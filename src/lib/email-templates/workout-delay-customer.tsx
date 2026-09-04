@@ -12,7 +12,7 @@ const Email = ({ name }: Props) => (
     <Preview>Your workout is on its way — nothing for you to do</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY WORKOUT</Text>
+        <Text style={brand}>SMARTY GYM</Text>
         <Heading style={heading}>Your workout is on its way</Heading>
         <Text style={text}>{name ? `Hi ${name},` : 'Hi,'}</Text>
         <Text style={text}>
@@ -24,7 +24,7 @@ const Email = ({ name }: Props) => (
         </Text>
         <Hr style={hr} />
         <Text style={footer}>Haris Falas — BSc Sports Science, EXOS Specialist, CSCS</Text>
-        <Text style={footer}>Smarty Workout</Text>
+        <Text style={footer}>Smarty Gym</Text>
       </Container>
     </Body>
   </Html>

@@ -10,7 +10,7 @@ import { useKeepScreenAwake } from "@/hooks/useKeepScreenAwake";
 import { PageHeader } from "@/components/PageHeader";
 
 const URL = "https://smartyworkout.com/tools/workout-timer";
-const TITLE = "Workout Timer — Interval training timer | SmartyWorkout";
+const TITLE = "Workout Timer — Interval training timer | SmartyGym";
 const DESCRIPTION =
   "Free workout interval timer. Customizable work/rest periods and rounds — perfect for HIIT, Tabata and circuit training.";
 
@@ -224,7 +224,7 @@ function WorkoutTimerPage() {
     <>
       <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
         <PageHeader
-          eyebrow="SmartyWorkout tools"
+          eyebrow="SmartyGym tools"
           title={
             <>
               Workout <span className="text-primary">Timer</span>

@@ -37,9 +37,9 @@ import {
 } from "lucide-react";
 
 const URL = "https://smartyworkout.com/founder-note";
-const TITLE = "A Note From The Founder | Smarty Workout";
+const TITLE = "A Note From The Founder | Smarty Gym";
 const DESCRIPTION =
-  "Why Smarty Workout exists and how the trained coach builds every workout from a real 1,384-movement library.";
+  "Why Smarty Gym exists and how the trained coach builds every workout from a real 1,384-movement library.";
 
 export const Route = createFileRoute("/founder-note")({
   head: () => ({
@@ -136,7 +136,7 @@ function FounderNotePage() {
         <div className="mx-auto mb-6 h-28 w-28 overflow-hidden rounded-full border-4 border-primary sm:h-36 sm:w-36">
           <img
             src={harisPhoto}
-            alt="Haris Falas — founder of Smarty Workout"
+            alt="Haris Falas — founder of Smarty Gym"
             className="h-full w-full object-cover object-center"
             width={320}
             height={320}
@@ -171,7 +171,7 @@ function FounderNotePage() {
               : "Let me tell you what I built and why I believe it is worth your €9.99."}
           </p>
           <P>
-            <Brand>Smarty Workout</Brand> is a powerful AI fitness coach — but it
+            <Brand>Smarty Gym</Brand> is a powerful AI fitness coach — but it
             is not just another chatbot. It has been trained by me, Haris Falas,
             a sports scientist, so it thinks the way I think about programme
             design, progression, safety, and real human movement. It does not
@@ -208,7 +208,7 @@ function FounderNotePage() {
                     It uses <strong>two pools of information</strong>. Your saved
                     Training Profile plus what you tell it right before
                     generating a workout — mood, focus, duration, equipment.
-                    Most apps use one or the other; <Brand>Smarty Workout</Brand>{" "}
+                    Most apps use one or the other; <Brand>Smarty Gym</Brand>{" "}
                     merges both.
                   </>
                 ),
@@ -265,7 +265,7 @@ function FounderNotePage() {
             It is not the same workout for everyone, but it is the same
             programme. That means you can train with your friends, compare the
             day, and still each get a personal workout.{" "}
-            <Brand>Smarty Workout</Brand> removes the decision fatigue: you wake
+            <Brand>Smarty Gym</Brand> removes the decision fatigue: you wake
             up, open the app, and train.
           </P>
           <List
@@ -317,7 +317,7 @@ function FounderNotePage() {
                   <>
                     A personal trainer normally costs €30–€100 per session. A
                     generic app gives you cookie-cutter plans.{" "}
-                    <Brand>Smarty Workout</Brand> gives you a daily personal
+                    <Brand>Smarty Gym</Brand> gives you a daily personal
                     programme plus unlimited manual generation.
                   </>
                 ),
@@ -525,7 +525,7 @@ function FounderNotePage() {
                 icon: <Bot size={18} />,
                 text: (
                   <>
-                    <Brand>Smarty Workout</Brand> does all of that. It is a
+                    <Brand>Smarty Gym</Brand> does all of that. It is a
                     trained agent, not a chatbot.
                   </>
                 ),
@@ -548,7 +548,7 @@ function FounderNotePage() {
             {freeAccessMode
               ? "Start anywhere. Create a profile, browse the exercise library, play with the tools. When you are ready, switch on the Workout of the Day. That is the moment "
               : "If you want to try it, start with the free parts. Create a profile, browse the exercise library, play with the tools. When you are ready, subscribe to the Workout of the Day. That is the moment "}
-            <Brand>Smarty Workout</Brand> becomes a real coach in your pocket.
+            <Brand>Smarty Gym</Brand> becomes a real coach in your pocket.
           </P>
 
           <div className="border-t-2 border-primary/30 pt-5 text-center">

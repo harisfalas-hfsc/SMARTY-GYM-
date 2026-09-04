@@ -10,8 +10,8 @@ export const Route = createFileRoute("/reset-password")({
   component: ResetPassword,
   head: () => ({
     meta: [
-      { title: "Reset password — SmartyWorkout" },
-      { name: "description", content: "Set a new password for your SmartyWorkout account." },
+      { title: "Reset password — SmartyGym" },
+      { name: "description", content: "Set a new password for your SmartyGym account." },
       { name: "robots", content: "noindex" },
     ],
   }),

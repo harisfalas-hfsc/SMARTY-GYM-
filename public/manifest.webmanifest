@@ -1,6 +1,6 @@
 {
-  "name": "Smarty Workout",
-  "short_name": "SmartyWorkout",
+  "name": "Smarty Gym",
+  "short_name": "SmartyGym",
   "description": "AI workouts built for you by Smarty Coach.",
   "start_url": "/",
   "display": "standalone",

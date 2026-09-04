@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "SmartyWorkout — Your personal workout, anytime, anywhere",
+        title: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
       },
       {
         name: "description",
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "SmartyWorkout — Your personal workout, anytime, anywhere",
+        content: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
       },
       {
         property: "og:description",
@@ -48,7 +48,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebPage",
           "@id": "https://smartyworkout.com/#webpage",
           url: "https://smartyworkout.com/",
-          name: "SmartyWorkout — Your personal workout, anytime, anywhere",
+          name: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
           description:
             "Answer a smart questionnaire and get a full tailor-made workout built around your body, goals, equipment and constraints.",
           inLanguage: "en",
@@ -73,9 +73,9 @@ function Home() {
           as="p"
           title={
             <>
-              Your personal workout
+              YOUR GYM RE-IMAGINED
               <br />
-              <span className="text-primary">anytime anywhere</span>
+              <span className="text-primary">ANYWHERE, ANYTIME.</span>
             </>
           }
           subtitle="Answer a smart questionnaire. Get a full tailor-made workout built around your body, goals, equipment and constraints."
@@ -139,9 +139,9 @@ function Home() {
 
           <div className="max-w-xl lg:max-w-3xl">
             <h1 className="text-[34px] font-extrabold uppercase leading-[1.05] tracking-tight text-white sm:text-[44px] lg:text-[60px]">
-              Your personal workout
+              YOUR GYM RE-IMAGINED
               <br />
-              <span className="whitespace-nowrap text-primary">anytime anywhere</span>
+              <span className="whitespace-nowrap text-primary">ANYWHERE, ANYTIME.</span>
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-white/80 lg:mt-6 lg:text-lg">

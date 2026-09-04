@@ -6,16 +6,16 @@ import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "Terms & Conditions | SmartyWorkout" },
+      { title: "Terms & Conditions | SmartyGym" },
       {
         name: "description",
         content:
-          "Terms and conditions for using SmartyWorkout — an AI-generated personalized training planning app, part of the Smarty family.",
+          "Terms and conditions for using SmartyGym — an AI-generated personalized training planning app, part of the Smarty family.",
       },
-      { property: "og:title", content: "Terms & Conditions — SmartyWorkout" },
+      { property: "og:title", content: "Terms & Conditions — SmartyGym" },
       {
         property: "og:description",
-        content: "Legal terms for using the SmartyWorkout AI training planning app.",
+        content: "Legal terms for using the SmartyGym AI training planning app.",
       },
       { property: "og:url", content: "https://smartyworkout.com/terms" },
     ],
@@ -29,27 +29,27 @@ function Terms() {
   return (
     <LegalLayout title="Terms & Conditions" icon={<FileText className="h-5 w-5" />} lastUpdated="July 2026">
       <p>
-        Welcome to <strong>Smarty Workout</strong> (smartyworkout.com). By accessing or using our
+        Welcome to <strong>Smarty Gym</strong> (smartyworkout.com). By accessing or using our
         AI-generated personalized training service, you agree to comply with and be bound by the
-        following Terms &amp; Conditions. Please read them carefully before using Smarty Workout.
+        following Terms &amp; Conditions. Please read them carefully before using Smarty Gym.
       </p>
 
       <h2>1. Acceptance of Terms</h2>
       <p>
-        By accessing or using Smarty Workout, you confirm that you have read, understood, and agree
+        By accessing or using Smarty Gym, you confirm that you have read, understood, and agree
         to these Terms &amp; Conditions. If you do not agree, please do not use our website or app.
       </p>
 
       <h2>2. Eligibility</h2>
       <p>
-        You must be at least 18 years old to use Smarty Workout. Users between 13 and 18 may only
-        use Smarty Workout with the supervision and explicit consent of a parent or legal guardian.
+        You must be at least 18 years old to use Smarty Gym. Users between 13 and 18 may only
+        use Smarty Gym with the supervision and explicit consent of a parent or legal guardian.
       </p>
 
-      <h2>3. What Smarty Workout Is</h2>
+      <h2>3. What Smarty Gym Is</h2>
       <p>
-        Smarty Workout is a web app that generates personalized training sessions using AI.
-        Specifically, Smarty Workout provides:
+        Smarty Gym is a web app that generates personalized training sessions using AI.
+        Specifically, Smarty Gym provides:
       </p>
       <ul>
         <li>Up to two AI-generated workouts per day, tailored to your goals, equipment, and fitness level.</li>
@@ -59,7 +59,7 @@ function Terms() {
         <li>Access to your workout history from your account at any time.</li>
       </ul>
       <p>
-        Smarty Workout is intended for <strong>personal educational and fitness purposes only</strong>{" "}
+        Smarty Gym is intended for <strong>personal educational and fitness purposes only</strong>{" "}
         and is <strong>not a substitute for medical or professional training advice</strong>,
         diagnosis, or treatment.
       </p>
@@ -77,7 +77,7 @@ function Terms() {
           <h2>5. Access to the Service</h2>
           <ul>
             <li>
-              All Smarty Workout features — daily workouts, the full exercise library, the training
+              All Smarty Gym features — daily workouts, the full exercise library, the training
               tools and your logbook — are available to every registered user at no cost.
             </li>
             <li>
@@ -91,7 +91,7 @@ function Terms() {
           <h2>5. Membership &amp; Pricing</h2>
           <ul>
             <li>
-              Smarty Workout offers a single paid membership priced at <strong>€9.99 per month</strong>,
+              Smarty Gym offers a single paid membership priced at <strong>€9.99 per month</strong>,
               which gives you access to up to 2 generated workouts per day, the full exercise
               library, our training tools, and your workout logbook.
             </li>
@@ -171,19 +171,19 @@ function Terms() {
       <h2>10. Acceptable Use</h2>
       <p>You agree NOT to:</p>
       <ul>
-        <li>Reverse engineer, decompile, or attempt to extract the source code of Smarty Workout.</li>
-        <li>Use Smarty Workout for any unlawful, harmful, or fraudulent purpose.</li>
+        <li>Reverse engineer, decompile, or attempt to extract the source code of Smarty Gym.</li>
+        <li>Use Smarty Gym for any unlawful, harmful, or fraudulent purpose.</li>
         <li>Upload malicious content or attempt to interfere with the service.</li>
         <li>Resell, sublicense, or share access to your account or generated workouts.</li>
-        <li>Use Smarty Workout to provide medical or training advice to other people.</li>
+        <li>Use Smarty Gym to provide medical or training advice to other people.</li>
       </ul>
 
       <h2>11. Intellectual Property</h2>
       <p>
-        All content, branding, methodology, source code, and copy in Smarty Workout are the
-        intellectual property of <strong>Smarty Workout</strong> and are protected by copyright,
+        All content, branding, methodology, source code, and copy in Smarty Gym are the
+        intellectual property of <strong>Smarty Gym</strong> and are protected by copyright,
         trademark, and other intellectual property laws. You receive a limited, personal,
-        non-transferable, non-exclusive license to use Smarty Workout for personal, non-commercial
+        non-transferable, non-exclusive license to use Smarty Gym for personal, non-commercial
         purposes only.
       </p>
 
@@ -200,9 +200,9 @@ function Terms() {
 
       <h2>13. Limitation of Liability</h2>
       <p>
-        To the fullest extent permitted by law, Smarty Workout shall not be liable for any
+        To the fullest extent permitted by law, Smarty Gym shall not be liable for any
         indirect, incidental, consequential, special, punitive, or exemplary damages arising from
-        your use of Smarty Workout, including but not limited to injury, loss of data, lost
+        your use of Smarty Gym, including but not limited to injury, loss of data, lost
         profits, or business interruption. Nothing in these Terms excludes liability that cannot be
         excluded under applicable consumer protection law.
       </p>
@@ -210,7 +210,7 @@ function Terms() {
       <h2>14. Changes to These Terms</h2>
       <p>
         We may update these Terms from time to time. We will notify users of material changes via
-        the app or email. Continued use of Smarty Workout after changes take effect constitutes
+        the app or email. Continued use of Smarty Gym after changes take effect constitutes
         acceptance of the updated Terms.
       </p>
 
@@ -223,7 +223,7 @@ function Terms() {
 
       <h2>16. Contact</h2>
       <p>
-        For questions about these Terms, contact <strong>Smarty Workout</strong> at{" "}
+        For questions about these Terms, contact <strong>Smarty Gym</strong> at{" "}
         <a href="mailto:smartyworkout@outlook.com">smartyworkout@outlook.com</a>.
       </p>
     </LegalLayout>

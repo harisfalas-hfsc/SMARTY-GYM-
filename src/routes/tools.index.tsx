@@ -8,16 +8,16 @@ import { PageHeader } from "@/components/PageHeader";
 export const Route = createFileRoute("/tools/")({
   head: () => ({
     meta: [
-      { title: "Free Workout Tools — Timer & 1RM | SmartyWorkout" },
+      { title: "Free Workout Tools — Timer & 1RM | SmartyGym" },
       {
         name: "description",
         content:
-          "Free SmartyWorkout training tools: interval workout timer, big-button rounds tracker and Brzycki 1RM calculator.",
+          "Free SmartyGym training tools: interval workout timer, big-button rounds tracker and Brzycki 1RM calculator.",
       },
-      { property: "og:title", content: "SmartyWorkout Tools — Free training tools" },
+      { property: "og:title", content: "SmartyGym Tools — Free training tools" },
       {
         property: "og:description",
-        content: "Workout timer, rounds tracker and 1RM calculator — free tools by SmartyWorkout.",
+        content: "Workout timer, rounds tracker and 1RM calculator — free tools by SmartyGym.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -33,9 +33,9 @@ export const Route = createFileRoute("/tools/")({
             {
               "@type": "CollectionPage",
               url: "https://smartyworkout.com/tools",
-              name: "SmartyWorkout Tools",
+              name: "SmartyGym Tools",
               description:
-                "Free SmartyWorkout training tools: interval workout timer, big-button rounds tracker and Brzycki 1RM calculator.",
+                "Free SmartyGym training tools: interval workout timer, big-button rounds tracker and Brzycki 1RM calculator.",
               inLanguage: "en",
               isPartOf: { "@id": "https://smartyworkout.com/#website" },
               mainEntity: {
@@ -145,7 +145,7 @@ function ToolsPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
-        eyebrow="SmartyWorkout tools"
+        eyebrow="SmartyGym tools"
         title={
           <>
             Free <span className="text-primary">training tools</span>

@@ -5,16 +5,16 @@ import { LegalLayout } from "@/components/LegalLayout";
 export const Route = createFileRoute("/disclaimer")({
   head: () => ({
     meta: [
-      { title: "Disclaimer & Release of Liability | SmartyWorkout" },
+      { title: "Disclaimer & Release of Liability | SmartyGym" },
       {
         name: "description",
         content:
-          "SmartyWorkout disclaimer and release of liability for our AI-generated personalized workouts.",
+          "SmartyGym disclaimer and release of liability for our AI-generated personalized workouts.",
       },
-      { property: "og:title", content: "Disclaimer — SmartyWorkout" },
+      { property: "og:title", content: "Disclaimer — SmartyGym" },
       {
         property: "og:description",
-        content: "Important safety, health, and liability information for SmartyWorkout users.",
+        content: "Important safety, health, and liability information for SmartyGym users.",
       },
       { property: "og:url", content: "https://smartyworkout.com/disclaimer" },
     ],
@@ -31,7 +31,7 @@ function Disclaimer() {
       lastUpdated="July 2026"
     >
       <div className="callout">
-        <strong>⚠️ Not medical or training advice.</strong> Smarty Workout generates general
+        <strong>⚠️ Not medical or training advice.</strong> Smarty Gym generates general
         fitness workouts using AI based on the information you provide. It is not a doctor,
         physical therapist, or personal trainer. Before starting any workout, and especially if
         you have any medical condition, are pregnant, or have an injury history, consult a
@@ -39,7 +39,7 @@ function Disclaimer() {
       </div>
 
       <p>
-        The information provided by <strong>Smarty Workout</strong> (smartyworkout.com) is
+        The information provided by <strong>Smarty Gym</strong> (smartyworkout.com) is
         intended solely for <strong>general educational and fitness purposes</strong>. Smarty
         Workout does not provide medical, physiotherapy, or personal training advice, diagnosis,
         or treatment.
@@ -47,10 +47,10 @@ function Disclaimer() {
 
       <h2>1. Not Medical or Training Advice</h2>
       <ul>
-        <li>The workouts, exercise library, tools, and educational content in Smarty Workout are <strong>for general fitness purposes only</strong>.</li>
+        <li>The workouts, exercise library, tools, and educational content in Smarty Gym are <strong>for general fitness purposes only</strong>.</li>
         <li>Always <strong>consult a qualified medical or training professional</strong> before starting any new exercise program — especially if you have heart, joint, or respiratory conditions, an injury history, or other health concerns; or are pregnant.</li>
-        <li>Do not disregard or delay professional advice because of information provided by Smarty Workout.</li>
-        <li>If you experience any pain, dizziness, or adverse reaction while following a Smarty Workout session, <strong>stop immediately and seek medical attention</strong>.</li>
+        <li>Do not disregard or delay professional advice because of information provided by Smarty Gym.</li>
+        <li>If you experience any pain, dizziness, or adverse reaction while following a Smarty Gym session, <strong>stop immediately and seek medical attention</strong>.</li>
       </ul>
 
       <h2>2. Fitness Screening &amp; Truthful Disclosure</h2>
@@ -59,7 +59,7 @@ function Disclaimer() {
         chest pain, dizziness, joint problems, medications, pregnancy, and other conditions that
         affect safe exercise (similar to a standard physical-activity readiness questionnaire). If
         you answer "yes" to any such question, or are unsure about your ability to exercise
-        safely, you should consult a doctor before using Smarty Workout.
+        safely, you should consult a doctor before using Smarty Gym.
       </p>
       <ul>
         <li>You are responsible for providing accurate and complete information about your fitness level, injuries, and health conditions.</li>
@@ -76,37 +76,37 @@ function Disclaimer() {
 
       <h2>4. Assumption of Risk</h2>
       <ul>
-        <li>By using Smarty Workout, you <strong>voluntarily assume all risks</strong> associated with physical exercise, including any injury, muscle strain, cardiovascular event, or aggravation of a pre-existing condition.</li>
-        <li>Smarty Workout, its operator, affiliates, and contributors <strong>accept no responsibility</strong> for any illness, injury, or health-related issue that may occur during or after your use of Smarty Workout.</li>
+        <li>By using Smarty Gym, you <strong>voluntarily assume all risks</strong> associated with physical exercise, including any injury, muscle strain, cardiovascular event, or aggravation of a pre-existing condition.</li>
+        <li>Smarty Gym, its operator, affiliates, and contributors <strong>accept no responsibility</strong> for any illness, injury, or health-related issue that may occur during or after your use of Smarty Gym.</li>
       </ul>
 
       <h2>5. Individual Responsibility</h2>
       <ul>
         <li>You are responsible for exercising within your <strong>personal limits and abilities</strong> and for skipping or adjusting any exercise that does not feel safe for you.</li>
-        <li>Minors (under 18) must use Smarty Workout only with supervision and prior medical clearance from a qualified healthcare professional.</li>
+        <li>Minors (under 18) must use Smarty Gym only with supervision and prior medical clearance from a qualified healthcare professional.</li>
       </ul>
 
       <h2>6. No Guarantee of Results</h2>
       <ul>
         <li>Results vary by individual based on age, health status, genetics, lifestyle, consistency, and adherence to the workout program.</li>
-        <li>Smarty Workout <strong>does not guarantee</strong> any specific weight change, body-composition change, performance improvement, or health outcome.</li>
+        <li>Smarty Gym <strong>does not guarantee</strong> any specific weight change, body-composition change, performance improvement, or health outcome.</li>
       </ul>
 
       <h2>7. Release of Liability &amp; Waiver of Claims</h2>
       <p>To the fullest extent permitted by law in the European Union and internationally:</p>
       <ul>
         <li>
-          <strong>Complete release:</strong> By using Smarty Workout, you voluntarily and knowingly
+          <strong>Complete release:</strong> By using Smarty Gym, you voluntarily and knowingly
           assume all risks associated with physical exercise and hereby <strong>RELEASE, WAIVE,
-          DISCHARGE, AND COVENANT NOT TO SUE</strong> Smarty Workout and its respective operators,
+          DISCHARGE, AND COVENANT NOT TO SUE</strong> Smarty Gym and its respective operators,
           owners, contributors, employees, contractors, affiliates, and agents from any and all
-          liability arising from your use of Smarty Workout.
+          liability arising from your use of Smarty Gym.
         </li>
         <li>
-          <strong>No liability:</strong> Smarty Workout and its representatives <strong>shall not
+          <strong>No liability:</strong> Smarty Gym and its representatives <strong>shall not
           be held liable</strong> for any direct, indirect, incidental, consequential, special,
           punitive, or exemplary damages arising from participation in any workout generated by
-          Smarty Workout, including but not limited to:
+          Smarty Gym, including but not limited to:
           <ul>
             <li>Personal illness, injury, or disability</li>
             <li>Aggravation of pre-existing medical conditions</li>
@@ -118,13 +118,13 @@ function Disclaimer() {
         </li>
         <li>
           <strong>Waiver of right to sue:</strong> You expressly waive any right to bring legal
-          action against Smarty Workout for injuries, illnesses, or damages sustained during or
+          action against Smarty Gym for injuries, illnesses, or damages sustained during or
           after use of any workout.
         </li>
         <li>
           <strong>Indemnification:</strong> You agree to indemnify and hold harmless Smarty
           Workout from any claims, damages, or expenses (including legal fees) arising from your
-          use of Smarty Workout or breach of this Disclaimer.
+          use of Smarty Gym or breach of this Disclaimer.
         </li>
       </ul>
       <p>
@@ -141,18 +141,18 @@ function Disclaimer() {
       </p>
 
       <div className="callout">
-        <strong>⚠️ Acceptance and acknowledgment.</strong> By accessing and using Smarty Workout,
+        <strong>⚠️ Acceptance and acknowledgment.</strong> By accessing and using Smarty Gym,
         you acknowledge and confirm that you have:
         <ul>
           <li><strong>Read and understood</strong> this entire Disclaimer and Release of Liability.</li>
           <li><strong>Provided truthful answers</strong> about your fitness level, injuries, and health conditions.</li>
           <li><strong>Obtained medical clearance</strong> if your health status requires it.</li>
           <li><strong>Voluntarily assumed all risks</strong> associated with physical exercise.</li>
-          <li><strong>Released Smarty Workout from all liability</strong> for any illness, injury, or damages arising from your use of the app.</li>
-          <li><strong>Agreed to use Smarty Workout at your own risk.</strong></li>
+          <li><strong>Released Smarty Gym from all liability</strong> for any illness, injury, or damages arising from your use of the app.</li>
+          <li><strong>Agreed to use Smarty Gym at your own risk.</strong></li>
         </ul>
         <p style={{ marginTop: 8, fontWeight: 700 }}>
-          If you do not agree with any part of this Disclaimer, do not use Smarty Workout.
+          If you do not agree with any part of this Disclaimer, do not use Smarty Gym.
         </p>
       </div>
     </LegalLayout>

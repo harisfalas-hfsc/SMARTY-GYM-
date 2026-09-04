@@ -47,7 +47,7 @@ import type {
 export const Route = createFileRoute("/community/")({
   head: () => ({
     meta: [
-      { title: "Smarty Community — Train together | Smarty Workout" },
+      { title: "Smarty Community — Train together | Smarty Gym" },
       {
         name: "description",
         content:
@@ -269,7 +269,7 @@ function CommunityPage() {
               <Link to="/auth">Sign in</Link>
             ) : (
               <Link to="/auth">
-                {access.signedIn ? "Renew membership" : "Join Smarty Workout"}
+                {access.signedIn ? "Renew membership" : "Join Smarty Gym"}
               </Link>
             )}
           </Button>

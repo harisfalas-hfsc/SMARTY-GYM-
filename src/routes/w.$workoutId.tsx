@@ -8,7 +8,7 @@ export const Route = createFileRoute("/w/$workoutId")({
   loader: ({ params }) => getWorkoutShareCard({ data: { workoutId: params.workoutId } }),
   head: ({ loaderData }) => {
     const w = loaderData ?? null;
-    const title = w ? `${w.name} — Smarty Workout` : "Workout — Smarty Workout";
+    const title = w ? `${w.name} — Smarty Gym` : "Workout — Smarty Gym";
     const bits = w
       ? [
           w.category,
@@ -18,8 +18,8 @@ export const Route = createFileRoute("/w/$workoutId")({
         ].filter(Boolean)
       : [];
     const description = w
-      ? `${bits.join(" · ")} — open it on Smarty Workout.`
-      : "A workout on Smarty Workout.";
+      ? `${bits.join(" · ")} — open it on Smarty Gym.`
+      : "A workout on Smarty Gym.";
     return {
       meta: [
         { title },
@@ -46,7 +46,7 @@ function SharePreviewPage() {
       <div className="mx-auto max-w-xl px-4 py-16 text-center lg:max-w-6xl">
         <p className="text-muted-foreground">This workout is no longer available.</p>
         <Button asChild className="mt-4 h-12 rounded-2xl">
-          <Link to="/">Go to Smarty Workout</Link>
+          <Link to="/">Go to Smarty Gym</Link>
         </Button>
       </div>
     );
@@ -99,7 +99,7 @@ function SharePreviewPage() {
               <Link to="/auth">Sign in to open it</Link>
             </Button>
             <Button asChild variant="secondary" className="h-12 rounded-2xl">
-              <Link to="/how-it-works">How Smarty Workout works</Link>
+              <Link to="/how-it-works">How Smarty Gym works</Link>
             </Button>
           </div>
         </div>

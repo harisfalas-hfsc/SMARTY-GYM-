@@ -1,4 +1,4 @@
-# Smarty Workout — native launch screens
+# Smarty Gym — native launch screens
 
 All assets are generated from `public/icon-512.png` on a pure black (#000000) background,
 matching the web splash screen.
@@ -58,7 +58,7 @@ npx cap sync
 - **No pull-to-refresh**: `overscroll-behavior-y: contain` on `html, body`, so the
   page never rubber-band reloads. Android back button and iOS/Android edge-swipe
   gestures still navigate normally (TanStack Router history).
-- **Refresh = logo**: tapping the SMARTYWORKOUT wordmark navigates home, revalidates
+- **Refresh = logo**: tapping the SMARTYGYM wordmark navigates home, revalidates
   data and scrolls to the top.
 - **Offline**: service worker app shell + IndexedDB caches (logbook, library, WOD,
   opened workouts) + queued actions replayed on reconnect.

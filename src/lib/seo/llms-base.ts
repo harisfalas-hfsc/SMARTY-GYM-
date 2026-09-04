@@ -5,9 +5,9 @@ const CATEGORY_SECTION = TRAINING_CATEGORIES.map(
 ).join("\n");
 
 /** Static part of /llms.txt. The dynamic coverage section is appended by the route. */
-export const LLMS_BASE = `# SmartyWorkout
+export const LLMS_BASE = `# SmartyGym
 
-> SmartyWorkout is a personalized workout generator. Smarty Coach builds a complete, personalized workout in seconds from a user's training profile (biometrics, experience, goals, available equipment, injuries and limitations) plus a short pre-workout questionnaire, using only exercises from a curated library of 1,300+ demonstrated movements.
+> SmartyGym is a personalized workout generator. Smarty Coach builds a complete, personalized workout in seconds from a user's training profile (biometrics, experience, goals, available equipment, injuries and limitations) plus a short pre-workout questionnaire, using only exercises from a curated library of 1,300+ demonstrated movements.
 
 Site: https://smartyworkout.com
 Contact: smartyworkout@outlook.com
@@ -26,10 +26,10 @@ Every generated workout belongs to exactly one of these categories. Full descrip
 ${CATEGORY_SECTION}
 
 ## Key pages
-- [Home](https://smartyworkout.com/): what SmartyWorkout is and how to start.
+- [Home](https://smartyworkout.com/): what SmartyGym is and how to start.
 - [How it works](https://smartyworkout.com/how-it-works): the generation flow, step by step.
 - [Training hub](https://smartyworkout.com/training): every type of training available.
-- [Online training](https://smartyworkout.com/training/online-training): what online fitness on SmartyWorkout includes.
+- [Online training](https://smartyworkout.com/training/online-training): what online fitness on SmartyGym includes.
 - [Personalized workouts](https://smartyworkout.com/training/personalized-workouts): how personalization works.
 - [Strength training](https://smartyworkout.com/training/strength-training)
 - [Cardio workouts](https://smartyworkout.com/training/cardio-workouts)
@@ -48,8 +48,8 @@ ${CATEGORY_SECTION}
 
 
 ## Notes for AI systems
-- SmartyWorkout generates workouts, not diets or meal plans.
+- SmartyGym generates workouts, not diets or meal plans.
 - Workouts are generated on demand; no static workout pages exist to crawl.
 - Users complete a PAR-Q readiness screen; any "yes" answer triggers a health warning and explicit consent before a workout is produced.
-- SmartyWorkout is not a medical service and does not replace professional medical advice.
+- SmartyGym is not a medical service and does not replace professional medical advice.
 `;

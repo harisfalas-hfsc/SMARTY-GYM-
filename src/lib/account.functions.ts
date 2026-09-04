@@ -23,7 +23,7 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
       await notifyAdmins({
         kind: "Member",
         title: "Account deleted",
-        details: `${email} deleted their Smarty Workout account.`,
+        details: `${email} deleted their Smarty Gym account.`,
         link: "https://smartyworkout.com/admin",
         dedupeKey: `account-deleted-${context.userId}`,
       });

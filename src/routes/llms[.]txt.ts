@@ -30,8 +30,8 @@ function stripPaidCopy(text: string): string {
     .join("\n")
     .replace(/\n{3,}/g, "\n\n")
     .replace(
-      "## Who SmartyWorkout is for",
-      "## Access\n\nEvery feature is available to all registered users at no cost.\n\n## Who SmartyWorkout is for",
+      "## Who SmartyGym is for",
+      "## Access\n\nEvery feature is available to all registered users at no cost.\n\n## Who SmartyGym is for",
     );
 }
 

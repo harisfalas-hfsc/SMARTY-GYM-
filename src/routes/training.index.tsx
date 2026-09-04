@@ -7,9 +7,9 @@ import { TRAINING_TOPICS } from "@/lib/seo/training-topics";
 const SITE = "https://smartyworkout.com";
 const URL = `${SITE}/training`;
 
-const TITLE = "Online Fitness and Personalized Training — SmartyWorkout Training Hub";
+const TITLE = "Online Fitness and Personalized Training — SmartyGym Training Hub";
 const DESCRIPTION =
-  "Explore how SmartyWorkout trains you online: personalized workouts, strength, cardio, metabolic conditioning, mobility, bodyweight and home training, plus daily workout programs.";
+  "Explore how SmartyGym trains you online: personalized workouts, strength, cardio, metabolic conditioning, mobility, bodyweight and home training, plus daily workout programs.";
 
 export const Route = createFileRoute("/training/")({
   head: () => ({
@@ -84,7 +84,7 @@ function TrainingHub() {
             <span className="text-primary">personalized training</span>
           </>
         }
-        subtitle="SmartyWorkout builds a complete workout from your training profile — your goals, experience, equipment, time and limitations. These pages explain each type of training and where to start."
+        subtitle="SmartyGym builds a complete workout from your training profile — your goals, experience, equipment, time and limitations. These pages explain each type of training and where to start."
       />
 
       <div className="grid gap-6 lg:grid-cols-2">

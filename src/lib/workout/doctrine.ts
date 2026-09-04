@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// SMARTY WORKOUT — HARD PROGRAMMING DOCTRINE
+// SMARTY GYM — HARD PROGRAMMING DOCTRINE
 //
 // Deterministic legality rules shared by the pool filter, the blueprint, the
 // enforcement pass and the validator. Nothing here is advisory: every function

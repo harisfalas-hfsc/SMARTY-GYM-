@@ -7,7 +7,7 @@ async function requirePremium(context: { supabase: unknown; userId: string }) {
   const { getAccessStateForUser } = await import("@/lib/eligibility.server");
   const access = await getAccessStateForUser(context.supabase as never, context.userId);
   if (!access.premium) {
-    throw new Error("An active Smarty Workout membership is required to join the community.");
+    throw new Error("An active Smarty Gym membership is required to join the community.");
   }
   return access;
 }

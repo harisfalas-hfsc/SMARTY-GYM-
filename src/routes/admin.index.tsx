@@ -46,11 +46,11 @@ export const Route = createFileRoute("/admin/")({
   component: AdminPage,
   head: () => ({
     meta: [
-      { title: "Admin | Smarty Workout" },
-      { name: "description", content: "Administration panel for Smarty Workout." },
+      { title: "Admin | Smarty Gym" },
+      { name: "description", content: "Administration panel for Smarty Gym." },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Admin | Smarty Workout" },
-      { property: "og:description", content: "Administration panel for Smarty Workout." },
+      { property: "og:title", content: "Admin | Smarty Gym" },
+      { property: "og:description", content: "Administration panel for Smarty Gym." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -191,7 +191,7 @@ function AdminPage() {
           </div>
           <h1 className="mt-4 text-xl font-extrabold">Admin access only</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            This area is restricted to Smarty Workout administrators.
+            This area is restricted to Smarty Gym administrators.
           </p>
         </div>
       </Shell>
@@ -205,7 +205,7 @@ function AdminPage() {
       <PageHeader
         eyebrow="Administration"
         title={active ? active.label : "Admin panel"}
-        subtitle={active ? active.description : "Everything that runs Smarty Workout"}
+        subtitle={active ? active.description : "Everything that runs Smarty Gym"}
       />
 
       {section ? (

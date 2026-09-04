@@ -1,4 +1,4 @@
-// Smarty Workout — 84-day periodization cycle (Workout of the Day).
+// Smarty Gym — 84-day periodization cycle (Workout of the Day).
 // Client-safe: no server imports. Ported from the SmartyGym cycle.
 
 import type { Category, StrengthFocus } from "@/lib/workout/spec";

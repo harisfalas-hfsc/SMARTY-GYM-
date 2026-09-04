@@ -1,5 +1,5 @@
 /**
- * Every automated (cron) job in SmartyWorkout, described in one place.
+ * Every automated (cron) job in SmartyGym, described in one place.
  *
  * The hourly scheduler (`/api/public/hooks/daily-run`, pg_cron, every hour at :05)
  * is the only trigger. Each job below decides whether it is due, and the Admin
@@ -124,11 +124,11 @@ export const CRON_JOBS: CronJobDefinition[] = [
     sends: [
       {
         title: "Your membership renews in 3 days",
-        body: "Your SmartyWorkout membership renews on DD Month YYYY.",
+        body: "Your SmartyGym membership renews on DD Month YYYY.",
       },
       {
         title: "Your membership renews tomorrow",
-        body: "Your SmartyWorkout membership renews on DD Month YYYY.",
+        body: "Your SmartyGym membership renews on DD Month YYYY.",
       },
     ],
     timeEditable: false,
@@ -203,7 +203,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "generate-weekly-blog-article",
     label: "Weekly blog article",
     description:
-      "Writes and publishes one brand-new Fitness article on the Blog every week, in the SmartyWorkout voice, with an SEO title, summary and internal links to real pages only. Titles used in the last 90 days are never repeated, and if an article was already published this week the job stops without posting a second one.",
+      "Writes and publishes one brand-new Fitness article on the Blog every week, in the SmartyGym voice, with an SEO title, summary and internal links to real pages only. Titles used in the last 90 days are never repeated, and if an article was already published this week the job stops without posting a second one.",
     timing: "weekly",
     timingNote: "Runs once a week, on Sunday at the time set below (site timezone).",
     sends: [

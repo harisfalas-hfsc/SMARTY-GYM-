@@ -34,9 +34,9 @@ import type { ExerciseSchemaItem } from "@/lib/seo/exercise-schema.functions";
 
 
 const URL = "https://smartyworkout.com/exercise-library";
-const TITLE = "Exercise Library — 1,300+ demos | SmartyWorkout";
+const TITLE = "Exercise Library — 1,300+ demos | SmartyGym";
 const DESCRIPTION =
-  "Browse the SmartyWorkout exercise library: 1,300+ barbell, dumbbell, kettlebell, band, machine and bodyweight movements with animated demonstrations, filtered by body part, equipment, target muscle and difficulty, curated by sports scientist Haris Falas (CSCS).";
+  "Browse the SmartyGym exercise library: 1,300+ barbell, dumbbell, kettlebell, band, machine and bodyweight movements with animated demonstrations, filtered by body part, equipment, target muscle and difficulty, curated by sports scientist Haris Falas (CSCS).";
 
 
 export const Route = createFileRoute("/exercise-library")({
@@ -97,9 +97,9 @@ export const Route = createFileRoute("/exercise-library")({
                 "@context": "https://schema.org",
                 "@type": "ItemList",
                 "@id": `${URL}#exercises`,
-                name: "SmartyWorkout exercise library",
+                name: "SmartyGym exercise library",
                 description:
-                  "Every exercise available in the SmartyWorkout exercise library, with the equipment required and the muscle targeted.",
+                  "Every exercise available in the SmartyGym exercise library, with the equipment required and the muscle targeted.",
                 url: URL,
                 numberOfItems: loaderData.schemaExercises.length,
                 itemListOrder: "https://schema.org/ItemListOrderAscending",

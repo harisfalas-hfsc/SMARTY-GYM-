@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/PageHeader";
 
 const URL = "https://smartyworkout.com/haris-falas";
 const TITLE =
-  "Haris Falas — Sports Scientist & Strength Coach | Smarty Workout";
+  "Haris Falas — Sports Scientist & Strength Coach | Smarty Gym";
 const DESCRIPTION =
   "Haris Falas: BSc Sport Science, EXOS Performance Specialist, 20+ years in strength & conditioning and elite football. The training philosophy behind Smarty Coach.";
 

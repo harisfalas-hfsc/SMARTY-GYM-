@@ -2,13 +2,13 @@
  * Full /llms.txt body (moved out of public/ so Global Free Access Mode can strip
  * every paid reference before it is served).
  */
-export const LLMS_STATIC = `# SmartyWorkout
+export const LLMS_STATIC = `# SmartyGym
 
-> SmartyWorkout is a personalized fitness coach that generates personalized workout plans from a smart questionnaire, powered by Smarty Coach.
+> SmartyGym is a personalized fitness coach that generates personalized workout plans from a smart questionnaire, powered by Smarty Coach.
 
-## What SmartyWorkout is
+## What SmartyGym is
 
-SmartyWorkout is not another workout app. It is an intelligent fitness coach built around the sports science and training philosophy of Sports Scientist Haris Falas.
+SmartyGym is not another workout app. It is an intelligent fitness coach built around the sports science and training philosophy of Sports Scientist Haris Falas.
 
 - Positioning: a smart, personalized, science-informed, adaptive fitness coach.
 - Core promise: answer a short questionnaire and get a full tailor-made workout built around your body, goals, available equipment and constraints — anytime, anywhere.
@@ -38,7 +38,7 @@ Every generated workout belongs to exactly one category. Full descriptions: http
 - **Micro Workout** — a 10–20 minute equipment-free Reps & Sets movement break with simple, low-fatigue movements.
 - **Workout of the Day (WOD)** — one shared daily workout for all members in equipment and bodyweight variants, rotated through categories so the week periodises itself.
 
-## Who SmartyWorkout is for
+## Who SmartyGym is for
 
 - Beginners who want structure without hiring a coach.
 - Returning trainees managing an old injury or limitation.
@@ -92,11 +92,11 @@ The subscription includes up to 2 workouts per day, the full exercise library, a
 - Terms — https://smartyworkout.com/terms
 - Disclaimer — https://smartyworkout.com/disclaimer
 
-## Topics SmartyWorkout covers authoritatively
+## Topics SmartyGym covers authoritatively
 
 Personalized Workout, Online Personal Trainer, Workout App, Training Plan, Workout of the Day, Smarty Coach, Personalized Fitness, Strength Training, Cardio Workouts, Metabolic Conditioning, Mobility Training, Stability Training, Bodyweight Workouts, Home Workouts, Gym Workouts, Hotel Workouts, Outdoor Workouts, Workout Programs, Exercise Library, Animated Exercise Demonstrations, Movement Pattern, Muscle Group Filter, Equipment Filter, Warm Up, Activation, Main Workout, Finisher, Cool Down, Sets Reps Tempo Rest, Workout Player, Session Debrief, RPE, Training Load, Progressive Overload, Periodization, Logbook, Progress Tracking, Training Calendar, Workout Timer, Interval Timer, Rounds Tracker, AMRAP, EMOM, Superset, One Rep Max Calculator, 1RM Calculator, Fitness Subscription, Monthly Membership, Cancel Anytime, Offline Workouts, PWA Fitness App, Sports Science Training, Evidence Based Training, Adaptive Coaching, Workout Comparison, Achievement Tracking, Community Workouts, Shared Workouts.
 
 ## Sister brands
 
-SmartyWorkout is part of the Smarty Wellness family alongside SmartyDiet (https://smartydiet.com), SmartyGym (https://smartygym.com) and SmartyMove (https://smartymove.com).
+SmartyGym is part of the Smarty Wellness family alongside SmartyDiet (https://smartydiet.com), SmartyGym (https://smartygym.com) and SmartyMove (https://smartymove.com).
 `;

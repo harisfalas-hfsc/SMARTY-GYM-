@@ -19,7 +19,7 @@ const Email = ({ userName, userEmail, userId, sessionId, stage, workoutName, wor
     <Preview>A previously failed workout has been delivered</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY WORKOUT — RECOVERED</Text>
+        <Text style={brand}>SMARTY GYM — RECOVERED</Text>
         <Heading style={heading}>Workout delivered after a failure</Heading>
         <Text style={label}>Member</Text>
         <Text style={text}>{`${userName || 'Unknown'} <${userEmail || 'no email'}>`}</Text>
@@ -43,7 +43,7 @@ const Email = ({ userName, userEmail, userId, sessionId, stage, workoutName, wor
 export const template = {
   component: Email,
   subject: (data: Record<string, any>) =>
-    `[SmartyWorkout] Recovered — workout delivered to ${String(data['userEmail'] || 'member')}`,
+    `[SmartyGym] Recovered — workout delivered to ${String(data['userEmail'] || 'member')}`,
   displayName: 'Workout ready (admin)',
   previewData: {
     userName: 'Alex Doe',

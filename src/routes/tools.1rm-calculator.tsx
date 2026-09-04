@@ -14,7 +14,7 @@ import {
 import { PageHeader } from "@/components/PageHeader";
 
 const URL = "https://smartyworkout.com/tools/1rm-calculator";
-const TITLE = "1RM Calculator — One rep max (Brzycki) | SmartyWorkout";
+const TITLE = "1RM Calculator — One rep max (Brzycki) | SmartyGym";
 const DESCRIPTION =
   "Free 1RM calculator using the Brzycki formula. Estimate your one rep max and get training percentages for strength programming.";
 
@@ -99,7 +99,7 @@ function OneRMCalculatorPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
-        eyebrow="SmartyWorkout tools"
+        eyebrow="SmartyGym tools"
         title={
           <>
             1RM <span className="text-primary">Calculator</span>

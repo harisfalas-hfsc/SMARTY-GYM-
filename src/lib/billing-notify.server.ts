@@ -70,7 +70,7 @@ export async function runRenewalReminders(db: DB): Promise<number> {
         userId: row.user_id,
         kind: "billing",
         title: "Your membership renews tomorrow",
-        body: `Your Smarty Workout membership (€9.99/month) renews on ${when}. Nothing to do — your card on file will be charged automatically. If you'd like to update your card or stop the renewal, you can do it any time from My account.`,
+        body: `Your Smarty Gym membership (€9.99/month) renews on ${when}. Nothing to do — your card on file will be charged automatically. If you'd like to update your card or stop the renewal, you can do it any time from My account.`,
         dedupeKey: `renew-1d:${row.current_period_end}`,
       });
       if (created) sent += 1;
@@ -79,7 +79,7 @@ export async function runRenewalReminders(db: DB): Promise<number> {
         userId: row.user_id,
         kind: "billing",
         title: "Your membership renews in 3 days",
-        body: `A friendly heads-up: your Smarty Workout membership (€9.99/month) renews on ${when}. No action is needed. If your card has changed, you can update it in My account so the renewal goes through smoothly.`,
+        body: `A friendly heads-up: your Smarty Gym membership (€9.99/month) renews on ${when}. No action is needed. If your card has changed, you can update it in My account so the renewal goes through smoothly.`,
         dedupeKey: `renew-3d:${row.current_period_end}`,
       });
       if (created) sent += 1;

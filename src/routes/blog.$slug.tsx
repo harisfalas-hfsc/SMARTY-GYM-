@@ -50,14 +50,14 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!loaderData) {
       return {
         meta: [
-          { title: "Article unavailable | SmartyWorkout Blog" },
+          { title: "Article unavailable | SmartyGym Blog" },
           { name: "robots", content: "noindex" },
         ],
       };
     }
     const a = loaderData;
     const url = `${SITE}/blog/${a.slug}`;
-    const title = `${a.title} | SmartyWorkout Blog`;
+    const title = `${a.title} | SmartyGym Blog`;
     const description = a.excerpt ?? a.title;
     const published = new Date(a.published_at ?? a.created_at).toISOString();
     const modified = new Date(a.updated_at ?? a.created_at).toISOString();
@@ -71,7 +71,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:url", content: url },
         { property: "og:title", content: a.title },
         { property: "og:description", content: description },
-        { property: "og:site_name", content: "SmartyWorkout" },
+        { property: "og:site_name", content: "SmartyGym" },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: a.title },
         { name: "twitter:description", content: description },
@@ -111,7 +111,7 @@ export const Route = createFileRoute("/blog/$slug")({
                 },
                 publisher: {
                   "@type": "Organization",
-                  name: "SmartyWorkout",
+                  name: "SmartyGym",
                   url: SITE,
                   logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
                 },

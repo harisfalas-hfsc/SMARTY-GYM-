@@ -153,7 +153,7 @@ function WorkoutPage() {
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <h1 className="text-xl font-extrabold uppercase tracking-tight">Members only</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          The Workout of the Day is part of the Smarty Workout membership. Join to open today's two
+          The Workout of the Day is part of the Smarty Gym membership. Join to open today's two
           workouts and get a new pair every morning.
         </p>
         <Button asChild className="mt-4 h-12 rounded-2xl">
