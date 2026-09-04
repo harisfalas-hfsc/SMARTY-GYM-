@@ -3,8 +3,8 @@
  *
  * A real failure always reaches:
  *   1. the owner inbox (harisfalas@gmail.com) — the ONLY admin address.
- *      Admin alerts never go to anyone's personal email or in-app inbox, so
- *      an administrator's own account sees exactly what any customer sees.
+ *      Admin alerts are emailed to the owner only, never posted to an in-app
+ *      inbox, so an administrator's own account sees exactly what a customer sees.
  *   2. the member — a branded, non-technical apology, sent ONCE per session.
  *
  * The happy path sends nothing at all.
