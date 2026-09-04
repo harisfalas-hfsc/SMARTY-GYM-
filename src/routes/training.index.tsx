@@ -14,6 +14,11 @@ const DESCRIPTION =
 export const Route = createFileRoute("/training/")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "training guides, strength training guide, hypertrophy guide, conditioning guide, mobility guide, periodization, progressive overload",
+      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },

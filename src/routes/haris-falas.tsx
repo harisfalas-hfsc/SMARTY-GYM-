@@ -14,6 +14,11 @@ const DESCRIPTION =
 export const Route = createFileRoute("/haris-falas")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "haris falas, sports scientist, cscs strength coach, strength and conditioning specialist, fitness expert",
+      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },

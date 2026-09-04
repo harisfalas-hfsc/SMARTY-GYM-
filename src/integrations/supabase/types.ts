@@ -86,11 +86,19 @@ export type Database = {
           content: string
           created_at: string
           excerpt: string | null
+          focus_keyphrase: string | null
           id: string
+          image_alt: string | null
           image_url: string | null
           is_published: boolean
           published_at: string | null
           read_time: string | null
+          seo_content_hash: string | null
+          seo_description: string | null
+          seo_faq: Json | null
+          seo_keywords: string[] | null
+          seo_optimized_at: string | null
+          seo_title: string | null
           slug: string
           title: string
           updated_at: string
@@ -103,11 +111,19 @@ export type Database = {
           content: string
           created_at?: string
           excerpt?: string | null
+          focus_keyphrase?: string | null
           id?: string
+          image_alt?: string | null
           image_url?: string | null
           is_published?: boolean
           published_at?: string | null
           read_time?: string | null
+          seo_content_hash?: string | null
+          seo_description?: string | null
+          seo_faq?: Json | null
+          seo_keywords?: string[] | null
+          seo_optimized_at?: string | null
+          seo_title?: string | null
           slug: string
           title: string
           updated_at?: string
@@ -120,11 +136,19 @@ export type Database = {
           content?: string
           created_at?: string
           excerpt?: string | null
+          focus_keyphrase?: string | null
           id?: string
+          image_alt?: string | null
           image_url?: string | null
           is_published?: boolean
           published_at?: string | null
           read_time?: string | null
+          seo_content_hash?: string | null
+          seo_description?: string | null
+          seo_faq?: Json | null
+          seo_keywords?: string[] | null
+          seo_optimized_at?: string | null
+          seo_title?: string | null
           slug?: string
           title?: string
           updated_at?: string
@@ -837,6 +861,33 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_state: {
+        Row: {
+          data: Json
+          key: string
+          lease_until: string | null
+          paused_at: string | null
+          paused_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          data?: Json
+          key: string
+          lease_until?: string | null
+          paused_at?: string | null
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          data?: Json
+          key?: string
+          lease_until?: string | null
+          paused_at?: string | null
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       set_logs: {
         Row: {
           attempt: number
@@ -1481,6 +1532,51 @@ export type Database = {
             foreignKeyName: "workout_results_workout_id_fkey"
             columns: ["workout_id"]
             isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workout_seo: {
+        Row: {
+          content_hash: string | null
+          created_at: string
+          optimized_at: string
+          seo_description: string | null
+          seo_keywords: string[] | null
+          seo_title: string | null
+          workout_id: string
+        }
+        Insert: {
+          content_hash?: string | null
+          created_at?: string
+          optimized_at?: string
+          seo_description?: string | null
+          seo_keywords?: string[] | null
+          seo_title?: string | null
+          workout_id: string
+        }
+        Update: {
+          content_hash?: string | null
+          created_at?: string
+          optimized_at?: string
+          seo_description?: string | null
+          seo_keywords?: string[] | null
+          seo_title?: string | null
+          workout_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_seo_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: true
+            referencedRelation: "community_workouts_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_seo_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: true
             referencedRelation: "workouts"
             referencedColumns: ["id"]
           },

@@ -6,6 +6,11 @@ import { PageHeader } from "@/components/PageHeader";
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "how smartygym works, pre workout questionnaire, training profile, warm up activation main workout finisher cool down, sets reps tempo rest, guided workout player, session debrief",
+      },
       { title: "How Smarty Gym works — answer, analyze, train" },
       {
         name: "description",

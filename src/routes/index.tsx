@@ -10,6 +10,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
+        name: "keywords",
+        content:
+          "online gym with a personal coach, personalized workout generator, online gym, personal coach app, workout of the day, smarty coach, training plan generator, home workout plan, gym workout plan",
+      },
+      {
         title: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
       },
       {

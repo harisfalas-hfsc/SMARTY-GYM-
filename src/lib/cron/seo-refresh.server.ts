@@ -6,6 +6,9 @@ import {
   saveKeywordIndex,
 } from "@/lib/seo/keyword-index.server";
 import type { CronJobConfig } from "@/lib/cron/jobs.server";
+import { optimizeArticles } from "@/lib/seo/article-optimizer.server";
+import { optimizeSharedWorkouts } from "@/lib/seo/workout-seo.server";
+import { submitToIndexNow } from "@/lib/seo/indexnow.server";
 
 type DB = SupabaseClient;
 
@@ -18,6 +21,15 @@ export interface SeoRefreshResult {
   failures: string[];
   counts: { exercises: number; workouts: number; articles: number };
   emailed: boolean;
+  /** Content optimization performed in this run. */
+  optimization?: {
+    articles: number;
+    articlesQueued: number;
+    workouts: number;
+    workoutsQueued: number;
+    submittedToSearchEngines: number;
+    notes: string[];
+  };
 }
 
 function extraKeywordsFrom(config: CronJobConfig | undefined): string[] {
@@ -26,10 +38,21 @@ function extraKeywordsFrom(config: CronJobConfig | undefined): string[] {
   return [];
 }
 
+/** Batch size per run, overridable from the job's settings in the admin panel. */
+function batchLimit(config: CronJobConfig | undefined, key: string, fallback: number): number {
+  const raw = (config?.content as Record<string, unknown> | undefined)?.[key];
+  const n = typeof raw === "number" ? raw : Number(raw);
+  return Number.isFinite(n) && n > 0 && n <= 40 ? Math.floor(n) : fallback;
+}
+
 /**
- * Rebuilds the site keyword index from every public page, training topic,
- * exercise and generated workout. Nothing is ever removed — the stored index is
- * merged and extended. When nothing changed, the job stops and reports "skipped".
+ * Weekly SEO run. Three bounded steps, each safe to repeat:
+ *   1. optimize new or changed blog articles (title, description, key phrase,
+ *      keywords, image alt text, FAQ) with the AI model;
+ *   2. optimize newly shared community workouts the same way;
+ *   3. rebuild the site keyword index from every public page, training topic,
+ *      exercise and generated workout, then tell the search engines what changed.
+ * Nothing is ever removed — the stored index is merged and extended.
  */
 export async function runSeoRefresh(
   db: DB,
@@ -39,6 +62,49 @@ export async function runSeoRefresh(
 ): Promise<SeoRefreshResult> {
   const failures: string[] = [];
   const startedAt = new Date();
+  const notes: string[] = [];
+  const changedPaths: string[] = [];
+
+  const articleRun = await optimizeArticles(db, {
+    limit: batchLimit(options.config, "articleBatch", 6),
+  }).catch((e) => {
+    const message = e instanceof Error ? e.message : String(e);
+    failures.push(`articles:${message}`);
+    return null;
+  });
+  if (articleRun) {
+    notes.push(`Articles: ${articleRun.summary}`);
+    failures.push(...articleRun.failures.map((f) => `article:${f}`));
+    changedPaths.push(...articleRun.slugs.map((s) => `/blog/${s}`));
+  }
+
+  const workoutRun = await optimizeSharedWorkouts(db, {
+    limit: batchLimit(options.config, "workoutBatch", 8),
+  }).catch((e) => {
+    const message = e instanceof Error ? e.message : String(e);
+    failures.push(`workouts:${message}`);
+    return null;
+  });
+  if (workoutRun) {
+    notes.push(`Shared workouts: ${workoutRun.summary}`);
+    failures.push(...workoutRun.failures.map((f) => `workout:${f}`));
+  }
+
+  let submitted = 0;
+  if (changedPaths.length) {
+    const ping = await submitToIndexNow([...changedPaths, "/blog", "/sitemap.xml"]);
+    submitted = ping.submitted;
+    notes.push(ping.detail);
+  }
+
+  const optimization = {
+    articles: articleRun?.optimized ?? 0,
+    articlesQueued: articleRun?.remaining ?? 0,
+    workouts: workoutRun?.optimized ?? 0,
+    workoutsQueued: workoutRun?.remaining ?? 0,
+    submittedToSearchEngines: submitted,
+    notes,
+  };
 
   let built;
   try {
@@ -55,6 +121,7 @@ export async function runSeoRefresh(
       failures,
       counts: { exercises: 0, workouts: 0, articles: 0 },
       emailed: false,
+      optimization,
     };
     result.emailed = await emailReport(result, startedAt, options.trigger);
     return result;
@@ -63,19 +130,25 @@ export async function runSeoRefresh(
   const previous = await readKeywordIndex();
   const { merged, added } = mergeIndexes(previous, built);
 
+  const optimizedSomething = optimization.articles > 0 || optimization.workouts > 0;
   const unchanged =
-    !options.force && previous !== null && added.length === 0 && previous.hash === built.hash;
+    !options.force &&
+    !optimizedSomething &&
+    previous !== null &&
+    added.length === 0 &&
+    previous.hash === built.hash;
 
   if (unchanged) {
     return {
       changed: false,
       status: "skipped",
-      summary: `No new keywords, pages or workouts since the last run — nothing to update (${merged.total} keywords indexed).`,
+      summary: `No new keywords, pages, articles or workouts since the last run — nothing to update (${merged.total} keywords indexed).`,
       total: merged.total,
       added: [],
       failures,
       counts: built.counts,
       emailed: false,
+      optimization,
     };
   }
 
@@ -86,17 +159,22 @@ export async function runSeoRefresh(
     failures.push(`save:${message}`);
   }
 
+  const optimizedLine = optimizedSomething
+    ? ` Optimized ${optimization.articles} article${optimization.articles === 1 ? "" : "s"} and ${optimization.workouts} shared workout${optimization.workouts === 1 ? "" : "s"}${optimization.submittedToSearchEngines ? `, ${optimization.submittedToSearchEngines} URL(s) submitted to the search engines` : ""}.`
+    : "";
+
   const result: SeoRefreshResult = {
     changed: failures.length === 0,
     status: failures.length ? "failed" : "ok",
     summary: failures.length
       ? `SEO update finished with errors: ${failures.join("; ")}`
-      : `SEO index updated — ${added.length} new keyword${added.length === 1 ? "" : "s"}, ${merged.total} indexed in total (${built.counts.exercises} exercises, ${built.counts.workouts} workouts, ${built.counts.articles} blog articles).`,
+      : `SEO index updated — ${added.length} new keyword${added.length === 1 ? "" : "s"}, ${merged.total} indexed in total (${built.counts.exercises} exercises, ${built.counts.workouts} workouts, ${built.counts.articles} blog articles).${optimizedLine}`,
     total: merged.total,
     added,
     failures,
     counts: built.counts,
     emailed: false,
+    optimization,
   };
 
   result.emailed = await emailReport(result, startedAt, options.trigger);

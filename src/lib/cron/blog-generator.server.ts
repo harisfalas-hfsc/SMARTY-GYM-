@@ -381,6 +381,25 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
     };
   }
 
+  // Optimize the new article for search and AI answer engines straight away
+  // (search title, description, key phrase, keywords, image alt text, FAQ), then
+  // tell the search engines the page exists. Never blocks publication.
+  try {
+    const { optimizeArticles } = await import("@/lib/seo/article-optimizer.server");
+    const seo = await optimizeArticles(db, { slug });
+    if (seo.status !== "ok" || !seo.optimized) {
+      failures.push(`seo:${seo.summary}`);
+    }
+  } catch (e) {
+    failures.push(`seo:${e instanceof Error ? e.message : String(e)}`);
+  }
+  try {
+    const { submitToIndexNow } = await import("@/lib/seo/indexnow.server");
+    await submitToIndexNow([`/blog/${slug}`, "/blog", "/sitemap.xml"]);
+  } catch {
+    // search-engine ping is best effort
+  }
+
   // Tell every member, in their inbox, with a link to the article.
   const notified = await notifyMembers(db, {
     title: parsed.title,

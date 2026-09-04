@@ -8,6 +8,11 @@ import { PageHeader } from "@/components/PageHeader";
 export const Route = createFileRoute("/tools/")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "free training tools, workout timer, interval timer, rounds tracker, 1rm calculator, one rep max calculator",
+      },
       { title: "Free Workout Tools — Timer & 1RM | SmartyGym" },
       {
         name: "description",

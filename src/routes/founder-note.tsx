@@ -44,6 +44,11 @@ const DESCRIPTION =
 export const Route = createFileRoute("/founder-note")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "smartygym founder note, founder letter, why smartygym, coaching for everyone, haris falas",
+      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
@@ -53,6 +58,12 @@ export const Route = createFileRoute("/founder-note")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({"@context": "https://schema.org","@graph": [{"@type": "WebPage","@id": "https://smartygym.com/founder-note#webpage","url": "https://smartygym.com/founder-note","name": "A note from the founder","inLanguage": "en","isPartOf": {"@id": "https://smartygym.com/#website"},"publisher": {"@id": "https://smartygym.com/#organization"}},{"@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 1,"name": "Home","item": "https://smartygym.com/"},{"@type": "ListItem","position": 2,"name": "A note from the founder","item": "https://smartygym.com/founder-note"}]}]}),
+      },
+    ],
   }),
   component: FounderNotePage,
 });
