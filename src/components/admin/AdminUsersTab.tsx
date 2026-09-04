@@ -51,6 +51,11 @@ export function AdminUsersTab() {
   const [busy, setBusy] = useState(false);
   const [logbookFor, setLogbookFor] = useState<AdminUserRow | null>(null);
   const [detailFor, setDetailFor] = useState<AdminUserRow | null>(null);
+  const [monthsById, setMonthsById] = useState<Record<string, number>>({});
+
+  const monthsFor = (id: string) => monthsById[id] ?? 1;
+  const setMonths = (id: string, value: number) =>
+    setMonthsById((prev) => ({ ...prev, [id]: Math.max(1, Math.min(36, value)) }));
 
   async function reload() {
     setLoading(true);
