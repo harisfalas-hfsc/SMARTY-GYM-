@@ -1,6 +1,4 @@
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Navigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SmartyCard, SmartyPill, toneClasses } from "@/components/SmartyCard";
 import { cn } from "@/lib/utils";
@@ -87,9 +85,6 @@ const TOOLS: { icon: string; label: string }[] = [
 ];
 
 function PricingPage() {
-  const { freeAccessMode, loading } = useFreeAccessMode();
-  if (loading) return null;
-  if (freeAccessMode) return <Navigate to="/" replace />;
   const t = toneClasses("pink");
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
