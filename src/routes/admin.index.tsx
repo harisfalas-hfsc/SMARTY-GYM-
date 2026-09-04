@@ -38,7 +38,7 @@ import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
 import { AdminMessagesTab } from "@/components/admin/AdminMessagesTab";
 import { AdminAwardsTab } from "@/components/admin/AdminAwardsTab";
 import { AdminReportsTab } from "@/components/admin/AdminReportsTab";
-import { AdminPaymentsTab } from "@/components/admin/AdminPaymentsTab";
+
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
 import { AdminGenerationFailuresTab } from "@/components/admin/AdminGenerationFailuresTab";
 
@@ -213,7 +213,7 @@ function AdminPage() {
           <Button variant="ghost" size="sm" onClick={() => setSection(null)}>
             <ArrowLeft className="mr-2 h-4 w-4" /> All sections
           </Button>
-          {section === "payments" && <AdminPaymentsTab />}
+          
           {section === "revenue" && <AdminRevenueTab />}
           {section === "customers" && <AdminUsersTab />}
           {section === "subscribers" && <AdminUsersTab onlySubscribers />}
