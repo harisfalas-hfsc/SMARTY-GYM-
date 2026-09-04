@@ -168,9 +168,9 @@ export function DailyCoachingSettings({ premium = false }: { premium?: boolean }
             >
               {wodBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : settings.wod_mode ? "Turn off" : "Turn on"}
             </Button>
-          ) : (
+          ) : freeAccessMode ? null : (
             <Link
-              to="/auth"
+              to="/pricing"
               className="flex h-10 shrink-0 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
             >
               See plans
