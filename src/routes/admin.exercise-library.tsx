@@ -40,10 +40,42 @@ export const Route = createFileRoute("/admin/exercise-library")({
 });
 
 function Page() {
+  const [authed, setAuthed] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    void adminCheckAccess()
+      .then((r) => {
+        if (active) setAuthed(Boolean(r?.isAdmin));
+      })
+      .catch(() => {
+        if (active) setAuthed(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <div className="flex min-h-[100dvh] w-full flex-col bg-background text-foreground">
       <main className="mx-auto w-full max-w-[1100px] px-4 pb-16 pt-4 lg:max-w-6xl lg:px-8">
-        <Uploader />
+        {authed === null ? (
+          <div className="mt-10 flex justify-center">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          </div>
+        ) : !authed ? (
+          <div className="mx-auto mt-10 max-w-sm rounded-3xl border-2 border-blue-400 bg-card p-6 text-center shadow-sm">
+            <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
+              <ShieldAlert className="h-6 w-6" />
+            </div>
+            <h1 className="mt-4 text-xl font-extrabold">Admin access only</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              This area is restricted to Smarty Gym administrators.
+            </p>
+          </div>
+        ) : (
+          <Uploader />
+        )}
       </main>
     </div>
   );
