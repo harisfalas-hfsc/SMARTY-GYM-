@@ -6,7 +6,9 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  redirect,
 } from "@tanstack/react-router";
+import { resolveLegacyPath } from "../lib/seo/legacy-redirects";
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
