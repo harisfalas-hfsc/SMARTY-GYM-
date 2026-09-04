@@ -190,6 +190,13 @@
       "when": 1788496283744,
       "tag": "0026_community_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1788496300259,
+      "tag": "0027_credit_trigger_revoke",
+      "breakpoints": true
     }
   ]
 }
