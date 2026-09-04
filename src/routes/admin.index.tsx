@@ -64,6 +64,7 @@ type SectionKey =
   | "awards"
   | "reports"
   | "payments"
+  | "revenue"
   | "cron"
   | "generation";
 
@@ -73,6 +74,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     label: "Payments",
     description: "Global Free Access Mode master switch",
     Icon: Lock,
+  },
+  {
+    key: "revenue",
+    label: "Revenue",
+    description: "Subscribers, monthly income and failed payments",
+    Icon: TrendingUp,
   },
   {
     key: "workouts",
@@ -86,7 +93,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     description: "Member messages and announcements",
     Icon: MessagesSquare,
   },
-  { key: "customers", label: "Members", description: "Search members and manage administrators", Icon: Users },
+  {
+    key: "customers",
+    label: "Members",
+    description: "Members, subscribers, complimentary access and administrators",
+    Icon: Users,
+  },
   {
     key: "rules",
     label: "Workout rules",
