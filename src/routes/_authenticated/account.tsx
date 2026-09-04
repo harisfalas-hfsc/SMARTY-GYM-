@@ -9,14 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Crown, LogOut, Mail, User, ClipboardList, Trash2, Zap } from "lucide-react";
 import { DailyCoachingSettings } from "@/components/DailyCoachingSettings";
 import { getMyAccessState } from "@/lib/access.functions";
-import {
-  createPortalSession,
-  getMembershipSummary,
-  setMembershipCancellation,
-  type MembershipSummary,
-} from "@/utils/payments.functions";
 import { deleteMyAccount } from "@/lib/account.functions";
-import { getStripeEnvironment } from "@/lib/stripe";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/PageHeader";
 import {
@@ -60,9 +53,6 @@ function Account() {
   const [count, setCount] = useState<number | null>(null);
   const [premium, setPremium] = useState<boolean | null>(null);
   const [quota, setQuota] = useState<{ used: number; limit: number } | null>(null);
-  const [membership, setMembership] = useState<MembershipSummary | null>(null);
-  const [portalBusy, setPortalBusy] = useState(false);
-  const [cancelBusy, setCancelBusy] = useState(false);
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [confirmText, setConfirmText] = useState("");
 
@@ -73,17 +63,6 @@ function Account() {
       setQuota({ used: access.generationsUsedToday, limit: access.generationsLimit });
     } catch {
       setPremium(false);
-    }
-    try {
-      setMembership(
-        await loadRemote(
-          "account:membership",
-          () => getMembershipSummary({ data: { environment: getStripeEnvironment() } }),
-          user?.id,
-        ),
-      );
-    } catch {
-      setMembership(null);
     }
   }, [user?.id]);
 
@@ -104,41 +83,6 @@ function Account() {
     })();
   }, [user?.id]);
 
-  async function openPortal() {
-    setPortalBusy(true);
-    try {
-      const result = await createPortalSession({
-        data: { returnUrl: window.location.href, environment: getStripeEnvironment() },
-      });
-      if ("error" in result) throw new Error(result.error);
-      window.open(result.url, "_blank", "noopener,noreferrer");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not open billing");
-    } finally {
-      setPortalBusy(false);
-    }
-  }
-
-  async function toggleCancellation(cancel: boolean) {
-    setCancelBusy(true);
-    try {
-      const result = await setMembershipCancellation({
-        data: { cancel, environment: getStripeEnvironment() },
-      });
-      if ("error" in result) throw new Error(result.error);
-      toast.success(
-        cancel
-          ? "Membership will end at the end of your billing period."
-          : "Membership renewal restored.",
-      );
-      await refresh();
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not update your membership");
-    } finally {
-      setCancelBusy(false);
-    }
-  }
-
   async function removeAccount() {
     setDeleteBusy(true);
     try {
@@ -152,7 +96,6 @@ function Account() {
     }
   }
 
-  const renewLabel = formatDate(membership?.currentPeriodEnd ?? null);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
@@ -189,65 +132,6 @@ function Account() {
 
       <DailyCoachingSettings premium={premium === true} />
 
-      {!freeAccessMode && (
-      <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
-        <div className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
-            <Crown className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="font-bold">Subscription</p>
-            <p className="text-sm text-muted-foreground">Smarty Workout · €9.99 / month</p>
-          </div>
-        </div>
-
-        <p className="mt-3 text-sm text-muted-foreground">
-          {premium === null
-            ? "Checking your membership…"
-            : premium
-              ? membership?.cancelAtPeriodEnd
-                ? `Your membership is active but set to end${renewLabel ? ` on ${renewLabel}` : ""}. You keep full access until then.`
-                : `Your membership renews automatically every month${renewLabel ? ` — next payment on ${renewLabel}` : ""}. Cancel anytime.`
-              : "You don't have an active membership yet. Subscribe to unlock Smarty Coach, Workout of the Day and your full history."}
-        </p>
-
-        {premium ? (
-          <p className="mt-2 flex items-start gap-2 text-sm text-muted-foreground">
-            <Zap className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-            Includes {quota?.limit ?? 2} coach workout generations per day plus your Workout of the
-            Day
-            {quota ? ` — ${Math.max(0, quota.limit - quota.used)} left today.` : "."}
-          </p>
-        ) : null}
-
-        <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          {premium ? (
-            <>
-              <Button
-                className="h-12 rounded-2xl"
-                disabled={portalBusy}
-                onClick={() => void openPortal()}
-              >
-                {portalBusy ? "Opening…" : "Manage billing"}
-              </Button>
-              <Button
-                variant="secondary"
-                className="h-12 rounded-2xl"
-                disabled={cancelBusy}
-                onClick={() => void toggleCancellation(!membership?.cancelAtPeriodEnd)}
-              >
-                {cancelBusy
-                  ? "Saving…"
-                  : membership?.cancelAtPeriodEnd
-                    ? "Resume membership"
-                    : "Cancel membership"}
-              </Button>
-            </>
-          ) : (
-            <Button asChild className="h-12 rounded-2xl">
-              <Link to="/auth">Create your free account</Link>
-            </Button>
-          )}
           <Button asChild variant="secondary" className="h-12 rounded-2xl">
             <Link to="/contact">
               <Mail className="mr-2 h-4 w-4" /> Billing help
