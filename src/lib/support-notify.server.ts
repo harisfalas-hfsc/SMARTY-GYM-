@@ -5,6 +5,8 @@
  * shows exactly what a customer sees.
  * Never throws: support actions must not fail because of a notification.
  */
+const ADMIN_MAILBOX = "smartygym@outlook.com";
+
 export async function notifyAdminsOfInboundMessage(input: {
   threadId: string;
   messageId?: string;
