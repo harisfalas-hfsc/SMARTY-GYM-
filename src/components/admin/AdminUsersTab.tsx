@@ -9,6 +9,8 @@ import {
   ArrowLeft,
   User,
   Gift,
+  ChevronLeft,
+  ChevronRight,
   Ban,
   CreditCard,
 } from "lucide-react";
