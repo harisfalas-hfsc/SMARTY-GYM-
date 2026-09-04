@@ -233,46 +233,6 @@ export const adminGetStats = createServerFn({ method: "POST" })
     }
   });
 
-export type AdminPayment = {
-  id: string;
-  amount: number;
-  currency: string;
-  created: string;
-  email: string | null;
-  status: string;
-  refunded: boolean;
-};
-
-export type AdminRevenue = {
-  environment: "live" | "sandbox";
-  currency: string;
-  total: number;
-  last30: number;
-  byMonth: { month: string; amount: number }[];
-  payments: AdminPayment[];
-};
-
-export const adminGetRevenue = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: { environment?: "live" | "sandbox" }) => data)
-  .handler(async ({ context, data }): Promise<{ revenue: AdminRevenue } | { error: string }> => {
-    try {
-      await assertAdmin(context as any);
-      const environment = data.environment ?? "live";
-      return {
-        revenue: {
-          environment,
-          currency: "EUR",
-          total: 0,
-          last30: 0,
-          byMonth: [],
-          payments: [],
-        },
-      };
-    } catch (e) {
-      return { error: e instanceof Error ? e.message : "Failed to load revenue" };
-    }
-  });
 
 /** Gives a member premium access for a number of months, without charging them. */
 export const adminGrantPremium = createServerFn({ method: "POST" })
