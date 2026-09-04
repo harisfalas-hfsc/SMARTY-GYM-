@@ -40,3 +40,9 @@ This matters most for the blog: the old site had 99 articles, and only the Fitne
 - Redirects for retired addresses: handled in the router as permanent (301) redirects, plus a catch-all for old blog slugs that resolves to the article when present and to `/blog` when not.
 - The sitemap already drops `/pricing` automatically when payments are switched off; that behaviour stays.
 - No change to canonical domain: `https://smartygym.com` everywhere.
+
+## Hard rule: nothing visible changes
+
+Every step here is invisible to visitors. No change to the design, colours, fonts, spacing, layout, header, footer, menus, buttons or any page's appearance or wording. No new visible pages or links anywhere on the site.
+
+All the work lives in the parts only search engines and AI crawlers read: the hidden tags in the page source, the sitemap file, `robots.txt`, `llms.txt`, structured data and behind-the-scenes redirects for old addresses. If a step would require anything a visitor could notice, I skip it and tell you instead of doing it.
