@@ -24,9 +24,11 @@ export function MembershipRequiredDialog({
   description?: string;
 }) {
   const { freeAccessMode } = useFreeAccessMode();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   // Hard safety net: never show paid copy while Free Access Mode is on.
   if (freeAccessMode) return null;
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="mx-auto max-h-[80vh] w-[calc(100%-2.5rem)] max-w-md overflow-y-auto rounded-3xl p-5 sm:p-6">
         <DialogTitle className="flex items-center gap-2 text-base font-extrabold uppercase tracking-[0.14em] text-primary">
