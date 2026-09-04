@@ -101,6 +101,6 @@ describe("retry policy", () => {
 
 describe("generation alert recipients", () => {
   it("alerts the owner inbox only", () => {
-    expect(adminRecipients()).toEqual(["harisfalas@gmail.com"]);
+    expect(adminRecipients()).toEqual(["smartygym@outlook.com"]);
   });
 });

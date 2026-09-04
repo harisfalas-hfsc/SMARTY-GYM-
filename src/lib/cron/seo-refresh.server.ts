@@ -111,7 +111,7 @@ async function emailReport(
   try {
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
     const finishedAt = new Date();
-    await sendTemplateEmail("cron-report", "harisfalas@gmail.com", {
+    await sendTemplateEmail("cron-report", (process.env["CRON_REPORT_RECIPIENT"] || "smartygym@outlook.com"), {
       templateData: {
         jobLabel: "Automatic SEO update",
         status: result.status,

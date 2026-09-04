@@ -95,7 +95,7 @@ export const template = {
   subject: (data: Record<string, any>) =>
     `[Problem] ${String(data['source'] || 'app')} — ${String(data['message'] || 'error').slice(0, 80)}`,
   displayName: 'Instant problem alert',
-  to: 'harisfalas@gmail.com',
+  to: 'smartygym@outlook.com',
   previewData: {
     message: 'Workout generation failed: out of AI credits',
     source: 'workout-generation',

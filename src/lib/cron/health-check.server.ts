@@ -174,12 +174,29 @@ export async function runHealthCheck(
     const broken: string[] = [];
     for (const row of sample) {
       try {
+        // Covers we host ourselves are checked in storage, so the result does
+        // not depend on which site is currently answering on the public domain.
+        const match = row.image_url.match(/\/api\/public\/blog-cover\/([^/?#]+)$/);
+        if (match) {
+          const file = decodeURIComponent(match[1] as string);
+          const { data: signed, error } = await db.storage
+            .from("blog-images")
+            .createSignedUrl(file, 120);
+          if (error || !signed?.signedUrl) {
+            broken.push(`${row.slug} (cover file missing)`);
+            continue;
+          }
+          const res = await fetch(signed.signedUrl, { method: "GET" });
+          if (!res.ok) broken.push(`${row.slug} (HTTP ${res.status})`);
+          continue;
+        }
         const res = await fetch(row.image_url, { method: "GET" });
         if (!res.ok) broken.push(`${row.slug} (HTTP ${res.status})`);
       } catch {
         broken.push(`${row.slug} (unreachable)`);
       }
     }
+
 
     if (missing.length > 0 || broken.length > 0) {
       const parts = [
