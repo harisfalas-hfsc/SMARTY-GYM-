@@ -10,33 +10,653 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
+import { Route as ExerciseLibraryRouteImport } from './routes/exercise-library'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as FounderNoteRouteImport } from './routes/founder-note'
+import { Route as GlossaryRouteImport } from './routes/glossary'
+import { Route as HarisFalasRouteImport } from './routes/haris-falas'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as WodRouteImport } from './routes/wod'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
+import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
+import { Route as AuthenticatedLogbookRouteImport } from './routes/_authenticated/logbook'
+import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminExerciseLibraryRouteImport } from './routes/admin.exercise-library'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as CommunityIndexRouteImport } from './routes/community.index'
+import { Route as CommunityWorkoutsRouteImport } from './routes/community.workouts'
+import { Route as ToolsIndexRouteImport } from './routes/tools.index'
+import { Route as Tools1rmCalculatorRouteImport } from './routes/tools.1rm-calculator'
+import { Route as ToolsRoundsTrackerRouteImport } from './routes/tools.rounds-tracker'
+import { Route as ToolsWorkoutTimerRouteImport } from './routes/tools.workout-timer'
+import { Route as TrainingIndexRouteImport } from './routes/training.index'
+import { Route as TrainingSlugRouteImport } from './routes/training.$slug'
+import { Route as WWorkoutIdRouteImport } from './routes/w.$workoutId'
+import { Route as AuthenticatedWorkoutWorkoutIdRouteImport } from './routes/_authenticated/workout.$workoutId'
+import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
+import { Route as ApiPublicRecoverAbandonedRouteImport } from './routes/api/public/recover-abandoned'
+import { Route as ApiPublicRetryGenerationsRouteImport } from './routes/api/public/retry-generations'
+import { Route as CommunityWorkoutWorkoutIdRouteImport } from './routes/community.workout.$workoutId'
+import { Route as ApiPublicBlogCoverFileRouteImport } from './routes/api/public/blog-cover/$file'
+import { Route as ApiPublicHooksDailyRunRouteImport } from './routes/api/public/hooks/daily-run'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExerciseLibraryRoute = ExerciseLibraryRouteImport.update({
+  id: '/exercise-library',
+  path: '/exercise-library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FounderNoteRoute = FounderNoteRouteImport.update({
+  id: '/founder-note',
+  path: '/founder-note',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HarisFalasRoute = HarisFalasRouteImport.update({
+  id: '/haris-falas',
+  path: '/haris-falas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WodRoute = WodRouteImport.update({
+  id: '/wod',
+  path: '/wod',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCoachRoute = AuthenticatedCoachRouteImport.update({
+  id: '/coach',
+  path: '/coach',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInboxRoute = AuthenticatedInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLogbookRoute = AuthenticatedLogbookRouteImport.update({
+  id: '/logbook',
+  path: '/logbook',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMessagesRoute = AuthenticatedMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProgressRoute = AuthenticatedProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminExerciseLibraryRoute = AdminExerciseLibraryRouteImport.update({
+  id: '/admin/exercise-library',
+  path: '/admin/exercise-library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityIndexRoute = CommunityIndexRouteImport.update({
+  id: '/community/',
+  path: '/community/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityWorkoutsRoute = CommunityWorkoutsRouteImport.update({
+  id: '/community/workouts',
+  path: '/community/workouts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsIndexRoute = ToolsIndexRouteImport.update({
+  id: '/tools/',
+  path: '/tools/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Tools1rmCalculatorRoute = Tools1rmCalculatorRouteImport.update({
+  id: '/tools/1rm-calculator',
+  path: '/tools/1rm-calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRoundsTrackerRoute = ToolsRoundsTrackerRouteImport.update({
+  id: '/tools/rounds-tracker',
+  path: '/tools/rounds-tracker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsWorkoutTimerRoute = ToolsWorkoutTimerRouteImport.update({
+  id: '/tools/workout-timer',
+  path: '/tools/workout-timer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingIndexRoute = TrainingIndexRouteImport.update({
+  id: '/training/',
+  path: '/training/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingSlugRoute = TrainingSlugRouteImport.update({
+  id: '/training/$slug',
+  path: '/training/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WWorkoutIdRoute = WWorkoutIdRouteImport.update({
+  id: '/w/$workoutId',
+  path: '/w/$workoutId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedWorkoutWorkoutIdRoute =
+  AuthenticatedWorkoutWorkoutIdRouteImport.update({
+    id: '/workout/$workoutId',
+    path: '/workout/$workoutId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api/public/health',
+  path: '/api/public/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRecoverAbandonedRoute =
+  ApiPublicRecoverAbandonedRouteImport.update({
+    id: '/api/public/recover-abandoned',
+    path: '/api/public/recover-abandoned',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRetryGenerationsRoute =
+  ApiPublicRetryGenerationsRouteImport.update({
+    id: '/api/public/retry-generations',
+    path: '/api/public/retry-generations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const CommunityWorkoutWorkoutIdRoute =
+  CommunityWorkoutWorkoutIdRouteImport.update({
+    id: '/community/workout/$workoutId',
+    path: '/community/workout/$workoutId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicBlogCoverFileRoute = ApiPublicBlogCoverFileRouteImport.update({
+  id: '/api/public/blog-cover/$file',
+  path: '/api/public/blog-cover/$file',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHooksDailyRunRoute = ApiPublicHooksDailyRunRouteImport.update({
+  id: '/api/public/hooks/daily-run',
+  path: '/api/public/hooks/daily-run',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
+  '/exercise-library': typeof ExerciseLibraryRoute
+  '/faq': typeof FaqRoute
+  '/founder-note': typeof FounderNoteRoute
+  '/glossary': typeof GlossaryRoute
+  '/haris-falas': typeof HarisFalasRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/wod': typeof WodRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/coach': typeof AuthenticatedCoachRoute
+  '/inbox': typeof AuthenticatedInboxRoute
+  '/logbook': typeof AuthenticatedLogbookRoute
+  '/messages': typeof AuthenticatedMessagesRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/progress': typeof AuthenticatedProgressRoute
+  '/admin/exercise-library': typeof AdminExerciseLibraryRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/community/workouts': typeof CommunityWorkoutsRoute
+  '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
+  '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
+  '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
+  '/training/$slug': typeof TrainingSlugRoute
+  '/w/$workoutId': typeof WWorkoutIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/community/': typeof CommunityIndexRoute
+  '/tools/': typeof ToolsIndexRoute
+  '/training/': typeof TrainingIndexRoute
+  '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
+  '/api/public/retry-generations': typeof ApiPublicRetryGenerationsRoute
+  '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
+  '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
+  '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
+  '/exercise-library': typeof ExerciseLibraryRoute
+  '/faq': typeof FaqRoute
+  '/founder-note': typeof FounderNoteRoute
+  '/glossary': typeof GlossaryRoute
+  '/haris-falas': typeof HarisFalasRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/wod': typeof WodRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/coach': typeof AuthenticatedCoachRoute
+  '/inbox': typeof AuthenticatedInboxRoute
+  '/logbook': typeof AuthenticatedLogbookRoute
+  '/messages': typeof AuthenticatedMessagesRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/progress': typeof AuthenticatedProgressRoute
+  '/admin/exercise-library': typeof AdminExerciseLibraryRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/community/workouts': typeof CommunityWorkoutsRoute
+  '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
+  '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
+  '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
+  '/training/$slug': typeof TrainingSlugRoute
+  '/w/$workoutId': typeof WWorkoutIdRoute
+  '/admin': typeof AdminIndexRoute
+  '/blog': typeof BlogIndexRoute
+  '/community': typeof CommunityIndexRoute
+  '/tools': typeof ToolsIndexRoute
+  '/training': typeof TrainingIndexRoute
+  '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
+  '/api/public/retry-generations': typeof ApiPublicRetryGenerationsRoute
+  '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
+  '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
+  '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
+  '/exercise-library': typeof ExerciseLibraryRoute
+  '/faq': typeof FaqRoute
+  '/founder-note': typeof FounderNoteRoute
+  '/glossary': typeof GlossaryRoute
+  '/haris-falas': typeof HarisFalasRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/wod': typeof WodRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/coach': typeof AuthenticatedCoachRoute
+  '/_authenticated/inbox': typeof AuthenticatedInboxRoute
+  '/_authenticated/logbook': typeof AuthenticatedLogbookRoute
+  '/_authenticated/messages': typeof AuthenticatedMessagesRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/progress': typeof AuthenticatedProgressRoute
+  '/admin/exercise-library': typeof AdminExerciseLibraryRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/community/workouts': typeof CommunityWorkoutsRoute
+  '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
+  '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
+  '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
+  '/training/$slug': typeof TrainingSlugRoute
+  '/w/$workoutId': typeof WWorkoutIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/community/': typeof CommunityIndexRoute
+  '/tools/': typeof ToolsIndexRoute
+  '/training/': typeof TrainingIndexRoute
+  '/_authenticated/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
+  '/api/public/retry-generations': typeof ApiPublicRetryGenerationsRoute
+  '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
+  '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
+  '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/contact'
+    | '/disclaimer'
+    | '/exercise-library'
+    | '/faq'
+    | '/founder-note'
+    | '/glossary'
+    | '/haris-falas'
+    | '/how-it-works'
+    | '/llms.txt'
+    | '/privacy'
+    | '/reset-password'
+    | '/sitemap.xml'
+    | '/terms'
+    | '/wod'
+    | '/account'
+    | '/coach'
+    | '/inbox'
+    | '/logbook'
+    | '/messages'
+    | '/notifications'
+    | '/profile'
+    | '/progress'
+    | '/admin/exercise-library'
+    | '/blog/$slug'
+    | '/community/workouts'
+    | '/tools/1rm-calculator'
+    | '/tools/rounds-tracker'
+    | '/tools/workout-timer'
+    | '/training/$slug'
+    | '/w/$workoutId'
+    | '/admin/'
+    | '/blog/'
+    | '/community/'
+    | '/tools/'
+    | '/training/'
+    | '/workout/$workoutId'
+    | '/api/public/health'
+    | '/api/public/recover-abandoned'
+    | '/api/public/retry-generations'
+    | '/community/workout/$workoutId'
+    | '/api/public/blog-cover/$file'
+    | '/api/public/hooks/daily-run'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/contact'
+    | '/disclaimer'
+    | '/exercise-library'
+    | '/faq'
+    | '/founder-note'
+    | '/glossary'
+    | '/haris-falas'
+    | '/how-it-works'
+    | '/llms.txt'
+    | '/privacy'
+    | '/reset-password'
+    | '/sitemap.xml'
+    | '/terms'
+    | '/wod'
+    | '/account'
+    | '/coach'
+    | '/inbox'
+    | '/logbook'
+    | '/messages'
+    | '/notifications'
+    | '/profile'
+    | '/progress'
+    | '/admin/exercise-library'
+    | '/blog/$slug'
+    | '/community/workouts'
+    | '/tools/1rm-calculator'
+    | '/tools/rounds-tracker'
+    | '/tools/workout-timer'
+    | '/training/$slug'
+    | '/w/$workoutId'
+    | '/admin'
+    | '/blog'
+    | '/community'
+    | '/tools'
+    | '/training'
+    | '/workout/$workoutId'
+    | '/api/public/health'
+    | '/api/public/recover-abandoned'
+    | '/api/public/retry-generations'
+    | '/community/workout/$workoutId'
+    | '/api/public/blog-cover/$file'
+    | '/api/public/hooks/daily-run'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/about'
+    | '/auth'
+    | '/contact'
+    | '/disclaimer'
+    | '/exercise-library'
+    | '/faq'
+    | '/founder-note'
+    | '/glossary'
+    | '/haris-falas'
+    | '/how-it-works'
+    | '/llms.txt'
+    | '/privacy'
+    | '/reset-password'
+    | '/sitemap.xml'
+    | '/terms'
+    | '/wod'
+    | '/_authenticated/account'
+    | '/_authenticated/coach'
+    | '/_authenticated/inbox'
+    | '/_authenticated/logbook'
+    | '/_authenticated/messages'
+    | '/_authenticated/notifications'
+    | '/_authenticated/profile'
+    | '/_authenticated/progress'
+    | '/admin/exercise-library'
+    | '/blog/$slug'
+    | '/community/workouts'
+    | '/tools/1rm-calculator'
+    | '/tools/rounds-tracker'
+    | '/tools/workout-timer'
+    | '/training/$slug'
+    | '/w/$workoutId'
+    | '/admin/'
+    | '/blog/'
+    | '/community/'
+    | '/tools/'
+    | '/training/'
+    | '/_authenticated/workout/$workoutId'
+    | '/api/public/health'
+    | '/api/public/recover-abandoned'
+    | '/api/public/retry-generations'
+    | '/community/workout/$workoutId'
+    | '/api/public/blog-cover/$file'
+    | '/api/public/hooks/daily-run'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  DisclaimerRoute: typeof DisclaimerRoute
+  ExerciseLibraryRoute: typeof ExerciseLibraryRoute
+  FaqRoute: typeof FaqRoute
+  FounderNoteRoute: typeof FounderNoteRoute
+  GlossaryRoute: typeof GlossaryRoute
+  HarisFalasRoute: typeof HarisFalasRoute
+  HowItWorksRoute: typeof HowItWorksRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
+  WodRoute: typeof WodRoute
+  AdminExerciseLibraryRoute: typeof AdminExerciseLibraryRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  CommunityWorkoutsRoute: typeof CommunityWorkoutsRoute
+  Tools1rmCalculatorRoute: typeof Tools1rmCalculatorRoute
+  ToolsRoundsTrackerRoute: typeof ToolsRoundsTrackerRoute
+  ToolsWorkoutTimerRoute: typeof ToolsWorkoutTimerRoute
+  TrainingSlugRoute: typeof TrainingSlugRoute
+  WWorkoutIdRoute: typeof WWorkoutIdRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  CommunityIndexRoute: typeof CommunityIndexRoute
+  ToolsIndexRoute: typeof ToolsIndexRoute
+  TrainingIndexRoute: typeof TrainingIndexRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
+  ApiPublicRecoverAbandonedRoute: typeof ApiPublicRecoverAbandonedRoute
+  ApiPublicRetryGenerationsRoute: typeof ApiPublicRetryGenerationsRoute
+  CommunityWorkoutWorkoutIdRoute: typeof CommunityWorkoutWorkoutIdRoute
+  ApiPublicBlogCoverFileRoute: typeof ApiPublicBlogCoverFileRoute
+  ApiPublicHooksDailyRunRoute: typeof ApiPublicHooksDailyRunRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +668,413 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exercise-library': {
+      id: '/exercise-library'
+      path: '/exercise-library'
+      fullPath: '/exercise-library'
+      preLoaderRoute: typeof ExerciseLibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/founder-note': {
+      id: '/founder-note'
+      path: '/founder-note'
+      fullPath: '/founder-note'
+      preLoaderRoute: typeof FounderNoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/haris-falas': {
+      id: '/haris-falas'
+      path: '/haris-falas'
+      fullPath: '/haris-falas'
+      preLoaderRoute: typeof HarisFalasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wod': {
+      id: '/wod'
+      path: '/wod'
+      fullPath: '/wod'
+      preLoaderRoute: typeof WodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/coach': {
+      id: '/_authenticated/coach'
+      path: '/coach'
+      fullPath: '/coach'
+      preLoaderRoute: typeof AuthenticatedCoachRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/inbox': {
+      id: '/_authenticated/inbox'
+      path: '/inbox'
+      fullPath: '/inbox'
+      preLoaderRoute: typeof AuthenticatedInboxRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/logbook': {
+      id: '/_authenticated/logbook'
+      path: '/logbook'
+      fullPath: '/logbook'
+      preLoaderRoute: typeof AuthenticatedLogbookRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/messages': {
+      id: '/_authenticated/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof AuthenticatedMessagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/progress': {
+      id: '/_authenticated/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof AuthenticatedProgressRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/exercise-library': {
+      id: '/admin/exercise-library'
+      path: '/admin/exercise-library'
+      fullPath: '/admin/exercise-library'
+      preLoaderRoute: typeof AdminExerciseLibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community/': {
+      id: '/community/'
+      path: '/community'
+      fullPath: '/community/'
+      preLoaderRoute: typeof CommunityIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community/workouts': {
+      id: '/community/workouts'
+      path: '/community/workouts'
+      fullPath: '/community/workouts'
+      preLoaderRoute: typeof CommunityWorkoutsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/': {
+      id: '/tools/'
+      path: '/tools'
+      fullPath: '/tools/'
+      preLoaderRoute: typeof ToolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/1rm-calculator': {
+      id: '/tools/1rm-calculator'
+      path: '/tools/1rm-calculator'
+      fullPath: '/tools/1rm-calculator'
+      preLoaderRoute: typeof Tools1rmCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/rounds-tracker': {
+      id: '/tools/rounds-tracker'
+      path: '/tools/rounds-tracker'
+      fullPath: '/tools/rounds-tracker'
+      preLoaderRoute: typeof ToolsRoundsTrackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/workout-timer': {
+      id: '/tools/workout-timer'
+      path: '/tools/workout-timer'
+      fullPath: '/tools/workout-timer'
+      preLoaderRoute: typeof ToolsWorkoutTimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/training/': {
+      id: '/training/'
+      path: '/training'
+      fullPath: '/training/'
+      preLoaderRoute: typeof TrainingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/training/$slug': {
+      id: '/training/$slug'
+      path: '/training/$slug'
+      fullPath: '/training/$slug'
+      preLoaderRoute: typeof TrainingSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/w/$workoutId': {
+      id: '/w/$workoutId'
+      path: '/w/$workoutId'
+      fullPath: '/w/$workoutId'
+      preLoaderRoute: typeof WWorkoutIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/workout/$workoutId': {
+      id: '/_authenticated/workout/$workoutId'
+      path: '/workout/$workoutId'
+      fullPath: '/workout/$workoutId'
+      preLoaderRoute: typeof AuthenticatedWorkoutWorkoutIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/health': {
+      id: '/api/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/recover-abandoned': {
+      id: '/api/public/recover-abandoned'
+      path: '/api/public/recover-abandoned'
+      fullPath: '/api/public/recover-abandoned'
+      preLoaderRoute: typeof ApiPublicRecoverAbandonedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/retry-generations': {
+      id: '/api/public/retry-generations'
+      path: '/api/public/retry-generations'
+      fullPath: '/api/public/retry-generations'
+      preLoaderRoute: typeof ApiPublicRetryGenerationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community/workout/$workoutId': {
+      id: '/community/workout/$workoutId'
+      path: '/community/workout/$workoutId'
+      fullPath: '/community/workout/$workoutId'
+      preLoaderRoute: typeof CommunityWorkoutWorkoutIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/blog-cover/$file': {
+      id: '/api/public/blog-cover/$file'
+      path: '/api/public/blog-cover/$file'
+      fullPath: '/api/public/blog-cover/$file'
+      preLoaderRoute: typeof ApiPublicBlogCoverFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/daily-run': {
+      id: '/api/public/hooks/daily-run'
+      path: '/api/public/hooks/daily-run'
+      fullPath: '/api/public/hooks/daily-run'
+      preLoaderRoute: typeof ApiPublicHooksDailyRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedCoachRoute: typeof AuthenticatedCoachRoute
+  AuthenticatedInboxRoute: typeof AuthenticatedInboxRoute
+  AuthenticatedLogbookRoute: typeof AuthenticatedLogbookRoute
+  AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
+  AuthenticatedWorkoutWorkoutIdRoute: typeof AuthenticatedWorkoutWorkoutIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedCoachRoute: AuthenticatedCoachRoute,
+  AuthenticatedInboxRoute: AuthenticatedInboxRoute,
+  AuthenticatedLogbookRoute: AuthenticatedLogbookRoute,
+  AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedProgressRoute: AuthenticatedProgressRoute,
+  AuthenticatedWorkoutWorkoutIdRoute: AuthenticatedWorkoutWorkoutIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  DisclaimerRoute: DisclaimerRoute,
+  ExerciseLibraryRoute: ExerciseLibraryRoute,
+  FaqRoute: FaqRoute,
+  FounderNoteRoute: FounderNoteRoute,
+  GlossaryRoute: GlossaryRoute,
+  HarisFalasRoute: HarisFalasRoute,
+  HowItWorksRoute: HowItWorksRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
+  PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
+  WodRoute: WodRoute,
+  AdminExerciseLibraryRoute: AdminExerciseLibraryRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  CommunityWorkoutsRoute: CommunityWorkoutsRoute,
+  Tools1rmCalculatorRoute: Tools1rmCalculatorRoute,
+  ToolsRoundsTrackerRoute: ToolsRoundsTrackerRoute,
+  ToolsWorkoutTimerRoute: ToolsWorkoutTimerRoute,
+  TrainingSlugRoute: TrainingSlugRoute,
+  WWorkoutIdRoute: WWorkoutIdRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  CommunityIndexRoute: CommunityIndexRoute,
+  ToolsIndexRoute: ToolsIndexRoute,
+  TrainingIndexRoute: TrainingIndexRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
+  ApiPublicRecoverAbandonedRoute: ApiPublicRecoverAbandonedRoute,
+  ApiPublicRetryGenerationsRoute: ApiPublicRetryGenerationsRoute,
+  CommunityWorkoutWorkoutIdRoute: CommunityWorkoutWorkoutIdRoute,
+  ApiPublicBlogCoverFileRoute: ApiPublicBlogCoverFileRoute,
+  ApiPublicHooksDailyRunRoute: ApiPublicHooksDailyRunRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
