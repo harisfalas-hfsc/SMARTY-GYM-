@@ -77,7 +77,7 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     description: "Member messages and announcements",
     Icon: MessagesSquare,
   },
-  { key: "customers", label: "Customers", description: "Search, grant, revoke, promote", Icon: Users },
+  { key: "customers", label: "Members", description: "Search members and manage administrators", Icon: Users },
   {
     key: "rules",
     label: "Workout rules",

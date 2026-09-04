@@ -102,9 +102,7 @@ export function AdminMemberDetail({ userId, onBack }: Props) {
           </div>
           <div className="flex flex-wrap gap-1">
             {member.is_admin && <Badge variant="secondary">Admin</Badge>}
-            <Badge variant={member.membership.active ? "default" : "outline"}>
-              {member.membership.active ? "Premium" : "Free"}
-            </Badge>
+            <Badge variant="outline">Member</Badge>
             {!member.email_confirmed && <Badge variant="outline">Email unconfirmed</Badge>}
             {p?.wod_mode && <Badge variant="outline">WOD</Badge>}
           </div>
@@ -113,13 +111,6 @@ export function AdminMemberDetail({ userId, onBack }: Props) {
           <span>Joined: {member.joined_at ? formatDate(member.joined_at) : "—"}</span>
           <span>
             Last sign-in: {member.last_sign_in_at ? formatDateTime(member.last_sign_in_at) : "—"}
-          </span>
-          <span>Credits: {member.membership.credits}</span>
-          <span>
-            Renews:{" "}
-            {member.membership.current_period_end
-              ? formatDate(member.membership.current_period_end)
-              : "—"}
           </span>
         </div>
       </div>

@@ -69,21 +69,6 @@ export function AdminRulesTab() {
           </p>
         </div>
 
-        <div>
-          <Label htmlFor="price">Membership price (EUR / month)</Label>
-          <Input
-            id="price"
-            type="number"
-            step="0.01"
-            min={0}
-            value={rules.membershipPriceEur}
-            onChange={(e) => setRules({ ...rules, membershipPriceEur: Number(e.target.value) })}
-          />
-          <p className="mt-1 text-xs text-muted-foreground">
-            Used for monthly recurring revenue estimates in this panel.
-          </p>
-        </div>
-
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-sm font-semibold">Workout of the Day active</p>
