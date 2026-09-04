@@ -56,7 +56,7 @@ function WorkoutPage() {
 
   const load = useCallback(async () => {
     if (!isSupabaseConfigured()) {
-      return { row: getLocalWorkout(workoutId), access: { premium: true } };
+      return { row: getLocalWorkout(workoutId), access: null };
     }
     const { data, error } = await supabase
       .from("workouts")

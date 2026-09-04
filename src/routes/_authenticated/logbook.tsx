@@ -883,7 +883,7 @@ function Logbook() {
   }, []);
 
   const cached = useRemoteData<Row[]>("logbook:list", loadRows, {
-    enabled: !!user?.id,
+    enabled: !isSupabaseConfigured() || !!user?.id,
   });
   const online = useOnlineStatus();
   const noSavedCopy = !online && cached.error !== null;
