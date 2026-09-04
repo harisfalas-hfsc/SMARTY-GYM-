@@ -49,7 +49,9 @@ export async function autoRespondToSupportMessage(input: {
       .from("support_threads")
       .update({
         user_unread: true,
-        admin_unread: escalated,
+        // The administrator always sees every new conversation, even when the
+        // automatic responder already answered it.
+        admin_unread: true,
         status: escalated ? "open" : "answered",
         last_message_at: new Date().toISOString(),
       } as never)
