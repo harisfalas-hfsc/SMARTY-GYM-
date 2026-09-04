@@ -22,14 +22,12 @@ import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as HarisFalasRouteImport } from './routes/haris-falas'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WodRouteImport } from './routes/wod'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
-import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
 import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
 import { Route as AuthenticatedLogbookRouteImport } from './routes/_authenticated/logbook'
@@ -50,7 +48,6 @@ import { Route as ToolsWorkoutTimerRouteImport } from './routes/tools.workout-ti
 import { Route as TrainingIndexRouteImport } from './routes/training.index'
 import { Route as TrainingSlugRouteImport } from './routes/training.$slug'
 import { Route as WWorkoutIdRouteImport } from './routes/w.$workoutId'
-import { Route as AuthenticatedCheckoutReturnRouteImport } from './routes/_authenticated/checkout.return'
 import { Route as AuthenticatedWorkoutWorkoutIdRouteImport } from './routes/_authenticated/workout.$workoutId'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicRecoverAbandonedRouteImport } from './routes/api/public/recover-abandoned'
@@ -58,7 +55,6 @@ import { Route as ApiPublicRetryGenerationsRouteImport } from './routes/api/publ
 import { Route as CommunityWorkoutWorkoutIdRouteImport } from './routes/community.workout.$workoutId'
 import { Route as ApiPublicBlogCoverFileRouteImport } from './routes/api/public/blog-cover/$file'
 import { Route as ApiPublicHooksDailyRunRouteImport } from './routes/api/public/hooks/daily-run'
-import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -127,11 +123,6 @@ const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -160,11 +151,6 @@ const WodRoute = WodRouteImport.update({
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCoachRoute = AuthenticatedCoachRouteImport.update({
@@ -268,12 +254,6 @@ const WWorkoutIdRoute = WWorkoutIdRouteImport.update({
   path: '/w/$workoutId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedCheckoutReturnRoute =
-  AuthenticatedCheckoutReturnRouteImport.update({
-    id: '/return',
-    path: '/return',
-    getParentRoute: () => AuthenticatedCheckoutRoute,
-  } as any)
 const AuthenticatedWorkoutWorkoutIdRoute =
   AuthenticatedWorkoutWorkoutIdRouteImport.update({
     id: '/workout/$workoutId',
@@ -313,12 +293,6 @@ const ApiPublicHooksDailyRunRoute = ApiPublicHooksDailyRunRouteImport.update({
   path: '/api/public/hooks/daily-run',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicPaymentsWebhookRoute =
-  ApiPublicPaymentsWebhookRouteImport.update({
-    id: '/api/public/payments/webhook',
-    path: '/api/public/payments/webhook',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -349,14 +323,12 @@ export interface FileRoutesByFullPath {
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/wod': typeof WodRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/checkout': typeof AuthenticatedCheckoutRouteWithChildren
   '/coach': typeof AuthenticatedCoachRoute
   '/inbox': typeof AuthenticatedInboxRoute
   '/logbook': typeof AuthenticatedLogbookRoute
@@ -377,7 +349,6 @@ export interface FileRoutesByFullPath {
   '/community/': typeof CommunityIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
-  '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -385,7 +356,6 @@ export interface FileRoutesByFullPath {
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -403,14 +373,12 @@ export interface FileRoutesByTo {
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/wod': typeof WodRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/checkout': typeof AuthenticatedCheckoutRouteWithChildren
   '/coach': typeof AuthenticatedCoachRoute
   '/inbox': typeof AuthenticatedInboxRoute
   '/logbook': typeof AuthenticatedLogbookRoute
@@ -431,7 +399,6 @@ export interface FileRoutesByTo {
   '/community': typeof CommunityIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/training': typeof TrainingIndexRoute
-  '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -439,7 +406,6 @@ export interface FileRoutesByTo {
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -459,14 +425,12 @@ export interface FileRoutesById {
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/wod': typeof WodRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
-  '/_authenticated/checkout': typeof AuthenticatedCheckoutRouteWithChildren
   '/_authenticated/coach': typeof AuthenticatedCoachRoute
   '/_authenticated/inbox': typeof AuthenticatedInboxRoute
   '/_authenticated/logbook': typeof AuthenticatedLogbookRoute
@@ -487,7 +451,6 @@ export interface FileRoutesById {
   '/community/': typeof CommunityIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
-  '/_authenticated/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/_authenticated/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -495,7 +458,6 @@ export interface FileRoutesById {
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -515,14 +477,12 @@ export interface FileRouteTypes {
     | '/haris-falas'
     | '/how-it-works'
     | '/llms.txt'
-    | '/pricing'
     | '/privacy'
     | '/reset-password'
     | '/sitemap.xml'
     | '/terms'
     | '/wod'
     | '/account'
-    | '/checkout'
     | '/coach'
     | '/inbox'
     | '/logbook'
@@ -543,7 +503,6 @@ export interface FileRouteTypes {
     | '/community/'
     | '/tools/'
     | '/training/'
-    | '/checkout/return'
     | '/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -551,7 +510,6 @@ export interface FileRouteTypes {
     | '/community/workout/$workoutId'
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
-    | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -569,14 +527,12 @@ export interface FileRouteTypes {
     | '/haris-falas'
     | '/how-it-works'
     | '/llms.txt'
-    | '/pricing'
     | '/privacy'
     | '/reset-password'
     | '/sitemap.xml'
     | '/terms'
     | '/wod'
     | '/account'
-    | '/checkout'
     | '/coach'
     | '/inbox'
     | '/logbook'
@@ -597,7 +553,6 @@ export interface FileRouteTypes {
     | '/community'
     | '/tools'
     | '/training'
-    | '/checkout/return'
     | '/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -605,7 +560,6 @@ export interface FileRouteTypes {
     | '/community/workout/$workoutId'
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
-    | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -624,14 +578,12 @@ export interface FileRouteTypes {
     | '/haris-falas'
     | '/how-it-works'
     | '/llms.txt'
-    | '/pricing'
     | '/privacy'
     | '/reset-password'
     | '/sitemap.xml'
     | '/terms'
     | '/wod'
     | '/_authenticated/account'
-    | '/_authenticated/checkout'
     | '/_authenticated/coach'
     | '/_authenticated/inbox'
     | '/_authenticated/logbook'
@@ -652,7 +604,6 @@ export interface FileRouteTypes {
     | '/community/'
     | '/tools/'
     | '/training/'
-    | '/_authenticated/checkout/return'
     | '/_authenticated/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -660,7 +611,6 @@ export interface FileRouteTypes {
     | '/community/workout/$workoutId'
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
-    | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -680,7 +630,6 @@ export interface RootRouteChildren {
   HarisFalasRoute: typeof HarisFalasRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
-  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -705,7 +654,6 @@ export interface RootRouteChildren {
   CommunityWorkoutWorkoutIdRoute: typeof CommunityWorkoutWorkoutIdRoute
   ApiPublicBlogCoverFileRoute: typeof ApiPublicBlogCoverFileRoute
   ApiPublicHooksDailyRunRoute: typeof ApiPublicHooksDailyRunRoute
-  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -804,13 +752,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -851,13 +792,6 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/checkout': {
-      id: '/_authenticated/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof AuthenticatedCheckoutRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/coach': {
@@ -1000,13 +934,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WWorkoutIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/checkout/return': {
-      id: '/_authenticated/checkout/return'
-      path: '/return'
-      fullPath: '/checkout/return'
-      preLoaderRoute: typeof AuthenticatedCheckoutReturnRouteImport
-      parentRoute: typeof AuthenticatedCheckoutRoute
-    }
     '/_authenticated/workout/$workoutId': {
       id: '/_authenticated/workout/$workoutId'
       path: '/workout/$workoutId'
@@ -1056,13 +983,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksDailyRunRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/payments/webhook': {
-      id: '/api/public/payments/webhook'
-      path: '/api/public/payments/webhook'
-      fullPath: '/api/public/payments/webhook'
-      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
       path: '/lovable/email/auth/preview'
@@ -1087,22 +1007,8 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedCheckoutRouteChildren {
-  AuthenticatedCheckoutReturnRoute: typeof AuthenticatedCheckoutReturnRoute
-}
-
-const AuthenticatedCheckoutRouteChildren: AuthenticatedCheckoutRouteChildren = {
-  AuthenticatedCheckoutReturnRoute: AuthenticatedCheckoutReturnRoute,
-}
-
-const AuthenticatedCheckoutRouteWithChildren =
-  AuthenticatedCheckoutRoute._addFileChildren(
-    AuthenticatedCheckoutRouteChildren,
-  )
-
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
-  AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRouteWithChildren
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRoute
   AuthenticatedInboxRoute: typeof AuthenticatedInboxRoute
   AuthenticatedLogbookRoute: typeof AuthenticatedLogbookRoute
@@ -1115,7 +1021,6 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
-  AuthenticatedCheckoutRoute: AuthenticatedCheckoutRouteWithChildren,
   AuthenticatedCoachRoute: AuthenticatedCoachRoute,
   AuthenticatedInboxRoute: AuthenticatedInboxRoute,
   AuthenticatedLogbookRoute: AuthenticatedLogbookRoute,
@@ -1143,7 +1048,6 @@ const rootRouteChildren: RootRouteChildren = {
   HarisFalasRoute: HarisFalasRoute,
   HowItWorksRoute: HowItWorksRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
-  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -1168,7 +1072,6 @@ const rootRouteChildren: RootRouteChildren = {
   CommunityWorkoutWorkoutIdRoute: CommunityWorkoutWorkoutIdRoute,
   ApiPublicBlogCoverFileRoute: ApiPublicBlogCoverFileRoute,
   ApiPublicHooksDailyRunRoute: ApiPublicHooksDailyRunRoute,
-  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
