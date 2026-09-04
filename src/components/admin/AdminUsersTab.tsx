@@ -9,6 +9,8 @@ import {
   ArrowLeft,
   User,
   Gift,
+  ChevronLeft,
+  ChevronRight,
   Ban,
   CreditCard,
 } from "lucide-react";
@@ -51,6 +53,11 @@ export function AdminUsersTab() {
   const [busy, setBusy] = useState(false);
   const [logbookFor, setLogbookFor] = useState<AdminUserRow | null>(null);
   const [detailFor, setDetailFor] = useState<AdminUserRow | null>(null);
+  const [monthsById, setMonthsById] = useState<Record<string, number>>({});
+
+  const monthsFor = (id: string) => monthsById[id] ?? 1;
+  const setMonths = (id: string, value: number) =>
+    setMonthsById((prev) => ({ ...prev, [id]: Math.max(1, Math.min(36, value)) }));
 
   async function reload() {
     setLoading(true);
@@ -201,32 +208,45 @@ export function AdminUsersTab() {
                 <Button size="sm" variant="outline" onClick={() => setLogbookFor(u)}>
                   <ClipboardList className="mr-1 h-4 w-4" /> Workouts ({u.workouts})
                 </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={busy}
-                  onClick={() =>
-                    act(
-                      () => grantPremium({ data: { userId: u.id, months: 1 } }),
-                      "1 complimentary month added.",
-                    )
-                  }
-                >
-                  <Gift className="mr-1 h-4 w-4" /> +1 month free
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={busy}
-                  onClick={() =>
-                    act(
-                      () => grantPremium({ data: { userId: u.id, months: 12 } }),
-                      "12 complimentary months added.",
-                    )
-                  }
-                >
-                  <Gift className="mr-1 h-4 w-4" /> +12 months
-                </Button>
+                <span className="flex items-center gap-1 rounded-xl border p-1">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8"
+                    aria-label="Fewer months"
+                    disabled={busy || monthsFor(u.id) <= 1}
+                    onClick={() => setMonths(u.id, monthsFor(u.id) - 1)}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="w-24 text-center text-sm font-semibold">
+                    {monthsFor(u.id)} {monthsFor(u.id) === 1 ? "month" : "months"}
+                  </span>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8"
+                    aria-label="More months"
+                    disabled={busy || monthsFor(u.id) >= 36}
+                    onClick={() => setMonths(u.id, monthsFor(u.id) + 1)}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={busy}
+                    onClick={() => {
+                      const months = monthsFor(u.id);
+                      void act(
+                        () => grantPremium({ data: { userId: u.id, months } }),
+                        `${months} complimentary ${months === 1 ? "month" : "months"} added — free access, no charge and no effect on revenue.`,
+                      );
+                    }}
+                  >
+                    <Gift className="mr-1 h-4 w-4" /> Give free access
+                  </Button>
+                </span>
                 {u.membership !== "member" && (
                   <Button
                     size="sm"
