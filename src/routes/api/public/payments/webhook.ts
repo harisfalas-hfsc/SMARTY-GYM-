@@ -72,11 +72,35 @@ async function handleWebhook(req: Request, env: StripeEnv) {
     case "customer.subscription.deleted":
       await markCanceled(event.data.object, env);
       break;
+    case "invoice.payment_failed": {
+      const invoice = event.data.object;
+      const { notifyPaymentFailure } = await import("@/lib/payment-failure.server");
+      await notifyPaymentFailure({
+        db: await db(),
+        subscriptionId:
+          typeof invoice.subscription === "string"
+            ? invoice.subscription
+            : invoice.subscription?.id ??
+              invoice.parent?.subscription_details?.subscription ??
+              null,
+        invoiceId: invoice.id ?? null,
+        amountDue: invoice.amount_due ?? null,
+        currency: invoice.currency ?? null,
+        attemptCount: invoice.attempt_count ?? null,
+        nextAttempt: invoice.next_payment_attempt ?? null,
+        final: !invoice.next_payment_attempt,
+      });
+      break;
+    }
+    case "customer.subscription.paused":
+      await upsertSubscription(event.data.object, env);
+      break;
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
     case "invoice.paid":
       // Subscription state is kept current by the customer.subscription.* events.
       break;
+
     default:
       console.log("Unhandled payments event:", event.type);
   }
