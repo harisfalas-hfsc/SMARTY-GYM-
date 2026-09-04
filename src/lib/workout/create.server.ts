@@ -9,6 +9,7 @@ import {
   type StrengthFocus,
 } from "@/lib/workout/spec";
 import { microMinutes, resolveDifficulty } from "@/lib/workout/programming";
+import { wodRationale } from "@/lib/wod-cycle";
 import { whyThisSession } from "@/lib/coach-rules/why";
 import { loadPerformanceOverview } from "@/lib/performance.server";
 
@@ -389,24 +390,36 @@ export async function createWorkoutForUser(
    * logged evidence the engine used, so the member can see what changed and why.
    */
   let coachRationale: string[] = [];
-  try {
-    const overview = await loadPerformanceOverview(db as never, userId);
-    coachRationale = whyThisSession({
-      readiness: overview.readiness.state,
-      overallLoad: overview.load.overall,
-      averageRpe: averageRpe(feedbackRows),
-      recentFeelings: feedbackRows.map((f) => f.feeling).filter(Boolean) as string[],
-      deprioritizedFormats: feedbackRows
-        .filter((f) => f.would_repeat === "No")
-        .map((f) => f.workouts?.category ?? "")
-        .filter(Boolean),
-      avoidedExercises: dislikedLibrary,
-      favoredExercises: favoriteLibrary,
-      loggedSessions: overview.loggedSessions,
+  if (data.wod) {
+    // The WOD is programmed, never scaled: explain the periodization instead.
+    coachRationale = wodRationale({
+      cycleDay: data.wod.cycleDay,
+      category: data.wod.category,
+      focus: data.wod.focus ?? null,
+      variant: data.wod.variant ?? null,
     });
-  } catch {
-    // Explanation is additive: never block a generation on it.
   }
+  else {
+    try {
+      const overview = await loadPerformanceOverview(db as never, userId);
+      coachRationale = whyThisSession({
+        readiness: overview.readiness.state,
+        overallLoad: overview.load.overall,
+        averageRpe: averageRpe(feedbackRows),
+        recentFeelings: feedbackRows.map((f) => f.feeling).filter(Boolean) as string[],
+        deprioritizedFormats: feedbackRows
+          .filter((f) => f.would_repeat === "No")
+          .map((f) => f.workouts?.category ?? "")
+          .filter(Boolean),
+        avoidedExercises: dislikedLibrary,
+        favoredExercises: favoriteLibrary,
+        loggedSessions: overview.loggedSessions,
+      });
+    } catch {
+      // Explanation is additive: never block a generation on it.
+    }
+  }
+
 
   const anyBuilt = built as Record<string, unknown>;
   const durationLabel = (anyBuilt["duration"] ?? anyBuilt["duration_label"] ?? null) as

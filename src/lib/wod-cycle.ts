@@ -166,3 +166,43 @@ export function difficultyLabelWithLevel(day: CycleDay, level: WodLevel = "cycle
   if (level === "cycle") return day.difficulty ?? "Recovery";
   return level.charAt(0).toUpperCase() + level.slice(1);
 }
+
+/**
+ * "Why this session" for the Workout of the Day. The WOD is programmed, not
+ * adapted: the reasoning explains the periodization decision behind today's
+ * date instead of claiming the session was scaled to the member.
+ */
+export function wodRationale(input: {
+  cycleDay: number;
+  category: string;
+  focus?: string | null;
+  variant?: string | null;
+}): string[] {
+  const dayIn84 = ((input.cycleDay - 1) % 84) + 1;
+  const block = cycleBlock(dayIn84);
+  const dayInBlock = ((dayIn84 - 1) % 28) + 1;
+  const day = PERIODIZATION_84DAY[dayIn84 - 1];
+  const lines: string[] = [];
+
+  lines.push(
+    `Day ${dayIn84} of the 84 day cycle (block ${block}, day ${dayInBlock} of 28): today is programmed as ${input.category}${input.focus ? ` — ${input.focus}` : ""}.`,
+  );
+
+  if (input.category === "RECOVERY") {
+    lines.push(
+      "A planned recovery day closes each 4 week block, so the work you did this block can actually be absorbed.",
+    );
+  } else if (day?.difficulty) {
+    lines.push(
+      `Difficulty is set to ${day.difficulty} by the calendar, so hard and easy days alternate across the block instead of stacking up.`,
+    );
+  }
+
+  if (input.variant === "bodyweight") {
+    lines.push("Bodyweight variant: same programmed stimulus, no equipment needed.");
+  } else if (input.variant) {
+    lines.push("Equipment variant: the same programmed stimulus loaded with the gear you have.");
+  }
+
+  return lines.slice(0, 3);
+}
