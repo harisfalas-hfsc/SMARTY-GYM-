@@ -279,50 +279,16 @@ export const adminGetRevenue = createServerFn({ method: "POST" })
     try {
       await assertAdmin(context as any);
       const environment = data.environment ?? "live";
-      const { createStripeClient, getStripeErrorMessage } = await import("@/lib/stripe.server");
-      try {
-        const stripe = createStripeClient(environment);
-        const charges = await stripe.charges.list({ limit: 100 });
-        const rows = charges.data.filter((c) => c.status === "succeeded");
-        const currency = (rows[0]?.currency ?? "eur").toUpperCase();
-        const since30 = Date.now() - 30 * 86_400_000;
-        const byMonth = new Map<string, number>();
-        let total = 0;
-        let last30 = 0;
-        const payments: AdminPayment[] = [];
-        for (const c of rows) {
-          const net = (c.amount - (c.amount_refunded ?? 0)) / 100;
-          total += net;
-          const createdMs = c.created * 1000;
-          if (createdMs >= since30) last30 += net;
-          const month = new Date(createdMs).toISOString().slice(0, 7);
-          byMonth.set(month, Number(((byMonth.get(month) ?? 0) + net).toFixed(2)));
-          payments.push({
-            id: c.id,
-            amount: net,
-            currency: c.currency.toUpperCase(),
-            created: new Date(createdMs).toISOString(),
-            email: c.billing_details?.email ?? c.receipt_email ?? null,
-            status: c.status,
-            refunded: Boolean(c.amount_refunded),
-          });
-        }
-        return {
-          revenue: {
-            environment,
-            currency,
-            total: Number(total.toFixed(2)),
-            last30: Number(last30.toFixed(2)),
-            byMonth: [...byMonth.entries()]
-              .sort((a, b) => (a[0] < b[0] ? 1 : -1))
-              .slice(0, 12)
-              .map(([month, amount]) => ({ month, amount })),
-            payments: payments.slice(0, 50),
-          },
-        };
-      } catch (stripeError) {
-        return { error: getStripeErrorMessage(stripeError) };
-      }
+      return {
+        revenue: {
+          environment,
+          currency: "EUR",
+          total: 0,
+          last30: 0,
+          byMonth: [],
+          payments: [],
+        },
+      };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed to load revenue" };
     }
