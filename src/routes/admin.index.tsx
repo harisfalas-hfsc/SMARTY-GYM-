@@ -18,6 +18,7 @@ import {
   ArrowLeft,
   AlertTriangle,
   type LucideIcon,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
@@ -36,6 +37,7 @@ import { AdminMessagesTab } from "@/components/admin/AdminMessagesTab";
 import { AdminAwardsTab } from "@/components/admin/AdminAwardsTab";
 import { AdminReportsTab } from "@/components/admin/AdminReportsTab";
 import { AdminPaymentsTab } from "@/components/admin/AdminPaymentsTab";
+import { AdminRevenueTab } from "@/components/admin/AdminRevenueTab";
 
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
 import { AdminGenerationFailuresTab } from "@/components/admin/AdminGenerationFailuresTab";
@@ -228,6 +230,7 @@ function AdminPage() {
           {section === "awards" && <AdminAwardsTab />}
           {section === "reports" && <AdminReportsTab />}
           {section === "payments" && <AdminPaymentsTab />}
+          {section === "revenue" && <AdminRevenueTab />}
           {section === "cron" && <AdminCronTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
         </div>
