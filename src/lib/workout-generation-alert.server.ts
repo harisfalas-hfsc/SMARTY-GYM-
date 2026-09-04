@@ -2,7 +2,7 @@
  * Alerting for workout generation.
  *
  * A real failure always reaches:
- *   1. the owner inbox (harisfalas@gmail.com) — the ONLY admin address.
+ *   1. the system inbox (smartygym@outlook.com) — the ONLY admin address.
  *      Admin alerts are emailed to the owner only, never posted to an in-app
  *      inbox, so an administrator's own account sees exactly what a customer sees.
  *   2. the member — a branded, non-technical apology, sent ONCE per session.
@@ -12,7 +12,7 @@
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 import { generationIdempotencyKey, type FailureKind } from "@/lib/workout-validation";
 
-export const SYSTEM_INBOX = "harisfalas@gmail.com";
+export const SYSTEM_INBOX = "smartygym@outlook.com";
 export const SUPPORT_REPLY_TO = "smartygym@outlook.com";
 
 export function adminRecipients(): string[] {

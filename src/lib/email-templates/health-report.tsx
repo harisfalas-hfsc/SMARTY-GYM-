@@ -107,7 +107,7 @@ export const template = {
         ? `[Health] All critical checks passed — ${data['warned']} warning(s)`
         : `[Health] All ${data['total'] ?? 0} checks passed`,
   displayName: 'Nightly system health report',
-  to: 'harisfalas@gmail.com',
+  to: 'smartygym@outlook.com',
   previewData: {
     startedAt: new Date().toISOString(),
     finishedAt: new Date().toISOString(),
