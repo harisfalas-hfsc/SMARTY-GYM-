@@ -183,6 +183,13 @@
       "when": 1788496239165,
       "tag": "0025_badges_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1788496283744,
+      "tag": "0026_community_schema",
+      "breakpoints": true
     }
   ]
 }
