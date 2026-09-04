@@ -70,16 +70,18 @@ function Account() {
     void refresh();
   }, [refresh]);
 
-  useEffect(() => {
+  const refreshMembership = useCallback(async () => {
     if (freeAccessMode) return;
-    (async () => {
-      try {
-        setMembership(await getMyMembership());
-      } catch {
-        setMembership(null);
-      }
-    })();
-  }, [freeAccessMode, user?.id]);
+    try {
+      setMembership(await getMyMembership());
+    } catch {
+      setMembership(null);
+    }
+  }, [freeAccessMode]);
+
+  useEffect(() => {
+    void refreshMembership();
+  }, [refreshMembership, user?.id]);
 
   async function openPortal() {
     setPortalBusy(true);
@@ -95,6 +97,30 @@ function Account() {
       setPortalBusy(false);
     }
   }
+
+  async function toggleCancellation(cancel: boolean) {
+    setCancelBusy(true);
+    try {
+      const result = await setMembershipCancellation({
+        data: { cancel, environment: getStripeEnvironment() },
+      });
+      if ("error" in result) throw new Error(result.error);
+      toast.success(
+        cancel
+          ? "Membership will end at the end of your billing period."
+          : "Membership renewal restored.",
+      );
+      await Promise.all([refresh(), refreshMembership()]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not update your membership");
+    } finally {
+      setCancelBusy(false);
+    }
+  }
+
+  const renewLabel = membership?.currentPeriodEnd
+    ? formatDateLong(new Date(membership.currentPeriodEnd))
+    : null;
 
   useEffect(() => {
     (async () => {
