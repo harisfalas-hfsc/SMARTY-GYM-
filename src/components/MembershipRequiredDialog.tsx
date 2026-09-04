@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
+import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
 
 /**
  * Shown when a signed-in athlete without an active membership tries to use a

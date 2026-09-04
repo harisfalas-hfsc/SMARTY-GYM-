@@ -40,6 +40,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminExerciseLibraryRouteImport } from './routes/admin.exercise-library'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as CommunityWorkoutsRouteImport } from './routes/community.workouts'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
@@ -216,6 +217,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
+  id: '/checkout/return',
+  path: '/checkout/return',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommunityIndexRoute = CommunityIndexRouteImport.update({
   id: '/community/',
   path: '/community/',
@@ -352,6 +358,7 @@ export interface FileRoutesByFullPath {
   '/progress': typeof AuthenticatedProgressRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -404,6 +411,7 @@ export interface FileRoutesByTo {
   '/progress': typeof AuthenticatedProgressRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -458,6 +466,7 @@ export interface FileRoutesById {
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -512,6 +521,7 @@ export interface FileRouteTypes {
     | '/progress'
     | '/admin/exercise-library'
     | '/blog/$slug'
+    | '/checkout/return'
     | '/community/workouts'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -564,6 +574,7 @@ export interface FileRouteTypes {
     | '/progress'
     | '/admin/exercise-library'
     | '/blog/$slug'
+    | '/checkout/return'
     | '/community/workouts'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -617,6 +628,7 @@ export interface FileRouteTypes {
     | '/_authenticated/progress'
     | '/admin/exercise-library'
     | '/blog/$slug'
+    | '/checkout/return'
     | '/community/workouts'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -663,6 +675,7 @@ export interface RootRouteChildren {
   WodRoute: typeof WodRoute
   AdminExerciseLibraryRoute: typeof AdminExerciseLibraryRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  CheckoutReturnRoute: typeof CheckoutReturnRoute
   CommunityWorkoutsRoute: typeof CommunityWorkoutsRoute
   Tools1rmCalculatorRoute: typeof Tools1rmCalculatorRoute
   ToolsRoundsTrackerRoute: typeof ToolsRoundsTrackerRoute
@@ -905,6 +918,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/return': {
+      id: '/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof CheckoutReturnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/community/': {
       id: '/community/'
       path: '/community'
@@ -1097,6 +1117,7 @@ const rootRouteChildren: RootRouteChildren = {
   WodRoute: WodRoute,
   AdminExerciseLibraryRoute: AdminExerciseLibraryRoute,
   BlogSlugRoute: BlogSlugRoute,
+  CheckoutReturnRoute: CheckoutReturnRoute,
   CommunityWorkoutsRoute: CommunityWorkoutsRoute,
   Tools1rmCalculatorRoute: Tools1rmCalculatorRoute,
   ToolsRoundsTrackerRoute: ToolsRoundsTrackerRoute,
