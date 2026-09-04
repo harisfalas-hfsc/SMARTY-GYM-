@@ -455,7 +455,7 @@ export function WorkoutPlayerDialog({
           <div className="h-1 bg-primary transition-all" style={{ width: `${progress}%` }} />
         </div>
 
-        <div className="relative h-[calc(clamp(9rem,26dvh,15rem)+5rem+0.75rem)] overflow-hidden pt-3">
+        <div className="relative h-[calc(clamp(9rem,26dvh,15rem)+8rem+0.75rem)] overflow-hidden pt-3">
           <Carousel setApi={setApi} className="h-full overflow-hidden">
             <CarouselContent className="ml-0 h-full min-h-0">
               {slides.map((s, i) => (
