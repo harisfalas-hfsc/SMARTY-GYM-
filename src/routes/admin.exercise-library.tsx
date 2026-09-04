@@ -99,6 +99,36 @@ function Uploader() {
   const [status, setStatus] = useState<Status>({ total: 0, done: 0, failed: [], running: false });
   const [log, setLog] = useState<string | null>(null);
   const [existing, setExisting] = useState<number | null>(null);
+  const [libStatus, setLibStatus] = useState<ExerciseLibraryStatus | null>(null);
+  const [importing, setImporting] = useState(false);
+  const [importLog, setImportLog] = useState<string | null>(null);
+
+  async function refreshLibraryStatus() {
+    try {
+      const s = await getExerciseLibraryStatus();
+      setLibStatus(s);
+    } catch {
+      setLibStatus(null);
+    }
+  }
+
+  async function runImport() {
+    setImporting(true);
+    setImportLog(null);
+    try {
+      const res = await importExerciseLibrary();
+      setImportLog(
+        res.ok
+          ? `Imported ${res.imported} exercises into the database${res.skipped ? ` (${res.skipped} records skipped)` : ""}.`
+          : `Imported ${res.imported} exercises with problems: ${res.errors.join(" | ")}`,
+      );
+    } catch (e) {
+      setImportLog(e instanceof Error ? e.message : "Import failed.");
+    } finally {
+      setImporting(false);
+      void refreshLibraryStatus();
+    }
+  }
 
   async function refreshCount() {
     let count = 0;
