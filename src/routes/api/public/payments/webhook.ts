@@ -1,0 +1,104 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
+
+async function db() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  return supabaseAdmin as any;
+}
+
+function iso(seconds: number | null | undefined): string | null {
+  return seconds ? new Date(seconds * 1000).toISOString() : null;
+}
+
+function priceIdOf(item: any): string | null {
+  return item?.price?.lookup_key ?? item?.price?.metadata?.lovable_external_id ?? item?.price?.id ?? null;
+}
+
+async function upsertSubscription(subscription: any, env: StripeEnv) {
+  const item = subscription.items?.data?.[0];
+  const userId = subscription.metadata?.userId;
+  const supabase = await db();
+
+  const row = {
+    provider: "stripe",
+    provider_customer_id:
+      typeof subscription.customer === "string" ? subscription.customer : subscription.customer?.id,
+    provider_subscription_id: subscription.id,
+    status: subscription.status,
+    price_id: priceIdOf(item),
+    product_id: typeof item?.price?.product === "string" ? item.price.product : null,
+    current_period_start: iso(item?.current_period_start ?? subscription.current_period_start),
+    current_period_end: iso(item?.current_period_end ?? subscription.current_period_end),
+    cancel_at_period_end: Boolean(subscription.cancel_at_period_end),
+    environment: env,
+    last_event_at: subscription.created ?? null,
+    updated_at: new Date().toISOString(),
+  };
+
+  const { data: existing } = await supabase
+    .from("subscriptions")
+    .select("id")
+    .eq("provider_subscription_id", subscription.id)
+    .maybeSingle();
+
+  if (existing?.id) {
+    await supabase.from("subscriptions").update(row).eq("id", existing.id);
+    return;
+  }
+  if (!userId) {
+    console.error("Stripe subscription without userId metadata:", subscription.id);
+    return;
+  }
+  await supabase.from("subscriptions").insert({ ...row, user_id: userId });
+}
+
+async function markCanceled(subscription: any, env: StripeEnv) {
+  const supabase = await db();
+  await supabase
+    .from("subscriptions")
+    .update({ status: "canceled", updated_at: new Date().toISOString() })
+    .eq("provider_subscription_id", subscription.id)
+    .eq("environment", env);
+}
+
+async function handleWebhook(req: Request, env: StripeEnv) {
+  const event = await verifyWebhook(req, env);
+
+  switch (event.type) {
+    case "customer.subscription.created":
+    case "customer.subscription.updated":
+      await upsertSubscription(event.data.object, env);
+      break;
+    case "customer.subscription.deleted":
+      await markCanceled(event.data.object, env);
+      break;
+    case "checkout.session.completed":
+    case "checkout.session.async_payment_succeeded":
+    case "invoice.paid":
+      // Subscription state is kept current by the customer.subscription.* events.
+      break;
+    default:
+      console.log("Unhandled payments event:", event.type);
+  }
+}
+
+export const Route = createFileRoute("/api/public/payments/webhook")({
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        const rawEnv = new URL(request.url).searchParams.get("env");
+        if (rawEnv !== "sandbox" && rawEnv !== "live") {
+          console.error("Payments webhook with invalid env:", rawEnv);
+          return Response.json({ received: true, ignored: "invalid env" });
+        }
+        try {
+          await handleWebhook(request, rawEnv);
+          return Response.json({ received: true });
+        } catch (e) {
+          console.error("Payments webhook error:", e);
+          return new Response("Webhook error", { status: 400 });
+        }
+      },
+    },
+  },
+});
