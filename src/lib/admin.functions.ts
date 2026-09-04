@@ -841,7 +841,6 @@ export type AdminMemberDetail = {
     active: boolean;
     provider: string | null;
     current_period_end: string | null;
-    credits: number;
   };
   progress: {
     score: number;
