@@ -3,7 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { Loader2, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+
 import { adminGetFreeAccessMode, adminSetFreeAccessMode } from "@/lib/admin.functions";
 import { setFreeAccessModeCache } from "@/hooks/useFreeAccessMode";
 
