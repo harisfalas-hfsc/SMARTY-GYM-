@@ -14,17 +14,24 @@ async function assertAdmin(ctx: { supabase: any; userId: string; claims: any }) 
   if (!role) throw new Error("Forbidden: admin access required");
 }
 
+/** How a member currently has access. */
+export type MembershipKind = "subscriber" | "complimentary" | "member";
+
 export type AdminUserRow = {
   id: string;
   email: string;
   name: string;
   age: number | null;
-  credits: number;
   created_at: string;
   is_admin: boolean;
   workouts: number;
   wod_subscribed: boolean;
   profile_complete: boolean;
+  /** Access source: paid subscriber, admin-granted complimentary, or free member. */
+  membership: MembershipKind;
+  membership_status: string | null;
+  membership_provider: string | null;
+  membership_until: string | null;
 };
 
 export const adminListUsers = createServerFn({ method: "POST" })
