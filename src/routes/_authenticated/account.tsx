@@ -122,20 +122,18 @@ function Account() {
 
       <DailyCoachingSettings premium={premium === true} />
 
-          <Button asChild variant="secondary" className="h-12 rounded-2xl">
-            <Link to="/contact">
-              <Mail className="mr-2 h-4 w-4" /> Contact support
-            </Link>
-          </Button>
-        </div>
-        {premium ? (
-          <p className="mt-3 text-xs text-muted-foreground">
-            Manage billing opens your secure billing portal in a new tab, where you can update your
-            payment method, download invoices and change your card.
-          </p>
-        ) : null}
+      <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
+        <p className="font-bold">Need a hand?</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Everything in Smarty Workout is free for members.
+        </p>
+        <Button asChild variant="secondary" className="mt-4 h-12 rounded-2xl">
+          <Link to="/contact">
+            <Mail className="mr-2 h-4 w-4" /> Contact support
+          </Link>
+        </Button>
       </section>
-      )}
+
 
       <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <p className="font-bold">Delete account</p>
