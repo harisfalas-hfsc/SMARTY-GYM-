@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRemoteData } from "@/lib/remote-data";
 import { useOnlineStatus } from "@/lib/connectivity";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useServerFn } from "@tanstack/react-start";
 import { setWorkoutMeta, setWorkoutStatus } from "@/lib/coach.functions";
@@ -62,6 +62,7 @@ import { ProgressSection } from "@/components/progress/ProgressSection";
 import { SessionDebriefDialog } from "@/components/workout/SessionDebriefDialog";
 import { PendingGenerationCard } from "@/components/workout/PendingGenerationCard";
 import { getSessionFeedback, type SessionFeedback } from "@/lib/feedback.functions";
+import { getLocalWorkouts } from "@/lib/local-workouts";
 
 type View = "list" | "calendar" | "progress";
 type LogSearch = { filter: string; view: View; equip?: string };
@@ -869,6 +870,7 @@ function Logbook() {
   );
 
   const loadRows = useCallback(async () => {
+    if (!isSupabaseConfigured()) return getLocalWorkouts() as Row[];
     const { data, error } = await supabase
       .from("workouts")
       .select(

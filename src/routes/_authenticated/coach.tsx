@@ -53,9 +53,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import { getMyAccessState } from "@/lib/access.functions";
 import { PageHeader } from "@/components/PageHeader";
+import { createLocalWorkout } from "@/lib/local-workouts";
 
 export const Route = createFileRoute("/_authenticated/coach")({
   head: () => ({
@@ -163,6 +164,11 @@ function CoachPage() {
 
 
   useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      setProfileReady(true);
+      setPremium(true);
+      return;
+    }
     void getMyAccessState()
       .then((access) => {
         setProfileReady(
@@ -178,6 +184,7 @@ function CoachPage() {
 
 
   useEffect(() => {
+    if (!isSupabaseConfigured()) return;
     (async () => {
       const { data: auth } = await supabase.auth.getUser();
       if (!auth.user) return;
@@ -242,6 +249,11 @@ function CoachPage() {
     setResuming(false);
     localStorage.setItem("smarty:generating", "1");
     try {
+      if (!isSupabaseConfigured()) {
+        const workout = createLocalWorkout(request);
+        navigate({ to: "/workout/$workoutId", params: { workoutId: workout.id } });
+        return;
+      }
       const res = await run({ data: request });
       if (res.notes?.length) toast.info(res.notes[0]);
       navigate({ to: "/workout/$workoutId", params: { workoutId: res.id } });
