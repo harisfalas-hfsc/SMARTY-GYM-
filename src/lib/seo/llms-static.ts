@@ -24,7 +24,7 @@ SmartyGym is not another workout app. It is an intelligent fitness coach built a
 
 ## Training categories
 
-Every generated workout belongs to exactly one category. Full descriptions: https://smartyworkout.com/glossary
+Every generated workout belongs to exactly one category. Full descriptions: https://smartygym.com/glossary
 
 - **Strength** — Reps & Sets sessions with generous rest, built around squat, hinge, push and pull patterns; barbells, racks and machines included. For getting measurably stronger.
 - **Muscle Building** — Reps & Sets with moderate loads, higher volume and shorter rest, targeted at a chosen body part; machines, dumbbells, barbells and cables included. For visible shape and size.
@@ -65,32 +65,32 @@ The subscription includes up to 2 workouts per day, the full exercise library, a
 
 ## Key pages
 
-- Home — https://smartyworkout.com/
-- About — https://smartyworkout.com/about
-- How it works — https://smartyworkout.com/how-it-works
-- FAQ — https://smartyworkout.com/faq
-- Contact — https://smartyworkout.com/contact
-- Workout of the Day — https://smartyworkout.com/wod
-- Exercise library — https://smartyworkout.com/exercise-library
-- Training hub — https://smartyworkout.com/training
-- Personalized workouts — https://smartyworkout.com/training/personalized-workouts
-- Strength training — https://smartyworkout.com/training/strength-training
-- Cardio workouts — https://smartyworkout.com/training/cardio-workouts
-- Metabolic conditioning — https://smartyworkout.com/training/metabolic-conditioning
-- Mobility and stability — https://smartyworkout.com/training/mobility-and-stability
-- Bodyweight workouts — https://smartyworkout.com/training/bodyweight-workouts
-- Home workouts — https://smartyworkout.com/training/home-workouts
-- Workout programs — https://smartyworkout.com/training/workout-programs
-- Tools index — https://smartyworkout.com/tools
-- Workout timer — https://smartyworkout.com/tools/workout-timer
-- Rounds tracker — https://smartyworkout.com/tools/rounds-tracker
-- 1RM calculator — https://smartyworkout.com/tools/1rm-calculator
-- Glossary — https://smartyworkout.com/glossary
-- Founder note — https://smartyworkout.com/founder-note
-- Haris Falas — https://smartyworkout.com/haris-falas
-- Privacy — https://smartyworkout.com/privacy
-- Terms — https://smartyworkout.com/terms
-- Disclaimer — https://smartyworkout.com/disclaimer
+- Home — https://smartygym.com/
+- About — https://smartygym.com/about
+- How it works — https://smartygym.com/how-it-works
+- FAQ — https://smartygym.com/faq
+- Contact — https://smartygym.com/contact
+- Workout of the Day — https://smartygym.com/wod
+- Exercise library — https://smartygym.com/exercise-library
+- Training hub — https://smartygym.com/training
+- Personalized workouts — https://smartygym.com/training/personalized-workouts
+- Strength training — https://smartygym.com/training/strength-training
+- Cardio workouts — https://smartygym.com/training/cardio-workouts
+- Metabolic conditioning — https://smartygym.com/training/metabolic-conditioning
+- Mobility and stability — https://smartygym.com/training/mobility-and-stability
+- Bodyweight workouts — https://smartygym.com/training/bodyweight-workouts
+- Home workouts — https://smartygym.com/training/home-workouts
+- Workout programs — https://smartygym.com/training/workout-programs
+- Tools index — https://smartygym.com/tools
+- Workout timer — https://smartygym.com/tools/workout-timer
+- Rounds tracker — https://smartygym.com/tools/rounds-tracker
+- 1RM calculator — https://smartygym.com/tools/1rm-calculator
+- Glossary — https://smartygym.com/glossary
+- Founder note — https://smartygym.com/founder-note
+- Haris Falas — https://smartygym.com/haris-falas
+- Privacy — https://smartygym.com/privacy
+- Terms — https://smartygym.com/terms
+- Disclaimer — https://smartygym.com/disclaimer
 
 ## Topics SmartyGym covers authoritatively
 

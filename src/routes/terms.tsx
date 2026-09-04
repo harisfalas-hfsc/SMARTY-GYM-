@@ -17,9 +17,9 @@ export const Route = createFileRoute("/terms")({
         property: "og:description",
         content: "Legal terms for using the SmartyGym AI training planning app.",
       },
-      { property: "og:url", content: "https://smartyworkout.com/terms" },
+      { property: "og:url", content: "https://smartygym.com/terms" },
     ],
-    links: [{ rel: "canonical", href: "https://smartyworkout.com/terms" }],
+    links: [{ rel: "canonical", href: "https://smartygym.com/terms" }],
   }),
   component: Terms,
 });
@@ -29,7 +29,7 @@ function Terms() {
   return (
     <LegalLayout title="Terms & Conditions" icon={<FileText className="h-5 w-5" />} lastUpdated="July 2026">
       <p>
-        Welcome to <strong>Smarty Gym</strong> (smartyworkout.com). By accessing or using our
+        Welcome to <strong>Smarty Gym</strong> (smartygym.com). By accessing or using our
         AI-generated personalized training service, you agree to comply with and be bound by the
         following Terms &amp; Conditions. Please read them carefully before using Smarty Gym.
       </p>
@@ -224,7 +224,7 @@ function Terms() {
       <h2>16. Contact</h2>
       <p>
         For questions about these Terms, contact <strong>Smarty Gym</strong> at{" "}
-        <a href="mailto:smartyworkout@outlook.com">smartyworkout@outlook.com</a>.
+        <a href="mailto:smartygym@outlook.com">smartygym@outlook.com</a>.
       </p>
     </LegalLayout>
   );

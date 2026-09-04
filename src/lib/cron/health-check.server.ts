@@ -32,7 +32,7 @@ export interface HealthReport {
 export { HEALTH_CHECKS, DEFAULT_HEALTH_RECIPIENT } from "@/lib/cron/health-checks";
 import { HEALTH_CHECKS, DEFAULT_HEALTH_RECIPIENT } from "@/lib/cron/health-checks";
 
-const SITE_BASE_URL = "https://smartyworkout.com";
+const SITE_BASE_URL = "https://smartygym.com";
 
 function enabledKeys(config?: CronJobConfig): Set<string> {
   const raw = config?.content?.checks;

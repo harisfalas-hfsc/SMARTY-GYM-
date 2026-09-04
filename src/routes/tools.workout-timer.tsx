@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useKeepScreenAwake } from "@/hooks/useKeepScreenAwake";
 import { PageHeader } from "@/components/PageHeader";
 
-const URL = "https://smartyworkout.com/tools/workout-timer";
+const URL = "https://smartygym.com/tools/workout-timer";
 const TITLE = "Workout Timer — Interval training timer | SmartyGym";
 const DESCRIPTION =
   "Free workout interval timer. Customizable work/rest periods and rounds — perfect for HIIT, Tabata and circuit training.";
@@ -41,13 +41,13 @@ export const Route = createFileRoute("/tools/workout-timer")({
               description: DESCRIPTION,
               isAccessibleForFree: true,
               offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-              publisher: { "@id": "https://smartyworkout.com/#organization" },
+              publisher: { "@id": "https://smartygym.com/#organization" },
             },
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
-                { "@type": "ListItem", position: 2, name: "Tools", item: "https://smartyworkout.com/tools" },
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                { "@type": "ListItem", position: 2, name: "Tools", item: "https://smartygym.com/tools" },
                 { "@type": "ListItem", position: 3, name: "Workout Timer", item: URL },
               ],
             },

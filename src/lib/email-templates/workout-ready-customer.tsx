@@ -41,7 +41,7 @@ export const template = {
   previewData: {
     name: 'Alex',
     workoutName: 'Full Body Strength Builder',
-    workoutUrl: 'https://smartyworkout.com/logbook',
+    workoutUrl: 'https://smartygym.com/logbook',
   },
 } satisfies TemplateEntry
 

@@ -33,7 +33,7 @@ import {
 import type { ExerciseSchemaItem } from "@/lib/seo/exercise-schema.functions";
 
 
-const URL = "https://smartyworkout.com/exercise-library";
+const URL = "https://smartygym.com/exercise-library";
 const TITLE = "Exercise Library — 1,300+ demos | SmartyGym";
 const DESCRIPTION =
   "Browse the SmartyGym exercise library: 1,300+ barbell, dumbbell, kettlebell, band, machine and bodyweight movements with animated demonstrations, filtered by body part, equipment, target muscle and difficulty, curated by sports scientist Haris Falas (CSCS).";
@@ -71,7 +71,7 @@ export const Route = createFileRoute("/exercise-library")({
               name: TITLE,
               description: DESCRIPTION,
               inLanguage: "en",
-              isPartOf: { "@id": "https://smartyworkout.com/#website" },
+              isPartOf: { "@id": "https://smartygym.com/#website" },
               about: {
                 "@type": "Thing",
                 name: "Exercise database",
@@ -82,7 +82,7 @@ export const Route = createFileRoute("/exercise-library")({
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
                 { "@type": "ListItem", position: 2, name: "Exercise Library", item: URL },
               ],
             },

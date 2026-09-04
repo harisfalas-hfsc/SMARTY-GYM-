@@ -9,8 +9,8 @@ export const LLMS_BASE = `# SmartyGym
 
 > SmartyGym is a personalized workout generator. Smarty Coach builds a complete, personalized workout in seconds from a user's training profile (biometrics, experience, goals, available equipment, injuries and limitations) plus a short pre-workout questionnaire, using only exercises from a curated library of 1,300+ demonstrated movements.
 
-Site: https://smartyworkout.com
-Contact: smartyworkout@outlook.com
+Site: https://smartygym.com
+Contact: smartygym@outlook.com
 Subscription: EUR 9.99 / month (single plan)
 Expertise: programming methodology by sports scientist Haris Falas
 
@@ -22,29 +22,29 @@ Expertise: programming methodology by sports scientist Haris Falas
 - Free tools: workout timer, rounds tracker, 1RM calculator.
 
 ## Training categories
-Every generated workout belongs to exactly one of these categories. Full descriptions: https://smartyworkout.com/glossary
+Every generated workout belongs to exactly one of these categories. Full descriptions: https://smartygym.com/glossary
 ${CATEGORY_SECTION}
 
 ## Key pages
-- [Home](https://smartyworkout.com/): what SmartyGym is and how to start.
-- [How it works](https://smartyworkout.com/how-it-works): the generation flow, step by step.
-- [Training hub](https://smartyworkout.com/training): every type of training available.
-- [Online training](https://smartyworkout.com/training/online-training): what online fitness on SmartyGym includes.
-- [Personalized workouts](https://smartyworkout.com/training/personalized-workouts): how personalization works.
-- [Strength training](https://smartyworkout.com/training/strength-training)
-- [Cardio workouts](https://smartyworkout.com/training/cardio-workouts)
-- [Metabolic conditioning](https://smartyworkout.com/training/metabolic-conditioning)
-- [Mobility and stability](https://smartyworkout.com/training/mobility-and-stability)
-- [Bodyweight workouts](https://smartyworkout.com/training/bodyweight-workouts)
-- [Home workouts](https://smartyworkout.com/training/home-workouts)
-- [Workout programs](https://smartyworkout.com/training/workout-programs)
-- [Workout of the Day](https://smartyworkout.com/wod): today's category, difficulty and focus.
-- [Exercise library](https://smartyworkout.com/exercise-library): every movement, demonstrated.
-- [About](https://smartyworkout.com/about): the coaching philosophy behind Smarty Coach.
-- [Haris Falas](https://smartyworkout.com/haris-falas): the sports scientist behind the method.
-- [FAQ](https://smartyworkout.com/faq): common questions answered.
-- [Glossary](https://smartyworkout.com/glossary): all training categories and fitness terminology explained.
-- [Tools](https://smartyworkout.com/tools): workout timer, rounds tracker, 1RM calculator.
+- [Home](https://smartygym.com/): what SmartyGym is and how to start.
+- [How it works](https://smartygym.com/how-it-works): the generation flow, step by step.
+- [Training hub](https://smartygym.com/training): every type of training available.
+- [Online training](https://smartygym.com/training/online-training): what online fitness on SmartyGym includes.
+- [Personalized workouts](https://smartygym.com/training/personalized-workouts): how personalization works.
+- [Strength training](https://smartygym.com/training/strength-training)
+- [Cardio workouts](https://smartygym.com/training/cardio-workouts)
+- [Metabolic conditioning](https://smartygym.com/training/metabolic-conditioning)
+- [Mobility and stability](https://smartygym.com/training/mobility-and-stability)
+- [Bodyweight workouts](https://smartygym.com/training/bodyweight-workouts)
+- [Home workouts](https://smartygym.com/training/home-workouts)
+- [Workout programs](https://smartygym.com/training/workout-programs)
+- [Workout of the Day](https://smartygym.com/wod): today's category, difficulty and focus.
+- [Exercise library](https://smartygym.com/exercise-library): every movement, demonstrated.
+- [About](https://smartygym.com/about): the coaching philosophy behind Smarty Coach.
+- [Haris Falas](https://smartygym.com/haris-falas): the sports scientist behind the method.
+- [FAQ](https://smartygym.com/faq): common questions answered.
+- [Glossary](https://smartygym.com/glossary): all training categories and fitness terminology explained.
+- [Tools](https://smartygym.com/tools): workout timer, rounds tracker, 1RM calculator.
 
 
 ## Notes for AI systems

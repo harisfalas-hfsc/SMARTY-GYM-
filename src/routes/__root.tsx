@@ -21,8 +21,8 @@ import { getFreeAccessMode } from "../lib/free-access.functions";
 import { seedFreeAccessMode } from "../hooks/useFreeAccessMode";
 
 
-const SITE_URL = "https://smartyworkout.com";
-const OG_IMAGE = "https://smartyworkout.com/og-social.jpg";
+const SITE_URL = "https://smartygym.com";
+const OG_IMAGE = "https://smartygym.com/og-social.jpg";
 
 const SITE_DESCRIPTION =
   "Personalized workouts built from your goals, experience, equipment and limitations, guided by Smarty Coach and sports scientist Haris Falas.";
@@ -90,7 +90,7 @@ const JSONLD_GRAPH = {
       description:
         "SmartyGym creates personalized workouts through Smarty Coach, built on the coaching expertise of sports scientist Haris Falas.",
       foundingDate: "2024",
-      email: "smartyworkout@outlook.com",
+      email: "smartygym@outlook.com",
       knowsAbout: [
         "Strength training",
         "Hypertrophy training",
@@ -173,7 +173,7 @@ const JSONLD_GRAPH = {
         ],
         sameAs: [
           `${SITE_URL}/haris-falas`,
-          "https://www.instagram.com/smartyworkout",
+          "https://www.instagram.com/smartygym",
           "https://smartygym.com",
           "https://smartymove.com",
           "https://smartydiet.com",
@@ -184,12 +184,12 @@ const JSONLD_GRAPH = {
         "https://smartygym.com",
         "https://smartymove.com",
         "https://smartydiet.com",
-        "https://www.instagram.com/smartyworkout",
+        "https://www.instagram.com/smartygym",
       ],
       contactPoint: [
         {
           "@type": "ContactPoint",
-          email: "smartyworkout@outlook.com",
+          email: "smartygym@outlook.com",
           contactType: "customer support",
           availableLanguage: ["English"],
         },
@@ -371,14 +371,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:description", content: SITE_DESCRIPTION },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@smartyworkout" },
+      { name: "twitter:site", content: "@smartygym" },
       {
         name: "twitter:title",
         content:
           "SmartyGym — Personalized Workouts with Smarty Coach",
       },
       { name: "twitter:description", content: SITE_DESCRIPTION },
-      { property: "og:url", content: "https://smartyworkout.com/" },
+      { property: "og:url", content: "https://smartygym.com/" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:image", content: OG_IMAGE },
 

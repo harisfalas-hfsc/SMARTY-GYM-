@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard } from "@/components/SmartyCard";
 import { TRAINING_TOPICS } from "@/lib/seo/training-topics";
 
-const SITE = "https://smartyworkout.com";
+const SITE = "https://smartygym.com";
 const URL = `${SITE}/training`;
 
 const TITLE = "Online Fitness and Personalized Training — SmartyGym Training Hub";

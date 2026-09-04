@@ -41,7 +41,7 @@ export function LegalLayout({
         }}
       >
         <strong className="text-foreground">Last updated:</strong> {lastUpdated} ·{" "}
-        <strong className="text-foreground">Operator:</strong> SmartyGym (smartyworkout.com), part of the{" "}
+        <strong className="text-foreground">Operator:</strong> SmartyGym (smartygym.com), part of the{" "}
         <a
           href="https://smartywellness.com"
           target="_blank"
@@ -70,8 +70,8 @@ export function LegalLayout({
         </a>
         ) ·{" "}
         <strong className="text-foreground">Contact:</strong>{" "}
-        <a href="mailto:smartyworkout@outlook.com" className="text-primary font-semibold hover:underline">
-          smartyworkout@outlook.com
+        <a href="mailto:smartygym@outlook.com" className="text-primary font-semibold hover:underline">
+          smartygym@outlook.com
         </a>
       </div>
 

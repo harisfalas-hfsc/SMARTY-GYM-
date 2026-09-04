@@ -29,32 +29,32 @@ export const Route = createFileRoute("/")({
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:url", content: "https://smartyworkout.com/" },
+      { property: "og:url", content: "https://smartygym.com/" },
       {
         property: "og:image",
-        content: "https://smartyworkout.com/og-social.jpg",
+        content: "https://smartygym.com/og-social.jpg",
       },
       {
         name: "twitter:image",
-        content: "https://smartyworkout.com/og-social.jpg",
+        content: "https://smartygym.com/og-social.jpg",
       },
     ],
-    links: [{ rel: "canonical", href: "https://smartyworkout.com/" }],
+    links: [{ rel: "canonical", href: "https://smartygym.com/" }],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
-          "@id": "https://smartyworkout.com/#webpage",
-          url: "https://smartyworkout.com/",
+          "@id": "https://smartygym.com/#webpage",
+          url: "https://smartygym.com/",
           name: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
           description:
             "Answer a smart questionnaire and get a full tailor-made workout built around your body, goals, equipment and constraints.",
           inLanguage: "en",
-          isPartOf: { "@id": "https://smartyworkout.com/#website" },
-          about: { "@id": "https://smartyworkout.com/#software" },
-          primaryImageOfPage: "https://smartyworkout.com/og-social.jpg",
+          isPartOf: { "@id": "https://smartygym.com/#website" },
+          about: { "@id": "https://smartygym.com/#software" },
+          primaryImageOfPage: "https://smartygym.com/og-social.jpg",
         }),
       },
     ],

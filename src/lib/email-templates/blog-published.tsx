@@ -99,7 +99,7 @@ export const template = {
   previewData: {
     title: 'Restarting Fitness: Your Smart Comeback Guide',
     excerpt: 'How to return to training after a long break without wrecking your first week.',
-    url: 'https://smartyworkout.com/blog/restarting-fitness-your-smart-comeback-guide',
+    url: 'https://smartygym.com/blog/restarting-fitness-your-smart-comeback-guide',
     readTime: '6 min read',
     trigger: 'schedule',
     publishedAt: new Date().toISOString(),

@@ -17,9 +17,9 @@ export const Route = createFileRoute("/privacy")({
         property: "og:description",
         content: "How SmartyGym protects your personal data and training profile information.",
       },
-      { property: "og:url", content: "https://smartyworkout.com/privacy" },
+      { property: "og:url", content: "https://smartygym.com/privacy" },
     ],
-    links: [{ rel: "canonical", href: "https://smartyworkout.com/privacy" }],
+    links: [{ rel: "canonical", href: "https://smartygym.com/privacy" }],
   }),
   component: Privacy,
 });
@@ -29,7 +29,7 @@ function Privacy() {
   return (
     <LegalLayout title="Privacy Policy" icon={<Shield className="h-5 w-5" />} lastUpdated="July 2026">
       <p>
-        At <strong>Smarty Gym</strong> (smartyworkout.com) we value your privacy and are
+        At <strong>Smarty Gym</strong> (smartygym.com) we value your privacy and are
         committed to protecting your personal data. This Privacy Policy explains how Smarty
         Workout collects, uses, stores, and protects your information when you use our
         AI-generated personalized training service. Our practices comply with the General Data
@@ -145,7 +145,7 @@ function Privacy() {
       </ul>
       <div className="note">
         To exercise these rights, use the controls in your profile settings or email{" "}
-        <a href="mailto:smartyworkout@outlook.com">smartyworkout@outlook.com</a>. We respond within 30 days.
+        <a href="mailto:smartygym@outlook.com">smartygym@outlook.com</a>. We respond within 30 days.
       </div>
 
       <h2>7. Security Measures</h2>
@@ -186,8 +186,8 @@ function Privacy() {
 
       <h2>12. Contact</h2>
       <p>
-        Data Controller: <strong>Smarty Gym</strong> (smartyworkout.com). Contact{" "}
-        <a href="mailto:smartyworkout@outlook.com">smartyworkout@outlook.com</a>.
+        Data Controller: <strong>Smarty Gym</strong> (smartygym.com). Contact{" "}
+        <a href="mailto:smartygym@outlook.com">smartygym@outlook.com</a>.
       </p>
     </LegalLayout>
   );

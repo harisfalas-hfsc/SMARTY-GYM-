@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useKeepScreenAwake } from "@/hooks/useKeepScreenAwake";
 import { PageHeader } from "@/components/PageHeader";
 
-const URL = "https://smartyworkout.com/tools/rounds-tracker";
+const URL = "https://smartygym.com/tools/rounds-tracker";
 const TITLE = "Rounds Tracker — Tap to count rounds & reps | SmartyGym";
 const DESCRIPTION =
   "Free big-button rounds and reps counter. Tap to count rounds during your workout — perfect for AMRAP, EMOM and circuit training.";
@@ -41,13 +41,13 @@ export const Route = createFileRoute("/tools/rounds-tracker")({
               description: DESCRIPTION,
               isAccessibleForFree: true,
               offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-              publisher: { "@id": "https://smartyworkout.com/#organization" },
+              publisher: { "@id": "https://smartygym.com/#organization" },
             },
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
-                { "@type": "ListItem", position: 2, name: "Tools", item: "https://smartyworkout.com/tools" },
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                { "@type": "ListItem", position: 2, name: "Tools", item: "https://smartygym.com/tools" },
                 { "@type": "ListItem", position: 3, name: "Rounds Tracker", item: URL },
               ],
             },

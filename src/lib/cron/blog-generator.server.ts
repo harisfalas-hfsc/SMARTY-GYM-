@@ -5,8 +5,8 @@ import { TRAINING_TOPIC_SLUGS } from "@/lib/seo/training-topics";
 type DB = SupabaseClient;
 
 const MODEL = "google/gemini-2.5-pro";
-const SITE_BASE_URL = "https://smartyworkout.com";
-const DEFAULT_BLOG_RECIPIENT = "smartyworkout@outlook.com";
+const SITE_BASE_URL = "https://smartygym.com";
+const DEFAULT_BLOG_RECIPIENT = "smartygym@outlook.com";
 const NOTIFY_BATCH = 200;
 const MAX_NOTIFY_MEMBERS = 5000;
 

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { TRAINING_CATEGORIES } from "@/lib/training-categories";
 
-const URL = "https://smartyworkout.com/glossary";
+const URL = "https://smartygym.com/glossary";
 const TITLE =
   "Training Glossary & Workout Categories Explained — Strength, Cardio, Metabolic, Pilates | SmartyGym";
 const DESCRIPTION =
@@ -187,7 +187,7 @@ const JSONLD = {
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
         { "@type": "ListItem", position: 2, name: "Glossary", item: URL },
       ],
     },

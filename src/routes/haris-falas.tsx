@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import harisPhoto from "@/assets/haris-falas-coach.png";
 import { PageHeader } from "@/components/PageHeader";
 
-const URL = "https://smartyworkout.com/haris-falas";
+const URL = "https://smartygym.com/haris-falas";
 const TITLE =
   "Haris Falas — Sports Scientist & Strength Coach | Smarty Gym";
 const DESCRIPTION =
@@ -100,12 +100,12 @@ export const Route = createFileRoute("/haris-falas")({
               ],
               sameAs: [
                 URL,
-                "https://www.instagram.com/smartyworkout",
+                "https://www.instagram.com/smartygym",
                 "https://smartygym.com",
                 "https://smartymove.com",
                 "https://smartydiet.com",
               ],
-              worksFor: { "@id": "https://smartyworkout.com/#organization" },
+              worksFor: { "@id": "https://smartygym.com/#organization" },
             },
 
             {
@@ -114,12 +114,12 @@ export const Route = createFileRoute("/haris-falas")({
               name: TITLE,
               description: DESCRIPTION,
               mainEntity: { "@id": `${URL}#person` },
-              isPartOf: { "@id": "https://smartyworkout.com/#website" },
+              isPartOf: { "@id": "https://smartygym.com/#website" },
             },
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
                 { "@type": "ListItem", position: 2, name: "Haris Falas", item: URL },
               ],
             },

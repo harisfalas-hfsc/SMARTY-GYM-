@@ -16,9 +16,9 @@ export const Route = createFileRoute("/disclaimer")({
         property: "og:description",
         content: "Important safety, health, and liability information for SmartyGym users.",
       },
-      { property: "og:url", content: "https://smartyworkout.com/disclaimer" },
+      { property: "og:url", content: "https://smartygym.com/disclaimer" },
     ],
-    links: [{ rel: "canonical", href: "https://smartyworkout.com/disclaimer" }],
+    links: [{ rel: "canonical", href: "https://smartygym.com/disclaimer" }],
   }),
   component: Disclaimer,
 });
@@ -39,7 +39,7 @@ function Disclaimer() {
       </div>
 
       <p>
-        The information provided by <strong>Smarty Gym</strong> (smartyworkout.com) is
+        The information provided by <strong>Smarty Gym</strong> (smartygym.com) is
         intended solely for <strong>general educational and fitness purposes</strong>. Smarty
         Workout does not provide medical, physiotherapy, or personal training advice, diagnosis,
         or treatment.

@@ -131,7 +131,7 @@ export const reportContent = createServerFn({ method: "POST" })
       kind: "Community report",
       title: `New ${data.targetType} report`,
       details: `Reported ${data.targetType} ${data.targetId}\nReason: ${data.reason?.slice(0, 500) || "(none given)"}`,
-      link: "https://smartyworkout.com/admin",
+      link: "https://smartygym.com/admin",
       dedupeKey: `report-${data.targetType}-${data.targetId}-${context.userId}`,
     });
     return { ok: true as const };

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { PageHeader } from "@/components/PageHeader";
 
-const URL = "https://smartyworkout.com/tools/1rm-calculator";
+const URL = "https://smartygym.com/tools/1rm-calculator";
 const TITLE = "1RM Calculator — One rep max (Brzycki) | SmartyGym";
 const DESCRIPTION =
   "Free 1RM calculator using the Brzycki formula. Estimate your one rep max and get training percentages for strength programming.";
@@ -45,13 +45,13 @@ export const Route = createFileRoute("/tools/1rm-calculator")({
               description: DESCRIPTION,
               isAccessibleForFree: true,
               offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-              publisher: { "@id": "https://smartyworkout.com/#organization" },
+              publisher: { "@id": "https://smartygym.com/#organization" },
             },
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
-                { "@type": "ListItem", position: 2, name: "Tools", item: "https://smartyworkout.com/tools" },
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                { "@type": "ListItem", position: 2, name: "Tools", item: "https://smartygym.com/tools" },
                 { "@type": "ListItem", position: 3, name: "1RM Calculator", item: URL },
               ],
             },

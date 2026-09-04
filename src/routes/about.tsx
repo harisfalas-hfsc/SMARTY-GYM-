@@ -40,9 +40,9 @@ export const Route = createFileRoute("/about")({
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:url", content: "https://smartyworkout.com/about" },
+      { property: "og:url", content: "https://smartygym.com/about" },
     ],
-    links: [{ rel: "canonical", href: "https://smartyworkout.com/about" }],
+    links: [{ rel: "canonical", href: "https://smartygym.com/about" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -51,19 +51,19 @@ export const Route = createFileRoute("/about")({
           "@graph": [
             {
               "@type": "AboutPage",
-              url: "https://smartyworkout.com/about",
+              url: "https://smartygym.com/about",
               name: "About Smarty Gym — Your Fitness Coach",
               description:
                 "Smarty Gym is not another workout app. Smarty Coach is a fitness coach built around the sports science of Haris Falas.",
               inLanguage: "en",
-              isPartOf: { "@id": "https://smartyworkout.com/#website" },
-              mainEntity: { "@id": "https://smartyworkout.com/#organization" },
+              isPartOf: { "@id": "https://smartygym.com/#website" },
+              mainEntity: { "@id": "https://smartygym.com/#organization" },
             },
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
-                { "@type": "ListItem", position: 2, name: "About", item: "https://smartyworkout.com/about" },
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                { "@type": "ListItem", position: 2, name: "About", item: "https://smartygym.com/about" },
               ],
             },
           ],

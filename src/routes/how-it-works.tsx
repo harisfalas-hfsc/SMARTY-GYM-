@@ -16,9 +16,9 @@ export const Route = createFileRoute("/how-it-works")({
       { property: "og:description", content: "You answer. Smarty Coach thinks. You train." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:url", content: "https://smartyworkout.com/how-it-works" },
+      { property: "og:url", content: "https://smartygym.com/how-it-works" },
     ],
-    links: [{ rel: "canonical", href: "https://smartyworkout.com/how-it-works" }],
+    links: [{ rel: "canonical", href: "https://smartygym.com/how-it-works" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -65,13 +65,13 @@ export const Route = createFileRoute("/how-it-works")({
                   "@type": "ListItem",
                   position: 1,
                   name: "Home",
-                  item: "https://smartyworkout.com/",
+                  item: "https://smartygym.com/",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
                   name: "How it works",
-                  item: "https://smartyworkout.com/how-it-works",
+                  item: "https://smartygym.com/how-it-works",
                 },
               ],
             },

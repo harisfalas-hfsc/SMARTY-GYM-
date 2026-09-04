@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { PageHeader } from "@/components/PageHeader";
 
-const URL = "https://smartyworkout.com/faq";
+const URL = "https://smartygym.com/faq";
 const TITLE = "SmartyGym FAQ — Smarty Coach, workouts & training";
 const DESCRIPTION =
   "Short answers about SmartyGym: how Smarty Coach builds your workout, what is included, equipment, injuries and privacy.";
@@ -150,7 +150,7 @@ const jsonLd = (freeAccessMode: boolean) => ({
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
         { "@type": "ListItem", position: 2, name: "FAQ", item: URL },
       ],
     },
