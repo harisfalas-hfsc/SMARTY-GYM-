@@ -5,12 +5,28 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, Mail, User, ClipboardList, Trash2, CreditCard, ExternalLink } from "lucide-react";
+import {
+  LogOut,
+  Mail,
+  User,
+  ClipboardList,
+  Trash2,
+  CreditCard,
+  ExternalLink,
+  Crown,
+  Zap,
+} from "lucide-react";
 import { DailyCoachingSettings } from "@/components/DailyCoachingSettings";
 import { getMyAccessState } from "@/lib/access.functions";
 import { deleteMyAccount } from "@/lib/account.functions";
-import { getMyMembership, createPortalSession, type MyMembership } from "@/utils/payments.functions";
+import {
+  getMyMembership,
+  createPortalSession,
+  setMembershipCancellation,
+  type MyMembership,
+} from "@/utils/payments.functions";
 import { getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
+import { formatDateLong } from "@/lib/date-format";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
 import { toast } from "sonner";
