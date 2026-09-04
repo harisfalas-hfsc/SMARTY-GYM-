@@ -7,19 +7,28 @@
 - All **7 automated jobs are switched on** in this project (motivation 07:00, workout-of-the-day 07:00, reminders, SEO update 00:00, health check 00:00, problem alerts, weekly blog article Sunday 00:00) and the hourly scheduler is live in this project's database, pointing at this project's own published address.
 - The nightly health report, problem alerts and the SEO report currently default to **harisfalas@gmail.com**, not smartygym@outlook.com.
 
-## 1. Move all 80 articles into this project
+## 1. Move the Fitness articles into this project
 
-- Build a one-off importer (admin-run, same pattern as the exercise-library import) that, for every article on the live site: reads the title, slug, summary, category, author, read time, publish date and the full article body.
+- Only articles in the **Fitness** category are transferred. Every other category on the old blog is left out.
+- Build a one-off importer (admin-run, same pattern as the exercise-library import) that, for each Fitness article on the live site: reads the title, slug, summary, category, author, read time, publish date and the full article body.
 - Download each article's cover image and re-upload it into this project's own new blog image folder, then point the article at this project's permanent cover address, so covers keep working forever and never expire.
 - Rewrite any image used **inside** an article body the same way, so no article body points back at the old project.
 - Article bodies are cleaned on the way in (links kept, nothing executable).
 
 ## 2. Guarantee no article is missing an image
 
-- After the import, run a verification pass over **every** article: it must have a cover image, that image must download successfully, and no image address may still point to the old project.
+- After the import, run a verification pass over **every** imported article: it must have a cover image, that image must download successfully, and no image address may still point to the old project.
 - Any article failing this is retried; if a cover truly cannot be recovered, a fresh cover is generated for it so it goes in with a picture.
-- I report the final numbers: articles imported, covers verified, inline images rewritten. Target is 80/80 with images.
+- I report the final numbers: Fitness articles found, imported, covers verified, inline images rewritten — every imported article with an image, no exceptions.
 - Also confirm the article list page, each article page, the sitemap and the social preview all show the images.
+
+## 2b. Blog page filters and read/unread
+
+- Verify **Newest first / Oldest first** sorting actually reorders the articles by publish date, and that the choice survives a page reload (it lives in the page address).
+- Verify **All / Unread only / Read only** filters return the right articles, with correct counts.
+- Verify the "Mark as read" / "Mark as unread" button toggles the article, shows the Read badge, is remembered on the device after reload, and stays in step with the filter (marking an article read while "Unread only" is selected removes it from the list immediately).
+- Verify Reset clears both filters, and that all of this works on mobile width too.
+
 
 ## 3. Weekly blog article job
 
