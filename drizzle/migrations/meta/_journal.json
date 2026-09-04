@@ -288,6 +288,13 @@
       "when": 1788496929767,
       "tag": "0040_admin_email_bootstrap",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1788498571289,
+      "tag": "0041_exercise_library_admin_write",
+      "breakpoints": true
     }
   ]
 }
