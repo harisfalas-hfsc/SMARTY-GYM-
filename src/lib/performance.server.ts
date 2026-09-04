@@ -347,8 +347,50 @@ export async function recalcAttempt(
   ]);
 
   const sets = (setRows ?? []) as SetLogRow[];
-  const result = (resultRow ?? null) as WorkoutResultRow | null;
-  if (!result) return { updated: false, note: null as string | null };
+  let result = (resultRow ?? null) as WorkoutResultRow | null;
+
+  // A session logged only through the editor has no result row yet. Create one
+  // from the workout's own prescription so loads, RPE and the calendar see it.
+  if (!result) {
+    if (!sets.length) return { updated: false, note: null as string | null };
+    const { data: workoutRow } = await supabase
+      .from("workouts")
+      .select("format,category")
+      .eq("id", workoutId)
+      .eq("user_id", userId)
+      .maybeSingle();
+    const performedAt =
+      sets
+        .map((s) => s.completed_at)
+        .filter(Boolean)
+        .sort()[0] ?? new Date().toISOString();
+    const seed = {
+      user_id: userId,
+      workout_id: workoutId,
+      attempt,
+      performed_at: performedAt,
+      format: (workoutRow as { format?: string | null } | null)?.format ?? null,
+      category: (workoutRow as { category?: string | null } | null)?.category ?? null,
+      metric: sets.find((s) => s.metric)?.metric ?? null,
+      duration_seconds: null,
+      rounds: null,
+      extra_reps: null,
+      intervals_done: null,
+      intervals_total: null,
+      finished: null,
+      rpe: null,
+      analysis_note: null,
+      strength_load: null,
+      conditioning_load: null,
+      data_points: 0,
+    };
+    const { error: seedError } = await supabase
+      .from("workout_results")
+      .upsert(seed, { onConflict: "workout_id,attempt" });
+    if (seedError) throw new Error(seedError.message);
+    result = seed as unknown as WorkoutResultRow;
+  }
+
 
   const analysis = note({ sets, result, history: [] });
   const dataPoints =

@@ -206,9 +206,17 @@ function ProfilePage() {
         ),
       ) as Partial<Profile>;
 
-      const row = { ...EMPTY, ...clean };
+      // Readiness questions always start unanswered: every visit is a fresh check,
+      // so no Yes/No button is pre-selected.
+      const row = {
+        ...EMPTY,
+        ...clean,
+        readiness_answers: {},
+        readiness_warning_acknowledged_at: null,
+      };
       setWasOnboarded(Boolean(row.onboarded));
       setP(row);
+
 
     })();
   }, []);
