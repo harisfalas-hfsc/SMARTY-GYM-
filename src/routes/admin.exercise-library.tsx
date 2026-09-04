@@ -290,6 +290,45 @@ function Uploader() {
             />
           </CardContent>
         </Card>
+
+        <Card className="md:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Database className="h-4 w-4 text-primary" /> Import into the exercise database
+            </CardTitle>
+            {libStatus !== null && (
+              <Badge variant="secondary">{libStatus.exercisesInDb} in database</Badge>
+            )}
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              After the metadata JSON is uploaded, run the import once. It reads every JSON file
+              stored under <code>data/</code> and fills the exercise table that the coach, the
+              public library and the workout engine actually use. Safe to run again — existing
+              exercises are updated, not duplicated.
+            </p>
+            {libStatus !== null && (
+              <p className="text-xs text-muted-foreground">
+                Stored: {libStatus.gifsInStorage} media files ·{" "}
+                {libStatus.jsonFiles.length
+                  ? `metadata: ${libStatus.jsonFiles.join(", ")}`
+                  : "no metadata JSON yet"}
+              </p>
+            )}
+            <Button
+              onClick={() => void runImport()}
+              disabled={status.running || importing || !libStatus?.jsonFiles.length}
+            >
+              {importing ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Database className="mr-2 h-4 w-4" />
+              )}
+              {importing ? "Importing…" : "Import exercises into the database"}
+            </Button>
+            {importLog && <p className="text-sm text-muted-foreground">{importLog}</p>}
+          </CardContent>
+        </Card>
       </div>
 
       {(status.running || status.total > 0) && (
