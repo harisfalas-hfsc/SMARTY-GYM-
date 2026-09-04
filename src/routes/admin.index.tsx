@@ -14,6 +14,7 @@ import {
   MessagesSquare,
   Trophy,
   Flag,
+  Lock,
   ArrowLeft,
   AlertTriangle,
   type LucideIcon,
@@ -34,6 +35,7 @@ import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
 import { AdminMessagesTab } from "@/components/admin/AdminMessagesTab";
 import { AdminAwardsTab } from "@/components/admin/AdminAwardsTab";
 import { AdminReportsTab } from "@/components/admin/AdminReportsTab";
+import { AdminPaymentsTab } from "@/components/admin/AdminPaymentsTab";
 
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
 import { AdminGenerationFailuresTab } from "@/components/admin/AdminGenerationFailuresTab";
@@ -61,10 +63,17 @@ type SectionKey =
   | "messages"
   | "awards"
   | "reports"
+  | "payments"
   | "cron"
   | "generation";
 
 const SECTIONS: { key: SectionKey; label: string; description: string; Icon: LucideIcon }[] = [
+  {
+    key: "payments",
+    label: "Payments",
+    description: "Global Free Access Mode master switch",
+    Icon: Lock,
+  },
   {
     key: "workouts",
     label: "Workouts",
@@ -206,6 +215,7 @@ function AdminPage() {
           {section === "messages" && <AdminMessagesTab />}
           {section === "awards" && <AdminAwardsTab />}
           {section === "reports" && <AdminReportsTab />}
+          {section === "payments" && <AdminPaymentsTab />}
           {section === "cron" && <AdminCronTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
         </div>

@@ -74,6 +74,7 @@ export const PAGE_KEYWORDS: Record<string, string[]> = {
     "training load",
     "deload",
   ],
+  "/pricing": ["fitness subscription", "monthly membership", "9.99 per month", "cancel anytime"],
   "/haris-falas": ["haris falas", "sports scientist", "cscs", "strength coach"],
   "/logbook": ["training logbook", "workout history", "progress tracking", "training calendar"],
   "/progress": ["progress score", "personal records", "training load", "performance trend"],

@@ -42,6 +42,7 @@ ${CATEGORY_SECTION}
 - [Exercise library](https://smartygym.com/exercise-library): every movement, demonstrated.
 - [About](https://smartygym.com/about): the coaching philosophy behind Smarty Coach.
 - [Haris Falas](https://smartygym.com/haris-falas): the sports scientist behind the method.
+- [Pricing](https://smartygym.com/pricing): EUR 9.99/month, everything included.
 - [FAQ](https://smartygym.com/faq): common questions answered.
 - [Glossary](https://smartygym.com/glossary): all training categories and fitness terminology explained.
 - [Tools](https://smartygym.com/tools): workout timer, rounds tracker, 1RM calculator.
