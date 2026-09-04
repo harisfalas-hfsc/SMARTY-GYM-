@@ -313,32 +313,6 @@ export const adminRevokePremium = createServerFn({ method: "POST" })
     }
   });
 
-export const adminGrantCredits = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: { userId: string; credits: number }) => data)
-  .handler(async ({ context, data }): Promise<{ ok: true; credits: number } | { error: string }> => {
-    try {
-      await assertAdmin(context as any);
-      if (!data.userId || !Number.isFinite(data.credits) || data.credits === 0)
-        return { error: "Invalid input" };
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { data: p } = await supabaseAdmin
-        .from("profiles")
-        .select("bonus_credits")
-        .eq("id", data.userId)
-        .maybeSingle();
-      if (!p) return { error: "User not found" };
-      const next = Math.max(0, ((p as any).bonus_credits ?? 0) + data.credits);
-      const { error } = await supabaseAdmin
-        .from("profiles")
-        .update({ bonus_credits: next })
-        .eq("id", data.userId);
-      if (error) return { error: error.message };
-      return { ok: true, credits: next };
-    } catch (e) {
-      return { error: e instanceof Error ? e.message : "Failed" };
-    }
-  });
 
 export const adminSetRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
