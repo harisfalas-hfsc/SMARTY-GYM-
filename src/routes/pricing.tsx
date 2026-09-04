@@ -1,24 +1,10 @@
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { Navigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SmartyCard, SmartyPill, toneClasses } from "@/components/SmartyCard";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/PageHeader";
 
 export const Route = createFileRoute("/pricing")({
-  beforeLoad: async () => {
-    const { getFreeAccessMode } = await import("@/lib/free-access.functions");
-    let free = false;
-    try {
-      free = (await getFreeAccessMode()).freeAccessMode;
-    } catch {
-      free = false;
-    }
-    // Free Access Mode: the page must never render or be indexed.
-    if (free) throw redirect({ to: "/", replace: true });
-  },
-
   head: () => ({
     meta: [
       { title: "Pricing — SmartyGym subscription €9.99/month" },
@@ -99,9 +85,6 @@ const TOOLS: { icon: string; label: string }[] = [
 ];
 
 function PricingPage() {
-  const { freeAccessMode, loading } = useFreeAccessMode();
-  if (loading) return null;
-  if (freeAccessMode) return <Navigate to="/" replace />;
   const t = toneClasses("pink");
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">

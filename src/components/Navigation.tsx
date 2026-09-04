@@ -1,4 +1,3 @@
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { Link, useNavigate, useRouter, useRouterState } from "@tanstack/react-router";
 import {
   LogOut,
@@ -223,7 +222,6 @@ export function Navigation() {
 }
 
 function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuthed: boolean; isAdmin: boolean }) {
-  const { freeAccessMode } = useFreeAccessMode();
   const sections: {
     heading: string;
     items: { to: string; label: string; Icon: typeof Home }[];
@@ -258,7 +256,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         { to: "/exercise-library", label: "Exercise Library", Icon: Dumbbell },
         { to: "/tools", label: "Tools", Icon: Wrench },
         { to: "/blog", label: "Blog", Icon: BookOpen },
-        ...(freeAccessMode ? [] : [{ to: "/pricing" as const, label: "Pricing", Icon: Crown }]),
+        { to: "/pricing", label: "Pricing", Icon: Crown },
         { to: "/faq", label: "Frequently Asked Questions", Icon: HelpCircle },
         { to: "/contact", label: "Contact", Icon: Mail },
 
