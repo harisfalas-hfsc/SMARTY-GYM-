@@ -1,3 +1,4 @@
+import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarCheck, Dumbbell, PenLine } from "lucide-react";
 import heroTraining from "@/assets/hero-training.jpg";
@@ -94,15 +95,19 @@ function Home() {
             <CalendarCheck className="h-4 w-4 shrink-0" />
             Follow Workout of the Day
           </Link>
-          <Link
-            to="/pricing"
-            className="flex h-12 w-full items-center justify-center rounded-full border-2 border-primary text-[15px] font-extrabold text-primary"
-          >
-            See pricing
-          </Link>
+          {freeAccessMode ? null : (
+            <Link
+              to="/pricing"
+              className="flex h-12 w-full items-center justify-center rounded-full border-2 border-primary text-[15px] font-extrabold text-primary"
+            >
+              See pricing
+            </Link>
+          )}
         </div>
         <p className="mt-4 text-center text-[13px] text-muted-foreground">
-          One membership. Two personalized workouts every day.
+          {freeAccessMode
+            ? "Free for every member. Two personalized workouts every day."
+            : "One membership. Two personalized workouts every day."}
         </p>
         <div className="mt-4 flex justify-center">
           <Link
@@ -167,7 +172,9 @@ function Home() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-white/60">
-              One membership. Two personalized workouts every day.
+              {freeAccessMode
+            ? "Free for every member. Two personalized workouts every day."
+            : "One membership. Two personalized workouts every day."}
             </p>
             <Link
               to="/founder-note"
