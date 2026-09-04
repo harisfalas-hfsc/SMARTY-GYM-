@@ -206,9 +206,10 @@ async function emailReport(
         articles: result.counts.articles,
         failures: result.failures,
         articlesOptimized: result.optimization?.articles ?? 0,
-        articlesQueued: result.optimization?.articlesRemaining ?? 0,
+        articlesQueued: result.optimization?.articlesQueued ?? 0,
         workoutsOptimized: result.optimization?.workouts ?? 0,
-        urlsSubmitted: result.optimization?.submitted ?? 0,
+        workoutsQueued: result.optimization?.workoutsQueued ?? 0,
+        urlsSubmitted: result.optimization?.submittedToSearchEngines ?? 0,
       },
       idempotencyKey: `seo-report:${startedAt.toISOString().slice(0, 13)}:${trigger}`,
     });
