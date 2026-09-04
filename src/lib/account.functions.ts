@@ -15,8 +15,41 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const email = (context.claims?.email as string | undefined) ?? context.userId;
 
+    // Stop any live recurring payment first, so a deleted member is never charged again.
+    try {
+      const { data: subs } = await (supabaseAdmin as any)
+        .from("subscriptions")
+        .select("provider,provider_subscription_id,status,environment")
+        .eq("user_id", context.userId);
+      const live = ((subs ?? []) as Array<{
+        provider?: string;
+        provider_subscription_id?: string;
+        status?: string;
+        environment?: string;
+      }>).filter(
+        (s) =>
+          s.provider === "stripe" &&
+          s.provider_subscription_id &&
+          !["canceled", "incomplete_expired"].includes(s.status ?? ""),
+      );
+      if (live.length) {
+        const { createStripeClient } = await import("@/lib/stripe.server");
+        for (const sub of live) {
+          try {
+            const stripe = createStripeClient(sub.environment === "live" ? "live" : "sandbox");
+            await stripe.subscriptions.cancel(sub.provider_subscription_id!);
+          } catch (e) {
+            console.error("[delete-account] could not cancel subscription:", e);
+          }
+        }
+      }
+    } catch (e) {
+      console.error("[delete-account] subscription lookup failed:", e);
+    }
+
     const { error } = await supabaseAdmin.auth.admin.deleteUser(context.userId);
     if (error) return { error: error.message };
+
 
     try {
       const { notifyAdmins } = await import("@/lib/admin-alert.server");
