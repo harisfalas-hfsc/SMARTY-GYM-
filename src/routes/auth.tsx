@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +26,7 @@ export const Route = createFileRoute("/auth")({
 });
 
 function Auth() {
+  const backendConfigured = isSupabaseConfigured();
   const navigate = useNavigate();
   const { next, mode: routeMode } = Route.useSearch();
   const [mode, setMode] = useState<"signin" | "signup" | "forgot">(routeMode ?? "signin");
@@ -74,6 +75,7 @@ function Auth() {
   }, [routeMode]);
 
   useEffect(() => {
+    if (!backendConfigured) return;
     supabase.auth.getSession().then(({ data }) => {
       if (data.session && mode !== "forgot") goNext();
     });
@@ -82,7 +84,14 @@ function Auth() {
     });
     return () => sub.subscription.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate, next, mode]);
+  }, [backendConfigured, navigate, next, mode]);
+
+  function requireBackend() {
+    if (backendConfigured) return true;
+    setAuthError("Account services are temporarily unavailable. Please try again shortly.");
+    setSubmitting(false);
+    return false;
+  }
 
 
   async function ensureProfile(authUser: User | null, fallbackName?: string) {
@@ -103,6 +112,7 @@ function Auth() {
   async function submitSignup(e: FormEvent) {
     e.preventDefault();
     if (!name || !email || !age || !password) return;
+    if (!requireBackend()) return;
     setAuthError("");
     setAuthNotice("");
     setSubmitting(true);
@@ -174,6 +184,7 @@ function Auth() {
   async function submitSignin(e: FormEvent) {
     e.preventDefault();
     if (!email || !password) return;
+    if (!requireBackend()) return;
     setAuthError("");
     setAuthNotice("");
     setSubmitting(true);
@@ -201,6 +212,7 @@ function Auth() {
       setAuthError("Enter your email first, then tap the sign-in link button.");
       return;
     }
+    if (!requireBackend()) return;
     setAuthError("");
     setAuthNotice("");
     setSubmitting(true);
@@ -221,6 +233,7 @@ function Auth() {
   async function submitForgot(e: FormEvent) {
     e.preventDefault();
     if (!email) return;
+    if (!requireBackend()) return;
     setAuthError("");
     setAuthNotice("");
     setSubmitting(true);
@@ -239,6 +252,11 @@ function Auth() {
 
   return (
     <div className="mx-auto flex min-h-[70vh] w-full max-w-[420px] flex-col px-5 pb-6 pt-5">
+      {!backendConfigured && (
+        <div role="status" className="mb-4 border-l-4 border-primary bg-muted px-4 py-3 text-sm text-foreground">
+          Account services are temporarily unavailable. This page will remain accessible while the connection is restored.
+        </div>
+      )}
       {mode === "signup" ? (
         <form onSubmit={submitSignup} className="mt-2 flex flex-col gap-3">
           <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
