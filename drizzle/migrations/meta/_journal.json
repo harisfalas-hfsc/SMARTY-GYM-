@@ -169,6 +169,13 @@
       "when": 1788496211803,
       "tag": "0023_is_app_admin_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1788496222894,
+      "tag": "0024_is_app_admin_revoke_anon",
+      "breakpoints": true
     }
   ]
 }
