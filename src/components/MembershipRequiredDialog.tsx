@@ -44,10 +44,14 @@ export function MembershipRequiredDialog({
         </div>
 
         <div className="grid gap-3 pt-1">
-          <Button asChild className="h-14 rounded-2xl text-base font-extrabold">
-            <Link to="/auth" onClick={() => onOpenChange(false)}>
-              Subscribe now
-            </Link>
+          <Button
+            className="h-14 rounded-2xl text-base font-extrabold"
+            onClick={() => {
+              onOpenChange(false);
+              setCheckoutOpen(true);
+            }}
+          >
+            Subscribe now
           </Button>
           <Button
             variant="ghost"
@@ -59,5 +63,7 @@ export function MembershipRequiredDialog({
         </div>
       </DialogContent>
     </Dialog>
+    <MembershipCheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
+    </>
   );
 }
