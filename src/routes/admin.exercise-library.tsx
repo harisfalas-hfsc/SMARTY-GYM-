@@ -6,7 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { UploadCloud, FileJson, Images } from "lucide-react";
+import { Database, Loader2, ShieldAlert, UploadCloud, FileJson, Images } from "lucide-react";
+import { adminCheckAccess } from "@/lib/admin.functions";
+import {
+  getExerciseLibraryStatus,
+  importExerciseLibrary,
+  type ExerciseLibraryStatus,
+} from "@/lib/exercise-library.functions";
 
 const BUCKET = "exercise-library";
 const CONCURRENCY = 6;
