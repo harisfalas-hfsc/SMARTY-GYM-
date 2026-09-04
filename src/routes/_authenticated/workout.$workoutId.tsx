@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRemoteData } from "@/lib/remote-data";
 import { useOnlineStatus } from "@/lib/connectivity";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { WorkoutStatusPanel } from "@/components/workout/WorkoutStatusPanel";
@@ -21,6 +21,7 @@ import { getSessionFeedback, type SessionFeedback } from "@/lib/feedback.functio
 
 import { ParqWaiverDialog } from "@/components/ParqWaiverDialog";
 import { hasParqAck, setParqAck } from "@/lib/parq-ack";
+import { getLocalWorkout, updateLocalWorkout } from "@/lib/local-workouts";
 
 export const Route = createFileRoute("/_authenticated/workout/$workoutId")({
   head: () => ({
@@ -54,6 +55,9 @@ function WorkoutPage() {
   const readFeedback = useServerFn(getSessionFeedback);
 
   const load = useCallback(async () => {
+    if (!isSupabaseConfigured()) {
+      return { row: getLocalWorkout(workoutId), access: null };
+    }
     const { data, error } = await supabase
       .from("workouts")
       .select("*")
@@ -93,6 +97,7 @@ function WorkoutPage() {
 
 
   const refreshFeedback = useCallback(async () => {
+    if (!isSupabaseConfigured()) return;
     try {
       const res = await readFeedback({ data: { workoutId } });
       setFeedback((res as { feedback: SessionFeedback | null }).feedback);
@@ -107,6 +112,11 @@ function WorkoutPage() {
 
   async function complete() {
     setDone(true);
+    if (!isSupabaseConfigured()) {
+      updateLocalWorkout(workoutId, { status: "completed", completed_at: new Date().toISOString() });
+      toast.success("Marked as completed.");
+      return;
+    }
     void refreshFeedback();
     // Same rule as the player and the logbook: completing opens the recap right away.
     if (!hasAnswers) setDebriefOpen(true);

@@ -1,10 +1,12 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import { isOnline } from "@/lib/connectivity";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
+    // Keep the copied app usable while its managed backend is unavailable.
+    if (!isSupabaseConfigured()) return { user: null };
     // Offline / network failure: trust the session saved on the device so the
     // member keeps access to their saved logbook, workouts and player.
     const offline = !isOnline();
