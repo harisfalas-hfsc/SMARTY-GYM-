@@ -27,7 +27,7 @@ export const Route = createFileRoute("/privacy")({
 function Privacy() {
   const { freeAccessMode } = useFreeAccessMode();
   return (
-    <LegalLayout title="Privacy Policy" icon={<Shield className="h-5 w-5" />} lastUpdated="July 2026">
+    <LegalLayout title="Privacy Policy" icon={<Shield className="h-5 w-5" />}>
       <p>
         At <strong>Smarty Gym</strong> (smartygym.com) we value your privacy and are
         committed to protecting your personal data. This Privacy Policy explains how Smarty

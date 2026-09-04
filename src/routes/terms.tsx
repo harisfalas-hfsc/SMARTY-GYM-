@@ -27,7 +27,7 @@ export const Route = createFileRoute("/terms")({
 function Terms() {
   const { freeAccessMode } = useFreeAccessMode();
   return (
-    <LegalLayout title="Terms & Conditions" icon={<FileText className="h-5 w-5" />} lastUpdated="July 2026">
+    <LegalLayout title="Terms & Conditions" icon={<FileText className="h-5 w-5" />}>
       <p>
         Welcome to <strong>Smarty Gym</strong> (smartygym.com). By accessing or using our
         AI-generated personalized training service, you agree to comply with and be bound by the

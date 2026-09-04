@@ -28,7 +28,6 @@ function Disclaimer() {
     <LegalLayout
       title="Disclaimer & Release of Liability"
       icon={<AlertTriangle className="h-5 w-5" />}
-      lastUpdated="July 2026"
     >
       <div className="callout">
         <strong>⚠️ Not medical or training advice.</strong> Smarty Gym generates general

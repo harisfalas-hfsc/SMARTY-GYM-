@@ -3,12 +3,10 @@ import { type ReactNode } from "react";
 export function LegalLayout({
   title,
   icon,
-  lastUpdated,
   children,
 }: {
   title: string;
   icon: ReactNode;
-  lastUpdated: string;
   children: ReactNode;
 }) {
   return (
@@ -28,51 +26,6 @@ export function LegalLayout({
         <h1 className="text-foreground" style={{ fontWeight: 700, fontSize: 26, lineHeight: 1.1, margin: 0 }}>
           {title}
         </h1>
-      </div>
-
-      <div
-        className="mt-4 text-muted-foreground"
-        style={{
-          background: "var(--card)",
-          border: "1px solid var(--border)",
-          borderRadius: 18,
-          padding: "16px 18px",
-          fontSize: 13,
-        }}
-      >
-        <strong className="text-foreground">Last updated:</strong> {lastUpdated} ·{" "}
-        <strong className="text-foreground">Operator:</strong> SmartyGym (smartygym.com), part of the{" "}
-        <a
-          href="https://smartywellness.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary font-semibold hover:underline"
-        >
-          Smarty Wellness
-        </a>{" "}
-        family of brands (with{" "}
-        <a
-          href="https://smartygym.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary font-semibold hover:underline"
-        >
-          SmartyGym
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://smartymove.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary font-semibold hover:underline"
-        >
-          SmartyMove
-        </a>
-        ) ·{" "}
-        <strong className="text-foreground">Contact:</strong>{" "}
-        <a href="mailto:smartygym@outlook.com" className="text-primary font-semibold hover:underline">
-          smartygym@outlook.com
-        </a>
       </div>
 
       <article
