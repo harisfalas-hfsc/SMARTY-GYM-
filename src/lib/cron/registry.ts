@@ -145,7 +145,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     sends: [
       {
         title: "[Admin] SEO update — X new keywords",
-        body: "Email to smartyworkout@outlook.com with the run time, what was updated, the new keywords and anything that failed.",
+        body: "Email to smartygym@outlook.com with the run time, what was updated, the new keywords and anything that failed.",
       },
     ],
     timeEditable: true,

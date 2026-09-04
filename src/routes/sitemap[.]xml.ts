@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import { TRAINING_TOPIC_SLUGS } from "@/lib/seo/training-topics";
 
 
-const BASE_URL = "https://smartyworkout.com";
+const BASE_URL = "https://smartygym.com";
 
 interface SitemapEntry {
   path: string;

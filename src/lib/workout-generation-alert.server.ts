@@ -2,7 +2,7 @@
  * Alerting for workout generation.
  *
  * A real failure always reaches:
- *   1. the system inbox (smartyworkout@outlook.com) — the ONLY admin address.
+ *   1. the system inbox (smartygym@outlook.com) — the ONLY admin address.
  *      Admin alerts never go to anyone's personal email or in-app inbox, so
  *      an administrator's own account sees exactly what any customer sees.
  *   2. the member — a branded, non-technical apology, sent ONCE per session.
@@ -12,15 +12,15 @@
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 import { generationIdempotencyKey, type FailureKind } from "@/lib/workout-validation";
 
-export const SYSTEM_INBOX = "smartyworkout@outlook.com";
-export const SUPPORT_REPLY_TO = "smartyworkout@outlook.com";
+export const SYSTEM_INBOX = "smartygym@outlook.com";
+export const SUPPORT_REPLY_TO = "smartygym@outlook.com";
 
 export function adminRecipients(): string[] {
   return [SYSTEM_INBOX];
 }
 
 export function siteOrigin(): string {
-  return (process.env["PUBLIC_SITE_URL"] || "https://smartyworkout.com").replace(/\/$/, "");
+  return (process.env["PUBLIC_SITE_URL"] || "https://smartygym.com").replace(/\/$/, "");
 }
 
 export const STAGE_LABEL: Record<string, string> = {

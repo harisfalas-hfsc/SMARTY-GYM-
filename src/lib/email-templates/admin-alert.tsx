@@ -48,12 +48,12 @@ export const template = {
   subject: (data: Record<string, any>) =>
     `[Admin] ${String(data['title'] || 'New item in the admin panel')}`,
   displayName: 'Admin alert',
-  to: 'smartyworkout@outlook.com',
+  to: 'smartygym@outlook.com',
   previewData: {
     alertType: 'Community report',
     title: 'New content report',
     details: 'A member reported a shared workout for inappropriate content.',
-    link: 'https://smartyworkout.com/admin',
+    link: 'https://smartygym.com/admin',
   },
 } satisfies TemplateEntry
 

@@ -579,4 +579,4 @@ Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
-Sitemap: https://smartyworkout.com/sitemap.xml
+Sitemap: https://smartygym.com/sitemap.xml

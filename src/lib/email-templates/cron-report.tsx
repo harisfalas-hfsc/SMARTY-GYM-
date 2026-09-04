@@ -126,7 +126,7 @@ export const template = {
           : 'failed'
     }`,
   displayName: 'Scheduled job report',
-  to: 'smartyworkout@outlook.com',
+  to: 'smartygym@outlook.com',
   previewData: {
     jobLabel: 'Automatic SEO update',
     status: 'ok',

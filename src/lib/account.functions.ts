@@ -24,7 +24,7 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
         kind: "Member",
         title: "Account deleted",
         details: `${email} deleted their Smarty Gym account.`,
-        link: "https://smartyworkout.com/admin",
+        link: "https://smartygym.com/admin",
         dedupeKey: `account-deleted-${context.userId}`,
       });
     } catch {
@@ -47,7 +47,7 @@ export const announceNewMember = createServerFn({ method: "POST" })
         kind: "Member",
         title: "New member onboarded",
         details: `${email} completed their Training Profile.`,
-        link: "https://smartyworkout.com/admin",
+        link: "https://smartygym.com/admin",
         dedupeKey: `new-member-${context.userId}`,
       });
     } catch {

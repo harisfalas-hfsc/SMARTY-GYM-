@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-const SUPPORT_EMAIL = "smartyworkout@outlook.com";
+const SUPPORT_EMAIL = "smartygym@outlook.com";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -34,24 +34,24 @@ export const Route = createFileRoute("/contact")({
         property: "og:description",
         content: "Questions, feedback, or support? We reply within 24–48 hours.",
       },
-      { property: "og:url", content: "https://smartyworkout.com/contact" },
+      { property: "og:url", content: "https://smartygym.com/contact" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://smartyworkout.com/contact" }],
+    links: [{ rel: "canonical", href: "https://smartygym.com/contact" }],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ContactPage",
-          url: "https://smartyworkout.com/contact",
+          url: "https://smartygym.com/contact",
           name: "Contact SmartyGym",
           description:
             "Get in touch with the SmartyGym team. Questions, feedback, partnership, support — we reply within 24–48 hours.",
           inLanguage: "en",
-          isPartOf: { "@id": "https://smartyworkout.com/#website" },
-          mainEntity: { "@id": "https://smartyworkout.com/#organization" },
+          isPartOf: { "@id": "https://smartygym.com/#website" },
+          mainEntity: { "@id": "https://smartygym.com/#organization" },
         }),
       },
     ],

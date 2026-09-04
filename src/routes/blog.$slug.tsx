@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 
-const SITE = "https://smartyworkout.com";
+const SITE = "https://smartygym.com";
 
 function displayImageUrl(url: string): string {
   return url.startsWith(`${SITE}/api/public/blog-cover/`)

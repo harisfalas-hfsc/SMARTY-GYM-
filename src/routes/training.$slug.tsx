@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard } from "@/components/SmartyCard";
 import { TOPIC_BY_SLUG, sanitizeTopicForFreeAccess } from "@/lib/seo/training-topics";
 
-const SITE = "https://smartyworkout.com";
+const SITE = "https://smartygym.com";
 
 export const Route = createFileRoute("/training/$slug")({
   loader: async ({ params }) => {

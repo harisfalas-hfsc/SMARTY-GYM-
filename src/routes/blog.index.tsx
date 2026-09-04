@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 
-const SITE = "https://smartyworkout.com";
+const SITE = "https://smartygym.com";
 const URL = `${SITE}/blog`;
 
 function displayImageUrl(url: string): string {

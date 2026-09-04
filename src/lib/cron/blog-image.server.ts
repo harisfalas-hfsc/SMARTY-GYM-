@@ -17,7 +17,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 const BUCKET = "blog-images";
 const IMAGE_MODEL = "google/gemini-3.1-flash-image";
 const IMAGE_SIZE = "1536x1024";
-const SITE_BASE_URL = "https://smartyworkout.com";
+const SITE_BASE_URL = "https://smartygym.com";
 const IMAGE_TIMEOUT_MS = 120_000;
 
 export const BLOG_IMAGE_BUCKET = BUCKET;

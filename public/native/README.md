@@ -51,7 +51,7 @@ npx cap sync
 ```
 
 `capacitor.config.ts` (repo root) already sets the app id, name, black splash and
-`server.url = https://smartyworkout.com`.
+`server.url = https://smartygym.com`.
 
 ### Behaviour already handled in the web app
 

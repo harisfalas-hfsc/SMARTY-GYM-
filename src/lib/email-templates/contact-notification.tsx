@@ -46,7 +46,7 @@ export const template = {
   subject: (data: Record<string, any>) =>
     `New contact message: ${String(data['subject'] || 'Support request')}`,
   displayName: 'Contact notification (admin)',
-  to: 'smartyworkout@outlook.com',
+  to: 'smartygym@outlook.com',
   previewData: {
     name: 'Alex',
     email: 'alex@example.com',

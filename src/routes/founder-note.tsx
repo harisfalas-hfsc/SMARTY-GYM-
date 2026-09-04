@@ -36,7 +36,7 @@ import {
 
 } from "lucide-react";
 
-const URL = "https://smartyworkout.com/founder-note";
+const URL = "https://smartygym.com/founder-note";
 const TITLE = "A Note From The Founder | Smarty Gym";
 const DESCRIPTION =
   "Why Smarty Gym exists and how the trained coach builds every workout from a real 1,384-movement library.";

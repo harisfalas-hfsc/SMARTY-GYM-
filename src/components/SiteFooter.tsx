@@ -13,7 +13,7 @@ export function SiteFooter() {
             <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className={socialClass}>
               <Facebook className="h-5 w-5" />
             </a>
-            <a href="https://www.instagram.com/smartyworkout?igsh=MThnMXl0ZXMwM2Y1aQ==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={socialClass}>
+            <a href="https://www.instagram.com/smartygym?igsh=MThnMXl0ZXMwM2Y1aQ==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={socialClass}>
               <Instagram className="h-5 w-5" />
             </a>
             <a href="https://www.tiktok.com/@smarty.diet?_r=1&_t=ZN-97ibGwN3neA" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className={socialClass}>
@@ -27,8 +27,6 @@ export function SiteFooter() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs sm:text-sm text-muted-foreground">
-            <Link to="/training" className="hover:text-primary transition-colors">Training</Link>
-            <span className="text-muted-foreground/40">·</span>
             <Link to="/privacy" className="hover:text-primary transition-colors">Privacy</Link>
 
             <span className="text-muted-foreground/40">·</span>

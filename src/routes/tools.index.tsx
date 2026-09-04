@@ -21,9 +21,9 @@ export const Route = createFileRoute("/tools/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:url", content: "https://smartyworkout.com/tools" },
+      { property: "og:url", content: "https://smartygym.com/tools" },
     ],
-    links: [{ rel: "canonical", href: "https://smartyworkout.com/tools" }],
+    links: [{ rel: "canonical", href: "https://smartygym.com/tools" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -32,12 +32,12 @@ export const Route = createFileRoute("/tools/")({
           "@graph": [
             {
               "@type": "CollectionPage",
-              url: "https://smartyworkout.com/tools",
+              url: "https://smartygym.com/tools",
               name: "SmartyGym Tools",
               description:
                 "Free SmartyGym training tools: interval workout timer, big-button rounds tracker and Brzycki 1RM calculator.",
               inLanguage: "en",
-              isPartOf: { "@id": "https://smartyworkout.com/#website" },
+              isPartOf: { "@id": "https://smartygym.com/#website" },
               mainEntity: {
                 "@type": "ItemList",
                 itemListElement: [
@@ -45,19 +45,19 @@ export const Route = createFileRoute("/tools/")({
                     "@type": "ListItem",
                     position: 1,
                     name: "Workout Timer",
-                    url: "https://smartyworkout.com/tools/workout-timer",
+                    url: "https://smartygym.com/tools/workout-timer",
                   },
                   {
                     "@type": "ListItem",
                     position: 2,
                     name: "Rounds Tracker",
-                    url: "https://smartyworkout.com/tools/rounds-tracker",
+                    url: "https://smartygym.com/tools/rounds-tracker",
                   },
                   {
                     "@type": "ListItem",
                     position: 3,
                     name: "1RM Calculator",
-                    url: "https://smartyworkout.com/tools/1rm-calculator",
+                    url: "https://smartygym.com/tools/1rm-calculator",
                   },
                 ],
               },
@@ -65,8 +65,8 @@ export const Route = createFileRoute("/tools/")({
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartyworkout.com/" },
-                { "@type": "ListItem", position: 2, name: "Tools", item: "https://smartyworkout.com/tools" },
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                { "@type": "ListItem", position: 2, name: "Tools", item: "https://smartygym.com/tools" },
               ],
             },
           ],
