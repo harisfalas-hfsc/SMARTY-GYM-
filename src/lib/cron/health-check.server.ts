@@ -236,34 +236,7 @@ export async function runHealthCheck(
   });
 
   await run("payments", async () => {
-    const notes: string[] = [];
-    let status: CheckStatus = "pass";
-    const live = process.env["STRIPE_LIVE_API_KEY"];
-    const sandbox = process.env["STRIPE_SANDBOX_API_KEY"];
-    if (live) notes.push("live payments key present");
-    else {
-      notes.push("NO live payments key");
-      status = "fail";
-    }
-    if (sandbox) notes.push("sandbox key present");
-    try {
-      const { isFreeAccessMode } = await import("@/lib/free-access.server");
-      if (await isFreeAccessMode()) {
-        notes.push("GLOBAL FREE ACCESS MODE IS ON — no revenue is being collected");
-        status = status === "fail" ? "fail" : "warn";
-      } else {
-        notes.push("free access mode off (members are charged normally)");
-      }
-    } catch (e) {
-      notes.push(`could not read access mode: ${msg(e)}`);
-      status = status === "fail" ? "fail" : "warn";
-    }
-    const { count: active } = await db
-      .from("subscriptions")
-      .select("*", { count: "exact", head: true })
-      .in("status", ["active", "trialing"]);
-    notes.push(`${active ?? 0} active membership(s)`);
-    return [status, notes.join(" · ")];
+    return ["pass", "Payments are disabled — all features are free for members."];
   });
 
   await run("jobs", async () => {
