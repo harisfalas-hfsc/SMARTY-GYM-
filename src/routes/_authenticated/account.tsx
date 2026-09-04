@@ -30,7 +30,7 @@ export const Route = createFileRoute("/_authenticated/account")({
       { title: "My account — Smarty Gym" },
       {
         name: "description",
-        content: "Manage your Smarty Gym subscription, profile details and sign-in.",
+        content: "Manage your Smarty Gym account, profile details and sign-in.",
       },
       { name: "robots", content: "noindex" },
     ],

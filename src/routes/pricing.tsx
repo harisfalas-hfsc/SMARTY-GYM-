@@ -1,10 +1,22 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SmartyCard, SmartyPill, toneClasses } from "@/components/SmartyCard";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/PageHeader";
 
 export const Route = createFileRoute("/pricing")({
+  // While Global Free Access Mode is ON there is no purchase path at all:
+  // the pricing page itself must not exist for visitors.
+  beforeLoad: async () => {
+    let free = false;
+    try {
+      const { getFreeAccessMode } = await import("@/lib/free-access.functions");
+      free = (await getFreeAccessMode()).freeAccessMode;
+    } catch {
+      free = false;
+    }
+    if (free) throw redirect({ to: "/" });
+  },
   head: () => ({
     meta: [
       { title: "Pricing — SmartyGym subscription €9.99/month" },
