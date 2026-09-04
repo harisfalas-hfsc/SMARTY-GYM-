@@ -315,12 +315,19 @@ export function AdminCronTab() {
                 <h3 className="text-base font-extrabold">{def.label}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{def.description}</p>
               </div>
-              <Switch
-                checked={enabled}
-                disabled={busy === def.key}
-                onCheckedChange={(v) => void patch(def.key, { enabled: v })}
-                aria-label={`${def.label} on or off`}
-              />
+              <div className="flex shrink-0 items-center gap-2 rounded-xl border-2 border-primary/60 px-2 py-1.5">
+                <span className="text-xs font-extrabold uppercase tracking-wider">
+                  {enabled ? "ON" : "OFF"}
+                </span>
+                <Switch
+                  checked={enabled}
+                  disabled={busy === def.key}
+                  onCheckedChange={(v) => void patch(def.key, { enabled: v })}
+                  aria-label={`${def.label} on or off`}
+                  className="h-8 w-14 data-[state=unchecked]:bg-muted [&>span]:h-6 [&>span]:w-6 [&>span]:bg-primary [&>span]:data-[state=checked]:translate-x-6"
+                />
+              </div>
+
             </div>
 
             <div className="rounded-xl border border-border/60 bg-muted/30 p-3 text-sm">
