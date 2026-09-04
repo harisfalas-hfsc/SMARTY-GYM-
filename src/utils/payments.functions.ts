@@ -134,3 +134,42 @@ export const createPortalSession = createServerFn({ method: "POST" })
       return { error: getStripeErrorMessage(error) };
     }
   });
+
+export type MyMembership = {
+  hasBilling: boolean;
+  status: string | null;
+  provider: string | null;
+  cancelAtPeriodEnd: boolean;
+  currentPeriodEnd: string | null;
+};
+
+/** The signed-in member's own membership record, used by the account page. */
+export const getMyMembership = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<MyMembership> => {
+    const { data } = await context.supabase
+      .from("subscriptions")
+      .select("provider,status,cancel_at_period_end,current_period_end,provider_customer_id")
+      .eq("user_id", context.userId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const row = data as
+      | {
+          provider?: string | null;
+          status?: string | null;
+          cancel_at_period_end?: boolean | null;
+          current_period_end?: string | null;
+          provider_customer_id?: string | null;
+        }
+      | null;
+
+    return {
+      hasBilling: Boolean(row?.provider_customer_id && row?.provider === "stripe"),
+      status: row?.status ?? null,
+      provider: row?.provider ?? null,
+      cancelAtPeriodEnd: Boolean(row?.cancel_at_period_end),
+      currentPeriodEnd: row?.current_period_end ?? null,
+    };
+  });
