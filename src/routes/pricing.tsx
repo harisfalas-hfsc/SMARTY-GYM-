@@ -158,8 +158,14 @@ function PricingPage() {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Button asChild size="lg">
-            <Link to="/auth" search={{ mode: "signup" }}>Subscribe · €9.99 / month</Link>
+          <Button
+            size="lg"
+            onClick={() => {
+              if (user) setCheckoutOpen(true);
+              else void navigate({ to: "/auth", search: { mode: "signup" } });
+            }}
+          >
+            Subscribe · €9.99 / month
           </Button>
           <Button asChild size="lg" variant="outline">
             <Link to="/how-it-works">How it works</Link>
@@ -169,6 +175,7 @@ function PricingPage() {
           Flow: create your account → complete the mandatory Training Profile → activate Premium → choose Workout of the Day or create a workout.
         </p>
       </SmartyCard>
+      <MembershipCheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
     </div>
   );
 }
