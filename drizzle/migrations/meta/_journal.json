@@ -204,6 +204,13 @@
       "when": 1788496321528,
       "tag": "0028_community_ratings",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1788496339506,
+      "tag": "0029_free_access_setting",
+      "breakpoints": true
     }
   ]
 }
