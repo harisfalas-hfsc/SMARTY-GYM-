@@ -113,26 +113,39 @@ export async function reportError(input: ReportErrorInput): Promise<void> {
 
     if (!shouldEmail) return;
 
-    const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
-    await sendTemplateEmail("error-alert", recipient, {
-      templateData: {
-        message: row.message,
-        source: row.source,
-        route: row.route,
-        severity,
-        kind: row.kind,
-        occurredAt: new Date().toISOString(),
-        userEmail: userEmail ?? "not signed in / unknown",
-        userId: input.userId ?? null,
-        details: JSON.stringify(input.details ?? {}, null, 2).slice(0, 1500),
-        groupWindowMin: windowMin,
-      },
-      idempotencyKey: `error-alert:${insertedId ?? groupKey}`,
-    });
+    // The problem is already recorded above. Emailing is best-effort: if the
+    // mail cannot go out, clear alerted_at so the next occurrence tries again.
+    try {
+      const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+      await sendTemplateEmail("error-alert", recipient, {
+        templateData: {
+          message: row.message,
+          source: row.source,
+          route: row.route,
+          severity,
+          kind: row.kind,
+          occurredAt: new Date().toISOString(),
+          userEmail: userEmail ?? "not signed in / unknown",
+          userId: input.userId ?? null,
+          details: JSON.stringify(input.details ?? {}, null, 2).slice(0, 1500),
+          groupWindowMin: windowMin,
+        },
+        idempotencyKey: `error-alert:${insertedId ?? groupKey}`,
+      });
+    } catch (mailError) {
+      console.error("[errors] alert email failed", mailError);
+      if (insertedId) {
+        await db
+          .from("error_events")
+          .update({ alerted_at: null } as never)
+          .eq("id", insertedId);
+      }
+    }
   } catch (e) {
     console.error("[errors] failed to record error", e);
   }
 }
+
 
 const EXPECTED_PATTERNS = [
   "training profile",
