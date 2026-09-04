@@ -330,6 +330,18 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  // Invisible SEO preservation: addresses published by the previous
+  // smartygym.com static site (the old ".html" pages) are answered with a
+  // permanent redirect so their search ranking transfers to this app. Handled
+  // at the root so legacy paths win over same-shaped app routes such as
+  // /workout/<id>. Nothing else about the request changes.
+  beforeLoad: ({ location }) => {
+    if (!location.pathname.toLowerCase().includes(".html")) return;
+    const target = resolveLegacyPath(location.pathname);
+    if (target && target !== location.pathname) {
+      throw redirect({ href: target, statusCode: 301 });
+    }
+  },
   loader: async () => {
     try {
       return await getFreeAccessMode();
