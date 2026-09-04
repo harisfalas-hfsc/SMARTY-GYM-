@@ -28,19 +28,74 @@ import { cn } from "@/lib/utils";
 import { WorkoutStatusPanel } from "@/components/workout/WorkoutStatusPanel";
 import { COMMENT_MAX, RATING_STARS, creatorOrigin } from "@/lib/community";
 import { formatDate } from "@/lib/date-format";
+import { getSharedWorkoutSeo } from "@/lib/seo/workout-seo.functions";
 
 
 export const Route = createFileRoute("/community/workout/$workoutId")({
-  head: () => ({
-    meta: [
-      { title: "Shared workout — Smarty Community" },
-      {
-        name: "description",
-        content: "A workout shared with the Smarty Community by a member.",
-      },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  /**
+   * Public head data only (title, description, key phrases written by the weekly
+   * SEO job). The visible page still loads through the member-only server
+   * function below, so nothing on screen changes.
+   */
+  loader: ({ params }) => getSharedWorkoutSeo({ data: { workoutId: params.workoutId } }),
+  head: ({ loaderData, params }) => {
+    const seo = loaderData;
+    const url = `https://smartygym.com/community/workout/${params.workoutId}`;
+    const title = seo?.title ?? "Shared workout — Smarty Community";
+    const description =
+      seo?.description ?? "A workout shared with the Smarty Community by a member.";
+    const image = seo?.image && seo.image.startsWith("https://") ? seo.image : null;
+
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        ...(seo?.keywords?.length ? [{ name: "keywords", content: seo.keywords.join(", ") }] : []),
+        {
+          name: "robots",
+          content: seo?.indexable
+            ? "index, follow, max-image-preview:large, max-snippet:-1"
+            : "noindex, follow",
+        },
+        { property: "og:site_name", content: "SmartyGym" },
+        { property: "og:type", content: "article" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: image ? "summary_large_image" : "summary" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        ...(image
+          ? [
+              { property: "og:image", content: image },
+              { name: "twitter:image", content: image },
+            ]
+          : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      ...(seo?.indexable && seo.found
+        ? {
+            scripts: [
+              {
+                type: "application/ld+json",
+                children: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "ExercisePlan",
+                  name: title,
+                  description,
+                  url,
+                  ...(seo.category ? { activityFrequency: seo.category } : {}),
+                  ...(seo.duration ? { duration: `PT${seo.duration}M` } : {}),
+                  ...(seo.equipment.length ? { additionalVariable: seo.equipment.join(", ") } : {}),
+                  isPartOf: { "@id": "https://smartygym.com/#website" },
+                  publisher: { "@id": "https://smartygym.com/#organization" },
+                }),
+              },
+            ],
+          }
+        : {}),
+    };
+  },
   component: SharedWorkoutPage,
 });
 

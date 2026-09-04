@@ -47,6 +47,11 @@ import type {
 export const Route = createFileRoute("/community/")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "shared workouts community, shared workouts, community workouts, member workouts, workout ratings, train someone elses workout",
+      },
       { title: "Smarty Community — Train together | Smarty Gym" },
       {
         name: "description",
@@ -59,7 +64,40 @@ export const Route = createFileRoute("/community/")({
         content: "Shared workouts, member rankings, workout rankings and shared-workout comments.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://smartygym.com/community" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://smartygym.com/community" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "CollectionPage",
+              "@id": "https://smartygym.com/community#webpage",
+              url: "https://smartygym.com/community",
+              name: "Smarty Community — Train together",
+              inLanguage: "en",
+              isPartOf: { "@id": "https://smartygym.com/#website" },
+              publisher: { "@id": "https://smartygym.com/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Smarty Community",
+                  item: "https://smartygym.com/community",
+                },
+              ],
+            },
+          ],
+        }),
+      },
     ],
   }),
   component: CommunityPage,

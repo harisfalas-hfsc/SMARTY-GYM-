@@ -5,6 +5,11 @@ import { LegalLayout } from "@/components/LegalLayout";
 export const Route = createFileRoute("/disclaimer")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "fitness disclaimer, not medical advice, train safely, injury warning, consult your doctor",
+      },
       { title: "Disclaimer & Release of Liability | SmartyGym" },
       {
         name: "description",
@@ -19,6 +24,12 @@ export const Route = createFileRoute("/disclaimer")({
       { property: "og:url", content: "https://smartygym.com/disclaimer" },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/disclaimer" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({"@context": "https://schema.org","@graph": [{"@type": "WebPage","@id": "https://smartygym.com/disclaimer#webpage","url": "https://smartygym.com/disclaimer","name": "Disclaimer","inLanguage": "en","isPartOf": {"@id": "https://smartygym.com/#website"},"publisher": {"@id": "https://smartygym.com/#organization"}},{"@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 1,"name": "Home","item": "https://smartygym.com/"},{"@type": "ListItem","position": 2,"name": "Disclaimer","item": "https://smartygym.com/disclaimer"}]}]}),
+      },
+    ],
   }),
   component: Disclaimer,
 });

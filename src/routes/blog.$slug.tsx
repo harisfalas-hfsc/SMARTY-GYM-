@@ -30,6 +30,13 @@ interface Article {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  /** Written by the automatic SEO optimization job; never shown on the page. */
+  seo_title?: string | null;
+  seo_description?: string | null;
+  focus_keyphrase?: string | null;
+  seo_keywords?: string[] | null;
+  image_alt?: string | null;
+  seo_faq?: { question: string; answer: string }[] | null;
 }
 
 async function loadArticle(slug: string): Promise<Article> {
@@ -59,16 +66,28 @@ export const Route = createFileRoute("/blog/$slug")({
     }
     const a = loaderData;
     const url = `${SITE}/blog/${a.slug}`;
-    const title = `${a.title} | SmartyGym Blog`;
-    const description = a.excerpt ?? a.title;
+    // The optimization job writes seo_title / seo_description; until it has run,
+    // the article's own title and excerpt are used.
+    const title = a.seo_title?.trim() || `${a.title} | SmartyGym Blog`;
+    const description = a.seo_description?.trim() || a.excerpt || a.title;
+    const keywords = [
+      ...(a.focus_keyphrase ? [a.focus_keyphrase] : []),
+      ...(a.seo_keywords ?? []),
+    ];
     const published = new Date(a.published_at ?? a.created_at).toISOString();
     const modified = new Date(a.updated_at ?? a.created_at).toISOString();
     const image = a.image_url && a.image_url.startsWith("https://") ? a.image_url : null;
+    const faq = (a.seo_faq ?? []).filter((f) => f?.question && f?.answer);
 
     return {
       meta: [
         { title },
         { name: "description", content: description },
+        ...(keywords.length ? [{ name: "keywords", content: keywords.join(", ") }] : []),
+        {
+          name: "robots",
+          content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
         { property: "og:title", content: a.title },
@@ -81,6 +100,12 @@ export const Route = createFileRoute("/blog/$slug")({
           ? [
               { property: "og:image", content: image },
               { name: "twitter:image", content: image },
+              ...(a.image_alt
+                ? [
+                    { property: "og:image:alt", content: a.image_alt },
+                    { name: "twitter:image:alt", content: a.image_alt },
+                  ]
+                : []),
             ]
           : []),
         { property: "article:published_time", content: published },
@@ -88,7 +113,11 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "article:section", content: a.category },
         { property: "article:author", content: a.author_name ?? "Haris Falas" },
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: [
+        { rel: "canonical", href: url },
+        { rel: "alternate", hrefLang: "en", href: url },
+        { rel: "alternate", hrefLang: "x-default", href: url },
+      ],
       scripts: [
         {
           type: "application/ld+json",
@@ -97,14 +126,29 @@ export const Route = createFileRoute("/blog/$slug")({
             "@graph": [
               {
                 "@type": "Article",
-                headline: a.title,
+                headline: (a.seo_title || a.title).slice(0, 110),
+                alternativeHeadline: a.title,
                 description,
+                ...(keywords.length ? { keywords: keywords.join(", ") } : {}),
                 datePublished: published,
                 dateModified: modified,
                 articleSection: a.category,
+                inLanguage: "en",
                 mainEntityOfPage: url,
                 url,
-                ...(image ? { image } : {}),
+                isPartOf: { "@id": `${SITE}/#website` },
+                ...(image
+                  ? {
+                      image: a.image_alt
+                        ? {
+                            "@type": "ImageObject",
+                            url: image,
+                            caption: a.image_alt,
+                            description: a.image_alt,
+                          }
+                        : image,
+                    }
+                  : {}),
                 author: {
                   "@type": "Person",
                   name: a.author_name ?? "Haris Falas",
@@ -118,6 +162,19 @@ export const Route = createFileRoute("/blog/$slug")({
                   logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
                 },
               },
+              ...(faq.length
+                ? [
+                    {
+                      "@type": "FAQPage",
+                      "@id": `${url}#faq`,
+                      mainEntity: faq.map((f) => ({
+                        "@type": "Question",
+                        name: f.question,
+                        acceptedAnswer: { "@type": "Answer", text: f.answer },
+                      })),
+                    },
+                  ]
+                : []),
               {
                 "@type": "BreadcrumbList",
                 itemListElement: [

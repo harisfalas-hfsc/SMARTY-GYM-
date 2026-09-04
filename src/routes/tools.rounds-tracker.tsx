@@ -17,6 +17,11 @@ const DESCRIPTION =
 export const Route = createFileRoute("/tools/rounds-tracker")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "rounds tracker, amrap counter, circuit round counter, rep counter, workout score tracker",
+      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
+import { Route as R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRouteImport } from './routes/8f2c41d7a9b34e6ea0c5d81f37b9e42c[.]txt'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -22,6 +23,7 @@ import { Route as FounderNoteRouteImport } from './routes/founder-note'
 import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as HarisFalasRouteImport } from './routes/haris-falas'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -73,6 +75,12 @@ const SplatRoute = SplatRouteImport.update({
   path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute =
+  R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRouteImport.update({
+    id: '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt',
+    path: '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -125,6 +133,11 @@ const HarisFalasRoute = HarisFalasRouteImport.update({
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
+  id: '/llms-full.txt',
+  path: '/llms-full.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
@@ -338,6 +351,7 @@ const LovableEmailTransactionalPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
@@ -348,6 +362,7 @@ export interface FileRoutesByFullPath {
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -392,6 +407,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
@@ -402,6 +418,7 @@ export interface FileRoutesByTo {
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -448,6 +465,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/$': typeof SplatRoute
+  '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
@@ -458,6 +476,7 @@ export interface FileRoutesById {
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -504,6 +523,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$'
+    | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
     | '/auth'
     | '/contact'
@@ -514,6 +534,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/haris-falas'
     | '/how-it-works'
+    | '/llms-full.txt'
     | '/llms.txt'
     | '/pricing'
     | '/privacy'
@@ -558,6 +579,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
+    | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
     | '/auth'
     | '/contact'
@@ -568,6 +590,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/haris-falas'
     | '/how-it-works'
+    | '/llms-full.txt'
     | '/llms.txt'
     | '/pricing'
     | '/privacy'
@@ -613,6 +636,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/$'
+    | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
     | '/auth'
     | '/contact'
@@ -623,6 +647,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/haris-falas'
     | '/how-it-works'
+    | '/llms-full.txt'
     | '/llms.txt'
     | '/pricing'
     | '/privacy'
@@ -669,6 +694,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
+  R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute: typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
@@ -679,6 +705,7 @@ export interface RootRouteChildren {
   GlossaryRoute: typeof GlossaryRoute
   HarisFalasRoute: typeof HarisFalasRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -726,6 +753,13 @@ declare module '@tanstack/react-router' {
       path: '/$'
       fullPath: '/$'
       preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': {
+      id: '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
+      path: '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
+      fullPath: '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
+      preLoaderRoute: typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -803,6 +837,13 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms-full.txt': {
+      id: '/llms-full.txt'
+      path: '/llms-full.txt'
+      fullPath: '/llms-full.txt'
+      preLoaderRoute: typeof LlmsFullDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/llms.txt': {
@@ -1119,6 +1160,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   SplatRoute: SplatRoute,
+  R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute:
+    R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
@@ -1129,6 +1172,7 @@ const rootRouteChildren: RootRouteChildren = {
   GlossaryRoute: GlossaryRoute,
   HarisFalasRoute: HarisFalasRoute,
   HowItWorksRoute: HowItWorksRoute,
+  LlmsFullDottxtRoute: LlmsFullDottxtRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,

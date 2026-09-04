@@ -25,6 +25,11 @@ import {
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "about smartygym, coaching philosophy, evidence based training, strength and conditioning, periodization, training methodology",
+      },
       { title: "About Smarty Gym — Your Fitness Coach" },
       {
         name: "description",

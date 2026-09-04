@@ -35,6 +35,11 @@ import { WodContextNote } from "@/components/performance/WodContextNote";
 export const Route = createFileRoute("/wod")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "workout of the day, wod, daily workout, bodyweight workout of the day, equipment workout of the day, 84 day training cycle, recovery day workout",
+      },
       { title: "Workout of the Day — Smarty Gym" },
       {
         name: "description",

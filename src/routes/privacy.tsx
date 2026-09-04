@@ -6,6 +6,11 @@ import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "smartygym privacy policy, data protection, gdpr, delete my data, cookies, personal data",
+      },
       { title: "Privacy Policy | SmartyGym" },
       {
         name: "description",
@@ -20,6 +25,12 @@ export const Route = createFileRoute("/privacy")({
       { property: "og:url", content: "https://smartygym.com/privacy" },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/privacy" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({"@context": "https://schema.org","@graph": [{"@type": "WebPage","@id": "https://smartygym.com/privacy#webpage","url": "https://smartygym.com/privacy","name": "Privacy Policy","inLanguage": "en","isPartOf": {"@id": "https://smartygym.com/#website"},"publisher": {"@id": "https://smartygym.com/#organization"}},{"@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 1,"name": "Home","item": "https://smartygym.com/"},{"@type": "ListItem","position": 2,"name": "Privacy Policy","item": "https://smartygym.com/privacy"}]}]}),
+      },
+    ],
   }),
   component: Privacy,
 });

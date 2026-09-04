@@ -6,6 +6,11 @@ import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "smartygym terms of service, terms and conditions, membership terms, acceptable use, cancellation",
+      },
       { title: "Terms & Conditions | SmartyGym" },
       {
         name: "description",
@@ -20,6 +25,12 @@ export const Route = createFileRoute("/terms")({
       { property: "og:url", content: "https://smartygym.com/terms" },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/terms" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({"@context": "https://schema.org","@graph": [{"@type": "WebPage","@id": "https://smartygym.com/terms#webpage","url": "https://smartygym.com/terms","name": "Terms of Service","inLanguage": "en","isPartOf": {"@id": "https://smartygym.com/#website"},"publisher": {"@id": "https://smartygym.com/#organization"}},{"@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 1,"name": "Home","item": "https://smartygym.com/"},{"@type": "ListItem","position": 2,"name": "Terms of Service","item": "https://smartygym.com/terms"}]}]}),
+      },
+    ],
   }),
   component: Terms,
 });

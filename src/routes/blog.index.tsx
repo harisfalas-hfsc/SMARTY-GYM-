@@ -66,6 +66,11 @@ export const Route = createFileRoute("/blog/")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
+      {
+        name: "keywords",
+        content:
+          "fitness blog, evidence based fitness articles, strength training articles, workout programming articles, recovery articles, sports science blog",
+      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
