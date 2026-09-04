@@ -232,6 +232,20 @@
       "when": 1788496390954,
       "tag": "0032_feedback_attempts",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1788496408951,
+      "tag": "0033_subscription_last_event",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1788496413765,
+      "tag": "0034_coach_rationale",
+      "breakpoints": true
     }
   ]
 }
