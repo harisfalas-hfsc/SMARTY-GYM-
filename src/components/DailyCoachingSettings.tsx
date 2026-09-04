@@ -40,6 +40,7 @@ function hourLabel(h: number) {
 
 export function DailyCoachingSettings({ premium = false }: { premium?: boolean }) {
   const { user } = useAuth();
+  const { freeAccessMode } = useFreeAccessMode();
   const load = useServerFn(getDailyHub);
   const save = useServerFn(saveDailySettings);
   const setSub = useServerFn(setWodSubscription);
