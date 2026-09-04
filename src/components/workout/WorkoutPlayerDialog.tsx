@@ -722,9 +722,9 @@ const MEDIA_FRAME_CLASS =
 
 function SlideShell({ media, info }: { media: React.ReactNode; info: React.ReactNode }) {
   return (
-    <div className="grid h-full min-h-0 w-full grid-rows-[clamp(9rem,26dvh,15rem)_5rem] content-start overflow-hidden text-center">
+    <div className="grid h-full min-h-0 w-full grid-rows-[clamp(9rem,26dvh,15rem)_8rem] content-start overflow-hidden text-center">
       <div className={MEDIA_FRAME_CLASS}>{media}</div>
-      <div className="flex h-20 w-full min-w-0 flex-col justify-center overflow-hidden border-b border-neutral-800 px-4 py-1 sm:px-6">{info}</div>
+      <div className="flex h-32 w-full min-w-0 flex-col justify-center gap-0.5 overflow-hidden border-b border-neutral-800 px-4 py-2 sm:px-6">{info}</div>
     </div>
   );
 }
