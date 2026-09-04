@@ -146,6 +146,7 @@ function Uploader() {
   }
   useEffect(() => {
     void refreshCount();
+    void refreshLibraryStatus();
   }, []);
 
   async function uploadMany(files: File[], prefix: string) {
