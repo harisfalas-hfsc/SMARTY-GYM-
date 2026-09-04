@@ -35,437 +35,6 @@ export type Database = {
         }
         Relationships: []
       }
-      badge_definitions: {
-        Row: {
-          category: string
-          created_at: string
-          description: string
-          icon: string
-          id: string
-          is_active: boolean
-          name: string
-          points: number
-          sort_order: number
-          threshold: number
-          updated_at: string
-        }
-        Insert: {
-          category: string
-          created_at?: string
-          description?: string
-          icon?: string
-          id: string
-          is_active?: boolean
-          name: string
-          points?: number
-          sort_order?: number
-          threshold?: number
-          updated_at?: string
-        }
-        Update: {
-          category?: string
-          created_at?: string
-          description?: string
-          icon?: string
-          id?: string
-          is_active?: boolean
-          name?: string
-          points?: number
-          sort_order?: number
-          threshold?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      blog_articles: {
-        Row: {
-          author_credentials: string
-          author_id: string | null
-          author_name: string
-          category: string
-          content: string
-          created_at: string
-          excerpt: string | null
-          id: string
-          image_url: string | null
-          is_published: boolean
-          published_at: string | null
-          read_time: string | null
-          slug: string
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          author_credentials?: string
-          author_id?: string | null
-          author_name?: string
-          category?: string
-          content: string
-          created_at?: string
-          excerpt?: string | null
-          id?: string
-          image_url?: string | null
-          is_published?: boolean
-          published_at?: string | null
-          read_time?: string | null
-          slug: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          author_credentials?: string
-          author_id?: string | null
-          author_name?: string
-          category?: string
-          content?: string
-          created_at?: string
-          excerpt?: string | null
-          id?: string
-          image_url?: string | null
-          is_published?: boolean
-          published_at?: string | null
-          read_time?: string | null
-          slug?: string
-          title?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      community_comments: {
-        Row: {
-          body: string
-          created_at: string
-          deleted_at: string | null
-          id: string
-          updated_at: string
-          user_id: string
-          workout_id: string
-        }
-        Insert: {
-          body: string
-          created_at?: string
-          deleted_at?: string | null
-          id?: string
-          updated_at?: string
-          user_id: string
-          workout_id: string
-        }
-        Update: {
-          body?: string
-          created_at?: string
-          deleted_at?: string | null
-          id?: string
-          updated_at?: string
-          user_id?: string
-          workout_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "community_comments_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_comments_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      community_completions: {
-        Row: {
-          completed_at: string
-          copy_workout_id: string | null
-          id: string
-          user_id: string
-          workout_id: string
-        }
-        Insert: {
-          completed_at?: string
-          copy_workout_id?: string | null
-          id?: string
-          user_id: string
-          workout_id: string
-        }
-        Update: {
-          completed_at?: string
-          copy_workout_id?: string | null
-          id?: string
-          user_id?: string
-          workout_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "community_completions_copy_workout_id_fkey"
-            columns: ["copy_workout_id"]
-            isOneToOne: true
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_completions_copy_workout_id_fkey"
-            columns: ["copy_workout_id"]
-            isOneToOne: true
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_completions_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_completions_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      community_ratings: {
-        Row: {
-          created_at: string
-          id: string
-          updated_at: string
-          user_id: string
-          value: number
-          workout_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          updated_at?: string
-          user_id: string
-          value: number
-          workout_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          updated_at?: string
-          user_id?: string
-          value?: number
-          workout_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "community_ratings_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_ratings_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      community_reactions: {
-        Row: {
-          created_at: string
-          id: string
-          updated_at: string
-          user_id: string
-          value: number
-          workout_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          updated_at?: string
-          user_id: string
-          value: number
-          workout_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          updated_at?: string
-          user_id?: string
-          value?: number
-          workout_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "community_reactions_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_reactions_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      community_reports: {
-        Row: {
-          created_at: string
-          id: string
-          reason: string | null
-          reporter_id: string
-          status: string
-          target_id: string
-          target_type: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          reason?: string | null
-          reporter_id: string
-          status?: string
-          target_id: string
-          target_type: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          reason?: string | null
-          reporter_id?: string
-          status?: string
-          target_id?: string
-          target_type?: string
-        }
-        Relationships: []
-      }
-      cron_jobs: {
-        Row: {
-          content: Json
-          enabled: boolean
-          hour: number
-          key: string
-          last_run_on: string | null
-          minute: number
-          timezone: string
-          updated_at: string
-        }
-        Insert: {
-          content?: Json
-          enabled?: boolean
-          hour?: number
-          key: string
-          last_run_on?: string | null
-          minute?: number
-          timezone?: string
-          updated_at?: string
-        }
-        Update: {
-          content?: Json
-          enabled?: boolean
-          hour?: number
-          key?: string
-          last_run_on?: string | null
-          minute?: number
-          timezone?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      cron_runs: {
-        Row: {
-          changed: boolean
-          details: Json
-          id: string
-          job_key: string
-          ran_at: string
-          status: string
-          summary: string | null
-          trigger: string
-        }
-        Insert: {
-          changed?: boolean
-          details?: Json
-          id?: string
-          job_key: string
-          ran_at?: string
-          status?: string
-          summary?: string | null
-          trigger?: string
-        }
-        Update: {
-          changed?: boolean
-          details?: Json
-          id?: string
-          job_key?: string
-          ran_at?: string
-          status?: string
-          summary?: string | null
-          trigger?: string
-        }
-        Relationships: []
-      }
-      error_events: {
-        Row: {
-          alerted_at: string | null
-          created_at: string
-          details: Json
-          group_key: string
-          id: string
-          kind: string
-          last_seen_at: string
-          message: string
-          occurrences: number
-          resolved_at: string | null
-          route: string | null
-          severity: string
-          source: string | null
-          updated_at: string
-          user_email: string | null
-          user_id: string | null
-        }
-        Insert: {
-          alerted_at?: string | null
-          created_at?: string
-          details?: Json
-          group_key: string
-          id?: string
-          kind?: string
-          last_seen_at?: string
-          message: string
-          occurrences?: number
-          resolved_at?: string | null
-          route?: string | null
-          severity?: string
-          source?: string | null
-          updated_at?: string
-          user_email?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          alerted_at?: string | null
-          created_at?: string
-          details?: Json
-          group_key?: string
-          id?: string
-          kind?: string
-          last_seen_at?: string
-          message?: string
-          occurrences?: number
-          resolved_at?: string | null
-          route?: string | null
-          severity?: string
-          source?: string | null
-          updated_at?: string
-          user_email?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       exercises: {
         Row: {
           body_part: string | null
@@ -615,13 +184,6 @@ export type Database = {
             foreignKeyName: "notifications_workout_id_fkey"
             columns: ["workout_id"]
             isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "notifications_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
             referencedRelation: "workouts"
             referencedColumns: ["id"]
           },
@@ -659,13 +221,6 @@ export type Database = {
           workout_id?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "personal_records_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "personal_records_workout_id_fkey"
             columns: ["workout_id"]
@@ -839,22 +394,12 @@ export type Database = {
       }
       set_logs: {
         Row: {
-          attempt: number
           completed_at: string
           created_at: string
-          distance_m: number | null
           exercise_id: string | null
           exercise_name: string
           id: string
-          interval_index: number | null
-          metric: string | null
-          partial: boolean
-          planned_reps: number | null
-          planned_seconds: number | null
-          planned_weight_kg: number | null
           reps: number | null
-          rounds: number | null
-          rpe: number | null
           seconds: number | null
           section: string | null
           set_number: number
@@ -864,22 +409,12 @@ export type Database = {
           workout_id: string
         }
         Insert: {
-          attempt?: number
           completed_at?: string
           created_at?: string
-          distance_m?: number | null
           exercise_id?: string | null
           exercise_name: string
           id?: string
-          interval_index?: number | null
-          metric?: string | null
-          partial?: boolean
-          planned_reps?: number | null
-          planned_seconds?: number | null
-          planned_weight_kg?: number | null
           reps?: number | null
-          rounds?: number | null
-          rpe?: number | null
           seconds?: number | null
           section?: string | null
           set_number?: number
@@ -889,22 +424,12 @@ export type Database = {
           workout_id: string
         }
         Update: {
-          attempt?: number
           completed_at?: string
           created_at?: string
-          distance_m?: number | null
           exercise_id?: string | null
           exercise_name?: string
           id?: string
-          interval_index?: number | null
-          metric?: string | null
-          partial?: boolean
-          planned_reps?: number | null
-          planned_seconds?: number | null
-          planned_weight_kg?: number | null
           reps?: number | null
-          rounds?: number | null
-          rpe?: number | null
           seconds?: number | null
           section?: string | null
           set_number?: number
@@ -914,13 +439,6 @@ export type Database = {
           workout_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "set_logs_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "set_logs_workout_id_fkey"
             columns: ["workout_id"]
@@ -938,7 +456,6 @@ export type Database = {
           current_period_start: string | null
           environment: string
           id: string
-          last_event_at: number | null
           price_id: string | null
           product_id: string | null
           provider: string
@@ -955,7 +472,6 @@ export type Database = {
           current_period_start?: string | null
           environment?: string
           id?: string
-          last_event_at?: number | null
           price_id?: string | null
           product_id?: string | null
           provider: string
@@ -972,7 +488,6 @@ export type Database = {
           current_period_start?: string | null
           environment?: string
           id?: string
-          last_event_at?: number | null
           price_id?: string | null
           product_id?: string | null
           provider?: string
@@ -1064,84 +579,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_badges: {
-        Row: {
-          badge_id: string
-          badge_name: string
-          category: string
-          earned_at: string
-          id: string
-          points: number
-          threshold: number
-          user_id: string
-        }
-        Insert: {
-          badge_id: string
-          badge_name: string
-          category: string
-          earned_at?: string
-          id?: string
-          points?: number
-          threshold?: number
-          user_id: string
-        }
-        Update: {
-          badge_id?: string
-          badge_name?: string
-          category?: string
-          earned_at?: string
-          id?: string
-          points?: number
-          threshold?: number
-          user_id?: string
-        }
-        Relationships: []
-      }
-      user_progress: {
-        Row: {
-          active_days: number
-          badge_points: number
-          created_at: string
-          current_streak: number
-          longest_streak: number
-          score: number
-          score_reached_at: string
-          subscription_months: number
-          updated_at: string
-          user_id: string
-          workouts_completed: number
-          workouts_generated: number
-        }
-        Insert: {
-          active_days?: number
-          badge_points?: number
-          created_at?: string
-          current_streak?: number
-          longest_streak?: number
-          score?: number
-          score_reached_at?: string
-          subscription_months?: number
-          updated_at?: string
-          user_id: string
-          workouts_completed?: number
-          workouts_generated?: number
-        }
-        Update: {
-          active_days?: number
-          badge_points?: number
-          created_at?: string
-          current_streak?: number
-          longest_streak?: number
-          score?: number
-          score_reached_at?: string
-          subscription_months?: number
-          updated_at?: string
-          user_id?: string
-          workouts_completed?: number
-          workouts_generated?: number
-        }
-        Relationships: []
-      }
       user_roles: {
         Row: {
           created_at: string
@@ -1165,43 +602,34 @@ export type Database = {
       }
       workout_feedback: {
         Row: {
-          attempt: number
           comment: string | null
           created_at: string
           difficulty_rating: string | null
           enjoyed: string | null
           feeling: string | null
           id: string
-          rpe: number | null
-          updated_at: string
           user_id: string
           workout_id: string
           would_repeat: string | null
         }
         Insert: {
-          attempt?: number
           comment?: string | null
           created_at?: string
           difficulty_rating?: string | null
           enjoyed?: string | null
           feeling?: string | null
           id?: string
-          rpe?: number | null
-          updated_at?: string
           user_id: string
           workout_id: string
           would_repeat?: string | null
         }
         Update: {
-          attempt?: number
           comment?: string | null
           created_at?: string
           difficulty_rating?: string | null
           enjoyed?: string | null
           feeling?: string | null
           id?: string
-          rpe?: number | null
-          updated_at?: string
           user_id?: string
           workout_id?: string
           would_repeat?: string | null
@@ -1209,142 +637,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "workout_feedback_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "workout_feedback_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      workout_generation_failures: {
-        Row: {
-          email_dispatched_at: string | null
-          email_error: string | null
-          email_message_id: string | null
-          email_recipient: string | null
-          email_status: string | null
-          failure_kind: string
-          id: string
-          occurred_at: string
-          read_at: string | null
-          reason: string
-          refinement_text: string | null
-          session_id: string | null
-          stage: string
-          user_id: string | null
-        }
-        Insert: {
-          email_dispatched_at?: string | null
-          email_error?: string | null
-          email_message_id?: string | null
-          email_recipient?: string | null
-          email_status?: string | null
-          failure_kind?: string
-          id?: string
-          occurred_at?: string
-          read_at?: string | null
-          reason: string
-          refinement_text?: string | null
-          session_id?: string | null
-          stage?: string
-          user_id?: string | null
-        }
-        Update: {
-          email_dispatched_at?: string | null
-          email_error?: string | null
-          email_message_id?: string | null
-          email_recipient?: string | null
-          email_status?: string | null
-          failure_kind?: string
-          id?: string
-          occurred_at?: string
-          read_at?: string | null
-          reason?: string
-          refinement_text?: string | null
-          session_id?: string | null
-          stage?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      workout_generation_requests: {
-        Row: {
-          abandoned_alert_at: string | null
-          attempt_count: number
-          completed_at: string | null
-          created_at: string
-          customer_notified_at: string | null
-          id: string
-          last_error: string | null
-          next_retry_at: string | null
-          notes: string[]
-          recovery_notified_at: string | null
-          refinement_text: string | null
-          request: Json
-          stage: string
-          status: string
-          updated_at: string
-          user_id: string
-          workout_id: string | null
-          workout_name: string | null
-        }
-        Insert: {
-          abandoned_alert_at?: string | null
-          attempt_count?: number
-          completed_at?: string | null
-          created_at?: string
-          customer_notified_at?: string | null
-          id?: string
-          last_error?: string | null
-          next_retry_at?: string | null
-          notes?: string[]
-          recovery_notified_at?: string | null
-          refinement_text?: string | null
-          request?: Json
-          stage?: string
-          status?: string
-          updated_at?: string
-          user_id: string
-          workout_id?: string | null
-          workout_name?: string | null
-        }
-        Update: {
-          abandoned_alert_at?: string | null
-          attempt_count?: number
-          completed_at?: string | null
-          created_at?: string
-          customer_notified_at?: string | null
-          id?: string
-          last_error?: string | null
-          next_retry_at?: string | null
-          notes?: string[]
-          recovery_notified_at?: string | null
-          refinement_text?: string | null
-          request?: Json
-          stage?: string
-          status?: string
-          updated_at?: string
-          user_id?: string
-          workout_id?: string | null
-          workout_name?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "workout_generation_requests_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "workout_generation_requests_workout_id_fkey"
             columns: ["workout_id"]
             isOneToOne: false
             referencedRelation: "workouts"
@@ -1396,103 +688,10 @@ export type Database = {
           },
         ]
       }
-      workout_results: {
-        Row: {
-          analysis_note: string | null
-          attempt: number
-          category: string | null
-          conditioning_load: number | null
-          created_at: string
-          data_points: number
-          duration_seconds: number | null
-          extra_reps: number | null
-          finished: boolean | null
-          format: string | null
-          id: string
-          intervals_done: number | null
-          intervals_total: number | null
-          metric: string | null
-          performed_at: string
-          prescription_hash: string | null
-          rounds: number | null
-          rpe: number | null
-          strength_load: number | null
-          updated_at: string
-          user_id: string
-          workout_id: string
-        }
-        Insert: {
-          analysis_note?: string | null
-          attempt?: number
-          category?: string | null
-          conditioning_load?: number | null
-          created_at?: string
-          data_points?: number
-          duration_seconds?: number | null
-          extra_reps?: number | null
-          finished?: boolean | null
-          format?: string | null
-          id?: string
-          intervals_done?: number | null
-          intervals_total?: number | null
-          metric?: string | null
-          performed_at?: string
-          prescription_hash?: string | null
-          rounds?: number | null
-          rpe?: number | null
-          strength_load?: number | null
-          updated_at?: string
-          user_id: string
-          workout_id: string
-        }
-        Update: {
-          analysis_note?: string | null
-          attempt?: number
-          category?: string | null
-          conditioning_load?: number | null
-          created_at?: string
-          data_points?: number
-          duration_seconds?: number | null
-          extra_reps?: number | null
-          finished?: boolean | null
-          format?: string | null
-          id?: string
-          intervals_done?: number | null
-          intervals_total?: number | null
-          metric?: string | null
-          performed_at?: string
-          prescription_hash?: string | null
-          rounds?: number | null
-          rpe?: number | null
-          strength_load?: number | null
-          updated_at?: string
-          user_id?: string
-          workout_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "workout_results_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "workout_results_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       workouts: {
         Row: {
           activation: string | null
           category: string
-          coach_rationale: string[]
-          community_hidden: boolean
-          community_source_id: string | null
           completed_at: string | null
           cool_down: string | null
           created_at: string
@@ -1512,7 +711,6 @@ export type Database = {
           instructions: string | null
           instructions_html: string | null
           is_favorite: boolean
-          is_shared: boolean
           is_wod: boolean
           location: string | null
           main_workout: string | null
@@ -1525,7 +723,6 @@ export type Database = {
           review_warnings: string[]
           scheduled_at: string | null
           serial: number
-          shared_at: string | null
           soft_tissue: string | null
           status: string
           tips: string[]
@@ -1541,9 +738,6 @@ export type Database = {
         Insert: {
           activation?: string | null
           category: string
-          coach_rationale?: string[]
-          community_hidden?: boolean
-          community_source_id?: string | null
           completed_at?: string | null
           cool_down?: string | null
           created_at?: string
@@ -1563,7 +757,6 @@ export type Database = {
           instructions?: string | null
           instructions_html?: string | null
           is_favorite?: boolean
-          is_shared?: boolean
           is_wod?: boolean
           location?: string | null
           main_workout?: string | null
@@ -1576,7 +769,6 @@ export type Database = {
           review_warnings?: string[]
           scheduled_at?: string | null
           serial?: number
-          shared_at?: string | null
           soft_tissue?: string | null
           status?: string
           tips?: string[]
@@ -1592,9 +784,6 @@ export type Database = {
         Update: {
           activation?: string | null
           category?: string
-          coach_rationale?: string[]
-          community_hidden?: boolean
-          community_source_id?: string | null
           completed_at?: string | null
           cool_down?: string | null
           created_at?: string
@@ -1614,7 +803,6 @@ export type Database = {
           instructions?: string | null
           instructions_html?: string | null
           is_favorite?: boolean
-          is_shared?: boolean
           is_wod?: boolean
           location?: string | null
           main_workout?: string | null
@@ -1627,7 +815,6 @@ export type Database = {
           review_warnings?: string[]
           scheduled_at?: string | null
           serial?: number
-          shared_at?: string | null
           soft_tissue?: string | null
           status?: string
           tips?: string[]
@@ -1640,117 +827,11 @@ export type Database = {
           wod_date?: string | null
           wod_variant?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "workouts_community_source_id_fkey"
-            columns: ["community_source_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "workouts_community_source_id_fkey"
-            columns: ["community_source_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
-      community_badges_public: {
-        Row: {
-          badge_id: string | null
-          badge_name: string | null
-          category: string | null
-          earned_at: string | null
-          icon: string | null
-          points: number | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
-      community_comments_public: {
-        Row: {
-          author_avatar: string | null
-          author_name: string | null
-          body: string | null
-          created_at: string | null
-          id: string | null
-          user_id: string | null
-          workout_id: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "community_comments_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "community_workouts_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_comments_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      community_members_public: {
-        Row: {
-          avatar_url: string | null
-          badge_points: number | null
-          current_streak: number | null
-          display_name: string | null
-          longest_streak: number | null
-          received_comments: number | null
-          received_completions: number | null
-          received_likes: number | null
-          score: number | null
-          subscription_months: number | null
-          user_id: string | null
-          workouts_completed: number | null
-          workouts_generated: number | null
-          workouts_shared: number | null
-        }
-        Relationships: []
-      }
-      community_workouts_public: {
-        Row: {
-          category: string | null
-          comments_count: number | null
-          completions: number | null
-          created_by: string | null
-          creator_avatar: string | null
-          creator_completed: number | null
-          creator_generated: number | null
-          creator_id: string | null
-          creator_name: string | null
-          creator_score: number | null
-          creator_streak: number | null
-          description: string | null
-          difficulty_stars: number | null
-          dislikes: number | null
-          duration_min: number | null
-          equipment: string[] | null
-          focus: string | null
-          format: string | null
-          id: string | null
-          image_url: string | null
-          is_wod: boolean | null
-          likes: number | null
-          location: string | null
-          name: string | null
-          rating_avg: number | null
-          rating_count: number | null
-          shared_at: string | null
-          unique_completions: number | null
-          wod_date: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       has_role: {
