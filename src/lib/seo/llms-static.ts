@@ -67,7 +67,6 @@ The subscription includes up to 2 workouts per day, the full exercise library, a
 
 - Home — https://smartyworkout.com/
 - About — https://smartyworkout.com/about
-- Pricing — https://smartyworkout.com/pricing
 - How it works — https://smartyworkout.com/how-it-works
 - FAQ — https://smartyworkout.com/faq
 - Contact — https://smartyworkout.com/contact

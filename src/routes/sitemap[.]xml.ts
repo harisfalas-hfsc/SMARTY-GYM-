@@ -25,7 +25,6 @@ const ENTRIES: SitemapEntry[] = [
   { path: "/haris-falas", changefreq: "monthly", priority: "0.7" },
   { path: "/founder-note", changefreq: "monthly", priority: "0.6" },
 
-  { path: "/pricing", changefreq: "monthly", priority: "0.9" },
   { path: "/how-it-works", changefreq: "monthly", priority: "0.8" },
   { path: "/exercise-library", changefreq: "weekly", priority: "0.85" },
   { path: "/wod", changefreq: "daily", priority: "0.85" },

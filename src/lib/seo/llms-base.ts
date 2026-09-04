@@ -40,7 +40,6 @@ ${CATEGORY_SECTION}
 - [Workout programs](https://smartyworkout.com/training/workout-programs)
 - [Workout of the Day](https://smartyworkout.com/wod): today's category, difficulty and focus.
 - [Exercise library](https://smartyworkout.com/exercise-library): every movement, demonstrated.
-- [Pricing](https://smartyworkout.com/pricing): EUR 9.99/month, everything included.
 - [About](https://smartyworkout.com/about): the coaching philosophy behind Smarty Coach.
 - [Haris Falas](https://smartyworkout.com/haris-falas): the sports scientist behind the method.
 - [FAQ](https://smartyworkout.com/faq): common questions answered.

@@ -472,7 +472,6 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     appLinks: [
       ...START_LINKS,
       { to: "/how-it-works", label: "See how a workout is built, step by step" },
-      { to: "/pricing", label: "See membership pricing" },
     ],
   },
 ];

@@ -34,7 +34,6 @@ const VALID_PATHS: string[] = [
   "/",
   "/about",
   "/haris-falas",
-  "/pricing",
   "/how-it-works",
   "/exercise-library",
   "/wod",
@@ -61,7 +60,6 @@ const SUGGESTED_LINKS = [
   "/training — the training hub",
   "/tools/1rm-calculator — one-rep-max calculator",
   "/tools/workout-timer — interval and workout timer",
-  "/pricing — membership",
 ];
 
 const TOPICS = [
