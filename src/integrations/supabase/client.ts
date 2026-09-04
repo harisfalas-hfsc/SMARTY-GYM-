@@ -27,14 +27,6 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
   };
 }
 
-export function isSupabaseConfigured(): boolean {
-  const url = import.meta.env['VITE_SUPABASE_URL'] || process.env['SUPABASE_URL'];
-  const publishableKey =
-    import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] || process.env['SUPABASE_PUBLISHABLE_KEY'];
-
-  return Boolean(url && publishableKey);
-}
-
 
 function createSupabaseClient() {
   // Use import.meta.env for client-side (Vite build-time replacement)
@@ -60,7 +52,7 @@ function createSupabaseClient() {
       storage: brokeredPreviewStorage(),
       persistSession: true,
       autoRefreshToken: true,
-    }
+    },
   });
 }
 

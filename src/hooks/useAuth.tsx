@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured } from "@/integrations/supabase/config";
 import type { Session, User } from "@supabase/supabase-js";
 import { isOnline } from "@/lib/connectivity";
 
