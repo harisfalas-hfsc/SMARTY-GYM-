@@ -4,9 +4,6 @@ import type { Category } from "@/lib/workout/spec";
 import type { WorkoutRules } from "@/lib/settings.server";
 
 async function assertAdmin(ctx: { supabase: any; userId: string; claims: any }) {
-  const { isAdminEmail } = await import("@/lib/admin.server");
-  const email = ctx.claims?.email as string | undefined;
-  if (isAdminEmail(email)) return;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: role } = await supabaseAdmin
     .from("user_roles")
@@ -23,13 +20,8 @@ export type AdminUserRow = {
   name: string;
   age: number | null;
   credits: number;
-  purchases: number;
   created_at: string;
   is_admin: boolean;
-  has_active_subscription: boolean;
-  subscription_status: string | null;
-  subscription_provider: string | null;
-  current_period_end: string | null;
   workouts: number;
   wod_subscribed: boolean;
   profile_complete: boolean;
@@ -41,7 +33,6 @@ export const adminListUsers = createServerFn({ method: "POST" })
   .handler(async ({ context, data }): Promise<{ users: AdminUserRow[] } | { error: string }> => {
     try {
       await assertAdmin(context as any);
-      const { isAdminEmail } = await import("@/lib/admin.server");
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
       // Fetch auth users to get email + created_at (paginated up to 1000)
@@ -69,57 +60,30 @@ export const adminListUsers = createServerFn({ method: "POST" })
       const ids = (profiles ?? []).map((p: any) => p.id);
       const filterIds = ids.length ? ids : ["00000000-0000-0000-0000-000000000000"];
 
-      const [{ data: roles }, { data: sessions }, { data: subs }, { data: workouts }] =
+      const [{ data: roles }, { data: workouts }] =
         await Promise.all([
           supabaseAdmin.from("user_roles").select("user_id, role").in("user_id", filterIds),
-          supabaseAdmin.from("generation_sessions").select("user_id, status").in("user_id", filterIds),
-          supabaseAdmin
-            .from("subscriptions")
-            .select("user_id, status, provider, current_period_end, updated_at")
-            .in("user_id", filterIds)
-            .order("updated_at", { ascending: false }),
           supabaseAdmin.from("workouts").select("user_id").in("user_id", filterIds).limit(20000),
         ]);
 
       const adminByUser = new Set<string>();
       for (const r of (roles ?? []) as any[]) if (r.role === "admin") adminByUser.add(r.user_id);
 
-      const purchasesByUser = new Map<string, number>();
-      for (const s of (sessions ?? []) as any[]) {
-        if (s.status === "paid" || s.status === "completed") {
-          purchasesByUser.set(s.user_id, (purchasesByUser.get(s.user_id) ?? 0) + 1);
-        }
-      }
-
       const workoutsByUser = new Map<string, number>();
       for (const w of (workouts ?? []) as any[]) {
         workoutsByUser.set(w.user_id, (workoutsByUser.get(w.user_id) ?? 0) + 1);
       }
 
-      const subByUser = new Map<string, any>();
-      for (const s of (subs ?? []) as any[]) if (!subByUser.has(s.user_id)) subByUser.set(s.user_id, s);
-
       const users: AdminUserRow[] = (profiles ?? []).map((p: any) => {
         const auth = authUsersMap.get(p.id);
-        const sub = subByUser.get(p.id);
-        const periodEnd = sub?.current_period_end ? new Date(sub.current_period_end).getTime() : null;
-        const active =
-          Boolean(sub) &&
-          ["active", "trialing"].includes(sub.status) &&
-          (!periodEnd || periodEnd > Date.now());
         return {
           id: p.id,
           email: auth?.email ?? "",
           name: p.display_name ?? "",
           age: p.age ?? null,
           credits: p.bonus_credits ?? 0,
-          purchases: purchasesByUser.get(p.id) ?? 0,
           created_at: p.created_at,
-          is_admin: isAdminEmail(auth?.email) || adminByUser.has(p.id),
-          has_active_subscription: active,
-          subscription_status: sub?.status ?? null,
-          subscription_provider: sub?.provider ?? null,
-          current_period_end: sub?.current_period_end ?? null,
+          is_admin: adminByUser.has(p.id),
           workouts: workoutsByUser.get(p.id) ?? 0,
           wod_subscribed: Boolean(p.wod_mode),
           profile_complete: Boolean(
@@ -149,10 +113,7 @@ export const adminListUsers = createServerFn({ method: "POST" })
 export type AdminStats = {
   totalUsers: number;
   newUsers30d: number;
-  activeSubscribers: number;
-  canceledSubscribers: number;
   wodSubscribers: number;
-  mrrEur: number;
   workoutsTotal: number;
   workoutsToday: number;
   workoutsCompleted: number;
@@ -166,9 +127,6 @@ export const adminGetStats = createServerFn({ method: "POST" })
     try {
       await assertAdmin(context as any);
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { getWorkoutRules } = await import("@/lib/settings.server");
-      const rules = await getWorkoutRules();
-
       const since30 = new Date(Date.now() - 30 * 86_400_000).toISOString();
       const startOfToday = new Date();
       startOfToday.setHours(0, 0, 0, 0);
@@ -219,28 +177,11 @@ export const adminGetStats = createServerFn({ method: "POST" })
         count(supabaseAdmin.from("user_roles").select("id", { count: "exact", head: true }).eq("role", "admin")),
       ]);
 
-      const { data: subs } = await supabaseAdmin
-        .from("subscriptions")
-        .select("user_id, status, current_period_end")
-        .limit(5000);
-      const activeUsers = new Set<string>();
-      const canceledUsers = new Set<string>();
-      for (const s of (subs ?? []) as any[]) {
-        const end = s.current_period_end ? new Date(s.current_period_end).getTime() : null;
-        if (["active", "trialing"].includes(s.status) && (!end || end > Date.now()))
-          activeUsers.add(s.user_id);
-        else canceledUsers.add(s.user_id);
-      }
-      for (const id of activeUsers) canceledUsers.delete(id);
-
       return {
         stats: {
           totalUsers,
           newUsers30d,
-          activeSubscribers: activeUsers.size,
-          canceledSubscribers: canceledUsers.size,
           wodSubscribers,
-          mrrEur: Number((activeUsers.size * rules.membershipPriceEur).toFixed(2)),
           workoutsTotal,
           workoutsToday,
           workoutsCompleted,
@@ -977,8 +918,7 @@ export const adminGetMemberDetail = createServerFn({ method: "POST" })
     async ({ context, data }): Promise<{ member: AdminMemberDetail } | { error: string }> => {
       try {
         await assertAdmin(context as any);
-        const { isAdminEmail } = await import("@/lib/admin.server");
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
         const [
           { data: authUser },
@@ -1064,7 +1004,7 @@ export const adminGetMemberDetail = createServerFn({ method: "POST" })
           joined_at: authUser?.user?.created_at ?? p?.created_at ?? "",
           last_sign_in_at: authUser?.user?.last_sign_in_at ?? null,
           email_confirmed: Boolean(authUser?.user?.email_confirmed_at),
-          is_admin: isAdminEmail(email) || Boolean(role),
+          is_admin: Boolean(role),
           profile: p
             ? {
                 age: p.age ?? null,

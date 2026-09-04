@@ -10,7 +10,6 @@ export type CronJobKey =
   | "daily-motivation"
   | "wod-auto-delivery"
   | "schedule-reminders"
-  | "renewal-reminders"
   | "seo-refresh"
   | "health-check"
   | "error-alerts"
@@ -72,7 +71,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentLabel: "Motivation message pool",
     contentHelp:
       "One message per line. A member gets the same line for a whole day. Leave empty to use the built-in pool.",
-    defaults: { enabled: true, hour: 7, minute: 0 },
+    defaults: { enabled: false, hour: 7, minute: 0 },
   },
   {
     key: "wod-auto-delivery",
@@ -81,7 +80,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
       "Builds today's Workout of the Day (bodyweight + equipment variants, or one recovery session) for every member with auto-delivery on, then notifies them that it is ready.",
     timing: "per-member",
     timingNote:
-      "Runs at each member's own chosen local hour (07:00 by default). Skips members without a Training Profile or an active membership.",
+      "Runs at each member's own chosen local hour (07:00 by default). Skips members without a complete Training Profile.",
     sends: [
       {
         title: "Your bodyweight Workout of the Day is ready",
@@ -94,7 +93,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     ],
     timeEditable: false,
     contentEditable: false,
-    defaults: { enabled: true, hour: 7, minute: 0 },
+    defaults: { enabled: false, hour: 7, minute: 0 },
   },
   {
     key: "schedule-reminders",
@@ -111,29 +110,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     ],
     timeEditable: false,
     contentEditable: false,
-    defaults: { enabled: true, hour: 0, minute: 0 },
-  },
-  {
-    key: "renewal-reminders",
-    label: "Membership renewal reminders",
-    description:
-      "Tells members with an auto-renewing membership that their subscription is about to renew, three days before and again the day before.",
-    timing: "continuous",
-    timingNote:
-      "Checked every hour and sent once per billing period, based on each member's own renewal date.",
-    sends: [
-      {
-        title: "Your membership renews in 3 days",
-        body: "Your SmartyGym membership renews on DD Month YYYY.",
-      },
-      {
-        title: "Your membership renews tomorrow",
-        body: "Your SmartyGym membership renews on DD Month YYYY.",
-      },
-    ],
-    timeEditable: false,
-    contentEditable: false,
-    defaults: { enabled: true, hour: 0, minute: 0 },
+    defaults: { enabled: false, hour: 0, minute: 0 },
   },
   {
     key: "seo-refresh",
@@ -153,14 +130,14 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentLabel: "Extra keywords to always include",
     contentHelp:
       "One keyword or phrase per line. These are merged into the index on every run and never removed.",
-    defaults: { enabled: true, hour: 0, minute: 0 },
+    defaults: { enabled: false, hour: 0, minute: 0 },
     runnable: true,
   },
   {
     key: "health-check",
     label: "Nightly system health check",
     description:
-      "Checks the whole system once every night — database, exercise library, player media, AI credits and workout generation, Workout of the Day, email, payments, every other scheduled job, all public pages, share links, logbook / progress / player data, the support inbox, errors from the last 24 hours and the day's activity. A numbered report is emailed every night, pass or fail.",
+      "Checks the whole system once every night — database, exercise library, player media, AI credits and workout generation, Workout of the Day, email, every other scheduled job, all public pages, share links, logbook / progress / player data, the support inbox, errors from the last 24 hours and the day's activity. A numbered report is emailed every night, pass or fail.",
     timing: "fixed",
     timingNote:
       "Runs once a day at the time set below (Cyprus time). Default 00:00. The report is always emailed, so silence means the check itself did not run.",
@@ -178,7 +155,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentEditable: false,
     settings: ["recipient", "checks"],
     runnable: true,
-    defaults: { enabled: true, hour: 0, minute: 0 },
+    defaults: { enabled: false, hour: 0, minute: 0 },
   },
   {
     key: "error-alerts",
@@ -197,7 +174,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     timeEditable: false,
     contentEditable: false,
     settings: ["recipient", "severity", "groupWindow"],
-    defaults: { enabled: true, hour: 0, minute: 0 },
+    defaults: { enabled: false, hour: 0, minute: 0 },
   },
   {
     key: "generate-weekly-blog-article",

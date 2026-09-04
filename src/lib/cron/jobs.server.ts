@@ -36,7 +36,7 @@ function withDefaults(key: string, row: Partial<CronJobConfig> | null): CronJobC
   const def = CRON_JOB_BY_KEY[key];
   return {
     key,
-    enabled: row?.enabled ?? def?.defaults.enabled ?? true,
+    enabled: row?.enabled ?? def?.defaults.enabled ?? false,
     hour: row?.hour ?? def?.defaults.hour ?? 0,
     minute: row?.minute ?? def?.defaults.minute ?? 0,
     timezone: row?.timezone || SITE_TIMEZONE,

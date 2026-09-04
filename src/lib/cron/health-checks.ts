@@ -7,7 +7,6 @@ export const HEALTH_CHECKS: { key: string; label: string }[] = [
   { key: "ai", label: "AI credits / workout generation" },
   { key: "wod", label: "Workout of the Day" },
   { key: "email", label: "Email delivery" },
-  { key: "payments", label: "Payments and access mode" },
   { key: "jobs", label: "Scheduled jobs" },
   { key: "pages", label: "Public pages reachable" },
   { key: "sharing", label: "Shared workout links" },

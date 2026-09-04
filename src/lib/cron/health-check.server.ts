@@ -235,10 +235,6 @@ export async function runHealthCheck(
     return ["pass", "Email sender configured (this report itself proves delivery)."];
   });
 
-  await run("payments", async () => {
-    return ["pass", "Payments are disabled — all features are free for members."];
-  });
-
   await run("jobs", async () => {
     const { getCronConfigs } = await import("@/lib/cron/jobs.server");
     const configs = await getCronConfigs(db);
