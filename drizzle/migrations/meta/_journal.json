@@ -218,6 +218,13 @@
       "when": 1788496353534,
       "tag": "0030_workout_results",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1788496372227,
+      "tag": "0031_attempts_columns",
+      "breakpoints": true
     }
   ]
 }
