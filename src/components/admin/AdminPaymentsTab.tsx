@@ -69,7 +69,7 @@ export function AdminPaymentsTab() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4 rounded-xl border-2 border-blue-400 p-3">
+        <div className="space-y-3 rounded-xl border-2 border-blue-400 p-3">
           <div>
             <p className="text-sm font-semibold">Make the entire app free</p>
             <p className="text-xs text-muted-foreground">
@@ -77,15 +77,49 @@ export function AdminPaymentsTab() {
               path at all.
             </p>
           </div>
-          <Switch checked={enabled} disabled={busy} onCheckedChange={(v) => void toggle(v)} />
+
+          <div className="flex items-center justify-between gap-3">
+            <span
+              className={`text-sm font-extrabold uppercase tracking-widest ${
+                enabled ? "text-amber-500" : "text-muted-foreground"
+              }`}
+            >
+              {enabled ? "ON" : "OFF"}
+            </span>
+            <Switch
+              aria-label="Free Access Mode"
+              checked={enabled}
+              disabled={busy}
+              onCheckedChange={(v) => void toggle(v)}
+              className="h-9 w-16 border-2 border-primary/60 data-[state=unchecked]:bg-muted [&>span]:h-7 [&>span]:w-7 [&>span]:bg-primary [&>span]:data-[state=checked]:translate-x-7"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant={enabled ? "outline" : "default"}
+              disabled={busy || !enabled}
+              onClick={() => void toggle(false)}
+            >
+              Switch OFF (paid)
+            </Button>
+            <Button
+              variant={enabled ? "default" : "outline"}
+              disabled={busy || enabled}
+              onClick={() => void toggle(true)}
+            >
+              Switch ON (free)
+            </Button>
+          </div>
         </div>
 
-        <p className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 text-sm">
           Current state:
           <Badge variant={enabled ? "destructive" : "secondary"}>
             {enabled ? "EVERYTHING FREE" : "NORMAL PAID MODE"}
           </Badge>
-        </p>
+        </div>
+
       </section>
 
       {enabled && (
