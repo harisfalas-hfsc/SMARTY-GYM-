@@ -1,27 +1,52 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, Search, Shield, Plus, Minus, RefreshCw, ClipboardList, ArrowLeft, User } from "lucide-react";
+import {
+  Loader2,
+  Search,
+  Shield,
+  RefreshCw,
+  ClipboardList,
+  ArrowLeft,
+  User,
+  Gift,
+  Ban,
+  CreditCard,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   adminListUsers,
-  adminGrantCredits,
   adminSetRole,
+  adminGrantPremium,
+  adminRevokePremium,
   type AdminUserRow,
 } from "@/lib/admin.functions";
 import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
 import { AdminMemberDetail } from "@/components/admin/AdminMemberDetail";
 import { formatDate } from "@/lib/date-format";
+import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
+
+type Filter = "all" | "subscriber" | "complimentary" | "member";
+
+const FILTERS: { key: Filter; label: string }[] = [
+  { key: "all", label: "Everyone" },
+  { key: "subscriber", label: "Paying subscribers" },
+  { key: "complimentary", label: "Complimentary" },
+  { key: "member", label: "Free members" },
+];
 
 export function AdminUsersTab() {
   const listUsers = useServerFn(adminListUsers);
-  const grantCredits = useServerFn(adminGrantCredits);
   const setRole = useServerFn(adminSetRole);
+  const grantPremium = useServerFn(adminGrantPremium);
+  const revokePremium = useServerFn(adminRevokePremium);
+  const { freeAccessMode } = useFreeAccessMode();
 
   const [users, setUsers] = useState<AdminUserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<Filter>("all");
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [logbookFor, setLogbookFor] = useState<AdminUserRow | null>(null);
@@ -40,7 +65,17 @@ export function AdminUsersTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const rows = users;
+  const counts = useMemo(
+    () => ({
+      all: users.length,
+      subscriber: users.filter((u) => u.membership === "subscriber").length,
+      complimentary: users.filter((u) => u.membership === "complimentary").length,
+      member: users.filter((u) => u.membership === "member").length,
+    }),
+    [users],
+  );
+
+  const rows = filter === "all" ? users : users.filter((u) => u.membership === filter);
 
   async function act(fn: () => Promise<{ error?: string } | unknown>, ok: string) {
     setBusy(true);
@@ -86,6 +121,27 @@ export function AdminUsersTab() {
         </Button>
       </div>
 
+      <div className="flex flex-wrap gap-2">
+        {FILTERS.map((f) => (
+          <Button
+            key={f.key}
+            size="sm"
+            variant={filter === f.key ? "default" : "outline"}
+            onClick={() => setFilter(f.key)}
+          >
+            {f.label} ({counts[f.key]})
+          </Button>
+        ))}
+      </div>
+
+      {freeAccessMode && (
+        <p className="rounded-2xl border border-amber-500 bg-amber-500/10 p-3 text-sm">
+          Free Access Mode is ON — every signed-in member has full access right now, whatever their
+          membership below says. Complimentary months you grant here stay recorded and take effect
+          again the moment you switch paid mode back on.
+        </p>
+      )}
+
       {message && <p className="text-sm text-muted-foreground">{message}</p>}
 
       {loading ? (
@@ -109,16 +165,33 @@ export function AdminUsersTab() {
                       <Shield className="h-3 w-3" /> Admin
                     </Badge>
                   )}
-                  <Badge variant="outline">Member</Badge>
+                  {u.membership === "subscriber" && (
+                    <Badge className="gap-1">
+                      <CreditCard className="h-3 w-3" /> Subscriber
+                    </Badge>
+                  )}
+                  {u.membership === "complimentary" && (
+                    <Badge variant="secondary" className="gap-1">
+                      <Gift className="h-3 w-3" /> Complimentary
+                    </Badge>
+                  )}
+                  {u.membership === "member" && <Badge variant="outline">Member (free)</Badge>}
+                  {u.membership_status === "past_due" && (
+                    <Badge variant="destructive">Payment failed</Badge>
+                  )}
                   {u.wod_subscribed && <Badge variant="outline">WOD</Badge>}
                   {!u.profile_complete && <Badge variant="outline">No profile</Badge>}
                 </div>
               </div>
 
-              <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground sm:grid-cols-4">
+              <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground sm:grid-cols-3">
                 <span>Workouts: {u.workouts}</span>
-                <span>Credits: {u.credits}</span>
                 <span>Joined: {formatDate(u.created_at)}</span>
+                <span>
+                  {u.membership === "member"
+                    ? "No active membership"
+                    : `Access until: ${u.membership_until ? formatDate(u.membership_until) : "—"}`}
+                </span>
               </div>
 
               <div className="mt-3 flex flex-wrap gap-2">
@@ -134,6 +207,47 @@ export function AdminUsersTab() {
                   disabled={busy}
                   onClick={() =>
                     act(
+                      () => grantPremium({ data: { userId: u.id, months: 1 } }),
+                      "1 complimentary month added.",
+                    )
+                  }
+                >
+                  <Gift className="mr-1 h-4 w-4" /> +1 month free
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={busy}
+                  onClick={() =>
+                    act(
+                      () => grantPremium({ data: { userId: u.id, months: 12 } }),
+                      "12 complimentary months added.",
+                    )
+                  }
+                >
+                  <Gift className="mr-1 h-4 w-4" /> +12 months
+                </Button>
+                {u.membership !== "member" && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    disabled={busy}
+                    onClick={() =>
+                      act(
+                        () => revokePremium({ data: { userId: u.id } }),
+                        "Membership access removed in the app. Paid subscriptions must also be cancelled in the Revenue section.",
+                      )
+                    }
+                  >
+                    <Ban className="mr-1 h-4 w-4" /> Remove access
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  disabled={busy}
+                  onClick={() =>
+                    act(
                       () => setRole({ data: { userId: u.id, makeAdmin: !u.is_admin } }),
                       u.is_admin ? "Admin access removed." : "Admin access granted.",
                     )
@@ -142,35 +256,11 @@ export function AdminUsersTab() {
                   <Shield className="mr-1 h-4 w-4" />
                   {u.is_admin ? "Remove admin" : "Make admin"}
                 </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  disabled={busy}
-                  onClick={() =>
-                    act(() => grantCredits({ data: { userId: u.id, credits: 1 } }), "Credit added.")
-                  }
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  disabled={busy}
-                  onClick={() =>
-                    act(
-                      () => grantCredits({ data: { userId: u.id, credits: -1 } }),
-                      "Credit removed.",
-                    )
-                  }
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
               </div>
             </div>
           ))}
         </div>
       )}
-
     </div>
   );
 }

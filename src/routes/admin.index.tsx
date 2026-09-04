@@ -18,6 +18,7 @@ import {
   ArrowLeft,
   AlertTriangle,
   type LucideIcon,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
@@ -36,6 +37,7 @@ import { AdminMessagesTab } from "@/components/admin/AdminMessagesTab";
 import { AdminAwardsTab } from "@/components/admin/AdminAwardsTab";
 import { AdminReportsTab } from "@/components/admin/AdminReportsTab";
 import { AdminPaymentsTab } from "@/components/admin/AdminPaymentsTab";
+import { AdminRevenueTab } from "@/components/admin/AdminRevenueTab";
 
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
 import { AdminGenerationFailuresTab } from "@/components/admin/AdminGenerationFailuresTab";
@@ -64,6 +66,7 @@ type SectionKey =
   | "awards"
   | "reports"
   | "payments"
+  | "revenue"
   | "cron"
   | "generation";
 
@@ -73,6 +76,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     label: "Payments",
     description: "Global Free Access Mode master switch",
     Icon: Lock,
+  },
+  {
+    key: "revenue",
+    label: "Revenue",
+    description: "Subscribers, monthly income and failed payments",
+    Icon: TrendingUp,
   },
   {
     key: "workouts",
@@ -86,7 +95,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     description: "Member messages and announcements",
     Icon: MessagesSquare,
   },
-  { key: "customers", label: "Members", description: "Search members and manage administrators", Icon: Users },
+  {
+    key: "customers",
+    label: "Members",
+    description: "Members, subscribers, complimentary access and administrators",
+    Icon: Users,
+  },
   {
     key: "rules",
     label: "Workout rules",
@@ -216,6 +230,7 @@ function AdminPage() {
           {section === "awards" && <AdminAwardsTab />}
           {section === "reports" && <AdminReportsTab />}
           {section === "payments" && <AdminPaymentsTab />}
+          {section === "revenue" && <AdminRevenueTab />}
           {section === "cron" && <AdminCronTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
         </div>

@@ -14,17 +14,24 @@ async function assertAdmin(ctx: { supabase: any; userId: string; claims: any }) 
   if (!role) throw new Error("Forbidden: admin access required");
 }
 
+/** How a member currently has access. */
+export type MembershipKind = "subscriber" | "complimentary" | "member";
+
 export type AdminUserRow = {
   id: string;
   email: string;
   name: string;
   age: number | null;
-  credits: number;
   created_at: string;
   is_admin: boolean;
   workouts: number;
   wod_subscribed: boolean;
   profile_complete: boolean;
+  /** Access source: paid subscriber, admin-granted complimentary, or free member. */
+  membership: MembershipKind;
+  membership_status: string | null;
+  membership_provider: string | null;
+  membership_until: string | null;
 };
 
 export const adminListUsers = createServerFn({ method: "POST" })
@@ -60,10 +67,15 @@ export const adminListUsers = createServerFn({ method: "POST" })
       const ids = (profiles ?? []).map((p: any) => p.id);
       const filterIds = ids.length ? ids : ["00000000-0000-0000-0000-000000000000"];
 
-      const [{ data: roles }, { data: workouts }] =
+      const [{ data: roles }, { data: workouts }, { data: subs }] =
         await Promise.all([
           supabaseAdmin.from("user_roles").select("user_id, role").in("user_id", filterIds),
           supabaseAdmin.from("workouts").select("user_id").in("user_id", filterIds).limit(20000),
+          supabaseAdmin
+            .from("subscriptions")
+            .select("user_id, provider, status, current_period_end, updated_at")
+            .in("user_id", filterIds)
+            .order("updated_at", { ascending: false }),
         ]);
 
       const adminByUser = new Set<string>();
@@ -74,18 +86,45 @@ export const adminListUsers = createServerFn({ method: "POST" })
         workoutsByUser.set(w.user_id, (workoutsByUser.get(w.user_id) ?? 0) + 1);
       }
 
+      // Keep the strongest access row per member: a live paid subscription wins
+      // over an admin grant, which wins over anything expired or canceled.
+      const subByUser = new Map<string, any>();
+      const isLive = (s: any) =>
+        ["active", "trialing", "past_due"].includes(s.status) &&
+        (!s.current_period_end || new Date(s.current_period_end).getTime() > Date.now());
+      for (const s of (subs ?? []) as any[]) {
+        const current = subByUser.get(s.user_id);
+        if (!current) {
+          subByUser.set(s.user_id, s);
+          continue;
+        }
+        const rank = (row: any) =>
+          (isLive(row) ? 2 : 0) + (row.provider && row.provider !== "admin_grant" ? 1 : 0);
+        if (rank(s) > rank(current)) subByUser.set(s.user_id, s);
+      }
+
       const users: AdminUserRow[] = (profiles ?? []).map((p: any) => {
         const auth = authUsersMap.get(p.id);
+        const sub = subByUser.get(p.id);
+        const live = sub ? isLive(sub) : false;
+        const membership: MembershipKind = !live
+          ? "member"
+          : sub.provider === "admin_grant"
+            ? "complimentary"
+            : "subscriber";
         return {
           id: p.id,
           email: auth?.email ?? "",
           name: p.display_name ?? "",
           age: p.age ?? null,
-          credits: p.bonus_credits ?? 0,
           created_at: p.created_at,
           is_admin: adminByUser.has(p.id),
           workouts: workoutsByUser.get(p.id) ?? 0,
           wod_subscribed: Boolean(p.wod_mode),
+          membership,
+          membership_status: sub?.status ?? null,
+          membership_provider: sub?.provider ?? null,
+          membership_until: sub?.current_period_end ?? null,
           profile_complete: Boolean(
             p.onboarded &&
               p.age &&
@@ -194,46 +233,6 @@ export const adminGetStats = createServerFn({ method: "POST" })
     }
   });
 
-export type AdminPayment = {
-  id: string;
-  amount: number;
-  currency: string;
-  created: string;
-  email: string | null;
-  status: string;
-  refunded: boolean;
-};
-
-export type AdminRevenue = {
-  environment: "live" | "sandbox";
-  currency: string;
-  total: number;
-  last30: number;
-  byMonth: { month: string; amount: number }[];
-  payments: AdminPayment[];
-};
-
-export const adminGetRevenue = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: { environment?: "live" | "sandbox" }) => data)
-  .handler(async ({ context, data }): Promise<{ revenue: AdminRevenue } | { error: string }> => {
-    try {
-      await assertAdmin(context as any);
-      const environment = data.environment ?? "live";
-      return {
-        revenue: {
-          environment,
-          currency: "EUR",
-          total: 0,
-          last30: 0,
-          byMonth: [],
-          payments: [],
-        },
-      };
-    } catch (e) {
-      return { error: e instanceof Error ? e.message : "Failed to load revenue" };
-    }
-  });
 
 /** Gives a member premium access for a number of months, without charging them. */
 export const adminGrantPremium = createServerFn({ method: "POST" })
@@ -314,32 +313,6 @@ export const adminRevokePremium = createServerFn({ method: "POST" })
     }
   });
 
-export const adminGrantCredits = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: { userId: string; credits: number }) => data)
-  .handler(async ({ context, data }): Promise<{ ok: true; credits: number } | { error: string }> => {
-    try {
-      await assertAdmin(context as any);
-      if (!data.userId || !Number.isFinite(data.credits) || data.credits === 0)
-        return { error: "Invalid input" };
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { data: p } = await supabaseAdmin
-        .from("profiles")
-        .select("bonus_credits")
-        .eq("id", data.userId)
-        .maybeSingle();
-      if (!p) return { error: "User not found" };
-      const next = Math.max(0, ((p as any).bonus_credits ?? 0) + data.credits);
-      const { error } = await supabaseAdmin
-        .from("profiles")
-        .update({ bonus_credits: next })
-        .eq("id", data.userId);
-      if (error) return { error: error.message };
-      return { ok: true, credits: next };
-    } catch (e) {
-      return { error: e instanceof Error ? e.message : "Failed" };
-    }
-  });
 
 export const adminSetRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -868,7 +841,6 @@ export type AdminMemberDetail = {
     active: boolean;
     provider: string | null;
     current_period_end: string | null;
-    credits: number;
   };
   progress: {
     score: number;
@@ -1040,7 +1012,7 @@ export const adminGetMemberDetail = createServerFn({ method: "POST" })
               (!periodEnd || periodEnd > Date.now()),
             provider: (sub as any)?.provider ?? null,
             current_period_end: (sub as any)?.current_period_end ?? null,
-            credits: p?.bonus_credits ?? 0,
+            
           },
           progress: progress
             ? {
