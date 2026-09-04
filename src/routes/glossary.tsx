@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { TRAINING_CATEGORIES } from "@/lib/training-categories";
+import { TRAINING_TOPICS } from "@/lib/seo/training-topics";
 
 const URL = "https://smartygym.com/glossary";
 const TITLE =
@@ -247,11 +248,31 @@ function GlossaryPage() {
             </AccordionItem>
           ))}
         </Accordion>
-        <p className="mt-3 text-[13px] text-muted-foreground">
-          <Link to="/training" className="font-semibold text-primary hover:underline">
-            Explore the training hub
-          </Link>
+      </section>
+
+      <section aria-labelledby="training-guides" className="mt-10">
+        <h2 id="training-guides" className="text-xs font-semibold uppercase tracking-wider text-primary">
+          Training Guides
+        </h2>
+        <p className="mt-2 text-muted-foreground">
+          In-depth guides on how Smarty Gym trains you online — personalized workouts, strength, cardio,
+          metabolic conditioning, mobility and home training.
         </p>
+        <ul className="mt-3 divide-y divide-border rounded-2xl border-2 border-primary px-4">
+          {TRAINING_TOPICS.map((topic) => (
+            <li key={topic.slug} className="py-4">
+              <Link
+                to="/training/$slug"
+                params={{ slug: topic.slug }}
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
+              >
+                {topic.h1}
+                <ArrowRight className="h-4 w-4 shrink-0" />
+              </Link>
+              <p className="mt-1 text-[13px] text-muted-foreground">{topic.metaDescription}</p>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <h2 className="mt-10 text-xs font-semibold uppercase tracking-wider text-primary">Terms</h2>

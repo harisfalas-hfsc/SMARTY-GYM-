@@ -98,5 +98,4 @@ Personalized Workout, Online Personal Trainer, Workout App, Training Plan, Worko
 
 ## Sister brands
 
-SmartyGym is part of the Smarty Wellness family alongside SmartyDiet (https://smartydiet.com), SmartyGym (https://smartygym.com) and SmartyMove (https://smartymove.com).
 `;
