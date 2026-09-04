@@ -1,8 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
-import { optimizeArticles } from "@/lib/seo/article-optimizer.server";
+import { optimizeSharedWorkouts } from "@/lib/seo/workout-seo.server";
 const db = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
-for (let i = 0; i < 4; i++) {
-  const r = await optimizeArticles(db as never, { limit: 5 });
-  console.log(i, r.status, r.optimized, "remaining", r.remaining, r.failures.slice(0,1));
-  if (r.remaining === 0 || r.status !== "ok") break;
-}
+const r = await optimizeSharedWorkouts(db as never, { limit: 5 });
+console.log(JSON.stringify(r, null, 2));
+const { data } = await db.from("blog_articles").select("slug, seo_title, focus_keyphrase, image_alt, seo_faq").not("seo_optimized_at","is",null).limit(2);
+console.log(JSON.stringify(data, null, 2).slice(0, 1200));
