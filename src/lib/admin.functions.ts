@@ -1012,7 +1012,7 @@ export const adminGetMemberDetail = createServerFn({ method: "POST" })
               (!periodEnd || periodEnd > Date.now()),
             provider: (sub as any)?.provider ?? null,
             current_period_end: (sub as any)?.current_period_end ?? null,
-            credits: p?.bonus_credits ?? 0,
+            
           },
           progress: progress
             ? {
