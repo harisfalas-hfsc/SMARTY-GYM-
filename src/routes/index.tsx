@@ -15,7 +15,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Personalized workout generator by sports scientist Haris Falas (CSCS): answer a smart questionnaire and get a tailor-made strength, hypertrophy, conditioning or mobility session built around your body, goals and equipment.",
+          "SmartyGym is an online gym with a personal coach built on the sports science of Haris Falas (CSCS). Ask your coach for a session and train strength, conditioning or mobility around your goals, your equipment and your schedule.",
       },
       {
         property: "og:title",
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/")({
           url: "https://smartygym.com/",
           name: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
           description:
-            "Answer a smart questionnaire and get a full tailor-made workout built around your body, goals, equipment and constraints.",
+            "An online gym with a personal coach: ask your coach for a session and train around your goals, your equipment and your schedule.",
           inLanguage: "en",
           isPartOf: { "@id": "https://smartygym.com/#website" },
           about: { "@id": "https://smartygym.com/#software" },
@@ -78,7 +78,7 @@ function Home() {
               <span className="text-primary">ANYWHERE, ANYTIME.</span>
             </>
           }
-          subtitle="Answer a smart questionnaire. Get a full tailor-made workout built around your body, goals, equipment and constraints."
+          subtitle="SmartyGym is your online gym and personal coach. Tell your coach how you feel, what you want to achieve and what you have to train with — and get a complete, properly programmed session built for you, whenever and wherever you train."
         />
 
         <div className="mx-auto flex max-w-xs flex-col gap-3">
@@ -87,7 +87,7 @@ function Home() {
             className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary text-[15px] font-extrabold text-primary-foreground"
           >
             <Dumbbell className="h-4 w-4 shrink-0" />
-            Create your workout
+            Ask your coach
           </Link>
           <Link
             to="/wod"
@@ -145,8 +145,10 @@ function Home() {
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-white/80 lg:mt-6 lg:text-lg">
-              Answer a smart questionnaire. Get a full tailor-made workout built
-              around your body, goals, equipment and constraints.
+              SmartyGym is your online gym and personal coach. Tell your coach how
+              you feel, what you want to achieve and what you have to train with — and
+              get a complete, properly programmed session built for you, whenever and
+              wherever you train.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3 lg:flex-nowrap">
               <Link
@@ -154,7 +156,7 @@ function Home() {
                 className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 text-base font-bold text-primary-foreground hover:opacity-95 lg:px-8"
               >
                 <Dumbbell className="h-4 w-4 shrink-0" />
-                Create your workout
+                Ask your coach
               </Link>
               <Link
                 to="/wod"
