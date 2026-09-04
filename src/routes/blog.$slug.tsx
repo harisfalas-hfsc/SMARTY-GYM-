@@ -40,7 +40,9 @@ async function loadArticle(slug: string): Promise<Article> {
     .eq("is_published", true)
     .maybeSingle();
   if (error) throw new Error(error.message);
-  if (!data) throw notFound();
+  // Retired articles were indexed on the old site: send their ranking to the
+  // blog index with a permanent redirect instead of returning a dead page.
+  if (!data) throw redirect({ to: "/blog", statusCode: 301 });
   return data as Article;
 }
 
