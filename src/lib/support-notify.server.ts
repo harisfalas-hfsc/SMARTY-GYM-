@@ -5,6 +5,8 @@
  * shows exactly what a customer sees.
  * Never throws: support actions must not fail because of a notification.
  */
+const ADMIN_MAILBOX = "smartygym@outlook.com";
+
 export async function notifyAdminsOfInboundMessage(input: {
   threadId: string;
   messageId?: string;
@@ -18,7 +20,7 @@ export async function notifyAdminsOfInboundMessage(input: {
 
   try {
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
-    await sendTemplateEmail("contact-notification", email, {
+    await sendTemplateEmail("contact-notification", ADMIN_MAILBOX, {
       templateData: { name, email, subject, message },
       idempotencyKey: `contact-notification-${messageId ?? threadId}`,
       replyTo: email,
