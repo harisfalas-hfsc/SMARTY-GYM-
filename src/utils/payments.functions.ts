@@ -173,3 +173,41 @@ export const getMyMembership = createServerFn({ method: "GET" })
       currentPeriodEnd: row?.current_period_end ?? null,
     };
   });
+
+/**
+ * Turns the automatic renewal of the member's own membership off (cancel at the
+ * end of the paid period) or back on. Same behaviour as the sister app.
+ */
+export const setMembershipCancellation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { cancel: boolean; environment: StripeEnv }) => data)
+  .handler(async ({ data, context }): Promise<{ ok: true } | { error: string }> => {
+    const { isFreeAccessMode, FREE_ACCESS_BLOCK } = await import("@/lib/free-access.server");
+    if (await isFreeAccessMode()) {
+      throw new Response(JSON.stringify(FREE_ACCESS_BLOCK), {
+        status: 403,
+        headers: { "content-type": "application/json" },
+      });
+    }
+
+    const { data: row } = await context.supabase
+      .from("subscriptions")
+      .select("provider_subscription_id")
+      .eq("user_id", context.userId)
+      .eq("environment", data.environment)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const subId = (row as { provider_subscription_id?: string | null } | null)
+      ?.provider_subscription_id;
+    if (!subId) return { error: "No active membership found" };
+
+    try {
+      const stripe = createStripeClient(data.environment);
+      await stripe.subscriptions.update(subId, { cancel_at_period_end: data.cancel });
+      return { ok: true };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });

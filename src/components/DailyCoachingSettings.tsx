@@ -20,6 +20,7 @@ import {
 } from "@/lib/daily.functions";
 import { loadRemote } from "@/lib/remote-data";
 import { useAuth } from "@/hooks/useAuth";
+import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const ZONES = [
@@ -40,6 +41,7 @@ function hourLabel(h: number) {
 
 export function DailyCoachingSettings({ premium = false }: { premium?: boolean }) {
   const { user } = useAuth();
+  const { freeAccessMode } = useFreeAccessMode();
   const load = useServerFn(getDailyHub);
   const save = useServerFn(saveDailySettings);
   const setSub = useServerFn(setWodSubscription);
@@ -168,9 +170,9 @@ export function DailyCoachingSettings({ premium = false }: { premium?: boolean }
             >
               {wodBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : settings.wod_mode ? "Turn off" : "Turn on"}
             </Button>
-          ) : (
+          ) : freeAccessMode ? null : (
             <Link
-              to="/auth"
+              to="/pricing"
               className="flex h-10 shrink-0 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
             >
               See plans

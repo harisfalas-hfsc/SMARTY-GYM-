@@ -5,12 +5,28 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, Mail, User, ClipboardList, Trash2, CreditCard, ExternalLink } from "lucide-react";
+import {
+  LogOut,
+  Mail,
+  User,
+  ClipboardList,
+  Trash2,
+  CreditCard,
+  ExternalLink,
+  Crown,
+  Zap,
+} from "lucide-react";
 import { DailyCoachingSettings } from "@/components/DailyCoachingSettings";
 import { getMyAccessState } from "@/lib/access.functions";
 import { deleteMyAccount } from "@/lib/account.functions";
-import { getMyMembership, createPortalSession, type MyMembership } from "@/utils/payments.functions";
+import {
+  getMyMembership,
+  createPortalSession,
+  setMembershipCancellation,
+  type MyMembership,
+} from "@/utils/payments.functions";
 import { getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
+import { formatDateLong } from "@/lib/date-format";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
 import { toast } from "sonner";
@@ -52,7 +68,9 @@ function Account() {
   const { freeAccessMode } = useFreeAccessMode();
   const [membership, setMembership] = useState<MyMembership | null>(null);
   const [portalBusy, setPortalBusy] = useState(false);
+  const [cancelBusy, setCancelBusy] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+
 
   const refresh = useCallback(async () => {
     try {
@@ -68,16 +86,18 @@ function Account() {
     void refresh();
   }, [refresh]);
 
-  useEffect(() => {
+  const refreshMembership = useCallback(async () => {
     if (freeAccessMode) return;
-    (async () => {
-      try {
-        setMembership(await getMyMembership());
-      } catch {
-        setMembership(null);
-      }
-    })();
-  }, [freeAccessMode, user?.id]);
+    try {
+      setMembership(await getMyMembership());
+    } catch {
+      setMembership(null);
+    }
+  }, [freeAccessMode]);
+
+  useEffect(() => {
+    void refreshMembership();
+  }, [refreshMembership, user?.id]);
 
   async function openPortal() {
     setPortalBusy(true);
@@ -93,6 +113,30 @@ function Account() {
       setPortalBusy(false);
     }
   }
+
+  async function toggleCancellation(cancel: boolean) {
+    setCancelBusy(true);
+    try {
+      const result = await setMembershipCancellation({
+        data: { cancel, environment: getStripeEnvironment() },
+      });
+      if ("error" in result) throw new Error(result.error);
+      toast.success(
+        cancel
+          ? "Membership will end at the end of your billing period."
+          : "Membership renewal restored.",
+      );
+      await Promise.all([refresh(), refreshMembership()]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not update your membership");
+    } finally {
+      setCancelBusy(false);
+    }
+  }
+
+  const renewLabel = membership?.currentPeriodEnd
+    ? formatDateLong(new Date(membership.currentPeriodEnd))
+    : null;
 
   useEffect(() => {
     (async () => {
@@ -155,6 +199,58 @@ function Account() {
       </section>
 
       <DailyCoachingSettings premium={premium === true} />
+
+      {freeAccessMode || !paymentsConfigured() ? null : (
+        <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
+              <Crown className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="font-bold">Subscription</p>
+              <p className="text-sm text-muted-foreground">Smarty Gym · €9.99 / month</p>
+            </div>
+          </div>
+
+          <p className="mt-3 text-sm text-muted-foreground">
+            {premium === null
+              ? "Checking your membership…"
+              : premium
+                ? membership?.cancelAtPeriodEnd
+                  ? `Your membership is active but set to end${renewLabel ? ` on ${renewLabel}` : ""}. You keep full access until then.`
+                  : `Your membership renews automatically every month${renewLabel ? ` — next payment on ${renewLabel}` : ""}. Cancel anytime.`
+                : "You don't have an active membership yet. Subscribe to unlock Smarty Coach, Workout of the Day and your full history."}
+          </p>
+
+          {premium ? (
+            <p className="mt-2 flex items-start gap-2 text-sm text-muted-foreground">
+              <Zap className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              Includes {quota?.limit ?? 2} coach workout generations per day plus your Workout of
+              the Day
+              {quota ? ` — ${Math.max(0, quota.limit - quota.used)} left today.` : "."}
+            </p>
+          ) : null}
+
+          {premium && membership?.hasBilling ? (
+            <div className="mt-4">
+              <Button
+                variant="secondary"
+                className="h-12 w-full rounded-2xl sm:w-auto"
+                disabled={cancelBusy}
+                onClick={() => void toggleCancellation(!membership?.cancelAtPeriodEnd)}
+              >
+                {cancelBusy
+                  ? "Saving…"
+                  : membership?.cancelAtPeriodEnd
+                    ? "Resume membership"
+                    : "Cancel membership"}
+              </Button>
+            </div>
+          ) : null}
+        </section>
+      )}
+
+
 
       <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <p className="font-bold">Need a hand?</p>
