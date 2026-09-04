@@ -52,7 +52,9 @@ function Account() {
   const { freeAccessMode } = useFreeAccessMode();
   const [membership, setMembership] = useState<MyMembership | null>(null);
   const [portalBusy, setPortalBusy] = useState(false);
+  const [cancelBusy, setCancelBusy] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+
 
   const refresh = useCallback(async () => {
     try {
