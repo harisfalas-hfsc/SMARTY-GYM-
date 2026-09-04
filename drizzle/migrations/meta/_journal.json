@@ -197,6 +197,13 @@
       "when": 1788496300259,
       "tag": "0027_credit_trigger_revoke",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1788496321528,
+      "tag": "0028_community_ratings",
+      "breakpoints": true
     }
   ]
 }
