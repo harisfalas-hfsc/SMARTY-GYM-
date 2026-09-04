@@ -260,6 +260,13 @@
       "when": 1788496447172,
       "tag": "0036_error_events",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1788496464518,
+      "tag": "0037_blog_articles",
+      "breakpoints": true
     }
   ]
 }
