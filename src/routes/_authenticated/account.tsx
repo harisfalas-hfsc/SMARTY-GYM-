@@ -1,4 +1,3 @@
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { loadRemote } from "@/lib/remote-data";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
@@ -6,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { useAuth } from "@/hooks/useAuth";
-import { Crown, LogOut, Mail, User, ClipboardList, Trash2, Zap } from "lucide-react";
+import { LogOut, Mail, User, ClipboardList, Trash2 } from "lucide-react";
 import { DailyCoachingSettings } from "@/components/DailyCoachingSettings";
 import { getMyAccessState } from "@/lib/access.functions";
 import { deleteMyAccount } from "@/lib/account.functions";
@@ -24,7 +23,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
-import { formatDateLong } from "@/lib/date-format";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
@@ -40,16 +38,8 @@ export const Route = createFileRoute("/_authenticated/account")({
   component: Account,
 });
 
-function formatDate(value: string | null) {
-  if (!value) return null;
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return null;
-  return formatDateLong(d);
-}
-
 function Account() {
   const { user, displayName } = useAuth();
-  const { freeAccessMode } = useFreeAccessMode();
   const [count, setCount] = useState<number | null>(null);
   const [premium, setPremium] = useState<boolean | null>(null);
   const [quota, setQuota] = useState<{ used: number; limit: number } | null>(null);
@@ -103,7 +93,7 @@ function Account() {
         className="mb-2"
         eyebrow="Smarty Workout"
         title="My account"
-        subtitle={freeAccessMode ? "Your personal details and preferences." : "Your subscription and personal details."}
+        subtitle="Your personal details and preferences."
       />
 
       <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5">
@@ -134,7 +124,7 @@ function Account() {
 
           <Button asChild variant="secondary" className="h-12 rounded-2xl">
             <Link to="/contact">
-              <Mail className="mr-2 h-4 w-4" /> Billing help
+              <Mail className="mr-2 h-4 w-4" /> Contact support
             </Link>
           </Button>
         </div>
