@@ -53,7 +53,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured } from "@/integrations/supabase/config";
 import { getMyAccessState } from "@/lib/access.functions";
 import { PageHeader } from "@/components/PageHeader";
 import { createLocalWorkout } from "@/lib/local-workouts";
