@@ -273,7 +273,7 @@ function CoachPage() {
   }
 
   function requestGenerate(surprise: boolean) {
-    if (!canGenerate) {
+    if (!surprise && !canGenerate) {
       toast.error("Please answer all required questions first.");
       return;
     }
@@ -394,7 +394,7 @@ function CoachPage() {
         <Button
           size="lg"
           className="mt-3 h-14 w-full rounded-2xl text-base font-extrabold"
-          disabled={busy || wodMode || !canGenerate}
+          disabled={busy || wodMode}
           onClick={() => requestGenerate(true)}
         >
           {busy ? (
