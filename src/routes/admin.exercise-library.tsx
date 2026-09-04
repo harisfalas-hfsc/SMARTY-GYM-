@@ -6,7 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { UploadCloud, FileJson, Images } from "lucide-react";
+import { Database, Loader2, ShieldAlert, UploadCloud, FileJson, Images } from "lucide-react";
+import { adminCheckAccess } from "@/lib/admin.functions";
+import {
+  getExerciseLibraryStatus,
+  importExerciseLibrary,
+  type ExerciseLibraryStatus,
+} from "@/lib/exercise-library.functions";
 
 const BUCKET = "exercise-library";
 const CONCURRENCY = 6;
@@ -34,10 +40,42 @@ export const Route = createFileRoute("/admin/exercise-library")({
 });
 
 function Page() {
+  const [authed, setAuthed] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    void adminCheckAccess()
+      .then((r) => {
+        if (active) setAuthed(Boolean(r?.isAdmin));
+      })
+      .catch(() => {
+        if (active) setAuthed(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <div className="flex min-h-[100dvh] w-full flex-col bg-background text-foreground">
       <main className="mx-auto w-full max-w-[1100px] px-4 pb-16 pt-4 lg:max-w-6xl lg:px-8">
-        <Uploader />
+        {authed === null ? (
+          <div className="mt-10 flex justify-center">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          </div>
+        ) : !authed ? (
+          <div className="mx-auto mt-10 max-w-sm rounded-3xl border-2 border-blue-400 bg-card p-6 text-center shadow-sm">
+            <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
+              <ShieldAlert className="h-6 w-6" />
+            </div>
+            <h1 className="mt-4 text-xl font-extrabold">Admin access only</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              This area is restricted to Smarty Gym administrators.
+            </p>
+          </div>
+        ) : (
+          <Uploader />
+        )}
       </main>
     </div>
   );
@@ -61,6 +99,36 @@ function Uploader() {
   const [status, setStatus] = useState<Status>({ total: 0, done: 0, failed: [], running: false });
   const [log, setLog] = useState<string | null>(null);
   const [existing, setExisting] = useState<number | null>(null);
+  const [libStatus, setLibStatus] = useState<ExerciseLibraryStatus | null>(null);
+  const [importing, setImporting] = useState(false);
+  const [importLog, setImportLog] = useState<string | null>(null);
+
+  async function refreshLibraryStatus() {
+    try {
+      const s = await getExerciseLibraryStatus();
+      setLibStatus(s);
+    } catch {
+      setLibStatus(null);
+    }
+  }
+
+  async function runImport() {
+    setImporting(true);
+    setImportLog(null);
+    try {
+      const res = await importExerciseLibrary();
+      setImportLog(
+        res.ok
+          ? `Imported ${res.imported} exercises into the database${res.skipped ? ` (${res.skipped} records skipped)` : ""}.`
+          : `Imported ${res.imported} exercises with problems: ${res.errors.join(" | ")}`,
+      );
+    } catch (e) {
+      setImportLog(e instanceof Error ? e.message : "Import failed.");
+    } finally {
+      setImporting(false);
+      void refreshLibraryStatus();
+    }
+  }
 
   async function refreshCount() {
     let count = 0;
@@ -78,6 +146,7 @@ function Uploader() {
   }
   useEffect(() => {
     void refreshCount();
+    void refreshLibraryStatus();
   }, []);
 
   async function uploadMany(files: File[], prefix: string) {
@@ -219,6 +288,45 @@ function Uploader() {
               className="hidden"
               onChange={(e) => pickJson(e.target.files)}
             />
+          </CardContent>
+        </Card>
+
+        <Card className="md:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Database className="h-4 w-4 text-primary" /> Import into the exercise database
+            </CardTitle>
+            {libStatus !== null && (
+              <Badge variant="secondary">{libStatus.exercisesInDb} in database</Badge>
+            )}
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              After the metadata JSON is uploaded, run the import once. It reads every JSON file
+              stored under <code>data/</code> and fills the exercise table that the coach, the
+              public library and the workout engine actually use. Safe to run again — existing
+              exercises are updated, not duplicated.
+            </p>
+            {libStatus !== null && (
+              <p className="text-xs text-muted-foreground">
+                Stored: {libStatus.gifsInStorage} media files ·{" "}
+                {libStatus.jsonFiles.length
+                  ? `metadata: ${libStatus.jsonFiles.join(", ")}`
+                  : "no metadata JSON yet"}
+              </p>
+            )}
+            <Button
+              onClick={() => void runImport()}
+              disabled={status.running || importing || !libStatus?.jsonFiles.length}
+            >
+              {importing ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Database className="mr-2 h-4 w-4" />
+              )}
+              {importing ? "Importing…" : "Import exercises into the database"}
+            </Button>
+            {importLog && <p className="text-sm text-muted-foreground">{importLog}</p>}
           </CardContent>
         </Card>
       </div>
