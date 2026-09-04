@@ -215,6 +215,7 @@ function AdminPage() {
           {section === "messages" && <AdminMessagesTab />}
           {section === "awards" && <AdminAwardsTab />}
           {section === "reports" && <AdminReportsTab />}
+          {section === "payments" && <AdminPaymentsTab />}
           {section === "cron" && <AdminCronTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
         </div>
