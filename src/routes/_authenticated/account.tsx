@@ -156,6 +156,58 @@ function Account() {
 
       <DailyCoachingSettings premium={premium === true} />
 
+      {freeAccessMode || !paymentsConfigured() ? null : (
+        <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
+              <Crown className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="font-bold">Subscription</p>
+              <p className="text-sm text-muted-foreground">Smarty Gym · €9.99 / month</p>
+            </div>
+          </div>
+
+          <p className="mt-3 text-sm text-muted-foreground">
+            {premium === null
+              ? "Checking your membership…"
+              : premium
+                ? membership?.cancelAtPeriodEnd
+                  ? `Your membership is active but set to end${renewLabel ? ` on ${renewLabel}` : ""}. You keep full access until then.`
+                  : `Your membership renews automatically every month${renewLabel ? ` — next payment on ${renewLabel}` : ""}. Cancel anytime.`
+                : "You don't have an active membership yet. Subscribe to unlock Smarty Coach, Workout of the Day and your full history."}
+          </p>
+
+          {premium ? (
+            <p className="mt-2 flex items-start gap-2 text-sm text-muted-foreground">
+              <Zap className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              Includes {quota?.limit ?? 2} coach workout generations per day plus your Workout of
+              the Day
+              {quota ? ` — ${Math.max(0, quota.limit - quota.used)} left today.` : "."}
+            </p>
+          ) : null}
+
+          {premium && membership?.hasBilling ? (
+            <div className="mt-4">
+              <Button
+                variant="secondary"
+                className="h-12 w-full rounded-2xl sm:w-auto"
+                disabled={cancelBusy}
+                onClick={() => void toggleCancellation(!membership?.cancelAtPeriodEnd)}
+              >
+                {cancelBusy
+                  ? "Saving…"
+                  : membership?.cancelAtPeriodEnd
+                    ? "Resume membership"
+                    : "Cancel membership"}
+              </Button>
+            </div>
+          ) : null}
+        </section>
+      )}
+
+
+
       <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <p className="font-bold">Need a hand?</p>
         <p className="mt-1 text-sm text-muted-foreground">
