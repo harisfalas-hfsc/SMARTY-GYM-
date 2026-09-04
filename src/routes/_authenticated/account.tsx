@@ -245,7 +245,7 @@ function Account() {
             </>
           ) : (
             <Button asChild className="h-12 rounded-2xl">
-              <Link to="/checkout">Subscribe · €9.99 / month</Link>
+              <Link to="/auth">Create your free account</Link>
             </Button>
           )}
           <Button asChild variant="secondary" className="h-12 rounded-2xl">

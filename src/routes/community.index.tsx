@@ -268,7 +268,7 @@ function CommunityPage() {
             {freeAccessMode ? (
               <Link to="/auth">Sign in</Link>
             ) : (
-              <Link to="/pricing">
+              <Link to="/auth">
                 {access.signedIn ? "Renew membership" : "Join Smarty Workout"}
               </Link>
             )}

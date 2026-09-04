@@ -170,7 +170,7 @@ export function DailyCoachingSettings({ premium = false }: { premium?: boolean }
             </Button>
           ) : (
             <Link
-              to="/pricing"
+              to="/auth"
               className="flex h-10 shrink-0 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
             >
               See plans

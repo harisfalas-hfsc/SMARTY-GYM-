@@ -203,7 +203,7 @@ function SharedWorkoutPage() {
         </p>
         <div className="mt-4 grid gap-2">
           <Button asChild className="h-12 rounded-2xl font-bold">
-            <Link to="/pricing">{access.signedIn ? "Renew membership" : "See membership"}</Link>
+            <Link to="/auth">{access.signedIn ? "Renew membership" : "See membership"}</Link>
           </Button>
           <Button asChild variant="secondary" className="h-12 rounded-2xl">
             <Link to="/community">Back to community</Link>

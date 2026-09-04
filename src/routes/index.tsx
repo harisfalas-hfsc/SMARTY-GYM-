@@ -98,7 +98,7 @@ function Home() {
           </Link>
           {!freeAccessMode && (
             <Link
-              to="/pricing"
+              to="/auth"
               className="flex h-12 w-full items-center justify-center rounded-full border-2 border-primary text-[15px] font-extrabold text-primary"
             >
               See pricing
@@ -165,7 +165,7 @@ function Home() {
               </Link>
               {!freeAccessMode && (
                 <Link
-                  to="/pricing"
+                  to="/auth"
                   className="inline-flex h-12 items-center whitespace-nowrap rounded-full border-2 border-primary px-6 text-base font-bold text-primary hover:bg-primary/10 lg:px-8"
                 >
                   See pricing

@@ -632,7 +632,7 @@ function ProfilePage() {
             <Button
               onClick={() => {
                 setSaved(false);
-                navigate({ to: wasOnboarded || freeAccessMode ? "/coach" : "/pricing" });
+                navigate({ to: "/coach" });
               }}
             >
               {wasOnboarded ? "Create a workout" : "Continue"}

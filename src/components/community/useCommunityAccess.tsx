@@ -90,7 +90,7 @@ export function CommunityGateDialog({
           ) : (
             <>
               <Button asChild className="h-12 rounded-2xl font-bold">
-                <Link to="/pricing">{signedIn ? "Renew my membership" : "See membership"}</Link>
+                <Link to="/auth">{signedIn ? "Renew my membership" : "See membership"}</Link>
               </Button>
               {!signedIn && (
                 <Button asChild variant="secondary" className="h-12 rounded-2xl">

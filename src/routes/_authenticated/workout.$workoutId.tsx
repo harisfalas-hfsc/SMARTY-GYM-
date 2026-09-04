@@ -157,7 +157,7 @@ function WorkoutPage() {
           workouts and get a new pair every morning.
         </p>
         <Button asChild className="mt-4 h-12 rounded-2xl">
-          <Link to="/pricing">See plans</Link>
+          <Link to="/auth">See plans</Link>
         </Button>
       </div>
     );

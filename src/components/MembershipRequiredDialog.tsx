@@ -42,7 +42,7 @@ export function MembershipRequiredDialog({
 
         <div className="grid gap-3 pt-1">
           <Button asChild className="h-14 rounded-2xl text-base font-extrabold">
-            <Link to="/checkout" onClick={() => onOpenChange(false)}>
+            <Link to="/auth" onClick={() => onOpenChange(false)}>
               Subscribe now
             </Link>
           </Button>
