@@ -14,6 +14,7 @@ import {
   MessagesSquare,
   Trophy,
   Flag,
+  Lock,
   ArrowLeft,
   AlertTriangle,
   type LucideIcon,
