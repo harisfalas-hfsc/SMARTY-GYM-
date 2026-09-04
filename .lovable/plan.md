@@ -33,7 +33,7 @@
 ## 3. Weekly blog article job
 
 - Run the weekly job once, on demand, end to end: it must write a brand-new article, create its cover, publish it, notify members and email the admin report.
-- Confirm the "no duplicate title in 90 days" and "one article per week" rules see the 80 imported articles (so it never rewrites an existing topic).
+- Confirm the "no duplicate title in 90 days" and "one article per week" rules see the imported Fitness articles (so it never rewrites an existing topic).
 - Confirm the rule that nothing publishes without a cover image still holds.
 - Confirm its scheduled slot (Sunday, the hour set in the admin panel) is what the scheduler will actually fire.
 
