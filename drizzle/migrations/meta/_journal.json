@@ -176,6 +176,13 @@
       "when": 1788496222894,
       "tag": "0024_is_app_admin_revoke_anon",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1788496239165,
+      "tag": "0025_badges_schema",
+      "breakpoints": true
     }
   ]
 }
