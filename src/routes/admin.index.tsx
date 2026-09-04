@@ -5,8 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   ShieldAlert,
   Users,
-  Crown,
-  TrendingUp,
   Loader2,
   SlidersHorizontal,
   CalendarClock,
@@ -18,7 +16,6 @@ import {
   Flag,
   ArrowLeft,
   AlertTriangle,
-  Lock,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,7 +28,6 @@ import {
   type AdminBadgeCounts,
 } from "@/lib/admin.functions";
 import { AdminUsersTab } from "@/components/admin/AdminUsersTab";
-import { AdminRevenueTab } from "@/components/admin/AdminRevenueTab";
 import { AdminRulesTab } from "@/components/admin/AdminRulesTab";
 import { AdminCycleTab } from "@/components/admin/AdminCycleTab";
 import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
@@ -59,26 +55,16 @@ export const Route = createFileRoute("/admin/")({
 
 type SectionKey =
   | "customers"
-  | "subscribers"
-  | "revenue"
   | "rules"
   | "cycle"
   | "workouts"
   | "messages"
   | "awards"
   | "reports"
-  | "payments"
   | "cron"
   | "generation";
 
 const SECTIONS: { key: SectionKey; label: string; description: string; Icon: LucideIcon }[] = [
-  {
-    key: "payments",
-    label: "Payments",
-    description: "Global Free Access Mode master switch",
-    Icon: Lock,
-  },
-  { key: "revenue", label: "Revenue", description: "Payments and monthly totals", Icon: TrendingUp },
   {
     key: "workouts",
     label: "Workouts",
@@ -92,11 +78,10 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     Icon: MessagesSquare,
   },
   { key: "customers", label: "Customers", description: "Search, grant, revoke, promote", Icon: Users },
-  { key: "subscribers", label: "Subscribers", description: "Active memberships only", Icon: Crown },
   {
     key: "rules",
     label: "Workout rules",
-    description: "Limits, pricing, coaching rules",
+    description: "Limits and coaching rules",
     Icon: SlidersHorizontal,
   },
   {
@@ -214,9 +199,7 @@ function AdminPage() {
             <ArrowLeft className="mr-2 h-4 w-4" /> All sections
           </Button>
           
-          {section === "revenue" && <AdminRevenueTab />}
           {section === "customers" && <AdminUsersTab />}
-          {section === "subscribers" && <AdminUsersTab onlySubscribers />}
           {section === "rules" && <AdminRulesTab />}
           {section === "cycle" && <AdminCycleTab />}
           {section === "workouts" && <AdminWorkoutsTab />}
@@ -288,8 +271,6 @@ function AdminHub({
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label="All members" value={stats?.totalUsers} help="Every registered member account." />
-        <Stat label="Paying members" value={stats?.activeSubscribers} help="Members with an active or trial membership." />
-        <Stat label="Est. monthly revenue" value={stats?.mrrEur} suffix=" EUR" help="Active paying members × the current monthly price. This is an estimate, not settled payments." />
         <Stat label="New members · 30 days" value={stats?.newUsers30d} help="Accounts created during the last 30 days." />
         <Stat label="All workouts" value={stats?.workoutsTotal} help="Every workout generated for every member." />
         <Stat label="Workouts created today" value={stats?.workoutsToday} help="Workouts generated since midnight today." />

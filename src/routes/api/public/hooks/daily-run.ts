@@ -5,7 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
  * Runs every automated job in `src/lib/cron/registry.ts`:
  *  - the daily motivational message, at each athlete's chosen local hour
  *  - the Workout of the Day, at each athlete's chosen local hour
- *  - scheduled-workout and renewal reminders
+ *  - scheduled-workout reminders
  *  - the automatic SEO update, at the fixed time set in the Admin panel
  * Every job is idempotent and can be switched off in Admin → Cron jobs.
  */
@@ -51,10 +51,9 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           "@/lib/cron/jobs.server"
         );
         const jobs = await getCronConfigs(db);
-        const motivationOn = jobs["daily-motivation"]?.enabled ?? true;
-        const wodOn = jobs["wod-auto-delivery"]?.enabled ?? true;
-        const scheduleOn = jobs["schedule-reminders"]?.enabled ?? true;
-        const renewalsOn = jobs["renewal-reminders"]?.enabled ?? true;
+        const motivationOn = jobs["daily-motivation"]?.enabled ?? false;
+        const wodOn = jobs["wod-auto-delivery"]?.enabled ?? false;
+        const scheduleOn = jobs["schedule-reminders"]?.enabled ?? false;
         const pool = motivationPool(jobs["daily-motivation"]);
 
         const failures: string[] = [];
@@ -113,16 +112,6 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
                 .update({ wod_mode: false, auto_workout_enabled: false } as never)
                 .eq("id", prof.id);
             }
-          }
-        }
-
-        let renewalReminders = 0;
-        if (renewalsOn) {
-          try {
-            const { runRenewalReminders } = await import("@/lib/billing-notify.server");
-            renewalReminders = await runRenewalReminders(db);
-          } catch (e) {
-            failures.push(`renewals:${e instanceof Error ? e.message : "error"}`);
           }
         }
 
@@ -274,16 +263,12 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
         if (scheduleReminders) {
           await recordRun(db, { jobKey: "schedule-reminders", status: "ok", changed: true, summary: `${scheduleReminders} scheduled workout reminder(s) sent.` });
         }
-        if (renewalReminders) {
-          await recordRun(db, { jobKey: "renewal-reminders", status: "ok", changed: true, summary: `${renewalReminders} membership renewal reminder(s) sent.` });
-        }
 
         return Response.json({
           ok: true,
           scanned: profiles.length,
           motivations,
           workouts,
-          renewalReminders,
           scheduleReminders,
           seo,
           health,

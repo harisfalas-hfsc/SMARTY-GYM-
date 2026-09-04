@@ -4,9 +4,6 @@ import type { Category } from "@/lib/workout/spec";
 import type { WorkoutRules } from "@/lib/settings.server";
 
 async function assertAdmin(ctx: { supabase: any; userId: string; claims: any }) {
-  const { isAdminEmail } = await import("@/lib/admin.server");
-  const email = ctx.claims?.email as string | undefined;
-  if (isAdminEmail(email)) return;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: role } = await supabaseAdmin
     .from("user_roles")
@@ -41,7 +38,6 @@ export const adminListUsers = createServerFn({ method: "POST" })
   .handler(async ({ context, data }): Promise<{ users: AdminUserRow[] } | { error: string }> => {
     try {
       await assertAdmin(context as any);
-      const { isAdminEmail } = await import("@/lib/admin.server");
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
       // Fetch auth users to get email + created_at (paginated up to 1000)
@@ -115,7 +111,7 @@ export const adminListUsers = createServerFn({ method: "POST" })
           credits: p.bonus_credits ?? 0,
           purchases: purchasesByUser.get(p.id) ?? 0,
           created_at: p.created_at,
-          is_admin: isAdminEmail(auth?.email) || adminByUser.has(p.id),
+          is_admin: adminByUser.has(p.id),
           has_active_subscription: active,
           subscription_status: sub?.status ?? null,
           subscription_provider: sub?.provider ?? null,
@@ -977,8 +973,7 @@ export const adminGetMemberDetail = createServerFn({ method: "POST" })
     async ({ context, data }): Promise<{ member: AdminMemberDetail } | { error: string }> => {
       try {
         await assertAdmin(context as any);
-        const { isAdminEmail } = await import("@/lib/admin.server");
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
         const [
           { data: authUser },
@@ -1064,7 +1059,7 @@ export const adminGetMemberDetail = createServerFn({ method: "POST" })
           joined_at: authUser?.user?.created_at ?? p?.created_at ?? "",
           last_sign_in_at: authUser?.user?.last_sign_in_at ?? null,
           email_confirmed: Boolean(authUser?.user?.email_confirmed_at),
-          is_admin: isAdminEmail(email) || Boolean(role),
+          is_admin: Boolean(role),
           profile: p
             ? {
                 age: p.age ?? null,
