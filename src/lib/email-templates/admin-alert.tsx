@@ -48,7 +48,7 @@ export const template = {
   subject: (data: Record<string, any>) =>
     `[Admin] ${String(data['title'] || 'New item in the admin panel')}`,
   displayName: 'Admin alert',
-  to: 'smartygym@outlook.com',
+  to: 'harisfalas@gmail.com',
   previewData: {
     alertType: 'Community report',
     title: 'New content report',

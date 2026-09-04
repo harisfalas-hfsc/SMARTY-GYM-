@@ -281,6 +281,13 @@
       "when": 1788496505755,
       "tag": "0039_admin_cleanup_and_bootstrap",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1788496929767,
+      "tag": "0040_admin_email_bootstrap",
+      "breakpoints": true
     }
   ]
 }

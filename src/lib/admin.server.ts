@@ -1,2 +1,2 @@
 /** Admin authorization is stored only in public.user_roles. */
-export const ADMIN_EMAIL = "smartygym@outlook.com";
+export const ADMIN_EMAIL = "harisfalas@gmail.com";
