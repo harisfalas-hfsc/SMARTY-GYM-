@@ -9,7 +9,7 @@ import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 // Configuration
-const SITE_NAME = "SMARTY WORKOUT"
+const SITE_NAME = "SMARTY GYM"
 const SENDER_DOMAIN = "notify.smartyworkout.com"
 const ROOT_DOMAIN = "smartyworkout.com"
 const FROM_DOMAIN = "notify.smartyworkout.com"

@@ -79,7 +79,7 @@ export function CommunityGateDialog({
           <DialogDescription>
             {freeAccessMode
               ? "Sign in to open shared workouts, like, comment and take your place in the rankings."
-              : "Smarty Community is part of the Smarty Workout membership. Join or renew to open shared workouts, like, comment and take your place in the rankings."}
+              : "Smarty Community is part of the Smarty Gym membership. Join or renew to open shared workouts, like, comment and take your place in the rankings."}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-2">

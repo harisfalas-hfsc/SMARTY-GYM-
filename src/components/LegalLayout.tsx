@@ -41,7 +41,7 @@ export function LegalLayout({
         }}
       >
         <strong className="text-foreground">Last updated:</strong> {lastUpdated} ·{" "}
-        <strong className="text-foreground">Operator:</strong> SmartyWorkout (smartyworkout.com), part of the{" "}
+        <strong className="text-foreground">Operator:</strong> SmartyGym (smartyworkout.com), part of the{" "}
         <a
           href="https://smartywellness.com"
           target="_blank"

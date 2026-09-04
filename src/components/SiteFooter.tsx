@@ -46,7 +46,7 @@ export function SiteFooter() {
 
             <p>
               © {new Date().getFullYear()}{" "}
-              <span className="text-primary font-semibold">SmartyWorkout</span>
+              <span className="text-primary font-semibold">SmartyGym</span>
             </p>
           </div>
         </div>

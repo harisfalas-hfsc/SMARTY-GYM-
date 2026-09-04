@@ -156,7 +156,7 @@ export function DailyCoachingSettings({ premium = false }: { premium?: boolean }
                 ? settings.wod_mode
                   ? "Daily plan is on. Two workouts land in your account every morning."
                   : "Turn it on to get two workouts (bodyweight and equipment) every morning."
-                : "Members only. Join Smarty Workout to receive the daily programme."}
+                : "Members only. Join Smarty Gym to receive the daily programme."}
             </p>
           </div>
           {premium ? (

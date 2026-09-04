@@ -73,7 +73,7 @@ const KEYWORDS = [
   "injury friendly workout",
   "sports science training",
   "Smarty Coach",
-  "SmartyWorkout",
+  "SmartyGym",
 ].join(", ");
 
 const JSONLD_GRAPH = {
@@ -82,13 +82,13 @@ const JSONLD_GRAPH = {
     {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
-      name: "SmartyWorkout",
-      alternateName: ["Smarty Workout", "SmartyWorkout"],
+      name: "SmartyGym",
+      alternateName: ["Smarty Gym", "SmartyGym"],
       url: SITE_URL,
       logo: `${SITE_URL}/icon-512.png`,
       image: OG_IMAGE,
       description:
-        "SmartyWorkout creates personalized workouts through Smarty Coach, built on the coaching expertise of sports scientist Haris Falas.",
+        "SmartyGym creates personalized workouts through Smarty Coach, built on the coaching expertise of sports scientist Haris Falas.",
       foundingDate: "2024",
       email: "smartyworkout@outlook.com",
       knowsAbout: [
@@ -199,7 +199,7 @@ const JSONLD_GRAPH = {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
-      name: "SmartyWorkout",
+      name: "SmartyGym",
       description: SITE_DESCRIPTION,
       inLanguage: "en",
       publisher: { "@id": `${SITE_URL}/#organization` },
@@ -215,7 +215,7 @@ const JSONLD_GRAPH = {
     {
       "@type": ["SoftwareApplication", "WebApplication"],
       "@id": `${SITE_URL}/#software`,
-      name: "SmartyWorkout — Personalized Workout Generator",
+      name: "SmartyGym — Personalized Workout Generator",
       applicationCategory: "HealthApplication",
       applicationSubCategory: "Personalized workout generator and personal training coach",
       operatingSystem: "Web, iOS, Android",
@@ -343,31 +343,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       {
         title:
-          "SmartyWorkout — Personalized Workouts with Smarty Coach",
+          "SmartyGym — Personalized Workouts with Smarty Coach",
       },
       { name: "description", content: SITE_DESCRIPTION },
       { name: "keywords", content: KEYWORDS },
-      { name: "author", content: "SmartyWorkout" },
+      { name: "author", content: "SmartyGym" },
       {
         name: "robots",
         content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
       },
       { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1" },
-      { name: "application-name", content: "SmartyWorkout" },
-      { name: "apple-mobile-web-app-title", content: "SmartyWorkout" },
+      { name: "application-name", content: "SmartyGym" },
+      { name: "apple-mobile-web-app-title", content: "SmartyGym" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "theme-color", content: "#000000" },
       { name: "color-scheme", content: "dark" },
 
-      { property: "og:site_name", content: "SmartyWorkout" },
+      { property: "og:site_name", content: "SmartyGym" },
       { property: "og:locale", content: "en_US" },
       { property: "og:type", content: "website" },
       {
         property: "og:title",
         content:
-          "SmartyWorkout — Personalized Workouts with Smarty Coach",
+          "SmartyGym — Personalized Workouts with Smarty Coach",
       },
       { property: "og:description", content: SITE_DESCRIPTION },
       { name: "twitter:card", content: "summary_large_image" },
@@ -375,7 +375,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "twitter:title",
         content:
-          "SmartyWorkout — Personalized Workouts with Smarty Coach",
+          "SmartyGym — Personalized Workouts with Smarty Coach",
       },
       { name: "twitter:description", content: SITE_DESCRIPTION },
       { property: "og:url", content: "https://smartyworkout.com/" },

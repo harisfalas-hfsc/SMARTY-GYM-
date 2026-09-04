@@ -58,7 +58,7 @@ const Email = ({
     <Preview>{`System health — ${summary || 'nightly report'}`}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY WORKOUT — SYSTEM HEALTH</Text>
+        <Text style={brand}>SMARTY GYM — SYSTEM HEALTH</Text>
         <Heading style={heading}>
           {failed > 0 ? 'Problems found' : 'All systems healthy'}
         </Heading>

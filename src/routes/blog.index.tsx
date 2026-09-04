@@ -27,7 +27,7 @@ function displayImageUrl(url: string): string {
     : url;
 }
 
-const TITLE = "Fitness Blog — Evidence-Based Training Articles | SmartyWorkout";
+const TITLE = "Fitness Blog — Evidence-Based Training Articles | SmartyGym";
 const DESCRIPTION =
   "Practical, evidence-based fitness articles from Haris Falas, Sports Scientist and CSCS: strength, conditioning, mobility, recovery and smarter training at home or in the gym.";
 
@@ -85,10 +85,10 @@ export const Route = createFileRoute("/blog/")({
           "@type": "Blog",
           "@id": `${URL}#blog`,
           url: URL,
-          name: "SmartyWorkout Fitness Blog",
+          name: "SmartyGym Fitness Blog",
           description: DESCRIPTION,
           inLanguage: "en",
-          publisher: { "@type": "Organization", name: "SmartyWorkout", url: SITE },
+          publisher: { "@type": "Organization", name: "SmartyGym", url: SITE },
         }),
       },
     ],
@@ -273,7 +273,7 @@ function BlogIndex() {
                   <div className="relative aspect-video overflow-hidden">
                     <img
                       src={displayImageUrl(article.image_url)}
-                      alt={`${article.title} — SmartyWorkout fitness blog`}
+                      alt={`${article.title} — SmartyGym fitness blog`}
                       width={1280}
                       height={720}
                       loading="lazy"

@@ -54,7 +54,7 @@ const RULES: Rule[] = [
     ],
     keywords: ["end my plan", "quit", "terminate", "money back", "charged again"],
     body:
-      "How to cancel your Smarty Workout membership:\n\n" +
+      "How to cancel your Smarty Gym membership:\n\n" +
       "1. Sign in and open the avatar menu (top right).\n" +
       "2. Go to Account.\n" +
       "3. Open Manage subscription — this opens the secure billing portal.\n" +
@@ -78,7 +78,7 @@ const RULES: Rule[] = [
     keywords: ["pay", "paid", "price", "cost", "euro", "9.99", "vat", "double charge", "checkout"],
     body:
       "About payments and billing:\n\n" +
-      "• Smarty Workout has one single plan: 9.99 EUR per month. No hidden extras, no tiers.\n" +
+      "• Smarty Gym has one single plan: 9.99 EUR per month. No hidden extras, no tiers.\n" +
       "• Payments are processed by our secure payment provider — we never see or store your card details.\n" +
       "• Invoices and receipts: Account → Manage subscription → Billing history. Every receipt can be downloaded there as a PDF.\n" +
       "• Card declined? It is almost always the bank's 3-D Secure step. Retry the checkout and confirm the prompt from your banking app, or try another card.\n" +
@@ -216,7 +216,7 @@ const RULES: Rule[] = [
     keywords: ["app store", "download", "sync", "airplane", "gym has no signal", "cache"],
     body:
       "About offline mode:\n\n" +
-      "• Smarty Workout is offline-first: once you sign in, your profile, your workouts, your logbook and the exercise library are stored on your device automatically — you do not need to visit each page first.\n" +
+      "• Smarty Gym is offline-first: once you sign in, your profile, your workouts, your logbook and the exercise library are stored on your device automatically — you do not need to visit each page first.\n" +
       "• In the gym with no signal you can still open, play and log workouts. Everything you log is queued and syncs the moment you are back online (you will see the sync pill confirm it).\n" +
       "• You stay signed in offline on a device you already used to sign in.\n" +
       "• You can install it like a native app: in your browser menu choose Add to Home Screen / Install app.",
@@ -242,7 +242,7 @@ const RULES: Rule[] = [
       "About your data and safety:\n\n" +
       "• We store only what the app needs to train you: your training profile, your workouts and your logs. We never sell data and we never share it with advertisers.\n" +
       "• Full details are in our Privacy Policy and Terms pages, linked in the footer.\n" +
-      "• Smarty Workout is not medical advice. If you have an injury or a health condition, declare it in your Training Profile limitations so Coach avoids those movements, and check with your doctor before starting.\n" +
+      "• Smarty Gym is not medical advice. If you have an injury or a health condition, declare it in your Training Profile limitations so Coach avoids those movements, and check with your doctor before starting.\n" +
       "• Want a copy or a deletion of your data? Reply here and we handle it.",
   },
   {
@@ -278,7 +278,7 @@ const WOD_AND_MANUAL_GENERATION_BODY =
 const ESCALATION_BODY =
   "Thank you for the additional details. We have forwarded your request to the administrator, who will reply here and by email shortly.\n\n" +
   "If you have a screenshot or another useful detail, you can add it to this conversation.\n\n" +
-  "Yours in good health,\nThe Smarty Workout team";
+  "Yours in good health,\nThe Smarty Gym team";
 
 export function escalationMessage(): string {
   return ESCALATION_BODY;

@@ -23,13 +23,13 @@ const SUPPORT_EMAIL = "smartyworkout@outlook.com";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact SmartyWorkout — We answer in 24–48 hours" },
+      { title: "Contact SmartyGym — We answer in 24–48 hours" },
       {
         name: "description",
         content:
-          "Get in touch with the SmartyWorkout team. Questions, feedback, partnership, support — we reply within 24–48 hours.",
+          "Get in touch with the SmartyGym team. Questions, feedback, partnership, support — we reply within 24–48 hours.",
       },
-      { property: "og:title", content: "Contact SmartyWorkout" },
+      { property: "og:title", content: "Contact SmartyGym" },
       {
         property: "og:description",
         content: "Questions, feedback, or support? We reply within 24–48 hours.",
@@ -46,9 +46,9 @@ export const Route = createFileRoute("/contact")({
           "@context": "https://schema.org",
           "@type": "ContactPage",
           url: "https://smartyworkout.com/contact",
-          name: "Contact SmartyWorkout",
+          name: "Contact SmartyGym",
           description:
-            "Get in touch with the SmartyWorkout team. Questions, feedback, partnership, support — we reply within 24–48 hours.",
+            "Get in touch with the SmartyGym team. Questions, feedback, partnership, support — we reply within 24–48 hours.",
           inLanguage: "en",
           isPartOf: { "@id": "https://smartyworkout.com/#website" },
           mainEntity: { "@id": "https://smartyworkout.com/#organization" },

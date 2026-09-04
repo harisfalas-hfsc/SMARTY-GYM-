@@ -10,7 +10,7 @@ import { useKeepScreenAwake } from "@/hooks/useKeepScreenAwake";
 import { PageHeader } from "@/components/PageHeader";
 
 const URL = "https://smartyworkout.com/tools/rounds-tracker";
-const TITLE = "Rounds Tracker — Tap to count rounds & reps | SmartyWorkout";
+const TITLE = "Rounds Tracker — Tap to count rounds & reps | SmartyGym";
 const DESCRIPTION =
   "Free big-button rounds and reps counter. Tap to count rounds during your workout — perfect for AMRAP, EMOM and circuit training.";
 
@@ -288,7 +288,7 @@ function RoundsTrackerPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
-        eyebrow="SmartyWorkout tools"
+        eyebrow="SmartyGym tools"
         title={
           <>
             Rounds <span className="text-primary">Tracker</span>

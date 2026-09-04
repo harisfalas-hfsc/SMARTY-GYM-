@@ -38,7 +38,7 @@ const Email = ({
     <Preview>{urgent ? 'A member is still waiting for a workout' : 'A workout generation failed'}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY WORKOUT — {urgent ? 'URGENT' : 'ALERT'}</Text>
+        <Text style={brand}>SMARTY GYM — {urgent ? 'URGENT' : 'ALERT'}</Text>
         <Heading style={heading}>
           {urgent ? 'A member is still without their workout' : 'Workout generation failed'}
         </Heading>
@@ -76,8 +76,8 @@ export const template = {
   component: Email,
   subject: (data: Record<string, any>) =>
     data['urgent']
-      ? `[SmartyWorkout URGENT] Workout still not delivered — ${String(data['userEmail'] || 'member')}`
-      : `[SmartyWorkout ALERT] Workout generation failed — ${String(data['userEmail'] || 'member')}`,
+      ? `[SmartyGym URGENT] Workout still not delivered — ${String(data['userEmail'] || 'member')}`
+      : `[SmartyGym ALERT] Workout generation failed — ${String(data['userEmail'] || 'member')}`,
   displayName: 'Workout generation failure (admin)',
   previewData: {
     userName: 'Alex Doe',

@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "SmartyWorkout — Your personal workout, anytime, anywhere",
+        title: "SmartyGym — Your personal workout, anytime, anywhere",
       },
       {
         name: "description",
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "SmartyWorkout — Your personal workout, anytime, anywhere",
+        content: "SmartyGym — Your personal workout, anytime, anywhere",
       },
       {
         property: "og:description",
@@ -48,7 +48,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebPage",
           "@id": "https://smartyworkout.com/#webpage",
           url: "https://smartyworkout.com/",
-          name: "SmartyWorkout — Your personal workout, anytime, anywhere",
+          name: "SmartyGym — Your personal workout, anytime, anywhere",
           description:
             "Answer a smart questionnaire and get a full tailor-made workout built around your body, goals, equipment and constraints.",
           inLanguage: "en",

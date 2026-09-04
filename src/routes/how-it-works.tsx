@@ -6,13 +6,13 @@ import { PageHeader } from "@/components/PageHeader";
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
     meta: [
-      { title: "How Smarty Workout works — answer, analyze, train" },
+      { title: "How Smarty Gym works — answer, analyze, train" },
       {
         name: "description",
         content:
           "You answer. Smarty Coach thinks. You train. Four simple steps from your goal to a personalized workout.",
       },
-      { property: "og:title", content: "How Smarty Workout works" },
+      { property: "og:title", content: "How Smarty Gym works" },
       { property: "og:description", content: "You answer. Smarty Coach thinks. You train." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/how-it-works")({
           "@graph": [
             {
               "@type": "HowTo",
-              name: "How to get a personalized workout with SmartyWorkout",
+              name: "How to get a personalized workout with SmartyGym",
               description:
                 "Four steps from your goal to a complete personalized workout built by Smarty Coach.",
               totalTime: "PT2M",
@@ -315,7 +315,7 @@ function HowItWorks() {
           Every session becomes data that improves the next one.
         </h2>
         <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-          The workout is only half of it. Smarty Workout records what you actually did, how it felt,
+          The workout is only half of it. Smarty Gym records what you actually did, how it felt,
           and how it compares with the last time you did the same session — then feeds all of it
           back to Smarty Coach.
         </p>

@@ -17,8 +17,8 @@ export const Route = createFileRoute("/auth")({
   },
   head: () => ({
     meta: [
-      { title: "Sign in — SmartyWorkout" },
-      { name: "description", content: "Sign in to SmartyWorkout to build your personalized training plan." },
+      { title: "Sign in — SmartyGym" },
+      { name: "description", content: "Sign in to SmartyGym to build your personalized training plan." },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -93,7 +93,7 @@ function Auth() {
       (typeof meta.full_name === "string" ? meta.full_name.trim() : "") ||
       (typeof meta.name === "string" ? meta.name.trim() : "") ||
       authUser.email?.split("@")[0] ||
-      "SmartyWorkout user";
+      "SmartyGym user";
 
     await supabase
       .from("profiles")

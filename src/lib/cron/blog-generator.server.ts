@@ -54,8 +54,8 @@ const VALID_PATHS: string[] = [
 
 /** Links the writer is nudged to weave into the article. */
 const SUGGESTED_LINKS = [
-  "/how-it-works — how SmartyWorkout builds a personalized workout",
-  "/exercise-library — the full SmartyWorkout exercise library",
+  "/how-it-works — how SmartyGym builds a personalized workout",
+  "/exercise-library — the full SmartyGym exercise library",
   "/wod — the Workout of the Day",
   "/training — the training hub",
   "/tools/1rm-calculator — one-rep-max calculator",
@@ -209,7 +209,7 @@ export async function runWeeklyBlogArticle(
 ${briefTitle ? `- Title keywords / angle: ${briefTitle}\n` : ""}${briefTopic ? `- Subject keywords and scope: ${briefTopic}\n` : ""}Build the title from the title keywords and cover precisely the subject described above. Stay evidence-based, and where the subject touches injury, surgery or rehabilitation, include a clear note that readers must follow their doctor's or physiotherapist's clearance before training.`
     : `TOPIC INSPIRATION (pick one or combine): ${hints}`;
 
-  const prompt = `You are a professional fitness content writer for SmartyWorkout, an AI-powered training platform that builds personalized workouts from a vetted exercise library. Write a comprehensive, SEO-optimized blog article for the "Fitness" category.
+  const prompt = `You are a professional fitness content writer for SmartyGym, an AI-powered training platform that builds personalized workouts from a vetted exercise library. Write a comprehensive, SEO-optimized blog article for the "Fitness" category.
 
 ${briefBlock}
 ${
@@ -234,7 +234,7 @@ ${SUGGESTED_LINKS.map((l) => `  ${l}`).join("\n")}
 
 VALID INTERNAL LINKS — ONLY use links from this list. Do NOT invent or guess any URLs:
 ${VALID_PATHS.map((p) => `  ${p}`).join("\n")}
-  /blog/[slug] — for linking to another SmartyWorkout article (only if you know the exact slug)
+  /blog/[slug] — for linking to another SmartyGym article (only if you know the exact slug)
 
 Any link not on this list will be removed automatically.
 

@@ -35,13 +35,13 @@ import { WodContextNote } from "@/components/performance/WodContextNote";
 export const Route = createFileRoute("/wod")({
   head: () => ({
     meta: [
-      { title: "Workout of the Day — Smarty Workout" },
+      { title: "Workout of the Day — Smarty Gym" },
       {
         name: "description",
         content:
           "Two Workouts of the Day — one bodyweight, one with equipment — built automatically for your profile every night at midnight.",
       },
-      { property: "og:title", content: "Workout of the Day — Smarty Workout" },
+      { property: "og:title", content: "Workout of the Day — Smarty Gym" },
       {
         property: "og:description",
         content: "A balanced daily workout programme adapted to your profile by Smarty Coach.",
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/wod")({
             {
               "@type": "WebPage",
               url: "https://smartyworkout.com/wod",
-              name: "Workout of the Day — Smarty Workout",
+              name: "Workout of the Day — Smarty Gym",
               description:
                 "Two Workouts of the Day — one bodyweight, one with equipment — built automatically for your profile every night at midnight.",
               inLanguage: "en",

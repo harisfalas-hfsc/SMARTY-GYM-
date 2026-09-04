@@ -65,7 +65,7 @@ const Email = ({
     <Preview>{`${jobLabel || 'Scheduled job'} — ${status || 'finished'}`}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY WORKOUT — SCHEDULED JOB</Text>
+        <Text style={brand}>SMARTY GYM — SCHEDULED JOB</Text>
         <Heading style={heading}>{jobLabel || 'Scheduled job'}</Heading>
 
         <Text style={label}>Result</Text>

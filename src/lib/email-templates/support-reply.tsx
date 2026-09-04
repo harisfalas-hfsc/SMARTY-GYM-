@@ -20,10 +20,10 @@ interface Props {
 const Email = ({ name, subject, message }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Smarty Workout support replied to your message</Preview>
+    <Preview>Smarty Gym support replied to your message</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY WORKOUT</Text>
+        <Text style={brand}>SMARTY GYM</Text>
         <Heading style={heading}>We replied to your message</Heading>
         <Text style={text}>
           {name ? `Hi ${name},` : 'Hi there,'} here is our reply
@@ -47,7 +47,7 @@ const Email = ({ name, subject, message }: Props) => (
 export const template = {
   component: Email,
   subject: (data: Record<string, any>) =>
-    data['subject'] ? `Re: ${String(data['subject'])}` : 'Smarty Workout support replied',
+    data['subject'] ? `Re: ${String(data['subject'])}` : 'Smarty Gym support replied',
   displayName: 'Support reply',
   previewData: {
     name: 'Alex',

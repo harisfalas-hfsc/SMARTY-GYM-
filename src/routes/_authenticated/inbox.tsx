@@ -15,13 +15,13 @@ export const Route = createFileRoute("/_authenticated/inbox")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Inbox — Smarty Workout" },
+      { title: "Inbox — Smarty Gym" },
       {
         name: "description",
         content:
-          "One place for your daily motivation, workout alerts and your conversations with the Smarty Workout team.",
+          "One place for your daily motivation, workout alerts and your conversations with the Smarty Gym team.",
       },
-      { property: "og:title", content: "Inbox — Smarty Workout" },
+      { property: "og:title", content: "Inbox — Smarty Gym" },
       {
         property: "og:description",
         content: "Notifications and support conversations, together in one simple inbox.",

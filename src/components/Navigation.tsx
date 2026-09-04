@@ -129,7 +129,7 @@ export function Navigation() {
               void router.invalidate();
               window.scrollTo({ top: 0, behavior: "auto" });
             }}
-            aria-label="SmartyWorkout home and refresh"
+            aria-label="SmartyGym home and refresh"
             className="bg-transparent p-0 text-lg font-extrabold leading-none tracking-tight no-underline hover:no-underline"
             style={{ textDecoration: "none" }}
           >
@@ -248,7 +248,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         ]
       : []),
     {
-      heading: "SmartyWorkout",
+      heading: "SmartyGym",
       items: [
         { to: "/", label: "Home", Icon: Home },
         { to: "/about", label: "About", Icon: Info },

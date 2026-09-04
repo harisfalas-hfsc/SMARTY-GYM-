@@ -11,13 +11,13 @@ import {
 import { PageHeader } from "@/components/PageHeader";
 
 const URL = "https://smartyworkout.com/faq";
-const TITLE = "SmartyWorkout FAQ — Smarty Coach, workouts & training";
+const TITLE = "SmartyGym FAQ — Smarty Coach, workouts & training";
 const DESCRIPTION =
-  "Short answers about SmartyWorkout: how Smarty Coach builds your workout, what is included, equipment, injuries and privacy.";
+  "Short answers about SmartyGym: how Smarty Coach builds your workout, what is included, equipment, injuries and privacy.";
 
 const ITEMS: { q: string; a: string }[] = [
   {
-    q: "What is SmartyWorkout?",
+    q: "What is SmartyGym?",
     a: "A personalized training app. Smarty Coach builds a personalized workout for you, today — based on your goal, mood, time, location and equipment.",
   },
   {
@@ -115,7 +115,7 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "Is this medical advice?",
-    a: "No. SmartyWorkout is a general fitness tool. Consult a professional if you have a medical condition.",
+    a: "No. SmartyGym is a general fitness tool. Consult a professional if you have a medical condition.",
   },
 
   {

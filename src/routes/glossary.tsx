@@ -11,9 +11,9 @@ import { TRAINING_CATEGORIES } from "@/lib/training-categories";
 
 const URL = "https://smartyworkout.com/glossary";
 const TITLE =
-  "Training Glossary & Workout Categories Explained — Strength, Cardio, Metabolic, Pilates | SmartyWorkout";
+  "Training Glossary & Workout Categories Explained — Strength, Cardio, Metabolic, Pilates | SmartyGym";
 const DESCRIPTION =
-  "Every SmartyWorkout training category explained — Strength, Muscle Building, Calorie Burning, Metabolic, Cardio, Mobility & Stability, Challenge, Pilates, Recovery, Micro Workout and Workout of the Day — plus plain-language definitions of 25+ fitness terms: what each workout type is, the formats it uses, who it suits and when to choose it.";
+  "Every SmartyGym training category explained — Strength, Muscle Building, Calorie Burning, Metabolic, Cardio, Mobility & Stability, Challenge, Pilates, Recovery, Micro Workout and Workout of the Day — plus plain-language definitions of 25+ fitness terms: what each workout type is, the formats it uses, who it suits and when to choose it.";
 const KEYWORDS = [
   "workout categories",
   "types of workouts",
@@ -53,7 +53,7 @@ const TERMS: { term: string; def: string }[] = [
   },
   {
     term: "BMR (Basal Metabolic Rate)",
-    def: "Calories the body burns at complete rest to keep vital functions running. SmartyWorkout uses the Mifflin-St Jeor equation.",
+    def: "Calories the body burns at complete rest to keep vital functions running. SmartyGym uses the Mifflin-St Jeor equation.",
   },
   {
     term: "TDEE (Total Daily Energy Expenditure)",
@@ -149,9 +149,9 @@ const JSONLD = {
     {
       "@type": "DefinedTermSet",
       "@id": `${URL}#categories`,
-      name: "Smarty Workout Training Categories",
+      name: "Smarty Gym Training Categories",
       description:
-        "The complete set of workout categories SmartyWorkout generates, with the training formats each category uses, who it suits and when to choose it.",
+        "The complete set of workout categories SmartyGym generates, with the training formats each category uses, who it suits and when to choose it.",
       hasDefinedTerm: TRAINING_CATEGORIES.map((c) => ({
         "@type": "DefinedTerm",
         "@id": `${URL}#${categoryAnchor(c.id)}`,
@@ -163,7 +163,7 @@ const JSONLD = {
     {
       "@type": "ItemList",
       "@id": `${URL}#category-list`,
-      name: "Smarty Workout Training Categories",
+      name: "Smarty Gym Training Categories",
       numberOfItems: TRAINING_CATEGORIES.length,
       itemListElement: TRAINING_CATEGORIES.map((c, i) => ({
         "@type": "ListItem",
@@ -176,7 +176,7 @@ const JSONLD = {
     {
       "@type": "DefinedTermSet",
       "@id": `${URL}#terms`,
-      name: "SmartyWorkout Training Glossary",
+      name: "SmartyGym Training Glossary",
       hasDefinedTerm: TERMS.map((t) => ({
         "@type": "DefinedTerm",
         name: t.term,
@@ -220,12 +220,12 @@ function GlossaryPage() {
       <PageHeader
         eyebrow="Glossary"
         title="Training Glossary"
-        subtitle="Every metric, training pattern and concept SmartyWorkout uses, defined in plain language."
+        subtitle="Every metric, training pattern and concept SmartyGym uses, defined in plain language."
       />
 
       <section aria-labelledby="training-categories" className="mt-8">
         <h2 id="training-categories" className="text-xs font-semibold uppercase tracking-wider text-primary">
-          Smarty Workout Training Categories
+          Smarty Gym Training Categories
         </h2>
         <Accordion type="single" collapsible className="mt-3 rounded-2xl border-2 border-primary px-4">
           {TRAINING_CATEGORIES.map((cat) => (

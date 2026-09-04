@@ -306,7 +306,7 @@ export const adminReplyToThread = createServerFn({ method: "POST" })
         await supabaseAdmin.from("notifications").insert({
           user_id: userId,
           kind: "support",
-          title: "Smarty Workout replied to your message",
+          title: "Smarty Gym replied to your message",
           body: body.slice(0, 240),
         } as never);
       }

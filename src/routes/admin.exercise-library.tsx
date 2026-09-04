@@ -15,16 +15,16 @@ export const Route = createFileRoute("/admin/exercise-library")({
   component: Page,
   head: () => ({
     meta: [
-      { title: "Exercise Library Upload | SmartyWorkout Admin" },
+      { title: "Exercise Library Upload | SmartyGym Admin" },
       {
         name: "description",
         content:
-          "Admin tool to bulk upload the SmartyWorkout exercise library: animated GIF demonstrations and the exercise metadata JSON file.",
+          "Admin tool to bulk upload the SmartyGym exercise library: animated GIF demonstrations and the exercise metadata JSON file.",
       },
-      { property: "og:title", content: "Exercise Library Upload | SmartyWorkout Admin" },
+      { property: "og:title", content: "Exercise Library Upload | SmartyGym Admin" },
       {
         property: "og:description",
-        content: "Bulk upload exercise GIFs and metadata JSON for SmartyWorkout.",
+        content: "Bulk upload exercise GIFs and metadata JSON for SmartyGym.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

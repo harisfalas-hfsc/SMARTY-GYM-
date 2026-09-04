@@ -25,13 +25,13 @@ import {
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Smarty Workout — Your Fitness Coach" },
+      { title: "About Smarty Gym — Your Fitness Coach" },
       {
         name: "description",
         content:
-          "Smarty Workout is not another workout app. Smarty Coach is a fitness coach built on the sports science of Haris Falas (BSc Sport Science, NSCA CSCS): strength, hypertrophy, conditioning and mobility programming with periodization and progressive overload.",
+          "Smarty Gym is not another workout app. Smarty Coach is a fitness coach built on the sports science of Haris Falas (BSc Sport Science, NSCA CSCS): strength, hypertrophy, conditioning and mobility programming with periodization and progressive overload.",
       },
-      { property: "og:title", content: "About Smarty Workout — Your Fitness Coach" },
+      { property: "og:title", content: "About Smarty Gym — Your Fitness Coach" },
       {
         property: "og:description",
         content:
@@ -52,9 +52,9 @@ export const Route = createFileRoute("/about")({
             {
               "@type": "AboutPage",
               url: "https://smartyworkout.com/about",
-              name: "About Smarty Workout — Your Fitness Coach",
+              name: "About Smarty Gym — Your Fitness Coach",
               description:
-                "Smarty Workout is not another workout app. Smarty Coach is a fitness coach built around the sports science of Haris Falas.",
+                "Smarty Gym is not another workout app. Smarty Coach is a fitness coach built around the sports science of Haris Falas.",
               inLanguage: "en",
               isPartOf: { "@id": "https://smartyworkout.com/#website" },
               mainEntity: { "@id": "https://smartyworkout.com/#organization" },
@@ -116,7 +116,7 @@ function AboutPage() {
           }
           description={
             <>
-              Smarty Workout is a fitness coach built on real Strength & Conditioning science. Every
+              Smarty Gym is a fitness coach built on real Strength & Conditioning science. Every
               session is structured around{" "}
               <span className="font-semibold text-foreground">proven training principles</span> — not
               a lucky shuffle of exercises. That is the difference between a generic generator and a
@@ -281,7 +281,7 @@ function AboutPage() {
             <span className="text-primary">tracked, measured & remembered</span>
           </>
         }
-        description="Smarty Workout does not stop when the session ends. What you actually did, how it felt, and how it compares with last time all feed back into your next workout."
+        description="Smarty Gym does not stop when the session ends. What you actually did, how it felt, and how it compares with last time all feed back into your next workout."
         className="mx-auto mt-6 max-w-xl lg:max-w-6xl"
       >
         <div className="grid gap-3 sm:grid-cols-2">

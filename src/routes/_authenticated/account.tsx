@@ -27,10 +27,10 @@ import { Input } from "@/components/ui/input";
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
     meta: [
-      { title: "My account — Smarty Workout" },
+      { title: "My account — Smarty Gym" },
       {
         name: "description",
-        content: "Manage your Smarty Workout subscription, profile details and sign-in.",
+        content: "Manage your Smarty Gym subscription, profile details and sign-in.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -91,7 +91,7 @@ function Account() {
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
         className="mb-2"
-        eyebrow="Smarty Workout"
+        eyebrow="Smarty Gym"
         title="My account"
         subtitle="Your personal details and preferences."
       />
@@ -125,7 +125,7 @@ function Account() {
       <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <p className="font-bold">Need a hand?</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Everything in Smarty Workout is free for members.
+          Everything in Smarty Gym is free for members.
         </p>
         <Button asChild variant="secondary" className="mt-4 h-12 rounded-2xl">
           <Link to="/contact">

@@ -43,7 +43,7 @@ export const Route = createFileRoute("/community/workouts")({
       { property: "og:title", content: "Shared workouts — Smarty Community" },
       {
         property: "og:description",
-        content: "Browse and filter every workout shared by Smarty Workout members.",
+        content: "Browse and filter every workout shared by Smarty Gym members.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

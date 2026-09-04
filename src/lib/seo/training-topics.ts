@@ -1,7 +1,7 @@
 /**
  * Content source for the public /training topic pages.
  *
- * These pages exist to make the real capabilities of SmartyWorkout
+ * These pages exist to make the real capabilities of SmartyGym
  * discoverable by search engines and answer engines. Every claim below must
  * describe something the application actually does.
  */
@@ -52,9 +52,9 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     h1: "Personalized Workouts Built Around You",
     title: "Personalized Workouts — Online Training Built Around You",
     metaDescription:
-      "SmartyWorkout builds personalized workouts from your training profile: experience, goals, available time, equipment and limitations. Full sessions with sets, reps, tempo and rest.",
+      "SmartyGym builds personalized workouts from your training profile: experience, goals, available time, equipment and limitations. Full sessions with sets, reps, tempo and rest.",
     intro:
-      "A personalized workout is not a template with your name on it. On SmartyWorkout, every session is assembled from your own training profile and from how your last sessions actually went, then written out as a complete workout you can follow from the first warm-up drill to the last cool-down stretch.",
+      "A personalized workout is not a template with your name on it. On SmartyGym, every session is assembled from your own training profile and from how your last sessions actually went, then written out as a complete workout you can follow from the first warm-up drill to the last cool-down stretch.",
     sections: [
       {
         heading: "What personalization actually means here",
@@ -102,9 +102,9 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     h1: "Strength Training Workouts",
     title: "Strength Training Workouts — Personalized Online Strength Plans",
     metaDescription:
-      "Personalized strength training workouts from SmartyWorkout: compound-led sessions with prescribed sets, reps, tempo and rest, scaled to your experience and your available equipment.",
+      "Personalized strength training workouts from SmartyGym: compound-led sessions with prescribed sets, reps, tempo and rest, scaled to your experience and your available equipment.",
     intro:
-      "Strength training is the work that makes you able to produce more force: heavier lifts, sturdier joints, better posture and a body that holds up under load. SmartyWorkout builds strength sessions around the equipment you actually own, from a full rack to a single pair of dumbbells.",
+      "Strength training is the work that makes you able to produce more force: heavier lifts, sturdier joints, better posture and a body that holds up under load. SmartyGym builds strength sessions around the equipment you actually own, from a full rack to a single pair of dumbbells.",
     sections: [
       {
         heading: "How strength sessions are structured",
@@ -151,9 +151,9 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     h1: "Cardio Workouts and Aerobic Training",
     title: "Cardio Workouts — Personalized Online Aerobic Training",
     metaDescription:
-      "Personalized cardio workouts from SmartyWorkout: steady aerobic work, intervals and machine-free options, with prescribed work and rest and a built-in interval timer.",
+      "Personalized cardio workouts from SmartyGym: steady aerobic work, intervals and machine-free options, with prescribed work and rest and a built-in interval timer.",
     intro:
-      "Cardio training develops the engine underneath everything else — how long you can work, how hard you can push, and how quickly you recover between efforts. SmartyWorkout programmes cardio with the same precision as strength: defined work, defined rest, defined intent.",
+      "Cardio training develops the engine underneath everything else — how long you can work, how hard you can push, and how quickly you recover between efforts. SmartyGym programmes cardio with the same precision as strength: defined work, defined rest, defined intent.",
     sections: [
       {
         heading: "Steady work and interval work",
@@ -199,7 +199,7 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     h1: "Metabolic Conditioning Workouts",
     title: "Metabolic Workouts — Personalized Conditioning and Circuit Training",
     metaDescription:
-      "Metabolic conditioning workouts from SmartyWorkout: AMRAP, EMOM and circuit formats built from your available equipment, with clear work-to-rest prescriptions and a rounds tracker.",
+      "Metabolic conditioning workouts from SmartyGym: AMRAP, EMOM and circuit formats built from your available equipment, with clear work-to-rest prescriptions and a rounds tracker.",
     intro:
       "Metabolic conditioning is high-density work: several movements strung together with controlled rest so the session keeps your output high from start to finish. It is where strength and cardio meet, and it is the fastest way to get a lot of quality work into a short window.",
     sections: [
@@ -248,9 +248,9 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     h1: "Mobility and Stability Training",
     title: "Mobility and Stability Workouts — Move Better, Train Longer",
     metaDescription:
-      "Mobility and stability work from SmartyWorkout: warm-ups, activation drills and cool-downs built into every session, plus movement work that respects your declared limitations.",
+      "Mobility and stability work from SmartyGym: warm-ups, activation drills and cool-downs built into every session, plus movement work that respects your declared limitations.",
     intro:
-      "Mobility is the range you can control; stability is your ability to hold position while producing force. Together they decide whether hard training makes you durable or sore. On SmartyWorkout this work is not an optional extra — it is written into every generated session.",
+      "Mobility is the range you can control; stability is your ability to hold position while producing force. Together they decide whether hard training makes you durable or sore. On SmartyGym this work is not an optional extra — it is written into every generated session.",
     sections: [
       {
         heading: "Built into every workout",
@@ -277,7 +277,7 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
       },
       {
         q: "Is this physiotherapy?",
-        a: "No. SmartyWorkout is a training platform, not a medical service, and it does not replace professional medical advice.",
+        a: "No. SmartyGym is a training platform, not a medical service, and it does not replace professional medical advice.",
       },
     ],
     related: [
@@ -293,9 +293,9 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     h1: "Bodyweight Workouts With No Equipment",
     title: "Bodyweight Workouts — No Equipment Training Anywhere",
     metaDescription:
-      "No-equipment bodyweight workouts from SmartyWorkout: full sessions using only your own body, scaled to your level, with demonstrations for every movement.",
+      "No-equipment bodyweight workouts from SmartyGym: full sessions using only your own body, scaled to your level, with demonstrations for every movement.",
     intro:
-      "A bodyweight workout needs nothing but floor space, which makes it the most reliable training you own — it survives travel, closed gyms and busy evenings. SmartyWorkout treats bodyweight training as a full method, not a fallback.",
+      "A bodyweight workout needs nothing but floor space, which makes it the most reliable training you own — it survives travel, closed gyms and busy evenings. SmartyGym treats bodyweight training as a full method, not a fallback.",
     sections: [
       {
         heading: "Scaling without equipment",
@@ -339,9 +339,9 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     h1: "Home Workouts For Any Space and Any Kit",
     title: "Home Workouts — Personalized Training For Your Space and Kit",
     metaDescription:
-      "Home workouts from SmartyWorkout, built around the equipment you actually own — dumbbells, kettlebells, bands or nothing at all — and the space and time you have today.",
+      "Home workouts from SmartyGym, built around the equipment you actually own — dumbbells, kettlebells, bands or nothing at all — and the space and time you have today.",
     intro:
-      "Most home training fails for one reason: the plan assumes equipment or space you do not have. SmartyWorkout starts from the opposite direction — you declare what is in the room, and the session is built from that.",
+      "Most home training fails for one reason: the plan assumes equipment or space you do not have. SmartyGym starts from the opposite direction — you declare what is in the room, and the session is built from that.",
     sections: [
       {
         heading: "Your kit defines the session",
@@ -358,7 +358,7 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
       },
       {
         heading: "Train offline",
-        body: "SmartyWorkout works offline. Your workouts, logbook and the exercise library are downloaded quietly while you are online, so a weak signal in the garage does not stop the session.",
+        body: "SmartyGym works offline. Your workouts, logbook and the exercise library are downloaded quietly while you are online, so a weak signal in the garage does not stop the session.",
       },
     ],
     faq: [
@@ -384,9 +384,9 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
     h1: "Workout Programs and Daily Training Structure",
     title: "Workout Programs — Daily Structured Training Online",
     metaDescription:
-      "Workout programs on SmartyWorkout: a periodized Workout of the Day calendar plus on-demand personalized sessions, with a logbook, scheduling and progress tracking.",
+      "Workout programs on SmartyGym: a periodized Workout of the Day calendar plus on-demand personalized sessions, with a logbook, scheduling and progress tracking.",
     intro:
-      "A programme is what turns scattered workouts into progress: the right stimulus, in the right order, repeated long enough to matter. SmartyWorkout offers two routes — a shared daily calendar, or sessions generated on demand around your own week.",
+      "A programme is what turns scattered workouts into progress: the right stimulus, in the right order, repeated long enough to matter. SmartyGym offers two routes — a shared daily calendar, or sessions generated on demand around your own week.",
     sections: [
       {
         heading: "Workout of the Day",
@@ -426,12 +426,12 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
   {
     slug: "online-training",
     eyebrow: "Online fitness",
-    h1: "Online Training and Online Fitness With SmartyWorkout",
+    h1: "Online Training and Online Fitness With SmartyGym",
     title: "Online Training — Online Fitness and Personalized Workouts",
     metaDescription:
-      "Online fitness with SmartyWorkout: personalized online training built by Smarty Coach from your profile, with 1,300+ demonstrated exercises, a guided player, logbook and progress tracking.",
+      "Online fitness with SmartyGym: personalized online training built by Smarty Coach from your profile, with 1,300+ demonstrated exercises, a guided player, logbook and progress tracking.",
     intro:
-      "Online training only works when the plan knows something about you. SmartyWorkout is an online fitness platform that generates a complete, personalized workout in seconds from your training profile and a short pre-workout questionnaire, using only exercises from a curated library of demonstrated movements.",
+      "Online training only works when the plan knows something about you. SmartyGym is an online fitness platform that generates a complete, personalized workout in seconds from your training profile and a short pre-workout questionnaire, using only exercises from a curated library of demonstrated movements.",
     sections: [
       {
         heading: "What you get",
@@ -461,7 +461,7 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
       },
       {
         q: "Is there a diet or meal plan?",
-        a: "No. SmartyWorkout generates workouts, not diets.",
+        a: "No. SmartyGym generates workouts, not diets.",
       },
     ],
     related: [

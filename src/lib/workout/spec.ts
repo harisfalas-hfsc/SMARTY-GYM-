@@ -1,4 +1,4 @@
-// Client-safe Smarty Workout specification constants.
+// Client-safe Smarty Gym specification constants.
 
 export const CATEGORIES = [
   "STRENGTH",
