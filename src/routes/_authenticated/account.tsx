@@ -5,10 +5,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, Mail, User, ClipboardList, Trash2 } from "lucide-react";
+import { LogOut, Mail, User, ClipboardList, Trash2, CreditCard, ExternalLink } from "lucide-react";
 import { DailyCoachingSettings } from "@/components/DailyCoachingSettings";
 import { getMyAccessState } from "@/lib/access.functions";
 import { deleteMyAccount } from "@/lib/account.functions";
+import { getMyMembership, createPortalSession, type MyMembership } from "@/utils/payments.functions";
+import { getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
+import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
+import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/PageHeader";
 import {
@@ -45,6 +49,10 @@ function Account() {
   const [quota, setQuota] = useState<{ used: number; limit: number } | null>(null);
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [confirmText, setConfirmText] = useState("");
+  const { freeAccessMode } = useFreeAccessMode();
+  const [membership, setMembership] = useState<MyMembership | null>(null);
+  const [portalBusy, setPortalBusy] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
@@ -59,6 +67,32 @@ function Account() {
   useEffect(() => {
     void refresh();
   }, [refresh]);
+
+  useEffect(() => {
+    if (freeAccessMode) return;
+    (async () => {
+      try {
+        setMembership(await getMyMembership());
+      } catch {
+        setMembership(null);
+      }
+    })();
+  }, [freeAccessMode, user?.id]);
+
+  async function openPortal() {
+    setPortalBusy(true);
+    try {
+      const result = await createPortalSession({
+        data: { returnUrl: `${window.location.origin}/account`, environment: getStripeEnvironment() },
+      });
+      if ("error" in result) throw new Error(result.error);
+      window.open(result.url, "_blank", "noopener");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not open the billing portal");
+    } finally {
+      setPortalBusy(false);
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -134,6 +168,55 @@ function Account() {
         </Button>
       </section>
 
+
+      {freeAccessMode || !paymentsConfigured() ? null : (
+        <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
+              <CreditCard className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <p className="font-bold">Manage my membership</p>
+              <p className="text-sm text-muted-foreground">
+                {membership?.status === "past_due" || membership?.status === "unpaid"
+                  ? "A payment did not go through. Update your card or pay the open invoice to keep your membership."
+                  : membership?.cancelAtPeriodEnd && membership?.currentPeriodEnd
+                    ? `Your membership ends on ${new Date(membership.currentPeriodEnd).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
+                    : membership?.status === "active" || membership?.status === "trialing"
+                      ? membership?.currentPeriodEnd
+                        ? `Active — renews on ${new Date(membership.currentPeriodEnd).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
+                        : "Your membership is active."
+                      : "€9.99 per month. Cancel any time."}
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            {membership?.hasBilling ? (
+              <Button
+                variant="secondary"
+                className="h-12 rounded-2xl"
+                disabled={portalBusy}
+                onClick={() => void openPortal()}
+              >
+                <ExternalLink className="mr-2 h-4 w-4" />
+                {portalBusy ? "Opening…" : "Update card, invoices & cancel"}
+              </Button>
+            ) : null}
+            {membership?.status === "active" || membership?.status === "trialing" ? null : (
+              <Button className="h-12 rounded-2xl" onClick={() => setCheckoutOpen(true)}>
+                <CreditCard className="mr-2 h-4 w-4" />
+                {membership?.hasBilling ? "Pay & restart membership" : "Subscribe · €9.99 / month"}
+              </Button>
+            )}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            In the billing portal you can update your card, settle an unpaid invoice, download your
+            receipts or cancel your renewal. Deleting your account cancels your membership
+            automatically.
+          </p>
+          <MembershipCheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
+        </section>
+      )}
 
       <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <p className="font-bold">Delete account</p>
