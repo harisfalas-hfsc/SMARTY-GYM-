@@ -20,6 +20,7 @@ import {
 } from "@/lib/daily.functions";
 import { loadRemote } from "@/lib/remote-data";
 import { useAuth } from "@/hooks/useAuth";
+import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const ZONES = [
