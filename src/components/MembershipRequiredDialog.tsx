@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
+import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
 
 /**
  * Shown when a signed-in athlete without an active membership tries to use a
@@ -23,9 +24,11 @@ export function MembershipRequiredDialog({
   description?: string;
 }) {
   const { freeAccessMode } = useFreeAccessMode();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   // Hard safety net: never show paid copy while Free Access Mode is on.
   if (freeAccessMode) return null;
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="mx-auto max-h-[80vh] w-[calc(100%-2.5rem)] max-w-md overflow-y-auto rounded-3xl p-5 sm:p-6">
         <DialogTitle className="flex items-center gap-2 text-base font-extrabold uppercase tracking-[0.14em] text-primary">
@@ -41,10 +44,14 @@ export function MembershipRequiredDialog({
         </div>
 
         <div className="grid gap-3 pt-1">
-          <Button asChild className="h-14 rounded-2xl text-base font-extrabold">
-            <Link to="/auth" onClick={() => onOpenChange(false)}>
-              Subscribe now
-            </Link>
+          <Button
+            className="h-14 rounded-2xl text-base font-extrabold"
+            onClick={() => {
+              onOpenChange(false);
+              setCheckoutOpen(true);
+            }}
+          >
+            Subscribe now
           </Button>
           <Button
             variant="ghost"
@@ -56,5 +63,7 @@ export function MembershipRequiredDialog({
         </div>
       </DialogContent>
     </Dialog>
+    <MembershipCheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
+    </>
   );
 }

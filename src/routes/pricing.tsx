@@ -1,5 +1,8 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { useState } from "react";
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
 import { SmartyCard, SmartyPill, toneClasses } from "@/components/SmartyCard";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/PageHeader";
@@ -98,6 +101,9 @@ const TOOLS: { icon: string; label: string }[] = [
 
 function PricingPage() {
   const t = toneClasses("pink");
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
@@ -152,8 +158,14 @@ function PricingPage() {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Button asChild size="lg">
-            <Link to="/auth" search={{ mode: "signup" }}>Subscribe · €9.99 / month</Link>
+          <Button
+            size="lg"
+            onClick={() => {
+              if (user) setCheckoutOpen(true);
+              else void navigate({ to: "/auth", search: { mode: "signup" } });
+            }}
+          >
+            Subscribe · €9.99 / month
           </Button>
           <Button asChild size="lg" variant="outline">
             <Link to="/how-it-works">How it works</Link>
@@ -163,6 +175,7 @@ function PricingPage() {
           Flow: create your account → complete the mandatory Training Profile → activate Premium → choose Workout of the Day or create a workout.
         </p>
       </SmartyCard>
+      <MembershipCheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
     </div>
   );
 }
