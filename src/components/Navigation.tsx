@@ -1,4 +1,3 @@
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { Link, useNavigate, useRouter, useRouterState } from "@tanstack/react-router";
 import {
   LogOut,
