@@ -67,10 +67,15 @@ export const adminListUsers = createServerFn({ method: "POST" })
       const ids = (profiles ?? []).map((p: any) => p.id);
       const filterIds = ids.length ? ids : ["00000000-0000-0000-0000-000000000000"];
 
-      const [{ data: roles }, { data: workouts }] =
+      const [{ data: roles }, { data: workouts }, { data: subs }] =
         await Promise.all([
           supabaseAdmin.from("user_roles").select("user_id, role").in("user_id", filterIds),
           supabaseAdmin.from("workouts").select("user_id").in("user_id", filterIds).limit(20000),
+          supabaseAdmin
+            .from("subscriptions")
+            .select("user_id, provider, status, current_period_end, updated_at")
+            .in("user_id", filterIds)
+            .order("updated_at", { ascending: false }),
         ]);
 
       const adminByUser = new Set<string>();
@@ -81,18 +86,45 @@ export const adminListUsers = createServerFn({ method: "POST" })
         workoutsByUser.set(w.user_id, (workoutsByUser.get(w.user_id) ?? 0) + 1);
       }
 
+      // Keep the strongest access row per member: a live paid subscription wins
+      // over an admin grant, which wins over anything expired or canceled.
+      const subByUser = new Map<string, any>();
+      const isLive = (s: any) =>
+        ["active", "trialing", "past_due"].includes(s.status) &&
+        (!s.current_period_end || new Date(s.current_period_end).getTime() > Date.now());
+      for (const s of (subs ?? []) as any[]) {
+        const current = subByUser.get(s.user_id);
+        if (!current) {
+          subByUser.set(s.user_id, s);
+          continue;
+        }
+        const rank = (row: any) =>
+          (isLive(row) ? 2 : 0) + (row.provider && row.provider !== "admin_grant" ? 1 : 0);
+        if (rank(s) > rank(current)) subByUser.set(s.user_id, s);
+      }
+
       const users: AdminUserRow[] = (profiles ?? []).map((p: any) => {
         const auth = authUsersMap.get(p.id);
+        const sub = subByUser.get(p.id);
+        const live = sub ? isLive(sub) : false;
+        const membership: MembershipKind = !live
+          ? "member"
+          : sub.provider === "admin_grant"
+            ? "complimentary"
+            : "subscriber";
         return {
           id: p.id,
           email: auth?.email ?? "",
           name: p.display_name ?? "",
           age: p.age ?? null,
-          credits: p.bonus_credits ?? 0,
           created_at: p.created_at,
           is_admin: adminByUser.has(p.id),
           workouts: workoutsByUser.get(p.id) ?? 0,
           wod_subscribed: Boolean(p.wod_mode),
+          membership,
+          membership_status: sub?.status ?? null,
+          membership_provider: sub?.provider ?? null,
+          membership_until: sub?.current_period_end ?? null,
           profile_complete: Boolean(
             p.onboarded &&
               p.age &&
