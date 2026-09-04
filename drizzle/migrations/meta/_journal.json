@@ -253,6 +253,13 @@
       "when": 1788496430720,
       "tag": "0035_cron_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1788496447172,
+      "tag": "0036_error_events",
+      "breakpoints": true
     }
   ]
 }
