@@ -17,4 +17,4 @@ export const HEALTH_CHECKS: { key: string; label: string }[] = [
   { key: "activity", label: "Activity in the last 24 hours" },
 ];
 
-export const DEFAULT_HEALTH_RECIPIENT = "smartygym@outlook.com";
+export const DEFAULT_HEALTH_RECIPIENT = "harisfalas@gmail.com";
