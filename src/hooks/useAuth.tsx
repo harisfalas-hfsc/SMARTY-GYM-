@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import type { Session, User } from "@supabase/supabase-js";
 import { isOnline } from "@/lib/connectivity";
 
@@ -28,6 +28,13 @@ export function useAuth() {
 
   useEffect(() => {
     let active = true;
+
+    if (!isSupabaseConfigured()) {
+      setLoading(false);
+      return () => {
+        active = false;
+      };
+    }
 
     const cacheKey = (id: string) => `smarty:profile:${id}`;
 
