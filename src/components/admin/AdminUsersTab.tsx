@@ -1,21 +1,12 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, Search, Crown, Shield, Plus, Minus, RefreshCw, ClipboardList, ArrowLeft, User } from "lucide-react";
+import { Loader2, Search, Shield, Plus, Minus, RefreshCw, ClipboardList, ArrowLeft, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import {
   adminListUsers,
   adminGrantCredits,
-  adminGrantPremium,
-  adminRevokePremium,
   adminSetRole,
   type AdminUserRow,
 } from "@/lib/admin.functions";
@@ -23,13 +14,9 @@ import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
 import { AdminMemberDetail } from "@/components/admin/AdminMemberDetail";
 import { formatDate } from "@/lib/date-format";
 
-type Props = { onlySubscribers?: boolean };
-
-export function AdminUsersTab({ onlySubscribers = false }: Props) {
+export function AdminUsersTab() {
   const listUsers = useServerFn(adminListUsers);
   const grantCredits = useServerFn(adminGrantCredits);
-  const grantPremium = useServerFn(adminGrantPremium);
-  const revokePremium = useServerFn(adminRevokePremium);
   const setRole = useServerFn(adminSetRole);
 
   const [users, setUsers] = useState<AdminUserRow[]>([]);
@@ -37,8 +24,6 @@ export function AdminUsersTab({ onlySubscribers = false }: Props) {
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [grantFor, setGrantFor] = useState<AdminUserRow | null>(null);
-  const [months, setMonths] = useState(1);
   const [logbookFor, setLogbookFor] = useState<AdminUserRow | null>(null);
   const [detailFor, setDetailFor] = useState<AdminUserRow | null>(null);
 
@@ -55,7 +40,7 @@ export function AdminUsersTab({ onlySubscribers = false }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const rows = onlySubscribers ? users.filter((u) => u.has_active_subscription) : users;
+  const rows = users;
 
   async function act(fn: () => Promise<{ error?: string } | unknown>, ok: string) {
     setBusy(true);
@@ -124,13 +109,7 @@ export function AdminUsersTab({ onlySubscribers = false }: Props) {
                       <Shield className="h-3 w-3" /> Admin
                     </Badge>
                   )}
-                  {u.has_active_subscription ? (
-                    <Badge className="gap-1">
-                      <Crown className="h-3 w-3" /> Premium
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline">Free</Badge>
-                  )}
+                  <Badge variant="outline">Member</Badge>
                   {u.wod_subscribed && <Badge variant="outline">WOD</Badge>}
                   {!u.profile_complete && <Badge variant="outline">No profile</Badge>}
                 </div>
@@ -139,12 +118,6 @@ export function AdminUsersTab({ onlySubscribers = false }: Props) {
               <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground sm:grid-cols-4">
                 <span>Workouts: {u.workouts}</span>
                 <span>Credits: {u.credits}</span>
-                <span>
-                  Renews:{" "}
-                  {u.current_period_end
-                    ? formatDate(u.current_period_end)
-                    : "—"}
-                </span>
                 <span>Joined: {formatDate(u.created_at)}</span>
               </div>
 
@@ -154,27 +127,6 @@ export function AdminUsersTab({ onlySubscribers = false }: Props) {
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => setLogbookFor(u)}>
                   <ClipboardList className="mr-1 h-4 w-4" /> Workouts ({u.workouts})
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={busy}
-                  onClick={() => {
-                    setGrantFor(u);
-                    setMonths(1);
-                  }}
-                >
-                  <Crown className="mr-1 h-4 w-4" /> Grant premium
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={busy || !u.has_active_subscription}
-                  onClick={() =>
-                    act(() => revokePremium({ data: { userId: u.id } }), "Premium revoked.")
-                  }
-                >
-                  Revoke premium
                 </Button>
                 <Button
                   size="sm"
@@ -219,43 +171,6 @@ export function AdminUsersTab({ onlySubscribers = false }: Props) {
         </div>
       )}
 
-      <Dialog open={Boolean(grantFor)} onOpenChange={(o) => !o && setGrantFor(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Grant premium months</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            {grantFor?.email} will get full membership access, added on top of any time they
-            already have.
-          </p>
-          <Input
-            type="number"
-            min={1}
-            max={36}
-            value={months}
-            onChange={(e) => setMonths(Number(e.target.value))}
-          />
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setGrantFor(null)}>
-              Cancel
-            </Button>
-            <Button
-              disabled={busy}
-              onClick={async () => {
-                const user = grantFor;
-                setGrantFor(null);
-                if (user)
-                  await act(
-                    () => grantPremium({ data: { userId: user.id, months } }),
-                    `Granted ${months} month(s) of premium.`,
-                  );
-              }}
-            >
-              Grant
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

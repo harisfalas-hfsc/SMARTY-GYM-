@@ -4,9 +4,6 @@ import { CRON_JOBS, type CronJobDefinition } from "@/lib/cron/registry";
 import type { CronJobConfig, CronRunRow } from "@/lib/cron/jobs.server";
 
 async function assertAdmin(ctx: { userId: string; claims: any }) {
-  const { isAdminEmail } = await import("@/lib/admin.server");
-  const email = ctx.claims?.email as string | undefined;
-  if (isAdminEmail(email)) return;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: role } = await supabaseAdmin
     .from("user_roles")
