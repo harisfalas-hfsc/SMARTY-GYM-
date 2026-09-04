@@ -101,6 +101,9 @@ const TOOLS: { icon: string; label: string }[] = [
 
 function PricingPage() {
   const t = toneClasses("pink");
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
