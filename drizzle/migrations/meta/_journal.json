@@ -323,6 +323,13 @@
       "when": 1788949933630,
       "tag": "0045_community_views_security_invoker",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1788950080051,
+      "tag": "0046_public_profiles_for_community",
+      "breakpoints": true
     }
   ]
 }
