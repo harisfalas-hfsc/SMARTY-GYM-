@@ -309,6 +309,13 @@
       "when": 1788949893818,
       "tag": "0043_community_views_policies_only",
       "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1788949920601,
+      "tag": "0044_test_current_user",
+      "breakpoints": true
     }
   ]
 }
