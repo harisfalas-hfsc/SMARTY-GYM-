@@ -330,6 +330,13 @@
       "when": 1788950080051,
       "tag": "0046_public_profiles_for_community",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1788950118926,
+      "tag": "0047_community_views_security_invoker_reapply",
+      "breakpoints": true
     }
   ]
 }
