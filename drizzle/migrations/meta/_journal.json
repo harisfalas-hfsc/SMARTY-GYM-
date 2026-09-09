@@ -302,6 +302,48 @@
       "when": 1788516710111,
       "tag": "0042_seo_optimization_layer",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1788949893818,
+      "tag": "0043_community_views_policies_only",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1788949920601,
+      "tag": "0044_test_current_user",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1788949933630,
+      "tag": "0045_community_views_security_invoker",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1788950080051,
+      "tag": "0046_public_profiles_for_community",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1788950118926,
+      "tag": "0047_community_views_security_invoker_reapply",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1788950164386,
+      "tag": "0048_public_user_progress_for_community",
+      "breakpoints": true
     }
   ]
 }

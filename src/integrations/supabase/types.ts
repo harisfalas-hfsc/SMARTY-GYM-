@@ -831,6 +831,79 @@ export type Database = {
         }
         Relationships: []
       }
+      public_profiles: {
+        Row: {
+          avatar_url: string | null
+          display_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          display_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          display_name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      public_user_progress: {
+        Row: {
+          badge_points: number
+          current_streak: number
+          longest_streak: number
+          score: number
+          subscription_months: number
+          updated_at: string
+          user_id: string
+          workouts_completed: number
+          workouts_generated: number
+        }
+        Insert: {
+          badge_points?: number
+          current_streak?: number
+          longest_streak?: number
+          score?: number
+          subscription_months?: number
+          updated_at?: string
+          user_id: string
+          workouts_completed?: number
+          workouts_generated?: number
+        }
+        Update: {
+          badge_points?: number
+          current_streak?: number
+          longest_streak?: number
+          score?: number
+          subscription_months?: number
+          updated_at?: string
+          user_id?: string
+          workouts_completed?: number
+          workouts_generated?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_user_progress_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       questionnaires: {
         Row: {
           created_at: string
@@ -1811,7 +1884,15 @@ export type Database = {
           workouts_generated: number | null
           workouts_shared: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       community_workouts_public: {
         Row: {
