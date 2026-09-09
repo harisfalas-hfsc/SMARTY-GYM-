@@ -302,6 +302,13 @@
       "when": 1788516710111,
       "tag": "0042_seo_optimization_layer",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1788949893818,
+      "tag": "0043_community_views_policies_only",
+      "breakpoints": true
     }
   ]
 }
