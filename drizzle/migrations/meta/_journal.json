@@ -337,6 +337,13 @@
       "when": 1788950118926,
       "tag": "0047_community_views_security_invoker_reapply",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1788950164386,
+      "tag": "0048_public_user_progress_for_community",
+      "breakpoints": true
     }
   ]
 }
