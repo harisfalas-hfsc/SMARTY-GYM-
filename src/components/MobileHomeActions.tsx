@@ -193,7 +193,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
             <Link
               key={card.to}
               to={card.to}
-              className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border-2 border-green-500/60 bg-card p-1.5 transition-all duration-300 hover:border-green-500 hover:shadow-xl"
+              className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border-2 border-primary/60 bg-card p-1.5 transition-all duration-300 hover:border-primary hover:shadow-xl"
             >
               <div className="relative h-[52px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
                 {card.image ? (
