@@ -459,8 +459,8 @@ function WodPage() {
               : busy
                 ? "Please wait…"
                 : subscribed
-                  ? "Stop the daily plan"
-                  : "Follow the daily plan"}
+                  ? "Unsubscribe from Workout of the Day"
+                  : "Subscribe to Workout of the Day"}
           </span>
         </Button>
 
