@@ -9,10 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 
-type MobileAction = {
+type CarouselAction = {
   title: string;
   description: string;
-  to: "/coach" | "/wod" | "/pricing" | "/tools" | "/blog" | "/faq" | "/founder-note";
+  to: "/coach" | "/wod" | "/pricing";
+  image: string;
+  icon: LucideIcon;
+};
+
+type BelowCard = {
+  label: string;
+  title: string;
+  description: string;
+  to: "/tools" | "/blog" | "/faq" | "/founder-note";
   image?: string;
   icon: LucideIcon;
 };
@@ -20,7 +29,8 @@ type MobileAction = {
 export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeIndex, setActiveIndex] = useState(0);
-  const actions: MobileAction[] = [
+
+  const carouselActions: CarouselAction[] = [
     {
       title: "Ask your coach",
       description: "Get a personalized workout built for you",
@@ -36,35 +46,44 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       icon: CalendarCheck,
     },
     ...(showPricing
-      ? [{
-          title: "Premium membership",
-          description: "See membership options and full access",
-          to: "/pricing" as const,
-          image: premiumImage,
-          icon: Crown,
-        }]
+      ? [
+          {
+            title: "Premium membership",
+            description: "See membership options and full access",
+            to: "/pricing" as const,
+            image: premiumImage,
+            icon: Crown,
+          },
+        ]
       : []),
+  ];
+
+  const belowCards: BelowCard[] = [
     {
+      label: "TOOLS",
       title: "Tools",
       description: "Calculators, timers and training trackers",
       to: "/tools",
       icon: Wrench,
     },
     {
+      label: "READ",
       title: "Blog",
       description: "Training articles, tips and guides",
       to: "/blog",
       icon: Newspaper,
     },
     {
-      title: "FAQ",
-      description: "Answers to the most common questions",
+      label: "HELP",
+      title: "Frequently Asked Questions",
+      description: "Answers about plans, training and access",
       to: "/faq",
       icon: HelpCircle,
     },
     {
+      label: "COACH",
       title: "A Note from the Founder",
-      description: "Why SmartyGym exists and who is behind it",
+      description: "Haris Falas — Sports Scientist & Founder",
       to: "/founder-note",
       image: founderPhoto,
       icon: NotebookPen,
@@ -111,7 +130,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
 
       <Carousel className="w-full" opts={{ align: "center", loop: true }} setApi={setCarouselApi}>
         <CarouselContent className="-ml-3">
-          {actions.map((action, index) => {
+          {carouselActions.map((action, index) => {
             const Icon = action.icon;
             return (
               <CarouselItem key={action.to} className="basis-[75%] pl-3 sm:basis-[60%]">
@@ -120,22 +139,16 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
                   className="flex flex-col overflow-hidden rounded-xl border-2 border-green-500/60 bg-card transition-all duration-300 hover:scale-[1.02] hover:border-green-500 hover:shadow-xl"
                 >
                   <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
-                    {action.image ? (
-                      <img
-                        src={action.image}
-                        alt={action.title}
-                        width={1280}
-                        height={640}
-                        loading={index === 0 ? "eager" : "lazy"}
-                        fetchPriority={index === 0 ? "high" : "auto"}
-                        decoding="async"
-                        className="absolute inset-0 h-full w-full object-cover object-[center_top]"
-                      />
-                    ) : (
-                      <span className="absolute inset-0 flex items-center justify-center bg-primary/10">
-                        <Icon className="h-12 w-12 text-primary" strokeWidth={1.5} />
-                      </span>
-                    )}
+                    <img
+                      src={action.image}
+                      alt={action.title}
+                      width={1280}
+                      height={640}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      fetchPriority={index === 0 ? "high" : "auto"}
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full object-cover object-[center_top]"
+                    />
                   </div>
                   <div className="flex flex-1 flex-col justify-center p-2 text-center">
                     <div className="mb-0.5 flex items-center justify-center gap-1.5">
@@ -157,7 +170,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       </Carousel>
 
       <div className="mt-4 flex justify-center gap-2">
-        {actions.map((action, index) => (
+        {carouselActions.map((action, index) => (
           <Button
             key={action.to}
             type="button"
@@ -171,6 +184,42 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
             )}
           />
         ))}
+      </div>
+
+      <div className="mt-6 flex flex-col gap-3">
+        {belowCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <Link
+              key={card.to}
+              to={card.to}
+              className="flex items-center gap-4 overflow-hidden rounded-xl border-2 border-green-500/60 bg-card p-3 transition-all duration-300 hover:border-green-500 hover:shadow-xl"
+            >
+              <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
+                {card.image ? (
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    width={144}
+                    height={144}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_top]"
+                  />
+                ) : (
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <Icon className="h-8 w-8 text-primary" strokeWidth={1.5} />
+                  </span>
+                )}
+              </div>
+              <div className="flex min-w-0 flex-1 flex-col justify-center">
+                <span className="text-[11px] font-bold uppercase tracking-wide text-primary">{card.label}</span>
+                <h3 className="text-sm font-extrabold leading-tight text-foreground">{card.title}</h3>
+                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">{card.description}</p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
