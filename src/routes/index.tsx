@@ -88,20 +88,6 @@ function Home() {
         />
 
         <MobileHomeActions showPricing={!freeAccessMode} />
-        <p className="mt-4 text-center text-[13px] text-muted-foreground">
-          {freeAccessMode
-            ? "Free for every member. Two personalized workouts every day."
-            : "One membership. Two personalized workouts every day."}
-        </p>
-        <div className="mt-4 flex justify-center">
-          <Link
-            to="/founder-note"
-            className="inline-flex items-center gap-2 rounded-full border-2 border-primary px-5 py-2.5 text-[13px] font-bold text-primary"
-          >
-            <PenLine className="h-4 w-4" />
-            A note from the founder
-          </Link>
-        </div>
       </section>
 
 
@@ -157,11 +143,6 @@ function Home() {
                 </Link>
               )}
             </div>
-            <p className="mt-4 text-sm text-white/60">
-              {freeAccessMode
-            ? "Free for every member. Two personalized workouts every day."
-            : "One membership. Two personalized workouts every day."}
-            </p>
             <Link
               to="/founder-note"
               className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary underline underline-offset-4"
