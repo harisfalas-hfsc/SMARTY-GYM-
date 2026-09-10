@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, type LucideIcon } from "lucide-react";
+import { CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, HelpCircle, NotebookPen, Newspaper, Wrench, type LucideIcon } from "lucide-react";
 import coachImage from "@/assets/coach-stopwatch-card.jpg";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
+import founderPhoto from "@/assets/haris-falas-coach.png";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
@@ -11,8 +12,8 @@ import { cn } from "@/lib/utils";
 type MobileAction = {
   title: string;
   description: string;
-  to: "/coach" | "/wod" | "/pricing";
-  image: string;
+  to: "/coach" | "/wod" | "/pricing" | "/tools" | "/blog" | "/faq" | "/founder-note";
+  image?: string;
   icon: LucideIcon;
 };
 
@@ -43,6 +44,31 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
           icon: Crown,
         }]
       : []),
+    {
+      title: "Tools",
+      description: "Calculators, timers and training trackers",
+      to: "/tools",
+      icon: Wrench,
+    },
+    {
+      title: "Blog",
+      description: "Training articles, tips and guides",
+      to: "/blog",
+      icon: Newspaper,
+    },
+    {
+      title: "FAQ",
+      description: "Answers to the most common questions",
+      to: "/faq",
+      icon: HelpCircle,
+    },
+    {
+      title: "A Note from the Founder",
+      description: "Why SmartyGym exists and who is behind it",
+      to: "/founder-note",
+      image: founderPhoto,
+      icon: NotebookPen,
+    },
   ];
 
   useEffect(() => {
@@ -94,16 +120,22 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
                   className="flex flex-col overflow-hidden rounded-xl border-2 border-green-500/60 bg-card transition-all duration-300 hover:scale-[1.02] hover:border-green-500 hover:shadow-xl"
                 >
                   <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
-                    <img
-                      src={action.image}
-                      alt={action.title}
-                      width={1280}
-                      height={640}
-                      loading={index === 0 ? "eager" : "lazy"}
-                      fetchPriority={index === 0 ? "high" : "auto"}
-                      decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover object-[center_top]"
-                    />
+                    {action.image ? (
+                      <img
+                        src={action.image}
+                        alt={action.title}
+                        width={1280}
+                        height={640}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        fetchPriority={index === 0 ? "high" : "auto"}
+                        decoding="async"
+                        className="absolute inset-0 h-full w-full object-cover object-[center_top]"
+                      />
+                    ) : (
+                      <span className="absolute inset-0 flex items-center justify-center bg-primary/10">
+                        <Icon className="h-12 w-12 text-primary" strokeWidth={1.5} />
+                      </span>
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col justify-center p-2 text-center">
                     <div className="mb-0.5 flex items-center justify-center gap-1.5">
