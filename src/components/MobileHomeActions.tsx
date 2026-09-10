@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, type LucideIcon } from "lucide-react";
+import { CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, HelpCircle, NotebookPen, Newspaper, Wrench, type LucideIcon } from "lucide-react";
 import coachImage from "@/assets/coach-stopwatch-card.jpg";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
+import founderPhoto from "@/assets/haris-falas-coach.png";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
