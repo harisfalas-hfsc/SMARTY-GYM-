@@ -226,11 +226,15 @@ function WodPage() {
       setMembershipOpen(true);
       return;
     }
-    if (!subscribed && access.readinessFlagged && access.readinessFlags.length > 0 && !hasParqAck()) {
+    if (subscribed) {
+      await toggleSub(false);
+      return;
+    }
+    if (access.readinessFlagged && access.readinessFlags.length > 0 && !hasParqAck()) {
       setParqOpen(true);
       return;
     }
-    await toggleSub(!subscribed);
+    setConfirmOpen(true);
   }
 
   async function toggleSub(subscribe: boolean) {
