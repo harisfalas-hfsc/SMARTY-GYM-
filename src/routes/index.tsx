@@ -79,12 +79,20 @@ function Home() {
           as="p"
           title={
             <>
-              YOUR GYM RE-IMAGINED
+              <span className="normal-case">Your gym</span>
               <br />
-              <span className="text-primary">ANYWHERE, ANYTIME.</span>
+              <span className="normal-case">reimagined</span>
+              <br />
+              <span className="normal-case text-primary">anywhere, anytime.</span>
             </>
           }
-          subtitle="SmartyGym is your online gym and personal coach. Tell your coach how you feel, what you want to achieve and what you have to train with — and get a complete, properly programmed session built for you, whenever and wherever you train."
+          subtitle={
+            <>
+              <span className="font-semibold text-primary">Smarty Gym</span> is your online gym and personal coach. Tell your coach how you feel, what you want to achieve and what you have to train with — and{" "}
+              <span className="font-semibold text-primary">get a complete properly programmed session</span>{" "}
+              built for you, whenever and wherever you train.
+            </>
+          }
         />
 
         <MobileHomeActions showPricing={!freeAccessMode} />
