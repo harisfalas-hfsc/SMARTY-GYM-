@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarCheck, Dumbbell, PenLine } from "lucide-react";
 import heroTraining from "@/assets/hero-training.jpg";
 import { PageHeader } from "@/components/PageHeader";
+import { MobileHomeActions } from "@/components/MobileHomeActions";
 
 
 
@@ -86,30 +87,7 @@ function Home() {
           subtitle="SmartyGym is your online gym and personal coach. Tell your coach how you feel, what you want to achieve and what you have to train with — and get a complete, properly programmed session built for you, whenever and wherever you train."
         />
 
-        <div className="mx-auto flex max-w-xs flex-col gap-3">
-          <Link
-            to="/coach"
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary text-[15px] font-extrabold text-primary-foreground"
-          >
-            <Dumbbell className="h-4 w-4 shrink-0" />
-            Ask your coach
-          </Link>
-          <Link
-            to="/wod"
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-primary text-[15px] font-extrabold text-primary"
-          >
-            <CalendarCheck className="h-4 w-4 shrink-0" />
-            Follow Workout of the Day
-          </Link>
-          {freeAccessMode ? null : (
-            <Link
-              to="/pricing"
-              className="flex h-12 w-full items-center justify-center rounded-full border-2 border-primary text-[15px] font-extrabold text-primary"
-            >
-              See pricing
-            </Link>
-          )}
-        </div>
+        <MobileHomeActions showPricing={!freeAccessMode} />
         <p className="mt-4 text-center text-[13px] text-muted-foreground">
           {freeAccessMode
             ? "Free for every member. Two personalized workouts every day."
