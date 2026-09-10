@@ -287,6 +287,8 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
             to: "/community" as const,
             image: communityImage,
             icon: Users,
+            thumbClass: "h-[58px] w-[58px]",
+            objectPosition: "center center",
           },
           {
             label: "COACH",
@@ -295,6 +297,8 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
             to: "/founder-note" as const,
             image: founderPhoto,
             icon: NotebookPen,
+            thumbClass: "h-[52px] w-[58px]",
+            objectPosition: "center top",
           },
         ].map((card) => {
           return (
@@ -303,7 +307,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
               to={card.to}
               className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border-2 border-primary/60 bg-card p-1.5 transition-all duration-300 hover:border-primary hover:shadow-xl"
             >
-              <div className="relative h-[52px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
+              <div className={cn("relative shrink-0 overflow-hidden rounded-lg bg-primary/10", card.thumbClass)}>
                 <img
                   src={card.image}
                   alt={card.title}
@@ -311,7 +315,8 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
                   height={144}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover object-[center_top]"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: card.objectPosition }}
                 />
               </div>
               <div className="flex min-w-0 flex-1 flex-col justify-center">
