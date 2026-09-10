@@ -351,6 +351,13 @@
       "when": 1789019756078,
       "tag": "0049_restrict_private_community_activity_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1789028718571,
+      "tag": "0050_restrict_private_workout_comment_reads",
+      "breakpoints": true
     }
   ]
 }
