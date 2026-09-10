@@ -359,7 +359,55 @@ function WodPage() {
         </div>
       </section>
 
-      <GeneratingDialog open={building} />
+      <GeneratingDialog open={building} onLeave={() => setBuilding(false)} />
+
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent className="max-w-md border-2 border-primary">
+          <DialogHeader>
+            <DialogTitle>Subscribe to Workout of the Day?</DialogTitle>
+            <DialogDescription>Here is exactly what you get before anything is built.</DialogDescription>
+          </DialogHeader>
+          <ul className="space-y-2 text-[13px] leading-6 text-muted-foreground">
+            <li>
+              <strong className="text-primary">Training days:</strong> two workouts every day — one
+              with equipment, one bodyweight only.
+            </li>
+            <li>
+              <strong className="text-primary">Recovery days:</strong> one gentle session instead of
+              two.
+            </li>
+            <li>
+              <strong className="text-primary">These are your workouts for the day.</strong> While
+              you are subscribed, creating your own workouts stays paused — unsubscribe any time and
+              it comes straight back.
+            </li>
+            <li>
+              Today&apos;s workouts are built right away, then automatically every night.
+            </li>
+          </ul>
+          <DialogFooter className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 rounded-xl"
+              onClick={() => setConfirmOpen(false)}
+            >
+              Not now
+            </Button>
+            <Button
+              type="button"
+              className="h-11 rounded-xl font-extrabold"
+              onClick={() => {
+                setConfirmOpen(false);
+                void toggleSub(true);
+              }}
+            >
+              Yes, subscribe
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <MembershipRequiredDialog
         open={membershipOpen}
         onOpenChange={setMembershipOpen}
