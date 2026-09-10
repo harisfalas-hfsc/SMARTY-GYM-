@@ -269,8 +269,8 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
               onClick={() => exploreApi?.scrollTo(index)}
               aria-label={`Go to ${action.title}`}
               className={cn(
-                "h-1.5 rounded-full p-0 transition-all",
-                exploreIndex === index ? "w-3 bg-primary hover:bg-primary" : "w-1.5 bg-primary/30 hover:bg-primary/50",
+                "h-2.5 rounded-full p-0 transition-all",
+                exploreIndex === index ? "w-2.5 scale-125 bg-primary hover:bg-primary" : "w-2.5 bg-primary/30 hover:bg-primary/50",
               )}
             />
           ))}
