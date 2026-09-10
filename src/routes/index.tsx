@@ -79,17 +79,17 @@ function Home() {
           as="p"
           title={
             <>
-              Your gym
+              <span className="normal-case">Your gym</span>
               <br />
-              reimagined
+              <span className="normal-case">reimagined</span>
               <br />
-              <span className="text-primary">anywhere, anytime.</span>
+              <span className="normal-case text-primary">anywhere, anytime.</span>
             </>
           }
           subtitle={
             <>
-              <span className="text-primary font-semibold">Smarty Gym</span> is your online gym and personal coach. Tell your coach how you feel, what you want to achieve and what you have to train with — and{" "}
-              <span className="text-primary font-semibold">get a complete properly programmed session</span>{" "}
+              <span className="font-semibold text-primary">Smarty Gym</span> is your online gym and personal coach. Tell your coach how you feel, what you want to achieve and what you have to train with — and{" "}
+              <span className="font-semibold text-primary">get a complete properly programmed session</span>{" "}
               built for you, whenever and wherever you train.
             </>
           }
