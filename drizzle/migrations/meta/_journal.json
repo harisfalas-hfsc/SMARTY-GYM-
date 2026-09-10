@@ -344,6 +344,13 @@
       "when": 1788950164386,
       "tag": "0048_public_user_progress_for_community",
       "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1789019756078,
+      "tag": "0049_restrict_private_community_activity_reads",
+      "breakpoints": true
     }
   ]
 }
