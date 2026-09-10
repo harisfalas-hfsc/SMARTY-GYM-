@@ -288,7 +288,6 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
             icon: NotebookPen,
           },
         ].map((card) => {
-          const Icon = card.icon;
           return (
             <Link
               key={card.to}
