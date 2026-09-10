@@ -426,11 +426,11 @@ function WodPage() {
       <ParqWaiverDialog
         open={parqOpen}
         flags={access?.readinessFlags ?? []}
-        confirmLabel="I confirm — follow the daily plan"
+        confirmLabel="I confirm — continue"
         onConfirm={() => {
           setParqAck();
           setParqOpen(false);
-          void toggleSub(true);
+          setConfirmOpen(true);
         }}
         onCancel={() => setParqOpen(false)}
       />
