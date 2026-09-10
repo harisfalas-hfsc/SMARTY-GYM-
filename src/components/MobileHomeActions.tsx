@@ -186,16 +186,16 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
         ))}
       </div>
 
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="mt-6 flex flex-col gap-2.5">
         {belowCards.map((card) => {
           const Icon = card.icon;
           return (
             <Link
               key={card.to}
               to={card.to}
-              className="flex items-center gap-4 overflow-hidden rounded-xl border-2 border-green-500/60 bg-card p-3 transition-all duration-300 hover:border-green-500 hover:shadow-xl"
+              className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border-2 border-green-500/60 bg-card p-1.5 transition-all duration-300 hover:border-green-500 hover:shadow-xl"
             >
-              <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
+              <div className="relative h-[52px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
                 {card.image ? (
                   <img
                     src={card.image}
@@ -208,14 +208,14 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
                   />
                 ) : (
                   <span className="absolute inset-0 flex items-center justify-center">
-                    <Icon className="h-8 w-8 text-primary" strokeWidth={1.5} />
+                    <Icon className="h-6 w-6 text-primary" strokeWidth={1.5} />
                   </span>
                 )}
               </div>
               <div className="flex min-w-0 flex-1 flex-col justify-center">
-                <span className="text-[11px] font-bold uppercase tracking-wide text-primary">{card.label}</span>
-                <h3 className="text-sm font-extrabold leading-tight text-foreground">{card.title}</h3>
-                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">{card.description}</p>
+                <span className="text-[9px] font-bold uppercase tracking-wide text-primary">{card.label}</span>
+                <h3 className="text-[13px] font-extrabold leading-tight text-foreground">{card.title}</h3>
+                <p className="line-clamp-1 text-[10px] leading-snug text-muted-foreground">{card.description}</p>
               </div>
             </Link>
           );
