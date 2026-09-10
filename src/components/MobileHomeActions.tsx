@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils";
 type MobileAction = {
   title: string;
   description: string;
-  to: "/coach" | "/wod" | "/pricing";
-  image: string;
+  to: "/coach" | "/wod" | "/pricing" | "/tools" | "/blog" | "/faq" | "/founder-note";
+  image?: string;
   icon: LucideIcon;
 };
 
@@ -44,6 +44,31 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
           icon: Crown,
         }]
       : []),
+    {
+      title: "Tools",
+      description: "Calculators, timers and training trackers",
+      to: "/tools",
+      icon: Wrench,
+    },
+    {
+      title: "Blog",
+      description: "Training articles, tips and guides",
+      to: "/blog",
+      icon: Newspaper,
+    },
+    {
+      title: "FAQ",
+      description: "Answers to the most common questions",
+      to: "/faq",
+      icon: HelpCircle,
+    },
+    {
+      title: "A Note from the Founder",
+      description: "Why SmartyGym exists and who is behind it",
+      to: "/founder-note",
+      image: founderPhoto,
+      icon: NotebookPen,
+    },
   ];
 
   useEffect(() => {
