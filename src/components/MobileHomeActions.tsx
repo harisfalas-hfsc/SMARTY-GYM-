@@ -278,8 +278,16 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 flex flex-col gap-3">
         {[
+          {
+            label: "COMMUNITY",
+            title: "Smarty Community",
+            description: "Share workouts, join rankings, and connect",
+            to: "/community" as const,
+            image: communityImage,
+            icon: Users,
+          },
           {
             label: "COACH",
             title: "A Note from the Founder",
