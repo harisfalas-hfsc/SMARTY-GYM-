@@ -5,6 +5,9 @@ import coachImage from "@/assets/coach-stopwatch-card.jpg";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
 import founderPhoto from "@/assets/haris-falas-coach.png";
+import toolsCardImage from "@/assets/tools-card.jpg.asset.json";
+import blogCardImage from "@/assets/blog-card.jpg.asset.json";
+import faqCardImage from "@/assets/faq-card.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
@@ -64,6 +67,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       title: "Tools",
       description: "Calculators, timers and training trackers",
       to: "/tools",
+      image: toolsCardImage.url,
       icon: Wrench,
     },
     {
@@ -71,6 +75,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       title: "Blog",
       description: "Training articles, tips and guides",
       to: "/blog",
+      image: blogCardImage.url,
       icon: Newspaper,
     },
     {
@@ -78,6 +83,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       title: "Frequently Asked Questions",
       description: "Answers about plans, training and access",
       to: "/faq",
+      image: faqCardImage.url,
       icon: HelpCircle,
     },
     {
