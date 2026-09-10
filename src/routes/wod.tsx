@@ -6,6 +6,14 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { CheckCircle2, Crown, Dumbbell, Home, Loader2, Play, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { SwipeToExplore } from "@/components/ui/SwipeToExplore";
 import {
@@ -174,6 +182,7 @@ function WodPage() {
   const [building, setBuilding] = useState(false);
   const [parqOpen, setParqOpen] = useState(false);
   const [membershipOpen, setMembershipOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(1);
 
@@ -225,11 +234,15 @@ function WodPage() {
       setMembershipOpen(true);
       return;
     }
-    if (!subscribed && access.readinessFlagged && access.readinessFlags.length > 0 && !hasParqAck()) {
+    if (subscribed) {
+      await toggleSub(false);
+      return;
+    }
+    if (access.readinessFlagged && access.readinessFlags.length > 0 && !hasParqAck()) {
       setParqOpen(true);
       return;
     }
-    await toggleSub(!subscribed);
+    setConfirmOpen(true);
   }
 
   async function toggleSub(subscribe: boolean) {
@@ -354,7 +367,55 @@ function WodPage() {
         </div>
       </section>
 
-      <GeneratingDialog open={building} />
+      <GeneratingDialog open={building} onLeave={() => setBuilding(false)} />
+
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent className="max-w-md border-2 border-primary">
+          <DialogHeader>
+            <DialogTitle>Subscribe to Workout of the Day?</DialogTitle>
+            <DialogDescription>Here is exactly what you get before anything is built.</DialogDescription>
+          </DialogHeader>
+          <ul className="space-y-2 text-[13px] leading-6 text-muted-foreground">
+            <li>
+              <strong className="text-primary">Training days:</strong> two workouts every day — one
+              with equipment, one bodyweight only.
+            </li>
+            <li>
+              <strong className="text-primary">Recovery days:</strong> one gentle session instead of
+              two.
+            </li>
+            <li>
+              <strong className="text-primary">These are your workouts for the day.</strong> While
+              you are subscribed, creating your own workouts stays paused — unsubscribe any time and
+              it comes straight back.
+            </li>
+            <li>
+              Today&apos;s workouts are built right away, then automatically every night.
+            </li>
+          </ul>
+          <DialogFooter className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 rounded-xl"
+              onClick={() => setConfirmOpen(false)}
+            >
+              Not now
+            </Button>
+            <Button
+              type="button"
+              className="h-11 rounded-xl font-extrabold"
+              onClick={() => {
+                setConfirmOpen(false);
+                void toggleSub(true);
+              }}
+            >
+              Yes, subscribe
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <MembershipRequiredDialog
         open={membershipOpen}
         onOpenChange={setMembershipOpen}
@@ -365,11 +426,11 @@ function WodPage() {
       <ParqWaiverDialog
         open={parqOpen}
         flags={access?.readinessFlags ?? []}
-        confirmLabel="I confirm — follow the daily plan"
+        confirmLabel="I confirm — continue"
         onConfirm={() => {
           setParqAck();
           setParqOpen(false);
-          void toggleSub(true);
+          setConfirmOpen(true);
         }}
         onCancel={() => setParqOpen(false)}
       />
@@ -398,8 +459,8 @@ function WodPage() {
               : busy
                 ? "Please wait…"
                 : subscribed
-                  ? "Stop the daily plan"
-                  : "Follow the daily plan"}
+                  ? "Unsubscribe from Workout of the Day"
+                  : "Subscribe to Workout of the Day"}
           </span>
         </Button>
 

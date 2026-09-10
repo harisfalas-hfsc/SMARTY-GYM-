@@ -256,7 +256,7 @@ function AboutPage() {
             today, next week and next month.
           </p>
           <Button asChild className="mt-auto w-full font-extrabold uppercase">
-            <Link to="/wod">Follow Workout of the Day</Link>
+            <Link to="/wod">Subscribe to Workout of the Day</Link>
           </Button>
         </div>
 
