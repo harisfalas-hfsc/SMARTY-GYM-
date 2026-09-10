@@ -79,11 +79,11 @@ function Home() {
           as="p"
           title={
             <>
-              <span className="normal-case">Your gym</span>
+              YOUR GYM
               <br />
-              <span className="normal-case">reimagined</span>
+              RE-IMAGINED
               <br />
-              <span className="normal-case text-primary">anywhere, anytime.</span>
+              <span className="text-primary">ANYWHERE, ANYTIME.</span>
             </>
           }
           subtitle={
