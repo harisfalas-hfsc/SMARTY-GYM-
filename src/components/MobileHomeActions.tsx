@@ -224,12 +224,12 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
             {exploreActions.map((action) => {
               const Icon = action.icon;
               return (
-                <CarouselItem key={action.to} className="basis-[75%] pl-3">
+                <CarouselItem key={action.to} className="basis-[75%] pl-3 sm:basis-[60%]">
                   <Link
                     to={action.to}
-                    className="group flex h-[165px] flex-col overflow-hidden rounded-xl border-2 border-primary/40 bg-card transition-all duration-300 hover:border-primary hover:shadow-2xl"
+                    className="flex flex-col overflow-hidden rounded-xl border-2 border-primary/40 bg-card transition-all duration-300 hover:scale-[1.02] hover:border-primary hover:shadow-xl"
                   >
-                    <div className="relative h-[55%] shrink-0 overflow-hidden">
+                    <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
                       <img
                         src={action.image}
                         alt={action.title}
@@ -237,18 +237,18 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
                         height={512}
                         loading="lazy"
                         decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="absolute inset-0 h-full w-full object-cover object-[center_top]"
                       />
                     </div>
-                    <div className="z-10 flex flex-1 flex-col justify-center p-2.5">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-semibold text-foreground">{action.title}</h3>
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-muted shadow-md transition-transform duration-300 group-hover:scale-110">
-                          <Icon className="h-4 w-4 text-primary" />
+                    <div className="flex flex-1 flex-col justify-center p-2 text-center">
+                      <div className="mb-0.5 flex items-center justify-center gap-1.5">
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                          <Icon className="h-3 w-3 text-primary" />
                         </span>
+                        <h3 className="whitespace-nowrap text-xs font-bold leading-tight text-foreground">{action.title}</h3>
                       </div>
-                      <p className="mt-0.5 line-clamp-1 text-[10px] text-muted-foreground">{action.description}</p>
-                      <span className="mt-1 flex items-center justify-center gap-1 text-[9px] font-medium text-primary">
+                      <p className="line-clamp-2 text-[10px] leading-snug text-muted-foreground">{action.description}</p>
+                      <span className="mt-0.5 flex items-center justify-center gap-1 text-[9px] font-medium text-primary">
                         Explore<ChevronRight className="h-2.5 w-2.5" />
                       </span>
                     </div>
