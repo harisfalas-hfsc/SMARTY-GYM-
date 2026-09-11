@@ -139,16 +139,8 @@ function Home() {
                 className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border-2 border-primary px-6 text-base font-bold text-primary hover:bg-primary/10 lg:px-8"
               >
                 <CalendarCheck className="h-4 w-4 shrink-0" />
-                Subscribe to Workout of the Day
+                Workout of the Day
               </Link>
-              {freeAccessMode ? null : (
-                <Link
-                  to="/pricing"
-                  className="inline-flex h-12 items-center whitespace-nowrap rounded-full border-2 border-primary px-6 text-base font-bold text-primary hover:bg-primary/10 lg:px-8"
-                >
-                  See pricing
-                </Link>
-              )}
             </div>
             <Link
               to="/founder-note"
