@@ -82,7 +82,7 @@ function Home() {
             <>
               YOUR GYM
               <br />
-              <span className="text-primary">REIMAGINED</span>
+              <span className="text-primary">RE-IMAGINED</span>
             </>
           }
           subtitle={
@@ -117,7 +117,7 @@ function Home() {
             <h1 className="text-[34px] font-extrabold uppercase leading-[1.05] tracking-tight text-white sm:text-[44px] lg:text-[60px]">
               YOUR GYM
               <br />
-              <span className="text-primary">REIMAGINED</span>
+              <span className="text-primary">RE-IMAGINED</span>
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-white/80 lg:mt-6 lg:text-lg">
