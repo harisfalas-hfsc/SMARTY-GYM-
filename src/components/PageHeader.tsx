@@ -14,6 +14,7 @@ interface PageHeaderProps {
    * so the document keeps exactly one h1. Styling is identical.
    */
   as?: "h1" | "h2" | "p";
+  titleClassName?: string;
 }
 
 /**
@@ -28,6 +29,7 @@ export function PageHeader({
   subtitle,
   className,
   as: Heading = "h1",
+  titleClassName,
 }: PageHeaderProps) {
   const Icon = typeof icon === "function" ? icon : null;
   return (
@@ -41,6 +43,7 @@ export function PageHeader({
         className={cn(
           "flex flex-wrap items-center justify-center gap-x-2 text-balance text-3xl font-extrabold uppercase tracking-tight sm:text-4xl",
           eyebrow ? "mt-2" : "mt-0",
+          titleClassName,
         )}
       >
         {Icon && <Icon className="h-7 w-7 shrink-0 text-primary sm:h-8 sm:w-8" />}
