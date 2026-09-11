@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
           "online gym with a personal coach, personalized workout generator, online gym, personal coach app, workout of the day, smarty coach, training plan generator, home workout plan, gym workout plan",
       },
       {
-        title: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
+        title: "Your gym reimagined.",
       },
       {
         name: "description",
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
+        content: "Your gym reimagined.",
       },
       {
         property: "og:description",
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebPage",
           "@id": "https://smartygym.com/#webpage",
           url: "https://smartygym.com/",
-          name: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
+          name: "Your gym reimagined.",
           description:
             "An online gym with a personal coach: ask your coach for a session and train around your goals, your equipment and your schedule.",
           inLanguage: "en",
@@ -77,13 +77,12 @@ function Home() {
       <section className="py-6 sm:hidden">
         <PageHeader
           as="p"
+          titleClassName="text-[38px] sm:text-4xl"
           title={
             <>
               YOUR GYM
               <br />
-              RE-IMAGINED
-              <br />
-              <span className="text-primary">ANYWHERE, ANYTIME.</span>
+              <span className="text-primary">REIMAGINED</span>
             </>
           }
           subtitle={
@@ -116,9 +115,9 @@ function Home() {
 
           <div className="max-w-xl lg:max-w-3xl">
             <h1 className="text-[34px] font-extrabold uppercase leading-[1.05] tracking-tight text-white sm:text-[44px] lg:text-[60px]">
-              YOUR GYM RE-IMAGINED
+              YOUR GYM
               <br />
-              <span className="whitespace-nowrap text-primary">ANYWHERE, ANYTIME.</span>
+              <span className="text-primary">REIMAGINED</span>
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-white/80 lg:mt-6 lg:text-lg">
