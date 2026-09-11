@@ -1,4 +1,3 @@
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarCheck, Dumbbell, PenLine } from "lucide-react";
 import heroTraining from "@/assets/hero-training.jpg";
@@ -70,7 +69,6 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { freeAccessMode } = useFreeAccessMode();
   return (
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
       {/* MOBILE — consistent with every other page: centered header + CTAs */}
@@ -94,7 +92,7 @@ function Home() {
           }
         />
 
-        <MobileHomeActions showPricing={!freeAccessMode} />
+        <MobileHomeActions showPricing={false} />
       </section>
 
 
@@ -139,16 +137,8 @@ function Home() {
                 className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border-2 border-primary px-6 text-base font-bold text-primary hover:bg-primary/10 lg:px-8"
               >
                 <CalendarCheck className="h-4 w-4 shrink-0" />
-                Subscribe to Workout of the Day
+                Workout of the Day
               </Link>
-              {freeAccessMode ? null : (
-                <Link
-                  to="/pricing"
-                  className="inline-flex h-12 items-center whitespace-nowrap rounded-full border-2 border-primary px-6 text-base font-bold text-primary hover:bg-primary/10 lg:px-8"
-                >
-                  See pricing
-                </Link>
-              )}
             </div>
             <Link
               to="/founder-note"
