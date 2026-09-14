@@ -296,25 +296,6 @@ function CommunityPage() {
         subtitle="Train together. Share your workouts. Discover sessions from every Smarty member, climb the rankings and take your place in the community."
       />
 
-      {access.checked && !access.premium && (
-        <div className="mx-auto mb-6 max-w-2xl rounded-3xl border-2 border-blue-400 bg-card p-5 text-center">
-          <p className="text-sm font-bold uppercase tracking-wider text-primary">Members only</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {freeAccessMode
-              ? "You can read the community. Sign in to open workouts, like, comment and train shared sessions."
-              : "You can read the community, but opening workouts, liking, commenting and training shared sessions are part of the membership."}
-          </p>
-          <Button asChild className="mt-4 h-12 rounded-2xl font-bold">
-            {freeAccessMode ? (
-              <Link to="/auth">Sign in</Link>
-            ) : (
-              <Link to="/auth">
-                {access.signedIn ? "Renew membership" : "Join Smarty Gym"}
-              </Link>
-            )}
-          </Button>
-        </div>
-      )}
 
       <div className="md:hidden">
         <SwipeToExplore
