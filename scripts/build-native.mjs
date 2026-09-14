@@ -70,18 +70,19 @@ await mkdir(outDir, { recursive: true });
 await cp(clientDir, outDir, { recursive: true });
 
 const html = `<!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="dark native-shell">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#000000" />
-    <title>Smarty Workout</title>
+    <title>SmartyGym</title>
     <link rel="icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 ${[...css].map((f) => `    <link rel="stylesheet" href="/${f}" />`).join("\n")}
     <style>
+      html.native-shell { --app-safe-area-top: 0px; }
       html, body { margin: 0; background: #000; color: #fff; overscroll-behavior-y: contain; }
     </style>
   </head>
