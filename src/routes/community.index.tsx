@@ -334,12 +334,11 @@ function CommunityPage() {
       </div>
 
       <div className="hidden md:block">
-        <SwipeToExplore
-          onPrev={() => desktopApi?.scrollPrev()}
-          onNext={() => desktopApi?.scrollNext()}
-        />
         <CarouselDots api={desktopApi} activeIndex={desktopPanel} count={panels.length} />
         <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
+          <CarouselPrevious
+            className="hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex left-[2%]"
+          />
           <CarouselContent className="-ml-4">
             {panels.map((panel, i) => (
               <CarouselItem key={i} className="basis-[72%] pl-4 lg:basis-[56%]">
@@ -347,6 +346,9 @@ function CommunityPage() {
               </CarouselItem>
             ))}
           </CarouselContent>
+          <CarouselNext
+            className="hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex right-[2%]"
+          />
         </Carousel>
       </div>
 
