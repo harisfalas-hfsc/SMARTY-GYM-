@@ -10,9 +10,12 @@ import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 // Configuration
 const SITE_NAME = "SMARTYGYM"
-const SENDER_DOMAIN = "notify.smartygym.com"
+// TEMPORARY: notify.smartygym.com DNS verification failed (provisioning_failed),
+// which is why auth emails (password resets, confirmations) were never delivered.
+// Sending through the workspace's verified sender until smartygym.com verifies.
+const SENDER_DOMAIN = "notify.smartydiet.com"
 const ROOT_DOMAIN = "smartygym.com"
-const FROM_DOMAIN = "notify.smartygym.com"
+const FROM_DOMAIN = "notify.smartydiet.com"
 const SITE_URL = `https://${ROOT_DOMAIN}`
 
 // The SDK handler owns verification, dispatch, and retry semantics; this file
