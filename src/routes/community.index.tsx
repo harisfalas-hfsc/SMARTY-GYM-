@@ -1,6 +1,6 @@
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { loadRemote } from "@/lib/remote-data";
+import { loadRemoteCached } from "@/lib/remote-data";
 import { useEffect, useState } from "react";
 import { Loader2, Trophy, Users, Star, MessageSquare, Dumbbell, Flame } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -169,7 +169,7 @@ function CommunityPage() {
   useEffect(() => {
     let active = true;
     setWorkouts(null);
-    void loadRemote(`community:workouts:${workoutSort}`, () =>
+    void loadRemoteCached(`community:workouts:${workoutSort}`, () =>
       fetchCommunityWorkouts({ sort: workoutSort, limit: SLOTS }),
     ).then((r) => {
       if (active) setWorkouts(r);
@@ -186,7 +186,7 @@ function CommunityPage() {
       memberSort === "workouts_shared"
         ? fetchCommunityCreators("workouts_shared", SLOTS)
         : fetchLeaders(memberSort, SLOTS);
-    void loadRemote(`community:members:${memberSort}`, () => load).then((r) => {
+    void loadRemoteCached(`community:members:${memberSort}`, () => load).then((r) => {
       if (active) setMembers(r);
     });
     return () => {
@@ -197,7 +197,7 @@ function CommunityPage() {
   useEffect(() => {
     let active = true;
     setRanked(null);
-    void loadRemote(`community:ranked:${rankSort}`, () =>
+    void loadRemoteCached(`community:ranked:${rankSort}`, () =>
       fetchCommunityWorkouts({ sort: rankSort, limit: SLOTS }),
     ).then((r) => {
       if (active) setRanked(r);
@@ -210,7 +210,7 @@ function CommunityPage() {
   useEffect(() => {
     let active = true;
     setComments(null);
-    void loadRemote(`community:comments:${talkSort}`, () =>
+    void loadRemoteCached(`community:comments:${talkSort}`, () =>
       fetchLatestComments(30, talkSort === "oldest" ? "oldest" : "newest"),
     ).then((rows) => {
       if (!active) return;
