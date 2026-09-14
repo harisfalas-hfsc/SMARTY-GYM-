@@ -78,20 +78,31 @@ const html = `<!doctype html>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#000000" />
     <title>SmartyGym</title>
-    <script>
-      if (/Android/i.test(navigator.userAgent)) document.documentElement.classList.add("android-native");
-    </script>
     <link rel="icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 ${[...css].map((f) => `    <link rel="stylesheet" href="/${f}" />`).join("\n")}
     <style>
-      html.android-native { --app-safe-area-top: 0px; }
-      html, body { margin: 0; background: #000; color: #fff; overscroll-behavior-y: contain; }
+      html.native-shell { --app-safe-area-top: 0px; color-scheme: dark; background: #000; }
+      html, body, #root { min-height: 100%; margin: 0; background: #000; color: #fff; overscroll-behavior-y: contain; }
+      #native-launch { position: fixed; inset: 0; z-index: 2147483647; display: grid; place-items: center; background: #000; transition: opacity 120ms ease; }
+      #native-launch img { width: 88px; height: 88px; object-fit: contain; }
+      #native-launch.native-launch-ready { pointer-events: none; opacity: 0; }
     </style>
   </head>
   <body>
+    <div id="native-launch" aria-hidden="true"><img src="/icon-192.png" alt="" /></div>
     <div id="root"></div>
     <script type="module" src="/${entry.file}"></script>
+    <script>
+      const launch = document.getElementById("native-launch");
+      const revealApp = () => {
+        if (!launch) return;
+        launch.classList.add("native-launch-ready");
+        window.setTimeout(() => launch.remove(), 160);
+      };
+      window.addEventListener("smartygym:native-ready", revealApp, { once: true });
+      window.setTimeout(revealApp, 8000);
+    </script>
   </body>
 </html>
 `;
