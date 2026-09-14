@@ -174,14 +174,14 @@ const JSONLD_GRAPH = {
         ],
         sameAs: [
           `${SITE_URL}/haris-falas`,
-          "https://www.instagram.com/smartygym",
+          "https://www.instagram.com/thesmartygym",
           "https://smartygym.com",
         ],
       },
 
       sameAs: [
         "https://smartygym.com",
-        "https://www.instagram.com/smartygym",
+        "https://www.instagram.com/thesmartygym",
       ],
       contactPoint: [
         {
