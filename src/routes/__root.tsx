@@ -16,7 +16,6 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navigation } from "../components/Navigation";
 import { SiteFooter } from "../components/SiteFooter";
 import { Toaster } from "../components/ui/sonner";
-import { SisterAppsPopup } from "../components/growth/SisterAppsPopup";
 import { BottomNav } from "../components/BottomNav";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
 import { getFreeAccessMode } from "../lib/free-access.functions";
@@ -177,15 +176,11 @@ const JSONLD_GRAPH = {
           `${SITE_URL}/haris-falas`,
           "https://www.instagram.com/smartygym",
           "https://smartygym.com",
-          "https://smartymove.com",
-          "https://smartydiet.com",
         ],
       },
 
       sameAs: [
         "https://smartygym.com",
-        "https://smartymove.com",
-        "https://smartydiet.com",
         "https://www.instagram.com/smartygym",
       ],
       contactPoint: [
@@ -459,8 +454,6 @@ function RootComponent() {
           </main>
           <SiteFooter />
           <Toaster />
-          {/* Smarty Family cross-promo panel — temporarily removed, keep for later. */}
-          {false && <SisterAppsPopup />}
           <BottomNav />
         </div>
       </ThemeProvider>

@@ -107,8 +107,6 @@ export const Route = createFileRoute("/haris-falas")({
                 URL,
                 "https://www.instagram.com/smartygym",
                 "https://smartygym.com",
-                "https://smartymove.com",
-                "https://smartydiet.com",
               ],
               worksFor: { "@id": "https://smartygym.com/#organization" },
             },
@@ -146,25 +144,6 @@ const QUALIFICATIONS = [
   "ACE Medical Exercise Specialist",
   "NSCA CSCS",
 ];
-
-const PROJECTS: { name: string; href: string; desc: string }[] = [
-  {
-    name: "SmartyMove",
-    href: "https://smarty-motion-pro.lovable.app",
-    desc: "Posture and movement screening",
-  },
-  {
-    name: "SmartyDiet",
-    href: "https://smarty-meals-hub.lovable.app",
-    desc: "Personalized nutrition planning",
-  },
-  {
-    name: "SmartyGym",
-    href: "https://smartygym.com",
-    desc: "Workouts and training programs",
-  },
-];
-
 
 function Bullets({ items }: { items: React.ReactNode[] }) {
   return (
@@ -240,22 +219,7 @@ function CoachProfilePage() {
                     HFSC
                   </a>
                 </>,
-                <>
-                  Founder of the Smarty ecosystem:{" "}
-                  {PROJECTS.map((p, i) => (
-                    <span key={p.name}>
-                      {i > 0 ? ", " : ""}
-                      <a
-                        href={p.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium text-primary underline underline-offset-2"
-                      >
-                        {p.name}
-                      </a>
-                    </span>
-                  ))}
-                </>,
+                "Founder of SMARTYGYM",
               ]}
             />
           </CardContent>
