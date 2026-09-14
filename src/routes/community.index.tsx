@@ -316,21 +316,19 @@ function CommunityPage() {
 
       <div className="hidden md:block">
         <CarouselDots api={desktopApi} activeIndex={desktopPanel} count={panels.length} />
-        <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
-          <CarouselPrevious
-            className="left-[2%] z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex"
-          />
-          <CarouselContent className="-ml-4">
-            {panels.map((panel, i) => (
-              <CarouselItem key={i} className="basis-[72%] pl-4 lg:basis-[56%]">
-                <div className="h-[620px]">{panel}</div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselNext
-            className="right-[2%] z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex"
-          />
-        </Carousel>
+        <div className="px-12 lg:px-16">
+          <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
+            <CarouselPrevious className="z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex" />
+            <CarouselContent className="-ml-4">
+              {panels.map((panel, i) => (
+                <CarouselItem key={i} className="basis-[72%] pl-4 lg:basis-[56%]">
+                  <div className="h-[620px]">{panel}</div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselNext className="z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex" />
+          </Carousel>
+        </div>
       </div>
 
       <div className="mt-8 text-center">
@@ -343,6 +341,30 @@ function CommunityPage() {
           </Link>
         </Button>
       </div>
+
+      {access.checked && !access.premium && (
+        <p className="mt-4 text-center text-sm text-muted-foreground">
+          {freeAccessMode ? (
+            <>
+              <Link to="/auth" className="font-semibold text-primary underline underline-offset-4 hover:text-primary/80">
+                Sign in
+              </Link>{" "}
+              to open workouts, like, comment, and train shared sessions.
+            </>
+          ) : (
+            <>
+              <Link
+                to="/auth"
+                className="font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
+              >
+                {access.signedIn ? "Renew membership" : "Join Smarty Gym"}
+              </Link>{" "}
+              to open workouts, like, comment, and train shared sessions.
+            </>
+          )}
+        </p>
+      )}
+
 
 
       <CommunityGateDialog
