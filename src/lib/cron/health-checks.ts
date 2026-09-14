@@ -4,7 +4,7 @@ export const HEALTH_CHECKS: { key: string; label: string }[] = [
   { key: "tables", label: "Key tables readable" },
   { key: "library", label: "Exercise library health" },
   { key: "media", label: "Exercise media storage (player images)" },
-  { key: "ai", label: "AI credits / workout generation" },
+  { key: "ai", label: "Workout generation availability" },
   { key: "wod", label: "Workout of the Day" },
   { key: "email", label: "Email delivery" },
   { key: "jobs", label: "Scheduled jobs" },

@@ -15,7 +15,7 @@ export const Route = createFileRoute("/privacy")({
       {
         name: "description",
         content:
-          "How SmartyGym collects, uses, and protects your personal data — GDPR-compliant privacy policy for our AI-generated personalized workouts.",
+          "How SmartyGym collects, uses, and protects your personal data for personalised workouts and training services.",
       },
       { property: "og:title", content: "Privacy Policy — SmartyGym" },
       {
@@ -43,7 +43,7 @@ function Privacy() {
         At <strong>Smarty Gym</strong> (smartygym.com) we value your privacy and are
         committed to protecting your personal data. This Privacy Policy explains how Smarty
         Gym collects, uses, stores, and protects your information when you use our
-        AI-generated personalized training service. Our practices comply with the General Data
+        personalized training service. Our practices comply with the General Data
         Protection Regulation (GDPR) (EU) 2016/679, the ePrivacy Directive 2002/58/EC, and
         applicable data protection laws worldwide.
       </p>
@@ -110,8 +110,8 @@ function Privacy() {
       <ul>
         <li><strong>Cloud hosting provider</strong> — database hosting and authentication.</li>
         <li>
-          <strong>AI provider(s)</strong> — used only to generate your personalized workouts from
-          your profile. No direct identifiers (name, email) are sent to the AI provider unless
+          <strong>Workout service provider(s)</strong> — used only to create your personalized workouts from
+          your profile. No direct identifiers (name, email) are sent to these services unless
           strictly required.
         </li>
         {freeAccessMode ? null : (

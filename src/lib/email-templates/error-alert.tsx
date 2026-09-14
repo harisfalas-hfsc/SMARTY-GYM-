@@ -97,7 +97,7 @@ export const template = {
   displayName: 'Instant problem alert',
   to: 'smartygym@outlook.com',
   previewData: {
-    message: 'Workout generation failed: out of AI credits',
+    message: 'Workout generation is unavailable',
     source: 'workout-generation',
     route: '/coach',
     severity: 'error',

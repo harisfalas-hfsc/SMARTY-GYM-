@@ -4,7 +4,7 @@
  */
 export const PAGE_KEYWORDS: Record<string, string[]> = {
   "/": [
-    "ai workout generator",
+    "personalized workout generator",
     "personalized workout",
     "online personal trainer",
     "workout app",

@@ -62,7 +62,7 @@ import { createLocalWorkout } from "@/lib/local-workouts";
 export const Route = createFileRoute("/_authenticated/coach")({
   head: () => ({
     meta: [
-      { title: "Smarty Coach — your AI workout today" },
+      { title: "Smarty Coach — your personal workout today" },
       {
         name: "description",
         content:

@@ -87,7 +87,7 @@ export const template = {
     stage: 'initial generation',
     paymentState: 'active subscription',
     failureKind: 'ai_balance',
-    reason: '402 Payment Required — AI balance exhausted',
+    reason: '402 Payment Required — generation service unavailable',
     attempt: 2,
     occurredAt: '2026-01-01 09:14 UTC',
   },

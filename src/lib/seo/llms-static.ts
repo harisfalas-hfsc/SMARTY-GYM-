@@ -8,7 +8,7 @@ export const LLMS_STATIC = `# SmartyGym
 
 ## What SmartyGym is
 
-SmartyGym is not another workout app. It is an intelligent fitness coach built around the sports science and training philosophy of Sports Scientist Haris Falas.
+SmartyGym is a complete online gym built around the experience, sports science, and training philosophy of Sports Scientist Haris Falas.
 
 - Positioning: a smart, personalized, science-informed, adaptive fitness coach.
 - Core promise: answer a short questionnaire and get a full tailor-made workout built around your body, goals, available equipment and constraints — anytime, anywhere.
@@ -49,7 +49,7 @@ Every generated workout belongs to exactly one category. Full descriptions: http
 ## Core differentiators
 
 - **Science-informed programming** — every session is built on Strength & Conditioning principles by a sports scientist, with warm-up, activation, main work, finisher and cool-down.
-- **AI personalization** — workouts are generated from your Training Profile plus a short pre-workout questionnaire about goal, mood, time, location and equipment.
+- **Personalized programming** — workouts are shaped from your Training Profile plus a short pre-workout questionnaire about goal, mood, time, location and equipment.
 - **Curated exercise library** — 1,384 movements with animated demonstrations, filterable by muscle group, equipment and movement pattern; Smarty Coach only selects exercises from this library.
 - **Workout of the Day** — a daily periodized plan identical for every subscriber, delivered in equipment and bodyweight variants, so you never overtrain or undertrain.
 - **Guided player + logging** — timers, rest, swipe navigation, and set-by-set logging of reps, weight, time and rounds.

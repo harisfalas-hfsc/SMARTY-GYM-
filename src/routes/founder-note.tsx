@@ -1,45 +1,14 @@
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Heart, Quote, UserRound } from "lucide-react";
+import harisPhoto from "@/assets/haris-falas-coach.jpg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import harisPhoto from "@/assets/haris-falas-coach.jpg";
 import { PageHeader } from "@/components/PageHeader";
-import {
-  User,
-  Dumbbell,
-  Calendar,
-  TrendingUp,
-  Bot,
-  CheckCircle2,
-  Sparkles,
-  Target,
-  ShieldCheck,
-  BookOpen,
-  Zap,
-  Coins,
-  CalendarDays,
-  Crown,
-  Smartphone,
-  Brain,
-  Heart,
-  Quote,
-  Library,
-  Clock,
-  ListChecks,
-  LineChart,
-  PlayCircle,
-  ClipboardCheck,
-  NotebookPen,
-  Activity,
-  Trophy,
-  WifiOff,
-
-} from "lucide-react";
 
 const URL = "https://smartygym.com/founder-note";
 const TITLE = "A Note From The Founder | Smarty Gym";
 const DESCRIPTION =
-  "Why Smarty Gym exists and how the trained coach builds every workout from a real 1,384-movement library.";
+  "Haris Falas explains why he created Smarty Gym and his mission to make expert, science-based fitness guidance available worldwide.";
 
 export const Route = createFileRoute("/founder-note")({
   head: () => ({
@@ -47,7 +16,7 @@ export const Route = createFileRoute("/founder-note")({
       {
         name: "keywords",
         content:
-          "smartygym founder note, founder letter, why smartygym, coaching for everyone, haris falas",
+          "smartygym founder note, founder letter, why smartygym, online gym, science based workouts, haris falas",
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
@@ -61,7 +30,27 @@ export const Route = createFileRoute("/founder-note")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify({"@context": "https://schema.org","@graph": [{"@type": "WebPage","@id": "https://smartygym.com/founder-note#webpage","url": "https://smartygym.com/founder-note","name": "A note from the founder","inLanguage": "en","isPartOf": {"@id": "https://smartygym.com/#website"},"publisher": {"@id": "https://smartygym.com/#organization"}},{"@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 1,"name": "Home","item": "https://smartygym.com/"},{"@type": "ListItem","position": 2,"name": "A note from the founder","item": "https://smartygym.com/founder-note"}]}]}),
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `${URL}#webpage`,
+              url: URL,
+              name: "A note from the founder",
+              inLanguage: "en",
+              isPartOf: { "@id": "https://smartygym.com/#website" },
+              publisher: { "@id": "https://smartygym.com/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                { "@type": "ListItem", position: 2, name: "A note from the founder", item: URL },
+              ],
+            },
+          ],
+        }),
       },
     ],
   }),
@@ -72,77 +61,35 @@ function Brand({ children }: { children: React.ReactNode }) {
   return <span className="font-extrabold text-primary">{children}</span>;
 }
 
-function P({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <p
-      className={
-        "text-sm leading-7 text-muted-foreground sm:text-base" +
-        (className ? " " + className : "")
-      }
-    >
-      {children}
-    </p>
-  );
+function Paragraph({ children }: { children: React.ReactNode }) {
+  return <p className="text-base leading-8 text-muted-foreground">{children}</p>;
 }
 
-function SectionCard({
+function NoteCard({
   icon,
   title,
   children,
-  className,
+  emphasized,
 }: {
   icon: React.ReactNode;
-  title: React.ReactNode;
+  title: string;
   children: React.ReactNode;
-  className?: string;
+  emphasized?: boolean;
 }) {
   return (
-    <Card className={className}>
+    <Card className={emphasized ? "bg-primary/5" : undefined}>
       <CardHeader className="flex-row items-center gap-3 space-y-0 pb-4">
-        <span className="shrink-0 rounded-xl bg-primary/10 p-2.5 text-primary">
-          {icon}
-        </span>
-        <CardTitle className="text-base font-extrabold uppercase tracking-tight sm:text-lg">
-          {title}
-        </CardTitle>
+        <span className="shrink-0 rounded-xl bg-primary/10 p-2.5 text-primary">{icon}</span>
+        <CardTitle className="text-base font-extrabold uppercase sm:text-lg">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">{children}</CardContent>
+      <CardContent className="space-y-5">{children}</CardContent>
     </Card>
   );
 }
 
-function List({
-  items,
-}: {
-  items: { icon: React.ReactNode; text: React.ReactNode }[];
-}) {
-  return (
-    <ul className="space-y-3">
-      {items.map((it, i) => (
-        <li
-          key={i}
-          className="flex items-start gap-3 rounded-xl bg-primary/5 p-3 text-sm leading-7 text-muted-foreground sm:text-base"
-        >
-          <span className="mt-0.5 shrink-0 rounded-md bg-primary/10 p-1.5 text-primary">
-            {it.icon}
-          </span>
-          <span className="min-w-0">{it.text}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 function FounderNotePage() {
-  const { freeAccessMode } = useFreeAccessMode();
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
+    <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:px-8 lg:py-16">
       <div className="text-center">
         <div className="mx-auto mb-6 h-28 w-28 overflow-hidden rounded-full border-4 border-primary sm:h-36 sm:w-36">
           <img
@@ -158,16 +105,9 @@ function FounderNotePage() {
         <PageHeader
           className="mb-0"
           eyebrow="A note from the founder"
-          title={
-            <>
-              Haris <span className="text-primary">Falas</span>
-            </>
-          }
+          title={<>Haris <span className="text-primary">Falas</span></>}
           subtitle={
-            <Link
-              to="/haris-falas"
-              className="font-semibold text-primary underline underline-offset-2"
-            >
+            <Link to="/haris-falas" className="font-semibold text-primary underline underline-offset-2">
               Read the full coach profile
             </Link>
           }
@@ -175,415 +115,70 @@ function FounderNotePage() {
       </div>
 
       <div className="mt-8 space-y-6">
-        <SectionCard icon={<Quote size={20} />} title="Why I built this">
-          <p className="text-base font-semibold leading-8 text-foreground sm:text-lg">
-            {freeAccessMode
-              ? "Let me tell you what I built and why I believe it is worth your time."
-              : "Let me tell you what I built and why I believe it is worth your €9.99."}
-          </p>
-          <P>
-            <Brand>Smarty Gym</Brand> is a powerful AI fitness coach — but it
-            is not just another chatbot. It has been trained by me, Haris Falas,
-            a sports scientist, so it thinks the way I think about programme
-            design, progression, safety, and real human movement. It does not
-            invent exercises from the internet. It does not hand you a generic
-            “Monday chest, Tuesday back” template. It asks you who you are, what
-            equipment you have, how much time you have, and what your body
-            needs, then creates a workout you can actually do today — according
-            to the principles of a sports scientist.
-          </P>
-        </SectionCard>
+        <NoteCard icon={<Quote size={20} />} title="Why I built this">
+          <Paragraph>
+            <Brand>Smarty Gym</Brand> is a powerful online gym that brings personal,
+            science-based training to you wherever you are. It gives you workouts shaped around
+            your goals, your level, your available time, your training environment, and the
+            equipment you have.
+          </Paragraph>
+          <Paragraph>
+            I built it because, after more than 25 years in the fitness industry, I wanted to help
+            more people than could ever physically reach me. Throughout my career, I have worked
+            with everyday people, children, adults, professional athletes, and people returning
+            from injury. I have helped people improve their health, movement, strength,
+            performance, and confidence through training that respects the individual.
+          </Paragraph>
+          <Paragraph>
+            Everything here carries my experience, knowledge, and standards as a sports
+            scientist and coach. I create the training principles behind your workouts, write the
+            educational articles, build the tools, and continue developing Smarty Gym so it can
+            become a complete online gym that fits anyone.
+          </Paragraph>
+        </NoteCard>
 
-        <SectionCard
-          icon={<Sparkles size={20} />}
-          title="What makes it different from ordinary generators"
-        >
-          <List
-            items={[
-              {
-                icon: <User size={18} />,
-                text: (
-                  <>
-                    It learns from <strong>your profile</strong>. Age,
-                    biometrics, fitness level, goal, equipment, environment,
-                    injuries, time budget, and a short health questionnaire.
-                    Change your profile and the next workout changes
-                    immediately.
-                  </>
-                ),
-              },
-              {
-                icon: <Brain size={18} />,
-                text: (
-                  <>
-                    It uses <strong>two pools of information</strong>. Your saved
-                    Training Profile plus what you tell it right before
-                    generating a workout — mood, focus, duration, equipment.
-                    Most apps use one or the other; <Brand>Smarty Gym</Brand>{" "}
-                    merges both.
-                  </>
-                ),
-              },
-              {
-                icon: <BookOpen size={18} />,
-                text: (
-                  <>
-                    The exercises are <strong>real</strong>. Every movement comes
-                    from our own curated library of 1,384 movements with GIFs.
-                    The AI is constrained to pick from that library, so it will
-                    not invent a “Smith machine Bulgarian split squat” if you
-                    only have dumbbells and a kettlebell.
-                  </>
-                ),
-              },
-              {
-                icon: <Target size={18} />,
-                text: (
-                  <>
-                    <strong>Three clear levels</strong>. Beginner, Intermediate,
-                    Advanced. Internally we model intensity across six stars, but
-                    we present them as three bands so you always know exactly
-                    where you stand.
-                  </>
-                ),
-              },
-              {
-                icon: <ShieldCheck size={18} />,
-                text: (
-                  <>
-                    <strong>Safety is built in</strong>. The PAR-Q questionnaire
-                    is mandatory. If you answer YES to a health question, you see
-                    a red warning box and must actively consent before training.
-                  </>
-                ),
-              },
-            ]}
-          />
-        </SectionCard>
+        <NoteCard icon={<UserRound size={20} />} title="My work and my mission">
+          <Paragraph>
+            I also run my own physical gym, <a href="https://hfsc.eu" target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-2">HFSC</a>,
+            where I work directly with real people and real training challenges. That daily
+            experience keeps my work practical, personal, and grounded in what people genuinely
+            need.
+          </Paragraph>
+          <Paragraph>
+            Smarty Gym belongs to the <strong className="text-foreground">Smarty family</strong>,
+            together with <a href="https://smartydiet.com" target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-2">Smarty Diet</a>,
+            created to support personalised nutrition, and <a href="https://smartymove.com" target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-2">Smarty Move</a>,
+            created for movement analysis, movement quality, and corrective guidance. Each one
+            focuses on a different part of a healthier life, while sharing the same commitment to
+            expert knowledge, individual needs, and practical support.
+          </Paragraph>
+          <Paragraph>
+            My mission is to give people everywhere the opportunity to benefit from real expertise
+            and science-based training anytime, anywhere—no matter where they train or what
+            equipment they have. I want to help people build healthier, stronger, and more
+            fulfilling lives, and I will keep growing Smarty Gym toward that purpose.
+          </Paragraph>
+        </NoteCard>
 
-        <SectionCard
-          icon={<CalendarDays size={20} />}
-          title="The Workout of the Day is the real innovation"
-        >
-          <P>
-            Everyone follows a fixed 84-day periodization calendar. All
-            members see the same category, focus, and difficulty for the day
-            — but the actual workout is generated from your individual profile
-            and equipment. You receive two versions each day: one bodyweight, one
-            using your equipment. On recovery days, you get a single session.
-          </P>
-          <P>
-            It is not the same workout for everyone, but it is the same
-            programme. That means you can train with your friends, compare the
-            day, and still each get a personal workout.{" "}
-            <Brand>Smarty Gym</Brand> removes the decision fatigue: you wake
-            up, open the app, and train.
-          </P>
-          <List
-            items={[
-              {
-                icon: <Crown size={18} />,
-                text: (
-                  <>
-                    {freeAccessMode ? (
-                      <>
-                        <strong>It is the flagship feature.</strong> When you turn
-                        it on, the app automatically creates your workouts every
-                        day at midnight. You do not think. You do not plan. You
-                        just train.
-                      </>
-                    ) : (
-                      <>
-                        <strong>It is the premium feature.</strong> When you
-                        subscribe, the app automatically creates your workouts
-                        every day at midnight. You do not think. You do not plan.
-                        You just train.
-                      </>
-                    )}
-                  </>
-                ),
-              },
-              {
-                icon: <Clock size={18} />,
-                text: (
-                  <>
-                    While the Workout of the Day is switched on, manual
-                    generation is paused — the daily programme already covers
-                    you.
-                  </>
-                ),
-              },
-            ]}
-          />
-        </SectionCard>
-
-        {freeAccessMode ? null : (
-        <SectionCard icon={<Coins size={20} />} title="Why €9.99 a month is worth it">
-          <P>Think of what you are paying for:</P>
-          <List
-            items={[
-              {
-                icon: <Coins size={18} />,
-                text: (
-                  <>
-                    A personal trainer normally costs €30–€100 per session. A
-                    generic app gives you cookie-cutter plans.{" "}
-                    <Brand>Smarty Gym</Brand> gives you a daily personal
-                    programme plus unlimited manual generation.
-                  </>
-                ),
-              },
-              {
-                icon: <Zap size={18} />,
-                text: (
-                  <>
-                    For less than one coffee per week, you get two daily workouts
-                    built for your profile, up to two manual workouts per day, a
-                    logbook with calendar and history, a complete exercise
-                    library, and tools like the Workout Timer, Rounds Tracker,
-                    and 1RM Calculator.
-                  </>
-                ),
-              },
-            ]}
-          />
-        </SectionCard>
-        )}
-
-        <SectionCard icon={<ListChecks size={20} />} title="How does it work?">
-          <List
-            items={[
-              {
-                icon: <CheckCircle2 size={18} />,
-                text: (
-                  <>
-                    <strong>Sign up and create your Training Profile.</strong>{" "}
-                    This is mandatory and takes a few minutes. It is not a
-                    gimmick; it is the data the trained agent needs to avoid
-                    giving you something useless.
-                  </>
-                ),
-              },
-              {
-                icon: <Calendar size={18} />,
-                text: (
-                  <>
-                    <strong>Choose a path.</strong> Follow the Workout of the
-                    Day, or ask <Brand>Smarty Coach</Brand> to generate a custom
-                    workout on demand.
-                  </>
-                ),
-              },
-              {
-                icon: <Bot size={18} />,
-                text: (
-                  <>
-                    <strong>Generate a workout.</strong> You answer a short
-                    questionnaire about today. The trained agent merges this with
-                    your profile, filters the exercise library, and writes a
-                    workout.
-                  </>
-                ),
-              },
-              {
-                icon: <Dumbbell size={18} />,
-                text: (
-                  <>
-                    <strong>Train.</strong> You get a clean Reader Mode and a
-                    Player with timers, rest periods, and swipe navigation. The
-                    app can keep your screen awake.
-                  </>
-                ),
-              },
-              {
-                icon: <TrendingUp size={18} />,
-                text: (
-                  <>
-                    <strong>Track.</strong> Completed workouts go to your
-                    Logbook. You can mark favorites, schedule workouts, and leave
-                    feedback. Your feedback is stored and influences future
-                    workouts.
-                  </>
-                ),
-              },
-            ]}
-          />
-        </SectionCard>
-
-        <SectionCard
-          icon={<LineChart size={20} />}
-          title="What happens after the workout"
-        >
-          <P>
-            A workout you cannot measure is a workout you cannot improve. This is
-            the part most apps skip, and the part I care about most.
-          </P>
-          <List
-            items={[
-              {
-                icon: <PlayCircle size={18} />,
-                text: (
-                  <>
-                    <strong>The player records what you actually did.</strong>{" "}
-                    Reps, weight, time, rounds or reps-in-time — set by set, in
-                    the format each exercise is prescribed in.
-                  </>
-                ),
-              },
-              {
-                icon: <ClipboardCheck size={18} />,
-                text: (
-                  <>
-                    <strong>One session debrief, not two.</strong> RPE, how you
-                    felt, whether you enjoyed it, and a note. Asked once at the
-                    end, and you can edit your answers any time — your progress
-                    updates instantly.
-                  </>
-                ),
-              },
-              {
-                icon: <NotebookPen size={18} />,
-                text: (
-                  <>
-                    <strong>Your Logbook keeps everything.</strong> A calendar of
-                    completed, scheduled, favourite and skipped sessions, with
-                    equipment badges and filters, so you can repeat any workout
-                    with one tap.
-                  </>
-                ),
-              },
-              {
-                icon: <TrendingUp size={18} />,
-                text: (
-                  <>
-                    <strong>Real progress, fairly compared.</strong> When you
-                    repeat a workout, each attempt is matched against the
-                    previous one only when the prescription is genuinely the
-                    same. 20 reps last time, 24 today — the app says so, next to
-                    the RPE and the feeling you logged that day.
-                  </>
-                ),
-              },
-              {
-                icon: <Activity size={18} />,
-                text: (
-                  <>
-                    <strong>Training load in your own units.</strong> No
-                    invented scores: your recent workload is compared with your
-                    own 21-day baseline and adjusted by your RPE, so “too much”
-                    and “too little” mean something for you specifically.
-                  </>
-                ),
-              },
-              {
-                icon: <Trophy size={18} />,
-                text: (
-                  <>
-                    <strong>Achievements and reminders.</strong> Milestones
-                    unlock as you train, and notifications keep scheduled
-                    sessions from quietly disappearing.
-                  </>
-                ),
-              },
-              {
-                icon: <WifiOff size={18} />,
-                text: (
-                  <>
-                    <strong>Offline mode.</strong> Your workouts, logbook and
-                    player keep working in a basement gym with no signal.
-                    Everything you log syncs the moment you are back online.
-                  </>
-                ),
-              },
-            ]}
-          />
-        </SectionCard>
-
-
-
-        <SectionCard
-          icon={<Smartphone size={20} />}
-          title="Easy to use, and better than a chatbot"
-        >
-          <List
-            items={[
-              {
-                icon: <Smartphone size={18} />,
-                text: (
-                  <>
-                    <strong>Built mobile first.</strong> The Coach asks questions
-                    in simple cards, one at a time. Buttons are large. The player
-                    is swipeable. The calendar shows scheduled, completed,
-                    favorite, and skipped workouts — usable in gym clothes or on
-                    the floor.
-                  </>
-                ),
-              },
-              {
-                icon: <Library size={18} />,
-                text: (
-                  <>
-                    <strong>Why not just ask ChatGPT?</strong> It does not know
-                    which exercises you have access to, your health limits,
-                    whether your gym has a cable machine or only dumbbells, the
-                    exact progression you need, or the 84-day plan you should
-                    follow. It cannot track your history, save your preferences,
-                    or guarantee it is not hallucinating an exercise.
-                  </>
-                ),
-              },
-              {
-                icon: <Bot size={18} />,
-                text: (
-                  <>
-                    <Brand>Smarty Gym</Brand> does all of that. It is a
-                    trained agent, not a chatbot.
-                  </>
-                ),
-              },
-            ]}
-          />
-        </SectionCard>
-
-        <SectionCard
-          icon={<Heart size={20} />}
-          title="My promise to you"
-          className="bg-primary/5"
-        >
-          <P>
-            {freeAccessMode
-              ? "From my perspective as the person who built it, this is the core pitch: a daily personal workout that is built from a real exercise library, respects your body, follows a long-term plan, and removes the decision fatigue of “what should I train today?”"
-              : "From my perspective as the person who built it, this is the core pitch: €9.99 per month for a daily personal workout that is built from a real exercise library, respects your body, follows a long-term plan, and removes the decision fatigue of “what should I train today?”"}
-          </P>
-          <P>
-            {freeAccessMode
-              ? "Start anywhere. Create a profile, browse the exercise library, play with the tools. When you are ready, switch on the Workout of the Day. That is the moment "
-              : "If you want to try it, start with the free parts. Create a profile, browse the exercise library, play with the tools. When you are ready, subscribe to the Workout of the Day. That is the moment "}
-            <Brand>Smarty Gym</Brand> becomes a real coach in your pocket.
-          </P>
-
+        <NoteCard icon={<Heart size={20} />} title="My promise to you" emphasized>
+          <Paragraph>
+            I will keep applying my knowledge, experience, and care to every part of Smarty Gym.
+            My promise is to keep improving it, expanding it, and building a trusted online gym
+            that helps you train with purpose and confidence wherever life takes you.
+          </Paragraph>
           <div className="border-t-2 border-primary/30 pt-5 text-center">
-            <p className="text-sm font-semibold italic text-muted-foreground sm:text-base">
-              Yours in good health,
-            </p>
-            <p className="mt-1 text-base font-extrabold text-foreground sm:text-lg">
-              Haris Falas
-            </p>
-            <p className="text-sm text-muted-foreground">
-              BSc Sports Science, EXOS Specialist, CSCS
-            </p>
+            <p className="text-sm font-semibold italic text-muted-foreground sm:text-base">Yours in good health,</p>
+            <p className="mt-1 text-base font-extrabold text-foreground sm:text-lg">Haris Falas</p>
+            <p className="text-sm text-muted-foreground">BSc Sports Science, EXOS Specialist, CSCS</p>
           </div>
-        </SectionCard>
+        </NoteCard>
       </div>
 
       <div className="mt-10 flex flex-col items-center gap-3">
         <Button asChild size="lg" className="font-extrabold uppercase">
           <Link to="/coach">Create your workout</Link>
         </Button>
-        <Link
-          to="/haris-falas"
-          className="text-sm font-semibold text-primary underline underline-offset-2"
-        >
+        <Link to="/haris-falas" className="text-sm font-semibold text-primary underline underline-offset-2">
           More about Haris Falas
         </Link>
       </div>
