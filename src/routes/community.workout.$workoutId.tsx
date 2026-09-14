@@ -136,6 +136,9 @@ function SharedWorkoutPage() {
 
 
   async function refreshCounts() {
+    // The community lists cache their rows; drop them so going back shows the
+    // new like / rating / comment straight away.
+    invalidateRemote("community:");
     const { data } = await supabase
       .from("community_workouts_public")
       .select("likes,dislikes,rating_avg,rating_count")
