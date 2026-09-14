@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { loadRemote } from "@/lib/remote-data";
+import { invalidateRemote, loadRemote } from "@/lib/remote-data";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -136,6 +136,9 @@ function SharedWorkoutPage() {
 
 
   async function refreshCounts() {
+    // The community lists cache their rows; drop them so going back shows the
+    // new like / rating / comment straight away.
+    invalidateRemote("community:");
     const { data } = await supabase
       .from("community_workouts_public")
       .select("likes,dislikes,rating_avg,rating_count")
@@ -215,6 +218,7 @@ function SharedWorkoutPage() {
       void postComment({ data: { workoutId, body } })
         .then(async () => {
           setDraft("");
+          invalidateRemote("community:");
           setComments(await fetchComments(workoutId));
         })
         .catch((e: Error) => toast.error(e.message))
@@ -224,7 +228,10 @@ function SharedWorkoutPage() {
 
   function removeMine(id: string) {
     void removeComment({ data: { commentId: id } })
-      .then(() => setComments((c) => c.filter((x) => x.id !== id)))
+      .then(() => {
+        invalidateRemote("community:");
+        setComments((c) => c.filter((x) => x.id !== id));
+      })
       .catch((e: Error) => toast.error(e.message));
   }
 

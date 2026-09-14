@@ -2,7 +2,7 @@ import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import harisPhoto from "@/assets/haris-falas-coach.png";
+import harisPhoto from "@/assets/haris-falas-coach.jpg";
 import { PageHeader } from "@/components/PageHeader";
 import {
   User,
