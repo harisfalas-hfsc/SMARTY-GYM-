@@ -21,8 +21,6 @@ export function loadRemote<T>(
   loader: () => Promise<T>,
   _userId?: string | null,
 ): Promise<T> {
-  const cached = results.get(key);
-  if (cached && Date.now() - cached.at < FRESH_MS) return Promise.resolve(cached.value as T);
   const existing = inFlight.get(key) as Promise<T> | undefined;
   if (existing) return existing;
   const request = loader()
@@ -33,6 +31,16 @@ export function loadRemote<T>(
     .finally(() => inFlight.delete(key));
   inFlight.set(key, request);
   return request;
+}
+
+/**
+ * Same as loadRemote, but a recent result for the key is returned immediately.
+ * Use for read-only lists that a mutation invalidates explicitly.
+ */
+export function loadRemoteCached<T>(key: string, loader: () => Promise<T>): Promise<T> {
+  const cached = results.get(key);
+  if (cached && Date.now() - cached.at < FRESH_MS) return Promise.resolve(cached.value as T);
+  return loadRemote(key, loader);
 }
 
 /** Drops cached results so the next read hits the backend again. */
