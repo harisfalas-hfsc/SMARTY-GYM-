@@ -4,12 +4,21 @@ import { LegalLayout } from "@/components/LegalLayout";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
 export const Route = createFileRoute("/terms")({
-  head: () => ({
+  loader: async () => {
+    try {
+      const { getFreeAccessMode } = await import("@/lib/free-access.functions");
+      return await getFreeAccessMode();
+    } catch {
+      return { freeAccessMode: false };
+    }
+  },
+  head: ({ loaderData }) => ({
     meta: [
       {
         name: "keywords",
-        content:
-          "smartygym terms of service, terms and conditions, membership terms, acceptable use, cancellation",
+        content: loaderData?.freeAccessMode
+          ? "smartygym terms of service, terms and conditions, acceptable use, free access"
+          : "smartygym terms of service, terms and conditions, membership terms, acceptable use, cancellation",
       },
       { title: "Terms & Conditions | SmartyGym" },
       {
