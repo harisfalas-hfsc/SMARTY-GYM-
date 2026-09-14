@@ -137,7 +137,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "health-check",
     label: "Nightly system health check",
     description:
-      "Checks the whole system once every night — database, exercise library, player media, AI credits and workout generation, Workout of the Day, email, every other scheduled job, all public pages, share links, logbook / progress / player data, the support inbox, errors from the last 24 hours and the day's activity. A numbered report is emailed every night, pass or fail.",
+      "Checks the whole system once every night — database, exercise library, player media, workout generation, Workout of the Day, email, every other scheduled job, all public pages, share links, logbook / progress / player data, the support inbox, errors from the last 24 hours and the day's activity. A numbered report is emailed every night, pass or fail.",
     timing: "fixed",
     timingNote:
       "Runs once a day at the time set below (Cyprus time). Default 00:00. The report is always emailed, so silence means the check itself did not run.",
@@ -148,7 +148,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
       },
       {
         title: "[Health] 1 FAILURE(S) — 14/15 checks passed",
-        body: "Same report, headline naming the failures — for example “OUT OF AI CREDITS — members cannot generate workouts”.",
+        body: "Same report, headline naming the failures — for example “WORKOUT GENERATION UNAVAILABLE — members cannot generate workouts”.",
       },
     ],
     timeEditable: true,
@@ -167,7 +167,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
       "Not scheduled — sent immediately when a problem is recorded. The switch below turns the emails on or off; problems are always logged either way.",
     sends: [
       {
-        title: "[Problem] workout-generation — out of AI credits",
+        title: "[Problem] workout generation unavailable",
         body: "What broke, where, the exact Cyprus time, the member affected and the technical details.",
       },
     ],
@@ -186,7 +186,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     sends: [
       {
         title: "New Fitness article published on /blog",
-        body: "The article goes live immediately with an AI-generated cover image, bylined Haris Falas, Sports Scientist, CSCS certified. If the cover image cannot be created, nothing is published — no article ever goes live without a picture.",
+        body: "The article goes live immediately with a custom cover image, bylined Haris Falas, Sports Scientist, CSCS certified. If the cover image cannot be created, nothing is published — no article ever goes live without a picture.",
       },
       {
         title: "Admin report email",

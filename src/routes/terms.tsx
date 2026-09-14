@@ -165,7 +165,7 @@ function Terms() {
       <h2>8. Personalized Workout Content</h2>
       <ul>
         <li>
-          Workouts are created through automated workout-generation technology based on your profile,
+          Workouts are personalized based on your profile,
           preferences, and equipment availability.
         </li>
         <li>
@@ -182,7 +182,7 @@ function Terms() {
       <h2>9. Third-Party Services</h2>
       <ul>
         <li><strong>Hosting &amp; infrastructure providers:</strong> Host the database, authentication{freeAccessMode ? "" : ", and payment processing"}.</li>
-        <li><strong>Workout-generation technology provider(s):</strong> Used to create your personalized workouts.</li>
+        <li><strong>Workout service provider(s):</strong> Used to create your personalized workouts.</li>
         {freeAccessMode ? null : (
           <li><strong>Payment processor:</strong> Used to securely process your monthly membership payment.</li>
         )}

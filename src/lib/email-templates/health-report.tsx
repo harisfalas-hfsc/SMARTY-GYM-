@@ -122,9 +122,9 @@ export const template = {
       { number: 1, label: 'Database reachable', status: 'pass', detail: 'Database answered normally.' },
       {
         number: 2,
-        label: 'AI credits / workout generation',
+        label: 'Workout generation availability',
         status: 'fail',
-        detail: 'OUT OF AI CREDITS — members cannot generate workouts.',
+        detail: 'WORKOUT GENERATION UNAVAILABLE — members cannot generate workouts.',
       },
     ],
   },

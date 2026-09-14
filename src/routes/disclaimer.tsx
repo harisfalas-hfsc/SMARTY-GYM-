@@ -79,7 +79,7 @@ function Disclaimer() {
 
       <h2>3. Personalized Workout Content</h2>
       <ul>
-        <li>Workouts are created through automated workout-generation technology and may contain errors, omissions, or inappropriate suggestions.</li>
+        <li>Personalized workouts may contain errors, omissions, or inappropriate suggestions.</li>
         <li>You are responsible for reviewing every workout carefully before performing it, and for adjusting or skipping any exercise that could interact with your health or physical limitations.</li>
         <li>Intensity and calorie-burn estimates shown in workouts are approximate and may differ from actual values.</li>
       </ul>

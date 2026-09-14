@@ -110,8 +110,8 @@ function Privacy() {
       <ul>
         <li><strong>Cloud hosting provider</strong> — database hosting and authentication.</li>
         <li>
-          <strong>Workout-generation technology provider(s)</strong> — used only to create your personalized workouts from
-          your profile. No direct identifiers (name, email) are sent to these providers unless
+          <strong>Workout service provider(s)</strong> — used only to create your personalized workouts from
+          your profile. No direct identifiers (name, email) are sent to these services unless
           strictly required.
         </li>
         {freeAccessMode ? null : (

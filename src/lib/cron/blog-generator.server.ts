@@ -209,7 +209,7 @@ export async function runWeeklyBlogArticle(
 ${briefTitle ? `- Title keywords / angle: ${briefTitle}\n` : ""}${briefTopic ? `- Subject keywords and scope: ${briefTopic}\n` : ""}Build the title from the title keywords and cover precisely the subject described above. Stay evidence-based, and where the subject touches injury, surgery or rehabilitation, include a clear note that readers must follow their doctor's or physiotherapist's clearance before training.`
     : `TOPIC INSPIRATION (pick one or combine): ${hints}`;
 
-  const prompt = `You are a professional fitness content writer for SmartyGym, an AI-powered training platform that builds personalized workouts from a vetted exercise library. Write a comprehensive, SEO-optimized blog article for the "Fitness" category.
+  const prompt = `You are the editorial writing assistant for SmartyGym, a complete online gym created by Sports Scientist Haris Falas. Write a comprehensive, SEO-optimized blog article for the "Fitness" category in Haris's expert, practical voice. The finished article is published under his name and must reflect his sports-science knowledge and more than 25 years of fitness-industry experience.
 
 ${briefBlock}
 ${
