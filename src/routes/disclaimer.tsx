@@ -14,7 +14,7 @@ export const Route = createFileRoute("/disclaimer")({
       {
         name: "description",
         content:
-          "SmartyGym disclaimer and release of liability for our AI-generated personalized workouts.",
+          "SmartyGym disclaimer and release of liability for personalised workouts and fitness guidance.",
       },
       { property: "og:title", content: "Disclaimer — SmartyGym" },
       {
@@ -41,8 +41,8 @@ function Disclaimer() {
       icon={<AlertTriangle className="h-5 w-5" />}
     >
       <div className="callout">
-        <strong>⚠️ Not medical or training advice.</strong> Smarty Gym generates general
-        fitness workouts using AI based on the information you provide. It is not a doctor,
+        <strong>⚠️ Not medical or training advice.</strong> Smarty Gym creates general
+        fitness workouts based on the information you provide. It is not a doctor,
         physical therapist, or personal trainer. Before starting any workout, and especially if
         you have any medical condition, are pregnant, or have an injury history, consult a
         qualified professional.
@@ -77,9 +77,9 @@ function Disclaimer() {
         <li>You must update your profile and generate a new workout whenever your health status changes.</li>
       </ul>
 
-      <h2>3. AI-Generated Content</h2>
+      <h2>3. Personalized Workout Content</h2>
       <ul>
-        <li>Workouts are generated with the assistance of AI and may contain errors, omissions, or inappropriate suggestions.</li>
+        <li>Workouts are created through automated workout-generation technology and may contain errors, omissions, or inappropriate suggestions.</li>
         <li>You are responsible for reviewing every workout carefully before performing it, and for adjusting or skipping any exercise that could interact with your health or physical limitations.</li>
         <li>Intensity and calorie-burn estimates shown in workouts are approximate and may differ from actual values.</li>
       </ul>

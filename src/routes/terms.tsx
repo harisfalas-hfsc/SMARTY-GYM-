@@ -24,12 +24,12 @@ export const Route = createFileRoute("/terms")({
       {
         name: "description",
         content:
-          "Terms and conditions for using SmartyGym, an AI-generated personalized training planning app.",
+          "Terms and conditions for using SmartyGym, a personalised online training service.",
       },
       { property: "og:title", content: "Terms & Conditions — SmartyGym" },
       {
         property: "og:description",
-        content: "Legal terms for using the SmartyGym AI training planning app.",
+        content: "Legal terms for using the SmartyGym personalised training service.",
       },
       { property: "og:url", content: "https://smartygym.com/terms" },
     ],
@@ -50,7 +50,7 @@ function Terms() {
     <LegalLayout title="Terms & Conditions" icon={<FileText className="h-5 w-5" />}>
       <p>
         Welcome to <strong>Smarty Gym</strong> (smartygym.com). By accessing or using our
-        AI-generated personalized training service, you agree to comply with and be bound by the
+        personalized training service, you agree to comply with and be bound by the
         following Terms &amp; Conditions. Please read them carefully before using Smarty Gym.
       </p>
 
@@ -68,11 +68,11 @@ function Terms() {
 
       <h2>3. What Smarty Gym Is</h2>
       <p>
-        Smarty Gym is a web app that generates personalized training sessions using AI.
+        Smarty Gym is an online gym that creates personalized training sessions.
         Specifically, Smarty Gym provides:
       </p>
       <ul>
-        <li>Up to two AI-generated workouts per day, tailored to your goals, equipment, and fitness level.</li>
+        <li>Up to two personalized workouts per day, tailored to your goals, equipment, and fitness level.</li>
         <li>A searchable exercise library with instructions and technique guidance.</li>
         <li>Training tools to help you plan and track your sessions.</li>
         <li>A workout logbook to record your sets, reps, weights, and progress over time.</li>
@@ -162,14 +162,14 @@ function Terms() {
         </li>
       </ul>
 
-      <h2>8. AI-Generated Content</h2>
+      <h2>8. Personalized Workout Content</h2>
       <ul>
         <li>
-          Workouts are generated with the assistance of AI models based on your profile,
+          Workouts are created through automated workout-generation technology based on your profile,
           preferences, and equipment availability.
         </li>
         <li>
-          AI output may contain errors, omissions, or inappropriate suggestions. You are
+          Workout content may contain errors, omissions, or inappropriate suggestions. You are
           responsible for reviewing every workout before performing it and for stopping if
           anything looks unsafe or incompatible with your fitness level.
         </li>
@@ -182,7 +182,7 @@ function Terms() {
       <h2>9. Third-Party Services</h2>
       <ul>
         <li><strong>Hosting &amp; infrastructure providers:</strong> Host the database, authentication{freeAccessMode ? "" : ", and payment processing"}.</li>
-        <li><strong>AI provider(s):</strong> Used to generate your personalized workouts.</li>
+        <li><strong>Workout-generation technology provider(s):</strong> Used to create your personalized workouts.</li>
         {freeAccessMode ? null : (
           <li><strong>Payment processor:</strong> Used to securely process your monthly membership payment.</li>
         )}

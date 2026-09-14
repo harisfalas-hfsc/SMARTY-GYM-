@@ -1,7 +1,7 @@
 {
   "name": "Smarty Gym",
   "short_name": "SmartyGym",
-  "description": "AI workouts built for you by Smarty Coach.",
+  "description": "Personalised workouts and expert fitness guidance from Smarty Coach.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
