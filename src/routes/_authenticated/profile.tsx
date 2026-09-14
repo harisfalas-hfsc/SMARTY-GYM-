@@ -473,8 +473,8 @@ function ProfilePage() {
         </SectionCard>
         <SectionCard
           icon={Sparkles}
-          title="Use my library preferences"
-          hint="Should Smarty Coach take your liked and disliked exercises into account?"
+          title="Use my liked & disliked exercises"
+          hint="The exercises you like or dislike in the Exercise Library"
         >
           <select
             className={selectClass}
