@@ -112,6 +112,8 @@ async function askModel(system: string, user: string): Promise<Record<string, un
     system,
     messages: [{ role: "user", content: user }],
     temperature: 0.85,
+    // Priority serving tier: same model, same quality, lower latency.
+    providerOptions: { lovable: { service_tier: "priority" } },
   });
   return extractJson(await result.text);
 }
