@@ -170,8 +170,9 @@ export const Route = createFileRoute("/faq")({
     meta: [
       {
         name: "keywords",
-        content:
-          "smartygym faq, workout app questions, how workouts are generated, membership questions, cancel membership, equipment needed",
+        content: loaderData?.freeAccessMode
+          ? "smartygym faq, workout app questions, how workouts are generated, free access, equipment needed"
+          : "smartygym faq, workout app questions, how workouts are generated, membership questions, cancel membership, equipment needed",
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },

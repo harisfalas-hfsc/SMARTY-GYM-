@@ -3,6 +3,7 @@ import { CalendarCheck, Dumbbell, PenLine } from "lucide-react";
 import heroTraining from "@/assets/hero-training.jpg";
 import { PageHeader } from "@/components/PageHeader";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
+import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
 
 
@@ -69,6 +70,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { freeAccessMode } = useFreeAccessMode();
   return (
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
       {/* MOBILE — consistent with every other page: centered header + CTAs */}
@@ -92,7 +94,7 @@ function Home() {
           }
         />
 
-        <MobileHomeActions showPricing={false} />
+        <MobileHomeActions showPricing={!freeAccessMode} />
       </section>
 
 

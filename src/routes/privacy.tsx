@@ -42,7 +42,7 @@ function Privacy() {
       <p>
         At <strong>Smarty Gym</strong> (smartygym.com) we value your privacy and are
         committed to protecting your personal data. This Privacy Policy explains how Smarty
-        Workout collects, uses, stores, and protects your information when you use our
+        Gym collects, uses, stores, and protects your information when you use our
         AI-generated personalized training service. Our practices comply with the General Data
         Protection Regulation (GDPR) (EU) 2016/679, the ePrivacy Directive 2002/58/EC, and
         applicable data protection laws worldwide.
