@@ -22,6 +22,7 @@ const config: CapacitorConfig = {
     contentInset: "never",
     scrollEnabled: true,
     backgroundColor: "#000000",
+    preferredContentMode: "mobile",
   },
   android: {
     backgroundColor: "#000000",
@@ -32,6 +33,8 @@ const config: CapacitorConfig = {
       backgroundColor: "#000000",
       showSpinner: false,
       launchAutoHide: true,
+      launchShowDuration: 0,
+      androidScaleType: "CENTER",
     },
   },
 };
