@@ -316,19 +316,17 @@ function CommunityPage() {
 
       <div className="hidden md:block">
         <CarouselDots api={desktopApi} activeIndex={desktopPanel} count={panels.length} />
-        <div className="px-12 lg:px-16">
-          <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
-            <CarouselPrevious className="z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex" />
-            <CarouselContent className="-ml-4">
-              {panels.map((panel, i) => (
-                <CarouselItem key={i} className="basis-[72%] pl-4 lg:basis-[56%]">
-                  <div className="h-[620px]">{panel}</div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselNext className="z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex" />
-          </Carousel>
-        </div>
+        <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
+          <CarouselPrevious className="left-[7%] z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex lg:left-[15%]" />
+          <CarouselContent className="-ml-4">
+            {panels.map((panel, i) => (
+              <CarouselItem key={i} className="basis-[72%] pl-4 lg:basis-[56%]">
+                <div className="h-[620px]">{panel}</div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselNext className="right-[7%] z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex lg:right-[15%]" />
+        </Carousel>
       </div>
 
       <div className="mt-8 text-center">
