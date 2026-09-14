@@ -53,7 +53,7 @@ export function GeneratingDialog({ open, onLeave }: { open: boolean; onLeave?: (
   return (
     <Dialog open={open}>
       <DialogContent
-        className="max-w-md border-2 border-primary [&>button]:hidden"
+        className="w-[calc(100%-2rem)] max-w-md rounded-3xl border-2 border-primary p-5 sm:p-6 [&>button]:hidden"
         onEscapeKeyDown={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => e.preventDefault()}
         onInteractOutside={(e) => e.preventDefault()}
