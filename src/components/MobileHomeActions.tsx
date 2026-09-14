@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
+import { BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
 import coachImage from "@/assets/coach-stopwatch-card.jpg";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
+import aboutImage from "@/assets/about-smartygym-card.jpg";
 import founderPhoto from "@/assets/haris-falas-coach.png";
 import toolsImage from "@/assets/explore-tools.jpg";
 import exerciseLibraryImage from "@/assets/explore-exercise-library.jpg";
