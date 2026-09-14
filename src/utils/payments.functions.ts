@@ -92,9 +92,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         ui_mode: "embedded_page",
         return_url: data.returnUrl,
         customer: customerId,
-        managed_payments: { enabled: true },
         ...(!isRecurring && { payment_intent_data: { description: productDescription } }),
-        metadata: { userId: context.userId, managed_payments: "true" },
+        metadata: { userId: context.userId, managed_payments: "false" },
         ...(isRecurring && {
           subscription_data: { metadata: { userId: context.userId } },
         }),
