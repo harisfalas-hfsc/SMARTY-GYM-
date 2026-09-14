@@ -9,16 +9,36 @@ import { useCallback, useEffect, useRef, useState } from "react";
  */
 const inFlight = new Map<string, Promise<unknown>>();
 
+/**
+ * Short-lived in-memory results, so leaving a page and coming straight back
+ * paints instantly instead of showing a spinner again. Cleared on reload.
+ */
+const FRESH_MS = 60_000;
+const results = new Map<string, { at: number; value: unknown }>();
+
 export function loadRemote<T>(
   key: string,
   loader: () => Promise<T>,
   _userId?: string | null,
 ): Promise<T> {
+  const cached = results.get(key);
+  if (cached && Date.now() - cached.at < FRESH_MS) return Promise.resolve(cached.value as T);
   const existing = inFlight.get(key) as Promise<T> | undefined;
   if (existing) return existing;
-  const request = loader().finally(() => inFlight.delete(key));
+  const request = loader()
+    .then((value) => {
+      results.set(key, { at: Date.now(), value });
+      return value;
+    })
+    .finally(() => inFlight.delete(key));
   inFlight.set(key, request);
   return request;
+}
+
+/** Drops cached results so the next read hits the backend again. */
+export function invalidateRemote(prefix?: string) {
+  if (!prefix) return results.clear();
+  for (const key of [...results.keys()]) if (key.startsWith(prefix)) results.delete(key);
 }
 
 type State<T> = {
