@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 type CarouselAction = {
   title: string;
   description: string;
-  to: "/coach" | "/wod" | "/pricing";
+  to: "/coach" | "/wod" | "/pricing" | "/about";
   image: string;
   icon: LucideIcon;
 };
