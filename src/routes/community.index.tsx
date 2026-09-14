@@ -337,7 +337,7 @@ function CommunityPage() {
         <CarouselDots api={desktopApi} activeIndex={desktopPanel} count={panels.length} />
         <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
           <CarouselPrevious
-            className="hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex left-[2%]"
+            className="left-[2%] z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex"
           />
           <CarouselContent className="-ml-4">
             {panels.map((panel, i) => (
@@ -347,7 +347,7 @@ function CommunityPage() {
             ))}
           </CarouselContent>
           <CarouselNext
-            className="hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex right-[2%]"
+            className="right-[2%] z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex"
           />
         </Carousel>
       </div>
