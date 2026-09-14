@@ -45,7 +45,7 @@ export const PAGE_SEO: PageSeo[] = [
   {
     path: "/",
     name: "Home",
-    title: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
+    title: "SmartyGym — YOUR GYM RE-IMAGINED ANYWHERE, ANYTIME.",
     description:
       "An online gym with a personal coach: get personalized workouts built around your goals, your equipment and your schedule, programmed on sports science.",
     keyphrase: "online gym with a personal coach",

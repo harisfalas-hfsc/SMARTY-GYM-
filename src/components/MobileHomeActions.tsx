@@ -53,7 +53,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
     },
     {
       title: "About Smarty Gym",
-      description: "Your online gym, anywhere, anytime",
+      description: "YOUR GYM RE-IMAGINED ANYWHERE, ANYTIME.",
       to: "/about",
       image: aboutImage,
       icon: Info,
