@@ -69,6 +69,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { freeAccessMode } = useFreeAccessMode();
   return (
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
       {/* MOBILE — consistent with every other page: centered header + CTAs */}
@@ -92,7 +93,7 @@ function Home() {
           }
         />
 
-        <MobileHomeActions showPricing={false} />
+        <MobileHomeActions showPricing={!freeAccessMode} />
       </section>
 
 
