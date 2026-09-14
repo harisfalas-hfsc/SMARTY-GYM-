@@ -24,7 +24,7 @@ export const Route = createFileRoute("/terms")({
       {
         name: "description",
         content:
-          "Terms and conditions for using SmartyGym — an AI-generated personalized training planning app, part of the Smarty family.",
+          "Terms and conditions for using SmartyGym, an AI-generated personalized training planning app.",
       },
       { property: "og:title", content: "Terms & Conditions — SmartyGym" },
       {

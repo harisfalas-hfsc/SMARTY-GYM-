@@ -1,10 +1,10 @@
-# SMARTY WORKOUT 
+# SMARTYGYM
 
-I want you to go to my dashboard and see the Smarty Diet project I have, and I want to copy paste it without the Stripe payments. And this time, it-- this project will not create diet, but workout. It will be Smarty Workout. Do it exactly the same. Design, structure, layout, style, exactly the same, but change whenever it says Smarty Diet, it's Smarty Workout and the about also. It will not create diets, but workouts.
+Personalized workouts, training tools, community features, and coaching from SMARTYGYM.
 
 This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://smarty-workout-buddy.lovable.app
+**Live app**: https://smartygym.com
 
 ## Build with Lovable
 
