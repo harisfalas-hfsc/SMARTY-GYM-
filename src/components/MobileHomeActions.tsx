@@ -51,6 +51,13 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       image: wodImage,
       icon: CalendarCheck,
     },
+    {
+      title: "About Smarty Gym",
+      description: "Your online gym, anywhere, anytime",
+      to: "/about",
+      image: aboutImage,
+      icon: Info,
+    },
     ...(showPricing
       ? [
           {
