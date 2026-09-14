@@ -28,6 +28,10 @@ const OG_IMAGE = "https://smartygym.com/og-social.jpg";
 const SITE_DESCRIPTION =
   "Personalized workouts built from your goals, experience, equipment and limitations, guided by Smarty Coach and sports scientist Haris Falas.";
 
+const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var u=navigator.userAgent||'';var c=!!window.Capacitor;var a=u.indexOf('; wv)')!==-1||u.indexOf(' wv ')!==-1;var i=(u.indexOf('iPhone')!==-1||u.indexOf('iPad')!==-1||u.indexOf('iPod')!==-1)&&u.indexOf('AppleWebKit')!==-1&&u.indexOf('Safari')===-1;if(c||a||i){var r=document.documentElement;r.classList.add('native-shell');r.style.backgroundColor='#000';}}catch(e){}})();`;
+
+const NATIVE_LAUNCH_SCRIPT = `(function(){var l=document.getElementById('native-web-launch');if(!l)return;var done=function(){l.classList.add('native-launch-ready');};window.addEventListener('smartygym:native-ready',done,{once:true});requestAnimationFrame(function(){requestAnimationFrame(done);});setTimeout(done,1000);})();`;
+
 
 const KEYWORDS = [
   "personalized workout generator",
@@ -424,13 +428,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark" style={{ colorScheme: "dark" }} suppressHydrationWarning>
+    <html
+      lang="en"
+      className="dark"
+      style={{ colorScheme: "dark", backgroundColor: "#000000" }}
+      suppressHydrationWarning
+    >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: NATIVE_WRAPPER_INIT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <style>{`html,body{margin:0;min-height:100%;background:#000}html:not(.native-shell) #native-web-launch{display:none}html.native-shell #native-web-launch{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;background:#000}html.native-shell #native-web-launch img{width:88px;height:88px;object-fit:contain}`}</style>
         <HeadContent />
       </head>
-      <body>
+      <body style={{ backgroundColor: "#000000" }}>
+        <div id="native-web-launch" aria-hidden="true">
+          <img src="/icon-192.png" alt="" width="88" height="88" />
+        </div>
         {children}
+        <script dangerouslySetInnerHTML={{ __html: NATIVE_LAUNCH_SCRIPT }} />
         <Scripts />
       </body>
     </html>
@@ -443,6 +458,14 @@ function RootComponent() {
   // Seed synchronously so every useFreeAccessMode() consumer renders the right
   // copy on the very first paint (SSR and hydration) — no paid-copy flash.
   seedFreeAccessMode(freeAccessMode);
+
+  useEffect(() => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        window.dispatchEvent(new Event("smartygym:native-ready"));
+      });
+    });
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

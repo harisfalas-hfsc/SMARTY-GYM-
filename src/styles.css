@@ -119,6 +119,13 @@
 }
 
 @layer base {
+  html.native-shell {
+    --app-safe-area-top: 0px;
+    background-color: oklch(0 0 0);
+  }
+  html.native-shell body {
+    background-color: oklch(0 0 0);
+  }
   * {
     border-color: var(--color-border);
   }
@@ -129,6 +136,31 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
+
+#native-web-launch {
+  display: none;
+}
+
+html.native-shell #native-web-launch {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: grid;
+  place-items: center;
+  background-color: oklch(0 0 0);
+  transition: opacity 120ms ease;
+}
+
+html.native-shell #native-web-launch img {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+}
+
+html.native-shell #native-web-launch.native-launch-ready {
+  pointer-events: none;
+  opacity: 0;
 }
 
 @layer utilities {
