@@ -60,6 +60,13 @@ if (manifest) {
   for (const key of entry.imports ?? []) {
     for (const file of manifest[key]?.css ?? []) css.add(file);
   }
+  // The global stylesheet is emitted as its own chunk, not attached to the
+  // entry. Without it the shell would paint unstyled white on launch.
+  if (css.size === 0) {
+    const assets = await readdir(resolve(clientDir, "assets"));
+    for (const f of assets.filter((f) => f.endsWith(".css"))) css.add(`assets/${f}`);
+  }
+  if (css.size === 0) throw new Error("No stylesheet found for the native shell.");
 } else {
   const scanned = await findEntryByScan();
   entry = scanned;
