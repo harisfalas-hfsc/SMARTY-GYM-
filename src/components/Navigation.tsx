@@ -98,7 +98,7 @@ export function Navigation() {
   return (
     <header
       className="sticky top-0 z-40 w-full bg-background"
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
+      style={{ paddingTop: "var(--app-safe-area-top, env(safe-area-inset-top))" }}
     >
       <div className="flex h-11 items-center justify-between gap-2 px-3">
         <div className="flex min-w-0 items-center gap-2">
@@ -280,7 +280,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
       <aside
         className="absolute left-0 top-0 flex h-full w-[85%] max-w-[340px] flex-col bg-background shadow-2xl"
-        style={{ paddingTop: "env(safe-area-inset-top)" }}
+        style={{ paddingTop: "var(--app-safe-area-top, env(safe-area-inset-top))" }}
       >
         <div className="flex h-12 items-center justify-between px-4">
           <div className="text-base font-extrabold">
