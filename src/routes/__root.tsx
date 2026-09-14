@@ -459,7 +459,8 @@ function RootComponent() {
           </main>
           <SiteFooter />
           <Toaster />
-          <SisterAppsPopup />
+          {/* Smarty Family cross-promo panel — temporarily removed, keep for later. */}
+          {false && <SisterAppsPopup />}
           <BottomNav />
         </div>
       </ThemeProvider>
