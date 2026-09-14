@@ -100,8 +100,8 @@ ${[...css].map((f) => `    <link rel="stylesheet" href="/${f}" />`).join("\n")}
         launch.classList.add("native-launch-ready");
         window.setTimeout(() => launch.remove(), 160);
       };
-      window.addEventListener("load", () => window.requestAnimationFrame(revealApp), { once: true });
-      window.setTimeout(revealApp, 2500);
+      window.addEventListener("smartygym:native-ready", revealApp, { once: true });
+      window.setTimeout(revealApp, 8000);
     </script>
   </body>
 </html>
