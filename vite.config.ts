@@ -22,6 +22,11 @@ export default defineConfig({
         },
       },
     ],
+    build: {
+      // The native shell builder reads this manifest to find the hashed entry
+      // instead of scanning minified bundles for `createRoot`.
+      manifest: true,
+    },
     define: {
       __APP_BUILD_ID__: JSON.stringify(APP_BUILD_ID),
     },
