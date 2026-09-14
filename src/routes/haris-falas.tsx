@@ -105,7 +105,7 @@ export const Route = createFileRoute("/haris-falas")({
               ],
               sameAs: [
                 URL,
-                "https://www.instagram.com/smartygym",
+                "https://www.instagram.com/thesmartygym",
                 "https://smartygym.com",
               ],
               worksFor: { "@id": "https://smartygym.com/#organization" },
