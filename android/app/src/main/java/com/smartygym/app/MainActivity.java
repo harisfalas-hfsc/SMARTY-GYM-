@@ -1,4 +1,4 @@
-package com.smartyworkout.app;
+package com.smartygym.app;
 
 import android.os.Bundle;
 import com.getcapacitor.BridgeActivity;

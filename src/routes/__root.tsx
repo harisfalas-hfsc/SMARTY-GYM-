@@ -28,7 +28,7 @@ const OG_IMAGE = "https://smartygym.com/og-social.jpg";
 const SITE_DESCRIPTION =
   "Personalized workouts built from your goals, experience, equipment and limitations, guided by Smarty Coach and sports scientist Haris Falas.";
 
-const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var u=navigator.userAgent||'';var q=new URLSearchParams(location.search);var stored=false;try{stored=localStorage.getItem('smartygym-native-wrapper')==='1';}catch(e){}var c=!!window.Capacitor;var a=/;\\s?wv\\)/i.test(u)||/\\swv\\s/i.test(u)||/Version\\/\\d+(?:\\.\\d+)?[^;]*Chrome\\//i.test(u);var i=/(iPhone|iPad|iPod)/i.test(u)&&/AppleWebKit/i.test(u)&&!/Safari/i.test(u);var marked=q.has('nativeApp')||q.has('forceHideBadge')||stored;if(!(c||a||i||marked))return;var r=document.documentElement;r.classList.add('native-shell');r.style.setProperty('--app-safe-area-top','0px');r.style.backgroundColor='#000';try{localStorage.setItem('smartygym-native-wrapper','1');}catch(e){}var hide=function(){try{var p=window.Capacitor&&window.Capacitor.Plugins;if(!p)return;var legacy=p.StatusBar;if(legacy&&typeof legacy.setOverlaysWebView==='function'){Promise.resolve(legacy.setOverlaysWebView({overlay:true})).catch(function(){});}var bars=p.SystemBars||legacy;if(bars&&typeof bars.hide==='function'){Promise.resolve(bars.hide({bar:'StatusBar'})).catch(function(){});}}catch(e){}};hide();document.addEventListener('deviceready',hide,{once:true});window.addEventListener('load',hide,{once:true});setTimeout(hide,250);setTimeout(hide,1000);}catch(e){}})();`;
+const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var q=new URLSearchParams(location.search);var marked=q.get('nativeApp')==='true'||q.get('forceHideBadge')==='true';var native=!!window.Capacitor||marked;if(!native)return;var r=document.documentElement;r.classList.add('native-shell');r.style.backgroundColor='#000';var hide=function(){try{var p=window.Capacitor&&window.Capacitor.Plugins;if(!p)return;var legacy=p.StatusBar;if(legacy&&typeof legacy.setOverlaysWebView==='function'){Promise.resolve(legacy.setOverlaysWebView({overlay:true})).catch(function(){});}var bars=p.SystemBars||legacy;if(bars&&typeof bars.hide==='function'){Promise.resolve(bars.hide({bar:'StatusBar'})).catch(function(){});}}catch(e){}};hide();document.addEventListener('deviceready',hide,{once:true});window.addEventListener('load',hide,{once:true});}catch(e){}})();`;
 
 
 const KEYWORDS = [
@@ -452,14 +452,6 @@ function RootComponent() {
   // Seed synchronously so every useFreeAccessMode() consumer renders the right
   // copy on the very first paint (SSR and hydration) — no paid-copy flash.
   seedFreeAccessMode(freeAccessMode);
-
-  useEffect(() => {
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        window.dispatchEvent(new Event("smartygym:native-ready"));
-      });
-    });
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
