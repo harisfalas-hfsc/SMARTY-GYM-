@@ -207,7 +207,7 @@ const RULES: Rule[] = [
       "• Workout Timer — intervals, EMOM, Tabata and AMRAP countdowns with audio cues.\n" +
       "• Rounds Tracker — a big tap target to count rounds and reps without losing your place.\n" +
       "• 1RM Calculator — estimates your one-rep max from a set you actually performed, and gives you the percentage table for programming.\n\n" +
-      "They all keep running with the screen locked on and work offline once the app has been opened at least once.",
+      "They keep running with the screen locked on while you train.",
   },
   {
     topic: "offline",
@@ -216,9 +216,8 @@ const RULES: Rule[] = [
     keywords: ["app store", "download", "sync", "airplane", "gym has no signal", "cache"],
     body:
       "About offline mode:\n\n" +
-      "• Smarty Gym is offline-first: once you sign in, your profile, your workouts, your logbook and the exercise library are stored on your device automatically — you do not need to visit each page first.\n" +
-      "• In the gym with no signal you can still open, play and log workouts. Everything you log is queued and syncs the moment you are back online (you will see the sync pill confirm it).\n" +
-      "• You stay signed in offline on a device you already used to sign in.\n" +
+      "• Smarty Gym needs an internet connection so it always loads your current account, workouts and community activity.\n" +
+      "• The phone apps and browser-installed version display the same live Smarty Gym experience.\n" +
       "• You can install it like a native app: in your browser menu choose Add to Home Screen / Install app.",
   },
   {

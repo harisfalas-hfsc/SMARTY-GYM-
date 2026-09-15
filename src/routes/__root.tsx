@@ -28,9 +28,7 @@ const OG_IMAGE = "https://smartygym.com/og-social.jpg";
 const SITE_DESCRIPTION =
   "Personalized workouts built from your goals, experience, equipment and limitations, guided by Smarty Coach and sports scientist Haris Falas.";
 
-const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var u=navigator.userAgent||'';var c=!!window.Capacitor;var a=/;\\s?wv\\)/i.test(u)||/Version\\/\\d+(?:\\.\\d+)?[^;]*Chrome\\//i.test(u);var i=/(iPhone|iPad|iPod)/i.test(u)&&/AppleWebKit/i.test(u)&&!/Safari/i.test(u);if(!(c||a||i))return;var r=document.documentElement;r.classList.add('native-shell');r.style.backgroundColor='#000';var hide=function(){try{var p=window.Capacitor&&window.Capacitor.Plugins;if(!p)return;var legacy=p.StatusBar;if(legacy&&typeof legacy.setOverlaysWebView==='function'){Promise.resolve(legacy.setOverlaysWebView({overlay:true})).catch(function(){});}var bars=p.SystemBars||legacy;if(bars&&typeof bars.hide==='function'){Promise.resolve(bars.hide({bar:'StatusBar'})).catch(function(){});}}catch(e){}};hide();document.addEventListener('deviceready',hide,{once:true});window.addEventListener('load',hide,{once:true});setTimeout(hide,250);setTimeout(hide,1000);}catch(e){}})();`;
-
-const NATIVE_LAUNCH_SCRIPT = `(function(){var l=document.getElementById('native-web-launch');if(!l)return;var done=function(){l.classList.add('native-launch-ready');};window.addEventListener('smartygym:native-ready',done,{once:true});requestAnimationFrame(function(){requestAnimationFrame(done);});setTimeout(done,1000);})();`;
+const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var u=navigator.userAgent||'';var q=new URLSearchParams(location.search);var stored=false;try{stored=localStorage.getItem('smartygym-native-wrapper')==='1';}catch(e){}var c=!!window.Capacitor;var a=/;\\s?wv\\)/i.test(u)||/\\swv\\s/i.test(u)||/Version\\/\\d+(?:\\.\\d+)?[^;]*Chrome\\//i.test(u);var i=/(iPhone|iPad|iPod)/i.test(u)&&/AppleWebKit/i.test(u)&&!/Safari/i.test(u);var marked=q.has('nativeApp')||q.has('forceHideBadge')||stored;if(!(c||a||i||marked))return;var r=document.documentElement;r.classList.add('native-shell');r.style.setProperty('--app-safe-area-top','0px');r.style.backgroundColor='#000';try{localStorage.setItem('smartygym-native-wrapper','1');}catch(e){}var hide=function(){try{var p=window.Capacitor&&window.Capacitor.Plugins;if(!p)return;var legacy=p.StatusBar;if(legacy&&typeof legacy.setOverlaysWebView==='function'){Promise.resolve(legacy.setOverlaysWebView({overlay:true})).catch(function(){});}var bars=p.SystemBars||legacy;if(bars&&typeof bars.hide==='function'){Promise.resolve(bars.hide({bar:'StatusBar'})).catch(function(){});}}catch(e){}};hide();document.addEventListener('deviceready',hide,{once:true});window.addEventListener('load',hide,{once:true});setTimeout(hide,250);setTimeout(hide,1000);}catch(e){}})();`;
 
 
 const KEYWORDS = [
@@ -437,15 +435,11 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: NATIVE_WRAPPER_INIT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-        <style>{`html,body{margin:0;min-height:100%;background:#000}html:not(.native-shell) #native-web-launch{display:none}html.native-shell #native-web-launch{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;background:#000}html.native-shell #native-web-launch img{width:88px;height:88px;object-fit:contain}`}</style>
+        <style>{`html,body{margin:0;min-height:100%;background:#000}`}</style>
         <HeadContent />
       </head>
       <body style={{ backgroundColor: "#000000" }}>
-        <div id="native-web-launch" aria-hidden="true">
-          <img src="/icon-192.png" alt="" width="88" height="88" />
-        </div>
         {children}
-        <script dangerouslySetInnerHTML={{ __html: NATIVE_LAUNCH_SCRIPT }} />
         <Scripts />
       </body>
     </html>

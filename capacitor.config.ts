@@ -1,19 +1,12 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
-/**
- * Native wrapper (iOS + Android) for SMARTYGYM.
- *
- * IMPORTANT: there is NO `server.url`. A remote-loaded shell cannot start
- * without internet (that is the `net::ERR_INTERNET_DISCONNECTED` white screen).
- * The app ships the built web shell inside the binary (`dist/native`, produced
- * by `bun run build:native`), so it boots fully offline and then talks to the
- * backend only when a connection exists.
- */
+/** Native wrappers render the same live mobile site as Chrome and the PWA. */
 const config: CapacitorConfig = {
   appId: "com.smartyworkout.app",
   appName: "SMARTYGYM",
-  webDir: "dist/native",
+  webDir: "dist/client",
   server: {
+    url: "https://smartygym.com",
     androidScheme: "https",
     iosScheme: "https",
     cleartext: false,

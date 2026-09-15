@@ -27,13 +27,11 @@ function revealNativeApp() {
 }
 
 startTransition(async () => {
-  if (document.documentElement.classList.contains("native-shell")) {
-    const root = document.getElementById("root");
-    if (!root) return;
-
+  const localNativeRoot = document.getElementById("root");
+  if (localNativeRoot) {
     const router = getRouter();
     await router.load();
-    createRoot(root).render(
+    createRoot(localNativeRoot).render(
       <StrictMode>
         <RouterProvider router={router} />
       </StrictMode>,
@@ -48,4 +46,5 @@ startTransition(async () => {
       <StartClient />
     </StrictMode>,
   );
+  window.requestAnimationFrame(() => window.requestAnimationFrame(revealNativeApp));
 });
