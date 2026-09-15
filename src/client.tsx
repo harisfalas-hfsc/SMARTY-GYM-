@@ -22,7 +22,6 @@ async function prepareNativeWindow() {
 }
 
 function revealNativeApp() {
-  window.dispatchEvent(new Event("smartygym:native-ready"));
   void prepareNativeWindow();
 }
 

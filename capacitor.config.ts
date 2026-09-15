@@ -2,7 +2,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 
 /** Native wrappers render the same live mobile site as Chrome and the PWA. */
 const config: CapacitorConfig = {
-  appId: "com.smartyworkout.app",
+  appId: "com.smartygym.app",
   appName: "SMARTYGYM",
   webDir: "dist/client",
   server: {

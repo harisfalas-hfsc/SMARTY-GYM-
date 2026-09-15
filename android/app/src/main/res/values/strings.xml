@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">SMARTYGYM</string>
     <string name="title_activity_main">SMARTYGYM</string>
-    <string name="package_name">com.smartyworkout.app</string>
-    <string name="custom_url_scheme">com.smartyworkout.app</string>
+    <string name="package_name">com.smartygym.app</string>
+    <string name="custom_url_scheme">com.smartygym.app</string>
 </resources>
