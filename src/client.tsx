@@ -21,14 +21,6 @@ async function prepareNativeWindow() {
   }
 }
 
-async function revealNativeApp() {
-  await prepareNativeWindow();
-  const bootScreen = document.getElementById("native-boot-screen");
-  if (!bootScreen) return;
-  bootScreen.classList.add("is-hidden");
-  window.setTimeout(() => bootScreen.remove(), 220);
-}
-
 startTransition(async () => {
   const localNativeRoot = document.getElementById("root");
   if (localNativeRoot) {
@@ -40,7 +32,7 @@ startTransition(async () => {
       </StrictMode>,
     );
     window.requestAnimationFrame(() =>
-      window.requestAnimationFrame(() => void revealNativeApp()),
+      window.requestAnimationFrame(() => void prepareNativeWindow()),
     );
     return;
   }
@@ -52,6 +44,6 @@ startTransition(async () => {
     </StrictMode>,
   );
   window.requestAnimationFrame(() =>
-    window.requestAnimationFrame(() => void revealNativeApp()),
+    window.requestAnimationFrame(() => void prepareNativeWindow()),
   );
 });
