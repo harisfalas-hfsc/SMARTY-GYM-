@@ -4,7 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 /** Key of the single app_settings row that drives Global Free Access Mode. */
 export const FREE_ACCESS_SETTING_KEY = "free_access_mode";
 
-let cached: boolean | null = null;
+// Free access is the safe first paint. The live master setting is refreshed
+// after hydration so it never delays the initial page response.
+let cached: boolean | null = true;
 let inFlight: Promise<boolean> | null = null;
 const subscribers = new Set<(value: boolean) => void>();
 
@@ -19,7 +21,7 @@ function publish(value: boolean) {
  */
 export async function fetchFreeAccessMode(force = false): Promise<boolean> {
   if (!force && cached !== null) return cached;
-  if (!force && inFlight) return inFlight;
+  if (inFlight) return inFlight;
   inFlight = (async () => {
     try {
       const { data, error } = await supabase
@@ -65,7 +67,7 @@ export function useFreeAccessMode(): { freeAccessMode: boolean; loading: boolean
       if (active) setValue(v);
     };
     subscribers.add(listener);
-    void fetchFreeAccessMode()
+    void fetchFreeAccessMode(true)
       .then((v) => {
         if (active) {
           setValue(v);
