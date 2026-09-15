@@ -9,8 +9,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .black
-        let bridgeViewController = SmartyBridgeViewController()
+        let bridgeViewController = CAPBridgeViewController()
         bridgeViewController.view.backgroundColor = .black
+        bridgeViewController.bridgedWebView?.isOpaque = false
+        bridgeViewController.bridgedWebView?.backgroundColor = .black
+        bridgeViewController.bridgedWebView?.scrollView.backgroundColor = .black
         window?.rootViewController = bridgeViewController
         window?.makeKeyAndVisible()
 
