@@ -21,8 +21,12 @@ async function prepareNativeWindow() {
   }
 }
 
-function revealNativeApp() {
-  void prepareNativeWindow();
+async function revealNativeApp() {
+  await prepareNativeWindow();
+  const bootScreen = document.getElementById("native-boot-screen");
+  if (!bootScreen) return;
+  bootScreen.classList.add("is-hidden");
+  window.setTimeout(() => bootScreen.remove(), 220);
 }
 
 startTransition(async () => {
@@ -35,7 +39,9 @@ startTransition(async () => {
         <RouterProvider router={router} />
       </StrictMode>,
     );
-    window.requestAnimationFrame(() => window.requestAnimationFrame(revealNativeApp));
+    window.requestAnimationFrame(() =>
+      window.requestAnimationFrame(() => void revealNativeApp()),
+    );
     return;
   }
 
@@ -45,5 +51,7 @@ startTransition(async () => {
       <StartClient />
     </StrictMode>,
   );
-  window.requestAnimationFrame(() => window.requestAnimationFrame(revealNativeApp));
+  window.requestAnimationFrame(() =>
+    window.requestAnimationFrame(() => void revealNativeApp()),
+  );
 });
