@@ -120,10 +120,9 @@
 
 @layer base {
   html.native-shell {
-    /* Trust the OS inset only: Android's webview reports 0 because it already
-       sits below the status bar, iOS reports the real notch height. Never add
-       a fixed value here or the gap is duplicated. */
-    --app-safe-area-top: env(safe-area-inset-top, 0px);
+    /* The native WebView already positions the app below the system status
+       area. Adding the CSS safe-area inset again creates the empty top gap. */
+    --app-safe-area-top: 0px;
     background-color: oklch(0 0 0);
   }
   html.native-shell body {
