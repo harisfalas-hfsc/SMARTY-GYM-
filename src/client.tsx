@@ -13,6 +13,7 @@ async function prepareNativeWindow() {
       import("@capacitor/status-bar"),
       import("@capacitor/splash-screen"),
     ]);
+    await StatusBar.setOverlaysWebView({ overlay: true });
     await StatusBar.hide();
     await SplashScreen.hide({ fadeOutDuration: 120 });
   } catch {
