@@ -19,7 +19,7 @@ function publish(value: boolean) {
  */
 export async function fetchFreeAccessMode(force = false): Promise<boolean> {
   if (!force && cached !== null) return cached;
-  if (!force && inFlight) return inFlight;
+  if (inFlight) return inFlight;
   inFlight = (async () => {
     try {
       const { data, error } = await supabase
@@ -65,7 +65,7 @@ export function useFreeAccessMode(): { freeAccessMode: boolean; loading: boolean
       if (active) setValue(v);
     };
     subscribers.add(listener);
-    void fetchFreeAccessMode()
+    void fetchFreeAccessMode(true)
       .then((v) => {
         if (active) {
           setValue(v);
