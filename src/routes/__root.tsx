@@ -340,7 +340,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       throw redirect({ href: target, statusCode: 301 });
     }
   },
-  head: ({ loaderData }) => ({
+  head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
@@ -398,7 +398,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(jsonLdGraph(Boolean(loaderData?.freeAccessMode))),
+        children: JSON.stringify(jsonLdGraph(true)),
       },
       {
         async: true,
