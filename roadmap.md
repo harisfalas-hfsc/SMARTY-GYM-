@@ -1,5 +1,5 @@
 # Roadmap
 
-- [ ] Compare the old SMARTYGYM startup response and mobile loading behavior with the current project.
-- [ ] Apply only the changes required to prevent the white loading page.
+- [x] Compare the old SMARTYGYM startup response and mobile loading behavior with the current project.
+- [x] Apply only the changes required to prevent the white loading page.
 - [ ] Verify first paint and loading behavior on Android and iOS signatures.

@@ -28,6 +28,11 @@ const SITE_DESCRIPTION =
 
 const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var q=new URLSearchParams(location.search);var marked=q.get('nativeApp')==='true'||q.get('forceHideBadge')==='true';var ua=navigator.userAgent||'';var android=/Android/i.test(ua);var androidWebView=android&&(ua.indexOf('; wv)')>=0||ua.indexOf(';wv)')>=0||(ua.indexOf('Version/')>=0&&ua.indexOf('Chrome/')>=0));var iosWebView=/(iPhone|iPad|iPod)/i.test(ua)&&/AppleWebKit/i.test(ua)&&!/Safari/i.test(ua);var native=!!window.Capacitor||marked||androidWebView||iosWebView;if(!native)return;var r=document.documentElement;r.classList.add('native-shell');r.style.backgroundColor='#000';var hide=function(){try{var p=window.Capacitor&&window.Capacitor.Plugins;if(!p)return;var legacy=p.StatusBar;if(legacy&&typeof legacy.setOverlaysWebView==='function'){Promise.resolve(legacy.setOverlaysWebView({overlay:true})).catch(function(){});}var bars=p.SystemBars||legacy;if(bars&&typeof bars.hide==='function'){Promise.resolve(bars.hide({bar:'StatusBar'})).catch(function(){});}}catch(e){}};hide();document.addEventListener('deviceready',hide,{once:true});window.addEventListener('load',hide,{once:true});}catch(e){}})();`;
 
+// Native WebViews get the same dark first frame as the previous site. This is
+// independent of React and removes itself on load or after four seconds, so it
+// can never trap the website behind a permanent logo screen.
+const NATIVE_FIRST_FRAME_SCRIPT = `(function(){if(!document.documentElement.classList.contains('native-shell'))return;document.documentElement.classList.add('native-first-frame');var clear=function(){document.documentElement.classList.remove('native-first-frame')};window.addEventListener('load',function(){requestAnimationFrame(function(){requestAnimationFrame(clear)})},{once:true});setTimeout(clear,4000)})();`;
+
 
 const KEYWORDS = [
   "personalized workout generator",
@@ -425,8 +430,9 @@ function RootShell({ children }: { children: ReactNode }) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: NATIVE_WRAPPER_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: NATIVE_FIRST_FRAME_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-        <style>{`html,body{margin:0;min-height:100%;background:#000}`}</style>
+        <style>{`html,body{margin:0;min-height:100%;background:#000}html.native-first-frame body::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#000 url('/icon-512.png') center/104px 104px no-repeat;pointer-events:none}`}</style>
         <HeadContent />
       </head>
       <body style={{ backgroundColor: "#000000" }}>
