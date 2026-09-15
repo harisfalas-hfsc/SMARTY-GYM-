@@ -4,6 +4,11 @@ import { StartClient } from "@tanstack/react-start/client";
 import { RouterProvider } from "@tanstack/react-router";
 
 import { getRouter } from "./router";
+import { purgeLegacyAppShells } from "./lib/service-worker-cleanup";
+
+// smartygym.com previously hosted a different app. Clear its retired offline
+// shell before hydration so an installed WebView cannot display its stale page.
+void purgeLegacyAppShells();
 
 async function prepareNativeWindow() {
   if (!document.documentElement.classList.contains("native-shell")) return;
@@ -21,6 +26,10 @@ async function prepareNativeWindow() {
   }
 }
 
+function revealFirstFrame() {
+  document.documentElement.classList.remove("native-first-frame");
+}
+
 startTransition(async () => {
   const localNativeRoot = document.getElementById("root");
   if (localNativeRoot) {
@@ -32,7 +41,10 @@ startTransition(async () => {
       </StrictMode>,
     );
     window.requestAnimationFrame(() =>
-      window.requestAnimationFrame(() => void prepareNativeWindow()),
+      window.requestAnimationFrame(() => {
+        revealFirstFrame();
+        void prepareNativeWindow();
+      }),
     );
     return;
   }
@@ -44,6 +56,9 @@ startTransition(async () => {
     </StrictMode>,
   );
   window.requestAnimationFrame(() =>
-    window.requestAnimationFrame(() => void prepareNativeWindow()),
+    window.requestAnimationFrame(() => {
+      revealFirstFrame();
+      void prepareNativeWindow();
+    }),
   );
 });
