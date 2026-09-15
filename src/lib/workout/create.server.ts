@@ -8,7 +8,7 @@ import {
   type Format,
   type StrengthFocus,
 } from "@/lib/workout/spec";
-import { microMinutes, resolveDifficulty } from "@/lib/workout/programming";
+import { resolveDifficulty } from "@/lib/workout/programming";
 import { wodRationale } from "@/lib/wod-cycle";
 import { whyThisSession } from "@/lib/coach-rules/why";
 import { loadPerformanceOverview } from "@/lib/performance.server";
@@ -48,7 +48,6 @@ export const GOAL_TO_CATEGORY: Record<string, Category> = {
   challenge: "CHALLENGE",
   mobility: "MOBILITY & STABILITY",
   pilates: "PILATES",
-  micro: "MICRO-WORKOUTS",
   recovery: "RECOVERY",
 };
 
@@ -225,8 +224,6 @@ export async function createWorkoutForUser(
     }
   }
 
-  if (!data.wod && minutes <= 5) category = "MICRO-WORKOUTS";
-
   const requestedLevel = String(data.level ?? "auto");
   let requestedStars = requestedStarsFor(
     (prof as never) ?? null,
@@ -249,15 +246,6 @@ export async function createWorkoutForUser(
   // by one level, never below beginner, for coach sessions and WOD alike.
   const { effectiveStars } = resolveDifficulty(requestedStars, mood);
   const stars = effectiveStars;
-
-  // MICRO WORKOUT: an equipment-free 10-minute movement break. Gear choices
-  // never apply here.
-  if (category === "MICRO-WORKOUTS") {
-    minutes = microMinutes(minutes);
-    equipmentIds = ["bodyweight"];
-    equipmentMode = "BODYWEIGHT";
-  }
-
 
   const usedNames = history.map((r) => r.name);
 

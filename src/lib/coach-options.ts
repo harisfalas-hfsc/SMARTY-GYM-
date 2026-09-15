@@ -9,7 +9,6 @@ export const GOALS = [
   { id: "challenge", label: "Challenge" },
   { id: "mobility", label: "Mobility & Stability" },
   { id: "pilates", label: "Pilates" },
-  { id: "micro", label: "Micro Workout" },
 ] as const;
 
 /** Goals that ask the athlete which part of the body the session trains. */
