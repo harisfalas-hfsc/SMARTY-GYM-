@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 /**
- * Native wrapper (iOS + Android) for SmartyWorkout.
+ * Native wrapper (iOS + Android) for SMARTYGYM.
  *
  * IMPORTANT: there is NO `server.url`. A remote-loaded shell cannot start
  * without internet (that is the `net::ERR_INTERNET_DISCONNECTED` white screen).
@@ -11,7 +11,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
  */
 const config: CapacitorConfig = {
   appId: "com.smartyworkout.app",
-  appName: "Smarty Workout",
+  appName: "SMARTYGYM",
   webDir: "dist/native",
   server: {
     androidScheme: "https",
@@ -32,9 +32,13 @@ const config: CapacitorConfig = {
     SplashScreen: {
       backgroundColor: "#000000",
       showSpinner: false,
-      launchAutoHide: true,
-      launchShowDuration: 0,
+      launchAutoHide: false,
+      launchFadeOutDuration: 120,
       androidScaleType: "CENTER",
+    },
+    StatusBar: {
+      overlaysWebView: true,
+      backgroundColor: "#000000",
     },
   },
 };

@@ -85,20 +85,6 @@ const html = `<!doctype html>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#000000" />
     <title>SmartyGym</title>
-    <script>
-      /* Remove the native status-bar window on both current SystemBars and
-         older StatusBar wrappers. This is outside the webpage, so CSS alone
-         cannot remove the strip above the header. */
-      const hideNativeStatusBar = () => {
-        try {
-          const plugins = window.Capacitor?.Plugins;
-          const bars = plugins?.SystemBars ?? plugins?.StatusBar;
-          if (bars?.hide) Promise.resolve(bars.hide({ bar: "StatusBar" })).catch(() => {});
-        } catch {}
-      };
-      hideNativeStatusBar();
-      document.addEventListener("deviceready", hideNativeStatusBar, { once: true });
-    </script>
     <link rel="icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 ${[...css].map((f) => `    <link rel="stylesheet" href="/${f}" />`).join("\n")}
@@ -123,7 +109,7 @@ ${[...css].map((f) => `    <link rel="stylesheet" href="/${f}" />`).join("\n")}
         window.setTimeout(() => launch.remove(), 160);
       };
       window.addEventListener("smartygym:native-ready", revealApp, { once: true });
-      window.setTimeout(revealApp, 3000);
+      window.setTimeout(revealApp, 8000);
     </script>
   </body>
 </html>

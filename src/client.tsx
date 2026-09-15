@@ -5,8 +5,24 @@ import { RouterProvider } from "@tanstack/react-router";
 
 import { getRouter } from "./router";
 
+async function prepareNativeWindow() {
+  if (!document.documentElement.classList.contains("native-shell")) return;
+
+  try {
+    const [{ StatusBar }, { SplashScreen }] = await Promise.all([
+      import("@capacitor/status-bar"),
+      import("@capacitor/splash-screen"),
+    ]);
+    await StatusBar.hide();
+    await SplashScreen.hide({ fadeOutDuration: 120 });
+  } catch {
+    // The same client bundle also runs in ordinary mobile browsers.
+  }
+}
+
 function revealNativeApp() {
   window.dispatchEvent(new Event("smartygym:native-ready"));
+  void prepareNativeWindow();
 }
 
 startTransition(async () => {
@@ -21,7 +37,7 @@ startTransition(async () => {
         <RouterProvider router={router} />
       </StrictMode>,
     );
-    window.requestAnimationFrame(revealNativeApp);
+    window.requestAnimationFrame(() => window.requestAnimationFrame(revealNativeApp));
     return;
   }
 
