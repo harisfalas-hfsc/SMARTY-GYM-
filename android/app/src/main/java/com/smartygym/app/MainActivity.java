@@ -1,6 +1,8 @@
 package com.smartygym.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.webkit.WebView;
 import com.getcapacitor.BridgeActivity;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -10,6 +12,13 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setBackgroundColor(Color.BLACK);
+        if (bridge != null) {
+            WebView webView = bridge.getWebView();
+            if (webView != null) {
+                webView.setBackgroundColor(Color.BLACK);
+            }
+        }
         hideStatusBar();
     }
 

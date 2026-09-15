@@ -9,7 +9,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .black
-        let bridgeViewController = CAPBridgeViewController()
+        let bridgeViewController = SmartyBridgeViewController()
         bridgeViewController.view.backgroundColor = .black
         window?.rootViewController = bridgeViewController
         window?.makeKeyAndVisible()
