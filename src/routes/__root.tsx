@@ -18,7 +18,6 @@ import { SiteFooter } from "../components/SiteFooter";
 import { Toaster } from "../components/ui/sonner";
 import { BottomNav } from "../components/BottomNav";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
-import { getFreeAccessMode } from "../lib/free-access.functions";
 import { seedFreeAccessMode } from "../hooks/useFreeAccessMode";
 
 
@@ -341,13 +340,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       throw redirect({ href: target, statusCode: 301 });
     }
   },
-  loader: async () => {
-    try {
-      return await getFreeAccessMode();
-    } catch {
-      return { freeAccessMode: false };
-    }
-  },
   head: ({ loaderData }) => ({
     meta: [
       { charSet: "utf-8" },
@@ -435,7 +427,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: NATIVE_WRAPPER_INIT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-        <style>{`html,body{margin:0;min-height:100%;background:#000}#native-boot-screen{display:none}.native-shell #native-boot-screen{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#000;opacity:1;transition:opacity 180ms ease}.native-shell #native-boot-screen img{width:104px;height:104px;object-fit:contain}.native-shell #native-boot-screen.is-hidden{opacity:0;pointer-events:none}@media(prefers-reduced-motion:reduce){.native-shell #native-boot-screen{transition:none}}`}</style>
+        <style>{`html,body{margin:0;min-height:100%;background:#000}#native-boot-screen{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#000;opacity:1;transition:opacity 180ms ease}#native-boot-screen img{width:104px;height:104px;object-fit:contain}#native-boot-screen.is-hidden{opacity:0;pointer-events:none}@media(prefers-reduced-motion:reduce){#native-boot-screen{transition:none}}`}</style>
         <HeadContent />
       </head>
       <body style={{ backgroundColor: "#000000" }}>
@@ -451,10 +443,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const { freeAccessMode } = Route.useLoaderData();
-  // Seed synchronously so every useFreeAccessMode() consumer renders the right
-  // copy on the very first paint (SSR and hydration) — no paid-copy flash.
-  seedFreeAccessMode(freeAccessMode);
+  // Free access is the safe first-paint default. The browser refreshes the
+  // master setting immediately after hydration without delaying the HTML.
+  seedFreeAccessMode(true);
 
   return (
     <QueryClientProvider client={queryClient}>
