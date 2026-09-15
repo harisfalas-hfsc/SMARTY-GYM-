@@ -32,18 +32,11 @@ export default defineConfig({
     },
   },
   tanstackStart: {
+    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
+    // nitro/vite builds from this
+    server: { entry: "server" },
     // The custom entry hydrates the website normally and mounts the bundled
     // native shell as a client-rendered app when Capacitor loads index.html.
     client: { entry: "client" },
-    // The submitted phone apps wait for this URL before showing the website.
-    // Emit the homepage as a ready-to-paint file so the WebView receives the
-    // black SMARTYGYM frame without waiting for a server render.
-    prerender: {
-      enabled: true,
-      autoStaticPathsDiscovery: false,
-      crawlLinks: false,
-      failOnError: true,
-    },
-    pages: [{ path: "/" }],
   },
 });
