@@ -89,8 +89,8 @@ const html = `<!doctype html>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 ${[...css].map((f) => `    <link rel="stylesheet" href="/${f}" />`).join("\n")}
     <style>
-      /* Let the real OS inset flow through; the app never adds a second one. */
-      html.native-shell { --app-safe-area-top: env(safe-area-inset-top, 0px); color-scheme: dark; background: #000; }
+      /* The native WebView already accounts for the system status area. */
+      html.native-shell { --app-safe-area-top: 0px; color-scheme: dark; background: #000; }
       html, body, #root { min-height: 100%; margin: 0; background: #000; color: #fff; overscroll-behavior-y: contain; }
       #native-launch { position: fixed; inset: 0; z-index: 2147483647; display: grid; place-items: center; background: #000; transition: opacity 120ms ease; }
       #native-launch img { width: 88px; height: 88px; object-fit: contain; }
