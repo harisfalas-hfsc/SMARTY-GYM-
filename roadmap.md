@@ -2,4 +2,5 @@
 
 - [x] Compare the old SMARTYGYM startup response and mobile loading behavior with the current project.
 - [x] Apply only the changes required to prevent the white loading page.
-- [x] Verify first paint and loading behavior on Android and iOS signatures.
+- [x] Inspect the submitted-app startup recording frame by frame and identify the white native loading view.
+- [ ] Confirm the correction on an installed Android and iOS build (blocked until updated store binaries are built and installed).
