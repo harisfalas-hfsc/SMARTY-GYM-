@@ -426,13 +426,10 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: NATIVE_WRAPPER_INIT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-        <style>{`html,body{margin:0;min-height:100%;background:#000}#native-boot-screen{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#000;opacity:1;transition:opacity 180ms ease}#native-boot-screen img{width:104px;height:104px;object-fit:contain}#native-boot-screen.is-hidden{opacity:0;pointer-events:none}@media(prefers-reduced-motion:reduce){#native-boot-screen{transition:none}}`}</style>
+        <style>{`html,body{margin:0;min-height:100%;background:#000}`}</style>
         <HeadContent />
       </head>
       <body style={{ backgroundColor: "#000000" }}>
-        <div id="native-boot-screen" role="status" aria-label="Loading SMARTYGYM">
-          <img src="/icon-512.png" alt="" width="104" height="104" />
-        </div>
         {children}
         <Scripts />
       </body>
