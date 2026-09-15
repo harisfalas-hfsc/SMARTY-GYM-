@@ -28,7 +28,7 @@ const OG_IMAGE = "https://smartygym.com/og-social.jpg";
 const SITE_DESCRIPTION =
   "Personalized workouts built from your goals, experience, equipment and limitations, guided by Smarty Coach and sports scientist Haris Falas.";
 
-const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var u=navigator.userAgent||'';var c=!!window.Capacitor;var a=u.indexOf('; wv)')!==-1||u.indexOf(' wv ')!==-1;var i=(u.indexOf('iPhone')!==-1||u.indexOf('iPad')!==-1||u.indexOf('iPod')!==-1)&&u.indexOf('AppleWebKit')!==-1&&u.indexOf('Safari')===-1;if(c||a||i){var r=document.documentElement;r.classList.add('native-shell');r.style.backgroundColor='#000';}}catch(e){}})();`;
+const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var u=navigator.userAgent||'';var c=!!window.Capacitor;var a=u.indexOf('; wv)')!==-1||u.indexOf(' wv ')!==-1;var i=(u.indexOf('iPhone')!==-1||u.indexOf('iPad')!==-1||u.indexOf('iPod')!==-1)&&u.indexOf('AppleWebKit')!==-1&&u.indexOf('Safari')===-1;if(!(c||a||i))return;var r=document.documentElement;r.classList.add('native-shell');r.style.backgroundColor='#000';var hide=function(){try{var p=window.Capacitor&&window.Capacitor.Plugins;if(!p)return;var bars=p.SystemBars||p.StatusBar;if(bars&&typeof bars.hide==='function'){Promise.resolve(bars.hide({bar:'StatusBar'})).catch(function(){});}}catch(e){}};hide();document.addEventListener('deviceready',hide,{once:true});}catch(e){}})();`;
 
 const NATIVE_LAUNCH_SCRIPT = `(function(){var l=document.getElementById('native-web-launch');if(!l)return;var done=function(){l.classList.add('native-launch-ready');};window.addEventListener('smartygym:native-ready',done,{once:true});requestAnimationFrame(function(){requestAnimationFrame(done);});setTimeout(done,1000);})();`;
 
