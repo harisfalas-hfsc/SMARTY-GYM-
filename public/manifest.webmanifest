@@ -1,6 +1,6 @@
 {
-  "name": "Smarty Gym",
-  "short_name": "SmartyGym",
+  "name": "SMARTYGYM",
+  "short_name": "SMARTYGYM",
   "description": "Personalised workouts and expert fitness guidance from Smarty Coach.",
   "start_url": "/",
   "display": "standalone",
