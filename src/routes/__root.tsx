@@ -31,7 +31,7 @@ const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var q=new URLSearchParams(lo
 // Native WebViews get the same dark first frame as the previous site. This is
 // independent of React and removes itself on load or after four seconds, so it
 // can never trap the website behind a permanent logo screen.
-const NATIVE_FIRST_FRAME_SCRIPT = `(function(){if(!document.documentElement.classList.contains('native-shell'))return;document.documentElement.classList.add('native-first-frame');var clear=function(){document.documentElement.classList.remove('native-first-frame')};window.addEventListener('load',function(){requestAnimationFrame(function(){requestAnimationFrame(clear)})},{once:true});setTimeout(clear,4000)})();`;
+const NATIVE_FIRST_FRAME_SCRIPT = `(function(){if(!document.documentElement.classList.contains('native-shell'))return;document.documentElement.classList.add('native-first-frame');setTimeout(function(){document.documentElement.classList.remove('native-first-frame')},8000)})();`;
 
 
 const KEYWORDS = [

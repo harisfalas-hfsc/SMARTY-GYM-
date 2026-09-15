@@ -38,14 +38,5 @@ export default defineConfig({
     // The custom entry hydrates the website normally and mounts the bundled
     // native shell as a client-rendered app when Capacitor loads index.html.
     client: { entry: "client" },
-    // Serve the homepage as a prebuilt HTML file, matching the previous site's
-    // instant first response instead of waiting for server rendering on launch.
-    prerender: {
-      enabled: true,
-      autoStaticPathsDiscovery: false,
-      crawlLinks: false,
-      failOnError: true,
-    },
-    pages: [{ path: "/" }],
   },
 });

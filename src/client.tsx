@@ -21,6 +21,10 @@ async function prepareNativeWindow() {
   }
 }
 
+function revealFirstFrame() {
+  document.documentElement.classList.remove("native-first-frame");
+}
+
 startTransition(async () => {
   const localNativeRoot = document.getElementById("root");
   if (localNativeRoot) {
@@ -32,7 +36,10 @@ startTransition(async () => {
       </StrictMode>,
     );
     window.requestAnimationFrame(() =>
-      window.requestAnimationFrame(() => void prepareNativeWindow()),
+      window.requestAnimationFrame(() => {
+        revealFirstFrame();
+        void prepareNativeWindow();
+      }),
     );
     return;
   }
@@ -44,6 +51,9 @@ startTransition(async () => {
     </StrictMode>,
   );
   window.requestAnimationFrame(() =>
-    window.requestAnimationFrame(() => void prepareNativeWindow()),
+    window.requestAnimationFrame(() => {
+      revealFirstFrame();
+      void prepareNativeWindow();
+    }),
   );
 });
