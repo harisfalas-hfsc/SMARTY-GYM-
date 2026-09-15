@@ -50,8 +50,9 @@ npx cap add ios && npx cap add android
 npx cap sync
 ```
 
-`capacitor.config.ts` (repo root) already sets the app id, name, black splash and
-`server.url = https://smartygym.com`.
+`capacitor.config.ts` sets the app id, name, black splash and the live
+`https://smartygym.com` address. The wrappers display the same live page as the
+mobile browser instead of maintaining a separate offline copy.
 
 ### Behaviour already handled in the web app
 
@@ -60,12 +61,10 @@ npx cap sync
   gestures still navigate normally (TanStack Router history).
 - **Refresh = logo**: tapping the SMARTYGYM wordmark navigates home, revalidates
   data and scrolls to the top.
-- **Offline**: service worker app shell + IndexedDB caches (logbook, library, WOD,
-  opened workouts) + queued actions replayed on reconnect.
-- **Offline sign-in**: after one online sign-in on the device, the account can sign
-  back in with no internet (PBKDF2 verifier + saved session, device-only).
-- **Safe areas**: `viewport-fit=cover` plus `env(safe-area-inset-*)` padding in the
-  header and bottom nav (notch / home indicator safe).
+- **Online-only**: the wrappers always load the current live page. There is no
+  separate native offline shell or service-worker app shell.
+- **Top edge**: the wrapper hides the status bar and the website forces the header
+  inset to zero, matching Chrome mobile.
 
 ### Android back button
 
