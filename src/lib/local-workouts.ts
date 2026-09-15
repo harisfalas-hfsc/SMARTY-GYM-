@@ -12,7 +12,6 @@ const CATEGORY: Record<string, string> = {
   challenge: "CHALLENGE",
   mobility: "MOBILITY & STABILITY",
   pilates: "PILATES",
-  micro: "MICRO-WORKOUTS",
 };
 
 type LocalWorkout = WorkoutRow & {
