@@ -4,7 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 /** Key of the single app_settings row that drives Global Free Access Mode. */
 export const FREE_ACCESS_SETTING_KEY = "free_access_mode";
 
-let cached: boolean | null = null;
+// Free access is the safe first paint. The live master setting is refreshed
+// after hydration so it never delays the initial page response.
+let cached: boolean | null = true;
 let inFlight: Promise<boolean> | null = null;
 const subscribers = new Set<(value: boolean) => void>();
 

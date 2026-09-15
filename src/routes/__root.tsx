@@ -18,7 +18,6 @@ import { SiteFooter } from "../components/SiteFooter";
 import { Toaster } from "../components/ui/sonner";
 import { BottomNav } from "../components/BottomNav";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
-import { seedFreeAccessMode } from "../hooks/useFreeAccessMode";
 
 
 const SITE_URL = "https://smartygym.com";
@@ -443,9 +442,6 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  // Free access is the safe first-paint default. The browser refreshes the
-  // master setting immediately after hydration without delaying the HTML.
-  seedFreeAccessMode(true);
 
   return (
     <QueryClientProvider client={queryClient}>
