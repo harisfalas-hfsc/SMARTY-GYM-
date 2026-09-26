@@ -6,6 +6,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -24,6 +25,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -42,6 +44,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -60,6 +63,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -78,6 +82,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -96,6 +101,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -114,6 +120,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -132,6 +139,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -150,6 +158,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -168,6 +177,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -186,6 +196,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -204,6 +215,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -222,6 +234,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -240,6 +253,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -259,6 +273,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -277,6 +292,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -295,6 +311,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -313,6 +330,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -331,6 +349,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -349,6 +368,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -367,6 +387,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -385,6 +406,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -403,6 +425,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -421,6 +444,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -439,6 +463,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -457,6 +482,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -475,6 +501,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -493,6 +520,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -511,6 +539,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -529,6 +558,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -547,6 +577,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -565,6 +596,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -583,6 +615,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -601,6 +634,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -619,6 +653,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -637,6 +672,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -655,6 +691,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -673,6 +710,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -691,6 +729,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -709,6 +748,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -727,6 +767,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -745,6 +786,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -763,6 +805,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -781,6 +824,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -799,6 +843,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
 Disallow: /create-your-workout
+Disallow: /smarty-ritual
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
