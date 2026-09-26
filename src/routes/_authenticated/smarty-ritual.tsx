@@ -77,7 +77,7 @@ function SmartyRitualPage() {
               Daily <span className="text-primary">Smarty</span> Ritual
             </h1>
             <p className="max-w-md text-sm text-muted-foreground">Your all-day game plan for movement, recovery, and performance</p>
-            {dateLabel && <p className="mt-3 text-sm font-semibold">{dateLabel}{data?.ritual ? ` • Ritual ${data.ritual.position}` : ""}</p>}
+            {dateLabel && <p className="mt-3 text-sm font-semibold">{dateLabel}</p>}
           </div>
         </div>
 
@@ -129,7 +129,7 @@ function SmartyRitualPage() {
           <DialogContent className="flex h-[100dvh] max-h-[100dvh] w-screen max-w-none flex-col gap-0 overflow-hidden rounded-none border-0 bg-background p-0 text-foreground sm:h-[92vh] sm:w-[min(760px,calc(100%-2rem))] sm:rounded-2xl sm:border [&>button:last-child]:hidden">
             <div className="flex items-center justify-between border-b border-border px-5 py-3">
               <DialogTitle className="text-base font-bold">
-                Daily Smarty Ritual {data.ritual.position}
+                 Daily Smarty Ritual
               </DialogTitle>
               <Button variant="ghost" size="icon" aria-label="Close reader" onClick={() => setReaderOpen(false)}>
                 <X className="h-5 w-5" />
