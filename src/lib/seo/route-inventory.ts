@@ -28,6 +28,8 @@ export interface StaticSitemapEntry {
 export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/": "indexable",
   "/about": "indexable",
+  "/why-invest-in-smartygym": "indexable",
+  "/the-smarty-method": "indexable",
   "/haris-falas": "indexable",
   "/founder-note": "indexable",
   "/how-it-works": "indexable",
@@ -90,6 +92,8 @@ export const PRIVATE_PREFIXES = [
 export const STATIC_SITEMAP_ENTRIES: StaticSitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/about", changefreq: "monthly", priority: "0.8" },
+  { path: "/why-invest-in-smartygym", changefreq: "monthly", priority: "0.75" },
+  { path: "/the-smarty-method", changefreq: "monthly", priority: "0.75" },
   { path: "/haris-falas", changefreq: "monthly", priority: "0.7" },
   { path: "/founder-note", changefreq: "monthly", priority: "0.6" },
   { path: "/how-it-works", changefreq: "monthly", priority: "0.8" },

@@ -21,6 +21,7 @@ import {
   Trophy,
   WifiOff,
   BookOpen,
+  ChevronRight,
 } from "lucide-react";
 
 
@@ -121,7 +122,15 @@ function AboutPage() {
             </>
           }
           className="lg:min-h-[420px]"
-        />
+        >
+          <Link
+            to="/why-invest-in-smartygym"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 hover:underline dark:text-green-500 dark:hover:text-green-400"
+          >
+            Why Invest in SmartyGym
+            <ChevronRight className="h-4 w-4" />
+          </Link>
+        </SmartyCard>
 
         <SmartyCard
           tone="blue"
@@ -144,7 +153,15 @@ function AboutPage() {
             </>
           }
           className="lg:min-h-[420px]"
-        />
+        >
+          <Link
+            to="/the-smarty-method"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 hover:underline dark:text-green-500 dark:hover:text-green-400"
+          >
+            Discover The Smarty Method
+            <ChevronRight className="h-4 w-4" />
+          </Link>
+        </SmartyCard>
 
         <SmartyCard
           tone="blue"
