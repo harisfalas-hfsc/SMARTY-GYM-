@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "Public user progress is readable" ON public.public_user_progress;
+CREATE POLICY "Members read own public progress" ON public.public_user_progress FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
