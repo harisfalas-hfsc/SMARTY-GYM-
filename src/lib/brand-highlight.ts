@@ -68,6 +68,34 @@ export function applyBrandHighlights(root: ParentNode = document.body): void {
   }
 }
 
+/** MutationObserver that keeps highlights applied to dynamically added content. */
+function watchBrandHighlights(): void {
+  if (typeof MutationObserver === "undefined") return;
+  let scheduled = false;
+  let applying = false;
+
+  const run = () => {
+    scheduled = false;
+    applying = true;
+    try {
+      applyBrandHighlights();
+    } finally {
+      applying = false;
+    }
+  };
+
+  const observer = new MutationObserver(() => {
+    if (applying || scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(run);
+  });
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
+}
+
 /**
  * Starts highlighting + the mutation watcher only after the page is fully
  * hydrated, so injected spans never race React's streaming hydration.
