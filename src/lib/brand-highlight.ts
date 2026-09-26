@@ -68,31 +68,41 @@ export function applyBrandHighlights(root: ParentNode = document.body): void {
   }
 }
 
-/** MutationObserver that keeps highlights applied to dynamically added content. */
-export function watchBrandHighlights(
-  root: ParentNode = document.body,
-): () => void {
-  if (typeof MutationObserver === "undefined") return () => {};
-  let scheduled = false;
-  let applying = false;
-  let observer: MutationObserver | null = null;
+/**
+ * Starts highlighting + the mutation watcher only after the page is fully
+ * hydrated, so injected spans never race React's streaming hydration.
+ * Returns a cleanup function.
+ */
+export function startBrandHighlights(): () => void {
+  if (typeof window === "undefined") return () => {};
+  let cancelled = false;
+  let started = false;
 
   const run = () => {
-    scheduled = false;
-    applying = true;
-    try {
-      applyBrandHighlights(root);
-    } finally {
-      applying = false;
-    }
+    if (cancelled || started) return;
+    started = true;
+    applyBrandHighlights();
+    watchBrandHighlights();
   };
 
-  observer = new MutationObserver(() => {
-    if (applying || scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(run);
-  });
-  observer.observe(root, { childList: true, subtree: true, characterData: true });
+  const start = () => {
+    // Two animation frames after hydration/load: React has claimed the DOM.
+    requestAnimationFrame(() => requestAnimationFrame(run));
+  };
 
-  return () => observer?.disconnect();
+  if (document.readyState === "complete") {
+    start();
+  } else {
+    window.addEventListener("load", start, { once: true });
+    // Fallback in case `load` is delayed by slow resources.
+    const fallback = setTimeout(start, 3000);
+    return () => {
+      cancelled = true;
+      clearTimeout(fallback);
+    };
+  }
+
+  return () => {
+    cancelled = true;
+  };
 }
