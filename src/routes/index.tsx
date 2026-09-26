@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarCheck, Dumbbell, PenLine } from "lucide-react";
 import heroTraining from "@/assets/hero-training.jpg";
-import { PageHeader } from "@/components/PageHeader";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
