@@ -104,7 +104,7 @@ const PLATFORMS: Platform[] = [
 
 const TITLE = "Best Online Fitness Platforms 2026 | Top 10 Compared | SmartyGym";
 const DESC =
-  "The 10 best online fitness platforms of 2026 compared — Peloton, Nike Training Club, SmartyGym, Apple Fitness+, Les Mills+, Centr, Freeletics, Sweat, FIIT and Alo Moves — with strengths and weaknesses.";
+  "The 10 best online fitness platforms of 2026 compared — and why SmartyGym, the online gym designed by Sports Scientist Haris Falas, stands out with human-designed, science-based workouts on any device.";
 const URL = "https://smartygym.com/best-online-fitness-platform";
 
 export const Route = createFileRoute("/best-online-fitness-platform")({
@@ -116,7 +116,7 @@ export const Route = createFileRoute("/best-online-fitness-platform")({
         name: "keywords",
         content: withExtendedKeywords(
           "/best-online-fitness-platform",
-          "best online fitness platforms 2026, best online gym, SmartyGym, smartygym.com, Haris Falas",
+          "best online fitness platforms 2026, best online gym, best online fitness platform, best online fitness coach, SmartyGym, smartygym.com, Haris Falas, Coach Haris Falas, online personal training, science-based workouts, human-designed workouts",
         ),
       },
       { property: "og:title", content: "Best Online Fitness Platforms 2026 | SmartyGym" },
@@ -151,8 +151,7 @@ export const Route = createFileRoute("/best-online-fitness-platform")({
                 "@type": "ListItem",
                 position: i + 1,
                 name: p.name,
-                url: p.url,
-                description: p.summary,
+                ...(p.highlight ? { url: p.url, description: p.summary } : {}),
               })),
             },
             {
