@@ -54,7 +54,7 @@ export function PendingGenerationCard() {
           <p className="font-bold">Workout in progress</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {generation.status === "building"
-              ? "Smarty Coach is building it now. You can safely leave this page."
+              ? "Your workout is being built now. You can safely leave this page."
               : `A temporary problem interrupted it. Automatic recovery is scheduled${generation.attempt_count ? ` (attempt ${generation.attempt_count} of 5)` : ""}.`}
           </p>
           <Button asChild variant="link" className="mt-1 h-auto p-0 font-bold">
