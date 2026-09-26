@@ -15,7 +15,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Googlebot-Image
 Allow: /
@@ -34,7 +33,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Google-Extended
 Allow: /
@@ -53,7 +51,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Bingbot
 Allow: /
@@ -72,7 +69,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Applebot
 Allow: /
@@ -91,7 +87,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Applebot-Extended
 Allow: /
@@ -110,7 +105,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: DuckDuckBot
 Allow: /
@@ -129,7 +123,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: YandexBot
 Allow: /
@@ -148,7 +141,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Twitterbot
 Allow: /
@@ -167,7 +159,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: facebookexternalhit
 Allow: /
@@ -186,7 +177,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: LinkedInBot
 Allow: /
@@ -205,7 +195,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Slackbot
 Allow: /
@@ -224,7 +213,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Discordbot
 Allow: /
@@ -243,7 +231,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: WhatsApp
 Allow: /
@@ -262,7 +249,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 # AI assistants and answer engines
 User-agent: GPTBot
@@ -282,7 +268,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: OAI-SearchBot
 Allow: /
@@ -301,7 +286,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: ChatGPT-User
 Allow: /
@@ -320,7 +304,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: ClaudeBot
 Allow: /
@@ -339,7 +322,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Claude-User
 Allow: /
@@ -358,7 +340,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Claude-SearchBot
 Allow: /
@@ -377,7 +358,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: anthropic-ai
 Allow: /
@@ -396,7 +376,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: PerplexityBot
 Allow: /
@@ -415,7 +394,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Perplexity-User
 Allow: /
@@ -434,7 +412,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Amazonbot
 Allow: /
@@ -453,7 +430,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: meta-externalagent
 Allow: /
@@ -472,7 +448,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: cohere-ai
 Allow: /
@@ -491,7 +466,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: YouBot
 Allow: /
@@ -510,7 +484,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: CCBot
 Allow: /
@@ -529,7 +502,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: *
 Allow: /
@@ -548,7 +520,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: BingPreview
 Allow: /
@@ -567,7 +538,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: microsoft-preview
 Allow: /
@@ -586,7 +556,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: DuckAssistBot
 Allow: /
@@ -605,7 +574,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: MistralAI-User
 Allow: /
@@ -624,7 +592,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Meta-ExternalFetcher
 Allow: /
@@ -643,7 +610,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Diffbot
 Allow: /
@@ -662,7 +628,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: xAI-Bot
 Allow: /
@@ -681,7 +646,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Grokbot
 Allow: /
@@ -700,7 +664,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Grok
 Allow: /
@@ -719,7 +682,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Bytespider
 Allow: /
@@ -738,7 +700,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: PetalBot
 Allow: /
@@ -757,7 +718,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: PanguBot
 Allow: /
@@ -776,7 +736,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Timpibot
 Allow: /
@@ -795,7 +754,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: AI2Bot
 Allow: /
@@ -814,7 +772,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Kagibot
 Allow: /
@@ -833,7 +790,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 User-agent: Yeti
 Allow: /
@@ -852,7 +808,6 @@ Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
 Disallow: /w/
-Disallow: /community/workout/
 
 Sitemap: https://smartygym.com/sitemap.xml
 Sitemap: https://smartygym.com/image-sitemap.xml

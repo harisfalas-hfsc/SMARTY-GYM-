@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { TRAINING_TOPIC_SLUGS } from "@/lib/seo/training-topics";
+import { STATIC_SITEMAP_ENTRIES } from "@/lib/seo/route-inventory";
 
 
 const BASE_URL = "https://smartygym.com";
@@ -30,39 +30,7 @@ function escapeXml(value: string): string {
     .replace(/'/g, "&apos;");
 }
 
-const ENTRIES: SitemapEntry[] = [
-  { path: "/", changefreq: "weekly", priority: "1.0" },
-  { path: "/about", changefreq: "monthly", priority: "0.8" },
-  { path: "/haris-falas", changefreq: "monthly", priority: "0.7" },
-  { path: "/founder-note", changefreq: "monthly", priority: "0.6" },
-
-  { path: "/how-it-works", changefreq: "monthly", priority: "0.8" },
-  { path: "/pricing", changefreq: "monthly", priority: "0.9" },
-  { path: "/exercise-library", changefreq: "weekly", priority: "0.85" },
-  { path: "/wod", changefreq: "daily", priority: "0.85" },
-  { path: "/faq", changefreq: "monthly", priority: "0.8" },
-  { path: "/contact", changefreq: "yearly", priority: "0.5" },
-  { path: "/glossary", changefreq: "monthly", priority: "0.75" },
-
-  { path: "/training", changefreq: "monthly", priority: "0.85" },
-  ...TRAINING_TOPIC_SLUGS.map((slug) => ({
-    path: `/training/${slug}`,
-    changefreq: "monthly" as const,
-    priority: "0.8",
-  })),
-
-
-
-  { path: "/blog", changefreq: "weekly", priority: "0.85" },
-  { path: "/tools", changefreq: "monthly", priority: "0.8" },
-
-  { path: "/tools/workout-timer", changefreq: "monthly", priority: "0.8" },
-  { path: "/tools/rounds-tracker", changefreq: "monthly", priority: "0.8" },
-  { path: "/tools/1rm-calculator", changefreq: "monthly", priority: "0.8" },
-  { path: "/privacy", changefreq: "yearly", priority: "0.3" },
-  { path: "/terms", changefreq: "yearly", priority: "0.3" },
-  { path: "/disclaimer", changefreq: "yearly", priority: "0.3" },
-];
+const ENTRIES: (SitemapEntry & { paidOnly?: boolean })[] = STATIC_SITEMAP_ENTRIES;
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -70,9 +38,10 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const { isFreeAccessMode } = await import("@/lib/free-access.server");
         const freeAccessMode = await isFreeAccessMode();
-        const base = freeAccessMode
-          ? ENTRIES.filter((e) => e.path !== "/pricing")
-          : ENTRIES;
+        const base: SitemapEntry[] = (freeAccessMode
+          ? ENTRIES.filter((e) => !e.paidOnly)
+          : ENTRIES
+        ).map(({ paidOnly: _p, ...e }) => e);
 
         let articles: SitemapEntry[] = [];
         try {
