@@ -229,7 +229,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
             items: [
               { to: "/create-your-workout", label: "Create Your Workout", Icon: Sparkles },
               { to: "/wod", label: "Workout of the Day", Icon: CalendarCheck },
-               { to: "/shared-workouts", label: "Shared Workouts", Icon: Dumbbell },
+              { to: "/shared-workouts", label: "Shared Workouts", Icon: Dumbbell },
               { to: "/smarty-ritual", label: "Smarty Ritual", Icon: Sparkles },
               { to: "/logbook", label: "Logbook", Icon: BookOpen },
               { to: "/community", label: "Smarty Community", Icon: Users },
@@ -249,6 +249,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         { to: "/how-it-works", label: "How It Works", Icon: BookOpen },
         ...(isAuthed ? [] : [{ to: "/wod", label: "Workout of the Day", Icon: CalendarCheck }]),
         ...(isAuthed ? [] : [{ to: "/shared-workouts", label: "Shared Workouts", Icon: Dumbbell }]),
+        ...(isAuthed ? [] : [{ to: "/smarty-ritual", label: "Smarty Ritual", Icon: Sparkles }]),
         ...(isAuthed ? [] : [{ to: "/community", label: "Smarty Community", Icon: Users }]),
         { to: "/exercise-library", label: "Exercise Library", Icon: Dumbbell },
         { to: "/tools", label: "Smarty Tools", Icon: Wrench },

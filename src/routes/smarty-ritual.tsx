@@ -11,6 +11,7 @@ import { getTodaysRitual } from "@/lib/ritual.functions";
 import { RitualHTML } from "@/components/ritual/RitualHTML";
 import { MembershipRequiredDialog } from "@/components/MembershipRequiredDialog";
 import { PageHeader } from "@/components/PageHeader";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/smarty-ritual")({
   component: SmartyRitualPage,
@@ -34,8 +35,13 @@ const PHASES = [
 ] as const;
 
 function SmartyRitualPage() {
+  const { user, loading: authLoading } = useAuth();
   const fetchRitual = useServerFn(getTodaysRitual);
-  const { data, isLoading } = useQuery({ queryKey: ["smarty-ritual"], queryFn: () => fetchRitual() });
+  const { data, isLoading } = useQuery({
+    queryKey: ["smarty-ritual", user?.id],
+    queryFn: () => fetchRitual(),
+    enabled: !authLoading && Boolean(user),
+  });
   const [membershipOpen, setMembershipOpen] = useState(false);
   const [readerOpen, setReaderOpen] = useState(false);
 
@@ -71,9 +77,9 @@ function SmartyRitualPage() {
           </div>
         </div>
 
-        {isLoading ? (
+        {authLoading || (Boolean(user) && isLoading) ? (
           <div className="flex justify-center p-10"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
-        ) : data?.locked ? (
+        ) : !user || data?.locked ? (
           <div className="bg-muted/50 p-6">
             <div className="flex flex-col items-center gap-4 text-center">
               <Lock className="h-12 w-12 text-muted-foreground" />
@@ -82,9 +88,17 @@ function SmartyRitualPage() {
                 <p className="mb-4 max-w-md text-muted-foreground">
                   The Daily Smarty Ritual is part of SmartyGym Premium. Become a member to unlock a fresh ritual every day.
                 </p>
-                <Button onClick={() => setMembershipOpen(true)}>
-                  <Crown className="mr-2 h-4 w-4" /> Become a member
-                </Button>
+                {user ? (
+                  <Button onClick={() => setMembershipOpen(true)}>
+                    <Crown className="mr-2 h-4 w-4" /> Become a member
+                  </Button>
+                ) : (
+                  <Button asChild>
+                    <Link to="/auth" search={{ next: "/smarty-ritual", mode: "signup" }}>
+                      <Crown className="mr-2 h-4 w-4" /> Become a member
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
           </div>
