@@ -31,7 +31,7 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "What's included in the subscription?",
-    a: "Up to 2 workouts per day, the full exercise library, all training tools, your logbook, progress tracking and every previous workout you've created.",
+    a: "Up to 2 workouts per day, the daily Smarty Ritual, the full exercise library, all training tools, your logbook, progress tracking and every previous workout you've created.",
   },
   {
     q: "What is the Workout of the Day?",
@@ -105,6 +105,10 @@ const ITEMS: { q: string; a: string }[] = [
   {
     q: "What are the rankings?",
     a: "Two boards with ten positions each: the member ranking (score, streak, completed, shared) and the workout ranking (most completed and most liked, shared workouts only). Empty positions stay visible until someone takes them.",
+  },
+  {
+    q: "What is Smarty Ritual?",
+    a: "One fresh daily plan with three practical phases: Morning activation, a Midday reset and an Evening unwind. It supports movement, mobility, energy and recovery around your workouts and the rest of your day.",
   },
   {
     q: "Can I schedule a workout?",
