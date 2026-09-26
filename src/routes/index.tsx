@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { CalendarCheck, Dumbbell, PenLine } from "lucide-react";
 import heroTraining from "@/assets/hero-training.jpg";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/")({
       {
         name: "keywords",
         content:
-          "online gym with a personal coach, personalized workout generator, online gym, personal coach app, workout of the day, smarty coach, training plan generator, home workout plan, gym workout plan, exercise library, Freeletics alternative, Peloton alternative, Haris Falas",
+          withExtendedKeywords("/", "online gym with a personal coach, personalized workout generator, online gym, personal coach app, workout of the day, smarty coach, training plan generator, home workout plan, gym workout plan, exercise library, Freeletics alternative, Peloton alternative, Haris Falas"),
       },
       {
         title: "Your gym reimagined.",

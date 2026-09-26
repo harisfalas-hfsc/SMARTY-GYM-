@@ -1,4 +1,5 @@
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleHelp } from "lucide-react";
 import { SmartyCard } from "@/components/SmartyCard";
@@ -170,9 +171,9 @@ export const Route = createFileRoute("/faq")({
     meta: [
       {
         name: "keywords",
-        content: loaderData?.freeAccessMode
+        content: withExtendedKeywords("/faq", loaderData?.freeAccessMode
           ? "smartygym faq, workout app questions, how workouts are generated, free access, equipment needed"
-          : "smartygym faq, workout app questions, how workouts are generated, membership questions, cancel membership, equipment needed",
+          : "smartygym faq, workout app questions, how workouts are generated, membership questions, cancel membership, equipment needed"),
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },

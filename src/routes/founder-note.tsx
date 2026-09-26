@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Heart, Quote, UserRound } from "lucide-react";
 import harisPhoto from "@/assets/haris-falas-coach.jpg";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/founder-note")({
       {
         name: "keywords",
         content:
-          "smartygym founder note, founder letter, why smartygym, online gym, science based workouts, haris falas",
+          withExtendedKeywords("/founder-note", "smartygym founder note, founder letter, why smartygym, online gym, science based workouts, haris falas"),
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },

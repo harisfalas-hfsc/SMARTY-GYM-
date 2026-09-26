@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { isOnline } from "@/lib/connectivity";
 import { useServerFn } from "@tanstack/react-start";
 import { loadRemote } from "@/lib/remote-data";
@@ -46,7 +47,7 @@ export const Route = createFileRoute("/wod")({
       {
         name: "keywords",
         content:
-          "workout of the day, wod, daily workout, bodyweight workout of the day, equipment workout of the day, 84 day training cycle, recovery day workout",
+          withExtendedKeywords("/wod", "workout of the day, wod, daily workout, bodyweight workout of the day, equipment workout of the day, 84 day training cycle, recovery day workout"),
       },
       { title: "Workout of the Day — Smarty Gym" },
       {

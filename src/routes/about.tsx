@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { GymDescription } from "@/lib/brand-copy";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
@@ -29,7 +30,7 @@ export const Route = createFileRoute("/about")({
       {
         name: "keywords",
         content:
-          "about smartygym, coaching philosophy, evidence based training, strength and conditioning, periodization, training methodology",
+          withExtendedKeywords("/about", "about smartygym, coaching philosophy, evidence based training, strength and conditioning, periodization, training methodology"),
       },
       { title: "About Smarty Gym — Your Fitness Coach" },
       {

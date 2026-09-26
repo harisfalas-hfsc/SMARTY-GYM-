@@ -1,4 +1,5 @@
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { loadRemoteCached } from "@/lib/remote-data";
 import { useEffect, useState } from "react";
@@ -52,7 +53,7 @@ export const Route = createFileRoute("/community/")({
       {
         name: "keywords",
         content:
-          "shared workouts community, shared workouts, community workouts, member workouts, workout ratings, train someone elses workout",
+          withExtendedKeywords("/community", "shared workouts community, shared workouts, community workouts, member workouts, workout ratings, train someone elses workout"),
       },
       { title: "Smarty Community — Train together | Smarty Gym" },
       {
