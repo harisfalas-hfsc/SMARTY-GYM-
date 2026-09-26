@@ -29,6 +29,7 @@ type ExploreAction = {
   to: "/tools" | "/exercise-library" | "/blog";
   image: string;
   icon: LucideIcon;
+  objectPosition?: string;
 };
 
 export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
@@ -42,8 +43,9 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       title: "Ask your coach",
       description: "Get a personalized workout built for you",
       to: "/coach",
-      image: coachImage,
+      image: founderPhoto,
       icon: Dumbbell,
+      objectPosition: "center center",
     },
     {
       title: "Workout of the Day",
