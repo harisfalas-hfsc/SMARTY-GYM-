@@ -33,6 +33,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SharedWorkoutsRouteImport } from './routes/shared-workouts'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TheSmartyMethodRouteImport } from './routes/the-smarty-method'
 import { Route as WhyInvestInSmartygymRouteImport } from './routes/why-invest-in-smartygym'
 import { Route as WodRouteImport } from './routes/wod'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
@@ -187,6 +188,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TheSmartyMethodRoute = TheSmartyMethodRouteImport.update({
+  id: '/the-smarty-method',
+  path: '/the-smarty-method',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WhyInvestInSmartygymRoute = WhyInvestInSmartygymRouteImport.update({
@@ -396,6 +402,7 @@ export interface FileRoutesByFullPath {
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/the-smarty-method': typeof TheSmartyMethodRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -456,6 +463,7 @@ export interface FileRoutesByTo {
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/the-smarty-method': typeof TheSmartyMethodRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -518,6 +526,7 @@ export interface FileRoutesById {
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/the-smarty-method': typeof TheSmartyMethodRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -580,6 +589,7 @@ export interface FileRouteTypes {
     | '/shared-workouts'
     | '/sitemap.xml'
     | '/terms'
+    | '/the-smarty-method'
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/account'
@@ -640,6 +650,7 @@ export interface FileRouteTypes {
     | '/shared-workouts'
     | '/sitemap.xml'
     | '/terms'
+    | '/the-smarty-method'
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/account'
@@ -701,6 +712,7 @@ export interface FileRouteTypes {
     | '/shared-workouts'
     | '/sitemap.xml'
     | '/terms'
+    | '/the-smarty-method'
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/_authenticated/account'
@@ -763,6 +775,7 @@ export interface RootRouteChildren {
   SharedWorkoutsRoute: typeof SharedWorkoutsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
+  TheSmartyMethodRoute: typeof TheSmartyMethodRoute
   WhyInvestInSmartygymRoute: typeof WhyInvestInSmartygymRoute
   WodRoute: typeof WodRoute
   AdminExerciseLibraryRoute: typeof AdminExerciseLibraryRoute
@@ -959,6 +972,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/the-smarty-method': {
+      id: '/the-smarty-method'
+      path: '/the-smarty-method'
+      fullPath: '/the-smarty-method'
+      preLoaderRoute: typeof TheSmartyMethodRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/why-invest-in-smartygym': {
@@ -1262,6 +1282,7 @@ const rootRouteChildren: RootRouteChildren = {
   SharedWorkoutsRoute: SharedWorkoutsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
+  TheSmartyMethodRoute: TheSmartyMethodRoute,
   WhyInvestInSmartygymRoute: WhyInvestInSmartygymRoute,
   WodRoute: WodRoute,
   AdminExerciseLibraryRoute: AdminExerciseLibraryRoute,
