@@ -18,7 +18,6 @@ import {
   BookOpen,
   ChevronLeft,
   User,
-  UserCircle,
   Dumbbell,
   CalendarCheck,
   Users,
@@ -159,9 +158,6 @@ export function Navigation() {
                 </DropdownMenuLabel>
                 <DropdownMenuItem asChild>
                   <Link to="/account"><User className="h-4 w-4 mr-2" /> My account</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/profile"><UserCircle className="h-4 w-4 mr-2" /> Training profile</Link>
                 </DropdownMenuItem>
                 {isAdmin && (
                   <>

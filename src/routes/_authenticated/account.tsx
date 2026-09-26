@@ -185,12 +185,12 @@ function Account() {
           </div>
         </div>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          <Button asChild variant="secondary" className="h-12 rounded-2xl">
+          <Button asChild variant="secondary" className="h-12 rounded-2xl border-2 border-primary">
             <Link to="/profile">
               <ClipboardList className="mr-2 h-4 w-4" /> Training profile
             </Link>
           </Button>
-          <Button asChild variant="secondary" className="h-12 rounded-2xl">
+          <Button asChild variant="secondary" className="h-12 rounded-2xl border-2 border-primary">
             <Link to="/logbook" search={{ filter: "all" as const, view: "list" as const }}>
               Logbook{count !== null ? ` (${count})` : ""}
             </Link>
