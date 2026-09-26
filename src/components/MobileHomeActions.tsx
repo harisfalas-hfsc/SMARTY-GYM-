@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
-import coachImage from "@/assets/coach-stopwatch-card.jpg";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
 import sharedWorkoutsImage from "@/assets/shared-workouts-card.jpg";
