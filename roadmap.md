@@ -10,4 +10,4 @@
 - [x] Remove Micro Workout from Smarty Coach, including automatic and surprise generation paths.
 - [x] Left-align the content inside workout questionnaire choice buttons without changing button layout.
 
-- [ ] Import Smarty Rituals from old project — waiting on JSON export upload from Haris
+- [x] Import Smarty Rituals (180)
