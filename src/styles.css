@@ -232,3 +232,8 @@ body {
     background: transparent !important;
   }
 }
+
+/* Brand name highlighting (Smarty Gym, Charis Falas) — applied across rendered text */
+.brand-highlight {
+  color: var(--primary);
+}
