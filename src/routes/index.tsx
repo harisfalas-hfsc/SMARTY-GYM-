@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
       {
         name: "keywords",
         content:
-          "online gym with a personal coach, personalized workout generator, online gym, personal coach app, workout of the day, smarty coach, training plan generator, home workout plan, gym workout plan",
+          "online gym with a personal coach, personalized workout generator, online gym, personal coach app, workout of the day, smarty coach, training plan generator, home workout plan, gym workout plan, exercise library, Freeletics alternative, Peloton alternative, Haris Falas",
       },
       {
         title: "Your gym reimagined.",

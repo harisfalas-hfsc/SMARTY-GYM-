@@ -151,16 +151,21 @@ export const Route = createFileRoute("/blog/$slug")({
                   : {}),
                 author: {
                   "@type": "Person",
+                  ...(!a.author_name || /haris\s+falas/i.test(a.author_name)
+                    ? { "@id": `${SITE}/haris-falas#person` }
+                    : {}),
                   name: a.author_name ?? "Haris Falas",
                   jobTitle: "Sports Scientist, CSCS Certified",
                   url: `${SITE}/haris-falas`,
                 },
                 publisher: {
                   "@type": "Organization",
+                  "@id": `${SITE}/#organization`,
                   name: "SmartyGym",
                   url: SITE,
                   logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
                 },
+                isPartOf: { "@id": `${SITE}/#website` },
               },
               ...(faq.length
                 ? [

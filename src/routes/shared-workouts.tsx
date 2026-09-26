@@ -46,7 +46,37 @@ export const Route = createFileRoute("/shared-workouts")({
         content: "Browse and filter every workout shared by Smarty Gym members.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://smartygym.com/shared-workouts" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://smartygym.com/shared-workouts" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "CollectionPage",
+              "@id": "https://smartygym.com/shared-workouts#webpage",
+              url: "https://smartygym.com/shared-workouts",
+              name: "Shared Workouts — SmartyGym",
+              description:
+                "Workouts shared by SmartyGym members, filterable by difficulty, category and popularity.",
+              inLanguage: "en",
+              isPartOf: { "@id": "https://smartygym.com/#website" },
+              publisher: { "@id": "https://smartygym.com/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                { "@type": "ListItem", position: 2, name: "Shared Workouts", item: "https://smartygym.com/shared-workouts" },
+              ],
+            },
+          ],
+        }),
+      },
     ],
   }),
   component: BrowsePage,
