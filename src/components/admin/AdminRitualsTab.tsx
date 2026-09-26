@@ -26,6 +26,21 @@ export function AdminRitualsTab() {
   const [data, setData] = useState<{ today: string; rituals: Row[] } | null>(null);
   const [editing, setEditing] = useState<Row | null>(null);
   const [saving, setSaving] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  const download = async (format: "word" | "pdf", rituals: Row[], filename: string) => {
+    if (exporting) return;
+    setExporting(true);
+    try {
+      if (format === "word") await exportWord(rituals, filename);
+      else await exportPdf(rituals, filename);
+      toast.success(`${format === "word" ? "Word" : "PDF"} downloaded`);
+    } catch (error) {
+      toast.error(`Could not export ${format === "word" ? "Word" : "PDF"}: ${error instanceof Error ? error.message : "Please try again"}`);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const load = () => list().then(setData).catch((e) => toast.error(String(e?.message ?? e)));
   useEffect(() => {
@@ -41,10 +56,10 @@ export function AdminRitualsTab() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">{data.rituals.length} rituals — one per day, in order, then the cycle starts again.</p>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => exportWord(data.rituals, "smarty-rituals")}>
+          <Button variant="outline" size="sm" disabled={exporting} onClick={() => void download("word", data.rituals, "smarty-rituals")}>
             <FileText className="mr-2 h-4 w-4" /> Export all · Word
           </Button>
-          <Button variant="outline" size="sm" onClick={() => { if (!exportPdf(data.rituals, "smarty-rituals")) toast.error("Allow pop-ups to export PDF"); }}>
+          <Button variant="outline" size="sm" disabled={exporting} onClick={() => void download("pdf", data.rituals, "smarty-rituals")}>
             <FileDown className="mr-2 h-4 w-4" /> Export all · PDF
           </Button>
         </div>
@@ -84,10 +99,10 @@ export function AdminRitualsTab() {
                 </div>
               ))}
               <div className="grid grid-cols-2 gap-2">
-                <Button variant="outline" onClick={() => exportWord([editing], `smarty-ritual-${editing.number}`)}>
+                <Button variant="outline" disabled={exporting} onClick={() => void download("word", [editing], `smarty-ritual-${editing.number}`)}>
                   <FileText className="mr-2 h-4 w-4" /> Word
                 </Button>
-                <Button variant="outline" onClick={() => { if (!exportPdf([editing], `smarty-ritual-${editing.number}`)) toast.error("Allow pop-ups to export PDF"); }}>
+                <Button variant="outline" disabled={exporting} onClick={() => void download("pdf", [editing], `smarty-ritual-${editing.number}`)}>
                   <FileDown className="mr-2 h-4 w-4" /> PDF
                 </Button>
               </div>
