@@ -3,7 +3,7 @@ import { BookOpen, Sparkles, User, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const ITEMS = [
-  { to: "/coach", label: "Coach", Icon: Sparkles },
+  { to: "/coach", label: "Create Your Workout", Icon: Sparkles },
   { to: "/logbook", label: "Logbook", Icon: BookOpen },
   { to: "/community", label: "Community", Icon: Users },
   { to: "/account", label: "Account", Icon: User },

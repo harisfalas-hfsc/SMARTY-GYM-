@@ -22,7 +22,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "SmartyGym is an online gym with a personal coach built on the sports science of Haris Falas (CSCS). Ask your coach for a session and train strength, conditioning or mobility around your goals, your equipment and your schedule.",
+          "SmartyGym is an online gym with a personal coach built on the sports science of Haris Falas (CSCS). Create your workout in seconds and train strength, conditioning or mobility around your goals, your equipment and your schedule.",
       },
       {
         property: "og:title",
@@ -57,7 +57,7 @@ export const Route = createFileRoute("/")({
           url: "https://smartygym.com/",
           name: "Your gym reimagined.",
           description:
-            "An online gym with a personal coach: ask your coach for a session and train around your goals, your equipment and your schedule.",
+            "An online gym with a personal coach: create your workout in seconds and train around your goals, your equipment and your schedule.",
           inLanguage: "en",
           isPartOf: { "@id": "https://smartygym.com/#website" },
           about: { "@id": "https://smartygym.com/#software" },
@@ -127,7 +127,7 @@ function Home() {
                 className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 text-base font-bold text-primary-foreground hover:opacity-95 lg:px-8"
               >
                 <Dumbbell className="h-4 w-4 shrink-0" />
-                Ask your coach
+                Create your workout
               </Link>
               <Link
                 to="/wod"
