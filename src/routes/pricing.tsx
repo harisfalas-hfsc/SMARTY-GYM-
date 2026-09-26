@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "keywords",
         content:
-          "smartygym pricing, fitness subscription, monthly membership, 9.99 per month, cancel anytime, workout app price",
+          withExtendedKeywords("/pricing", "smartygym pricing, fitness subscription, monthly membership, 9.99 per month, cancel anytime, workout app price"),
       },
       { title: "Pricing — SmartyGym subscription €9.99/month" },
       {

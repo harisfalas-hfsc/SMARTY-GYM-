@@ -2,7 +2,9 @@
  * Keywords that come from the fixed public pages of the site.
  * Every term here describes something that is genuinely on that page.
  */
-export const PAGE_KEYWORDS: Record<string, string[]> = {
+import { EXTENDED_PAGE_KEYWORDS, mergeKeywords } from "@/lib/seo/extended-keywords";
+
+const BASE_PAGE_KEYWORDS: Record<string, string[]> = {
   "/": [
     "personalized workout generator",
     "personalized workout",
@@ -79,3 +81,11 @@ export const PAGE_KEYWORDS: Record<string, string[]> = {
   "/logbook": ["training logbook", "workout history", "progress tracking", "training calendar"],
   "/progress": ["progress score", "personal records", "training load", "performance trend"],
 };
+
+/** Base keywords plus the extended phrases, for every known page path. */
+export const PAGE_KEYWORDS: Record<string, string[]> = Object.fromEntries(
+  Array.from(new Set([...Object.keys(BASE_PAGE_KEYWORDS), ...Object.keys(EXTENDED_PAGE_KEYWORDS)])).map((path) => [
+    path,
+    mergeKeywords(BASE_PAGE_KEYWORDS[path] ?? [], path),
+  ]),
+);

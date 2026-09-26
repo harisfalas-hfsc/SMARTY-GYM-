@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useState, useCallback, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/tools/rounds-tracker")({
       {
         name: "keywords",
         content:
-          "rounds tracker, amrap counter, circuit round counter, rep counter, workout score tracker",
+          withExtendedKeywords("/tools/rounds-tracker", "rounds tracker, amrap counter, circuit round counter, rep counter, workout score tracker"),
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },

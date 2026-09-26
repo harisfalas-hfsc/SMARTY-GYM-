@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/haris-falas")({
       {
         name: "keywords",
         content:
-          "haris falas, sports scientist, cscs strength coach, strength and conditioning specialist, fitness expert",
+          withExtendedKeywords("/haris-falas", "haris falas, sports scientist, cscs strength coach, strength and conditioning specialist, fitness expert"),
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
@@ -38,6 +39,7 @@ export const Route = createFileRoute("/haris-falas")({
               "@type": "Person",
               "@id": `${URL}#person`,
               name: "Haris Falas",
+              alternateName: ["Coach Haris", "Coach Haris Falas", "Haris Falas CSCS", "Haris Falas Sports Scientist"],
               url: URL,
               jobTitle: "Sports Scientist & Strength and Conditioning Coach",
               description: DESCRIPTION,

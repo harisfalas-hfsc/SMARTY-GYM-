@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useEffect, useState } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/shared-workouts")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
+      { name: "keywords", content: withExtendedKeywords("/shared-workouts", "shared workouts") },
       { title: "Shared Workouts — SMARTYGYM" },
       {
         name: "description",

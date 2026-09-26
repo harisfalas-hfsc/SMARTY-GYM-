@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { AlertTriangle } from "lucide-react";
 import { LegalLayout } from "@/components/LegalLayout";
 
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/disclaimer")({
       {
         name: "keywords",
         content:
-          "fitness disclaimer, not medical advice, train safely, injury warning, consult your doctor",
+          withExtendedKeywords("/disclaimer", "fitness disclaimer, not medical advice, train safely, injury warning, consult your doctor"),
       },
       { title: "Disclaimer & Release of Liability | SmartyGym" },
       {

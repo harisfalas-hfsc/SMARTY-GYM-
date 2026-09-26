@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard } from "@/components/SmartyCard";
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/training/")({
       {
         name: "keywords",
         content:
-          "training guides, strength training guide, hypertrophy guide, conditioning guide, mobility guide, periodization, progressive overload",
+          withExtendedKeywords("/training", "training guides, strength training guide, hypertrophy guide, conditioning guide, mobility guide, periodization, progressive overload"),
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },

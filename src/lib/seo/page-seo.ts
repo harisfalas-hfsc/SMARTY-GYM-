@@ -41,7 +41,9 @@ export interface PageSeo {
   paidOnly?: boolean;
 }
 
-export const PAGE_SEO: PageSeo[] = [
+import { mergeKeywords } from "@/lib/seo/extended-keywords";
+
+const BASE_PAGE_SEO: PageSeo[] = [
   {
     path: "/",
     name: "Home",
@@ -430,6 +432,12 @@ export const PAGE_SEO: PageSeo[] = [
     schemaType: "WebPage",
   },
 ];
+
+/** Registry with the extended background keywords appended to each page. */
+export const PAGE_SEO: PageSeo[] = BASE_PAGE_SEO.map((p) => ({
+  ...p,
+  keywords: mergeKeywords(p.keywords, p.path),
+}));
 
 export const PAGE_SEO_BY_PATH: Record<string, PageSeo> = Object.fromEntries(
   PAGE_SEO.map((p) => [p.path, p]),

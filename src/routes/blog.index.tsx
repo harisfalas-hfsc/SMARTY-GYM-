@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
@@ -69,7 +70,7 @@ export const Route = createFileRoute("/blog/")({
       {
         name: "keywords",
         content:
-          "fitness blog, evidence based fitness articles, strength training articles, workout programming articles, recovery articles, sports science blog",
+          withExtendedKeywords("/blog", "fitness blog, evidence based fitness articles, strength training articles, workout programming articles, recovery articles, sports science blog"),
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },

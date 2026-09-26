@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { FileText } from "lucide-react";
 import { LegalLayout } from "@/components/LegalLayout";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
@@ -16,9 +17,9 @@ export const Route = createFileRoute("/terms")({
     meta: [
       {
         name: "keywords",
-        content: loaderData?.freeAccessMode
+        content: withExtendedKeywords("/terms", loaderData?.freeAccessMode
           ? "smartygym terms of service, terms and conditions, acceptable use, free access"
-          : "smartygym terms of service, terms and conditions, membership terms, acceptable use, cancellation",
+          : "smartygym terms of service, terms and conditions, membership terms, acceptable use, cancellation"),
       },
       { title: "Terms & Conditions | SmartyGym" },
       {

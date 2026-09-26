@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { loadRemote } from "@/lib/remote-data";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -53,7 +54,7 @@ export const Route = createFileRoute("/exercise-library")({
       {
         name: "keywords",
         content:
-          "exercise library, exercise database, animated exercise demonstrations, exercises by muscle group, exercises by equipment, movement pattern, how to perform exercise",
+          withExtendedKeywords("/exercise-library", "exercise library, exercise database, animated exercise demonstrations, exercises by muscle group, exercises by equipment, movement pattern, how to perform exercise"),
       },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
