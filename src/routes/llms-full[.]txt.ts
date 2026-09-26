@@ -117,6 +117,18 @@ export const Route = createFileRoute("/llms-full.txt")({
           // keyword index not built yet
         }
 
+        try {
+          const { LLMS_LEGACY } = await import("@/lib/seo/llms-legacy");
+          const { isFreeAccessMode } = await import("@/lib/free-access.server");
+          const free = await isFreeAccessMode();
+          lines.push(
+            ...LLMS_LEGACY.split("\n").filter((l) => !free || !/€9\.99|\/pricing/.test(l)),
+            "",
+          );
+        } catch {
+          // legacy brand sections are optional
+        }
+
         lines.push(
           "## Usage",
           "",
