@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarCheck, Dumbbell, PenLine } from "lucide-react";
 import heroTraining from "@/assets/hero-training.jpg";
-import { PageHeader } from "@/components/PageHeader";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
@@ -73,26 +72,23 @@ function Home() {
   const { freeAccessMode } = useFreeAccessMode();
   return (
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
-      {/* MOBILE — consistent with every other page: centered header + CTAs */}
-      <section className="py-6 sm:hidden">
-        <PageHeader
-          as="p"
-          titleClassName="text-[38px] sm:text-4xl"
-          title={
-            <>
-              YOUR GYM
-              <br />
-              <span className="text-primary">RE-IMAGINED</span>
-            </>
-          }
-          subtitle={
-            <>
-              <span className="font-semibold text-primary">Smarty Gym</span> is your online gym and personal coach. Tell your coach how you feel, what you want to achieve and what you have to train with — and{" "}
-              <span className="font-semibold text-primary">get a complete properly programmed session</span>{" "}
-              built for you, whenever and wherever you train.
-            </>
-          }
-        />
+      {/* MOBILE — eyebrow + tight headline + tagline, matching the original design */}
+      <section className="py-6 text-center sm:hidden">
+        <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-primary">
+          Science-backed · Expert-designed
+        </p>
+        <h1 className="mt-3 text-[38px] font-extrabold uppercase leading-[1.02] tracking-tight">
+          YOUR GYM
+          <br />
+          <span className="text-primary">RE-IMAGINED.</span>
+        </h1>
+        <p className="mt-4 text-[13px] font-semibold uppercase leading-[1.9] tracking-[0.16em] text-muted-foreground">
+          Expert workouts · Exercise library
+          <br />
+          Blog insights · Smarty tools
+          <br />
+          <span className="text-primary">All in your pocket.</span>
+        </p>
 
         <MobileHomeActions showPricing={!freeAccessMode} />
       </section>
