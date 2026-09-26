@@ -130,7 +130,7 @@ export function Navigation() {
             className="bg-transparent p-0 text-lg font-extrabold leading-none tracking-tight no-underline hover:no-underline"
             style={{ textDecoration: "none" }}
           >
-            <span className="text-primary">SMARTY</span><span className="text-green-500">GYM</span>
+            <span data-brand-skip><span className="text-primary">SMARTY</span><span className="text-green-500">GYM</span></span>
           </button>
 
 
@@ -279,7 +279,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         className="absolute left-0 top-0 flex h-full w-[85%] max-w-[340px] flex-col bg-background shadow-2xl"
       >
         <div className="flex h-12 items-center justify-between px-4">
-          <div className="text-base font-extrabold">
+          <div className="text-base font-extrabold" data-brand-skip>
             <span className="text-primary">SMARTY</span><span className="text-green-500">GYM</span>
           </div>
 

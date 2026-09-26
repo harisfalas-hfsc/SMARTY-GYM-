@@ -4,12 +4,14 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   redirect,
 } from "@tanstack/react-router";
 import { resolveLegacyPath } from "../lib/seo/legacy-redirects";
 import { useEffect, type ReactNode } from "react";
+import { startBrandHighlights } from "../lib/brand-highlight";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -445,6 +447,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Highlight brand names ("Smarty Gym", "Charis Falas") everywhere rendered.
+  useEffect(() => {
+    return startBrandHighlights();
+  }, [pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
