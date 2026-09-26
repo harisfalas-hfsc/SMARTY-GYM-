@@ -14,7 +14,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -34,7 +33,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -54,7 +52,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -74,7 +71,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -94,7 +90,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -114,7 +109,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -134,7 +128,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -154,7 +147,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -174,7 +166,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -194,7 +185,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -214,7 +204,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -234,7 +223,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -254,7 +242,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -274,7 +261,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -295,7 +281,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -315,7 +300,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -335,7 +319,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -355,7 +338,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -375,7 +357,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -395,7 +376,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -415,7 +395,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -435,7 +414,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -455,7 +433,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -475,7 +452,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -495,7 +471,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -515,7 +490,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -535,7 +509,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -555,7 +528,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -575,7 +547,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -595,7 +566,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -615,7 +585,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -635,7 +604,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -655,7 +623,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -675,7 +642,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -695,7 +661,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -715,7 +680,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -735,7 +699,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -755,7 +718,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -775,7 +737,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -795,7 +756,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -815,7 +775,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -835,7 +794,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -855,7 +813,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -875,7 +832,6 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
@@ -895,11 +851,11 @@ Disallow: /inbox
 Disallow: /messages
 Disallow: /diagnostics
 Disallow: /checkout
-Disallow: /workout/
 Disallow: /w/
 Disallow: /community/workout/
 
 Sitemap: https://smartygym.com/sitemap.xml
+Sitemap: https://smartygym.com/image-sitemap.xml
 
 # Machine-readable site guides for AI assistants
 # https://smartygym.com/llms.txt
