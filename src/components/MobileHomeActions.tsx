@@ -20,6 +20,7 @@ type CarouselAction = {
   to: "/coach" | "/wod" | "/pricing" | "/shared-workouts";
   image: string;
   icon: LucideIcon;
+  objectPosition?: string;
 };
 
 type ExploreAction = {
@@ -28,7 +29,6 @@ type ExploreAction = {
   to: "/tools" | "/exercise-library" | "/blog";
   image: string;
   icon: LucideIcon;
-  objectPosition?: string;
 };
 
 export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
