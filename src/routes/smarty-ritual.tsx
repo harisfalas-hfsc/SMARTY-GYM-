@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { BookOpen, Clock, Crown, Loader2, Lock, Moon, Sparkles, Sun, Sunrise, X } from "lucide-react";
+import { BookOpen, Clock, Crown, Loader2, Lock, LogIn, Moon, Sparkles, Sun, Sunrise, X } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -84,20 +84,28 @@ function SmartyRitualPage() {
             <div className="flex flex-col items-center gap-4 text-center">
               <Lock className="h-12 w-12 text-muted-foreground" />
               <div>
-                <h3 className="mb-2 text-xl font-semibold">Premium members only</h3>
-                <p className="mb-4 max-w-md text-muted-foreground">
-                  The Daily Smarty Ritual is part of SmartyGym Premium. Become a member to unlock a fresh ritual every day.
-                </p>
                 {user ? (
-                  <Button onClick={() => setMembershipOpen(true)}>
-                    <Crown className="mr-2 h-4 w-4" /> Become a member
-                  </Button>
+                  <>
+                    <h3 className="mb-2 text-xl font-semibold">Premium access required</h3>
+                    <p className="mb-4 max-w-md text-muted-foreground">
+                      Your account does not currently include Smarty Ritual. View the Premium option to unlock today's ritual.
+                    </p>
+                    <Button onClick={() => setMembershipOpen(true)}>
+                      <Crown className="mr-2 h-4 w-4" /> View Premium option
+                    </Button>
+                  </>
                 ) : (
-                  <Button asChild>
-                    <Link to="/auth" search={{ next: "/smarty-ritual", mode: "signup" }}>
-                      <Crown className="mr-2 h-4 w-4" /> Become a member
-                    </Link>
-                  </Button>
+                  <>
+                    <h3 className="mb-2 text-xl font-semibold">Log in to continue</h3>
+                    <p className="mb-4 max-w-md text-muted-foreground">
+                      Log in to check your access to today's Smarty Ritual.
+                    </p>
+                    <Button asChild>
+                      <Link to="/auth" search={{ next: "/smarty-ritual", mode: "signin" }}>
+                        <LogIn className="mr-2 h-4 w-4" /> Log in
+                      </Link>
+                    </Button>
+                  </>
                 )}
               </div>
             </div>
@@ -163,6 +171,8 @@ function SmartyRitualPage() {
         open={membershipOpen}
         onOpenChange={setMembershipOpen}
         title="Unlock the Daily Smarty Ritual"
+        description="Smarty Ritual is included with Premium, with a fresh Morning, Midday and Evening plan every day."
+        label="Premium access"
       />
     </div>
   );

@@ -17,11 +17,13 @@ export function MembershipRequiredDialog({
   onOpenChange,
   title = "Your workout is one step away",
   description = "Smarty Coach builds every session around your profile, your equipment and how you feel today — and remembers what worked. Membership unlocks unlimited coaching, the Workout of the Day and the full community.",
+  label = "Members only",
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title?: string;
   description?: string;
+  label?: string;
 }) {
   const { freeAccessMode } = useFreeAccessMode();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -32,7 +34,7 @@ export function MembershipRequiredDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="mx-auto max-h-[80vh] w-[calc(100%-2.5rem)] max-w-md overflow-y-auto rounded-3xl p-5 sm:p-6">
         <DialogTitle className="flex items-center gap-2 text-base font-extrabold uppercase tracking-[0.14em] text-primary">
-          <Sparkles className="h-5 w-5" /> Members only
+          <Sparkles className="h-5 w-5" /> {label}
         </DialogTitle>
 
         <p className="text-sm font-bold text-foreground">{title}</p>
