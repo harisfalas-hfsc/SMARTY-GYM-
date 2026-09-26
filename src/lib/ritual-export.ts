@@ -85,7 +85,8 @@ const STYLES = `
   .export-sheet .time { color: #647079; font-size: 14px; margin: 2px 0 0; }
   .export-sheet .content p { margin: 8px 0; }
   .export-sheet .content ul, .export-sheet .content ol { margin: 8px 0; padding-left: 25px; }
-  .export-sheet .content li { padding: 0; margin: 3px 0; }
+  .export-sheet .content li { padding: 0; margin: 3px 0; position: relative; }
+  .export-sheet .content li .list-marker { position: absolute; left: -19px; top: 0; }
   .export-sheet .content a { color: #087ea4; text-decoration: underline; }
   .export-sheet .emoji { display: inline-block; width: 17px; height: 17px; vertical-align: -3px; margin: 0 2px; object-fit: contain; }
 `;
@@ -118,6 +119,15 @@ async function sheet(ritual: ExportRitual): Promise<HTMLElement> {
     const content = document.createElement("div");
     content.className = "content";
     content.innerHTML = DOMPurify.sanitize(ritual[phase.key]);
+    content.querySelectorAll("ul, ol").forEach((list) => {
+      Array.from(list.children).forEach((item, index) => {
+        if (item.tagName !== "LI") return;
+        const marker = document.createElement("span");
+        marker.className = "list-marker";
+        marker.textContent = list.tagName === "OL" ? `${index + 1}.` : "•";
+        item.prepend(marker);
+      });
+    });
     section.append(headingRow, content);
     el.append(section);
   }
@@ -148,6 +158,7 @@ export async function exportWord(rituals: ExportRitual[], filename: string) {
   const readRuns = (node: Node, style: { bold?: boolean; italics?: boolean; underline?: object; color?: string } = {}): WordRun[] => {
     if (node.nodeType === Node.TEXT_NODE) return node.textContent ? [new TextRun({ text: node.textContent, ...style })] : [];
     if (!(node instanceof HTMLElement)) return [];
+    if (node.classList.contains("list-marker")) return [];
     if (node.tagName === "IMG" && node instanceof HTMLImageElement) return [new ImageRun({ type: "png", data: imageBytes(node.src), transformation: { width: 13, height: 13 }, altText: { title: node.alt, name: node.alt, description: node.alt } })];
     const next = { ...style };
     if (["B", "STRONG"].includes(node.tagName)) next.bold = true;
@@ -175,7 +186,11 @@ export async function exportWord(rituals: ExportRitual[], filename: string) {
     children.push(new Paragraph({ pageBreakBefore: i > 0, heading: HeadingLevel.HEADING_1, children: readRuns(el.querySelector("h1") as HTMLElement) }));
     children.push(new Paragraph({ children: readRuns(el.querySelector(".byline") as HTMLElement), spacing: { after: 230 } }));
     for (const phase of el.querySelectorAll(".phase")) {
-      children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, children: readRuns(phase.querySelector(".phase-heading") as HTMLElement), spacing: { before: 180, after: 150 }, keepNext: true }));
+      const title = phase.querySelector("h2");
+      const icon = phase.querySelector(".phase-heading .emoji");
+      children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, children: [...(icon ? readRuns(icon) : []), new TextRun(" "), ...(title ? readRuns(title) : [])], spacing: { before: 180, after: 35 }, keepNext: true }));
+      const time = phase.querySelector(".time");
+      if (time) children.push(new Paragraph({ children: readRuns(time), spacing: { after: 140 }, keepNext: true }));
       contentParagraphs(phase.querySelector(".content") as HTMLElement);
     }
   }
