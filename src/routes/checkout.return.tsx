@@ -49,7 +49,7 @@ function CheckoutReturn() {
         </>
       )}
       <Button asChild className="mt-6 h-12 rounded-2xl font-bold">
-        <Link to="/coach">Start training</Link>
+        <Link to="/create-your-workout">Start training</Link>
       </Button>
     </div>
   );

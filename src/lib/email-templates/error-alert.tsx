@@ -99,7 +99,7 @@ export const template = {
   previewData: {
     message: 'Workout generation is unavailable',
     source: 'workout-generation',
-    route: '/coach',
+    route: '/create-your-workout',
     severity: 'error',
     kind: 'server',
     occurredAt: new Date().toISOString(),

@@ -40,7 +40,7 @@ export interface TrainingTopic {
 }
 
 const START_LINKS: TopicLink[] = [
-  { to: "/coach", label: "Create a personalized workout with Smarty Coach" },
+  { to: "/create-your-workout", label: "Create a personalized workout with Smarty Coach" },
   { to: "/wod", label: "Follow today's Workout of the Day" },
   { to: "/exercise-library", label: "Browse the exercise library" },
 ];

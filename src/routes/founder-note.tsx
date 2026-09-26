@@ -177,7 +177,7 @@ function FounderNotePage() {
 
       <div className="mt-10 flex flex-col items-center gap-3">
         <Button asChild size="lg" className="font-extrabold uppercase">
-          <Link to="/coach">Create your workout</Link>
+          <Link to="/create-your-workout">Create your workout</Link>
         </Button>
         <Link to="/haris-falas" className="text-sm font-semibold text-primary underline underline-offset-2">
           More about Haris Falas

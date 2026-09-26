@@ -5,7 +5,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -23,7 +23,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -41,7 +41,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -59,7 +59,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -77,7 +77,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -95,7 +95,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -113,7 +113,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -131,7 +131,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -149,7 +149,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -167,7 +167,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -185,7 +185,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -203,7 +203,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -221,7 +221,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -239,7 +239,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -258,7 +258,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -276,7 +276,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -294,7 +294,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -312,7 +312,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -330,7 +330,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -348,7 +348,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -366,7 +366,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -384,7 +384,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -402,7 +402,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -420,7 +420,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -438,7 +438,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -456,7 +456,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -474,7 +474,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -492,7 +492,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -510,7 +510,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -528,7 +528,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -546,7 +546,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -564,7 +564,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -582,7 +582,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -600,7 +600,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -618,7 +618,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -636,7 +636,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -654,7 +654,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -672,7 +672,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -690,7 +690,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -708,7 +708,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -726,7 +726,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -744,7 +744,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -762,7 +762,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -780,7 +780,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress
@@ -798,7 +798,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
-Disallow: /coach
+Disallow: /create-your-workout
 Disallow: /profile
 Disallow: /logbook
 Disallow: /progress

@@ -227,7 +227,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
           {
             heading: "App",
             items: [
-              { to: "/coach", label: "Create Your Workout", Icon: Sparkles },
+              { to: "/create-your-workout", label: "Create Your Workout", Icon: Sparkles },
               { to: "/wod", label: "Workout of the Day", Icon: CalendarCheck },
                { to: "/shared-workouts", label: "Shared Workouts", Icon: Dumbbell },
               { to: "/logbook", label: "Logbook", Icon: BookOpen },

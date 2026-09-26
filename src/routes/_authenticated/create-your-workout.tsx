@@ -59,7 +59,7 @@ import { getMyAccessState } from "@/lib/access.functions";
 import { PageHeader } from "@/components/PageHeader";
 import { createLocalWorkout } from "@/lib/local-workouts";
 
-export const Route = createFileRoute("/_authenticated/coach")({
+export const Route = createFileRoute("/_authenticated/create-your-workout")({
   head: () => ({
     meta: [
       { title: "Create Your Workout — your personal workout today" },

@@ -230,7 +230,7 @@ function HowItWorks() {
 
         <div className="mt-6 flex justify-center">
           <Button asChild size="lg" className="font-extrabold uppercase">
-            <Link to="/coach">Create my workout</Link>
+            <Link to="/create-your-workout">Create my workout</Link>
           </Button>
         </div>
       </section>

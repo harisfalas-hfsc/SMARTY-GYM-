@@ -211,7 +211,7 @@ const ecosystemItems = [
     title: "Smarty Coach",
     description:
       "Individual structured sessions across multiple categories — each with a clear focus, proper warm-up, primary training block, and cool-down.",
-    link: "/coach",
+    link: "/create-your-workout",
   },
   {
     icon: Wrench,
@@ -577,7 +577,7 @@ function TheSmartyMethod() {
               </div>
 
               <Button asChild size="lg">
-                <Link to="/coach">
+                <Link to="/create-your-workout">
                   <Sparkles className="mr-2 h-5 w-5" />
                   Start Your Journey
                 </Link>

@@ -178,7 +178,7 @@ function WorkoutPage() {
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <p className="text-muted-foreground">Workout not found.</p>
         <Button asChild className="mt-4">
-          <Link to="/coach">Back to Smarty Coach</Link>
+          <Link to="/create-your-workout">Back to Smarty Coach</Link>
         </Button>
       </div>
     );
@@ -316,7 +316,7 @@ function WorkoutPage() {
 
           <div className="grid gap-2 sm:grid-cols-2">
             <Button asChild size="lg" className="h-12 w-full rounded-2xl font-bold">
-              <Link to="/coach">Next workout</Link>
+              <Link to="/create-your-workout">Next workout</Link>
             </Button>
             <Button asChild size="lg" variant="secondary" className="h-12 w-full rounded-2xl font-bold">
               <Link to="/logbook" search={{ filter: "all" as const, view: "list" as const }}>Open logbook</Link>

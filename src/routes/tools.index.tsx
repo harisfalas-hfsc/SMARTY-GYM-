@@ -168,7 +168,7 @@ function ToolsPage() {
 
       <div className="mt-8 text-center text-xs text-muted-foreground">
         Want a session built around your goal?{" "}
-        <Link to="/coach" className="font-semibold text-primary">
+        <Link to="/create-your-workout" className="font-semibold text-primary">
           Ask Smarty Coach →
         </Link>
       </div>

@@ -232,7 +232,7 @@ function BestPlatformsPage() {
                   </div>
                   {p.highlight && (
                     <Button asChild>
-                      <Link to="/coach">Start training with SmartyGym</Link>
+                      <Link to="/create-your-workout">Start training with SmartyGym</Link>
                     </Button>
                   )}
                 </CardContent>
