@@ -4,12 +4,17 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   redirect,
 } from "@tanstack/react-router";
 import { resolveLegacyPath } from "../lib/seo/legacy-redirects";
 import { useEffect, type ReactNode } from "react";
+import {
+  applyBrandHighlights,
+  watchBrandHighlights,
+} from "../lib/brand-highlight";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
