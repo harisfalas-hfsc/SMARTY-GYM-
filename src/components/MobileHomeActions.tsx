@@ -167,7 +167,8 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
                       loading={index === 0 ? "eager" : "lazy"}
                       fetchPriority={index === 0 ? "high" : "auto"}
                       decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover object-[center_top]"
+                      className="absolute inset-0 h-full w-full object-cover"
+                      style={{ objectPosition: action.objectPosition ?? "center top" }}
                     />
                   </div>
                   <div className="flex flex-1 flex-col justify-center p-2 text-center">
