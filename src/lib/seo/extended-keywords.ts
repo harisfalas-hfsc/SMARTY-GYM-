@@ -1,0 +1,294 @@
+/**
+ * Extended, background-only search phrases per public page. Added on top of each
+ * page's existing keywords (never replacing them) and read by the keywords meta
+ * tag, the keyword index and the AI-crawler files. Nothing here renders on screen.
+ *
+ * Carried over from the old SmartyGym search setup, limited to what is true today
+ * (no programs, nutrition calculators, shop or other sites).
+ */
+
+/** Brand and founder entity phrases — how people search for SmartyGym and Haris Falas. */
+export const BRAND_KEYWORDS = [
+  "smartygym",
+  "smarty gym",
+  "smartygym.com",
+  "smarty gym online",
+  "smartygym app",
+  "smart gym online",
+  "online gym",
+  "virtual gym",
+  "digital gym",
+  "your gym re-imagined",
+  "gym in your pocket",
+  "anywhere anytime workouts",
+];
+
+export const FOUNDER_KEYWORDS = [
+  "haris falas",
+  "coach haris",
+  "coach haris falas",
+  "haris falas coach",
+  "haris falas trainer",
+  "haris falas sports scientist",
+  "haris falas cscs",
+  "haris falas strength coach",
+  "haris falas cyprus",
+  "haris falas nicosia",
+  "haris falas hfsc",
+  "hfsc",
+  "hfsc performance",
+  "sports scientist cyprus",
+  "strength and conditioning coach cyprus",
+  "personal trainer cyprus",
+  "bsc sports science",
+  "certified strength and conditioning specialist",
+  "nsca cscs",
+  "exos performance specialist",
+  "fms specialist",
+  "ace medical exercise specialist",
+];
+
+export const SERVICE_KEYWORDS = [
+  "online fitness platform",
+  "online workouts",
+  "online training",
+  "online coaching",
+  "online personal training",
+  "online personal trainer",
+  "virtual personal trainer",
+  "virtual fitness coach",
+  "online fitness coaching",
+  "home workouts",
+  "home gym workouts",
+  "gym workouts",
+  "outdoor workouts",
+  "travel workouts",
+  "hotel room workout",
+  "office fitness",
+  "online workouts for busy people",
+  "home workouts without equipment",
+  "expert designed workouts",
+  "expert designed workouts by sports scientist",
+  "science based workouts",
+  "evidence based training",
+  "personalized workout plan",
+  "custom workout generator",
+  "workout generator app",
+  "best online gym",
+  "best workout app",
+  "fitness app for adults",
+  "beginner home workouts",
+  "advanced hiit training",
+  "professional online fitness coaching",
+];
+
+export const FORMAT_KEYWORDS = [
+  "amrap workout",
+  "tabata workout",
+  "emom workout",
+  "circuit training",
+  "for time workout",
+  "rounds for time",
+  "reps and sets",
+  "timed sets",
+  "supersets",
+  "hiit workout",
+  "strength workout",
+  "hypertrophy workout",
+  "metabolic conditioning",
+  "calorie burning workout",
+  "cardio workout",
+  "mobility workout",
+  "stability workout",
+  "recovery workout",
+  "challenge workout",
+  "functional training",
+  "bodyweight workout",
+  "dumbbell workout",
+  "kettlebell workout",
+  "barbell workout",
+  "resistance band workout",
+  "no equipment workout",
+];
+
+/** Category comparison phrases people search when choosing a training app. */
+export const COMPARISON_KEYWORDS = [
+  "freeletics alternative",
+  "peloton alternative",
+  "fitbod alternative",
+  "nike training club alternative",
+  "apple fitness plus alternative",
+  "centr alternative",
+  "personal trainer alternative",
+  "gym membership alternative",
+];
+
+/** Extra phrases per page path, appended after the page's own keywords. */
+export const EXTENDED_PAGE_KEYWORDS: Record<string, string[]> = {
+  "/": [...BRAND_KEYWORDS, ...SERVICE_KEYWORDS, ...COMPARISON_KEYWORDS, "haris falas"],
+  "/about": [
+    ...BRAND_KEYWORDS,
+    "about smarty gym",
+    "what is smartygym",
+    "online gym anywhere anytime",
+    "sports science training philosophy",
+    "haris falas",
+    "haris falas sports scientist",
+    "science backed expert designed",
+  ],
+  "/how-it-works": [
+    "how smarty coach works",
+    "how workouts are generated",
+    "how to create a workout",
+    "workout questionnaire",
+    "goal mood time location equipment",
+    "personalized session builder",
+    "adaptive training",
+    "workout adapts to you",
+  ],
+  "/wod": [
+    "smarty wod",
+    "daily wod",
+    "free workout of the day",
+    "wod today",
+    "daily workout plan",
+    "periodized daily workout",
+    "bodyweight wod",
+    "dumbbell wod",
+    "kettlebell wod",
+    "daily training email",
+  ],
+  "/exercise-library": [
+    "exercise demonstrations",
+    "exercise gifs",
+    "exercise videos",
+    "how to do exercises",
+    "exercises for every muscle",
+    "chest exercises",
+    "back exercises",
+    "leg exercises",
+    "shoulder exercises",
+    "arm exercises",
+    "core exercises",
+    "glute exercises",
+    "bodyweight exercises",
+    "dumbbell exercises",
+    "kettlebell exercises",
+    "barbell exercises",
+    "resistance band exercises",
+    "mobility exercises",
+    "liked exercises",
+  ],
+  "/training": [
+    "training topics",
+    "strength training for beginners",
+    "how to build muscle",
+    "how to improve conditioning",
+    "mobility training",
+    "recovery training",
+    "fat loss training",
+    "workout programming guide",
+  ],
+  "/glossary": [
+    "fitness glossary",
+    "gym terms explained",
+    "what is amrap",
+    "what is emom",
+    "what is tabata",
+    "what is rpe",
+    "what is tempo training",
+    "what is progressive overload",
+    "what is periodization",
+    "what is a deload",
+    "what is a superset",
+    "what is hypertrophy",
+  ],
+  "/blog": [
+    "smarty blog",
+    "smartygym blog",
+    "blog and insights",
+    "fitness articles",
+    "training tips",
+    "workout tips",
+    "sports science articles",
+    "haris falas articles",
+    "weekly fitness article",
+  ],
+  "/tools": [
+    "smarty tools",
+    "free fitness tools",
+    "gym tools",
+    "fitness calculators",
+    "tabata timer",
+    "emom timer",
+    "amrap counter",
+    "max strength calculator",
+  ],
+  "/tools/workout-timer": ["smarty workout timer", "free interval timer", "circuit timer", "boxing round timer", "gym timer app"],
+  "/tools/rounds-tracker": ["smarty rounds tracker", "amrap round counter", "workout counter", "crossfit round counter"],
+  "/tools/1rm-calculator": ["smarty 1rm calculator", "bench press 1rm", "squat 1rm", "deadlift 1rm", "brzycki formula", "percentage chart"],
+  "/faq": [
+    "smarty gym questions",
+    "how does smarty gym work",
+    "is smarty gym free",
+    "what equipment do i need",
+    "can i train at home",
+    "workouts with injuries",
+    "how does workout of the day work",
+    "how to share a workout",
+    "how to delete my account",
+    "who is haris falas",
+  ],
+  "/haris-falas": FOUNDER_KEYWORDS,
+  "/founder-note": ["note from the founder", "haris falas", "coach haris", "hfsc", "why smarty gym was built", "25 years in fitness"],
+  "/community": [
+    "smarty community",
+    "fitness community",
+    "workout community",
+    "shared workouts",
+    "workout leaderboard",
+    "member rankings",
+    "workout comments",
+  ],
+  "/shared-workouts": [
+    "shared workouts",
+    "smarty shared workouts",
+    "community workouts",
+    "member workouts",
+    "free shared workouts",
+    "top rated workouts",
+    "popular workouts",
+    "workouts by category",
+    "workouts by difficulty",
+  ],
+  "/contact": ["contact smarty gym", "smarty gym support", "smartygym email", "contact haris falas"],
+  "/privacy": ["smarty gym privacy", "privacy policy", "gdpr fitness app", "data export", "account deletion"],
+  "/terms": ["smarty gym terms", "terms of service", "terms of use", "user agreement", "fitness app terms"],
+  "/disclaimer": ["smarty gym disclaimer", "fitness disclaimer", "health disclaimer", "exercise safety", "par-q", "medical clearance"],
+  "/pricing": ["smarty gym membership", "smarty premium", "online gym membership", "affordable online gym"],
+  /** Signed-in areas: keyword index only — these pages are never listed for crawlers. */
+  "/coach": ["smarty coach", "ask your coach", "workout creator", "create a workout", "personal coach", "ai-free coaching style"].filter(
+    (k) => k !== "ai-free coaching style",
+  ),
+  "/logbook": ["smarty logbook", "workout logbook", "training diary", "workout log", "exercise log", "training history"],
+};
+
+const norm = (k: string) => k.trim().toLowerCase();
+
+/** Existing keywords first, then the extended phrases, de-duplicated. */
+export function mergeKeywords(existing: string[], path: string): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const k of [...existing, ...(EXTENDED_PAGE_KEYWORDS[path] ?? [])]) {
+    const n = norm(k);
+    if (!n || seen.has(n)) continue;
+    seen.add(n);
+    out.push(k.trim());
+  }
+  return out;
+}
+
+/** For a route's keywords meta `content` string: keeps the original and appends. */
+export function withExtendedKeywords(path: string, content: string): string {
+  return mergeKeywords(content.split(","), path).join(", ");
+}
