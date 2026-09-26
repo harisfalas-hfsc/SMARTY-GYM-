@@ -87,7 +87,7 @@ function AboutPage() {
         eyebrow="About"
         title={
           <>
-            Your gym <span className="text-primary">reimagined</span>
+            Your gym <span className="text-primary">re-imagined</span>
             <br />
             anywhere, anytime
           </>
@@ -117,17 +117,18 @@ function AboutPage() {
           eyebrowIcon={Brain}
           title={
             <>
-              A fitness coach built on{" "}
-              <span className="text-primary">real science</span>
+              A complete online gym,{" "}
+              <span className="text-primary">in your pocket</span>
             </>
           }
           description={
             <>
-              Smarty Gym is a fitness coach built on real Strength & Conditioning science. Every
-              session is structured around{" "}
-              <span className="font-semibold text-foreground">proven training principles</span> — not
-              a lucky shuffle of exercises. That is the difference between a generic generator and a
-              coach that thinks like a{" "}
+              Smarty Gym is a real gym that lives on your phone — open{" "}
+              <span className="font-semibold text-foreground">anywhere, anytime</span>. Every
+              session inside is structured around{" "}
+              <span className="font-semibold text-foreground">proven training principles</span> —
+              not a lucky shuffle of exercises. That is the difference between a generic generator
+              and a gym that thinks like a{" "}
               <span className="font-semibold text-foreground">sports scientist</span>.
             </>
           }
