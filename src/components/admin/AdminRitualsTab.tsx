@@ -3,7 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ritual/RichTextEditor";
+import { exportPdf, exportWord } from "@/lib/ritual-export";
+import { FileDown, FileText } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { adminListRituals, adminUpdateRitual } from "@/lib/ritual.functions";
 
@@ -36,7 +38,17 @@ export function AdminRitualsTab() {
 
   return (
     <div className="space-y-2">
-      <p className="text-sm text-muted-foreground">{data.rituals.length} rituals — one per day, in order, then the cycle starts again.</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground">{data.rituals.length} rituals — one per day, in order, then the cycle starts again.</p>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => exportWord(data.rituals, "smarty-rituals")}>
+            <FileText className="mr-2 h-4 w-4" /> Export all · Word
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => { if (!exportPdf(data.rituals, "smarty-rituals")) toast.error("Allow pop-ups to export PDF"); }}>
+            <FileDown className="mr-2 h-4 w-4" /> Export all · PDF
+          </Button>
+        </div>
+      </div>
       {data.rituals.map((r) => {
         const isToday = r.next === data.today;
         return (
@@ -58,20 +70,27 @@ export function AdminRitualsTab() {
       })}
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+        <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-3xl overflow-y-auto rounded-2xl">
           <DialogTitle>Ritual {editing?.number}</DialogTitle>
           {editing && (
             <div className="space-y-3">
               {(["morning_content", "midday_content", "evening_content"] as const).map((k) => (
-                <label key={k} className="block space-y-1">
+                <div key={`${editing.id}-${k}`} className="space-y-1">
                   <span className="text-sm font-semibold capitalize">{k.split("_")[0]}</span>
-                  <Textarea
-                    rows={8}
+                  <RichTextEditor
                     value={editing[k]}
-                    onChange={(e) => setEditing({ ...editing, [k]: e.target.value })}
+                    onChange={(html) => setEditing((prev) => (prev ? { ...prev, [k]: html } : prev))}
                   />
-                </label>
+                </div>
               ))}
+              <div className="grid grid-cols-2 gap-2">
+                <Button variant="outline" onClick={() => exportWord([editing], `smarty-ritual-${editing.number}`)}>
+                  <FileText className="mr-2 h-4 w-4" /> Word
+                </Button>
+                <Button variant="outline" onClick={() => { if (!exportPdf([editing], `smarty-ritual-${editing.number}`)) toast.error("Allow pop-ups to export PDF"); }}>
+                  <FileDown className="mr-2 h-4 w-4" /> PDF
+                </Button>
+              </div>
               <Button
                 disabled={saving}
                 className="w-full"

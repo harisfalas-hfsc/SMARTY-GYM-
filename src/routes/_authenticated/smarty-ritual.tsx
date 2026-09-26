@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { Clock, Crown, Loader2, Lock, Moon, Share2, Sparkles, Sun, Sunrise } from "lucide-react";
-import { toast } from "sonner";
+import { BookOpen, Clock, Crown, Loader2, Lock, Moon, Sparkles, Sun, Sunrise, X } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -36,24 +36,11 @@ function SmartyRitualPage() {
   const fetchRitual = useServerFn(getTodaysRitual);
   const { data, isLoading } = useQuery({ queryKey: ["smarty-ritual"], queryFn: () => fetchRitual() });
   const [membershipOpen, setMembershipOpen] = useState(false);
+  const [readerOpen, setReaderOpen] = useState(false);
 
   const dateLabel = data
     ? new Date(`${data.today}T12:00:00Z`).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
     : "";
-
-  async function share() {
-    const url = `${window.location.origin}/smarty-ritual`;
-    const text = "My Daily Smarty Ritual on SmartyGym";
-    try {
-      if (navigator.share) await navigator.share({ title: "Smarty Ritual", text, url });
-      else {
-        await navigator.clipboard.writeText(url);
-        toast.success("Link copied");
-      }
-    } catch {
-      /* cancelled */
-    }
-  }
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 pb-10 pt-6">
@@ -77,8 +64,8 @@ function SmartyRitualPage() {
       <Card className="overflow-hidden">
         <div className="relative bg-gradient-to-r from-primary/10 to-primary/5 p-6 sm:p-8">
           {data?.ritual && (
-            <Button variant="outline" size="sm" className="absolute right-4 top-4" onClick={share}>
-              <Share2 className="mr-2 h-4 w-4" /> Share
+            <Button variant="outline" size="sm" className="absolute right-4 top-4" onClick={() => setReaderOpen(true)}>
+              <BookOpen className="mr-2 h-4 w-4" /> Reader
             </Button>
           )}
           <div className="flex flex-col items-center text-center">
@@ -137,6 +124,37 @@ function SmartyRitualPage() {
           </CardContent>
         )}
       </Card>
+      {data?.ritual && (
+        <Dialog open={readerOpen} onOpenChange={setReaderOpen}>
+          <DialogContent className="flex h-[100dvh] max-h-[100dvh] w-screen max-w-none flex-col gap-0 overflow-hidden rounded-none border-0 bg-background p-0 text-foreground sm:h-[92vh] sm:w-[min(760px,calc(100%-2rem))] sm:rounded-2xl sm:border [&>button:last-child]:hidden">
+            <div className="flex items-center justify-between border-b border-border px-5 py-3">
+              <DialogTitle className="text-base font-bold">
+                Daily Smarty Ritual {data.ritual.position}
+              </DialogTitle>
+              <Button variant="ghost" size="icon" aria-label="Close reader" onClick={() => setReaderOpen(false)}>
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-5 py-6 sm:px-10">
+              <p className="mb-6 text-sm text-muted-foreground">{dateLabel}</p>
+              {PHASES.map(({ key, title, time, Icon, tone }, i) => (
+                <section key={key} className={i > 0 ? "mt-8 border-t border-border pt-8" : ""}>
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className={`rounded-full p-2 ${tone}`}><Icon className="h-6 w-6" /></div>
+                    <div>
+                      <h2 className="text-xl font-bold">{title}</h2>
+                      <p className="text-sm text-muted-foreground">{time}</p>
+                    </div>
+                  </div>
+                  <div className="text-base leading-relaxed [&_.prose]:text-base">
+                    <RitualHTML html={data.ritual![key]} />
+                  </div>
+                </section>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
       <MembershipRequiredDialog
         open={membershipOpen}
         onOpenChange={setMembershipOpen}
