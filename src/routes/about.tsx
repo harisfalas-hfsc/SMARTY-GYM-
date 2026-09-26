@@ -232,10 +232,10 @@ function AboutPage() {
       </p>
 
       <h2 className="mt-10 text-center text-xl font-extrabold uppercase sm:text-2xl">
-        Three ways to <span className="text-primary">benefit</span>
+        Three ways to train. One daily <span className="text-primary">ritual.</span>
       </h2>
 
-      <div className="mx-auto mt-4 grid max-w-xl gap-4 lg:max-w-6xl lg:grid-cols-3">
+      <div className="mx-auto mt-4 grid max-w-xl gap-4 lg:max-w-6xl lg:grid-cols-2">
         <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Create your workout
@@ -280,6 +280,21 @@ function AboutPage() {
           </p>
           <Button asChild className="mt-auto w-full font-extrabold uppercase">
             <Link to="/community">Open Smarty Community</Link>
+          </Button>
+        </div>
+
+        <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+            Smarty Ritual
+          </p>
+          <p className="mt-2 text-base font-extrabold uppercase">Move, reset and recover every day</p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Open one fresh daily ritual with three practical phases: Morning activation, a Midday
+            reset and an Evening unwind. Each phase supports mobility, energy and recovery around
+            your training and the rest of your day.
+          </p>
+          <Button asChild className="mt-auto w-full font-extrabold uppercase">
+            <Link to="/smarty-ritual">Open Smarty Ritual</Link>
           </Button>
         </div>
       </div>

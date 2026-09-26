@@ -10,7 +10,7 @@ export const Route = createFileRoute("/how-it-works")({
       {
         name: "keywords",
         content:
-          withExtendedKeywords("/how-it-works", "how smartygym works, pre workout questionnaire, training profile, warm up activation main workout finisher cool down, sets reps tempo rest, guided workout player, session debrief"),
+           withExtendedKeywords("/how-it-works", "how smartygym works, pre workout questionnaire, training profile, warm up activation main workout finisher cool down, sets reps tempo rest, guided workout player, session debrief, smarty ritual, daily movement recovery ritual"),
       },
       { title: "How Smarty Gym works — answer, analyze, train" },
       {
@@ -159,6 +159,24 @@ const COMMUNITY_STEPS = [
   },
 ];
 
+const RITUAL_STEPS = [
+  {
+    n: "01",
+    title: "Morning activation",
+    desc: "Wake up • Mobilize • Prepare",
+  },
+  {
+    n: "02",
+    title: "Midday reset",
+    desc: "Move • Release stiffness • Refocus",
+  },
+  {
+    n: "03",
+    title: "Evening unwind",
+    desc: "Recover • Decompress • Prepare for rest",
+  },
+];
+
 const TRACKING_STEPS = [
   {
     n: "01",
@@ -196,7 +214,7 @@ function HowItWorks() {
             Simple &amp; <span className="text-primary">transparent</span>
           </>
         }
-        subtitle="Three ways to train: create your own workout on demand, follow the Workout of the Day, or train a workout shared by the Smarty Community."
+        subtitle="Three ways to train: create your own workout on demand, follow the Workout of the Day, or train a workout shared by the Smarty Community — with Smarty Ritual supporting your movement and recovery every day."
       />
 
       <section className="rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
@@ -231,6 +249,36 @@ function HowItWorks() {
         <div className="mt-6 flex justify-center">
           <Button asChild size="lg" className="font-extrabold uppercase">
             <Link to="/create-your-workout">Create my workout</Link>
+          </Button>
+        </div>
+      </section>
+
+      <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+        <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+          Daily support — Smarty Ritual
+        </p>
+        <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
+          Your day is more than one workout.
+        </h2>
+        <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
+          Each day brings one fresh Smarty Ritual arranged around three moments: activate in the
+          morning, reset at midday and unwind in the evening. Open it, follow the practical guidance
+          and support your mobility, energy and recovery between workouts.
+        </p>
+
+        <div className="mt-6 grid gap-6 sm:grid-cols-3 sm:gap-4">
+          {RITUAL_STEPS.map((s) => (
+            <div key={s.n} className="flex flex-col items-center text-center">
+              <div className="text-4xl font-black leading-none text-primary sm:text-5xl">{s.n}</div>
+              <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
+              <div className="mt-1 text-sm text-muted-foreground">{s.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          <Button asChild size="lg" className="font-extrabold uppercase">
+            <Link to="/smarty-ritual">Open Smarty Ritual</Link>
           </Button>
         </div>
       </section>

@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { getTodaysRitual } from "@/lib/ritual.functions";
 import { RitualHTML } from "@/components/ritual/RitualHTML";
 import { MembershipRequiredDialog } from "@/components/MembershipRequiredDialog";
+import { PageHeader } from "@/components/PageHeader";
 
 export const Route = createFileRoute("/_authenticated/smarty-ritual")({
   component: SmartyRitualPage,
@@ -43,23 +44,12 @@ function SmartyRitualPage() {
     : "";
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 pb-10 pt-6">
-      <Card className="mb-6 border-2 border-primary/40">
-        <div className="p-4 text-center sm:p-5">
-          <h2 className="mb-3 text-xl font-extrabold uppercase tracking-tight sm:text-2xl">Smarty Ritual</h2>
-          <p className="text-sm font-bold text-muted-foreground sm:text-base">
-            Your all-day game plan for movement, recovery, and performance. Each day brings a fresh ritual with three expertly designed phases:
-          </p>
-          <div className="mt-4 grid grid-cols-1 justify-items-center gap-3 sm:grid-cols-3">
-            <span className="flex items-center gap-2 text-sm font-bold"><Sunrise className="h-4 w-4 text-orange-500" /> Morning: Activation</span>
-            <span className="flex items-center gap-2 text-sm font-bold"><Sun className="h-4 w-4 text-yellow-600" /> Midday: Reset</span>
-            <span className="flex items-center gap-2 text-sm font-bold"><Moon className="h-4 w-4 text-purple-600" /> Evening: Unwind</span>
-          </div>
-          <p className="mt-4 text-sm font-semibold sm:text-base">
-            Designed by <Link to="/haris-falas" className="text-primary hover:underline">Haris Falas</Link> to keep you energized, mobile, and performing at your best.
-          </p>
-        </div>
-      </Card>
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
+      <PageHeader
+        eyebrow="Smarty Ritual"
+        title={<>Move. Reset. <span className="text-primary">Recover.</span></>}
+        subtitle={<>Your daily Morning, Midday and Evening plan for movement, recovery and performance, designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>.</>}
+      />
 
       <Card className="overflow-hidden">
         <div className="relative bg-gradient-to-r from-primary/10 to-primary/5 p-6 sm:p-8">
