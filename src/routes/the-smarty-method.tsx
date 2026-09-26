@@ -314,11 +314,11 @@ function TheSmartyMethod() {
     <main className="min-h-screen bg-background">
       <div className="container mx-auto max-w-5xl px-4 py-8 md:max-w-[1200px] md:px-6">
         {/* Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-1.5 text-sm text-muted-foreground">
+        <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted-foreground sm:text-sm [&>*]:whitespace-nowrap">
           <Link to="/" className="hover:text-primary">Home</Link>
-          <ChevronRight className="h-3.5 w-3.5" />
+          <ChevronRight className="h-3.5 w-3.5 shrink-0" />
           <Link to="/about" className="hover:text-primary">About SmartyGym</Link>
-          <ChevronRight className="h-3.5 w-3.5" />
+          <ChevronRight className="h-3.5 w-3.5 shrink-0" />
           <span className="text-foreground">The Smarty Method</span>
         </nav>
 
