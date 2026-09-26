@@ -296,6 +296,11 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
             to: "/about" as const,
             image: aboutImage,
             icon: Info,
+            thumbClass: "h-[58px] w-[58px]",
+            objectPosition: "center center",
+          },
+          {
+            label: "COMMUNITY",
             title: "Smarty Community",
             description: "Share workouts, join rankings, and connect",
             to: "/community" as const,
