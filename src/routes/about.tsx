@@ -247,7 +247,7 @@ function AboutPage() {
             when your day, your energy or your available gear changes.
           </p>
           <Button asChild className="mt-auto w-full font-extrabold uppercase">
-            <Link to="/coach">Create your workout</Link>
+            <Link to="/create-your-workout">Create your workout</Link>
           </Button>
         </div>
 

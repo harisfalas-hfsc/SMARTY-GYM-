@@ -123,7 +123,7 @@ function Home() {
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3 lg:flex-nowrap">
               <Link
-                to="/coach"
+                to="/create-your-workout"
                 className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 text-base font-bold text-primary-foreground hover:opacity-95 lg:px-8"
               >
                 <Dumbbell className="h-4 w-4 shrink-0" />

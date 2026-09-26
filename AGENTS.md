@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep the standalone Shared Workouts page backed by the existing public community-workout view and access guard, so its listing stays consistent without duplicating workout rules or altering Community.
+- The workout creator's canonical route is `/create-your-workout`; `/coach` exists only as a redirect so old bookmarks still work.

@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 type CarouselAction = {
   title: string;
   description: string;
-  to: "/coach" | "/wod" | "/pricing" | "/shared-workouts";
+  to: "/create-your-workout" | "/wod" | "/pricing" | "/shared-workouts";
   image: string;
   icon: LucideIcon;
   objectPosition?: string;
@@ -42,7 +42,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
     {
       title: "Create Your Workout",
       description: "Get a personalized workout built for you",
-      to: "/coach",
+      to: "/create-your-workout",
       image: createWorkoutImage,
       icon: Dumbbell,
       objectPosition: "center center",
