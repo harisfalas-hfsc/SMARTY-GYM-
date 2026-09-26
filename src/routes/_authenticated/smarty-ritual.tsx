@@ -63,9 +63,9 @@ function SmartyRitualPage() {
             <p className="mb-2 text-sm text-muted-foreground">
               Designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>
             </p>
-            <h1 className="mb-2 text-2xl font-bold sm:text-3xl">
+            <h2 className="mb-2 text-2xl font-bold sm:text-3xl">
               Daily <span className="text-primary">Smarty</span> Ritual
-            </h1>
+            </h2>
             <p className="max-w-md text-sm text-muted-foreground">Your all-day game plan for movement, recovery, and performance</p>
             {dateLabel && <p className="mt-3 text-sm font-semibold">{dateLabel}</p>}
           </div>
