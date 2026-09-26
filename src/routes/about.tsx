@@ -87,15 +87,17 @@ function AboutPage() {
         eyebrow="About"
         title={
           <>
-            Coaching expertise
+            Your gym <span className="text-primary">reimagined</span>
             <br />
-            <span className="text-primary">Precision</span>
+            anywhere, anytime
           </>
         }
         subtitle={
           <>
-            An intelligent fitness coach trained around the sports science and training philosophy
-            of{" "}
+            Smarty Gym is your online gym and personal coach. Tell your coach how you feel, what
+            you want to achieve and what you have to train with — and get a complete properly
+            programmed session built for you, whenever and wherever you train. Built on the sports
+            science and training philosophy of{" "}
             <Link
               to="/haris-falas"
               className="whitespace-nowrap font-semibold text-primary underline underline-offset-2"
