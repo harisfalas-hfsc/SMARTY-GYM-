@@ -479,14 +479,14 @@ function TheSmartyMethod() {
                     <AreaChart data={progressData}>
                       <defs>
                         <linearGradient id="progressGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="week" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                      <XAxis dataKey="week" tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
                       <YAxis hide />
-                      <Area type="monotone" dataKey="value" stroke="hsl(var(--primary))" fill="url(#progressGradient)" strokeWidth={2} />
+                      <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="url(#progressGradient)" strokeWidth={2} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -505,10 +505,10 @@ function TheSmartyMethod() {
                 <div className="h-32">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={workoutFrequencyData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                      <XAxis dataKey="day" tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
                       <YAxis hide />
-                      <Bar dataKey="sessions" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="sessions" fill="#22c55e" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

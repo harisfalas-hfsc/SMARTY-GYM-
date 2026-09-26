@@ -128,10 +128,12 @@ const consistencyResultsData = [
 ];
 
 const adherenceData = [
-  { name: "Expert-Guided Training", value: 67, fill: "hsl(var(--primary))" },
-  { name: "Self-Guided Training", value: 23, fill: "hsl(var(--muted-foreground))" },
-  { name: "Generic Apps", value: 10, fill: "hsl(var(--muted))" },
+  { name: "Expert-Guided Training", value: 67, fill: "#22c55e" },
+  { name: "Self-Guided Training", value: 23, fill: "#f59e0b" },
+  { name: "Generic Apps", value: 10, fill: "#94a3b8" },
 ];
+
+const inactivityColors = ["#fbbf24", "#fb923c", "#f97316", "#ef4444", "#dc2626"];
 
 const inactivityByAgeData = [
   { age: "18-29", percentage: 27 },
@@ -255,11 +257,12 @@ function WhyInvestInSmartyGym() {
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={mentalHealthData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="condition" className="text-xs" />
-                        <YAxis tickFormatter={(v) => `${v}%`} className="text-xs" />
+                        <XAxis dataKey="condition" tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
+                        <YAxis tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
                         <Tooltip />
-                        <Bar dataKey="withExercise" name="With Regular Exercise" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="withoutExercise" name="Without Exercise" fill="hsl(var(--destructive))" radius={[4, 4, 0, 0]} />
+                        <Legend wrapperStyle={{ fontSize: 12 }} />
+                        <Bar dataKey="withExercise" name="With Regular Exercise" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="withoutExercise" name="Without Exercise" fill="#ef4444" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -347,11 +350,12 @@ function WhyInvestInSmartyGym() {
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={consistencyResultsData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="week" className="text-xs" />
-                        <YAxis className="text-xs" />
+                        <XAxis dataKey="week" tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
+                        <YAxis tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
                         <Tooltip />
-                        <Line type="monotone" dataKey="structured" stroke="hsl(var(--primary))" strokeWidth={3} dot={{ fill: "hsl(var(--primary))", strokeWidth: 2, r: 5 }} name="Structured Training" />
-                        <Line type="monotone" dataKey="unstructured" stroke="hsl(var(--muted-foreground))" strokeWidth={2} strokeDasharray="5 5" dot={{ fill: "hsl(var(--muted-foreground))", strokeWidth: 2, r: 4 }} name="Self-Guided" />
+                        <Legend wrapperStyle={{ fontSize: 12 }} />
+                        <Line type="monotone" dataKey="structured" stroke="#3b82f6" strokeWidth={3} dot={{ fill: "#3b82f6", strokeWidth: 2, r: 5 }} name="Structured Training" />
+                        <Line type="monotone" dataKey="unstructured" stroke="#f59e0b" strokeWidth={2} strokeDasharray="5 5" dot={{ fill: "#f59e0b", strokeWidth: 2, r: 4 }} name="Self-Guided" />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -381,12 +385,12 @@ function WhyInvestInSmartyGym() {
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
-                        <Pie data={adherenceData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value" label={({ value }) => `${value}%`}>
+                        <Pie data={adherenceData} cx="50%" cy="42%" innerRadius={45} outerRadius={70} paddingAngle={5} dataKey="value" label={({ value }) => `${value}%`}>
                           {adherenceData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.fill} />
                           ))}
                         </Pie>
-                        <Legend />
+                        <Legend verticalAlign="bottom" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
                         <Tooltip />
                       </PieChart>
                     </ResponsiveContainer>
@@ -564,10 +568,14 @@ function WhyInvestInSmartyGym() {
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={inactivityByAgeData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="age" className="text-xs" />
-                        <YAxis tickFormatter={(v) => `${v}%`} className="text-xs" />
+                        <XAxis dataKey="age" tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
+                        <YAxis tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
                         <Tooltip />
-                        <Bar dataKey="percentage" fill="hsl(var(--destructive))" radius={[4, 4, 0, 0]} name="Inactive %" />
+                        <Bar dataKey="percentage" radius={[4, 4, 0, 0]} name="Inactive %">
+                          {inactivityByAgeData.map((_, index) => (
+                            <Cell key={`cell-${index}`} fill={inactivityColors[index]} />
+                          ))}
+                        </Bar>
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
