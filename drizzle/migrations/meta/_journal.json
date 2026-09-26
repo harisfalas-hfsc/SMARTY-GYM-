@@ -365,6 +365,13 @@
       "when": 1790404342112,
       "tag": "0051_restrict_direct_public_progress_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1790404353504,
+      "tag": "0052_limit_exercise_storage_to_public_demos",
+      "breakpoints": true
     }
   ]
 }
