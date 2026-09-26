@@ -23,7 +23,7 @@ function confidenceRule(ctx: CoachContext): CoachRecommendation | null {
     id: "confidence.limited",
     message: `Training at your selected ${starWord(ctx.selectedStars)} is a fine starting point.`,
     reason:
-      "Not enough logged performance data yet to recommend a different level — log your sets and results and SmartyCoach will start comparing like with like.",
+      "Not enough logged performance data yet to recommend a different level — log your sets and results and your workout builder will start comparing like with like.",
     suggestedStars: null,
     priority: 10,
   };
