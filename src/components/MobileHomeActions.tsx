@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
+import { Sparkles, BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
 import sharedWorkoutsImage from "@/assets/shared-workouts-card.jpg";
@@ -9,6 +9,9 @@ import createWorkoutImage from "@/assets/create-workout-card.jpg";
 import toolsImage from "@/assets/explore-tools.jpg";
 import exerciseLibraryImage from "@/assets/explore-exercise-library.jpg";
 import blogImage from "@/assets/explore-blog.jpg";
+import ritualImage from "@/assets/explore-ritual.jpg";
+import { useAuth } from "@/hooks/useAuth";
+import { getMyAccessState } from "@/lib/access.functions";
 import communityImage from "@/assets/community-card.jpg";
 import aboutImage from "@/assets/about-smartygym-card.jpg";
 import { Button } from "@/components/ui/button";
@@ -27,7 +30,7 @@ type CarouselAction = {
 type ExploreAction = {
   title: string;
   description: string;
-  to: "/tools" | "/exercise-library" | "/blog" | "/pricing";
+  to: "/smarty-ritual" | "/tools" | "/exercise-library" | "/blog" | "/pricing";
   image: string;
   icon: LucideIcon;
 };
@@ -37,6 +40,22 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [exploreApi, setExploreApi] = useState<CarouselApi>();
   const [exploreIndex, setExploreIndex] = useState(0);
+  const { user, loading: authLoading } = useAuth();
+  const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    if (authLoading || !user) {
+      setIsPremium(false);
+      return;
+    }
+    void getMyAccessState({})
+      .then((a) => active && setIsPremium(Boolean(a?.premium)))
+      .catch(() => active && setIsPremium(false));
+    return () => {
+      active = false;
+    };
+  }, [user, authLoading]);
 
   const carouselActions: CarouselAction[] = [
     {
@@ -65,6 +84,13 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
 
   const exploreActions: ExploreAction[] = [
     {
+      title: "Smarty Ritual",
+      description: "Your daily morning, midday and evening ritual",
+      to: "/smarty-ritual",
+      image: ritualImage,
+      icon: Sparkles,
+    },
+    {
       title: "Smarty Tools",
       description: "Calculators for fitness metrics",
       to: "/tools",
@@ -85,7 +111,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       image: blogImage,
       icon: Newspaper,
     },
-    ...(showPricing
+    ...(showPricing && !isPremium
       ? [
           {
             title: "Premium membership",
