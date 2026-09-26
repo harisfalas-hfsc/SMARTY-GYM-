@@ -62,11 +62,11 @@ import { createLocalWorkout } from "@/lib/local-workouts";
 export const Route = createFileRoute("/_authenticated/coach")({
   head: () => ({
     meta: [
-      { title: "Smarty Coach — your personal workout today" },
+      { title: "Create Your Workout — your personal workout today" },
       {
         name: "description",
         content:
-          "Tell Smarty Coach your goal, mood, time and equipment and get a personalised workout built from a 1,300+ exercise library.",
+          "Answer your goal, mood, time, location and equipment and get a personalised workout built from a 1,300+ exercise library.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -300,9 +300,9 @@ function CoachPage() {
       <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
         <PageHeader
           className="mb-6"
-          eyebrow="Smarty Coach"
+          eyebrow="Create Your Workout"
           title="Complete your training profile first"
-          subtitle="Smarty Coach builds around you — it needs your profile before the first workout."
+          subtitle="Your workout builds around you — it needs your profile before the first workout."
         />
         <div className="rounded-2xl border-2 border-primary bg-card p-5 text-center">
           <p className="text-sm text-muted-foreground">
@@ -323,9 +323,9 @@ function CoachPage() {
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
         className="mb-6"
-        eyebrow="Smarty Coach"
+        eyebrow="Create Your Workout"
         title={name ? `${name}, what's your workout today?` : "What's your workout today?"}
-        subtitle="Smarty Coach already knows your profile. Answer below — or let it decide for you."
+        subtitle="Your workout builder already knows your profile. Answer below — or let it decide for you."
       />
 
       <PendingGenerationCard />
@@ -334,7 +334,7 @@ function CoachPage() {
         <div className="mb-5 rounded-2xl border-2 border-primary bg-primary/5 p-4 text-sm">
           <p className="font-semibold">A workout was being built when you left.</p>
           <p className="mt-1 text-muted-foreground">
-            Smarty Coach finishes on the server, so it keeps going even if you close the page. Check
+            Your workout finishes on the server, so it keeps going even if you close the page. Check
             your{" "}
             <button
               type="button"
@@ -374,7 +374,7 @@ function CoachPage() {
         <div className="mb-6 rounded-3xl border-2 border-primary bg-primary/5 p-5 text-center">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-primary">WOD mode is on</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            You're following the periodization programme, so Smarty Coach builds two workouts for
+            You're following the periodization programme, so two workouts are built for
             you each day. You can still use every workout you already have, but new manual
             generation stays paused until you unsubscribe.
           </p>
@@ -425,7 +425,7 @@ function CoachPage() {
             step={2}
             icon={Dumbbell}
             title={goal === "muscle" ? "Which muscles today?" : "Which part of the body?"}
-            hint="Smarty Coach only picks exercises that train what you choose."
+            hint="The builder only picks exercises that train what you choose."
           >
             <Grid>
               {BODY_FOCUS.map((f) => (
@@ -539,7 +539,7 @@ function CoachPage() {
                 className="rounded-2xl"
               />
               <p className="mt-1.5 text-xs text-muted-foreground">
-                Smarty Coach only uses it if a matching exercise exists in the library.
+                The builder only uses it if a matching exercise exists in the library.
               </p>
             </div>
           ) : null}
@@ -578,7 +578,7 @@ function CoachPage() {
           step={showFocus ? 9 : 8}
           icon={MessageSquare}
           title="Anything else?"
-          hint="Optional — Smarty Coach reads this too."
+          hint="Optional — the builder reads this too."
         >
           <Textarea
             value={note}
@@ -603,7 +603,7 @@ function CoachPage() {
           ) : (
             <Sparkles className="mr-2 h-5 w-5" />
           )}
-          {busy ? "Smarty Coach is thinking…" : "Create my workout"}
+          {busy ? "Building your workout…" : "Create my workout"}
         </Button>
         {!canGenerate && !busy && !wodMode ? (
           <p className="mt-2 text-center text-xs text-muted-foreground">
@@ -617,10 +617,10 @@ function CoachPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Advanced today — are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              You told Smarty Coach you're feeling{" "}
+              You told us you're feeling{" "}
               {MOODS.find((m) => m.id === mood)?.label.toLowerCase() ?? mood}. Advanced means high
               volume, complex movements and short rest. Training hard on a low-energy day raises
-              injury risk. Smarty Coach can scale it to match how you feel instead.
+              injury risk. The builder can scale it to match how you feel instead.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
