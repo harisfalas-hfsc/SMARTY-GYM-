@@ -13,3 +13,4 @@
 - The workout creator's canonical route is `/create-your-workout`; `/coach` exists only as a redirect so old bookmarks still work.
 
 - Smarty Ritual rotation is computed from app_settings.ritual_anchor_date + position (src/lib/ritual-schedule.ts); no nightly job, so page and admin schedule never drift.
+- Ritual exports are generated client-side as real DOCX and paginated PDF files with embedded emoji artwork; this preserves formatting and avoids mislabeled HTML or print-window downloads.

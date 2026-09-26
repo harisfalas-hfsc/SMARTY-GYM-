@@ -11,3 +11,4 @@
 - [x] Left-align the content inside workout questionnaire choice buttons without changing button layout.
 
 - [x] Import Smarty Rituals (180)
+- [x] Replace broken ritual Word/PDF export with real formatted downloads and verify single/all exports.
