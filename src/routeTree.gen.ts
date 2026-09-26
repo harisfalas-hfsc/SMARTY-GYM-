@@ -16,6 +16,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AiDottxtRouteImport } from './routes/ai[.]txt'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BestOnlineFitnessPlatformRouteImport } from './routes/best-online-fitness-platform'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as ExerciseLibraryRouteImport } from './routes/exercise-library'
@@ -105,6 +106,12 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BestOnlineFitnessPlatformRoute =
+  BestOnlineFitnessPlatformRouteImport.update({
+    id: '/best-online-fitness-platform',
+    path: '/best-online-fitness-platform',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -385,6 +392,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
+  '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
@@ -446,6 +454,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
+  '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
@@ -509,6 +518,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
+  '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
@@ -572,6 +582,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/ai.txt'
     | '/auth'
+    | '/best-online-fitness-platform'
     | '/contact'
     | '/disclaimer'
     | '/exercise-library'
@@ -633,6 +644,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/ai.txt'
     | '/auth'
+    | '/best-online-fitness-platform'
     | '/contact'
     | '/disclaimer'
     | '/exercise-library'
@@ -695,6 +707,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/ai.txt'
     | '/auth'
+    | '/best-online-fitness-platform'
     | '/contact'
     | '/disclaimer'
     | '/exercise-library'
@@ -758,6 +771,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AiDottxtRoute: typeof AiDottxtRoute
   AuthRoute: typeof AuthRoute
+  BestOnlineFitnessPlatformRoute: typeof BestOnlineFitnessPlatformRoute
   ContactRoute: typeof ContactRoute
   DisclaimerRoute: typeof DisclaimerRoute
   ExerciseLibraryRoute: typeof ExerciseLibraryRoute
@@ -853,6 +867,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/best-online-fitness-platform': {
+      id: '/best-online-fitness-platform'
+      path: '/best-online-fitness-platform'
+      fullPath: '/best-online-fitness-platform'
+      preLoaderRoute: typeof BestOnlineFitnessPlatformRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -1265,6 +1286,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AiDottxtRoute: AiDottxtRoute,
   AuthRoute: AuthRoute,
+  BestOnlineFitnessPlatformRoute: BestOnlineFitnessPlatformRoute,
   ContactRoute: ContactRoute,
   DisclaimerRoute: DisclaimerRoute,
   ExerciseLibraryRoute: ExerciseLibraryRoute,

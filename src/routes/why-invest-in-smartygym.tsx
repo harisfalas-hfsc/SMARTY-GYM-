@@ -456,6 +456,43 @@ function WhyInvestInSmartyGym() {
               </div>
             </section>
 
+            {/* The Online Fitness Platform Revolution */}
+            <section>
+              <div className="mb-4 flex items-center gap-3">
+                <div className="rounded-full bg-primary/20 p-2">
+                  <Smartphone className="h-6 w-6 text-primary" />
+                </div>
+                <h2 className="text-2xl font-bold">The Online Fitness Platform Revolution</h2>
+              </div>
+              <div className="space-y-4 border-l-2 border-primary/30 pl-4">
+                <p>
+                  Training has moved online. Millions of people now train at home, in hotel rooms
+                  and in parks, guided by a screen instead of a membership card. Online fitness
+                  platforms removed the commute, the fixed class times and the high monthly fees of
+                  traditional gyms, and made expert coaching available to anyone, anywhere.
+                </p>
+                <p>
+                  But not all platforms are equal. Some are built around expensive hardware, some
+                  rely on algorithm-generated workouts, and many offer endless content without
+                  structure. <span className="font-bold text-primary">SmartyGym</span> was built to
+                  combine the freedom of online training with the structure of real coaching:
+                  every workout is designed by <strong>Haris Falas</strong>, periodized, and
+                  available on any device, with or without equipment.
+                </p>
+                <p>
+                  See how the leading platforms compare — their strengths, their weaknesses, and
+                  where SmartyGym stands among them.
+                </p>
+                <Link
+                  to="/best-online-fitness-platform"
+                  className="inline-flex items-center gap-1 font-semibold text-green-600 hover:underline dark:text-green-500"
+                >
+                  Best Online Fitness Platforms 2026
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </section>
+
             {/* Section 7: The SmartyGym Ecosystem */}
             <section>
               <div className="mb-4 flex items-center gap-3">
