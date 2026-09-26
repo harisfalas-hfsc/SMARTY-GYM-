@@ -11,10 +11,7 @@ import {
 } from "@tanstack/react-router";
 import { resolveLegacyPath } from "../lib/seo/legacy-redirects";
 import { useEffect, type ReactNode } from "react";
-import {
-  applyBrandHighlights,
-  watchBrandHighlights,
-} from "../lib/brand-highlight";
+import { startBrandHighlights } from "../lib/brand-highlight";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -454,12 +451,7 @@ function RootComponent() {
 
   // Highlight brand names ("Smarty Gym", "Charis Falas") everywhere rendered.
   useEffect(() => {
-    const raf = requestAnimationFrame(() => applyBrandHighlights());
-    const stopWatching = watchBrandHighlights();
-    return () => {
-      cancelAnimationFrame(raf);
-      stopWatching();
-    };
+    return startBrandHighlights();
   }, [pathname]);
 
   return (
