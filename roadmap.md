@@ -1,5 +1,8 @@
 # Roadmap
 
+- [x] Replace the mobile About carousel card with Shared Workouts and a new photo.
+- [x] Add a standalone Shared Workouts page and link below Workout of the Day in the menu.
+- [x] Verify mobile/desktop navigation and shared-workout browsing without changing Community.
 - [x] Compare the old SMARTYGYM startup response and mobile loading behavior with the current project.
 - [x] Apply only the changes required to prevent the white loading page.
 - [x] Inspect the submitted-app startup recording frame by frame and identify the white native loading view.
