@@ -41,6 +41,48 @@ const PAGE_MAP: Record<string, string> = {
   "/termsofservice.html": "/terms",
   "/terms-of-service.html": "/terms",
   "/disclaimer.html": "/disclaimer",
+  "/home": "/",
+  "/start": "/",
+  "/about-smartygym": "/about",
+  "/why-smartygym": "/about",
+  "/human-performance": "/about",
+  "/best-online-fitness-platform": "/about",
+  "/smartygym-vs-peloton": "/about",
+  "/smartygym-vs-freeletics": "/about",
+  "/smartygym-vs-peloton.html": "/about",
+  "/smartygym-vs-freeletics.html": "/about",
+  "/coach-profile": "/haris-falas",
+  "/coach-cv": "/haris-falas",
+  "/the-smarty-method": "/how-it-works",
+  "/why-invest-in-smartygym": "/how-it-works",
+  "/take-a-tour": "/how-it-works",
+  "/takeatour": "/how-it-works",
+  "/smarty-premium": "/how-it-works",
+  "/smartypremium": "/how-it-works",
+  "/join-premium": "/how-it-works",
+  "/joinpremium": "/how-it-works",
+  "/premiumbenefits": "/how-it-works",
+  "/premium-comparison": "/how-it-works",
+  "/premiumcomparison": "/how-it-works",
+  "/smarty-plans": "/how-it-works",
+  "/shop": "/how-it-works",
+  "/corporate": "/contact",
+  "/corporate-wellness": "/contact",
+  "/fitness-training": "/training",
+  "/research": "/glossary",
+  "/termsofservice": "/terms",
+  "/privacy-policy": "/privacy",
+  "/1rmcalculator": "/tools/1rm-calculator",
+  "/workouttimer": "/tools/workout-timer",
+  "/bmrcalculator": "/tools",
+  "/macrocalculator": "/tools",
+  "/caloriecounter": "/tools",
+  "/caloriecalculator": "/tools",
+  "/calculator-history": "/tools",
+  "/create-your-own-workout": "/how-it-works",
+  "/dashboard": "/",
+  "/userdashboard": "/",
+  "/my-workouts": "/",
 };
 
 /** Old /workout/<category>[/<session>] sections. */
@@ -102,6 +144,7 @@ export function resolveLegacyPath(rawPathname: string): string | null {
 
   if (first === "workout") {
     if (!second) return "/training";
+    if (second === "shared") return "/shared-workouts";
     return WORKOUT_MAP[second] ?? "/training";
   }
 

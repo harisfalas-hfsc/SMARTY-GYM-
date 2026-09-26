@@ -91,7 +91,7 @@ const JSONLD_GRAPH = {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
       name: "SmartyGym",
-      alternateName: ["Smarty Gym", "SmartyGym"],
+      alternateName: ["Smarty Gym", "SmartyGym", "smartygym.com", "SmartGym", "Smart Gym", "Smart-Gym"],
       url: SITE_URL,
       logo: `${SITE_URL}/icon-512.png`,
       image: OG_IMAGE,

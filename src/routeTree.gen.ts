@@ -14,6 +14,7 @@ import { Route as SplatRouteImport } from './routes/$'
 import { Route as R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRouteImport } from './routes/8f2c41d7a9b34e6ea0c5d81f37b9e42c[.]txt'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AiDottxtRouteImport } from './routes/ai[.]txt'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
@@ -23,6 +24,7 @@ import { Route as FounderNoteRouteImport } from './routes/founder-note'
 import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as HarisFalasRouteImport } from './routes/haris-falas'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as ImageSitemapDotxmlRouteImport } from './routes/image-sitemap[.]xml'
 import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -91,6 +93,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiDottxtRoute = AiDottxtRouteImport.update({
+  id: '/ai.txt',
+  path: '/ai.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -134,6 +141,11 @@ const HarisFalasRoute = HarisFalasRouteImport.update({
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImageSitemapDotxmlRoute = ImageSitemapDotxmlRouteImport.update({
+  id: '/image-sitemap.xml',
+  path: '/image-sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
@@ -359,6 +371,7 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
+  '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -368,6 +381,7 @@ export interface FileRoutesByFullPath {
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/image-sitemap.xml': typeof ImageSitemapDotxmlRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
@@ -416,6 +430,7 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
+  '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -425,6 +440,7 @@ export interface FileRoutesByTo {
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/image-sitemap.xml': typeof ImageSitemapDotxmlRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
@@ -475,6 +491,7 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
+  '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -484,6 +501,7 @@ export interface FileRoutesById {
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/image-sitemap.xml': typeof ImageSitemapDotxmlRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
@@ -534,6 +552,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
+    | '/ai.txt'
     | '/auth'
     | '/contact'
     | '/disclaimer'
@@ -543,6 +562,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/haris-falas'
     | '/how-it-works'
+    | '/image-sitemap.xml'
     | '/llms-full.txt'
     | '/llms.txt'
     | '/pricing'
@@ -591,6 +611,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
+    | '/ai.txt'
     | '/auth'
     | '/contact'
     | '/disclaimer'
@@ -600,6 +621,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/haris-falas'
     | '/how-it-works'
+    | '/image-sitemap.xml'
     | '/llms-full.txt'
     | '/llms.txt'
     | '/pricing'
@@ -649,6 +671,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
+    | '/ai.txt'
     | '/auth'
     | '/contact'
     | '/disclaimer'
@@ -658,6 +681,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/haris-falas'
     | '/how-it-works'
+    | '/image-sitemap.xml'
     | '/llms-full.txt'
     | '/llms.txt'
     | '/pricing'
@@ -708,6 +732,7 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute: typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   AboutRoute: typeof AboutRoute
+  AiDottxtRoute: typeof AiDottxtRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   DisclaimerRoute: typeof DisclaimerRoute
@@ -717,6 +742,7 @@ export interface RootRouteChildren {
   GlossaryRoute: typeof GlossaryRoute
   HarisFalasRoute: typeof HarisFalasRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  ImageSitemapDotxmlRoute: typeof ImageSitemapDotxmlRoute
   LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   PricingRoute: typeof PricingRoute
@@ -789,6 +815,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai.txt': {
+      id: '/ai.txt'
+      path: '/ai.txt'
+      fullPath: '/ai.txt'
+      preLoaderRoute: typeof AiDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -850,6 +883,13 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/image-sitemap.xml': {
+      id: '/image-sitemap.xml'
+      path: '/image-sitemap.xml'
+      fullPath: '/image-sitemap.xml'
+      preLoaderRoute: typeof ImageSitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/llms-full.txt': {
@@ -1183,6 +1223,7 @@ const rootRouteChildren: RootRouteChildren = {
   R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute:
     R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute,
   AboutRoute: AboutRoute,
+  AiDottxtRoute: AiDottxtRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   DisclaimerRoute: DisclaimerRoute,
@@ -1192,6 +1233,7 @@ const rootRouteChildren: RootRouteChildren = {
   GlossaryRoute: GlossaryRoute,
   HarisFalasRoute: HarisFalasRoute,
   HowItWorksRoute: HowItWorksRoute,
+  ImageSitemapDotxmlRoute: ImageSitemapDotxmlRoute,
   LlmsFullDottxtRoute: LlmsFullDottxtRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   PricingRoute: PricingRoute,

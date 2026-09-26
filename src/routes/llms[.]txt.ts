@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { LLMS_STATIC } from "@/lib/seo/llms-static";
+import { LLMS_STATIC as LLMS_BASE_STATIC } from "@/lib/seo/llms-static";
+import { LLMS_LEGACY } from "@/lib/seo/llms-legacy";
+
+const LLMS_STATIC = `${LLMS_BASE_STATIC.trimEnd()}\n\n${LLMS_LEGACY}`;
 
 /**
  * /llms.txt — served dynamically so the automatic SEO update (Admin → Cron jobs)
