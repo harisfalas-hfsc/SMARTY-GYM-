@@ -55,7 +55,7 @@ export function CoachRecommendationCard({
   return (
     <div className="rounded-2xl border-2 border-primary bg-primary/5 p-4">
       <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-        <Lightbulb className="h-4 w-4" /> SmartyCoach recommendation
+        <Lightbulb className="h-4 w-4" /> Today's recommendation
       </p>
       <p className="mt-2 text-sm font-semibold">{rec.message}</p>
       <p className="mt-1 text-xs text-muted-foreground">{rec.reason}</p>

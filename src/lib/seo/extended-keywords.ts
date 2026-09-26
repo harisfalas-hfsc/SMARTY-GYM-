@@ -354,7 +354,7 @@ export const EXTENDED_PAGE_KEYWORDS: Record<string, string[]> = {
   "/disclaimer": ["smarty gym disclaimer", "fitness disclaimer", "health disclaimer", "exercise safety", "par-q", "medical clearance"],
   "/pricing": ["smarty gym membership", "smarty premium", "online gym membership", "affordable online gym"],
   /** Signed-in areas: keyword index only — these pages are never listed for crawlers. */
-  "/coach": ["smarty coach", "ask your coach", "workout creator", "create a workout", "personal coach"],
+  "/coach": ["smarty coach", "create your workout", "workout creator", "create a workout", "personal coach"],
   "/logbook": ["smarty logbook", "workout logbook", "training diary", "workout log", "exercise log", "training history"],
 };
 
