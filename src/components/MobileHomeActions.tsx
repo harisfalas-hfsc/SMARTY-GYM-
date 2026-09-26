@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
+import { BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
 import coachImage from "@/assets/coach-stopwatch-card.jpg";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
@@ -10,6 +10,7 @@ import toolsImage from "@/assets/explore-tools.jpg";
 import exerciseLibraryImage from "@/assets/explore-exercise-library.jpg";
 import blogImage from "@/assets/explore-blog.jpg";
 import communityImage from "@/assets/community-card.jpg";
+import aboutImage from "@/assets/about-smartygym-card.jpg";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
@@ -288,6 +289,16 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
 
       <div className="mt-6 flex flex-col gap-3">
         {[
+          {
+            label: "ABOUT",
+            title: "About Smarty Gym",
+            description: "The mission behind Smarty Gym",
+            to: "/about" as const,
+            image: aboutImage,
+            icon: Info,
+            thumbClass: "h-[58px] w-[58px]",
+            objectPosition: "center center",
+          },
           {
             label: "COMMUNITY",
             title: "Smarty Community",
