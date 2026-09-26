@@ -12,7 +12,7 @@ import { RitualHTML } from "@/components/ritual/RitualHTML";
 import { MembershipRequiredDialog } from "@/components/MembershipRequiredDialog";
 import { PageHeader } from "@/components/PageHeader";
 
-export const Route = createFileRoute("/_authenticated/smarty-ritual")({
+export const Route = createFileRoute("/smarty-ritual")({
   component: SmartyRitualPage,
   head: () => ({
     meta: [

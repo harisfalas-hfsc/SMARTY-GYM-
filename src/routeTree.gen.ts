@@ -34,6 +34,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SharedWorkoutsRouteImport } from './routes/shared-workouts'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SmartyRitualRouteImport } from './routes/smarty-ritual'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TheSmartyMethodRouteImport } from './routes/the-smarty-method'
 import { Route as WhyInvestInSmartygymRouteImport } from './routes/why-invest-in-smartygym'
@@ -46,7 +47,6 @@ import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
-import { Route as AuthenticatedSmartyRitualRouteImport } from './routes/_authenticated/smarty-ritual'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminExerciseLibraryRouteImport } from './routes/admin.exercise-library'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -199,6 +199,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SmartyRitualRoute = SmartyRitualRouteImport.update({
+  id: '/smarty-ritual',
+  path: '/smarty-ritual',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -261,12 +266,6 @@ const AuthenticatedProgressRoute = AuthenticatedProgressRouteImport.update({
   path: '/progress',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedSmartyRitualRoute =
-  AuthenticatedSmartyRitualRouteImport.update({
-    id: '/smarty-ritual',
-    path: '/smarty-ritual',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -424,6 +423,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
@@ -436,7 +436,6 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/progress': typeof AuthenticatedProgressRoute
-  '/smarty-ritual': typeof AuthenticatedSmartyRitualRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -488,6 +487,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
@@ -500,7 +500,6 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/progress': typeof AuthenticatedProgressRoute
-  '/smarty-ritual': typeof AuthenticatedSmartyRitualRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -554,6 +553,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
@@ -566,7 +566,6 @@ export interface FileRoutesById {
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
-  '/_authenticated/smarty-ritual': typeof AuthenticatedSmartyRitualRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -620,6 +619,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap.xml'
+    | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
     | '/why-invest-in-smartygym'
@@ -632,7 +632,6 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/profile'
     | '/progress'
-    | '/smarty-ritual'
     | '/admin/exercise-library'
     | '/blog/$slug'
     | '/checkout/return'
@@ -684,6 +683,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap.xml'
+    | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
     | '/why-invest-in-smartygym'
@@ -696,7 +696,6 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/profile'
     | '/progress'
-    | '/smarty-ritual'
     | '/admin/exercise-library'
     | '/blog/$slug'
     | '/checkout/return'
@@ -749,6 +748,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap.xml'
+    | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
     | '/why-invest-in-smartygym'
@@ -761,7 +761,6 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications'
     | '/_authenticated/profile'
     | '/_authenticated/progress'
-    | '/_authenticated/smarty-ritual'
     | '/admin/exercise-library'
     | '/blog/$slug'
     | '/checkout/return'
@@ -815,6 +814,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SharedWorkoutsRoute: typeof SharedWorkoutsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SmartyRitualRoute: typeof SmartyRitualRoute
   TermsRoute: typeof TermsRoute
   TheSmartyMethodRoute: typeof TheSmartyMethodRoute
   WhyInvestInSmartygymRoute: typeof WhyInvestInSmartygymRoute
@@ -1022,6 +1022,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/smarty-ritual': {
+      id: '/smarty-ritual'
+      path: '/smarty-ritual'
+      fullPath: '/smarty-ritual'
+      preLoaderRoute: typeof SmartyRitualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -1104,13 +1111,6 @@ declare module '@tanstack/react-router' {
       path: '/progress'
       fullPath: '/progress'
       preLoaderRoute: typeof AuthenticatedProgressRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/smarty-ritual': {
-      id: '/_authenticated/smarty-ritual'
-      path: '/smarty-ritual'
-      fullPath: '/smarty-ritual'
-      preLoaderRoute: typeof AuthenticatedSmartyRitualRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/admin/': {
@@ -1300,7 +1300,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
-  AuthenticatedSmartyRitualRoute: typeof AuthenticatedSmartyRitualRoute
   AuthenticatedWorkoutWorkoutIdRoute: typeof AuthenticatedWorkoutWorkoutIdRoute
 }
 
@@ -1313,7 +1312,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,
-  AuthenticatedSmartyRitualRoute: AuthenticatedSmartyRitualRoute,
   AuthenticatedWorkoutWorkoutIdRoute: AuthenticatedWorkoutWorkoutIdRoute,
 }
 
@@ -1347,6 +1345,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SharedWorkoutsRoute: SharedWorkoutsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SmartyRitualRoute: SmartyRitualRoute,
   TermsRoute: TermsRoute,
   TheSmartyMethodRoute: TheSmartyMethodRoute,
   WhyInvestInSmartygymRoute: WhyInvestInSmartygymRoute,
