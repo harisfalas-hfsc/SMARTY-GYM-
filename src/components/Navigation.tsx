@@ -18,7 +18,6 @@ import {
   BookOpen,
   ChevronLeft,
   User,
-  UserCircle,
   Dumbbell,
   CalendarCheck,
   Users,
