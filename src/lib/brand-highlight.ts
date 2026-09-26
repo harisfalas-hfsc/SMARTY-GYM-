@@ -3,10 +3,13 @@
  * primary color everywhere rendered text appears — including content that
  * loads after hydration.
  *
- * DOM post-processing approach: walks text nodes and wraps matches in
- * span.brand-highlight. Runs after hydration; never blocks or traps paint.
+ * Uses the CSS Custom Highlight API (CSS.highlights + ::highlight()), which
+ * colors matched ranges WITHOUT mutating the DOM — so it can never conflict
+ * with React hydration. Browsers without support simply show plain text.
  * Opt-out any element with [data-brand-skip] (e.g. the SMARTY/GYM logo).
  */
+
+const HIGHLIGHT_NAME = "brand-name";
 
 const BRAND_RE = /\b(Smarty\s*Gym|Charis\s+Falas|Haris\s+Falas)\b/gi;
 
@@ -21,71 +24,64 @@ const SKIP_TAGS = new Set([
   "TITLE",
 ]);
 
-function shouldSkip(node: Node): boolean {
-  let el: Element | null =
-    node.nodeType === 3 ? node.parentElement : (node as Element);
+interface HighlightApi {
+  highlights: Map<string, unknown>;
+}
+type HighlightCtor = new (...ranges: Range[]) => unknown;
+
+function shouldSkip(textNode: Text): boolean {
+  let el: Element | null = textNode.parentElement;
   while (el) {
     if (el.hasAttribute("data-brand-skip")) return true;
-    if (el.classList?.contains("brand-highlight")) return true;
     if (SKIP_TAGS.has(el.tagName)) return true;
     el = el.parentElement;
   }
   return false;
 }
 
-export function applyBrandHighlights(root: ParentNode = document.body): void {
-  if (typeof document === "undefined") return;
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const targets: Text[] = [];
+function applyBrandHighlights(): void {
+  const api = CSS as unknown as HighlightApi | undefined;
+  const HighlightCtor = (
+    window as unknown as { Highlight?: HighlightCtor }
+  ).Highlight;
+  if (!api?.highlights || !HighlightCtor) return;
+
+  const ranges: Range[] = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let node = walker.nextNode();
   while (node) {
-    const text = node.nodeValue ?? "";
-    if (text && BRAND_RE.test(text) && !shouldSkip(node)) targets.push(node as Text);
-    BRAND_RE.lastIndex = 0;
+    const textNode = node as Text;
+    const text = textNode.nodeValue ?? "";
+    if (text) {
+      BRAND_RE.lastIndex = 0;
+      let match: RegExpExecArray | null;
+      while ((match = BRAND_RE.exec(text))) {
+        if (!shouldSkip(textNode)) {
+          const range = document.createRange();
+          range.setStart(textNode, match.index);
+          range.setEnd(textNode, match.index + match[0].length);
+          ranges.push(range);
+        }
+      }
+    }
     node = walker.nextNode();
   }
 
-  for (const textNode of targets) {
-    const text = textNode.nodeValue ?? "";
-    const frag = document.createDocumentFragment();
-    let last = 0;
-    BRAND_RE.lastIndex = 0;
-    let match: RegExpExecArray | null;
-    while ((match = BRAND_RE.exec(text))) {
-      if (match.index > last) {
-        frag.appendChild(document.createTextNode(text.slice(last, match.index)));
-      }
-      const span = document.createElement("span");
-      span.className = "brand-highlight";
-      span.textContent = match[0];
-      frag.appendChild(span);
-      last = match.index + match[0].length;
-    }
-    if (last < text.length) {
-      frag.appendChild(document.createTextNode(text.slice(last)));
-    }
-    textNode.parentNode?.replaceChild(frag, textNode);
-  }
+  api.highlights.set(HIGHLIGHT_NAME, new HighlightCtor(...ranges));
 }
 
-/** MutationObserver that keeps highlights applied to dynamically added content. */
+/** Re-computes highlights whenever the DOM changes (dynamic content, navigations). */
 function watchBrandHighlights(): void {
   if (typeof MutationObserver === "undefined") return;
   let scheduled = false;
-  let applying = false;
 
   const run = () => {
     scheduled = false;
-    applying = true;
-    try {
-      applyBrandHighlights();
-    } finally {
-      applying = false;
-    }
+    applyBrandHighlights();
   };
 
   const observer = new MutationObserver(() => {
-    if (applying || scheduled) return;
+    if (scheduled) return;
     scheduled = true;
     requestAnimationFrame(run);
   });
@@ -97,9 +93,8 @@ function watchBrandHighlights(): void {
 }
 
 /**
- * Starts highlighting + the mutation watcher only after the page is fully
- * hydrated, so injected spans never race React's streaming hydration.
- * Returns a cleanup function.
+ * Starts highlighting once the page has painted, then keeps it in sync with
+ * DOM changes. Returns a cleanup function.
  */
 export function startBrandHighlights(): () => void {
   if (typeof window === "undefined") return () => {};
@@ -114,7 +109,6 @@ export function startBrandHighlights(): () => void {
   };
 
   const start = () => {
-    // Two animation frames after hydration/load: React has claimed the DOM.
     requestAnimationFrame(() => requestAnimationFrame(run));
   };
 
