@@ -1054,6 +1054,36 @@ export type Database = {
           },
         ]
       }
+      smarty_rituals: {
+        Row: {
+          created_at: string
+          evening_content: string
+          id: string
+          midday_content: string
+          morning_content: string
+          position: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          evening_content?: string
+          id?: string
+          midday_content?: string
+          morning_content?: string
+          position: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          evening_content?: string
+          id?: string
+          midday_content?: string
+          morning_content?: string
+          position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean

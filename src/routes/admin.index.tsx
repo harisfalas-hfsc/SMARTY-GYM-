@@ -19,6 +19,7 @@ import {
   AlertTriangle,
   type LucideIcon,
   TrendingUp,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
@@ -39,6 +40,7 @@ import { AdminReportsTab } from "@/components/admin/AdminReportsTab";
 import { AdminPaymentsTab } from "@/components/admin/AdminPaymentsTab";
 import { AdminRevenueTab } from "@/components/admin/AdminRevenueTab";
 
+import { AdminRitualsTab } from "@/components/admin/AdminRitualsTab";
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
 import { AdminGenerationFailuresTab } from "@/components/admin/AdminGenerationFailuresTab";
 
@@ -62,6 +64,7 @@ type SectionKey =
   | "rules"
   | "cycle"
   | "workouts"
+  | "rituals"
   | "messages"
   | "awards"
   | "reports"
@@ -88,6 +91,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     label: "Workouts",
     description: "Every workout ever generated",
     Icon: ClipboardList,
+  },
+  {
+    key: "rituals",
+    label: "Rituals",
+    description: "Daily Smarty Rituals, order and schedule",
+    Icon: Sparkles,
   },
   {
     key: "messages",
@@ -226,6 +235,7 @@ function AdminPage() {
           {section === "rules" && <AdminRulesTab />}
           {section === "cycle" && <AdminCycleTab />}
           {section === "workouts" && <AdminWorkoutsTab />}
+          {section === "rituals" && <AdminRitualsTab />}
           {section === "messages" && <AdminMessagesTab />}
           {section === "awards" && <AdminAwardsTab />}
           {section === "reports" && <AdminReportsTab />}
