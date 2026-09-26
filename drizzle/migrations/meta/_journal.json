@@ -379,6 +379,13 @@
       "when": 1790443166109,
       "tag": "0053_smarty_rituals",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1790443754691,
+      "tag": "0054_ritual_links_fix",
+      "breakpoints": true
     }
   ]
 }
