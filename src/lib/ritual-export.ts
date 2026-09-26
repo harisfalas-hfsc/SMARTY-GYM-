@@ -84,7 +84,7 @@ const STYLES = `
   .export-sheet .phase-heading .emoji { width: 30px; height: 30px; }
   .export-sheet .time { color: #647079; font-size: 14px; margin: 2px 0 0; }
   .export-sheet .content p { margin: 8px 0; }
-  .export-sheet .content ul, .export-sheet .content ol { margin: 8px 0; padding-left: 25px; }
+  .export-sheet .content ul, .export-sheet .content ol { margin: 8px 0; padding-left: 25px; list-style: none; }
   .export-sheet .content li { padding: 0; margin: 3px 0; position: relative; }
   .export-sheet .content li .list-marker { position: absolute; left: -19px; top: 0; }
   .export-sheet .content a { color: #087ea4; text-decoration: underline; }
