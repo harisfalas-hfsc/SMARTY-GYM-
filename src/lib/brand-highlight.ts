@@ -1,5 +1,5 @@
 /**
- * Highlights brand names ("Smarty Gym", "Charis Falas", "Haris Falas") in the
+ * Highlights brand names ("Smarty Gym", "Haris Falas") in the
  * primary color everywhere rendered text appears — including content that
  * loads after hydration.
  *
@@ -11,7 +11,7 @@
 
 const HIGHLIGHT_NAME = "brand-name";
 
-const BRAND_RE = /\b(Smarty\s*Gym|Charis\s+Falas|Haris\s+Falas)\b/gi;
+const BRAND_RE = /\b(Smarty\s*Gym|Haris\s+Falas)\b/gi;
 
 const SKIP_TAGS = new Set([
   "SCRIPT",
