@@ -9,7 +9,7 @@ import createWorkoutImage from "@/assets/create-workout-card.jpg";
 import toolsImage from "@/assets/explore-tools.jpg";
 import exerciseLibraryImage from "@/assets/explore-exercise-library.jpg";
 import blogImage from "@/assets/explore-blog.jpg";
-import ritualImage from "@/assets/explore-ritual.jpg";
+import ritualImage from "@/assets/explore-ritual.png";
 import { useAuth } from "@/hooks/useAuth";
 import { getMyAccessState } from "@/lib/access.functions";
 import communityImage from "@/assets/community-card.jpg";
