@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { GymDescription } from "@/lib/brand-copy";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard, SmartyRow } from "@/components/SmartyCard";
