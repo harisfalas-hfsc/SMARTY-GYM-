@@ -25,6 +25,7 @@ export const BRAND_KEYWORDS = [
 
 export const FOUNDER_KEYWORDS = [
   "haris falas",
+  "falas",
   "coach haris",
   "coach haris falas",
   "haris falas coach",
@@ -49,6 +50,17 @@ export const FOUNDER_KEYWORDS = [
 ];
 
 export const SERVICE_KEYWORDS = [
+  "best workout",
+  "best online fitness platform",
+  "best online gym",
+  "best online fitness coach",
+  "best coaching",
+  "fitness coach",
+  "coach",
+  "coaching",
+  "personal trainer",
+  "workout motivation",
+  "exercises",
   "online fitness platform",
   "online workouts",
   "online training",
