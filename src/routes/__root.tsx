@@ -450,6 +450,17 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Highlight brand names ("Smarty Gym", "Charis Falas") everywhere rendered.
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => applyBrandHighlights());
+    const stopWatching = watchBrandHighlights();
+    return () => {
+      cancelAnimationFrame(raf);
+      stopWatching();
+    };
+  }, [pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
