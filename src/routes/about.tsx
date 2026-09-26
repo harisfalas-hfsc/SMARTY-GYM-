@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { GymDescription } from "@/lib/brand-copy";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard, SmartyRow } from "@/components/SmartyCard";
@@ -92,21 +93,7 @@ function AboutPage() {
             anywhere, anytime
           </>
         }
-        subtitle={
-          <>
-            Smarty Gym is your online gym and personal coach. Tell your coach how you feel, what
-            you want to achieve and what you have to train with — and get a complete properly
-            programmed session built for you, whenever and wherever you train. Built on the sports
-            science and training philosophy of{" "}
-            <Link
-              to="/haris-falas"
-              className="whitespace-nowrap font-semibold text-primary underline underline-offset-2"
-            >
-              Sports Scientist Haris Falas
-            </Link>
-            .
-          </>
-        }
+        subtitle={<GymDescription />}
       />
 
       {/* What / How / When — the core story */}
