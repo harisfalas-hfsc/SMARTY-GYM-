@@ -117,18 +117,7 @@ function Home() {
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-white/80 lg:mt-6 lg:text-lg">
-              Smarty Gym is your online gym and personal coach. Tell your coach how
-              you feel, what you want to achieve and what you have to train with — and
-              get a complete properly programmed session built for you, whenever and
-              wherever you train. Built on the sports science and training philosophy
-              of{" "}
-              <Link
-                to="/haris-falas"
-                className="whitespace-nowrap font-semibold text-primary underline underline-offset-2"
-              >
-                Sports Scientist Haris Falas
-              </Link>
-              .
+              <GymDescription />
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3 lg:flex-nowrap">
               <Link
