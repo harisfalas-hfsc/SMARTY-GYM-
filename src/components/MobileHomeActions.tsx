@@ -295,12 +295,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
             description: "The mission behind Smarty Gym",
             to: "/about" as const,
             image: aboutImage,
-            icon: Users,
-            thumbClass: "h-[58px] w-[58px]",
-            objectPosition: "center center",
-          },
-          {
-            label: "COMMUNITY",
+            icon: Info,
             title: "Smarty Community",
             description: "Share workouts, join rankings, and connect",
             to: "/community" as const,
