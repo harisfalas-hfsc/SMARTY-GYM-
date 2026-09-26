@@ -10,6 +10,7 @@ import toolsImage from "@/assets/explore-tools.jpg";
 import exerciseLibraryImage from "@/assets/explore-exercise-library.jpg";
 import blogImage from "@/assets/explore-blog.jpg";
 import communityImage from "@/assets/community-card.jpg";
+import aboutImage from "@/assets/about-smartygym-card.jpg";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
