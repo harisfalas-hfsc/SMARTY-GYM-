@@ -39,6 +39,7 @@ export const Route = createFileRoute("/haris-falas")({
               "@type": "Person",
               "@id": `${URL}#person`,
               name: "Haris Falas",
+              alternateName: ["Coach Haris", "Coach Haris Falas", "Haris Falas CSCS", "Haris Falas Sports Scientist"],
               url: URL,
               jobTitle: "Sports Scientist & Strength and Conditioning Coach",
               description: DESCRIPTION,

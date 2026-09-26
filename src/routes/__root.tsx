@@ -120,6 +120,7 @@ const JSONLD_GRAPH = {
         "@type": "Person",
         "@id": `${SITE_URL}/haris-falas#person`,
         name: "Haris Falas",
+        alternateName: ["Coach Haris", "Coach Haris Falas", "Haris Falas CSCS", "Haris Falas Sports Scientist"],
         jobTitle: "Sports Scientist & Strength and Conditioning Coach",
         url: `${SITE_URL}/haris-falas`,
         worksFor: { "@id": `${SITE_URL}/#organization` },
