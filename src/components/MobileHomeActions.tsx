@@ -5,6 +5,7 @@ import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
 import sharedWorkoutsImage from "@/assets/shared-workouts-card.jpg";
 import founderPhoto from "@/assets/haris-falas-coach.jpg";
+import createWorkoutImage from "@/assets/create-workout-card.jpg";
 import toolsImage from "@/assets/explore-tools.jpg";
 import exerciseLibraryImage from "@/assets/explore-exercise-library.jpg";
 import blogImage from "@/assets/explore-blog.jpg";
@@ -39,10 +40,10 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
 
   const carouselActions: CarouselAction[] = [
     {
-      title: "Ask your coach",
+      title: "Create Your Workout",
       description: "Get a personalized workout built for you",
       to: "/coach",
-      image: founderPhoto,
+      image: createWorkoutImage,
       icon: Dumbbell,
       objectPosition: "center center",
     },
