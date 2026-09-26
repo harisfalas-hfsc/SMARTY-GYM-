@@ -1,0 +1,1 @@
+UPDATE public.smarty_rituals SET morning_content = replace(morning_content, ' ZZSAVETEST', '') WHERE morning_content LIKE '%ZZSAVETEST%';
