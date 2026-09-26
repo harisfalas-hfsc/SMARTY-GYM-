@@ -174,10 +174,10 @@ export async function exportWord(rituals: ExportRitual[], filename: string) {
       if (tag === "UL" || tag === "OL") contentParagraphs(child as HTMLElement, tag === "UL" ? "bullet" : "number");
       else if (tag === "LI" && Array.from(child.children).some((e) => ["UL", "OL"].includes(e.tagName))) {
         const runs = Array.from(child.childNodes).filter((n) => !(n instanceof HTMLElement && ["UL", "OL"].includes(n.tagName))).flatMap((n) => readRuns(n));
-        children.push(new Paragraph({ children: runs, numbering: { reference: list === "number" ? "ritual-numbers" : "ritual-bullets", level: 0 }, spacing: { after: 65 } }));
+        children.push(new Paragraph({ children: runs, numbering: { reference: list === "number" ? "ritual-numbers" : "ritual-bullets", level: 0 }, spacing: { after: 100 } }));
         contentParagraphs(child as HTMLElement);
       } else {
-        children.push(new Paragraph({ children: readRuns(child), ...(list ? { numbering: { reference: list === "number" ? "ritual-numbers" : "ritual-bullets", level: 0 } } : {}), spacing: { before: tag === "P" ? 80 : 40, after: 85 }, ...(tag === "H3" ? { heading: HeadingLevel.HEADING_3 } : {}) }));
+        children.push(new Paragraph({ children: readRuns(child), ...(list ? { numbering: { reference: list === "number" ? "ritual-numbers" : "ritual-bullets", level: 0 } } : {}), spacing: { before: tag === "P" ? 110 : 55, after: 115 }, ...(tag === "H3" ? { heading: HeadingLevel.HEADING_3 } : {}) }));
       }
     }
   };
@@ -188,9 +188,9 @@ export async function exportWord(rituals: ExportRitual[], filename: string) {
     for (const phase of el.querySelectorAll(".phase")) {
       const title = phase.querySelector("h2");
       const icon = phase.querySelector(".phase-heading .emoji");
-      children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, children: [...(icon ? readRuns(icon) : []), new TextRun(" "), ...(title ? readRuns(title) : [])], spacing: { before: 180, after: 35 }, keepNext: true }));
+      children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, children: [...(icon ? readRuns(icon) : []), new TextRun(" "), ...(title ? readRuns(title) : [])], spacing: { before: 260, after: 35 }, keepNext: true }));
       const time = phase.querySelector(".time");
-      if (time) children.push(new Paragraph({ children: readRuns(time), spacing: { after: 140 }, keepNext: true }));
+      if (time) children.push(new Paragraph({ children: readRuns(time), spacing: { after: 185 }, keepNext: true }));
       contentParagraphs(phase.querySelector(".content") as HTMLElement);
     }
   }
