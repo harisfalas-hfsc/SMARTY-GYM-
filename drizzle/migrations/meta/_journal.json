@@ -372,6 +372,13 @@
       "when": 1790404353504,
       "tag": "0052_limit_exercise_storage_to_public_demos",
       "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1790443166109,
+      "tag": "0053_smarty_rituals",
+      "breakpoints": true
     }
   ]
 }
