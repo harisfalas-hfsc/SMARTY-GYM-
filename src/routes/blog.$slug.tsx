@@ -165,7 +165,6 @@ export const Route = createFileRoute("/blog/$slug")({
                   url: SITE,
                   logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
                 },
-                isPartOf: { "@id": `${SITE}/#website` },
               },
               ...(faq.length
                 ? [
