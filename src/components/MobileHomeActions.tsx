@@ -26,7 +26,7 @@ type CarouselAction = {
 type ExploreAction = {
   title: string;
   description: string;
-  to: "/tools" | "/exercise-library" | "/blog";
+  to: "/tools" | "/exercise-library" | "/blog" | "/pricing";
   image: string;
   icon: LucideIcon;
 };
@@ -84,6 +84,17 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       image: blogImage,
       icon: Newspaper,
     },
+    ...(showPricing
+      ? [
+          {
+            title: "Premium membership",
+            description: "See membership options and full access",
+            to: "/pricing" as const,
+            image: premiumImage,
+            icon: Crown,
+          },
+        ]
+      : []),
   ];
 
   useEffect(() => {
