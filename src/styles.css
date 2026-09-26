@@ -2,7 +2,7 @@
 @source "../src";
 @import "tw-animate-css";
 
-/* Brand name highlighting (Smarty Gym, Charis Falas, Haris Falas) — applied via
+/* Brand name highlighting (Smarty Gym, Haris Falas) — applied via
    the CSS Custom Highlight API, so no DOM is ever mutated (hydration-safe). */
 ::highlight(brand-name) {
   color: var(--primary);

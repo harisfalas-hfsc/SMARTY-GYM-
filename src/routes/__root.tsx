@@ -449,7 +449,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  // Highlight brand names ("Smarty Gym", "Charis Falas") everywhere rendered.
+  // Highlight brand names ("Smarty Gym", "Haris Falas") everywhere rendered.
   useEffect(() => {
     return startBrandHighlights();
   }, [pathname]);
