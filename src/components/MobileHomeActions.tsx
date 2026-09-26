@@ -290,6 +290,16 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       <div className="mt-6 flex flex-col gap-3">
         {[
           {
+            label: "ABOUT",
+            title: "About Smarty Gym",
+            description: "The mission behind Smarty Gym",
+            to: "/about" as const,
+            image: aboutImage,
+            icon: Users,
+            thumbClass: "h-[58px] w-[58px]",
+            objectPosition: "center center",
+          },
+          {
             label: "COMMUNITY",
             title: "Smarty Community",
             description: "Share workouts, join rankings, and connect",
