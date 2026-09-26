@@ -60,17 +60,6 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       image: sharedWorkoutsImage,
       icon: Users,
     },
-    ...(showPricing
-      ? [
-          {
-            title: "Premium membership",
-            description: "See membership options and full access",
-            to: "/pricing" as const,
-            image: premiumImage,
-            icon: Crown,
-          },
-        ]
-      : []),
   ];
 
   const exploreActions: ExploreAction[] = [
