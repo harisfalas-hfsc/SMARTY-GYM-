@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
-import coachImage from "@/assets/coach-stopwatch-card.jpg";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
 import sharedWorkoutsImage from "@/assets/shared-workouts-card.jpg";
@@ -21,6 +20,7 @@ type CarouselAction = {
   to: "/coach" | "/wod" | "/pricing" | "/shared-workouts";
   image: string;
   icon: LucideIcon;
+  objectPosition?: string;
 };
 
 type ExploreAction = {
@@ -42,8 +42,9 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       title: "Ask your coach",
       description: "Get a personalized workout built for you",
       to: "/coach",
-      image: coachImage,
+      image: founderPhoto,
       icon: Dumbbell,
+      objectPosition: "center center",
     },
     {
       title: "Workout of the Day",
@@ -165,7 +166,8 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
                       loading={index === 0 ? "eager" : "lazy"}
                       fetchPriority={index === 0 ? "high" : "auto"}
                       decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover object-[center_top]"
+                      className="absolute inset-0 h-full w-full object-cover"
+                      style={{ objectPosition: action.objectPosition ?? "center top" }}
                     />
                   </div>
                   <div className="flex flex-1 flex-col justify-center p-2 text-center">
