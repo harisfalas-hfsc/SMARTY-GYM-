@@ -20,6 +20,7 @@ import {
   type LucideIcon,
   TrendingUp,
   Sparkles,
+  HeartPulse,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
@@ -42,6 +43,7 @@ import { AdminRevenueTab } from "@/components/admin/AdminRevenueTab";
 
 import { AdminRitualsTab } from "@/components/admin/AdminRitualsTab";
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
+import { AdminHealthTab } from "@/components/admin/AdminHealthTab";
 import { AdminGenerationFailuresTab } from "@/components/admin/AdminGenerationFailuresTab";
 
 export const Route = createFileRoute("/admin/")({
@@ -71,9 +73,16 @@ type SectionKey =
   | "payments"
   | "revenue"
   | "cron"
+  | "health"
   | "generation";
 
 const SECTIONS: { key: SectionKey; label: string; description: string; Icon: LucideIcon }[] = [
+  {
+    key: "health",
+    label: "System health",
+    description: "Run the full health audit and see the report",
+    Icon: HeartPulse,
+  },
   {
     key: "payments",
     label: "Payments",
@@ -242,6 +251,7 @@ function AdminPage() {
           {section === "payments" && <AdminPaymentsTab />}
           {section === "revenue" && <AdminRevenueTab />}
           {section === "cron" && <AdminCronTab />}
+          {section === "health" && <AdminHealthTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
         </div>
       ) : (
