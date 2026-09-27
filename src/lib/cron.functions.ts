@@ -116,6 +116,7 @@ export const adminRunCronJob = createServerFn({ method: "POST" })
                 .filter((i) => i.status !== "pass")
                 .map((i) => `${i.label}: ${i.detail}`)
                 .slice(0, 50),
+              items: report.items,
             },
             trigger: "manual",
           });
