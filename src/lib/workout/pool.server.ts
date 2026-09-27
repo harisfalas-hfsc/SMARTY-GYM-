@@ -32,7 +32,7 @@ export type PoolExercise = {
   equipment: string | null;
   category: string | null;
   difficulty: string | null;
-  smarty_tags: string[] | null;
+  smarty_tags?: string[] | null;
   movement_pattern: string | null;
   body_region: string | null;
   gif_path: string | null;
