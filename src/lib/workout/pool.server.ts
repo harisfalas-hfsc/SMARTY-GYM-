@@ -32,13 +32,14 @@ export type PoolExercise = {
   equipment: string | null;
   category: string | null;
   difficulty: string | null;
+  smarty_tags: string[] | null;
   movement_pattern: string | null;
   body_region: string | null;
   gif_path: string | null;
 };
 
 const SELECT =
-  "id,name,body_part,target_muscle,secondary_muscles,equipment,category,difficulty,movement_pattern,body_region,gif_path";
+  "id,name,body_part,target_muscle,secondary_muscles,equipment,category,difficulty,movement_pattern,body_region,gif_path,smarty_tags";
 
 /** Loads the whole exercises table, paginated 1000 rows at a time. */
 export async function loadAllExercises(supabase: SupabaseClient): Promise<PoolExercise[]> {
@@ -284,6 +285,16 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // 4. Static-hold guardrail for momentum / conditioning categories.
   const momentum: Category[] = ["CARDIO", "CALORIE BURNING", "METABOLIC", "CHALLENGE"];
   if (momentum.includes(f.category)) pool = pool.filter((e) => !STATIC_HOLD_RE.test(e.name));
+
+  // 4b. CHALLENGE vocabulary preference — when the library carries Smarty
+  //     tags, a challenge is built from challenge/hiit/cardio-tagged material
+  //     whenever enough of it survives the filters above.
+  if (f.category === "CHALLENGE") {
+    const tagged = pool.filter((e) =>
+      (e.smarty_tags ?? []).some((t) => ["challenge", "hiit", "cardio"].includes(t)),
+    );
+    if (tagged.length >= 12) pool = tagged;
+  }
 
   // 5. Body focus (§15) — a HARD filter for EVERY category that carries one.
   //    A focus is never widened because fewer than N exercises survive.
