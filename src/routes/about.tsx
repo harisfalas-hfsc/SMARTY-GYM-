@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { GymDescription } from "@/lib/brand-copy";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,6 @@ import {
   BookOpen,
   ChevronRight,
 } from "lucide-react";
-import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
 import pageHeroImage from "@/assets/about-smartygym-card.jpg";
 
 
@@ -86,9 +86,15 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
+  // Desktop: the About content is the homepage — send desktop visitors there.
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+      void navigate({ to: "/", replace: true });
+    }
+  }, [navigate]);
+
   return (
-    <>
-    <DesktopAboutLanding />
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:hidden">
       <PageHeader image={pageHeroImage}
         eyebrow="About"
@@ -369,6 +375,5 @@ function AboutPage() {
       </SmartyCard>
 
     </div>
-    </>
   );
 }
