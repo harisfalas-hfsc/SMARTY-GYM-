@@ -134,7 +134,7 @@ export interface CronRunRow {
   status: string;
   changed: boolean;
   summary: string | null;
-  details: { added?: string[]; failures?: string[]; items?: unknown[] };
+  details: { added?: string[]; failures?: string[]; items?: { number: number; key: string; label: string; status: "pass" | "warn" | "fail"; detail: string }[] };
   trigger: string;
 }
 
@@ -145,7 +145,7 @@ export async function recordRun(
     status: "ok" | "skipped" | "failed";
     changed?: boolean;
     summary: string;
-    details?: { added?: string[]; failures?: string[]; items?: unknown[] };
+    details?: { added?: string[]; failures?: string[]; items?: { number: number; key: string; label: string; status: "pass" | "warn" | "fail"; detail: string }[] };
     trigger?: "schedule" | "manual";
   },
 ): Promise<void> {
