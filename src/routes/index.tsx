@@ -71,6 +71,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const { freeAccessMode } = useFreeAccessMode();
   return (
+    <>
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
       {/* MOBILE — eyebrow + tight headline + tagline, matching the original design */}
       <section className="py-6 sm:hidden">
