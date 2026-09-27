@@ -340,6 +340,121 @@ export async function runHealthCheck(
     return ["pass", "Logbook, progress, player, performance, awards, messages all readable."];
   });
 
+  await run("overdue", async () => {
+    const { getCronConfigs } = await import("@/lib/cron/jobs.server");
+    const { CRON_JOB_BY_KEY } = await import("@/lib/cron/registry");
+    const configs = await getCronConfigs(db);
+    const now = Date.now();
+    const late: string[] = [];
+    const checked: string[] = [];
+    for (const c of Object.values(configs)) {
+      const def = CRON_JOB_BY_KEY[c.key];
+      if (!c.enabled || !def || (def.timing !== "fixed" && def.timing !== "weekly")) continue;
+      if (c.key === "health-check") continue;
+      checked.push(def.label);
+      const maxDays = def.timing === "weekly" ? 8 : 2;
+      const last = c.last_run_on ? Date.parse(`${c.last_run_on}T00:00:00Z`) : 0;
+      if (!last || now - last > maxDays * 86400000)
+        late.push(`${def.label} (last run ${c.last_run_on ?? "never"})`);
+    }
+    if (late.length) return ["fail", `Overdue: ${late.join(", ")}`];
+    return ["pass", `${checked.length} scheduled job(s) ran on time.`];
+  });
+
+  await run("generation", async () => {
+    const from = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+    const { data: failedRows } = await db
+      .from("workout_generation_failures")
+      .select("user_id,reason")
+      .gte("occurred_at", from)
+      .limit(100);
+    const failures = (failedRows as { user_id: string | null; reason: string }[] | null) ?? [];
+    const { count: stuck } = await db
+      .from("workout_generation_requests")
+      .select("*", { count: "exact", head: true })
+      .not("status", "in", "(ready,failed)")
+      .lt("updated_at", new Date(Date.now() - 3600 * 1000).toISOString());
+    const { count: reqFailed } = await db
+      .from("workout_generation_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "failed")
+      .gte("updated_at", from);
+    const { count: made } = await db
+      .from("workout_generation_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "ready")
+      .gte("updated_at", from);
+    const members = new Set(failures.map((f) => f.user_id).filter(Boolean)).size;
+    const parts = [`${made ?? 0} workout(s) generated in 24h`];
+    if (failures.length || reqFailed)
+      parts.push(`${Math.max(failures.length, reqFailed ?? 0)} failure(s) affecting ${members} member(s)${failures[0] ? ` — latest: ${failures[0].reason}` : ""}`);
+    if (stuck) parts.push(`${stuck} request(s) stuck for over 1 hour`);
+    if (stuck || reqFailed || failures.length) return ["fail", parts.join(" · ")];
+    return ["pass", `${parts[0]} · no failures, nothing stuck.`];
+  });
+
+  await run("payments", async () => {
+    const { data: mode } = await db
+      .from("app_settings")
+      .select("value")
+      .eq("key", "free_access_mode")
+      .maybeSingle();
+    const free = (mode as { value: unknown } | null)?.value === true;
+    const { data: subs, error } = await db.from("subscriptions").select("status");
+    if (error) return ["fail", `Subscriptions unreadable: ${error.message}`];
+    const rows = (subs as { status: string }[] | null) ?? [];
+    const active = rows.filter((r) => r.status === "active" || r.status === "trialing").length;
+    const bad = rows.filter((r) => ["past_due", "unpaid", "incomplete"].includes(r.status)).length;
+    const from = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+    const { count: payErr } = await db
+      .from("error_events")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", from)
+      .or("source.ilike.%pay%,source.ilike.%stripe%,source.ilike.%checkout%,source.ilike.%subscri%");
+    const detail = `Payments switch: ${free ? "OFF (site is free for everyone)" : "ON (paid membership)"} · ${active} active subscription(s) · ${bad} past-due/unpaid · ${payErr ?? 0} payment error(s) in 24h.`;
+    if (payErr) return ["fail", detail];
+    if (bad) return ["warn", detail];
+    return ["pass", detail];
+  });
+
+  await run("ritual", async () => {
+    const { count } = await db.from("smarty_rituals").select("*", { count: "exact", head: true });
+    const { data: anchor } = await db
+      .from("app_settings")
+      .select("value")
+      .eq("key", "ritual_anchor_date")
+      .maybeSingle();
+    if (!count) return ["fail", "No rituals stored — the Smarty Ritual page would be empty."];
+    if (!anchor) return ["fail", "Ritual start date is missing — today's ritual cannot be chosen."];
+    return ["pass", `${count} rituals in rotation; today's ritual resolves.`];
+  });
+
+  await run("features", async () => {
+    const bad: string[] = [];
+    const q: [string, () => PromiseLike<{ error: { message: string } | null; count?: number | null }>][] = [
+      ["Community", () => db.from("workouts").select("id", { count: "exact", head: true }).eq("is_shared", true).eq("community_hidden", false)],
+      ["Community comments", () => db.from("community_comments").select("id", { count: "exact", head: true })],
+      ["Blog", () => db.from("blog_articles").select("id", { count: "exact", head: true }).eq("is_published", true)],
+      ["Exercise Library", () => db.from("exercises").select("id", { count: "exact", head: true }).eq("is_active", true)],
+    ];
+    const counts: string[] = [];
+    for (const [name, fn] of q) {
+      const r = await fn();
+      if (r.error) bad.push(`${name} (${r.error.message})`);
+      else counts.push(`${name} ${r.count ?? 0}`);
+    }
+    for (const p of ["/shared-workouts", "/smarty-ritual", "/blog", "/create-your-workout"]) {
+      try {
+        const res = await fetch(`${SITE_BASE_URL}${p}`, { method: "GET" });
+        if (!res.ok) bad.push(`${p} → HTTP ${res.status}`);
+      } catch (e) {
+        bad.push(`${p} → ${msg(e)}`);
+      }
+    }
+    if (bad.length) return ["fail", `Problems: ${bad.join(", ")}`];
+    return ["pass", `All feature pages load · ${counts.join(" · ")}.`];
+  });
+
   await run("support", async () => {
     const { count } = await db
       .from("support_threads")
@@ -355,15 +470,17 @@ export async function runHealthCheck(
     const from = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
     const { data, count } = await db
       .from("error_events")
-      .select("message,route,occurrences", { count: "exact" })
+      .select("message,route,occurrences,source", { count: "exact" })
       .gte("created_at", from)
       .order("occurrences", { ascending: false })
-      .limit(5);
+      .limit(50);
     const rows = (data as { message: string; route: string | null }[] | null) ?? [];
     const total = count ?? 0;
     if (total === 0) return ["pass", "No errors recorded in the last 24 hours."];
+    const bySource = new Map<string, number>();
+    for (const r of rows as { source?: string | null }[]) bySource.set(r.source ?? "other", (bySource.get(r.source ?? "other") ?? 0) + 1);
     const top = rows.map((r) => `${r.message}${r.route ? ` (${r.route})` : ""}`).join(" | ");
-    return [total > 20 ? "fail" : "warn", `${total} error(s) in 24h. Most frequent: ${top}`];
+    return [total > 20 ? "fail" : "warn", `${total} error(s) in 24h (${[...bySource].map(([k, v]) => `${k}: ${v}`).join(", ")}). Most frequent: ${top}`];
   });
 
   await run("activity", async () => {
