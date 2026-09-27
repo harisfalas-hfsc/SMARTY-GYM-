@@ -23,6 +23,7 @@ import {
   BookOpen,
   ChevronRight,
 } from "lucide-react";
+import pageHeroImage from "@/assets/about-smartygym-card.jpg";
 
 
 export const Route = createFileRoute("/about")({
@@ -85,8 +86,8 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         eyebrow="About"
         title={
           <>
@@ -99,7 +100,7 @@ function AboutPage() {
       />
 
       {/* What / How / When — the core story */}
-      <div className="mx-auto grid max-w-xl gap-4 lg:max-w-6xl lg:grid-cols-3 lg:gap-5">
+      <div className="mx-auto grid max-w-xl gap-4 lg:max-w-none lg:grid-cols-3 lg:gap-5">
         <SmartyCard
           tone="blue"
           eyebrow="What"
@@ -195,7 +196,7 @@ function AboutPage() {
             <span className="text-primary">Adaptive</span>
           </>
         }
-        className="mx-auto mt-4 max-w-xl lg:max-w-6xl"
+        className="mx-auto mt-4 max-w-xl lg:max-w-none"
       >
         <div className="grid gap-3 sm:grid-cols-2">
           <SmartyRow
@@ -235,7 +236,7 @@ function AboutPage() {
         Three ways to train. One daily <span className="text-primary">ritual.</span>
       </h2>
 
-      <div className="mx-auto mt-4 grid max-w-xl gap-4 lg:max-w-6xl lg:grid-cols-2">
+      <div className="mx-auto mt-4 grid max-w-xl gap-4 lg:max-w-none lg:grid-cols-2">
         <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Create your workout
@@ -310,7 +311,7 @@ function AboutPage() {
           </>
         }
         description="Smarty Gym does not stop when the session ends. What you actually did, how it felt, and how it compares with last time all feed back into your next workout."
-        className="mx-auto mt-6 max-w-xl lg:max-w-6xl"
+        className="mx-auto mt-6 max-w-xl lg:max-w-none"
       >
         <div className="grid gap-3 sm:grid-cols-2">
           <SmartyRow

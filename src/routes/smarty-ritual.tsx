@@ -12,6 +12,7 @@ import { RitualHTML } from "@/components/ritual/RitualHTML";
 import { MembershipRequiredDialog } from "@/components/MembershipRequiredDialog";
 import { PageHeader } from "@/components/PageHeader";
 import { useAuth } from "@/hooks/useAuth";
+import pageHeroImage from "@/assets/explore-ritual.png";
 
 export const Route = createFileRoute("/smarty-ritual")({
   component: SmartyRitualPage,
@@ -50,8 +51,8 @@ function SmartyRitualPage() {
     : "";
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         eyebrow="Smarty Ritual"
         title={<>Move. Reset. <span className="text-primary">Recover.</span></>}
         subtitle={<>Your daily Morning, Midday and Evening plan for movement, recovery and performance, designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>.</>}

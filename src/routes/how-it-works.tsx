@@ -3,6 +3,7 @@ import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import pageHeroImage from "@/assets/hero-training.jpg";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
@@ -206,8 +207,8 @@ const TRACKING_STEPS = [
 function HowItWorks() {
   const { freeAccessMode } = useFreeAccessMode();
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         eyebrow="How it works"
         title={
           <>
