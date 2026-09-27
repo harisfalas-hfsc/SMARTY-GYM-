@@ -14,13 +14,11 @@ import {
   FlaskConical,
   RefreshCw,
   LineChart,
-  PlayCircle,
   ClipboardCheck,
   NotebookPen,
   TrendingUp,
   Activity,
   Trophy,
-  WifiOff,
   BookOpen,
   ChevronRight,
 } from "lucide-react";
@@ -324,12 +322,6 @@ function AboutPage() {
       >
         <div className="grid gap-3 sm:grid-cols-2">
           <SmartyRow
-            icon={PlayCircle}
-            title="Guided player"
-            subtitle="Timers, rest, swipe — and logs your reps, weight, time and rounds set by set."
-            tone="blue"
-          />
-          <SmartyRow
             icon={ClipboardCheck}
             title="One session debrief"
             subtitle="RPE, how you felt, enjoyment and notes — asked once, editable any time."
@@ -357,12 +349,6 @@ function AboutPage() {
             icon={Trophy}
             title="Achievements & reminders"
             subtitle="Milestones unlock as you train, and notifications keep scheduled sessions on track."
-            tone="blue"
-          />
-          <SmartyRow
-            icon={WifiOff}
-            title="Offline mode"
-            subtitle="Workouts, logbook and player keep working with no signal — everything syncs later."
             tone="blue"
           />
           <SmartyRow

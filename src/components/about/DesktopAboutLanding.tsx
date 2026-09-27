@@ -4,12 +4,13 @@ import { ArrowRight, ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Brain,
   SlidersHorizontal,
+  FlaskConical,
+  RefreshCw,
   ClipboardCheck,
   NotebookPen,
   TrendingUp,
   Activity,
   Trophy,
-  WifiOff,
   BookOpen,
 } from "lucide-react";
 import heroCity from "@/assets/about-desktop/hero-city-running.jpg";
