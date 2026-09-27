@@ -70,10 +70,17 @@ async function since24h(db: DB, table: string, column = "created_at"): Promise<n
  */
 export async function runHealthCheck(
   db: DB,
-  options: { config?: CronJobConfig; trigger: "schedule" | "manual" },
+  options: {
+    config?: CronJobConfig;
+    trigger: "schedule" | "manual";
+    /** Run only these checks (used for live step-by-step runs in the admin panel). */
+    only?: string[];
+    /** Skip the email (the caller emails the combined report itself). */
+    skipEmail?: boolean;
+  },
 ): Promise<HealthReport> {
   const startedAt = new Date();
-  const on = enabledKeys(options.config);
+  const on = options.only ? new Set(options.only) : enabledKeys(options.config);
   const items: HealthCheckItem[] = [];
   let n = 0;
 
@@ -479,7 +486,7 @@ export async function runHealthCheck(
     if (total === 0) return ["pass", "No errors recorded in the last 24 hours."];
     const bySource = new Map<string, number>();
     for (const r of rows as { source?: string | null }[]) bySource.set(r.source ?? "other", (bySource.get(r.source ?? "other") ?? 0) + 1);
-    const top = rows.map((r) => `${r.message}${r.route ? ` (${r.route})` : ""}`).join(" | ");
+    const top = rows.slice(0, 5).map((r) => `${r.message}${r.route ? ` (${r.route})` : ""}`).join(" | ");
     return [total > 20 ? "fail" : "warn", `${total} error(s) in 24h (${[...bySource].map(([k, v]) => `${k}: ${v}`).join(", ")}). Most frequent: ${top}`];
   });
 
@@ -496,6 +503,19 @@ export async function runHealthCheck(
     ];
   });
 
+  const report = buildReport(items, startedAt, options.trigger, healthRecipient(options.config));
+  if (!options.skipEmail) report.emailed = await emailReport(report);
+  return report;
+}
+
+/** Combines check results into a report (numbers each line in order). */
+export function buildReport(
+  rawItems: HealthCheckItem[],
+  startedAt: Date,
+  trigger: "schedule" | "manual",
+  recipient: string,
+): HealthReport {
+  const items = rawItems.map((it, i) => ({ ...it, number: i + 1 }));
   const finishedAt = new Date();
   const passed = items.filter((i) => i.status === "pass").length;
   const warned = items.filter((i) => i.status === "warn").length;
@@ -506,7 +526,7 @@ export async function runHealthCheck(
     startedAt: startedAt.toISOString(),
     finishedAt: finishedAt.toISOString(),
     durationSec: Math.max(1, Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000)),
-    trigger: options.trigger,
+    trigger,
     items,
     passed,
     warned,
@@ -514,14 +534,12 @@ export async function runHealthCheck(
     status: failed ? "failed" : "ok",
     summary,
     emailed: false,
-    recipient: healthRecipient(options.config),
+    recipient,
   };
-
-  report.emailed = await emailReport(report);
   return report;
 }
 
-async function emailReport(report: HealthReport): Promise<boolean> {
+export async function emailReport(report: HealthReport): Promise<boolean> {
   try {
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
     await sendTemplateEmail("health-report", report.recipient, {
@@ -537,7 +555,7 @@ async function emailReport(report: HealthReport): Promise<boolean> {
         total: report.items.length,
         items: report.items,
       },
-      idempotencyKey: `health-report:${report.startedAt.slice(0, 13)}:${report.trigger}`,
+      idempotencyKey: `health-report:${report.trigger === "manual" ? report.startedAt : report.startedAt.slice(0, 13)}:${report.trigger}`,
     });
     return true;
   } catch (e) {
