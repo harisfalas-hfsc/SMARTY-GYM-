@@ -6,13 +6,11 @@ import {
   SlidersHorizontal,
   FlaskConical,
   RefreshCw,
-  PlayCircle,
   ClipboardCheck,
   NotebookPen,
   TrendingUp,
   Activity,
   Trophy,
-  WifiOff,
   BookOpen,
 } from "lucide-react";
 import heroCity from "@/assets/about-desktop/hero-city-running.jpg";
@@ -113,13 +111,11 @@ const sections: Section[] = [
     description:
       "Smarty Gym does not stop when the session ends. What you actually did, how it felt and how it compares with last time all feed back into your next workout.",
     items: [
-      { id: "player", title: "Guided player", meta: "Timers, rest and set-by-set logging.", icon: PlayCircle },
       { id: "debrief", title: "One session debrief", meta: "RPE, feel, enjoyment and notes.", icon: ClipboardCheck },
       { id: "logbook", title: "Logbook & calendar", meta: "Saved, scheduled, favourited or repeated.", icon: NotebookPen },
       { id: "progress", title: "Progress & comparison", meta: "Each attempt compared like-for-like.", icon: TrendingUp },
       { id: "load", title: "Training load", meta: "Against your own 21-day baseline.", icon: Activity },
       { id: "achieve", title: "Achievements & reminders", meta: "Milestones and scheduled-session alerts.", icon: Trophy },
-      { id: "offline", title: "Offline mode", meta: "Keeps working with no signal.", icon: WifiOff },
       { id: "library", title: "Exercise library", meta: "1,384 movements with GIFs.", icon: BookOpen, to: "/exercise-library" },
     ],
     cta: { label: "Explore the Exercise Library", to: "/exercise-library" },
