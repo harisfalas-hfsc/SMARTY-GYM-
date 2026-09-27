@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { GymDescription } from "@/lib/brand-copy";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,6 @@ import {
   BookOpen,
   ChevronRight,
 } from "lucide-react";
-import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
 import pageHeroImage from "@/assets/about-smartygym-card.jpg";
 
 
