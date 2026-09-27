@@ -546,6 +546,55 @@ export function activationRelevanceViolation(
 }
 
 
+// --- 11b. CHALLENGE full-body balance ----------------------------------------
+
+/**
+ * A Challenge is a FULL-BODY benchmark, at every level. It is never an
+ * upper-body day, never a muscle-group sequence and never an equipment
+ * showcase: the majority of the work is bodyweight, the movements pair
+ * opposing body positions (prone + supine, push + pull, lower + upper) and no
+ * single body region may dominate the block.
+ */
+export function challengeBalanceViolation(
+  exercises: ExerciseLike[],
+  level: DifficultyLevel,
+): string | null {
+  if (exercises.length < 3) return null;
+
+  const regions = exercises.map((e) => regionOf(e));
+  const counts: Record<BodyRegion, number> = { lower: 0, upper: 0, core: 0, full: 0 };
+  for (const r of regions) counts[r] += 1;
+  const represented = (["lower", "upper", "core"] as BodyRegion[]).filter((r) => counts[r] > 0);
+  if (represented.length < 2 && counts.full * 2 < exercises.length)
+    return `A Challenge is a full-body benchmark: this block trains ${represented[0] ?? "one region"} almost exclusively. Pair lower-body, upper-body (push AND pull) and core work in the same session.`;
+  const top = (Object.keys(counts) as BodyRegion[]).sort((a, b) => counts[b] - counts[a])[0]!;
+  if (top !== "full" && counts[top] / exercises.length > 0.6)
+    return `A Challenge never focuses on one body region: ${Math.round((counts[top] / exercises.length) * 100)}% of this block is ${top}-body work. Rebalance it across lower body, upper push/pull and core.`;
+
+  const bodyweight = exercises.filter((e) =>
+    (e.equipment ?? "").toLowerCase().includes("body weight"),
+  ).length;
+  if (bodyweight * 2 < exercises.length)
+    return `A Challenge is majority bodyweight: only ${bodyweight} of ${exercises.length} movements are bodyweight. A challenge is run anywhere, with minimal equipment — loaded movements are the minority, never the backbone.`;
+
+  // Level integrity: an intermediate challenge is built from intermediate
+  // vocabulary — never beginner drills, never advanced skill work.
+  if (level === "intermediate" || level === "beginner" || level === "advanced") {
+    const known = exercises.filter((e) => {
+      const d = (e as { difficulty?: string | null }).difficulty;
+      return typeof d === "string" && d.length > 0;
+    }) as Array<ExerciseLike & { difficulty: string }>;
+    if (known.length >= 3) {
+      const offLevel = known.filter(
+        (e) => e.difficulty.toLowerCase() !== level,
+      );
+      if (offLevel.length * 2 > known.length)
+        return `This is an ${level} Challenge but most of its exercises are ${offLevel[0]!.difficulty} material. The level the athlete selected is the level they train at — build the block from ${level} exercises.`;
+    }
+  }
+  return null;
+}
+
 // --- 12. Equipment family doctrine ------------------------------------------
 
 /** Canonical equipment family for the transition / family rules. */
