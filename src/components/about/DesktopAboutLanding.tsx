@@ -20,7 +20,6 @@ import heroBarbell from "@/assets/about-desktop/hero-barbell-lift.jpg";
 import heroRopes from "@/assets/about-desktop/hero-battle-ropes.jpg";
 import heroTimer from "@/assets/about-desktop/hero-timer-tablet.jpg";
 import imgWorkouts from "@/assets/about-desktop/hero-workouts-bright.jpg";
-import imgBlog from "@/assets/about-desktop/hero-blog.jpg";
 import imgTools from "@/assets/about-desktop/hero-tools.jpg";
 import imgAbout from "@/assets/about-smartygym-card.jpg";
 import imgCreate from "@/assets/create-workout-card.jpg";
@@ -127,7 +126,6 @@ const sections: Section[] = [
   },
 ];
 
-void imgBlog;
 
 function ItemRow({ item }: { item: Item }) {
   const Icon = item.icon;
