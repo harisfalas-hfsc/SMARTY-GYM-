@@ -23,6 +23,7 @@ import {
   BookOpen,
   ChevronRight,
 } from "lucide-react";
+import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
 import pageHeroImage from "@/assets/about-smartygym-card.jpg";
 
 
@@ -86,7 +87,9 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+    <>
+    <DesktopAboutLanding />
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:hidden">
       <PageHeader image={pageHeroImage}
         eyebrow="About"
         title={
@@ -366,6 +369,6 @@ function AboutPage() {
       </SmartyCard>
 
     </div>
-
+    </>
   );
 }
