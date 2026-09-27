@@ -22,6 +22,7 @@ import {
   durationOverflowViolation,
   dynamicExerciseViolation,
   equipmentFamilyViolation,
+  flowSpecialtyViolation,
   focusViolation,
   humanRealismViolation,
   locationEquipmentViolation,
@@ -149,6 +150,9 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
       // 2b. Format legality — no setup-heavy apparatus in a dynamic format.
       const dyn = dynamicExerciseViolation(row, opts.category, opts.format);
       if (dyn) errors.push(dyn);
+      // 2b-bis. Flow — no balance tools / isolation machines in flow sessions.
+      const flow = flowSpecialtyViolation(row, opts.category, opts.format);
+      if (flow) errors.push(flow);
 
       // 2c. Category vocabulary legality (Pilates, Mobility, Recovery, Micro,
       //     Challenge) — one shared definition with the pool filter.

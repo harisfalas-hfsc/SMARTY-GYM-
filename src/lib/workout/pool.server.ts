@@ -4,6 +4,7 @@ import type { Category, DifficultyLevel, EquipmentMode, Format, StrengthFocus } 
 import {
   categoryExerciseViolation,
   dynamicExerciseViolation,
+  flowSpecialtyViolation,
   focusRegion,
   humanRealismViolation,
   locationEquipmentViolation,
@@ -257,6 +258,9 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   //     barbell, rack, bench, cable, Smith or selectorized machine work.
   if (f.format)
     pool = pool.filter((e) => !dynamicExerciseViolation(e, f.category, f.format!));
+  // 2c. Flow doctrine — no balance tools or isolation machines in
+  //     continuous-flow categories or clock-driven formats.
+  pool = pool.filter((e) => !flowSpecialtyViolation(e, f.category, f.format ?? "REPS & SETS"));
 
   // 3. Difficulty (§16). The requested tier is programmed as-is. A thin tier is
   //    only ever filled from EASIER material: Beginner never inherits Advanced
@@ -264,17 +268,13 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   //    and Advanced may borrow Intermediate ones. Difficulty is expressed as
   //    variation complexity, volume and loading — never as harder vocabulary
   //    handed to an athlete who did not ask for it.
-  if (f.level !== "all") {
-    const at = (lvl: string) => pool.filter((e) => (e.difficulty ?? "").toLowerCase() === lvl);
-    const strict = at(f.level);
-    const easier: string[] =
-      f.level === "advanced" ? ["intermediate", "beginner"] : f.level === "intermediate" ? ["beginner"] : [];
-    if (strict.length >= 12 || !easier.length) {
-      if (strict.length) pool = strict;
-    } else {
-      const widened = [...strict, ...easier.flatMap(at)];
-      if (widened.length) pool = widened;
-    }
+  // Master engine §4/§24: difficulty is PRESCRIPTION (load, reps, sets, rest,
+  // tempo, density) — never different vocabulary. Every level draws from the
+  // same fundamental exercises; only a Beginner is kept away from rows the
+  // library itself marks as advanced skill material.
+  if (f.level === "beginner") {
+    const safe = pool.filter((e) => (e.difficulty ?? "").toLowerCase() !== "advanced");
+    if (safe.length >= 12) pool = safe;
   }
 
   // 3b. CARDIO stays aerobic (§4). High-fatigue conditioning vocabulary is

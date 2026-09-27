@@ -62,14 +62,14 @@ describe("challengeBalanceViolation", () => {
     expect(challengeBalanceViolation(block, "intermediate")).toMatch(/majority bodyweight/i);
   });
 
-  it("rejects an intermediate challenge built mostly from beginner material", () => {
+  it("does not gate challenge exercises by library difficulty (prescription carries the level)", () => {
     const block = [
       ex("Marching in Place", "full body", "body weight", "beginner"),
       ex("Wall Push-Up", "chest", "body weight", "beginner"),
       ex("Sit-to-Stand", "upper legs", "body weight", "beginner"),
       ex("Burpee", "full body", "body weight", "intermediate"),
     ];
-    expect(challengeBalanceViolation(block, "intermediate")).toMatch(/intermediate/i);
+    expect(challengeBalanceViolation(block, "intermediate")).toBeNull();
   });
 
   it("ignores blocks too small to judge", () => {
