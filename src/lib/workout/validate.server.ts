@@ -14,6 +14,7 @@ import {
 import {
   activationRelevanceViolation,
   ageSafetyViolation,
+  challengeBalanceViolation,
   categoryAllowsFinisher,
   categoryExerciseViolation,
   cardioDominanceViolation,
