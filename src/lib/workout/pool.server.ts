@@ -1,3 +1,4 @@
+import { priorityIds } from "./priority";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Category, DifficultyLevel, EquipmentMode, Format, StrengthFocus } from "./spec";
 import {
@@ -50,6 +51,10 @@ export async function loadAllExercises(supabase: SupabaseClient): Promise<PoolEx
       .from("exercises")
       .select(SELECT)
       .eq("is_active", true)
+      // Never hand the engine an exercise without a GIF or instructions.
+      .not("gif_path", "is", null)
+      .neq("gif_path", "")
+      .not("instructions", "is", null)
       .order("id", { ascending: true })
       .range(from, from + 999);
     if (error) throw new Error(error.message);
@@ -486,9 +491,10 @@ export function samplePool(
     if (fresh.length >= Math.max(60, Math.floor(max * 0.6))) pool = fresh;
   }
   if (pool.length <= max) return pool;
-  const favourites = favoriteIds.length
-    ? pool.filter((e) => favoriteIds.includes(e.id))
-    : [];
+  // Coach priority movements (see ./priority) are always carried into the
+  // vocabulary so the model can build most of the session from them.
+  const prio = priorityIds(pool);
+  const favourites = pool.filter((e) => favoriteIds.includes(e.id) || prio.has(e.id));
   const rest = pool.filter((e) => !favourites.includes(e));
   const byPart = new Map<string, PoolExercise[]>();
   for (const e of rest) {
