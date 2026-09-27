@@ -1,10 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
-import { CalendarCheck, Dumbbell, PenLine } from "lucide-react";
-import heroTraining from "@/assets/hero-training.jpg";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
-import { GymDescription } from "@/lib/brand-copy";
+import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
 
 
 
@@ -96,57 +94,6 @@ function Home() {
       </section>
 
 
-      {/* FULL-BLEED HERO — desktop/tablet */}
-      <section className="relative left-1/2 mb-4 hidden w-screen -translate-x-1/2 overflow-hidden sm:mb-6 sm:block">
-        <img
-          src={heroTraining}
-          alt="Athlete training with dumbbells during a personalized workout session"
-          width={1920}
-          height={1080}
-          fetchPriority="high"
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover object-[60%_center]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/75 to-black/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[oklch(0.18_0_0)] via-[oklch(0.18_0_0)]/25 to-transparent" />
-        <div className="relative mx-auto w-full max-w-6xl px-5 py-12 lg:px-6 lg:py-20">
-
-          <div className="max-w-xl lg:max-w-3xl">
-            <h1 className="text-[34px] font-extrabold uppercase leading-[1.05] tracking-tight text-white sm:text-[44px] lg:text-[60px]">
-              YOUR GYM <span className="text-primary">RE-IMAGINED</span>
-              <br />
-              ANYWHERE, ANYTIME
-            </h1>
-
-            <p className="mt-5 text-base leading-relaxed text-white/80 lg:mt-6 lg:text-lg">
-              <GymDescription />
-            </p>
-            <div className="mt-7 flex flex-wrap items-center gap-3 lg:flex-nowrap">
-              <Link
-                to="/create-your-workout"
-                className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 text-base font-bold text-primary-foreground hover:opacity-95 lg:px-8"
-              >
-                <Dumbbell className="h-4 w-4 shrink-0" />
-                Create your workout
-              </Link>
-              <Link
-                to="/wod"
-                className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border-2 border-primary px-6 text-base font-bold text-primary hover:bg-primary/10 lg:px-8"
-              >
-                <CalendarCheck className="h-4 w-4 shrink-0" />
-                Workout of the Day
-              </Link>
-            </div>
-            <Link
-              to="/founder-note"
-              className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary underline underline-offset-4"
-            >
-              <PenLine className="h-4 w-4" />
-              A note from the founder
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
