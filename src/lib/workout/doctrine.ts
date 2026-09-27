@@ -625,21 +625,9 @@ export function challengeBalanceViolation(
   if (bodyweight * 2 < exercises.length)
     return `A Challenge is majority bodyweight: only ${bodyweight} of ${exercises.length} movements are bodyweight. A challenge is run anywhere, with minimal equipment — loaded movements are the minority, never the backbone.`;
 
-  // Level integrity: an intermediate challenge is built from intermediate
-  // vocabulary — never beginner drills, never advanced skill work.
-  if (level === "intermediate" || level === "beginner" || level === "advanced") {
-    const known = exercises.filter((e) => {
-      const d = (e as { difficulty?: string | null }).difficulty;
-      return typeof d === "string" && d.length > 0;
-    }) as Array<ExerciseLike & { difficulty: string }>;
-    if (known.length >= 3) {
-      const offLevel = known.filter(
-        (e) => e.difficulty.toLowerCase() !== level,
-      );
-      if (offLevel.length * 2 > known.length)
-        return `This is an ${level} Challenge but most of its exercises are ${offLevel[0]!.difficulty} material. The level the athlete selected is the level they train at — build the block from ${level} exercises.`;
-    }
-  }
+  // Master engine §4/§24: difficulty changes the PRESCRIPTION, never the
+  // exercise vocabulary — the library difficulty label is not a gate here.
+  void level;
   return null;
 }
 
@@ -883,6 +871,9 @@ Before choosing any exercise ask: "Would a professional coach realistically give
 NEVER program: Turkish get-ups, pistol squats, shrimp/sissy squats, handstands or handstand push-ups, headstands, pike push-ups, levers (front/back/human flag), planches, muscle-ups, nordic curls, dragon flags, skin the cat, clapping/aztec push-ups, kipping or butterfly pull-ups, windmills, bent presses, overhead squats, snatches, cleans, jerks, behind-the-neck pressing, or any movement needing exceptional mobility, balance, skill or coordination. Bodyweight does not make an exercise appropriate, and advanced does not make it better.
 ALWAYS prefer the common, familiar, effective movements from the library: squats, goblet squats, lunges, reverse lunges, step-ups, hip thrusts, glute bridges, push-ups, presses, rows, pulldowns, TRX rows, dumbbell and kettlebell work, kettlebell swings, medicine-ball work, carries, simple core work, and genuine cardio (bike, rower, jump rope, running) where appropriate.
 SEQUENCING: never place a technical, balance or precision movement straight after a high-fatigue one (burpees → handstand push-ups is unacceptable), and never chain movements that need completely different setups or locations inside a timed workout. The athlete must spend the session training, not preparing equipment.
+DIFFICULTY IS PRESCRIPTION, NOT VOCABULARY: Beginner, Intermediate and Advanced use the SAME fundamental exercises (squat, goblet squat, push-up, pull-up, row, lunge, RDL, swing, thruster, burpee…). Level changes load, reps, sets, work/rest intervals, tempo, density and total volume — never swap in obscure or complicated exercises because the level is Advanced. Duration changes rounds, sets and volume — never the strangeness of the exercises.
+VARIETY IS LAST: never pick an exercise because it is unusual, has not appeared recently, or because a piece of equipment exists. Ask "what is the athlete training?" before "what equipment can I use?". Full Gym means common gym equipment is AVAILABLE — not that machines must be used. Dumbbell/kettlebell snatch, clean, clean & press, push press and thrusters are fundamental and allowed.
+FLOW: in Calorie Burning, Cardio, Metabolic, Challenge and every Circuit/EMOM/AMRAP/For Time/Tabata, never use BOSU, balance boards, stability balls, leg extension, leg curl, pec deck, calf raises, curls, pushdowns, raises, flyes or any isolation machine; keep one area and as few implements as possible.
 FINAL TEST before you output: would you genuinely give this workout to that client, can they understand it, perform it safely, transition naturally between the exercises, and does it feel achievable rather than complicated? If not, replace the exercise.`;
 
 /** Prompt text so the model sees the same doctrine the validator enforces. */
