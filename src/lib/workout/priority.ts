@@ -95,11 +95,88 @@ function tokens(s: string): string[] {
 }
 
 /**
- * Best library match for one coach name: every coach token must be present in
- * the library name; among those, the fewest extra words wins (the plainest
- * variation). Returns up to `max` matches.
+ * Hand-checked library equivalents where the library spells the movement
+ * differently from the coach's list. Names that do not exist are ignored.
+ */
+export const PRIORITY_ALIASES: Record<string, string[]> = {
+  "Push-Up": ["push-up"],
+  "Hand-Release Push-Up": ["push-up"],
+  "Pike Push-Up": ["pike-to-cobra push-up"],
+  "Plank to Push-Up": ["push-up to side plank"],
+  "Bodyweight Squat": ["squat to overhead reach", "bodyweight drop jump squat"],
+  "Split Squat": ["split squats"],
+  "Reverse Lunge": ["dumbbell rear lunge", "barbell rear lunge"],
+  "Forward Lunge": ["forward lunge (male)", "walking lunge"],
+  "Bulgarian Split Squat": ["split squats", "dumbbell single leg split squat"],
+  "Step-Up": ["dumbbell step-up", "barbell step-up"],
+  "Glute Bridge": ["low glute bridge on floor", "glute bridge march"],
+  "Single-Leg Glute Bridge": ["single leg bridge with outstretched leg"],
+  "Hip Thrust": ["barbell glute bridge", "glute bridge two legs on bench (male)"],
+  "Calf Raise": ["bodyweight standing calf raise"],
+  "Plank": ["weighted front plank", "front plank with twist"],
+  "Side Plank": ["bodyweight incline side plank", "side bridge v. 2"],
+  "Sit-Up": ["sit-up with arms on chest", "arms overhead full sit-up (male)"],
+  "Crunch": ["crunch floor"],
+  "Leg Raise": ["lying leg raise flat bench"],
+  "Tuck Jump": ["star jump (male)", "forward jump"],
+  "Broad Jump": ["forward jump"],
+  "Jumping Jack": ["jack jump (male)", "star jump (male)"],
+  "High Knees": ["high knee against wall"],
+  "Shuttle Run": ["run"],
+  "Sprint": ["run"],
+  "Plank Jack": ["jack burpee"],
+  "Dumbbell Shoulder Press": ["dumbbell one arm shoulder press", "dumbbell arnold press"],
+  "Dumbbell Row": ["dumbbell bent over row"],
+  "Single-Arm Dumbbell Row": ["dumbbell one arm bent-over row"],
+  "Dumbbell Reverse Lunge": ["dumbbell rear lunge"],
+  "Dumbbell Walking Lunge": ["dumbbell lunge"],
+  "Dumbbell Bulgarian Split Squat": ["dumbbell single leg split squat"],
+  "Dumbbell Hip Thrust": ["barbell glute bridge"],
+  "Dumbbell Thruster": ["kettlebell thruster", "barbell thruster"],
+  "Dumbbell Renegade Row": ["kettlebell alternating renegade row"],
+  "Dumbbell Devil Press": ["burpee", "dumbbell push press"],
+  "Kettlebell Deadlift": ["kettlebell sumo high pull"],
+  "Kettlebell Reverse Lunge": ["kettlebell lunge pass through"],
+  "Kettlebell Clean & Press": ["kettlebell one arm clean and jerk"],
+  "TRX Row": ["suspended row", "inverted row with straps"],
+  "TRX Single-Arm Row": ["suspended row"],
+  "TRX Push-Up": ["suspended push-up"],
+  "TRX Split Squat": ["suspended split squat"],
+  "TRX Reverse Lunge": ["suspended split squat"],
+  "TRX Knee Tuck": ["suspended reverse crunch"],
+  "TRX Mountain Climber": ["suspended abdominal fallout"],
+  "Medicine Ball Slam": ["medicine ball overhead slam"],
+  "Medicine Ball Rotational Throw": ["medicine ball supine chest throw"],
+  "Medicine Ball Squat to Press": ["medicine ball chest push from 3 point stance"],
+  "Barbell Back Squat": ["barbell full squat", "barbell high bar squat"],
+  "Smith Machine Squat": ["smith squat", "smith full squat"],
+  "Smith Machine Reverse Lunge": ["smith single leg split squat"],
+  "Hip Thrust Machine": ["barbell glute bridge"],
+  "Glute Kickback Machine": ["cable kickback", "cable standing hip extension"],
+  "Pec Deck": ["cable middle fly", "dumbbell fly"],
+  "Cable Chest Fly": ["cable standing fly", "cable middle fly"],
+  "Lat Pulldown": ["cable lat pulldown full range of motion", "cable pulldown"],
+  "Chest-Supported Row Machine": ["lever seated row", "lever t bar row"],
+  "Barbell Row": ["barbell bent over row", "barbell pendlay row"],
+  "Barbell Overhead Press": ["barbell seated overhead press"],
+  "Cable Crunch": ["cable kneeling crunch"],
+  "Machine Ab Crunch": ["lever seated crunch"],
+  "Cable Wood Chop": ["band horizontal pallof press"],
+  "Cable Pallof Press": ["band horizontal pallof press", "band vertical pallof press"],
+  "Ab Wheel Rollout": ["wheel rollout", "standing wheel rollerout"],
+  "Triceps Dip": ["triceps dip", "bench dip (knees bent)"],
+};
+
+/**
+ * Library matches for one coach name: hand-checked aliases first, then the
+ * token matcher (every coach word present, fewest extra words wins).
  */
 export function resolvePriority(name: string, library: PoolExercise[], max = 2): PoolExercise[] {
+  const byName = new Map(library.map((e) => [e.name.toLowerCase(), e] as const));
+  const aliased = (PRIORITY_ALIASES[name] ?? [])
+    .map((n) => byName.get(n.toLowerCase()))
+    .filter((e): e is PoolExercise => !!e);
+  if (aliased.length) return aliased.slice(0, max);
   const want = tokens(name);
   if (!want.length) return [];
   const scored: { e: PoolExercise; extra: number }[] = [];
