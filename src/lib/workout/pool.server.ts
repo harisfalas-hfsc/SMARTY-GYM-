@@ -4,6 +4,7 @@ import type { Category, DifficultyLevel, EquipmentMode, Format, StrengthFocus } 
 import {
   categoryExerciseViolation,
   dynamicExerciseViolation,
+  flowSpecialtyViolation,
   focusRegion,
   humanRealismViolation,
   locationEquipmentViolation,
