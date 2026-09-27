@@ -1,3 +1,4 @@
+import { priorityIds } from "./priority";
 import type { PoolExercise } from "./pool.server";
 import { planPrompt, type SessionPlan } from "./programming";
 import { ageDirective } from "./doctrine";
@@ -184,13 +185,15 @@ export type PromptInput = {
   plan?: SessionPlan;
 };
 
-const poolTable = (list: PoolExercise[]) =>
-  list
+const poolTable = (list: PoolExercise[], markPriority = false) => {
+  const prio = markPriority ? priorityIds(list) : new Set<string>();
+  return list
     .map(
       (e) =>
-        `${e.id}|${e.name}|${e.body_part ?? "-"}|${e.target_muscle ?? "-"}|${e.equipment ?? "-"}|${e.difficulty ?? "-"}`,
+        `${e.id}|${e.name}|${e.body_part ?? "-"}|${e.target_muscle ?? "-"}|${e.equipment ?? "-"}|${e.difficulty ?? "-"}${prio.has(e.id) ? "|★" : ""}`,
     )
     .join("\n");
+};
 
 /** Keeps prompt size sane while covering every body part. */
 function trimPrep(list: PoolExercise[], max: number): PoolExercise[] {
@@ -237,7 +240,7 @@ NO 🧽 Soft Tissue Preparation. NO 🔥 Activation. NO ⚡ Finisher. NO 🧘 Co
 4. ⚡ Finisher — library exercises, minimum 3
 5. 🧘 Cool Down — 3 lines, EVERY line a token from the COOL DOWN LIST, then one breathing line`;
 
-  const poolText = poolTable(input.pool);
+  const poolText = poolTable(input.pool, true);
   const activationText = poolTable(trimPrep(input.activationPool ?? [], 90));
   const cooldownText = poolTable(trimPrep(input.cooldownPool ?? [], 70));
 
@@ -247,6 +250,11 @@ LIBRARY-FIRST RULE (non-negotiable)
 - Every exercise reference MUST be written as {{exercise:ID:Name}} using an ID and the EXACT name from the approved library below (e.g. {{exercise:0043:barbell full squat}}).
 - Never invent an exercise. Never write a plain exercise name without markup. Slug ids such as {{exercise:bird-dog:...}} are forbidden.
 - Exception: the 🧽 Soft Tissue Preparation section contains NO tokens at all.
+
+COACH PRIORITY EXERCISES (Haris Falas)
+- Library rows ending in "|★" are the coach's priority movements for this environment (the fundamental push-ups, squats, lunges, rows, presses, swings, burpees, planks and their closest library equivalents).
+- Build MOST of the session (at least 70% of the main and finisher exercises) from ★ rows whenever they suit the category, format and focus. Use non-★ rows only to fill a gap the ★ rows cannot cover.
+- Use the ★ exercise exactly as named in the library — never rename it to the coach's wording.
 
 COACHING STANDARD (how a professional S&C coach programmes)
 - Sequence by nervous-system cost: most technical and heaviest first, then accessory, then metabolic, then core. Never fatigue a stabiliser before the lift that needs it.
