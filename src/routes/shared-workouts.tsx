@@ -23,6 +23,7 @@ import { fetchBadgesFor, fetchCategories, fetchCommunityWorkouts } from "@/lib/c
 import { SORTS, type CommunityBadge, type CommunitySort, type CommunityWorkoutCard as CardData } from "@/lib/community";
 import { CATEGORIES, MAX_STARS } from "@/lib/workout/spec";
 import { loadRemote } from "@/lib/remote-data";
+import pageHeroImage from "@/assets/shared-workouts-card.jpg";
 
 const searchSchema = z.object({
   sort: fallback(z.string(), "latest").default("latest"),
@@ -243,8 +244,8 @@ function BrowsePage() {
   );
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         eyebrow="SMARTYGYM"
         title="Shared workouts"
         subtitle="Explore workouts shared by Smarty Gym members. Find a session that fits you."

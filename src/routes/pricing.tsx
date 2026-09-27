@@ -7,6 +7,7 @@ import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog"
 import { SmartyCard, SmartyPill, toneClasses } from "@/components/SmartyCard";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/PageHeader";
+import pageHeroImage from "@/assets/premium-membership-card.jpg";
 
 export const Route = createFileRoute("/pricing")({
   // While Global Free Access Mode is ON there is no purchase path at all:
@@ -111,8 +112,8 @@ function PricingPage() {
   const navigate = useNavigate();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         eyebrow="Pricing"
         title={
           <>

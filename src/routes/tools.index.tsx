@@ -5,6 +5,7 @@ import timerCard from "@/assets/tools/timer-card.jpg";
 import roundsCard from "@/assets/tools/rounds-card.jpg";
 import oneRmCard from "@/assets/tools/1rm-card.jpg";
 import { PageHeader } from "@/components/PageHeader";
+import pageHeroImage from "@/assets/explore-tools.jpg";
 
 export const Route = createFileRoute("/tools/")({
   head: () => ({
@@ -149,8 +150,8 @@ function ToolCard({ tool }: { tool: Tool }) {
 
 function ToolsPage() {
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         eyebrow="SmartyGym tools"
         title={
           <>

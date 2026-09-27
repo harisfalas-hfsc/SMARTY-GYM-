@@ -39,6 +39,7 @@ import { MembershipRequiredDialog } from "@/components/MembershipRequiredDialog"
 import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/PageHeader";
 import { WodContextNote } from "@/components/performance/WodContextNote";
+import pageHeroImage from "@/assets/hero-wod-card.jpg";
 
 
 export const Route = createFileRoute("/wod")({
@@ -302,8 +303,8 @@ function WodPage() {
   ].filter((s): s is { day: DayInfo; label: string } => Boolean(s.day));
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-5 px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl space-y-5 px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         className="mb-2"
         eyebrow="Smarty Coach"
         title="Workout of the Day"

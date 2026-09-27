@@ -46,6 +46,7 @@ import type {
   CommunityMember,
   CommunityWorkoutCard as CardData,
 } from "@/lib/community";
+import pageHeroImage from "@/assets/community-card.jpg";
 
 export const Route = createFileRoute("/community/")({
   head: () => ({
@@ -289,8 +290,8 @@ function CommunityPage() {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         eyebrow="Smarty Community"
         icon={Users}
         title="Together"

@@ -32,6 +32,7 @@ import {
   type ExercisePreferences,
 } from "@/lib/preferences.functions";
 import type { ExerciseSchemaItem } from "@/lib/seo/exercise-schema.functions";
+import pageHeroImage from "@/assets/explore-exercise-library.jpg";
 
 
 const URL = "https://smartygym.com/exercise-library";
@@ -387,8 +388,8 @@ function ExerciseLibraryPage() {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      <PageHeader image={pageHeroImage}
         eyebrow="Exercise library"
         title={
           <>
