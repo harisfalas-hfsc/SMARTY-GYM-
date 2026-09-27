@@ -93,7 +93,8 @@ function Home() {
         <MobileHomeActions showPricing={!freeAccessMode} />
       </section>
 
-
+      {/* DESKTOP — the About landing layout is the homepage */}
+      <DesktopAboutLanding />
     </div>
   );
 }
