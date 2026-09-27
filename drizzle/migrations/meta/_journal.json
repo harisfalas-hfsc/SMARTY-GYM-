@@ -393,6 +393,13 @@
       "when": 1790444205330,
       "tag": "0055_ritual_remove_save_test",
       "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1790496090940,
+      "tag": "0056_exercise_smarty_tags",
+      "breakpoints": true
     }
   ]
 }

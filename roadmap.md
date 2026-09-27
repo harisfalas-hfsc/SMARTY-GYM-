@@ -12,3 +12,8 @@
 
 - [x] Import Smarty Rituals (180)
 - [x] Replace broken ritual Word/PDF export with real formatted downloads and verify single/all exports.
+- [x] Challenge balance + level-consistency enforcement (doctrine/validator/prompt) — done, 179 tests pass
+- [x] exercises.smarty_tags migration + backfill + pool preference — done
+- [ ] Verify ritual PDF export opens in a real PDF app; Word file in Word
+- [ ] Emoji rendering unverified on a real phone (test browser lacks emoji fonts)
+- [ ] Installed Android app is an old binary — needs rebuild/resubmission (no store credentials)

@@ -14,6 +14,7 @@ import {
 import {
   activationRelevanceViolation,
   ageSafetyViolation,
+  challengeBalanceViolation,
   categoryAllowsFinisher,
   categoryExerciseViolation,
   cardioDominanceViolation,
@@ -180,6 +181,16 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
     categoryAllowsFinisher(opts.category) && (opts.requireFinisher ?? true);
   if (!categoryAllowsFinisher(opts.category) && finisher.length) {
     errors.push(`${opts.category} sessions never carry a Finisher.`);
+  }
+
+  // 4b. CHALLENGE is a full-body, majority-bodyweight benchmark at the level
+  //     the athlete selected — a structural error, so the block regenerates.
+  if (opts.category === "CHALLENGE") {
+    const work = [...main, ...finisher]
+      .map((s) => libraryById.get(s.exerciseId))
+      .filter((e): e is NonNullable<typeof e> => Boolean(e));
+    const bv = challengeBalanceViolation(work, opts.level);
+    if (bv) errors.push(bv);
   }
 
   const wantsActivation = opts.requireActivation ?? opts.category !== "MICRO-WORKOUTS";

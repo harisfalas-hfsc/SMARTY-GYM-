@@ -508,6 +508,7 @@ export type Database = {
           movement_pattern: string | null
           name: string
           secondary_muscles: string[]
+          smarty_tags: string[]
           tags: string[]
           target_muscle: string | null
           updated_at: string
@@ -529,6 +530,7 @@ export type Database = {
           movement_pattern?: string | null
           name: string
           secondary_muscles?: string[]
+          smarty_tags?: string[]
           tags?: string[]
           target_muscle?: string | null
           updated_at?: string
@@ -550,6 +552,7 @@ export type Database = {
           movement_pattern?: string | null
           name?: string
           secondary_muscles?: string[]
+          smarty_tags?: string[]
           tags?: string[]
           target_muscle?: string | null
           updated_at?: string
