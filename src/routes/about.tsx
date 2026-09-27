@@ -86,9 +86,15 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
+  // Desktop: the About content is the homepage — send desktop visitors there.
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+      void navigate({ to: "/", replace: true });
+    }
+  }, [navigate]);
+
   return (
-    <>
-    <DesktopAboutLanding />
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:hidden">
       <PageHeader image={pageHeroImage}
         eyebrow="About"
