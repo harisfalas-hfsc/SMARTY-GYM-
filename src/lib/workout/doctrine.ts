@@ -202,15 +202,62 @@ export const HIGH_SKILL_RE =
  * 40s and 50s — familiar, effective, achievable movements only.
  */
 export const IMPRACTICAL_MOVEMENT_RE =
-  /\b(turkish get-?up|get-?up|handstand|hand stand|headstand|forearm stand|pike push-?up|pistol squat|pistol|shrimp squat|sissy squat|planche|front lever|back lever|human flag|iron cross|dragon flag|skin the cat|muscle-?up|nordic|crow pose|frog stand|typewriter|aztec|clapping push-?up|superman push-?up|hollow back|windmill|bent press|jefferson|zercher|overhead squat|snatch|jerk|power clean|hang clean|squat clean|split clean|clean and press|clean and jerk|kipping|butterfly pull-?up|behind[- ]the[- ]neck|good morning)\b/i;
+  /\b(turkish get-?up|get-?up|handstand|hand stand|headstand|forearm stand|pistol squat|pistol|shrimp squat|sissy squat|planche|front lever|back lever|human flag|iron cross|dragon flag|skin the cat|muscle-?up|nordic|crow pose|frog stand|typewriter|aztec|clapping push-?up|superman push-?up|hollow back|windmill|bent press|jefferson|zercher|overhead squat|snatch|jerk|power clean|hang clean|squat clean|split clean|clean and press|clean and jerk|kipping|butterfly pull-?up|behind[- ]the[- ]neck|good morning)\b/i;
+
+/**
+ * Master engine ruleset — the dumbbell / kettlebell power family (snatch,
+ * clean, clean & press, push press, thruster) is fundamental coaching
+ * vocabulary, NOT Olympic barbell lifting. It stays legal everywhere.
+ */
+export function isImplementPower(name: string): boolean {
+  const n = name.toLowerCase();
+  return (
+    /\b(dumbbell|kettlebell)\b/.test(n) &&
+    !/\b(barbell|jerk|overhead squat)\b/.test(n) &&
+    /\b(snatch|clean|push press|thruster)\b/.test(n)
+  );
+}
+
+/** Kettlebell Turkish Get-Up is a coach's priority strength drill — REPS & SETS only. */
+function isKettlebellGetUp(name: string): boolean {
+  return /\bkettlebell\b/i.test(name) && /\bturkish get-?up\b/i.test(name);
+}
 
 /**
  * Global legality: an exercise that a real coach would not hand to a normal
  * adult is rejected before anything else looks at it.
  */
 export function humanRealismViolation(e: ExerciseLike): string | null {
+  if (isImplementPower(e.name) || isKettlebellGetUp(e.name)) return null;
   if (IMPRACTICAL_MOVEMENT_RE.test(e.name.toLowerCase()))
     return `"${e.name}" is a high-skill, gymnastic or technically demanding movement that a coach would not program for a normal adult client.`;
+  return null;
+}
+
+/**
+ * Master engine §11-§14, §18, §20-§21 — continuous-flow categories (Calorie
+ * Burning, Cardio, Metabolic, Challenge) and every clock-driven format never
+ * carry balance tools, isolation machines or single-joint isolation work.
+ * Full Gym means those tools are available, never that they are used.
+ * Mobility & Stability is the only category where balance tools are legal.
+ */
+export const FLOW_CATEGORIES: Category[] = ["CALORIE BURNING", "CARDIO", "METABOLIC", "CHALLENGE"];
+const BALANCE_TOOL_RE = /\b(bosu|balance board|wobble|stability ball|swiss ball|balance pad|balance disc)\b/i;
+const ISOLATION_RE =
+  /\b(leg extension|leg curl|pec deck|calf raise|calf press|seated calf|biceps? curl|hammer curl|preacher|concentration curl|cable curl|curl machine|triceps? (?:extension|pushdown|kickback)|pushdown|kickback|lateral raise|front raise|rear delt|reverse fly|chest fly|cable fly|fly machine|shrug|wrist curl|adductor|abductor|hip adduction|hip abduction)\b/i;
+
+export function flowSpecialtyViolation(
+  e: ExerciseLike,
+  category: Category,
+  format: Format,
+): string | null {
+  const flow = FLOW_CATEGORIES.includes(category) || isDynamicFormat(format);
+  if (!flow) return null;
+  const both = `${e.name} ${e.equipment ?? ""}`;
+  if (category !== "MOBILITY & STABILITY" && BALANCE_TOOL_RE.test(both))
+    return `"${e.name}" is specialised balance equipment — it has no place in a ${category} ${format} session.`;
+  if (ISOLATION_RE.test(e.name))
+    return `"${e.name}" is isolation / machine work that destroys the flow of a ${category} ${format} session — use a compound, low-setup movement.`;
   return null;
 }
 
@@ -324,7 +371,8 @@ export function dynamicExerciseViolation(
   const name = e.name.toLowerCase();
   const both = `${name} ${equipment}`;
 
-  if (HIGH_SKILL_RE.test(name))
+  const implementPower = isImplementPower(e.name);
+  if (HIGH_SKILL_RE.test(name) && !(implementPower && !/\b(turkish|get-?up|windmill)\b/.test(name)))
     return `"${e.name}" is a high-skill or single-limb movement and is never programmed inside a ${format} session.`;
 
   const isErgo = ERGOMETER_RE.test(both) && !MACHINE_STRENGTH_RE.test(name);
@@ -332,7 +380,7 @@ export function dynamicExerciseViolation(
 
   if (SETUP_EQUIPMENT_RE.test(equipment))
     return `"${e.name}" uses ${e.equipment} — setup-dependent strength equipment is not legal in a ${format} ${category} session.`;
-  if (SETUP_MOVEMENT_RE.test(name))
+  if (SETUP_MOVEMENT_RE.test(name) && !implementPower)
     return `"${e.name}" is a setup-, rack-, bench- or spotter-dependent movement and cannot be repeated inside a ${format}.`;
   if (MACHINE_STRENGTH_RE.test(both))
     return `"${e.name}" is machine strength work, which is not legal in a ${format} ${category} session.`;
