@@ -117,8 +117,8 @@ export const CRON_JOBS: CronJobDefinition[] = [
     label: "Automatic SEO update",
     description:
       "Rebuilds the site-wide keyword index from every public page, every training topic, the whole exercise library and every workout ever generated (name, category, format, focus, muscles, equipment, patterns and tags). Nothing is deleted — the index is merged and extended. When nothing changed since the last run, the job stops without touching anything. Every completed run emails a report to the administrator.",
-    timing: "fixed",
-    timingNote: "Runs once a day at the time set below (site timezone).",
+    timing: "weekly",
+    timingNote: "Runs once a week, on Sunday night at the time set below (Cyprus time) — 23:00 by default, so it finishes before Monday. Background only: nothing visible on the site changes.",
     sends: [
       {
         title: "[Admin] SEO update — X new keywords",
@@ -130,24 +130,25 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentLabel: "Extra keywords to always include",
     contentHelp:
       "One keyword or phrase per line. These are merged into the index on every run and never removed.",
-    defaults: { enabled: false, hour: 0, minute: 0 },
+    weekday: 0,
+    defaults: { enabled: false, hour: 23, minute: 0 },
     runnable: true,
   },
   {
     key: "health-check",
-    label: "Nightly system health check",
+    label: "Daily system health audit",
     description:
-      "Checks the whole system once every night — database, exercise library, player media, workout generation, Workout of the Day, email, every other scheduled job, all public pages, share links, logbook / progress / player data, the support inbox, errors from the last 24 hours and the day's activity. A numbered report is emailed every night, pass or fail.",
+      "Audits the whole system once a day — database, exercise library, player media, workout generation (including failed or stuck requests), Workout of the Day, payments (switch, failed or past-due subscriptions, payment errors), every scheduled job (failed, switched off or overdue), all public pages, Smarty Ritual, Community, Shared Workouts, Blog, share links, logbook / progress / player data, the support inbox, member errors from the last 24 hours and the day's activity. A numbered report is emailed every day, pass or fail. You can also run it any time from System health.",
     timing: "fixed",
     timingNote:
-      "Runs once a day at the time set below (Cyprus time). Default 00:00. The report is always emailed, so silence means the check itself did not run.",
+      "Runs once a day at the time set below (Cyprus time). Default 12:00. The report is always emailed, so silence means the check itself did not run.",
     sends: [
       {
-        title: "[Health] All 15 checks passed",
+        title: "[Health] All checks passed",
         body: "Numbered report with PASS / WARNING / FAILED and one line of detail per check.",
       },
       {
-        title: "[Health] 1 FAILURE(S) — 14/15 checks passed",
+        title: "[Health] 1 FAILURE(S) — 20/21 checks passed",
         body: "Same report, headline naming the failures — for example “WORKOUT GENERATION UNAVAILABLE — members cannot generate workouts”.",
       },
     ],
@@ -155,7 +156,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentEditable: false,
     settings: ["recipient", "checks"],
     runnable: true,
-    defaults: { enabled: false, hour: 0, minute: 0 },
+    defaults: { enabled: false, hour: 12, minute: 0 },
   },
   {
     key: "error-alerts",

@@ -210,6 +210,7 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
                   .filter((i) => i.status !== "pass")
                   .map((i) => `${i.label}: ${i.detail}`)
                   .slice(0, 50),
+                items: report.items,
               },
               trigger: "schedule",
             });
