@@ -238,14 +238,14 @@ export function DesktopAboutLanding() {
           return (
             <section key={s.id} id={s.id} className="bg-background">
               <div
-                className={`mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-stretch gap-12 px-8 py-10 ${
+                className={`mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-12 px-8 py-10 ${
                   reverse ? "[&>*:first-child]:order-2" : ""
                 }`}
               >
                 <Link
                   to={s.cta.to}
                   aria-label={s.cta.label}
-                  className="group relative block h-full min-h-0 min-w-0 overflow-hidden rounded-3xl shadow-2xl"
+                  className="group relative block aspect-[4/3] min-w-0 overflow-hidden rounded-3xl shadow-2xl"
                 >
                   <img
                     src={s.image}
@@ -254,7 +254,7 @@ export function DesktopAboutLanding() {
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </Link>
-                <div className="flex min-w-0 flex-col justify-between py-1">
+                <div className="flex min-w-0 flex-col py-1">
                   <div className="min-h-0">
                     <div className={`inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] ${accent}`}>
                       <span className={`h-px w-6 ${bar}`} />
