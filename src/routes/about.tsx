@@ -375,6 +375,5 @@ function AboutPage() {
       </SmartyCard>
 
     </div>
-    </>
   );
 }
