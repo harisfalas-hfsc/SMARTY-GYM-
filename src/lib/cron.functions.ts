@@ -220,3 +220,87 @@ export const adminResolveError = createServerFn({ method: "POST" })
       return { error: e instanceof Error ? e.message : "Failed to update" };
     }
   });
+
+/* ---------------- System health (admin panel, live step-by-step run) ---------------- */
+
+export interface HealthItemDTO {
+  number: number;
+  key: string;
+  label: string;
+  status: "pass" | "warn" | "fail";
+  detail: string;
+}
+
+export const adminHealthCheckStep = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { key: string }) => data)
+  .handler(async ({ context, data }): Promise<{ item: HealthItemDTO | null } | { error: string }> => {
+    try {
+      await assertAdmin(context as any);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const db = supabaseAdmin as never as import("@supabase/supabase-js").SupabaseClient;
+      const { runHealthCheck } = await import("@/lib/cron/health-check.server");
+      const r = await runHealthCheck(db, { trigger: "manual", only: [data.key], skipEmail: true });
+      return { item: (r.items[0] as HealthItemDTO | undefined) ?? null };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Check failed" };
+    }
+  });
+
+export const adminFinishHealthAudit = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { startedAt: string; items: HealthItemDTO[] }) => data)
+  .handler(
+    async ({ context, data }): Promise<{ summary: string; status: string; emailed: boolean; recipient: string } | { error: string }> => {
+      try {
+        await assertAdmin(context as any);
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const db = supabaseAdmin as never as import("@supabase/supabase-js").SupabaseClient;
+        const { getCronConfig, recordRun } = await import("@/lib/cron/jobs.server");
+        const { buildReport, emailReport, healthRecipient } = await import("@/lib/cron/health-check.server");
+        const config = await getCronConfig(db, "health-check");
+        const items = data.items.slice(0, 60).map((i) => ({
+          number: i.number,
+          key: String(i.key),
+          label: String(i.label).slice(0, 200),
+          status: (["pass", "warn", "fail"].includes(i.status) ? i.status : "fail") as "pass" | "warn" | "fail",
+          detail: String(i.detail).slice(0, 1000),
+        }));
+        const report = buildReport(items, new Date(data.startedAt), "manual", healthRecipient(config));
+        report.emailed = await emailReport(report);
+        await recordRun(db, {
+          jobKey: "health-check",
+          status: report.status === "ok" ? "ok" : "failed",
+          changed: report.failed > 0,
+          summary: report.summary,
+          details: {
+            failures: report.items.filter((i) => i.status !== "pass").map((i) => `${i.label}: ${i.detail}`),
+            items: report.items,
+          },
+          trigger: "manual",
+        });
+        return { summary: report.summary, status: report.status, emailed: report.emailed, recipient: report.recipient };
+      } catch (e) {
+        return { error: e instanceof Error ? e.message : "Could not finish the audit" };
+      }
+    },
+  );
+
+export const adminListHealthRuns = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ runs: CronRunRow[] } | { error: string }> => {
+    try {
+      await assertAdmin(context as any);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data, error } = await (supabaseAdmin as any)
+        .from("cron_runs")
+        .select("*")
+        .eq("job_key", "health-check")
+        .order("ran_at", { ascending: false })
+        .limit(20);
+      if (error) throw new Error(error.message);
+      return { runs: (data ?? []) as CronRunRow[] };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Failed to load history" };
+    }
+  });
