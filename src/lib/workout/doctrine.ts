@@ -7,7 +7,7 @@
 // The AI is never the final authority — this module is.
 // ---------------------------------------------------------------------------
 
-import type { Category, Format, StrengthFocus } from "./spec";
+import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type ExerciseLike = {
   id?: string;
