@@ -238,7 +238,7 @@ export function DesktopAboutLanding() {
           return (
             <section key={s.id} id={s.id} className="bg-background">
               <div
-                className={`mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-12 px-8 py-10 ${
+                className={`mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-12 px-8 py-10 ${
                   reverse ? "[&>*:first-child]:order-2" : ""
                 }`}
               >
