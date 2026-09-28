@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { localDateISO } from "@/lib/wod-cycle";
 import { scoreFor } from "@/lib/progress-config";
+import { completeStreaks } from "@/lib/checkins/score";
 
 export type BadgeDef = {
   id: string;
@@ -32,6 +33,8 @@ export type ProgressStats = {
   longest_streak: number;
   subscription_months: number;
   badge_points: number;
+  /** Longest run of complete Smarty Check-in days. */
+  checkin_longest_streak?: number;
 };
 
 function addDaysISO(iso: string, delta: number) {
@@ -96,6 +99,12 @@ export async function recomputeProgress(admin: SupabaseClient, userId: string) {
       admin.from("badge_definitions").select("*").eq("is_active", true).order("sort_order"),
       admin.from("user_badges").select("badge_id").eq("user_id", userId),
     ]);
+  const { data: checkinRows } = await admin
+    .from("smarty_checkins")
+    .select("checkin_date")
+    .eq("user_id", userId)
+    .eq("status", "complete")
+    .limit(5000);
 
   const tz = ((profile as { timezone?: string | null } | null)?.timezone || "Europe/Athens") as string;
   const rows = (workouts ?? []) as { id: string; status: string; completed_at: string | null; created_at: string }[];
@@ -124,8 +133,14 @@ export async function recomputeProgress(admin: SupabaseClient, userId: string) {
 
   const definitions = ((defs ?? []) as BadgeDef[]).filter((d) => d.is_active);
   const ownedIds = new Set(((owned ?? []) as { badge_id: string }[]).map((b) => b.badge_id));
+  const checkinLongest = completeStreaks(
+    ((checkinRows ?? []) as { checkin_date: string }[]).map((r) => r.checkin_date),
+    todayISO,
+  ).longest;
   const valueFor = (category: string) =>
-    category === "subscription"
+    category === "checkins"
+      ? checkinLongest
+      : category === "subscription"
       ? months
       : category === "generated"
         ? generated
@@ -203,6 +218,7 @@ export async function recomputeProgress(admin: SupabaseClient, userId: string) {
     longest_streak: longest,
     subscription_months: months,
     badge_points: badgePoints,
+    checkin_longest_streak: checkinLongest,
   };
   return { stats, definitions, newlyEarned };
 }

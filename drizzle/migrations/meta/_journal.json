@@ -400,6 +400,13 @@
       "when": 1790496090940,
       "tag": "0056_exercise_smarty_tags",
       "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1790586397283,
+      "tag": "0057_smarty_checkins",
+      "breakpoints": true
     }
   ]
 }

@@ -30,8 +30,13 @@ export const getCoachRecommendation = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { loadPerformanceOverview } = await import("@/lib/performance.server");
     const { recommend, wodContextNote } = await import("@/lib/coach-rules");
-    const overview = await loadPerformanceOverview(context.supabase as never, context.userId);
+    const { loadCheckinSignal } = await import("@/lib/checkins.server");
+    const [overview, checkin] = await Promise.all([
+      loadPerformanceOverview(context.supabase as never, context.userId),
+      loadCheckinSignal(context.supabase as never, context.userId).catch(() => null),
+    ]);
     const ctx = {
+      checkin,
       selectedStars: data.selectedStars,
       category: data.category,
       format: data.format,

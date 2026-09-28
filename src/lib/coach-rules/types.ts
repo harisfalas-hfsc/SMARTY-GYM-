@@ -27,6 +27,19 @@ export type CoachContext = {
   progressionReady: string[];
   /** Sessions where logged reps fell short of the prescription. */
   recentShortfalls: number;
+  /** Today's / yesterday's Smarty Check-in answers, when the member gave them. */
+  checkin?: CheckinSignal | null;
+};
+
+export type CheckinSignal = {
+  sleepHours: number | null;
+  sleepQuality: number | null;
+  readiness: number | null;
+  soreness: number | null;
+  mood: number | null;
+  /** Yesterday evening's reported day strain (0-10) and daily score. */
+  yesterdayStrain: number | null;
+  yesterdayScore: number | null;
 };
 
 export type CoachRecommendation = {
