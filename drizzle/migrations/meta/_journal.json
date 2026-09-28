@@ -407,6 +407,13 @@
       "when": 1790586397283,
       "tag": "0057_smarty_checkins",
       "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1790588073150,
+      "tag": "0058_checkin_badge_ladder",
+      "breakpoints": true
     }
   ]
 }

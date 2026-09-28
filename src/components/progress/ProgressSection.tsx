@@ -33,6 +33,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+/** Award tiers by level within each category: Bronze -> Legend. */
+const AWARD_TIERS = [
+  { name: "Bronze", ring: "#cd7f32", bg: "linear-gradient(135deg,#f3c49b,#b8732e)", text: "#3b1f07" },
+  { name: "Silver", ring: "#a8b2bd", bg: "linear-gradient(135deg,#f1f4f7,#9aa5b1)", text: "#1f2933" },
+  { name: "Gold", ring: "#e6b422", bg: "linear-gradient(135deg,#ffe98a,#d69e0b)", text: "#3d2a00" },
+  { name: "Platinum", ring: "#5fd3c6", bg: "linear-gradient(135deg,#d9fbf6,#3bb3a6)", text: "#063b36" },
+  { name: "Diamond", ring: "#4aa8ff", bg: "linear-gradient(135deg,#cfe8ff,#2f7de1)", text: "#04213f" },
+  { name: "Master", ring: "#a26bff", bg: "linear-gradient(135deg,#e6d6ff,#7b3fe4)", text: "#1f0a45" },
+  { name: "Elite", ring: "#ff5c8a", bg: "linear-gradient(135deg,#ffd3df,#e0336a)", text: "#43061a" },
+  { name: "Legend", ring: "#ff7a1a", bg: "linear-gradient(135deg,#ffe07a,#ff4d1a)", text: "#3f0f00" },
+];
+
 const ICONS: Record<string, typeof Trophy> = {
   trophy: Trophy,
   flame: Flame,
@@ -282,24 +294,32 @@ export function ProgressSection() {
                 )}
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {defs.map((d) => {
+                  {defs.map((d, i) => {
                     const Icon = ICONS[d.icon] ?? Trophy;
                     const has = earned.has(d.id);
                     const when = data.badges.find((b) => b.badge_id === d.id)?.earned_at;
+                    const tier = AWARD_TIERS[Math.min(i, AWARD_TIERS.length - 1)];
                     return (
                       <div
                         key={d.id}
                         title={
-                          has && when ? `${d.description}. Earned ${formatDate(when)}` : d.description
+                          has && when ? `${tier.name} · ${d.description}. Earned ${formatDate(when)}` : `${tier.name} · ${d.description}`
                         }
                         className={cn(
-                          "flex min-w-[92px] flex-1 flex-col items-center gap-1 rounded-xl border p-3 text-center sm:flex-none",
-                          has
-                            ? "border-blue-400 bg-primary/10 text-foreground"
-                            : "border-border bg-muted/40 text-muted-foreground",
+                          "flex min-w-[92px] flex-1 flex-col items-center gap-1 rounded-xl border-2 p-3 text-center sm:flex-none",
+                          !has && "opacity-60 grayscale-[35%]",
                         )}
+                        style={{
+                          borderColor: tier.ring,
+                          background: has ? tier.bg : "transparent",
+                          color: has ? tier.text : undefined,
+                          boxShadow: has ? `0 4px 14px -4px ${tier.ring}` : undefined,
+                        }}
                       >
-                        {has ? <Icon className="h-5 w-5 text-primary" /> : <Lock className="h-5 w-5" />}
+                        {has ? <Icon className="h-5 w-5" /> : <Lock className="h-5 w-5" style={{ color: tier.ring }} />}
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider" style={has ? undefined : { color: tier.ring }}>
+                          {tier.name}
+                        </span>
                         <span className="text-[11px] font-semibold leading-tight">
                           {num(d.threshold)} {unit}
                         </span>
