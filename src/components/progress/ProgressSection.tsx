@@ -282,24 +282,32 @@ export function ProgressSection() {
                 )}
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {defs.map((d) => {
+                  {defs.map((d, i) => {
                     const Icon = ICONS[d.icon] ?? Trophy;
                     const has = earned.has(d.id);
                     const when = data.badges.find((b) => b.badge_id === d.id)?.earned_at;
+                    const tier = AWARD_TIERS[Math.min(i, AWARD_TIERS.length - 1)];
                     return (
                       <div
                         key={d.id}
                         title={
-                          has && when ? `${d.description}. Earned ${formatDate(when)}` : d.description
+                          has && when ? `${tier.name} · ${d.description}. Earned ${formatDate(when)}` : `${tier.name} · ${d.description}`
                         }
                         className={cn(
-                          "flex min-w-[92px] flex-1 flex-col items-center gap-1 rounded-xl border p-3 text-center sm:flex-none",
-                          has
-                            ? "border-blue-400 bg-primary/10 text-foreground"
-                            : "border-border bg-muted/40 text-muted-foreground",
+                          "flex min-w-[92px] flex-1 flex-col items-center gap-1 rounded-xl border-2 p-3 text-center sm:flex-none",
+                          !has && "opacity-60 grayscale-[35%]",
                         )}
+                        style={{
+                          borderColor: tier.ring,
+                          background: has ? tier.bg : "transparent",
+                          color: has ? tier.text : undefined,
+                          boxShadow: has ? `0 4px 14px -4px ${tier.ring}` : undefined,
+                        }}
                       >
-                        {has ? <Icon className="h-5 w-5 text-primary" /> : <Lock className="h-5 w-5" />}
+                        {has ? <Icon className="h-5 w-5" /> : <Lock className="h-5 w-5" style={{ color: tier.ring }} />}
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider" style={has ? undefined : { color: tier.ring }}>
+                          {tier.name}
+                        </span>
                         <span className="text-[11px] font-semibold leading-tight">
                           {num(d.threshold)} {unit}
                         </span>
