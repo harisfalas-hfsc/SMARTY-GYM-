@@ -1,3 +1,4 @@
+import { PremiumGate } from "@/components/PremiumGate";
 import { DayCheckinNote } from "@/components/checkins/CheckinsPanel";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -835,6 +836,14 @@ function ScheduledView({
 }
 
 function Logbook() {
+  return (
+    <PremiumGate>
+      <LogbookContent />
+    </PremiumGate>
+  );
+}
+
+function LogbookContent() {
   const { filter, view } = Route.useSearch();
   const equip = Route.useSearch().equip ?? "all";
   const navigate = useNavigate({ from: "/logbook" });

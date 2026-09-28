@@ -81,7 +81,10 @@ function WorkoutPage() {
     }
     const { row, access } = cached.data;
     setW(row);
+    // Expired members keep their saved workouts in the account, but opening
+    // them needs an active membership again (WOD also locks when unknown).
     if ((row as { is_wod?: boolean } | null)?.is_wod) setLocked(!access?.premium);
+    else if (access && access.premium === false) setLocked(true);
     if (row && access?.readinessFlagged && access.readinessFlags.length > 0) {
       setParqFlags(access.readinessFlags);
       if (!hasParqAck()) {
@@ -164,8 +167,9 @@ function WorkoutPage() {
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <h1 className="text-xl font-extrabold uppercase tracking-tight">Members only</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          The Workout of the Day is part of the Smarty Gym membership. Join to open today's two
-          workouts and get a new pair every morning.
+          {(w as { is_wod?: boolean }).is_wod
+            ? "The Workout of the Day is part of the Smarty Gym membership. Join to open today's two workouts and get a new pair every morning."
+            : "This workout is safely kept in your account. Renew your Smarty Gym membership to open it again."}
         </p>
         <Button asChild className="mt-4 h-12 rounded-2xl">
           <Link to="/auth">See plans</Link>
