@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Award, Bell, Crown, Loader2, Lock, LogIn, Moon, Sparkles, Sun, Target } from "lucide-react";
+import { Crown, Loader2, Lock, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
@@ -31,15 +31,6 @@ export const Route = createFileRoute("/smarty-checkins")({
   }),
 });
 
-const HOW = [
-  { Icon: Sun, title: "Morning check-in", time: "07:00 – 10:00", desc: "Sleep hours, sleep quality, readiness, soreness and mood." },
-  { Icon: Moon, title: "Night check-in", time: "19:00 – 22:00", desc: "Steps, hydration, protein and how demanding your day was." },
-  { Icon: Target, title: "Daily Smarty Score", time: "0 – 100", desc: "Both check-ins become one score: red, orange, yellow or green." },
-  { Icon: Sparkles, title: "Smarter workouts", time: "Create Your Workout", desc: "Your answers shape the coach's suggestion — you decide whether to accept it." },
-  { Icon: Bell, title: "Reminders", time: "Pop-up + inbox", desc: "A pop-up in the app and a message in your inbox during each window." },
-  { Icon: Award, title: "Streak badges", time: "7 · 30 · 90 days", desc: "Complete both check-ins to build your streak and earn awards." },
-];
-
 function SmartyCheckinsPage() {
   const { user, loading: authLoading } = useAuth();
   const fetchAccess = useServerFn(getCheckinAccess);
@@ -56,26 +47,16 @@ function SmartyCheckinsPage() {
         image={pageHeroImage}
         eyebrow="Smarty Check-ins"
         title={<>Check in. Score. <span className="text-primary">Train smarter.</span></>}
-        subtitle={<>Two 30-second check-ins a day turn how you slept, feel and lived into one Smarty Score, designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>.</>}
+        subtitle={
+          <>
+            Two 30-second check-ins a day turn how you slept, feel and lived into one Smarty Score,{" "}
+            <span className="whitespace-nowrap">
+              designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>
+            </span>
+            .
+          </>
+        }
       />
-
-      <Card className="mb-6 overflow-hidden">
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-6 sm:p-8">
-          <h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl">
-            How <span className="text-primary">Smarty</span> Check-ins work
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {HOW.map(({ Icon, title, time, desc }) => (
-              <div key={title} className="rounded-2xl border-2 border-blue-400 bg-card p-4">
-                <Icon className="h-6 w-6 text-primary" />
-                <p className="mt-2 font-bold">{title}</p>
-                <p className="text-xs font-semibold uppercase tracking-wide text-primary">{time}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Card>
 
       {authLoading || (Boolean(user) && isLoading) ? (
         <div className="flex justify-center p-10"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
@@ -109,7 +90,7 @@ function SmartyCheckinsPage() {
           </div>
         </Card>
       ) : (
-        <CheckinsPanel />
+        <CheckinsPanel todayFirst />
       )}
 
       <MembershipRequiredDialog
