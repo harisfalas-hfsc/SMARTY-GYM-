@@ -23,8 +23,7 @@ import {
   Users,
   Sun,
   Moon,
-  LogIn,
-} from "lucide-react";
+  LogIn, ClipboardCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/lib/theme";
@@ -253,6 +252,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         ...(isAuthed ? [] : [{ to: "/community", label: "Smarty Community", Icon: Users }]),
         { to: "/exercise-library", label: "Exercise Library", Icon: Dumbbell },
         { to: "/tools", label: "Smarty Tools", Icon: Wrench },
+        { to: "/smarty-checkins", label: "Smarty Check-ins", Icon: ClipboardCheck },
         { to: "/blog", label: "Smarty Blog", Icon: BookOpen },
         ...(freeAccessMode ? [] : [{ to: "/pricing", label: "Pricing", Icon: Crown }]),
         { to: "/faq", label: "Frequently Asked Questions", Icon: HelpCircle },

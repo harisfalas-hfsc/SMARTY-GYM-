@@ -15,11 +15,29 @@ async function todayFor(db: never, userId: string) {
   return { tz, ...localClock(new Date(), tz) };
 }
 
+export const CHECKIN_PREMIUM_REQUIRED = "Premium access required for Smarty Check-ins.";
+
+async function assertPremium(db: never, userId: string) {
+  const { getAccessStateForUser } = await import("@/lib/eligibility.server");
+  const access = await getAccessStateForUser(db, userId);
+  if (!access.premium) throw new Error(CHECKIN_PREMIUM_REQUIRED);
+}
+
+/** Whether the signed-in member can use Smarty Check-ins (premium only). */
+export const getCheckinAccess = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { getAccessStateForUser } = await import("@/lib/eligibility.server");
+    const access = await getAccessStateForUser(context.supabase as never, context.userId);
+    return { premium: Boolean(access.premium) };
+  });
+
 export const getCheckinState = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i?: { days?: number }) => ({ days: Math.min(365, Math.max(7, i?.days ?? 90)) }))
   .handler(async ({ data, context }) => {
     const db = context.supabase;
+    await assertPremium(db as never, context.userId);
     const { date, minutes, tz } = await todayFor(db as never, context.userId);
     const since = new Date(`${date}T12:00:00Z`);
     since.setUTCDate(since.getUTCDate() - data.days);
@@ -75,6 +93,7 @@ export const submitCheckin = createServerFn({ method: "POST" })
   .inputValidator((i: unknown) => z.discriminatedUnion("kind", [morning, night]).parse(i))
   .handler(async ({ data, context }) => {
     const db = context.supabase;
+    await assertPremium(db as never, context.userId);
     const { date, minutes } = await todayFor(db as never, context.userId);
     const w = windowStatus(minutes);
     if (data.kind === "morning" && !w.isMorning)

@@ -160,6 +160,12 @@ const COMMUNITY_STEPS = [
   },
 ];
 
+const CHECKIN_STEPS = [
+  { n: "01", title: "Morning check-in", desc: "Sleep • Readiness • Soreness • Mood" },
+  { n: "02", title: "Night check-in", desc: "Steps • Hydration • Protein • Day strain" },
+  { n: "03", title: "Smarty Score", desc: "One score out of 100 • Guides your workout" },
+];
+
 const RITUAL_STEPS = [
   {
     n: "01",
@@ -321,6 +327,39 @@ function HowItWorks() {
         <div className="mt-6 flex justify-center">
           <Button asChild size="lg" className="font-extrabold uppercase">
             <Link to="/smarty-ritual">Open Smarty Ritual</Link>
+          </Button>
+        </div>
+      </section>
+
+      <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+        <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+          Daily support — Smarty Check-ins
+        </p>
+        <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
+          Tell your coach how you really feel.
+        </h2>
+        <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
+          Two 30-second check-ins a day. In the morning (07:00–10:00) you log sleep, readiness,
+          soreness and mood; at night (19:00–22:00) your steps, hydration, protein and how demanding
+          the day was. Both become one Daily Smarty Score, saved in Logbook → Progress, and Create
+          Your Workout uses it to suggest the right intensity — you decide whether to accept. Missed
+          the pop-up? Open Smarty Check-ins any time during the window, and you also get a reminder
+          in your inbox.
+        </p>
+
+        <div className="mt-6 grid gap-6 sm:grid-cols-3 sm:gap-4">
+          {CHECKIN_STEPS.map((s) => (
+            <div key={s.n} className="flex flex-col items-center text-center">
+              <div className="text-4xl font-black leading-none text-primary sm:text-5xl">{s.n}</div>
+              <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
+              <div className="mt-1 text-sm text-muted-foreground">{s.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          <Button asChild size="lg" className="font-extrabold uppercase">
+            <Link to="/smarty-checkins">Open Smarty Check-ins</Link>
           </Button>
         </div>
       </section>

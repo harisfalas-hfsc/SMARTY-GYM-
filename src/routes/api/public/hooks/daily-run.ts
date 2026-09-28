@@ -125,6 +125,20 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           }
         }
 
+        let checkinReminders = 0;
+        if (jobs["checkin-reminders"]?.enabled) {
+          try {
+            const { runCheckinReminders } = await import("@/lib/checkin-reminders.server");
+            checkinReminders = await runCheckinReminders(db);
+            if (checkinReminders)
+              await recordRun(db, { jobKey: "checkin-reminders", status: "ok", changed: true, summary: `${checkinReminders} check-in reminder(s) sent.` });
+          } catch (e) {
+            const message = e instanceof Error ? e.message : "error";
+            failures.push(`checkin:${message}`);
+            await recordRun(db, { jobKey: "checkin-reminders", status: "failed", summary: `Check-in reminders failed: ${message}` });
+          }
+        }
+
         // Automatic SEO update — fixed time, once a day, only when something changed.
         let seo: { status: string; summary: string } | null = null;
         const seoConfig = jobs["seo-refresh"];
@@ -271,6 +285,7 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           motivations,
           workouts,
           scheduleReminders,
+          checkinReminders,
           seo,
           health,
           blog,
