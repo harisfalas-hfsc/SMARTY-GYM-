@@ -33,10 +33,10 @@ const stepBuckets = [
 ];
 const hydrationQuick = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
 const proteinLevels = [
-  { value: 0, emoji: "🔴", label: "Way below" },
-  { value: 1, emoji: "🟠", label: "Some" },
-  { value: 2, emoji: "🟡", label: "Close" },
-  { value: 3, emoji: "🟢", label: "Hit target" },
+  { value: 0, emoji: "🍽️", label: "Way below" },
+  { value: 1, emoji: "🥚", label: "Some" },
+  { value: 2, emoji: "🍗", label: "Close" },
+  { value: 3, emoji: "🥩", label: "Hit target" },
   { value: 4, emoji: "💪", label: "Exceeded" },
 ];
 const strainLabel = (n: number) =>
