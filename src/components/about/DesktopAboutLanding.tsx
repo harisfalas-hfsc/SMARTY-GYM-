@@ -133,12 +133,12 @@ function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
           alt={item.title}
           loading="lazy"
           className={compact
-            ? "h-10 w-10 flex-shrink-0 rounded-md object-cover lg:h-11 lg:w-11"
+            ? "h-10 w-10 flex-shrink-0 rounded-md object-cover"
             : "h-12 w-12 flex-shrink-0 rounded-md object-cover lg:h-14 lg:w-14 xl:h-16 xl:w-16"}
         />
       ) : Icon ? (
         <span className={compact
-          ? "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary lg:h-11 lg:w-11"
+          ? "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
           : "flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary lg:h-14 lg:w-14"}>
           <Icon className="h-6 w-6" />
         </span>
@@ -157,7 +157,7 @@ function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
     </>
   );
   const cls = compact
-    ? "group flex min-h-10 items-center gap-3 text-left transition-colors lg:min-h-11"
+    ? "group flex min-h-10 items-center gap-3 text-left transition-colors"
     : "group flex min-h-12 items-center gap-3 text-left transition-colors lg:min-h-14 xl:min-h-16";
   return item.to ? (
     <Link to={item.to} className={cls}>
