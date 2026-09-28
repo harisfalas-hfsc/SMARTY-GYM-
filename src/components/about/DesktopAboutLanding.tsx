@@ -123,7 +123,7 @@ const sections: Section[] = [
 ];
 
 
-function ItemRow({ item }: { item: Item }) {
+function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
   const Icon = item.icon;
   const inner = (
     <>
@@ -132,10 +132,14 @@ function ItemRow({ item }: { item: Item }) {
           src={item.image}
           alt={item.title}
           loading="lazy"
-          className="h-12 w-12 flex-shrink-0 rounded-md object-cover lg:h-14 lg:w-14 xl:h-16 xl:w-16"
+          className={compact
+            ? "h-10 w-10 flex-shrink-0 rounded-md object-cover"
+            : "h-12 w-12 flex-shrink-0 rounded-md object-cover lg:h-14 lg:w-14 xl:h-16 xl:w-16"}
         />
       ) : Icon ? (
-        <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary lg:h-14 lg:w-14">
+        <span className={compact
+          ? "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+          : "flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary lg:h-14 lg:w-14"}>
           <Icon className="h-6 w-6" />
         </span>
       ) : null}
@@ -152,7 +156,9 @@ function ItemRow({ item }: { item: Item }) {
       )}
     </>
   );
-  const cls = "group flex min-h-12 items-center gap-3 text-left transition-colors lg:min-h-14 xl:min-h-16";
+  const cls = compact
+    ? "group flex min-h-10 items-center gap-3 text-left transition-colors"
+    : "group flex min-h-12 items-center gap-3 text-left transition-colors lg:min-h-14 xl:min-h-16";
   return item.to ? (
     <Link to={item.to} className={cls}>
       {inner}
@@ -235,6 +241,7 @@ export function DesktopAboutLanding() {
           const accent = s.green ? "text-green-600 dark:text-green-500" : "text-primary";
           const bar = s.green ? "bg-green-600 dark:bg-green-500" : "bg-primary";
           const many = s.items.length > 4;
+          const compactRows = s.id === "how" || s.id === "train";
           return (
             <section key={s.id} id={s.id} className="bg-background">
               <div
@@ -254,7 +261,7 @@ export function DesktopAboutLanding() {
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </Link>
-                <div className="flex min-w-0 flex-col py-1">
+                <div className="flex aspect-[4/3] min-w-0 flex-col justify-between py-1">
                   <div className="min-h-0">
                     <div className={`inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] ${accent}`}>
                       <span className={`h-px w-6 ${bar}`} />
@@ -266,9 +273,9 @@ export function DesktopAboutLanding() {
                     <p className="mt-3 line-clamp-4 text-sm leading-snug text-muted-foreground">
                       {s.description}
                     </p>
-                    <div className={`mt-5 grid gap-2 lg:gap-2.5 ${many ? "grid-cols-2 gap-x-6" : "grid-cols-1"}`}>
+                    <div className={`mt-5 grid ${compactRows ? "gap-1.5" : "gap-2 lg:gap-2.5"} ${many ? "grid-cols-2 gap-x-6" : "grid-cols-1"}`}>
                       {s.items.map((item) => (
-                        <ItemRow key={item.id} item={item} />
+                        <ItemRow key={item.id} item={item} compact={compactRows} />
                       ))}
                     </div>
                   </div>
