@@ -316,13 +316,13 @@ function CommunityPage() {
         </Carousel>
       </div>
 
-      <div className="hidden md:block md:px-12">
+      <div className="hidden md:block">
         <CarouselDots api={desktopApi} activeIndex={desktopPanel} count={panels.length} />
         <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
           <CarouselPrevious className="-left-14 z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-[18px] [&>svg]:w-[18px]" />
           <CarouselContent className="-ml-4">
             {panels.map((panel, i) => (
-              <CarouselItem key={i} className="basis-[80%] pl-4 lg:basis-[61%] xl:basis-[60%]">
+              <CarouselItem key={i} className="basis-[72%] pl-4 lg:basis-[56%]">
                 <div className="h-[620px]">{panel}</div>
               </CarouselItem>
             ))}
