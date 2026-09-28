@@ -234,7 +234,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
   return (
     // todayFirst (Smarty Check-ins page): the check-in card leads; Progress keeps stats first.
     <div className="flex flex-col gap-4">
-      <div className={cn("grid grid-cols-2 gap-3 sm:grid-cols-4", todayFirst && "order-2")}>
+      <div className={cn("grid grid-cols-2 gap-3 sm:grid-cols-4", todayFirst && "order-5")}>
         {[
           { icon: Flame, label: "Current streak", value: `${s.currentStreak}d` },
           { icon: Target, label: "Avg score", value: s.averageScore ?? 0 },
@@ -308,7 +308,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         ) : null}
       </div>
 
-      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-3")}>
+      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-2")}>
         <p className="mb-3 font-bold">Trends</p>
         <MetricPicker value={metric} onChange={setMetric} options={METRICS.map((m) => ({ key: m.key, label: m.label, color: m.color }))} />
         <div className="mt-3">
@@ -320,7 +320,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         </div>
       </div>
 
-      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-4")}>
+      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-3")}>
         <p className="flex items-center gap-2 font-bold">
           <Lightbulb className="h-5 w-5" /> Weekly Insights
         </p>
@@ -339,7 +339,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         </div>
       </div>
 
-      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-5")}>
+      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-4")}>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="font-bold">History</p>
           <div className="flex gap-2">
