@@ -418,7 +418,7 @@ export async function runHealthCheck(
       .select("*", { count: "exact", head: true })
       .gte("created_at", from)
       .or("source.ilike.%pay%,source.ilike.%stripe%,source.ilike.%checkout%,source.ilike.%subscri%");
-    const detail = `Payments switch: ${free ? "OFF (site is free for everyone)" : "ON (paid membership)"} · ${active} active subscription(s) · ${bad} past-due/unpaid · ${payErr ?? 0} payment error(s) in 24h.`;
+    const detail = `Free mode: ${free ? "ON (premium access is free)" : "OFF (active paid membership required)"} · ${active} active subscription(s) · ${bad} past-due/unpaid · ${payErr ?? 0} payment error(s) in 24h.`;
     if (payErr) return ["fail", detail];
     if (bad) return ["warn", detail];
     return ["pass", detail];
