@@ -36,8 +36,8 @@ export function AdminPaymentsTab() {
     setFreeAccessModeCache(r.enabled);
     toast.success(
       r.enabled
-        ? "Free Access Mode ON — All content is free for signed-in members. Every price, purchase button and premium page is hidden everywhere."
-        : "Free Access Mode OFF — Normal paid mode restored. Existing subscriptions were never touched.",
+        ? "Free mode is ON — every signed-in member has premium access without paying."
+        : "Free mode is OFF — premium access requires an active paid membership.",
     );
   }
 
@@ -61,12 +61,10 @@ export function AdminPaymentsTab() {
             <Lock className="h-5 w-5" />
           </span>
           <div>
-            <p className="font-bold">Global Free Access Mode</p>
+            <p className="font-bold">Free mode</p>
             <p className="text-xs text-muted-foreground">
-              Master switch. When ON, every signed-in member gets full premium access and the whole
-              app becomes free-only: no prices, no purchase buttons, no premium pages, no "buy on
-              the website" notices. Nothing in the payment provider changes and existing
-              subscriptions keep billing — flip it back any time.
+              This switch controls whether premium access is free. It does not switch the payment
+              system itself on or off.
             </p>
           </div>
         </div>
@@ -75,8 +73,8 @@ export function AdminPaymentsTab() {
           <div>
             <p className="text-sm font-semibold">Make the entire app free</p>
             <p className="text-xs text-muted-foreground">
-              Use this for App Store / Play Store review when a reviewer must not see any purchase
-              path at all.
+              ON means every signed-in member gets premium access without paying. OFF means only
+              administrators and members with an active paid membership get premium access.
             </p>
           </div>
 
@@ -86,7 +84,7 @@ export function AdminPaymentsTab() {
                 enabled ? "text-amber-500" : "text-muted-foreground"
               }`}
             >
-              {enabled ? "ON" : "OFF"}
+              {enabled ? "FREE MODE ON" : "FREE MODE OFF"}
             </span>
             <Switch
               aria-label="Free Access Mode"
@@ -103,14 +101,14 @@ export function AdminPaymentsTab() {
               disabled={busy || !enabled}
               onClick={() => void toggle(false)}
             >
-              Switch OFF (paid)
+              Require paid membership
             </Button>
             <Button
               variant={enabled ? "default" : "outline"}
               disabled={busy || enabled}
               onClick={() => void toggle(true)}
             >
-              Switch ON (free)
+              Make app free
             </Button>
           </div>
         </div>
@@ -118,7 +116,7 @@ export function AdminPaymentsTab() {
         <div className="flex items-center gap-2 text-sm">
           Current state:
           <Badge variant={enabled ? "destructive" : "secondary"}>
-            {enabled ? "EVERYTHING FREE" : "NORMAL PAID MODE"}
+            {enabled ? "FREE — NO MEMBERSHIP REQUIRED" : "PAID — ACTIVE MEMBERSHIP REQUIRED"}
           </Badge>
         </div>
 
@@ -126,8 +124,8 @@ export function AdminPaymentsTab() {
 
       {enabled && (
         <p className="rounded-2xl border border-amber-500 bg-amber-500/10 p-3 text-sm">
-          Free Access Mode is ON. It overrides everything else — purchases are forced OFF on iOS,
-          Android and web, and the Pricing page is hidden.
+          Free mode is ON. Prices and purchase options are hidden, and every signed-in member has
+          premium access.
         </p>
       )}
     </div>

@@ -85,8 +85,8 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
   },
   {
     key: "payments",
-    label: "Payments",
-    description: "Global Free Access Mode master switch",
+    label: "Free mode",
+    description: "Choose free access or paid membership access",
     Icon: Lock,
   },
   {
