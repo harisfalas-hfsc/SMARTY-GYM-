@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Award, Bell, Crown, Loader2, Lock, LogIn, Moon, Sparkles, Sun, Target } from "lucide-react";
+import { Crown, Loader2, Lock, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
@@ -30,15 +30,6 @@ export const Route = createFileRoute("/smarty-checkins")({
     ],
   }),
 });
-
-const HOW = [
-  { Icon: Sun, title: "Morning check-in", time: "07:00 – 10:00", desc: "Sleep hours, sleep quality, readiness, soreness and mood." },
-  { Icon: Moon, title: "Night check-in", time: "19:00 – 22:00", desc: "Steps, hydration, protein and how demanding your day was." },
-  { Icon: Target, title: "Daily Smarty Score", time: "0 – 100", desc: "Both check-ins become one score: red, orange, yellow or green." },
-  { Icon: Sparkles, title: "Smarter workouts", time: "Create Your Workout", desc: "Your answers shape the coach's suggestion — you decide whether to accept it." },
-  { Icon: Bell, title: "Reminders", time: "Pop-up + inbox", desc: "A pop-up in the app and a message in your inbox during each window." },
-  { Icon: Award, title: "Streak badges", time: "7 · 30 · 90 days", desc: "Complete both check-ins to build your streak and earn awards." },
-];
 
 function SmartyCheckinsPage() {
   const { user, loading: authLoading } = useAuth();
