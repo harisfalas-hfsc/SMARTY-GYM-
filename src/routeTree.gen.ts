@@ -34,6 +34,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SharedWorkoutsRouteImport } from './routes/shared-workouts'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SmartyCheckinsRouteImport } from './routes/smarty-checkins'
 import { Route as SmartyRitualRouteImport } from './routes/smarty-ritual'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TheSmartyMethodRouteImport } from './routes/the-smarty-method'
@@ -197,6 +198,11 @@ const SharedWorkoutsRoute = SharedWorkoutsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartyCheckinsRoute = SmartyCheckinsRouteImport.update({
+  id: '/smarty-checkins',
+  path: '/smarty-checkins',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SmartyRitualRoute = SmartyRitualRouteImport.update({
@@ -423,6 +429,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
@@ -487,6 +494,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
@@ -553,6 +561,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
@@ -619,6 +628,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap.xml'
+    | '/smarty-checkins'
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
@@ -683,6 +693,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap.xml'
+    | '/smarty-checkins'
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
@@ -748,6 +759,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap.xml'
+    | '/smarty-checkins'
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
@@ -814,6 +826,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SharedWorkoutsRoute: typeof SharedWorkoutsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SmartyCheckinsRoute: typeof SmartyCheckinsRoute
   SmartyRitualRoute: typeof SmartyRitualRoute
   TermsRoute: typeof TermsRoute
   TheSmartyMethodRoute: typeof TheSmartyMethodRoute
@@ -1020,6 +1033,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smarty-checkins': {
+      id: '/smarty-checkins'
+      path: '/smarty-checkins'
+      fullPath: '/smarty-checkins'
+      preLoaderRoute: typeof SmartyCheckinsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/smarty-ritual': {
@@ -1345,6 +1365,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SharedWorkoutsRoute: SharedWorkoutsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SmartyCheckinsRoute: SmartyCheckinsRoute,
   SmartyRitualRoute: SmartyRitualRoute,
   TermsRoute: TermsRoute,
   TheSmartyMethodRoute: TheSmartyMethodRoute,

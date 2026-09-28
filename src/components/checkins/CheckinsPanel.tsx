@@ -179,13 +179,15 @@ async function exportCheckins(kind: "pdf" | "docx", rows: CheckinRow[]) {
 export function CheckinsPanel() {
   const fetchState = useServerFn(getCheckinState);
   const [state, setState] = useState<CheckinState | null>(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<false | "premium" | "other">(false);
   const [metric, setMetric] = useState<string>("daily_smarty_score");
 
   const load = useCallback(() => {
     fetchState({ data: { days: 90 } })
       .then((r) => setState(r as CheckinState))
-      .catch(() => setError(true));
+      .catch((e: unknown) =>
+        setError(e instanceof Error && e.message.includes("Premium access required") ? "premium" : "other"),
+      );
   }, [fetchState]);
   useEffect(() => {
     load();
@@ -206,6 +208,12 @@ export function CheckinsPanel() {
   }, [state, metric]);
   const insights = useMemo(() => (state ? insightsFor(state.checkins) : []), [state]);
 
+  if (error === "premium")
+    return (
+      <p className="text-sm text-muted-foreground">
+        Premium access required. Smarty Check-ins are included with Premium.
+      </p>
+    );
   if (error) return <p className="text-sm text-muted-foreground">Check-ins could not be loaded right now.</p>;
   if (!state)
     return (
@@ -280,10 +288,21 @@ export function CheckinsPanel() {
             <NightCheckinForm onSubmit={night} />
           </div>
         ) : null}
+        {w.isMorning && t?.morning_completed ? (
+          <p className="mt-3 text-sm text-muted-foreground">Morning check-in done. Your night check-in opens at 19:00.</p>
+        ) : null}
+        {w.isNight && t?.night_completed ? (
+          <p className="mt-3 text-sm text-muted-foreground">Night check-in done. Your next morning check-in opens tomorrow at 07:00.</p>
+        ) : null}
         {w.next ? (
-          <p className="mt-3 text-xs text-muted-foreground">
-            Next {w.next === "morning" ? "morning" : "night"} check-in opens in {w.timeUntil}.
-          </p>
+          <div className="mt-4 rounded-xl bg-muted/50 p-3 text-sm">
+            <p className="font-semibold">Check-ins are closed right now.</p>
+            <p className="mt-1 text-muted-foreground">
+              The next {w.next === "morning" ? "morning" : "night"} check-in opens at{" "}
+              {w.next === "morning" ? "07:00" : "19:00"} (in {w.timeUntil}). Morning check-ins are open
+              07:00–10:00 and night check-ins 19:00–22:00.
+            </p>
+          </div>
         ) : null}
       </div>
 

@@ -10,6 +10,7 @@ export type CronJobKey =
   | "daily-motivation"
   | "wod-auto-delivery"
   | "schedule-reminders"
+  | "checkin-reminders"
   | "seo-refresh"
   | "health-check"
   | "error-alerts"
@@ -111,6 +112,22 @@ export const CRON_JOBS: CronJobDefinition[] = [
     timeEditable: false,
     contentEditable: false,
     defaults: { enabled: false, hour: 0, minute: 0 },
+  },
+  {
+    key: "checkin-reminders",
+    label: "Smarty Check-in reminders",
+    description:
+      "Sends one inbox message to every Premium member for each check-in window they have not completed yet — once in the morning and once at night. Members who already checked in get nothing, and nobody gets the same reminder twice in a day.",
+    timing: "per-member",
+    timingNote:
+      "Sent inside each window at the member's local time: 08:05 (morning window 07:00–10:00) and 20:05 (night window 19:00–22:00).",
+    sends: [
+      { title: "Your Morning Smarty Check-in is open", body: "Takes 30 seconds. Open until 10:00 — with a Do check-in button." },
+      { title: "Your Night Smarty Check-in is open", body: "Review your day in 30 seconds. Open until 22:00." },
+    ],
+    timeEditable: false,
+    contentEditable: false,
+    defaults: { enabled: true, hour: 8, minute: 0 },
   },
   {
     key: "seo-refresh",

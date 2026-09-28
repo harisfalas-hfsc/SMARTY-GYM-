@@ -275,6 +275,14 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                         Read article
                       </Link>
                     )}
+                    {n.kind === "checkin" && (
+                      <Link
+                        to="/smarty-checkins"
+                        className="flex h-10 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
+                      >
+                        Do check-in
+                      </Link>
+                    )}
                     {n.workout_id && (
                       <Link
                         to="/workout/$workoutId"

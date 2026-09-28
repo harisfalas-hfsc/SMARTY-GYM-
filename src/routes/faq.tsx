@@ -31,7 +31,7 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "What's included in the subscription?",
-    a: "Up to 2 workouts per day, the daily Smarty Ritual, the full exercise library, all training tools, your logbook, progress tracking and every previous workout you've created.",
+    a: "Up to 2 workouts per day, the daily Smarty Ritual, Smarty Check-ins, the full exercise library, all training tools, your logbook, progress tracking and every previous workout you've created.",
   },
   {
     q: "What is the Workout of the Day?",
@@ -109,6 +109,18 @@ const ITEMS: { q: string; a: string }[] = [
   {
     q: "What is Smarty Ritual?",
     a: "One fresh daily plan with three practical phases: Morning activation, a Midday reset and an Evening unwind. It supports movement, mobility, energy and recovery around your workouts and the rest of your day.",
+  },
+  {
+    q: "What are Smarty Check-ins?",
+    a: "Two 30-second check-ins a day for Premium members. The morning check-in (07:00–10:00) asks about sleep, readiness, soreness and mood; the night check-in (19:00–22:00) about steps, hydration, protein and how demanding your day was. Together they give you a Daily Smarty Score out of 100, saved in Logbook → Progress with trends, weekly insights and streak badges.",
+  },
+  {
+    q: "What if I miss the check-in pop-up?",
+    a: "Open Smarty Check-ins from the menu and complete it any time while the window is open. You also get one reminder in your inbox during each window. Outside the windows, the page tells you when the next check-in opens.",
+  },
+  {
+    q: "Do my check-ins change my workouts?",
+    a: "They inform them. When you create a workout, the coach may suggest an easier or harder session because of how you slept, felt or how hard yesterday was, and tells you why. Your own choice stays unless you accept the suggestion.",
   },
   {
     q: "Can I schedule a workout?",

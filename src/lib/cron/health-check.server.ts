@@ -450,7 +450,7 @@ export async function runHealthCheck(
       if (r.error) bad.push(`${name} (${r.error.message})`);
       else counts.push(`${name} ${r.count ?? 0}`);
     }
-    for (const p of ["/shared-workouts", "/smarty-ritual", "/blog", "/create-your-workout"]) {
+    for (const p of ["/shared-workouts", "/smarty-ritual", "/smarty-checkins", "/blog", "/create-your-workout"]) {
       try {
         const res = await fetch(`${SITE_BASE_URL}${p}`, { method: "GET" });
         if (!res.ok) bad.push(`${p} → HTTP ${res.status}`);
