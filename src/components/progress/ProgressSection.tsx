@@ -33,6 +33,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+/** Award tiers by level within each category: Bronze -> Legend. */
+const AWARD_TIERS = [
+  { name: "Bronze", ring: "#cd7f32", bg: "linear-gradient(135deg,#f3c49b,#b8732e)", text: "#3b1f07" },
+  { name: "Silver", ring: "#a8b2bd", bg: "linear-gradient(135deg,#f1f4f7,#9aa5b1)", text: "#1f2933" },
+  { name: "Gold", ring: "#e6b422", bg: "linear-gradient(135deg,#ffe98a,#d69e0b)", text: "#3d2a00" },
+  { name: "Platinum", ring: "#5fd3c6", bg: "linear-gradient(135deg,#d9fbf6,#3bb3a6)", text: "#063b36" },
+  { name: "Diamond", ring: "#4aa8ff", bg: "linear-gradient(135deg,#cfe8ff,#2f7de1)", text: "#04213f" },
+  { name: "Master", ring: "#a26bff", bg: "linear-gradient(135deg,#e6d6ff,#7b3fe4)", text: "#1f0a45" },
+  { name: "Elite", ring: "#ff5c8a", bg: "linear-gradient(135deg,#ffd3df,#e0336a)", text: "#43061a" },
+  { name: "Legend", ring: "#ff7a1a", bg: "linear-gradient(135deg,#ffe07a,#ff4d1a)", text: "#3f0f00" },
+];
+
 const ICONS: Record<string, typeof Trophy> = {
   trophy: Trophy,
   flame: Flame,

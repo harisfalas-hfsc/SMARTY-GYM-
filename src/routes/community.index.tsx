@@ -327,7 +327,7 @@ function CommunityPage() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselNext className="-right-[84px] z-10 hidden h-[50px] w-[50px] rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-5 [&>svg]:w-5" />
+          <CarouselNext className="-right-[60px] z-10 hidden h-[50px] w-[50px] rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-5 [&>svg]:w-5" />
         </Carousel>
       </div>
 
