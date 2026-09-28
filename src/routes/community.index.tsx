@@ -319,7 +319,7 @@ function CommunityPage() {
       <div className="hidden md:block md:px-12">
         <CarouselDots api={desktopApi} activeIndex={desktopPanel} count={panels.length} />
         <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
-          <CarouselPrevious className="-left-10 z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-[18px] [&>svg]:w-[18px]" />
+          <CarouselPrevious className="-left-14 z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-[18px] [&>svg]:w-[18px]" />
           <CarouselContent className="-ml-4">
             {panels.map((panel, i) => (
               <CarouselItem key={i} className="basis-[80%] pl-4 lg:basis-[61%] xl:basis-[60%]">
@@ -327,7 +327,7 @@ function CommunityPage() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselNext className="-right-10 z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-[18px] [&>svg]:w-[18px]" />
+          <CarouselNext className="-right-14 z-10 hidden h-10 w-10 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-[18px] [&>svg]:w-[18px]" />
         </Carousel>
       </div>
 
