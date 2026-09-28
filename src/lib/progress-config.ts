@@ -13,6 +13,7 @@ export const CATEGORY_LABEL: Record<string, string> = {
   generated: "Generated workouts",
   completed: "Completed workouts",
   streak: "Streaks",
+  checkins: "Smarty Check-ins",
 };
 
 export const CATEGORY_UNIT: Record<string, string> = {
@@ -20,6 +21,7 @@ export const CATEGORY_UNIT: Record<string, string> = {
   generated: "workouts",
   completed: "workouts",
   streak: "days",
+  checkins: "days",
 };
 
 export function scoreFor(input: {

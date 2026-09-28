@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { TrainingLoadPanel } from "@/components/performance/TrainingLoadPanel";
 import { RecentLoadTrend } from "@/components/performance/RecentLoadTrend";
+import { CheckinsPanel } from "@/components/checkins/CheckinsPanel";
 
 import { getProgressOverview, type ProgressOverview } from "@/lib/progress.functions";
 import { CATEGORY_LABEL, CATEGORY_UNIT } from "@/lib/progress-config";
@@ -138,7 +139,9 @@ export function ProgressSection() {
     if (!data) return [];
     const earned = new Set(data.badges.map((b) => b.badge_id));
     const value = (c: string) =>
-      c === "subscription"
+      c === "checkins"
+        ? (data.stats.checkin_longest_streak ?? 0)
+        : c === "subscription"
         ? data.stats.subscription_months
         : c === "generated"
           ? data.stats.workouts_generated
@@ -146,8 +149,8 @@ export function ProgressSection() {
             ? data.stats.workouts_completed
             : data.stats.longest_streak;
     const cats = freeAccessMode
-      ? ["completed", "streak", "generated"]
-      : ["completed", "streak", "generated", "subscription"];
+      ? ["completed", "streak", "generated", "checkins"]
+      : ["completed", "streak", "generated", "checkins", "subscription"];
     return cats.map((c) => {
       const defs = data.definitions
         .filter((d) => d.category === c)
@@ -238,6 +241,13 @@ export function ProgressSection() {
         </div>
       </section>
 
+
+      <section>
+        <h2 className="text-lg font-extrabold">Check-ins</h2>
+        <div className="mt-3">
+          <CheckinsPanel />
+        </div>
+      </section>
 
       <section>
         <h2 className="text-lg font-extrabold">Awards</h2>

@@ -1,3 +1,4 @@
+import { DayCheckinNote } from "@/components/checkins/CheckinsPanel";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -649,6 +650,7 @@ function CalendarView({
         end={end ?? start}
         onClear={end ? () => { setSelectionMode("day"); setEnd(null); } : undefined}
       />
+      {!end ? <DayCheckinNote date={start} /> : null}
 
       {periodRows.length === 0 ? (
         <div className="rounded-2xl border-2 border-blue-400 bg-card p-6 text-center text-sm text-muted-foreground">

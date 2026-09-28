@@ -125,7 +125,58 @@ function steadyRule(ctx: CoachContext): CoachRecommendation {
   };
 }
 
-const RULES = [readinessRule, loadRule, shortfallRule, progressionRule, confidenceRule];
+function checkinRule(ctx: CoachContext): CoachRecommendation | null {
+  const c = ctx.checkin;
+  if (!c) return null;
+  const reasons: string[] = [];
+  if (c.sleepHours !== null && c.sleepHours < 5.5) reasons.push(`you slept ${c.sleepHours} hours`);
+  if (c.sleepQuality !== null && c.sleepQuality <= 2) reasons.push("your sleep quality was poor");
+  if (c.soreness !== null && c.soreness >= 7) reasons.push(`soreness is ${c.soreness}/10`);
+  if (c.readiness !== null && c.readiness <= 3) reasons.push(`readiness is ${c.readiness}/10`);
+  if (c.yesterdayStrain !== null && c.yesterdayStrain >= 8)
+    reasons.push(`yesterday felt hard (${c.yesterdayStrain}/10)`);
+  const because = reasons.length
+    ? `Because ${reasons.slice(0, 3).join(", ").replace(/, ([^,]*)$/, " and $1")} in your Smarty Check-in.`
+    : "";
+  if (reasons.length >= 2 || (c.soreness ?? 0) >= 8 || (c.readiness ?? 10) <= 2) {
+    const stars = ctx.selectedStars;
+    const lower = stars !== null && stars > 1 ? 1 : null;
+    return {
+      id: "checkin.recover",
+      message: lower
+        ? `${starWord(1)} or a Mobility & Stability session would suit you better today.`
+        : "Keep today light — a Mobility & Stability session or an easy pace fits best.",
+      reason: because,
+      suggestedStars: lower,
+      priority: 85,
+    };
+  }
+  if (reasons.length === 1) {
+    const stars = ctx.selectedStars;
+    const lower = stars !== null && stars >= 3 ? 2 : null;
+    return {
+      id: "checkin.caution",
+      message: lower
+        ? `${starWord(2)} would fit today better than ${starWord(3)}.`
+        : "Train as planned, but keep the effort controlled today.",
+      reason: because,
+      suggestedStars: lower,
+      priority: 68,
+    };
+  }
+  if ((c.readiness ?? 0) >= 8 && (c.sleepHours ?? 0) >= 7 && (c.soreness ?? 10) <= 3) {
+    return {
+      id: "checkin.ready",
+      message: "You are well rested and ready — a good day to train with full focus.",
+      reason: `Because you slept ${c.sleepHours} hours, readiness is ${c.readiness}/10 and soreness is low in your Smarty Check-in.`,
+      suggestedStars: null,
+      priority: 8,
+    };
+  }
+  return null;
+}
+
+const RULES = [checkinRule, readinessRule, loadRule, shortfallRule, progressionRule, confidenceRule];
 
 /** Returns exactly ONE ranked recommendation. Never blocking, never required. */
 export function recommend(ctx: CoachContext): CoachRecommendation {

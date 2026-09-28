@@ -1057,6 +1057,108 @@ export type Database = {
           },
         ]
       }
+      smarty_checkins: {
+        Row: {
+          checkin_date: string
+          created_at: string
+          daily_smarty_score: number | null
+          day_strain: number | null
+          day_strain_score: number | null
+          hydration_liters: number | null
+          hydration_score: number | null
+          id: string
+          mood_rating: number | null
+          mood_score: number | null
+          morning_completed: boolean
+          morning_completed_at: string | null
+          morning_modal_shown: boolean
+          movement_score: number | null
+          night_completed: boolean
+          night_completed_at: string | null
+          night_modal_shown: boolean
+          protein_level: number | null
+          protein_score_norm: number | null
+          readiness_score: number | null
+          readiness_score_norm: number | null
+          score_category: string | null
+          sleep_hours: number | null
+          sleep_quality: number | null
+          sleep_score: number | null
+          soreness_rating: number | null
+          soreness_score: number | null
+          status: string
+          steps_bucket: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          checkin_date: string
+          created_at?: string
+          daily_smarty_score?: number | null
+          day_strain?: number | null
+          day_strain_score?: number | null
+          hydration_liters?: number | null
+          hydration_score?: number | null
+          id?: string
+          mood_rating?: number | null
+          mood_score?: number | null
+          morning_completed?: boolean
+          morning_completed_at?: string | null
+          morning_modal_shown?: boolean
+          movement_score?: number | null
+          night_completed?: boolean
+          night_completed_at?: string | null
+          night_modal_shown?: boolean
+          protein_level?: number | null
+          protein_score_norm?: number | null
+          readiness_score?: number | null
+          readiness_score_norm?: number | null
+          score_category?: string | null
+          sleep_hours?: number | null
+          sleep_quality?: number | null
+          sleep_score?: number | null
+          soreness_rating?: number | null
+          soreness_score?: number | null
+          status?: string
+          steps_bucket?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          checkin_date?: string
+          created_at?: string
+          daily_smarty_score?: number | null
+          day_strain?: number | null
+          day_strain_score?: number | null
+          hydration_liters?: number | null
+          hydration_score?: number | null
+          id?: string
+          mood_rating?: number | null
+          mood_score?: number | null
+          morning_completed?: boolean
+          morning_completed_at?: string | null
+          morning_modal_shown?: boolean
+          movement_score?: number | null
+          night_completed?: boolean
+          night_completed_at?: string | null
+          night_modal_shown?: boolean
+          protein_level?: number | null
+          protein_score_norm?: number | null
+          readiness_score?: number | null
+          readiness_score_norm?: number | null
+          score_category?: string | null
+          sleep_hours?: number | null
+          sleep_quality?: number | null
+          sleep_score?: number | null
+          soreness_rating?: number | null
+          soreness_score?: number | null
+          status?: string
+          steps_bucket?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       smarty_rituals: {
         Row: {
           created_at: string
