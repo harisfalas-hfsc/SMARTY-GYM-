@@ -47,26 +47,16 @@ function SmartyCheckinsPage() {
         image={pageHeroImage}
         eyebrow="Smarty Check-ins"
         title={<>Check in. Score. <span className="text-primary">Train smarter.</span></>}
-        subtitle={<>Two 30-second check-ins a day turn how you slept, feel and lived into one Smarty Score, designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>.</>}
+        subtitle={
+          <>
+            Two 30-second check-ins a day turn how you slept, feel and lived into one Smarty Score,{" "}
+            <span className="whitespace-nowrap">
+              designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>
+            </span>
+            .
+          </>
+        }
       />
-
-      <Card className="mb-6 overflow-hidden">
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-6 sm:p-8">
-          <h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl">
-            How <span className="text-primary">Smarty</span> Check-ins work
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {HOW.map(({ Icon, title, time, desc }) => (
-              <div key={title} className="rounded-2xl border-2 border-blue-400 bg-card p-4">
-                <Icon className="h-6 w-6 text-primary" />
-                <p className="mt-2 font-bold">{title}</p>
-                <p className="text-xs font-semibold uppercase tracking-wide text-primary">{time}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Card>
 
       {authLoading || (Boolean(user) && isLoading) ? (
         <div className="flex justify-center p-10"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
@@ -100,7 +90,7 @@ function SmartyCheckinsPage() {
           </div>
         </Card>
       ) : (
-        <CheckinsPanel />
+        <CheckinsPanel todayFirst />
       )}
 
       <MembershipRequiredDialog
