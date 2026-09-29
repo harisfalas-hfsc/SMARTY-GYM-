@@ -55,6 +55,8 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as CommunityWorkoutsRouteImport } from './routes/community.workouts'
+import { Route as SmartyWorkoutsIndexRouteImport } from './routes/smarty-workouts.index'
+import { Route as SmartyWorkoutsWorkoutIdRouteImport } from './routes/smarty-workouts.$workoutId'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as Tools1rmCalculatorRouteImport } from './routes/tools.1rm-calculator'
 import { Route as ToolsRoundsTrackerRouteImport } from './routes/tools.rounds-tracker'
@@ -70,6 +72,7 @@ import { Route as CommunityWorkoutWorkoutIdRouteImport } from './routes/communit
 import { Route as ApiPublicBlogCoverFileRouteImport } from './routes/api/public/blog-cover/$file'
 import { Route as ApiPublicHooksDailyRunRouteImport } from './routes/api/public/hooks/daily-run'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicWorkoutCoverFileRouteImport } from './routes/api/public/workout-cover/$file'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -307,6 +310,16 @@ const CommunityWorkoutsRoute = CommunityWorkoutsRouteImport.update({
   path: '/community/workouts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SmartyWorkoutsIndexRoute = SmartyWorkoutsIndexRouteImport.update({
+  id: '/smarty-workouts/',
+  path: '/smarty-workouts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartyWorkoutsWorkoutIdRoute = SmartyWorkoutsWorkoutIdRouteImport.update({
+  id: '/smarty-workouts/$workoutId',
+  path: '/smarty-workouts/$workoutId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsIndexRoute = ToolsIndexRouteImport.update({
   id: '/tools/',
   path: '/tools/',
@@ -387,6 +400,12 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicWorkoutCoverFileRoute =
+  ApiPublicWorkoutCoverFileRouteImport.update({
+    id: '/api/public/workout-cover/$file',
+    path: '/api/public/workout-cover/$file',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -447,6 +466,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
   '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
@@ -455,6 +475,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/community/': typeof CommunityIndexRoute
+  '/smarty-workouts/': typeof SmartyWorkoutsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
@@ -465,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/workout-cover/$file': typeof ApiPublicWorkoutCoverFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -512,6 +534,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
   '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
@@ -520,6 +543,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/community': typeof CommunityIndexRoute
+  '/smarty-workouts': typeof SmartyWorkoutsIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/training': typeof TrainingIndexRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
@@ -530,6 +554,7 @@ export interface FileRoutesByTo {
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/workout-cover/$file': typeof ApiPublicWorkoutCoverFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -579,6 +604,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
   '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
@@ -587,6 +613,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/community/': typeof CommunityIndexRoute
+  '/smarty-workouts/': typeof SmartyWorkoutsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
   '/_authenticated/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
@@ -597,6 +624,7 @@ export interface FileRoutesById {
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/workout-cover/$file': typeof ApiPublicWorkoutCoverFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -646,6 +674,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
     | '/tools/workout-timer'
@@ -654,6 +683,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/community/'
+    | '/smarty-workouts/'
     | '/tools/'
     | '/training/'
     | '/workout/$workoutId'
@@ -664,6 +694,7 @@ export interface FileRouteTypes {
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
+    | '/api/public/workout-cover/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -711,6 +742,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
     | '/tools/workout-timer'
@@ -719,6 +751,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/community'
+    | '/smarty-workouts'
     | '/tools'
     | '/training'
     | '/workout/$workoutId'
@@ -729,6 +762,7 @@ export interface FileRouteTypes {
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
+    | '/api/public/workout-cover/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -777,6 +811,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
     | '/tools/workout-timer'
@@ -785,6 +820,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/community/'
+    | '/smarty-workouts/'
     | '/tools/'
     | '/training/'
     | '/_authenticated/workout/$workoutId'
@@ -795,6 +831,7 @@ export interface FileRouteTypes {
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
+    | '/api/public/workout-cover/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -836,6 +873,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   CommunityWorkoutsRoute: typeof CommunityWorkoutsRoute
+  SmartyWorkoutsWorkoutIdRoute: typeof SmartyWorkoutsWorkoutIdRoute
   Tools1rmCalculatorRoute: typeof Tools1rmCalculatorRoute
   ToolsRoundsTrackerRoute: typeof ToolsRoundsTrackerRoute
   ToolsWorkoutTimerRoute: typeof ToolsWorkoutTimerRoute
@@ -844,6 +882,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   CommunityIndexRoute: typeof CommunityIndexRoute
+  SmartyWorkoutsIndexRoute: typeof SmartyWorkoutsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   TrainingIndexRoute: typeof TrainingIndexRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
@@ -853,6 +892,7 @@ export interface RootRouteChildren {
   ApiPublicBlogCoverFileRoute: typeof ApiPublicBlogCoverFileRoute
   ApiPublicHooksDailyRunRoute: typeof ApiPublicHooksDailyRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicWorkoutCoverFileRoute: typeof ApiPublicWorkoutCoverFileRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -1182,6 +1222,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CommunityWorkoutsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/smarty-workouts/': {
+      id: '/smarty-workouts/'
+      path: '/smarty-workouts'
+      fullPath: '/smarty-workouts/'
+      preLoaderRoute: typeof SmartyWorkoutsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smarty-workouts/$workoutId': {
+      id: '/smarty-workouts/$workoutId'
+      path: '/smarty-workouts/$workoutId'
+      fullPath: '/smarty-workouts/$workoutId'
+      preLoaderRoute: typeof SmartyWorkoutsWorkoutIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/': {
       id: '/tools/'
       path: '/tools'
@@ -1287,6 +1341,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/workout-cover/$file': {
+      id: '/api/public/workout-cover/$file'
+      path: '/api/public/workout-cover/$file'
+      fullPath: '/api/public/workout-cover/$file'
+      preLoaderRoute: typeof ApiPublicWorkoutCoverFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
       path: '/lovable/email/auth/preview'
@@ -1375,6 +1436,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   CommunityWorkoutsRoute: CommunityWorkoutsRoute,
+  SmartyWorkoutsWorkoutIdRoute: SmartyWorkoutsWorkoutIdRoute,
   Tools1rmCalculatorRoute: Tools1rmCalculatorRoute,
   ToolsRoundsTrackerRoute: ToolsRoundsTrackerRoute,
   ToolsWorkoutTimerRoute: ToolsWorkoutTimerRoute,
@@ -1383,6 +1445,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   CommunityIndexRoute: CommunityIndexRoute,
+  SmartyWorkoutsIndexRoute: SmartyWorkoutsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   TrainingIndexRoute: TrainingIndexRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
@@ -1392,6 +1455,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicBlogCoverFileRoute: ApiPublicBlogCoverFileRoute,
   ApiPublicHooksDailyRunRoute: ApiPublicHooksDailyRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicWorkoutCoverFileRoute: ApiPublicWorkoutCoverFileRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
