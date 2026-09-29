@@ -50,6 +50,27 @@ async function upsertSubscription(subscription: any, env: StripeEnv) {
     return;
   }
   await supabase.from("subscriptions").insert({ ...row, user_id: userId });
+
+  // Tell the owner about every new paying member.
+  if (["active", "trialing"].includes(subscription.status)) {
+    try {
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("email,display_name")
+        .eq("id", userId)
+        .maybeSingle();
+      const { notifyAdmins } = await import("@/lib/admin-alert.server");
+      await notifyAdmins({
+        kind: "Payment",
+        title: env === "live" ? "New Premium member" : "New Premium member (test payment)",
+        details: `${prof?.display_name ? prof.display_name + " — " : ""}${prof?.email ?? userId} started a Smarty Gym Premium membership (€9.99/month).`,
+        link: "https://smartygym.com/admin",
+        dedupeKey: `new-premium-${subscription.id}`,
+      });
+    } catch {
+      /* alerts never block payments */
+    }
+  }
 }
 
 async function markCanceled(subscription: any, env: StripeEnv) {

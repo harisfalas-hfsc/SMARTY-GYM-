@@ -70,6 +70,22 @@ export function useAuth() {
       }
     }
 
+    // Tell the owner about brand-new accounts (server ignores accounts older than 2 days).
+    function maybeAnnounce(authUser: User | null) {
+      if (!authUser?.created_at) return;
+      if (Date.now() - new Date(authUser.created_at).getTime() > 2 * 86400000) return;
+      const key = `smarty:signup-announced:${authUser.id}`;
+      try {
+        if (localStorage.getItem(key)) return;
+        localStorage.setItem(key, "1");
+      } catch {
+        /* ignore */
+      }
+      void import("@/lib/account.functions")
+        .then(({ announceNewSignup }) => announceNewSignup())
+        .catch(() => undefined);
+    }
+
 
     supabase.auth.getSession().then(({ data }) => {
       if (!active) return;
@@ -84,6 +100,7 @@ export function useAuth() {
       setUser(s?.user ?? null);
       setLoading(false);
       void loadProfile(s?.user ?? null);
+      maybeAnnounce(s?.user ?? null);
     });
     return () => {
       active = false;
