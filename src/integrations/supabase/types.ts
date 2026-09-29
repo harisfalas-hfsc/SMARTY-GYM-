@@ -1189,6 +1189,75 @@ export type Database = {
         }
         Relationships: []
       }
+      smarty_workouts: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          description_html: string | null
+          difficulty_stars: number
+          duration_label: string | null
+          duration_min: number
+          equipment: string[]
+          focus: string | null
+          format: string | null
+          id: string
+          image_url: string | null
+          instructions_html: string | null
+          is_visible: boolean
+          location: string | null
+          main_workout: string | null
+          name: string
+          sort_order: number
+          tips_html: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number
+          duration_label?: string | null
+          duration_min?: number
+          equipment?: string[]
+          focus?: string | null
+          format?: string | null
+          id?: string
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean
+          location?: string | null
+          main_workout?: string | null
+          name: string
+          sort_order?: number
+          tips_html?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number
+          duration_label?: string | null
+          duration_min?: number
+          equipment?: string[]
+          focus?: string | null
+          format?: string | null
+          id?: string
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean
+          location?: string | null
+          main_workout?: string | null
+          name?: string
+          sort_order?: number
+          tips_html?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean
