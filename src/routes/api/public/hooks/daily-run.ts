@@ -115,6 +115,15 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           }
         }
 
+        // Automatic recovery: rebuild any workout (incl. Workout of the Day) that failed.
+        let recovered = 0;
+        try {
+          const { retryPendingGenerations } = await import("@/lib/workout-generation.server");
+          recovered = (await retryPendingGenerations(10)).recovered;
+        } catch (e) {
+          failures.push(`recovery:${e instanceof Error ? e.message : "error"}`);
+        }
+
         let scheduleReminders = 0;
         if (scheduleOn) {
           try {

@@ -55,7 +55,7 @@ export function PendingGenerationCard() {
           <p className="mt-1 text-sm text-muted-foreground">
             {generation.status === "building"
               ? "Your workout is being built now. You can safely leave this page."
-              : `A temporary problem interrupted it. Automatic recovery is scheduled${generation.attempt_count ? ` (attempt ${generation.attempt_count} of 5)` : ""}.`}
+              : "We're still preparing this workout. It will appear in your Logbook shortly — no action needed."}
           </p>
           <Button asChild variant="link" className="mt-1 h-auto p-0 font-bold">
             <Link to="/logbook" search={{ filter: "all", view: "list" }}>Check my Logbook</Link>
