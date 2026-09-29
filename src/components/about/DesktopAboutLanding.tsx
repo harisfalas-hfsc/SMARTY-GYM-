@@ -144,28 +144,12 @@ const homeSections: Section[] = [
     cta: { label: "Explore Smarty Workouts", to: "/smarty-workouts" },
   },
   {
-    id: "create-workout",
-    image: imgCreate,
-    tag: "Create Your Own Workout",
-    lead: "Your goal, time and gear,",
-    accentWord: "one complete session",
-    green: false,
-    description:
-      "Tell Smarty Coach what you want to train, how you feel, how much time you have and what equipment is available. Your workout is built around your Training Profile and your circumstances today.",
-    items: [
-      { id: "personal", title: "Personalized", meta: "Built around your profile", icon: SlidersHorizontal },
-      { id: "science", title: "Science-informed", meta: "Coherent, coach-like programming", icon: FlaskConical },
-      { id: "adaptive", title: "Adaptive", meta: "Matches today's energy and equipment", icon: Brain },
-    ],
-    cta: { label: "Create Your Own Workout", to: "/create-your-workout" },
-  },
-  {
     id: "workout-of-the-day",
     image: imgWod,
     tag: "Workout of the Day",
     lead: "Two planned workouts,",
     accentWord: "every day",
-    green: true,
+    green: false,
     description:
       "Receive one bodyweight session and one equipment session, programmed around your profile and training history. Open your daily pair and train without having to plan the next step.",
     items: [
@@ -174,6 +158,22 @@ const homeSections: Section[] = [
       { id: "planned", title: "Planned Progression", meta: "Balanced across your training cycle", icon: TrendingUp },
     ],
     cta: { label: "Open Workout of the Day", to: "/wod" },
+  },
+  {
+    id: "create-workout",
+    image: imgCreate,
+    tag: "Create Your Own Workout",
+    lead: "Your goal, time and gear,",
+    accentWord: "one complete session",
+    green: true,
+    description:
+      "Tell Smarty Coach what you want to train, how you feel, how much time you have and what equipment is available. Your workout is built around your Training Profile and your circumstances today.",
+    items: [
+      { id: "personal", title: "Personalized", meta: "Built around your profile", icon: SlidersHorizontal },
+      { id: "science", title: "Science-informed", meta: "Coherent, coach-like programming", icon: FlaskConical },
+      { id: "adaptive", title: "Adaptive", meta: "Matches today's energy and equipment", icon: Brain },
+    ],
+    cta: { label: "Create Your Own Workout", to: "/create-your-workout" },
   },
   {
     id: "smarty-tools",

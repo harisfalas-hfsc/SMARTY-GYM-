@@ -60,14 +60,6 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
 
   const carouselActions: CarouselAction[] = [
     {
-      title: "Create Your Workout",
-      description: "Get a personalized workout built for you",
-      to: "/create-your-workout",
-      image: createWorkoutImage,
-      icon: Dumbbell,
-      objectPosition: "center center",
-    },
-    {
       title: "Smarty Workouts",
       description: "Ready-made workouts in every category",
       to: "/smarty-workouts",
@@ -80,6 +72,14 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       to: "/wod",
       image: wodImage,
       icon: CalendarCheck,
+    },
+    {
+      title: "Create Your Workout",
+      description: "Get a personalized workout built for you",
+      to: "/create-your-workout",
+      image: createWorkoutImage,
+      icon: Dumbbell,
+      objectPosition: "center center",
     },
     {
       title: "Shared Workouts",
