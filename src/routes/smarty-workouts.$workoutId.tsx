@@ -1,13 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { Clock, Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { WorkoutDisplay } from "@/components/workout/WorkoutDisplay";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
-import { getSmartyWorkout, listSmartyWorkouts, type SmartyWorkout, type SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
-import { categoryLabel, smartyToWorkoutRow } from "@/lib/smarty-workout-row";
+import { listSmartyWorkouts, startSmartyWorkout, type SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
+import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, type SmartyCategory } from "@/lib/smarty-workout-categories";
 import { difficultyLabel } from "@/lib/workout/spec";
 
@@ -29,9 +28,10 @@ export const Route = createFileRoute("/smarty-workouts/$workoutId")({
 function SmartyWorkoutPage() {
   const { workoutId } = Route.useParams();
   const { user, loading: authLoading } = useAuth();
-  const getWorkout = useServerFn(getSmartyWorkout);
+  const startWorkout = useServerFn(startSmartyWorkout);
+  const navigate = useNavigate();
   const [state, setState] = useState<
-    { kind: "loading" } | { kind: "ok"; w: SmartyWorkout } | { kind: "locked" } | { kind: "error"; msg: string }
+    { kind: "loading" } | { kind: "locked" } | { kind: "error"; msg: string }
   >({ kind: "loading" });
   const [checkout, setCheckout] = useState(false);
   const [card, setCard] = useState<SmartyWorkoutCard | null>(null);
@@ -44,9 +44,11 @@ function SmartyWorkoutPage() {
 
   useEffect(() => {
     if (authLoading || !user) return;
-    void getWorkout({ data: { id: workoutId } })
+    // Premium members get the workout in their own logbook, so it behaves
+    // exactly like every other workout (player, logging, schedule, finish).
+    void startWorkout({ data: { id: workoutId } })
       .then((r) => {
-        if ("workout" in r) setState({ kind: "ok", w: r.workout });
+        if ("workoutId" in r) void navigate({ to: "/workout/$workoutId", params: { workoutId: r.workoutId }, replace: true });
         else if ("locked" in r) setState({ kind: "locked" });
         else setState({ kind: "error", msg: r.error });
       })
@@ -87,9 +89,8 @@ function SmartyWorkoutPage() {
   if (state.kind === "error") return <Notice back={back} title="Workout unavailable" text={state.msg} />;
 
   return (
-    <div className="mx-auto w-full max-w-4xl py-4 lg:max-w-7xl">
-      <div className="px-4 pb-2">{back}</div>
-      <WorkoutDisplay workout={smartyToWorkoutRow(state.w)} previewMode onComplete={() => {}} />
+    <div className="flex min-h-[50vh] items-center justify-center">
+      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
     </div>
   );
 }
