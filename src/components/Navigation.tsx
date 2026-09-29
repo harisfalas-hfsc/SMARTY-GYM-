@@ -307,11 +307,11 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
               </div>
               <ul className="space-y-1">
                 {s.items.map(({ to, label, Icon, className }) => (
-                  <li key={to}>
+                  <li key={to} className={className}>
                     <Link
                       to={to}
                       onClick={onClose}
-                      className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10 ${className ?? ""}`}
+                      className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10"
                       style={{ textDecoration: "none" }}
                     >
                       <span className="grid h-9 w-9 place-items-center rounded-xl brand-gradient-soft text-primary">
