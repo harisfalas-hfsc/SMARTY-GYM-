@@ -55,6 +55,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as CommunityWorkoutsRouteImport } from './routes/community.workouts'
+import { Route as SmartyWorkoutsIndexRouteImport } from './routes/smarty-workouts.index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as Tools1rmCalculatorRouteImport } from './routes/tools.1rm-calculator'
 import { Route as ToolsRoundsTrackerRouteImport } from './routes/tools.rounds-tracker'
@@ -308,6 +309,11 @@ const CommunityWorkoutsRoute = CommunityWorkoutsRouteImport.update({
   path: '/community/workouts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SmartyWorkoutsIndexRoute = SmartyWorkoutsIndexRouteImport.update({
+  id: '/smarty-workouts/',
+  path: '/smarty-workouts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsIndexRoute = ToolsIndexRouteImport.update({
   id: '/tools/',
   path: '/tools/',
@@ -462,6 +468,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/community/': typeof CommunityIndexRoute
+  '/smarty-workouts/': typeof SmartyWorkoutsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
@@ -528,6 +535,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/community': typeof CommunityIndexRoute
+  '/smarty-workouts': typeof SmartyWorkoutsIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/training': typeof TrainingIndexRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
@@ -596,6 +604,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/community/': typeof CommunityIndexRoute
+  '/smarty-workouts/': typeof SmartyWorkoutsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
   '/_authenticated/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
@@ -664,6 +673,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/community/'
+    | '/smarty-workouts/'
     | '/tools/'
     | '/training/'
     | '/workout/$workoutId'
@@ -730,6 +740,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/community'
+    | '/smarty-workouts'
     | '/tools'
     | '/training'
     | '/workout/$workoutId'
@@ -797,6 +808,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/community/'
+    | '/smarty-workouts/'
     | '/tools/'
     | '/training/'
     | '/_authenticated/workout/$workoutId'
@@ -857,6 +869,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   CommunityIndexRoute: typeof CommunityIndexRoute
+  SmartyWorkoutsIndexRoute: typeof SmartyWorkoutsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   TrainingIndexRoute: typeof TrainingIndexRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
@@ -1196,6 +1209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CommunityWorkoutsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/smarty-workouts/': {
+      id: '/smarty-workouts/'
+      path: '/smarty-workouts'
+      fullPath: '/smarty-workouts/'
+      preLoaderRoute: typeof SmartyWorkoutsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/': {
       id: '/tools/'
       path: '/tools'
@@ -1404,6 +1424,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   CommunityIndexRoute: CommunityIndexRoute,
+  SmartyWorkoutsIndexRoute: SmartyWorkoutsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   TrainingIndexRoute: TrainingIndexRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
