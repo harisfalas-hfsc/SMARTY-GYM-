@@ -67,6 +67,7 @@ export function anchorDate(row: LogbookRow): Date {
 export function sourceLabel(row: LogbookRow): string {
   if (row.is_wod) return "Workout of the Day";
   if (row.created_by === "member" || row.created_by === "community") return "Community copy";
+  if (String(row.created_by ?? "").startsWith("smarty:")) return "Smarty Workout";
   return "Smarty Coach";
 }
 

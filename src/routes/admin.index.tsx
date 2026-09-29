@@ -35,6 +35,7 @@ import { AdminUsersTab } from "@/components/admin/AdminUsersTab";
 import { AdminRulesTab } from "@/components/admin/AdminRulesTab";
 import { AdminCycleTab } from "@/components/admin/AdminCycleTab";
 import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminSmartyWorkoutsTab } from "@/components/admin/AdminSmartyWorkoutsTab";
 import { AdminMessagesTab } from "@/components/admin/AdminMessagesTab";
 import { AdminAwardsTab } from "@/components/admin/AdminAwardsTab";
@@ -245,10 +246,14 @@ function AdminPage() {
           {section === "rules" && <AdminRulesTab />}
           {section === "cycle" && <AdminCycleTab />}
           {section === "workouts" && (
-            <div className="space-y-8">
-              <AdminSmartyWorkoutsTab />
-              <AdminWorkoutsTab title="Member workouts" />
-            </div>
+            <Tabs defaultValue="smarty" className="rounded-2xl border-2 border-blue-400 bg-card p-3 sm:p-4">
+              <TabsList className="grid h-auto w-full grid-cols-2">
+                <TabsTrigger value="smarty" className="py-2 font-bold">My Smarty Workouts</TabsTrigger>
+                <TabsTrigger value="members" className="py-2 font-bold">Member workouts</TabsTrigger>
+              </TabsList>
+              <TabsContent value="smarty" className="mt-4"><AdminSmartyWorkoutsTab /></TabsContent>
+              <TabsContent value="members" className="mt-4"><AdminWorkoutsTab title="Member workouts" /></TabsContent>
+            </Tabs>
           )}
           {section === "rituals" && <AdminRitualsTab />}
           {section === "messages" && <AdminMessagesTab />}

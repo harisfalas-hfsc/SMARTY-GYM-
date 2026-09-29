@@ -294,3 +294,67 @@ export const adminSmartyWorkoutImage = createServerFn({ method: "POST" })
       return { error: e instanceof Error ? e.message : "Picture failed" };
     }
   });
+
+/**
+ * Premium members start a ready workout: it is copied, unchanged, into their
+ * own logbook so it gets the same page, player, logging, rating, schedule and
+ * completion as every other workout. Tagged created_by "smarty:<id>" so it
+ * can never be shared to the community. Reuses an unfinished copy.
+ */
+export const startSmartyWorkout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }): Promise<{ workoutId: string } | { locked: true } | { error: string }> => {
+    const { getAccessStateForUser } = await import("@/lib/eligibility.server");
+    const access = (await getAccessStateForUser(context.supabase as never, context.userId)) as { premium?: boolean };
+    if (!access?.premium) return { locked: true };
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const tag = `smarty:${data.id}`;
+    const { data: existing } = await supabaseAdmin
+      .from("workouts")
+      .select("id")
+      .eq("user_id", context.userId)
+      .eq("created_by", tag)
+      .neq("status", "completed")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (existing) return { workoutId: (existing as { id: string }).id };
+    const { data: src } = await supabaseAdmin
+      .from("smarty_workouts")
+      .select("*")
+      .eq("id", data.id)
+      .eq("is_visible", true)
+      .maybeSingle();
+    if (!src) return { error: "Workout not found" };
+    const s = src as unknown as SmartyWorkout & { description?: string | null };
+    const { data: created, error } = await supabaseAdmin
+      .from("workouts")
+      .insert({
+        user_id: context.userId,
+        status: "created",
+        created_by: tag,
+        is_shared: false,
+        is_wod: false,
+        name: s.name,
+        category: s.category,
+        format: s.format,
+        focus: s.focus,
+        difficulty_stars: s.difficulty_stars,
+        duration_min: s.duration_min,
+        duration_label: s.duration_label,
+        equipment: s.equipment ?? [],
+        location: s.location,
+        image_url: s.image_url,
+        description_html: s.description_html,
+        instructions_html: s.instructions_html,
+        tips_html: s.tips_html,
+        main_workout: s.main_workout,
+        tips: [],
+        plan: {},
+      } as never)
+      .select("id")
+      .single();
+    if (error) return { error: "Could not start this workout. Please try again." };
+    return { workoutId: (created as { id: string }).id };
+  });
