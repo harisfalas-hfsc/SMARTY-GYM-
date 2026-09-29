@@ -199,29 +199,29 @@ function CategoryPage() {
                       className="relative block h-full p-4 transition hover:bg-primary/10"
                     >
                       <div className="flex items-center justify-between gap-2 pr-11">
-                        <span className="rounded-md border border-border bg-card/90 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur-sm">
+                        <span className="rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur-sm">
                           {bw ? "Bodyweight" : "Equipment"}
                         </span>
                       </div>
 
-                      <p className="mt-2 w-fit max-w-[calc(100%-2.75rem)] rounded-md border border-border bg-card/90 px-2 py-1 text-base font-bold leading-tight text-card-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
-                      <p className="mt-1 w-fit rounded-md border border-border bg-card/90 px-2 py-1 text-[11px] text-muted-foreground shadow-sm backdrop-blur-sm">Smarty Workout</p>
+                      <p className="mt-2 w-fit max-w-[calc(100%-2.75rem)] rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-base font-bold leading-tight text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
+                      <p className="mt-1 w-fit rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] text-workout-overlay-muted shadow-sm backdrop-blur-sm">Smarty Workout</p>
 
                       <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
-                        <span className="inline-flex w-fit items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-card-foreground shadow-sm backdrop-blur-sm">
+                        <span className="inline-flex w-fit items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm">
                           <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />{w.duration_min} min
                         </span>
-                        <span className="inline-flex w-fit items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-card-foreground shadow-sm backdrop-blur-sm">
+                        <span className="inline-flex w-fit items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm">
                           <Gauge className="h-3.5 w-3.5 shrink-0 text-primary" />{difficultyLabel(w.difficulty_stars)}
                         </span>
-                        {user ? <span className="inline-flex w-fit items-center gap-1 justify-self-end rounded-md border border-border bg-card/90 px-2 py-1 text-card-foreground shadow-sm backdrop-blur-sm">{mine?.done ? <><CheckCircle2 className="h-3.5 w-3.5 text-primary" />Done</> : "Not done"}</span> : null}
+                        {user ? <span className="inline-flex w-fit items-center gap-1 justify-self-end rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{mine?.done ? <><CheckCircle2 className="h-3.5 w-3.5 text-primary" />Done</> : "Not done"}</span> : null}
                       </div>
 
-                      {w.format ? <span className="mt-2 inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[11px] text-card-foreground shadow-sm backdrop-blur-sm"><Repeat2 className="h-3.5 w-3.5 text-primary" />{w.format}</span> : null}
+                      {w.format ? <span className="mt-2 inline-flex items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] text-workout-overlay-foreground shadow-sm backdrop-blur-sm"><Repeat2 className="h-3.5 w-3.5 text-primary" />{w.format}</span> : null}
 
                       <div className="mt-2 flex flex-wrap gap-1">
-                        {(bw ? ["Bodyweight"] : badges.shown).map((e) => <span key={e} className="rounded-full border border-primary/40 bg-card/90 px-2 py-0.5 text-[10px] font-semibold capitalize text-primary shadow-sm backdrop-blur-sm">{e}</span>)}
-                        {!bw && badges.overflow ? <span className="rounded-full border border-border bg-card/90 px-2 py-0.5 text-[10px] text-muted-foreground shadow-sm backdrop-blur-sm">+{badges.overflow}</span> : null}
+                        {(bw ? ["Bodyweight"] : badges.shown).map((e) => <span key={e} className="rounded-full border border-primary/40 bg-workout-overlay px-2 py-0.5 text-[10px] font-semibold capitalize text-primary shadow-sm backdrop-blur-sm">{e}</span>)}
+                        {!bw && badges.overflow ? <span className="rounded-full border border-workout-overlay-border bg-workout-overlay px-2 py-0.5 text-[10px] text-workout-overlay-muted shadow-sm backdrop-blur-sm">+{badges.overflow}</span> : null}
                       </div>
                     </Link>
 
@@ -234,7 +234,7 @@ function CategoryPage() {
                         aria-pressed={Boolean(mine?.fav)}
                         disabled={savingFavorite === w.id}
                         onClick={() => void toggleFavorite(w.id, !mine?.fav)}
-                        className="absolute right-2 top-2 bg-card/90 text-muted-foreground shadow-sm backdrop-blur-sm hover:text-destructive"
+                        className="absolute right-2 top-2 border-workout-overlay-border bg-workout-overlay text-workout-overlay-muted shadow-sm backdrop-blur-sm hover:bg-workout-overlay hover:text-destructive"
                       >
                         {savingFavorite === w.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Heart className={`h-5 w-5 ${mine?.fav ? "fill-destructive text-destructive" : ""}`} />}
                       </Button>
