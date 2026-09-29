@@ -35,6 +35,7 @@ import { AdminUsersTab } from "@/components/admin/AdminUsersTab";
 import { AdminRulesTab } from "@/components/admin/AdminRulesTab";
 import { AdminCycleTab } from "@/components/admin/AdminCycleTab";
 import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
+import { AdminSmartyWorkoutsTab } from "@/components/admin/AdminSmartyWorkoutsTab";
 import { AdminMessagesTab } from "@/components/admin/AdminMessagesTab";
 import { AdminAwardsTab } from "@/components/admin/AdminAwardsTab";
 import { AdminReportsTab } from "@/components/admin/AdminReportsTab";
@@ -243,7 +244,12 @@ function AdminPage() {
           {section === "customers" && <AdminUsersTab />}
           {section === "rules" && <AdminRulesTab />}
           {section === "cycle" && <AdminCycleTab />}
-          {section === "workouts" && <AdminWorkoutsTab />}
+          {section === "workouts" && (
+            <div className="space-y-8">
+              <AdminSmartyWorkoutsTab />
+              <AdminWorkoutsTab title="Member workouts" />
+            </div>
+          )}
           {section === "rituals" && <AdminRitualsTab />}
           {section === "messages" && <AdminMessagesTab />}
           {section === "awards" && <AdminAwardsTab />}
