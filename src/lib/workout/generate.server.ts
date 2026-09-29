@@ -254,8 +254,6 @@ export async function generateWorkoutContent(
     );
 
   const libraryById = new Map(all.map((e) => [e.id, e]));
-  type Candidate = GeneratedWorkout & { score: number };
-  let best: Candidate | null = null;
   let lastError = "";
   const modelAttempts = input.deterministic ? 0 : 1;
   for (let attempt = 0; attempt < modelAttempts; attempt++) {
@@ -328,7 +326,7 @@ export async function generateWorkoutContent(
       estimatedMinutes: estimateWorkMinutes(enforced.html),
     });
 
-    const candidate: Candidate = {
+    const candidate: GeneratedWorkout & { score: number } = {
       name,
       description_html: String(payload["description"] ?? ""),
       main_workout: enforced.html,
@@ -338,12 +336,8 @@ export async function generateWorkoutContent(
       needs_review: warnings.length > 0 || quality.score < 75,
       score: quality.score,
     };
-    if (!best || candidate.score > best.score) best = candidate;
-
-    return { ...best, format, pool, duration };
+    return { ...candidate, format, pool, duration };
   }
-
-  if (best) return { ...best, format, pool, duration };
 
   // ---- Reliability fallback: deterministic template engine ---------------------
   const pack = buildPackWorkout(pool, all, {
@@ -364,12 +358,6 @@ export async function generateWorkoutContent(
     ...enforcedPack.errors,
     ...packValidation.errors,
   ]);
-  if (packSplit.structural.length) {
-    throw new Error(
-      `Smarty Coach could not build a compliant workout (${lastError || "deterministic validation failed"}).`,
-    );
-  }
-
   const copy = packCopy({
     category: input.category,
     format,
@@ -388,6 +376,7 @@ export async function generateWorkoutContent(
       ...enforcedPack.warnings,
       ...packValidation.warnings,
       ...packSplit.soft,
+      ...packSplit.structural.map((issue) => `Fallback adjustment: ${issue}`),
     ],
     needs_review: true,
     format,
