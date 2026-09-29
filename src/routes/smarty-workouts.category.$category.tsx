@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { listSmartyWorkouts, type SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, categoryFromSlug } from "@/lib/smarty-workout-categories";
-import { difficultyLabel } from "@/lib/workout/spec";
+import { CATEGORY_FORMATS, difficultyLabel, type Category } from "@/lib/workout/spec";
 
 export const Route = createFileRoute("/smarty-workouts/category/$category")({
   loader: ({ params }) => {
@@ -61,6 +61,8 @@ function CategoryPage() {
   const [duration, setDuration] = useState(ALL);
   const [difficulty, setDifficulty] = useState(ALL);
   const [format, setFormat] = useState(ALL);
+  // Strength, Muscle Building, Mobility & Stability and Pilates are always sets & reps.
+  const showFormat = (CATEGORY_FORMATS[category as Category] ?? []).length > 1;
 
   useEffect(() => {
     void listSmartyWorkouts()
@@ -96,7 +98,7 @@ function CategoryPage() {
       <Link to="/smarty-workouts" className="mb-3 inline-block text-xs font-bold uppercase tracking-wider text-primary">← Smarty Workouts</Link>
       <PageHeader image={detail.image} eyebrow="SMARTY WORKOUTS" title={categoryLabel(category)} subtitle={detail.description} />
 
-      <div className="mb-4 grid gap-3 rounded-lg border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className={`mb-4 grid gap-3 rounded-lg border border-border bg-card p-4 sm:grid-cols-2 ${showFormat ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}>
         <div className="relative sm:col-span-2 lg:col-span-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search workouts" className="pl-9" />
@@ -113,10 +115,12 @@ function CategoryPage() {
           <SelectTrigger aria-label="Difficulty"><SelectValue /></SelectTrigger>
           <SelectContent><SelectItem value={ALL}>All levels</SelectItem><SelectItem value="1">Beginner</SelectItem><SelectItem value="2">Intermediate</SelectItem><SelectItem value="3">Advanced</SelectItem></SelectContent>
         </Select>
-        <Select value={format} onValueChange={setFormat}>
-          <SelectTrigger aria-label="Format"><SelectValue /></SelectTrigger>
-          <SelectContent><SelectItem value={ALL}>All formats</SelectItem>{formats.map((f) => <SelectItem key={f} value={f.toLowerCase()}>{f}</SelectItem>)}</SelectContent>
-        </Select>
+        {showFormat && (
+          <Select value={format} onValueChange={setFormat}>
+            <SelectTrigger aria-label="Format"><SelectValue /></SelectTrigger>
+            <SelectContent><SelectItem value={ALL}>All formats</SelectItem>{formats.map((f) => <SelectItem key={f} value={f.toLowerCase()}>{f}</SelectItem>)}</SelectContent>
+          </Select>
+        )}
       </div>
 
       {rows === null ? (

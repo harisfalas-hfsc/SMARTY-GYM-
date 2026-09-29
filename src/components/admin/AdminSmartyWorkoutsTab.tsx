@@ -7,7 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { A4Container } from "@/components/ui/a4-container";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { WorkoutDisplay } from "@/components/workout/WorkoutDisplay";
@@ -296,52 +299,60 @@ function CreateDialog({ open, onClose, onCreated }: { open: boolean; onClose: ()
   );
 }
 
-type Section = "description_html" | "main_workout" | "instructions_html" | "tips_html";
-const SECTIONS: { key: Section; label: string }[] = [
-  { key: "description_html", label: "Description" },
-  { key: "main_workout", label: "Workout" },
-  { key: "instructions_html", label: "Instructions" },
-  { key: "tips_html", label: "Tips" },
-];
+const STANDARD_SECTIONS_TEMPLATE = `<div class="workout-content">
+<h3>🧘 Soft Tissue Preparation</h3>
+<ul><li></li></ul>
+<h3>🔥 Activation</h3>
+<ul><li></li></ul>
+<h3>💪 Main Workout</h3>
+<ul><li></li></ul>
+<h3>⚡ Finisher</h3>
+<ul><li></li></ul>
+<h3>🧊 Cool Down</h3>
+<ul><li></li></ul>
+</div>`;
+
+const DURATION_OPTIONS = [15, 20, 25, 30, 35, 40, 45, 50, 60];
+const SETS_AND_REPS = "REPS & SETS";
+
+function fixedFormat(category: string): string | null {
+  const legal = CATEGORY_FORMATS[category as Category] ?? [];
+  return legal.length === 1 ? legal[0]! : null;
+}
+
+function isBodyweightList(equipment: string[]) {
+  return equipment.length === 0 || equipment.every((e) => e.toLowerCase() === "bodyweight");
+}
 
 function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onClose: () => void; onSaved: () => void }) {
   const update = useServerFn(adminUpdateSmartyWorkout);
   const image = useServerFn(adminSmartyWorkoutImage);
   const [w, setW] = useState<SmartyWorkout>(workout);
-  const [active, setActive] = useState<Section>("main_workout");
   const [saving, setSaving] = useState(false);
   const [imgBusy, setImgBusy] = useState(false);
   const [preview, setPreview] = useState(false);
-  const areaRef = useRef<HTMLTextAreaElement>(null);
+  const [generateUnique, setGenerateUnique] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-
-  function insertExercise(id: string, name: string) {
-    const token = `{{exercise:${id}:${name}}}`;
-    const el = areaRef.current;
-    const cur = w[active] ?? "";
-    const at = el ? el.selectionStart : cur.length;
-    const next = cur.slice(0, at) + token + cur.slice(at);
-    setW({ ...w, [active]: next });
-    requestAnimationFrame(() => {
-      if (el) {
-        el.focus();
-        el.selectionStart = el.selectionEnd = at + token.length;
-      }
-    });
-  }
+  const required = fixedFormat(w.category);
+  const formatOptions = CATEGORY_FORMATS[w.category as Category] ?? [];
+  const equipmentChoice = isBodyweightList(w.equipment) ? "BODYWEIGHT" : "EQUIPMENT";
 
   async function save() {
+    if (!w.name.trim()) return toast.error("Workout name is required");
+    if (!(w.main_workout ?? "").replace(/<[^>]*>/g, "").trim()) return toast.error("Workout content is required");
     setSaving(true);
     const r = await update({
       data: {
         id: w.id,
         patch: {
-          name: w.name,
+          name: w.name.trim(),
           category: w.category as never,
-          format: w.format,
+          format: required ?? w.format,
+          focus: FOCUS_CATEGORIES.includes(w.category as Category) ? w.focus : null,
           difficulty_stars: w.difficulty_stars,
           duration_min: w.duration_min,
           equipment: w.equipment,
+          image_url: w.image_url,
           description_html: w.description_html,
           main_workout: w.main_workout,
           instructions_html: w.instructions_html,
@@ -350,8 +361,15 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
         },
       },
     });
+    if ("error" in r) {
+      setSaving(false);
+      return toast.error(r.error);
+    }
+    if (generateUnique) {
+      const img = await image({ data: { id: w.id } });
+      if ("error" in img) toast.error(`Saved, but the picture failed: ${img.error}`);
+    }
     setSaving(false);
-    if ("error" in r) return toast.error(r.error);
     toast.success("Workout saved");
     onSaved();
   }
@@ -375,155 +393,238 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
 
   return (
     <Dialog open onOpenChange={(o) => !o && !saving && onClose()}>
-      <DialogContent className="max-h-[95dvh] w-[calc(100vw-1rem)] max-w-5xl overflow-y-auto sm:w-full">
-        <DialogHeader><DialogTitle>Edit workout</DialogTitle></DialogHeader>
+      <DialogContent className="max-h-[95vh] w-[95vw] max-w-5xl overflow-y-auto overflow-x-hidden">
+        <DialogHeader>
+          <DialogTitle>Edit Workout</DialogTitle>
+          <DialogDescription>Update workout details</DialogDescription>
+        </DialogHeader>
         {preview ? (
           <div className="-mx-6">
             <Button variant="outline" size="sm" className="mx-6 mb-2" onClick={() => setPreview(false)}>Back to editor</Button>
             <WorkoutDisplay workout={smartyToWorkoutRow(w)} previewMode onComplete={() => {}} />
           </div>
         ) : (
-          <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-[220px_1fr]">
+          <div className="space-y-4 pb-4">
+            {/* 1. Category */}
+            <div className="space-y-2">
+              <Label>1. Category *</Label>
+              <Select
+                value={w.category}
+                onValueChange={(value) => {
+                  const req = fixedFormat(value);
+                  setW((prev) => ({
+                    ...prev,
+                    category: value,
+                    focus: FOCUS_CATEGORIES.includes(value as Category) ? prev.focus : null,
+                    format: req ?? ((CATEGORY_FORMATS[value as Category] ?? []).includes(prev.format as never) ? prev.format : null),
+                  }));
+                }}
+              >
+                <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                <SelectContent className="z-50 bg-popover">
+                  {SMARTY_WORKOUT_CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 2. Focus (Strength / Muscle Building only) */}
+            {FOCUS_CATEGORIES.includes(w.category as Category) && (
               <div className="space-y-2">
-                <div className="aspect-[3/2] overflow-hidden rounded-xl bg-muted">
-                  {w.image_url && <img src={w.image_url} alt="" className="h-full w-full object-cover" />}
-                </div>
-                <Button size="sm" variant="outline" className="w-full" disabled={imgBusy} onClick={() => void regen()}>
-                  {imgBusy ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <ImagePlus className="mr-1 h-4 w-4" />}
-                  {w.image_url ? "Regenerate picture" : "Generate picture"}
-                </Button>
-                <Button size="sm" variant="outline" className="w-full" disabled={imgBusy} onClick={() => fileRef.current?.click()}>
-                  <Upload className="mr-1 h-4 w-4" /> Upload picture
-                </Button>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-                  className="hidden"
-                  onChange={(e) => {
-                    const f = e.target.files?.[0];
-                    if (f) void onFile(f);
-                    e.target.value = "";
-                  }}
-                />
+                <Label>2. {categoryLabel(w.category)} Focus *</Label>
+                <Select value={w.focus ?? ""} onValueChange={(v) => setW({ ...w, focus: v })}>
+                  <SelectTrigger><SelectValue placeholder="Select focus" /></SelectTrigger>
+                  <SelectContent className="z-50 bg-popover">
+                    {STRENGTH_FOCUS.map((f) => <SelectItem key={f} value={f}>{f}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">Only Strength and Muscle Building use this field.</p>
               </div>
-              <div className="space-y-2">
-                <Field label="Name"><Input value={w.name} onChange={(e) => setW({ ...w, name: e.target.value })} /></Field>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  <Field label="Category">
-                    <Select value={w.category} onValueChange={(v) => setW({ ...w, category: v })}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>{SMARTY_WORKOUT_CATEGORIES.map((c) => <SelectItem key={c} value={c}>{categoryLabel(c)}</SelectItem>)}</SelectContent>
-                    </Select>
-                  </Field>
-                  <Field label="Format"><Input value={w.format ?? ""} onChange={(e) => setW({ ...w, format: e.target.value || null })} /></Field>
-                  <Field label="Difficulty">
-                    <Select value={String(w.difficulty_stars)} onValueChange={(v) => setW({ ...w, difficulty_stars: Number(v) })}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>{LEVELS.map((l) => <SelectItem key={l.v} value={String(l.v)}>{l.label}</SelectItem>)}</SelectContent>
-                    </Select>
-                  </Field>
-                  <Field label="Minutes">
-                    <Input type="number" value={w.duration_min} onChange={(e) => setW({ ...w, duration_min: Math.max(1, Number(e.target.value) || 1) })} />
-                  </Field>
-                </div>
-                <Field label="Equipment (comma separated)">
-                  <Input
-                    value={w.equipment.join(", ")}
-                    onChange={(e) => setW({ ...w, equipment: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })}
-                  />
-                </Field>
-                <label className="flex items-center gap-2 text-sm font-semibold">
-                  <Switch checked={w.is_visible} onCheckedChange={(v) => setW({ ...w, is_visible: v })} />
-                  Visible on Smarty Workouts
-                </label>
+            )}
+
+            {/* 3. Name */}
+            <div className="space-y-2">
+              <Label htmlFor="sw-name">3. Workout Name *</Label>
+              <Input id="sw-name" value={w.name} onChange={(e) => setW({ ...w, name: e.target.value })} placeholder="Enter workout name" />
+            </div>
+
+            {/* 4. Difficulty */}
+            <div className="space-y-2">
+              <Label>4. Difficulty Level *</Label>
+              <div className="flex items-center gap-4">
+                <Select value={String(w.difficulty_stars)} onValueChange={(v) => setW({ ...w, difficulty_stars: Number(v) })}>
+                  <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+                  <SelectContent className="z-50 bg-popover">
+                    {LEVELS.map((l) => <SelectItem key={l.v} value={String(l.v)}>{`${"⭐".repeat(l.v)} (${l.v})`}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+                <span className="text-sm text-muted-foreground">{LEVELS.find((l) => l.v === w.difficulty_stars)?.label}</span>
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-1">
-              {SECTIONS.map((s) => (
-                <Button key={s.key} size="sm" variant={active === s.key ? "default" : "outline"} onClick={() => setActive(s.key)}>
-                  {s.label}
+            {/* 5. Equipment */}
+            <div className="space-y-2">
+              <Label>5. Equipment *</Label>
+              <Select
+                value={equipmentChoice}
+                onValueChange={(v) => setW({ ...w, equipment: v === "BODYWEIGHT" ? ["bodyweight"] : isBodyweightList(w.equipment) ? ["dumbbells"] : w.equipment })}
+              >
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent><SelectItem value="BODYWEIGHT">BODYWEIGHT</SelectItem><SelectItem value="EQUIPMENT">EQUIPMENT</SelectItem></SelectContent>
+              </Select>
+              {equipmentChoice === "EQUIPMENT" && (
+                <Input
+                  value={w.equipment.join(", ")}
+                  onChange={(e) => setW({ ...w, equipment: e.target.value.split(",").map((x) => x.trim()).filter(Boolean) })}
+                  placeholder="e.g. dumbbells, kettlebell"
+                />
+              )}
+            </div>
+
+            {/* 6. Format */}
+            <div className="space-y-2">
+              <Label>6. Format *</Label>
+              {required ? (
+                <>
+                  <Input value={required} disabled className="cursor-not-allowed bg-muted" />
+                  <p className="text-xs font-medium text-amber-600">⚠️ {w.category} category requires "{required}" format (auto-set)</p>
+                </>
+              ) : (
+                <Select value={w.format ?? ""} onValueChange={(v) => setW({ ...w, format: v })}>
+                  <SelectTrigger><SelectValue placeholder="Select format" /></SelectTrigger>
+                  <SelectContent>{formatOptions.map((f) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent>
+                </Select>
+              )}
+            </div>
+
+            {/* 7. Duration */}
+            <div className="space-y-2">
+              <Label>7. Duration *</Label>
+              <Select value={String(w.duration_min)} onValueChange={(v) => setW({ ...w, duration_min: Number(v) })}>
+                <SelectTrigger><SelectValue placeholder="Select duration" /></SelectTrigger>
+                <SelectContent>
+                  {[...new Set([...DURATION_OPTIONS, w.duration_min])].sort((a, b) => a - b).map((d) => <SelectItem key={d} value={String(d)}>{d} min</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 8. Workout Content */}
+            <div className="space-y-2 border-t pt-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <Label>8. Workout Content *</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const current = (w.main_workout ?? "").replace(/<[^>]*>/g, "").trim();
+                    if (current && !window.confirm("Replace current content with the standard 5-section structure? This cannot be undone.")) return;
+                    setW((prev) => ({ ...prev, main_workout: STANDARD_SECTIONS_TEMPLATE }));
+                    toast.success("Structure inserted — fill in exercises in each section, then save.");
+                  }}
+                >
+                  Insert standard structure
                 </Button>
-              ))}
+              </div>
+              <A4Container>
+                <RichTextEditor
+                  value={w.main_workout ?? ""}
+                  onChange={(value) => setW((prev) => ({ ...prev, main_workout: value }))}
+                  placeholder="Enter the complete workout content here - format with bold, bullets, headings, tables, etc..."
+                  minHeight="300px"
+                  showExerciseSearch
+                />
+              </A4Container>
+              <p className="text-xs text-muted-foreground">Use the exercise search above the toolbar to add exercises with View buttons</p>
             </div>
-            <div className="grid gap-3 lg:grid-cols-[1fr_300px]">
-              <Textarea
-                ref={areaRef}
-                value={w[active] ?? ""}
-                onChange={(e) => setW({ ...w, [active]: e.target.value })}
-                rows={16}
-                className="font-mono text-xs"
-              />
-              <ExerciseSearch onPick={insertExercise} />
+
+            {/* 9. Description */}
+            <div className="space-y-2">
+              <Label>9. Description</Label>
+              <A4Container>
+                <RichTextEditor value={w.description_html ?? ""} onChange={(value) => setW((prev) => ({ ...prev, description_html: value }))} placeholder="Brief description of the workout..." minHeight="120px" />
+              </A4Container>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Exercises from the library appear as {"{{exercise:ID:Name}}"}; members see the name with its GIF, instructions and tips. You can type any other text or HTML freely.
-            </p>
-            <div className="flex flex-wrap justify-end gap-2">
+
+            {/* 10. Instructions */}
+            <div className="space-y-2">
+              <Label>10. Instructions</Label>
+              <p className="text-sm italic text-muted-foreground">Note: exercises added from the library show their GIF and instructions to members automatically.</p>
+              <A4Container>
+                <RichTextEditor value={w.instructions_html ?? ""} onChange={(value) => setW((prev) => ({ ...prev, instructions_html: value }))} placeholder="Step-by-step instructions..." minHeight="150px" />
+              </A4Container>
+            </div>
+
+            {/* 11. Tips */}
+            <div className="space-y-2">
+              <Label>11. Tips</Label>
+              <A4Container>
+                <RichTextEditor value={w.tips_html ?? ""} onChange={(value) => setW((prev) => ({ ...prev, tips_html: value }))} placeholder="Helpful tips for this workout..." minHeight="120px" />
+              </A4Container>
+            </div>
+
+            {/* Image */}
+            <div className="space-y-4 border-t pt-4">
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <div className="aspect-[3/2] w-full shrink-0 overflow-hidden rounded-xl bg-muted sm:w-56">
+                  {w.image_url && <img src={w.image_url} alt="" className="h-full w-full object-cover" />}
+                </div>
+                <div className="flex-1 space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="sw-gen">Generate Unique Image</Label>
+                      <p className="text-sm text-muted-foreground">AI will create a unique workout cover image based on title, category, and format when you save</p>
+                    </div>
+                    <Switch id="sw-gen" checked={generateUnique} onCheckedChange={setGenerateUnique} />
+                  </div>
+                  {!generateUnique && (
+                    <div className="space-y-2">
+                      <Label htmlFor="sw-img">Or Enter Image URL Manually</Label>
+                      <Input id="sw-img" value={w.image_url ?? ""} onChange={(e) => setW({ ...w, image_url: e.target.value || null })} placeholder="https://..." />
+                      <div className="flex flex-wrap gap-2">
+                        <Button size="sm" variant="outline" disabled={imgBusy} onClick={() => void regen()}>
+                          {imgBusy ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <ImagePlus className="mr-1 h-4 w-4" />}Generate now
+                        </Button>
+                        <Button size="sm" variant="outline" disabled={imgBusy} onClick={() => fileRef.current?.click()}>
+                          <Upload className="mr-1 h-4 w-4" />Upload picture
+                        </Button>
+                      </div>
+                      <input
+                        ref={fileRef}
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) void onFile(f);
+                          e.target.value = "";
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Visibility */}
+            <div className="flex items-center justify-between gap-3 border-t pt-4">
+              <div>
+                <Label htmlFor="sw-vis">Visible on Smarty Workouts</Label>
+                <p className="text-sm text-muted-foreground">Hidden workouts stay in your admin panel only.</p>
+              </div>
+              <Switch id="sw-vis" checked={w.is_visible} onCheckedChange={(v) => setW({ ...w, is_visible: v })} />
+            </div>
+
+            <div className="flex flex-wrap justify-end gap-2 border-t pt-4">
               <Button variant="outline" onClick={() => setPreview(true)}><Eye className="mr-1 h-4 w-4" />Preview</Button>
               <Button variant="outline" onClick={onClose} disabled={saving}>Cancel</Button>
               <Button onClick={() => void save()} disabled={saving}>
-                {saving && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Save
+                {saving && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Save Workout
               </Button>
             </div>
           </div>
         )}
       </DialogContent>
     </Dialog>
-  );
-}
-
-function ExerciseSearch({ onPick }: { onPick: (id: string, name: string) => void }) {
-  const [q, setQ] = useState("");
-  const [res, setRes] = useState<{ id: string; name: string; body_part: string | null; equipment: string | null }[]>([]);
-  const [busy, setBusy] = useState(false);
-
-  useEffect(() => {
-    const term = q.trim();
-    if (term.length < 2) {
-      setRes([]);
-      return;
-    }
-    const t = setTimeout(async () => {
-      setBusy(true);
-      const { data } = await supabase
-        .from("exercises")
-        .select("id,name,body_part,equipment")
-        .ilike("name", `%${term}%`)
-        .order("name")
-        .limit(30);
-      setRes((data ?? []) as never);
-      setBusy(false);
-    }, 250);
-    return () => clearTimeout(t);
-  }, [q]);
-
-  return (
-    <div className="rounded-xl border border-border p-2">
-      <div className="relative">
-        <Search className="pointer-events-none absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search exercise library" className="pl-8" />
-      </div>
-      <div className="mt-2 max-h-72 space-y-1 overflow-y-auto">
-        {busy && <Loader2 className="mx-auto h-4 w-4 animate-spin" />}
-        {res.map((r) => (
-          <button
-            key={r.id}
-            type="button"
-            onClick={() => onPick(r.id, r.name)}
-            className="w-full rounded-lg px-2 py-1.5 text-left text-xs hover:bg-accent"
-          >
-            <span className="font-semibold capitalize">{r.name}</span>
-            <span className="block text-muted-foreground">{[r.body_part, r.equipment].filter(Boolean).join(" · ")}</span>
-          </button>
-        ))}
-        {!busy && q.trim().length >= 2 && res.length === 0 && (
-          <p className="px-2 py-1 text-xs text-muted-foreground">No exercises found.</p>
-        )}
-      </div>
-    </div>
   );
 }
 
