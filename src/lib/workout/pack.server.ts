@@ -1,4 +1,4 @@
-import { priorityIds } from "./priority";
+import { pickPriorityByPattern } from "./priority";
 // Deterministic template ("pack") engine.
 // Builds a fully compliant session straight from the filtered pool — no model
 // involved. Used as the reliability fallback when the AI cannot produce a
@@ -216,10 +216,11 @@ export function buildPackWorkout(
   // legal pool is only used to top up when too few priority matches exist.
   // Mobility & Stability and Pilates keep their own specialist vocabulary.
   const usePriority = input.category !== "MOBILITY & STABILITY" && input.category !== "PILATES";
-  const prio = usePriority ? priorityIds(pool) : new Set<string>();
-  const prioPool = pool.filter((e) => prio.has(e.id));
+  const flow = input.format !== "REPS & SETS";
   const pickPriorityFirst = (count: number, favs: string[]) => {
-    const first = prioPool.length ? pickBalanced(prioPool, count, { favoriteIds: favs, exclude: used }) : [];
+    const first = usePriority
+      ? pickPriorityByPattern(pool, count, { exclude: used, seed: input.seed ?? input.minutes, conditioningFirst: flow })
+      : [];
     if (first.length >= count) return first;
     const ex = new Set([...used, ...first.map((e) => e.id)]);
     return [...first, ...pickBalanced(pool, count - first.length, { favoriteIds: favs, exclude: ex })];

@@ -222,3 +222,83 @@ export function priorityShortfall(html: string, library: PoolExercise[], categor
     ? null
     : `Only ${hits} of ${ids.length} main exercises are coach priority exercises (need at least 70%).`;
 }
+
+type Env = "BODYWEIGHT" | "EQUIPMENT" | "FULL_GYM";
+
+/** Which of the three coach lists applies, read from what the legal pool holds. */
+export function poolEnvironment(pool: PoolExercise[]): Env {
+  const eq = (e: PoolExercise) => `${e.equipment ?? ""} ${e.name}`.toLowerCase();
+  if (pool.some((e) => /\b(lever|cable|smith|sled)\b/.test(eq(e)))) return "FULL_GYM";
+  if (pool.some((e) => /\b(dumbbell|kettlebell|barbell|trx|suspen|medicine)\b/.test(eq(e)))) return "EQUIPMENT";
+  return "BODYWEIGHT";
+}
+
+/**
+ * The coach's priority exercises for this environment, in the coach's own
+ * order (environment list first, then the simpler lists), one closest library
+ * match per name, only rows present in the legal pool.
+ */
+export function orderedPriority(pool: PoolExercise[]): PoolExercise[] {
+  const env = poolEnvironment(pool);
+  const names =
+    env === "FULL_GYM"
+      ? [...PRIORITY_FULL_GYM, ...PRIORITY_EQUIPMENT, ...PRIORITY_BODYWEIGHT]
+      : env === "EQUIPMENT"
+        ? [...PRIORITY_EQUIPMENT, ...PRIORITY_BODYWEIGHT]
+        : PRIORITY_BODYWEIGHT;
+  const out: PoolExercise[] = [];
+  const seen = new Set<string>();
+  for (const n of names) {
+    const e = resolvePriority(n, pool, 1)[0];
+    if (e && !seen.has(e.id)) {
+      seen.add(e.id);
+      out.push(e);
+    }
+  }
+  return out;
+}
+
+/** Movement patterns, in the order a coach fills a session. */
+const PATTERNS: { key: string; re: RegExp }[] = [
+  { key: "squat", re: /squat|leg press|thruster/i },
+  { key: "hinge", re: /deadlift|swing|hip thrust|glute bridge|clean|snatch/i },
+  { key: "push", re: /bench press|chest press|push-?up|press|dip/i },
+  { key: "pull", re: /row|pull-?up|chin-?up|pulldown|pull down/i },
+  { key: "lunge", re: /lunge|split squat|step-?up|bulgarian/i },
+  { key: "core", re: /plank|crunch|dead bug|bird dog|hollow|leg raise|knee raise|rollout|twist|pallof|sit-?up|v-?up|chop/i },
+  { key: "conditioning", re: /burpee|jump|climber|jack|knees|skater|sprint|slam|run|crawl/i },
+];
+
+/**
+ * Picks `count` coach-priority exercises, one per movement pattern in coach
+ * order (squat, hinge, push, pull, lunge, core, conditioning), rotating
+ * between the top few per pattern by seed. Returns fewer when the pool
+ * cannot supply them.
+ */
+export function pickPriorityByPattern(
+  pool: PoolExercise[],
+  count: number,
+  opts: { exclude?: Set<string>; seed?: number; conditioningFirst?: boolean } = {},
+): PoolExercise[] {
+  const exclude = opts.exclude ?? new Set<string>();
+  const list = orderedPriority(pool).filter((e) => !exclude.has(e.id));
+  const patterns = opts.conditioningFirst
+    ? [PATTERNS[6]!, PATTERNS[0]!, PATTERNS[2]!, PATTERNS[1]!, PATTERNS[3]!, PATTERNS[4]!, PATTERNS[5]!]
+    : PATTERNS;
+  const out: PoolExercise[] = [];
+  const used = new Set<string>();
+  const seed = Math.abs(opts.seed ?? 0);
+  let round = 0;
+  while (out.length < count && round < 4) {
+    for (const p of patterns) {
+      if (out.length >= count) break;
+      const cands = list.filter((e) => !used.has(e.id) && p.re.test(e.name) && !/calf/i.test(e.name));
+      if (!cands.length) continue;
+      const pick = cands[(seed + round) % Math.min(3, cands.length)]!;
+      out.push(pick);
+      used.add(pick.id);
+    }
+    round += 1;
+  }
+  return out;
+}
