@@ -94,7 +94,6 @@ export const getSmartyWorkout = createServerFn({ method: "POST" })
         .from("smarty_workouts")
         .select("*")
         .eq("id", data.id)
-        .eq("is_visible", true)
         .maybeSingle();
       if (!row) return { error: "Workout not found" };
       return { workout: row as unknown as SmartyWorkout };
