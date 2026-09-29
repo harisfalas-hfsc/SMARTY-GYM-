@@ -1,6 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Clock, Loader2, Lock, Search, X } from "lucide-react";
+import { CheckCircle2, Clock, Heart, Loader2, Search, X } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { equipmentBadges } from "@/lib/format/labels";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -125,7 +128,7 @@ function CategoryPage() {
         </div>
         <Select value={equipment} onValueChange={setEquipment}>
           <SelectTrigger aria-label="Equipment"><SelectValue /></SelectTrigger>
-          <SelectContent><SelectItem value={ALL}>All equipment</SelectItem><SelectItem value="bodyweight">No equipment</SelectItem><SelectItem value="equipment">With equipment</SelectItem></SelectContent>
+          <SelectContent><SelectItem value={ALL}>All equipment</SelectItem><SelectItem value="bodyweight">Bodyweight</SelectItem><SelectItem value="equipment">Equipment</SelectItem></SelectContent>
         </Select>
         <Select value={duration} onValueChange={setDuration}>
           <SelectTrigger aria-label="Duration"><SelectValue /></SelectTrigger>
