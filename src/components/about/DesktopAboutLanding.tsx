@@ -98,8 +98,8 @@ const aboutSections: Section[] = [
       "Choose a ready Smarty Workout, build one on demand, receive two planned workouts every day, or train what the community shares. Move, reset and recover with a fresh daily ritual.",
     items: [
       { id: "smarty-workouts", title: "Smarty Workouts", meta: "Ready workouts in eight categories", image: imgWorkouts, to: "/smarty-workouts" },
-      { id: "create", title: "Create Your Workout", meta: "On demand, whenever you want", image: imgCreate, to: "/create-your-workout" },
       { id: "wod", title: "Workout of the Day", meta: "Two planned workouts, every day", image: imgWod, to: "/wod" },
+      { id: "create", title: "Create Your Workout", meta: "On demand, whenever you want", image: imgCreate, to: "/create-your-workout" },
       { id: "community", title: "Smarty Community", meta: "Train, like, comment and climb the rankings", image: imgCommunity, to: "/community" },
       { id: "ritual", title: "Smarty Ritual", meta: "Morning, Midday and Evening phases", image: imgRitual, to: "/smarty-ritual" },
     ],
