@@ -31,7 +31,15 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "What's included in the subscription?",
-    a: "Up to 2 workouts per day, the daily Smarty Ritual, Smarty Check-ins, the full exercise library, all training tools, your logbook, progress tracking and every previous workout you've created.",
+    a: "Up to 2 workouts per day, access to ready Smarty Workouts, the daily Smarty Ritual, Smarty Check-ins, the full exercise library, all training tools, your logbook, progress tracking and every previous workout you've created.",
+  },
+  {
+    q: "What are Smarty Workouts?",
+    a: "Ready workouts in eight categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates. Anyone can browse the categories and see workout pictures and details; Premium members can open a workout and train it. Choose a category to filter workouts by equipment, duration and difficulty.",
+  },
+  {
+    q: "Can I track a Smarty Workout in my logbook?",
+    a: "Yes. When you open one to train, it works like your other workouts: start the player, log performance, mark it completed or not completed, or schedule it. It appears in your logbook. You cannot share it to the community because it is already published for everyone to browse.",
   },
   {
     q: "What is the Workout of the Day?",

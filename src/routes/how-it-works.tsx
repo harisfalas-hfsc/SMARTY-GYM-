@@ -221,12 +221,33 @@ function HowItWorks() {
             Simple &amp; <span className="text-primary">transparent</span>
           </>
         }
-        subtitle="Three ways to train: create your own workout on demand, follow the Workout of the Day, or train a workout shared by the Smarty Community — with Smarty Ritual supporting your movement and recovery every day."
+         subtitle="Four ways to train: choose a ready Smarty Workout, create your own, follow the Workout of the Day or train with the Smarty Community — with Smarty Ritual supporting your movement and recovery."
       />
 
-      <section className="rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+       <section className="rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+           Way 1 — Smarty Workouts
+         </p>
+         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
+           Find a ready workout and train.
+         </h2>
+         <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
+           Explore eight categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic,
+           Challenge, Mobility &amp; Stability and Pilates. Open a category to filter by equipment,
+           duration and difficulty. Everyone can browse workout pictures and details; Premium members
+           can open a workout, train it, log performance and track it in their logbook. These workouts
+           are published for everyone to browse, so they cannot be shared to the community.
+         </p>
+         <div className="mt-6 flex justify-center">
+           <Button asChild size="lg" className="font-extrabold uppercase">
+             <Link to="/smarty-workouts">Explore Smarty Workouts</Link>
+           </Button>
+         </div>
+       </section>
+
+       <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-          Way 1 — Create any workout
+           Way 2 — Create any workout
         </p>
         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
           You answer. Smarty Coach thinks. You train.
@@ -262,7 +283,7 @@ function HowItWorks() {
 
       <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-          Way 2 — Workout of the Day
+           Way 3 — Workout of the Day
         </p>
         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
           {freeAccessMode
@@ -366,7 +387,7 @@ function HowItWorks() {
 
       <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-          Way 3 — Smarty Community
+           Way 4 — Smarty Community
         </p>
         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
           Train the workouts other members share.
