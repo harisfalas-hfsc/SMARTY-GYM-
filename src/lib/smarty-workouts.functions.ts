@@ -466,7 +466,6 @@ export const setSmartyWorkoutFavorite = createServerFn({ method: "POST" })
       .select("id")
       .eq("user_id", context.userId)
       .eq("created_by", tag)
-      .eq("is_favorite", true)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
