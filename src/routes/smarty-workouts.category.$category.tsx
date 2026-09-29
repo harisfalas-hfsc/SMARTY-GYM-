@@ -166,28 +166,81 @@ function CategoryPage() {
                 const mine = mineById[w.id];
                 const badges = equipmentBadges(w.equipment);
                 return (
-                  <Link key={w.id} to="/smarty-workouts/$workoutId" params={{ workoutId: w.id }} className="group relative block aspect-[4/5] overflow-hidden rounded-lg border-2 border-border bg-muted transition hover:border-primary hover:shadow-lg sm:aspect-[3/4]">
+                  <div key={w.id} className="relative flex aspect-[4/5] flex-col overflow-hidden rounded-2xl border-2 border-blue-400 transition hover:shadow-lg sm:aspect-[3/4]">
                     <img src={w.image_url ?? detail.image} alt={w.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-                    <span className="absolute left-2 top-2 rounded-full border border-primary/40 bg-background/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-primary shadow-sm backdrop-blur">{bw ? "Bodyweight" : "Equipment"}</span>
-                    <div className="absolute inset-x-2 bottom-2 flex flex-col items-end gap-1.5 rounded-lg bg-background/90 p-3 text-right shadow-sm backdrop-blur">
-                      <h3 className="font-bold leading-snug text-foreground">{w.name}</h3>
-                      <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                        <span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5 text-primary" />{w.duration_min} min</span>
-                        <span>{difficultyLabel(w.difficulty_stars)}</span>
-                        {w.format && <span>{w.format}</span>}
-                        {user && (mine?.done
-                          ? <span className="inline-flex items-center gap-1 font-semibold text-primary"><CheckCircle2 className="h-3.5 w-3.5" />Completed</span>
-                          : <span>Not done</span>)}
-                        {user && <Heart aria-label={mine?.fav ? "Favourite" : "Not favourite"} className={`h-4 w-4 ${mine?.fav ? "fill-primary text-primary" : "text-muted-foreground"}`} />}
+                    <div className="absolute inset-0 bg-black/55" aria-hidden />
+                    <Link
+                      to="/smarty-workouts/$workoutId"
+                      params={{ workoutId: w.id }}
+                      className="relative block flex-1 p-4 transition hover:bg-blue-500/10"
+                    >
+                      <p className="pr-10 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-300">
+                        {bw ? "Bodyweight" : "Equipment"}
+                      </p>
+
+                      <p className="mt-1 pr-10 font-bold leading-tight text-white">{w.name}</p>
+
+                      <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
+                        <span className="inline-flex items-center gap-1 text-white/80">
+                          <Clock className="h-3.5 w-3.5 shrink-0" />
+                          {w.duration_min} min
+                        </span>
+                        <span className="inline-flex items-center gap-0.5">
+                          {Array.from({ length: MAX_STARS }).map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-3 w-3 ${
+                                i < Math.min(MAX_STARS, Math.max(0, Math.round(w.difficulty_stars)))
+                                  ? "fill-blue-300 text-blue-300"
+                                  : "text-white/30"
+                              }`}
+                            />
+                          ))}
+                        </span>
+                        <span className="justify-self-end text-right">
+                          {user && (mine?.done ? (
+                            <span className="inline-flex items-center gap-1 font-semibold text-blue-300">
+                              <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+                              Done
+                            </span>
+                          ) : (
+                            <span className="text-white/70">Not done</span>
+                          ))}
+                        </span>
                       </div>
-                      <div className="flex flex-wrap justify-end gap-1">
+
+                      {w.format ? (
+                        <p className="mt-1.5 text-[11px] text-white/70">{w.format} · {difficultyLabel(w.difficulty_stars)}</p>
+                      ) : (
+                        <p className="mt-1.5 text-[11px] text-white/70">{difficultyLabel(w.difficulty_stars)}</p>
+                      )}
+
+                      <div className="mt-2 flex flex-wrap gap-1">
                         {(bw ? ["Bodyweight"] : badges.shown).map((e) => (
-                          <span key={e} className="rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold capitalize text-primary">{e}</span>
+                          <span
+                            key={e}
+                            className="rounded-full border border-blue-300/50 bg-blue-500/25 px-2 py-0.5 text-[10px] font-semibold capitalize text-blue-200"
+                          >
+                            {e}
+                          </span>
                         ))}
-                        {!bw && badges.overflow ? <span className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground">+{badges.overflow}</span> : null}
+                        {!bw && badges.overflow ? (
+                          <span className="rounded-full border border-white/30 px-2 py-0.5 text-[10px] text-white/70">
+                            +{badges.overflow}
+                          </span>
+                        ) : null}
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+
+                    {user ? (
+                      <span
+                        aria-label={mine?.fav ? "Favourite" : "Not favourite"}
+                        className="absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full bg-black/40 text-white/70"
+                      >
+                        <Heart className={`h-5 w-5 ${mine?.fav ? "fill-blue-300 text-blue-300" : ""}`} />
+                      </span>
+                    ) : null}
+                  </div>
                 );
               })}
             </div>
