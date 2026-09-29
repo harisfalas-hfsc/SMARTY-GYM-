@@ -327,19 +327,16 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const uploadImage = async (file: File) => {
     setIsUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `editor-images/${fileName}`;
+      const fileExt = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const fileName = `editor-${crypto.randomUUID()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('editor-uploads')
-        .upload(filePath, file);
+        .from('smarty-workout-images')
+        .upload(fileName, file, { contentType: file.type || undefined });
 
       if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('editor-uploads')
-        .getPublicUrl(filePath);
+      const publicUrl = `/api/public/workout-cover/${fileName}`;
 
       editor.chain().focus().setImage({ src: publicUrl }).run();
       toast.success('Image uploaded successfully');
