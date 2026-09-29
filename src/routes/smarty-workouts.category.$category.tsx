@@ -166,26 +166,21 @@ function CategoryPage() {
                 const mine = mineById[w.id];
                 const badges = equipmentBadges(w.equipment);
                 return (
-                  <Link key={w.id} to="/smarty-workouts/$workoutId" params={{ workoutId: w.id }} className="group overflow-hidden rounded-lg border-2 border-border bg-card transition hover:border-primary hover:shadow-lg">
-                    <div className="relative aspect-[3/2] bg-muted">
-                      <img src={w.image_url ?? detail.image} alt={w.name} loading="lazy" className="h-full w-full object-cover" />
-                      <span className="absolute left-2 top-2 rounded-full bg-background/90 px-2 py-1 text-[11px] font-semibold text-foreground shadow-sm">{bw ? "Bodyweight" : "Equipment"}</span>
-                      {mine?.fav && (
-                        <span className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-background/90 shadow-sm" aria-label="Favourite"><Heart className="h-4 w-4 fill-primary text-primary" /></span>
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-primary">{categoryLabel(w.category)}</p>
-                      <h3 className="mt-1 font-bold leading-snug text-foreground">{w.name}</h3>
-                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                  <Link key={w.id} to="/smarty-workouts/$workoutId" params={{ workoutId: w.id }} className="group relative block aspect-[4/5] overflow-hidden rounded-lg border-2 border-border bg-muted transition hover:border-primary hover:shadow-lg sm:aspect-[3/4]">
+                    <img src={w.image_url ?? detail.image} alt={w.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                    <span className="absolute left-2 top-2 rounded-full border border-primary/40 bg-background/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-primary shadow-sm backdrop-blur">{bw ? "Bodyweight" : "Equipment"}</span>
+                    <div className="absolute inset-x-2 bottom-2 flex flex-col items-end gap-1.5 rounded-lg bg-background/90 p-3 text-right shadow-sm backdrop-blur">
+                      <h3 className="font-bold leading-snug text-foreground">{w.name}</h3>
+                      <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-xs text-muted-foreground">
                         <span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5 text-primary" />{w.duration_min} min</span>
                         <span>{difficultyLabel(w.difficulty_stars)}</span>
                         {w.format && <span>{w.format}</span>}
                         {user && (mine?.done
                           ? <span className="inline-flex items-center gap-1 font-semibold text-primary"><CheckCircle2 className="h-3.5 w-3.5" />Completed</span>
                           : <span>Not done</span>)}
+                        {user && <Heart aria-label={mine?.fav ? "Favourite" : "Not favourite"} className={`h-4 w-4 ${mine?.fav ? "fill-primary text-primary" : "text-muted-foreground"}`} />}
                       </div>
-                      <div className="mt-2 flex flex-wrap gap-1">
+                      <div className="flex flex-wrap justify-end gap-1">
                         {(bw ? ["Bodyweight"] : badges.shown).map((e) => (
                           <span key={e} className="rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold capitalize text-primary">{e}</span>
                         ))}
