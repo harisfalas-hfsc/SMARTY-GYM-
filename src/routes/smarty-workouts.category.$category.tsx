@@ -1,6 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Clock, Heart, Loader2, Search, Star, X } from "lucide-react";
+import { CheckCircle2, Clock, Gauge, Heart, Loader2, Repeat2, Search, Star, X } from "lucide-react";
+import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { equipmentBadges } from "@/lib/format/labels";
@@ -8,7 +10,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { listSmartyWorkouts, type SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
+import { listSmartyWorkouts, setSmartyWorkoutFavorite, type SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, categoryFromSlug } from "@/lib/smarty-workout-categories";
 import { CATEGORY_FORMATS, difficultyLabel, type Category } from "@/lib/workout/spec";
@@ -77,6 +79,8 @@ function CategoryPage() {
   // The member's own progress on each ready workout (done / favourite).
   const { user } = useAuth();
   const [mineById, setMine] = useState<Record<string, { done: boolean; fav: boolean }>>({});
+  const [savingFavorite, setSavingFavorite] = useState<string | null>(null);
+  const saveFavorite = useServerFn(setSmartyWorkoutFavorite);
   useEffect(() => {
     if (!user) { setMine({}); return; }
     void supabase
@@ -93,6 +97,28 @@ function CategoryPage() {
         setMine(map);
       });
   }, [user]);
+
+  async function toggleFavorite(id: string, next: boolean) {
+    if (savingFavorite) return;
+    const previous = mineById;
+    setSavingFavorite(id);
+    setMine((current) => ({ ...current, [id]: { done: current[id]?.done ?? false, fav: next } }));
+    try {
+      const result = await saveFavorite({ data: { id, favorite: next } });
+      if ("locked" in result) {
+        setMine(previous);
+        toast.error("Premium access is required to save favourites.");
+      } else if ("error" in result) {
+        setMine(previous);
+        toast.error(result.error);
+      }
+    } catch {
+      setMine(previous);
+      toast.error("Could not save that change. Please try again.");
+    } finally {
+      setSavingFavorite(null);
+    }
+  }
 
   const formats = useMemo(() => [...new Set((rows ?? []).map((r) => r.format).filter((v): v is string => Boolean(v)))], [rows]);
 
@@ -161,85 +187,55 @@ function CategoryPage() {
               <p className="mt-1 text-sm text-muted-foreground">{rows.length ? "Try a different duration, level or equipment option." : "New sessions will appear here when they are published."}</p>
             </div>
           ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((w) => {
                 const bw = w.equipment.length === 0 || w.equipment.every((i) => i.toLowerCase() === "bodyweight");
                 const mine = mineById[w.id];
                 const badges = equipmentBadges(w.equipment);
                 return (
-                  <div key={w.id} className="relative flex aspect-[4/5] flex-col overflow-hidden rounded-2xl border-2 border-blue-400 transition hover:shadow-lg sm:aspect-[3/4]">
-                    <img src={w.image_url ?? detail.image} alt={w.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-                    <div className="absolute inset-0 bg-black/55" aria-hidden />
+                  <div key={w.id} className="relative h-56 overflow-hidden rounded-2xl border-2 border-blue-400 bg-muted transition hover:shadow-lg">
+                    <img src={w.image_url ?? detail.image} alt={w.name} loading="lazy" className="absolute inset-0 h-full w-full object-contain" />
                     <Link
                       to="/smarty-workouts/$workoutId"
                       params={{ workoutId: w.id }}
-                      className="relative block flex-1 p-4 transition hover:bg-blue-500/10"
+                      className="relative flex h-full flex-col justify-between p-3 transition hover:bg-primary/10"
                     >
-                      <p className="pr-10 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-300">
-                        {bw ? "Bodyweight" : "Equipment"}
-                      </p>
-
-                      <p className="mt-1 pr-10 font-bold leading-tight text-white">{w.name}</p>
-
-                      <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
-                        <span className="inline-flex items-center gap-1 text-white/80">
-                          <Clock className="h-3.5 w-3.5 shrink-0" />
-                          {w.duration_min} min
-                        </span>
-                        <span className="inline-flex items-center gap-0.5">
-                          {Array.from({ length: MAX_STARS }).map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-3 w-3 ${
-                                i < Math.min(MAX_STARS, Math.max(0, Math.round(w.difficulty_stars)))
-                                  ? "fill-blue-300 text-blue-300"
-                                  : "text-white/30"
-                              }`}
-                            />
-                          ))}
-                        </span>
-                        <span className="justify-self-end text-right">
-                          {user && (mine?.done ? (
-                            <span className="inline-flex items-center gap-1 font-semibold text-blue-300">
-                              <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-                              Done
-                            </span>
-                          ) : (
-                            <span className="text-white/70">Not done</span>
-                          ))}
+                      <div className="flex items-start justify-between gap-2 pr-11">
+                        <span className="rounded-md border border-primary/40 bg-card/90 px-2 py-1 text-[10px] font-bold uppercase text-primary shadow-sm backdrop-blur-sm">
+                          {bw ? "Bodyweight" : "Equipment"}
                         </span>
                       </div>
-
-                      {w.format ? (
-                        <p className="mt-1.5 text-[11px] text-white/70">{w.format} · {difficultyLabel(w.difficulty_stars)}</p>
-                      ) : (
-                        <p className="mt-1.5 text-[11px] text-white/70">{difficultyLabel(w.difficulty_stars)}</p>
-                      )}
-
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {(bw ? ["Bodyweight"] : badges.shown).map((e) => (
-                          <span
-                            key={e}
-                            className="rounded-full border border-blue-300/50 bg-blue-500/25 px-2 py-0.5 text-[10px] font-semibold capitalize text-blue-200"
-                          >
-                            {e}
+                      <div className="space-y-1.5">
+                        <p className="w-fit max-w-full rounded-md border border-border bg-card/90 px-2 py-1 text-sm font-bold leading-tight text-card-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-card-foreground shadow-sm backdrop-blur-sm"><Clock className="h-3 w-3 text-primary" />{w.duration_min} min</span>
+                          <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-card-foreground shadow-sm backdrop-blur-sm"><Gauge className="h-3 w-3 text-primary" />{difficultyLabel(w.difficulty_stars)}</span>
+                          {w.format ? <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-card-foreground shadow-sm backdrop-blur-sm"><Repeat2 className="h-3 w-3 text-primary" />{w.format}</span> : null}
+                          <span className="inline-flex items-center gap-0.5 rounded-md border border-border bg-card/90 px-2 py-1 shadow-sm backdrop-blur-sm">
+                            {Array.from({ length: MAX_STARS }).map((_, i) => <Star key={i} className={`h-3 w-3 ${i < Math.min(MAX_STARS, Math.max(0, Math.round(w.difficulty_stars))) ? "fill-primary text-primary" : "text-muted-foreground/40"}`} />)}
                           </span>
-                        ))}
-                        {!bw && badges.overflow ? (
-                          <span className="rounded-full border border-white/30 px-2 py-0.5 text-[10px] text-white/70">
-                            +{badges.overflow}
-                          </span>
-                        ) : null}
+                          {user ? <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-card-foreground shadow-sm backdrop-blur-sm">{mine?.done ? <><CheckCircle2 className="h-3 w-3 text-primary" />Done</> : "Not done"}</span> : null}
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {(bw ? ["Bodyweight"] : badges.shown).map((e) => <span key={e} className="rounded-md border border-primary/40 bg-card/90 px-2 py-1 text-[10px] font-semibold capitalize text-primary shadow-sm backdrop-blur-sm">{e}</span>)}
+                          {!bw && badges.overflow ? <span className="rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-muted-foreground shadow-sm backdrop-blur-sm">+{badges.overflow}</span> : null}
+                        </div>
                       </div>
                     </Link>
 
                     {user ? (
-                      <span
-                        aria-label={mine?.fav ? "Favourite" : "Not favourite"}
-                        className="absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full bg-black/40 text-white/70"
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        aria-label={mine?.fav ? "Remove from favourites" : "Mark as favourite"}
+                        aria-pressed={Boolean(mine?.fav)}
+                        disabled={savingFavorite === w.id}
+                        onClick={() => void toggleFavorite(w.id, !mine?.fav)}
+                        className="absolute right-2 top-2 bg-card/90 text-muted-foreground shadow-sm backdrop-blur-sm hover:text-destructive"
                       >
-                        <Heart className={`h-5 w-5 ${mine?.fav ? "fill-blue-300 text-blue-300" : ""}`} />
-                      </span>
+                        {savingFavorite === w.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Heart className={`h-5 w-5 ${mine?.fav ? "fill-destructive text-destructive" : ""}`} />}
+                      </Button>
                     ) : null}
                   </div>
                 );

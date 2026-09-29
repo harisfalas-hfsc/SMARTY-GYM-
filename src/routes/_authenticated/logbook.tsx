@@ -234,9 +234,9 @@ function WorkoutCard({
         aria-label={r.is_favorite ? "Remove from favourites" : "Mark as favourite"}
         aria-pressed={Boolean(r.is_favorite)}
         onClick={() => onToggleFavorite?.(r.id, !r.is_favorite)}
-        className="absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full text-muted-foreground transition hover:bg-primary/10 hover:text-primary"
+        className="absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
       >
-        <Heart className={`h-5 w-5 ${r.is_favorite ? "fill-primary text-primary" : ""}`} />
+        <Heart className={`h-5 w-5 ${r.is_favorite ? "fill-destructive text-destructive" : ""}`} />
       </button>
     </div>
   );

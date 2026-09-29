@@ -267,7 +267,7 @@ export function WorkoutDisplay({
             title={previewMode ? "Disabled in administrator preview" : undefined}
           >
             <Heart
-              className={`mr-1.5 h-4 w-4 shrink-0 ${favorite ? "fill-primary text-primary" : ""}`}
+              className={`mr-1.5 h-4 w-4 shrink-0 ${favorite ? "fill-destructive text-destructive" : ""}`}
             />
             {favorite ? "Saved" : "Save"}
           </Button>
