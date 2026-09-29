@@ -416,7 +416,7 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
                     ...prev,
                     category: value,
                     focus: FOCUS_CATEGORIES.includes(value as Category) ? prev.focus : null,
-                    format: req ?? (CATEGORY_FORMATS[value as Category] ?? []).includes(prev.format as never) ? (req ?? prev.format) : null,
+                    format: req ?? ((CATEGORY_FORMATS[value as Category] ?? []).includes(prev.format as never) ? prev.format : null),
                   }));
                 }}
               >
