@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Clock3, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ type GenerationState = {
 
 export function PendingGenerationCard() {
   const readPending = useServerFn(getPendingGeneration);
+  const inLogbook = useRouterState({ select: (s) => s.location.pathname.startsWith("/logbook") });
   const [generation, setGeneration] = useState<GenerationState | null>(null);
 
   useEffect(() => {
@@ -54,12 +55,18 @@ export function PendingGenerationCard() {
           <p className="font-bold">Workout in progress</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {generation.status === "building"
-              ? "Your workout is being built now. You can safely leave this page."
-              : "We're still preparing this workout. It will appear in your Logbook shortly — no action needed."}
+              ? inLogbook
+                ? "Your workout is being built now. It will appear in this list shortly."
+                : "Your workout is being built now. You can safely leave this page."
+              : inLogbook
+                ? "We're still preparing this workout. It will appear in this list shortly — no action needed."
+                : "We're still preparing this workout. It will appear in your Logbook shortly — no action needed."}
           </p>
-          <Button asChild variant="link" className="mt-1 h-auto p-0 font-bold">
-            <Link to="/logbook" search={{ filter: "all", view: "list" }}>Check my Logbook</Link>
-          </Button>
+          {!inLogbook && (
+            <Button asChild variant="link" className="mt-1 h-auto p-0 font-bold">
+              <Link to="/logbook" search={{ filter: "all", view: "list" }}>Check my Logbook</Link>
+            </Button>
+          )}
         </div>
       </div>
     </section>
