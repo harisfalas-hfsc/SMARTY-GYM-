@@ -94,7 +94,7 @@ function CategoryPage() {
   const clear = () => { setSearch(""); setEquipment(ALL); setDuration(ALL); setDifficulty(ALL); setFormat(ALL); };
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-[1600px] lg:px-8 lg:py-16 xl:px-12">
       <Link to="/smarty-workouts" className="mb-3 inline-block text-xs font-bold uppercase tracking-wider text-primary">← Smarty Workouts</Link>
       <PageHeader image={detail.image} eyebrow="SMARTY WORKOUTS" title={categoryLabel(category)} subtitle={detail.description} />
 
@@ -137,7 +137,7 @@ function CategoryPage() {
               <p className="mt-1 text-sm text-muted-foreground">{rows.length ? "Try a different duration, level or equipment option." : "New sessions will appear here when they are published."}</p>
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((w) => {
                 const bw = w.equipment.length === 0 || w.equipment.every((i) => i.toLowerCase() === "bodyweight");
                 return (

@@ -12,6 +12,8 @@ import {
   Activity,
   Trophy,
   BookOpen,
+  Clock,
+  Dumbbell,
 } from "lucide-react";
 import heroCity from "@/assets/about-desktop/hero-city-running.jpg";
 import heroBarbell from "@/assets/about-desktop/hero-barbell-lift.jpg";
@@ -19,6 +21,7 @@ import heroRopes from "@/assets/about-desktop/hero-battle-ropes.jpg";
 import heroTimer from "@/assets/about-desktop/hero-timer-tablet.jpg";
 import imgWorkouts from "@/assets/about-desktop/hero-workouts-bright.jpg";
 import imgTools from "@/assets/about-desktop/hero-tools.jpg";
+import imgBlog from "@/assets/about-desktop/hero-blog.jpg";
 import imgAbout from "@/assets/about-smartygym-card.jpg";
 import imgCreate from "@/assets/create-workout-card.jpg";
 import imgWod from "@/assets/hero-wod-card.jpg";
@@ -50,7 +53,7 @@ type Section = {
   cta: { label: string; to: string };
 };
 
-const sections: Section[] = [
+const aboutSections: Section[] = [
   {
     id: "what",
     image: imgWorkouts,
@@ -122,6 +125,89 @@ const sections: Section[] = [
   },
 ];
 
+const homeSections: Section[] = [
+  {
+    id: "smarty-workouts",
+    image: imgWorkouts,
+    tag: "Smarty Workouts",
+    lead: "Ready workouts, built to",
+    accentWord: "train now",
+    green: true,
+    description:
+      "Choose from Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates. Every session is designed by Haris Falas and ready when you are.",
+    items: [
+      { id: "strength", title: "Strength & Muscle Building", meta: "Structured sets and reps", icon: Dumbbell },
+      { id: "conditioning", title: "Conditioning & Challenge", meta: "Efficient, purposeful formats", icon: Activity },
+      { id: "mobility", title: "Mobility & Pilates", meta: "Controlled movement and recovery", icon: RefreshCw },
+    ],
+    cta: { label: "Explore Smarty Workouts", to: "/smarty-workouts" },
+  },
+  {
+    id: "create-workout",
+    image: imgCreate,
+    tag: "Create Your Own Workout",
+    lead: "Your goal, time and gear,",
+    accentWord: "one complete session",
+    green: false,
+    description:
+      "Tell Smarty Coach what you want to train, how you feel, how much time you have and what equipment is available. Your workout is built around your Training Profile and your circumstances today.",
+    items: [
+      { id: "personal", title: "Personalized", meta: "Built around your profile", icon: SlidersHorizontal },
+      { id: "science", title: "Science-informed", meta: "Coherent, coach-like programming", icon: FlaskConical },
+      { id: "adaptive", title: "Adaptive", meta: "Matches today's energy and equipment", icon: Brain },
+    ],
+    cta: { label: "Create Your Own Workout", to: "/create-your-workout" },
+  },
+  {
+    id: "workout-of-the-day",
+    image: imgWod,
+    tag: "Workout of the Day",
+    lead: "Two planned workouts,",
+    accentWord: "every day",
+    green: true,
+    description:
+      "Receive one bodyweight session and one equipment session, programmed around your profile and training history. Open your daily pair and train without having to plan the next step.",
+    items: [
+      { id: "bodyweight", title: "Bodyweight Workout", meta: "Train anywhere", icon: Activity },
+      { id: "equipment", title: "Equipment Workout", meta: "Use the gear available to you", icon: Dumbbell },
+      { id: "planned", title: "Planned Progression", meta: "Balanced across your training cycle", icon: TrendingUp },
+    ],
+    cta: { label: "Open Workout of the Day", to: "/wod" },
+  },
+  {
+    id: "smarty-tools",
+    image: imgTools,
+    tag: "Smarty Tools",
+    lead: "Practical training tools,",
+    accentWord: "always ready",
+    green: false,
+    description:
+      "Use focused tools for the moments around your workout: calculate training loads, track rounds and keep your session timing clear without leaving Smarty Gym.",
+    items: [
+      { id: "calculator", title: "1RM Calculator", meta: "Estimate and plan your working loads", icon: TrendingUp, to: "/tools/1rm-calculator" },
+      { id: "timer", title: "Workout Timer", meta: "Time intervals and training blocks", icon: Clock, to: "/tools/workout-timer" },
+      { id: "rounds", title: "Rounds Tracker", meta: "Keep every round accounted for", icon: ClipboardCheck, to: "/tools/rounds-tracker" },
+    ],
+    cta: { label: "Explore Smarty Tools", to: "/tools" },
+  },
+  {
+    id: "smarty-blog",
+    image: imgBlog,
+    tag: "Smarty Blog",
+    lead: "Training knowledge,",
+    accentWord: "made useful",
+    green: true,
+    description:
+      "Read practical insights on training, recovery, performance and the thinking behind better programming, written to help you understand not only what to do, but why it works.",
+    items: [
+      { id: "training", title: "Training Insights", meta: "Strength, conditioning and progression", icon: Dumbbell },
+      { id: "recovery", title: "Recovery & Readiness", meta: "Train with better timing and awareness", icon: RefreshCw },
+      { id: "method", title: "The Smarty Method", meta: "The science behind the system", icon: BookOpen, to: "/the-smarty-method" },
+    ],
+    cta: { label: "Read the Smarty Blog", to: "/blog" },
+  },
+];
+
 
 function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
   const Icon = item.icon;
@@ -169,8 +255,9 @@ function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
 }
 
 /** Desktop-only About layout mirroring the old SmartyGym desktop homepage. */
-export function DesktopAboutLanding() {
+export function DesktopAboutLanding({ page = "home" }: { page?: "home" | "about" }) {
   const [slide, setSlide] = useState(0);
+  const displayedSections = page === "about" ? aboutSections : homeSections;
   useEffect(() => {
     const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 2750);
     return () => clearInterval(id);
@@ -202,7 +289,7 @@ export function DesktopAboutLanding() {
         <div className="relative z-10 h-full">
           <div className="mx-auto w-full max-w-[1080px] px-6 pt-[144px]">
             <div className="w-[640px] max-w-full text-left">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">About Smarty Gym</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{page === "about" ? "About Smarty Gym" : "Smarty Gym"}</p>
               <h2 className="mt-2 text-[60px] font-extrabold uppercase leading-[1.05] tracking-tight text-hero-foreground">
                 <span className="block whitespace-nowrap">Your Gym Re-imagined</span>
                 <span className="block whitespace-nowrap text-primary">Anywhere, Anytime.</span>
@@ -236,7 +323,7 @@ export function DesktopAboutLanding() {
       </section>
 
       <div>
-        {sections.map((s, idx) => {
+        {displayedSections.map((s, idx) => {
           const reverse = idx % 2 === 1;
           const accent = s.green ? "text-green-600 dark:text-green-500" : "text-primary";
           const bar = s.green ? "bg-green-600 dark:bg-green-500" : "bg-primary";
