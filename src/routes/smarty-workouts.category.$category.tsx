@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Clock, Heart, Loader2, Search, X } from "lucide-react";
+import { CheckCircle2, Clock, Heart, Loader2, Search, Star, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { equipmentBadges } from "@/lib/format/labels";
@@ -54,6 +54,7 @@ export const Route = createFileRoute("/smarty-workouts/category/$category")({
 });
 
 const ALL = "all";
+const MAX_STARS = 3;
 
 function CategoryPage() {
   const { category } = Route.useLoaderData();
