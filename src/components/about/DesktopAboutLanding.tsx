@@ -12,6 +12,8 @@ import {
   Activity,
   Trophy,
   BookOpen,
+  Clock,
+  Dumbbell,
 } from "lucide-react";
 import heroCity from "@/assets/about-desktop/hero-city-running.jpg";
 import heroBarbell from "@/assets/about-desktop/hero-barbell-lift.jpg";
