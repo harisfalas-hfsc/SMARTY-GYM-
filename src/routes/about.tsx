@@ -227,16 +227,31 @@ function AboutPage() {
       </SmartyCard>
 
       <p className="mt-6 text-center text-sm font-bold leading-snug sm:text-base">
-        You don&apos;t choose a workout.
+        Choose a ready workout or create one for today.
         <br />
-        <span className="text-primary">Smarty Coach creates the workout you need today.</span>
+        <span className="text-primary">Train your way with Smarty Gym.</span>
       </p>
 
       <h2 className="mt-10 text-center text-xl font-extrabold uppercase sm:text-2xl">
-        Three ways to train. One daily <span className="text-primary">ritual.</span>
+        Four ways to train. One daily <span className="text-primary">ritual.</span>
       </h2>
 
       <div className="mx-auto mt-4 grid max-w-xl gap-4 lg:max-w-none lg:grid-cols-2">
+        <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+            Smarty Workouts
+          </p>
+          <p className="mt-2 text-base font-extrabold uppercase">Ready when you are</p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Browse ready workouts across eight categories, from Strength and Cardio to Mobility &amp;
+            Stability and Pilates. See the workout details before choosing one; Premium members can
+            open it, train it and track their performance in the logbook.
+          </p>
+          <Button asChild className="mt-auto w-full font-extrabold uppercase">
+            <Link to="/smarty-workouts">Explore Smarty Workouts</Link>
+          </Button>
+        </div>
+
         <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Create your workout

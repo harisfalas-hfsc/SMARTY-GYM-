@@ -91,12 +91,13 @@ const aboutSections: Section[] = [
     id: "train",
     image: heroRopes,
     tag: "Train",
-    lead: "Three ways to train. One daily",
+    lead: "Four ways to train. One daily",
     accentWord: "ritual",
     green: true,
     description:
-      "You don't choose a workout — Smarty Coach creates the workout you need today. Build one on demand, receive two planned workouts every day, train what the community shares, and move, reset and recover with a fresh daily ritual.",
+      "Choose a ready Smarty Workout, build one on demand, receive two planned workouts every day, or train what the community shares. Move, reset and recover with a fresh daily ritual.",
     items: [
+      { id: "smarty-workouts", title: "Smarty Workouts", meta: "Ready workouts in eight categories", image: imgWorkouts, to: "/smarty-workouts" },
       { id: "create", title: "Create Your Workout", meta: "On demand, whenever you want", image: imgCreate, to: "/create-your-workout" },
       { id: "wod", title: "Workout of the Day", meta: "Two planned workouts, every day", image: imgWod, to: "/wod" },
       { id: "community", title: "Smarty Community", meta: "Train, like, comment and climb the rankings", image: imgCommunity, to: "/community" },
