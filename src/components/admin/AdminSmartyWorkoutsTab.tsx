@@ -113,7 +113,7 @@ export function AdminSmartyWorkoutsTab() {
       {loading ? (
         <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
       ) : shown.length === 0 ? (
-        <p className="py-10 text-center text-sm text-muted-foreground">No Smarty Workouts yet.</p>
+        <p className="py-10 text-center text-sm text-muted-foreground">You have not created any Smarty Workouts yet. Press "Create New Workout" to make your first one — it will appear here to view, edit, hide, show or delete.</p>
       ) : (
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {shown.map((w) => (
