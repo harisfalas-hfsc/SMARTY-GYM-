@@ -17,3 +17,4 @@
 - [ ] Verify ritual PDF export opens in a real PDF app; Word file in Word
 - [ ] Emoji rendering unverified on a real phone (test browser lacks emoji fonts)
 - [ ] Installed Android app is an old binary — needs rebuild/resubmission (no store credentials)
+- [x] Make WOD delivery immediate and cap manual workout generation before guaranteed fallback.

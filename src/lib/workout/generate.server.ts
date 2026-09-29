@@ -32,6 +32,7 @@ import {
 } from "./spec";
 
 const MODEL = "google/gemini-3.1-pro-preview";
+const MODEL_TIMEOUT_MS = 18_000;
 
 export type GenerateInput = {
   category: Category;
@@ -53,6 +54,8 @@ export type GenerateInput = {
   recentIds?: string[];
 
   athlete?: AthleteContext;
+  /** Daily delivery prioritises guaranteed speed over generated prose. */
+  deterministic?: boolean;
 };
 
 export type GeneratedWorkout = {
@@ -112,6 +115,8 @@ async function askModel(system: string, user: string): Promise<Record<string, un
     system,
     messages: [{ role: "user", content: user }],
     temperature: 0.85,
+    maxRetries: 0,
+    timeout: { totalMs: MODEL_TIMEOUT_MS },
     // Priority serving tier: same model, same quality, lower latency.
     providerOptions: { lovable: { service_tier: "priority" } },
   });
@@ -151,7 +156,7 @@ export async function generateWorkoutContent(
   });
 
 
-  if (pool.length < 12) {
+  if (pool.length < 1) {
     throw new Error("Not enough exercises match those settings. Try different equipment.");
   }
 
@@ -249,10 +254,9 @@ export async function generateWorkoutContent(
     );
 
   const libraryById = new Map(all.map((e) => [e.id, e]));
-  type Candidate = GeneratedWorkout & { score: number };
-  let best: Candidate | null = null;
   let lastError = "";
-  for (let attempt = 0; attempt < 3; attempt++) {
+  const modelAttempts = input.deterministic ? 0 : 1;
+  for (let attempt = 0; attempt < modelAttempts; attempt++) {
     let payload: Record<string, unknown>;
     try {
       const { system, user } = buildWorkoutPrompt({
@@ -276,9 +280,7 @@ export async function generateWorkoutContent(
 
       payload = await askModel(
         extraRules ? `${system}\n\nADDITIONAL COACH RULES (highest priority)\n${extraRules}` : system,
-        attempt === 0
-          ? user
-          : `${user}\n\nPREVIOUS ATTEMPT REJECTED: ${lastError}\nFix it and return valid JSON.`,
+        user,
       );
     } catch (err) {
       lastError = err instanceof Error ? err.message : "model call failed";
@@ -324,7 +326,7 @@ export async function generateWorkoutContent(
       estimatedMinutes: estimateWorkMinutes(enforced.html),
     });
 
-    const candidate: Candidate = {
+    const candidate: GeneratedWorkout & { score: number } = {
       name,
       description_html: String(payload["description"] ?? ""),
       main_workout: enforced.html,
@@ -334,17 +336,8 @@ export async function generateWorkoutContent(
       needs_review: warnings.length > 0 || quality.score < 75,
       score: quality.score,
     };
-    if (!best || candidate.score > best.score) best = candidate;
-
-    if (candidate.score < 80 && attempt < 2) {
-      lastError = `Session quality ${candidate.score}/100. Fix: ${quality.issues.slice(0, 4).join(" ")}`;
-      continue;
-    }
-
-    return { ...best, format, pool, duration };
+    return { ...candidate, format, pool, duration };
   }
-
-  if (best) return { ...best, format, pool, duration };
 
   // ---- Reliability fallback: deterministic template engine ---------------------
   const pack = buildPackWorkout(pool, all, {
@@ -365,12 +358,6 @@ export async function generateWorkoutContent(
     ...enforcedPack.errors,
     ...packValidation.errors,
   ]);
-  if (packSplit.structural.length) {
-    throw new Error(
-      `Smarty Coach could not build a compliant workout (${lastError}). Please try again.`,
-    );
-  }
-
   const copy = packCopy({
     category: input.category,
     format,
@@ -389,6 +376,7 @@ export async function generateWorkoutContent(
       ...enforcedPack.warnings,
       ...packValidation.warnings,
       ...packSplit.soft,
+      ...packSplit.structural.map((issue) => `Fallback adjustment: ${issue}`),
     ],
     needs_review: true,
     format,
