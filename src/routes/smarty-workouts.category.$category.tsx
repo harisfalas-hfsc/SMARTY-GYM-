@@ -198,13 +198,11 @@ function CategoryPage() {
                       params={{ workoutId: w.id }}
                       className="relative block h-full p-4 transition hover:bg-primary/10"
                     >
-                      <div className="flex items-center justify-between gap-2 pr-11">
-                        <span className="rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur-sm">
-                          {bw ? "Bodyweight" : "Equipment"}
-                        </span>
-                      </div>
+                      <p className="w-fit max-w-[calc(100%-2.75rem)] rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-base font-bold leading-tight text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
 
-                      <p className="mt-2 w-fit max-w-[calc(100%-2.75rem)] rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-base font-bold leading-tight text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
+                      <p className="mt-2 w-fit rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur-sm">
+                        {bw ? "Bodyweight" : "Equipment"}
+                      </p>
 
                       <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
                         <span className="inline-flex w-fit items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm">
