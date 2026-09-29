@@ -219,7 +219,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
   const { freeAccessMode } = useFreeAccessMode();
   const sections: {
     heading: string;
-    items: { to: string; label: string; Icon: typeof Home }[];
+    items: { to: string; label: string; Icon: typeof Home; className?: string }[];
   }[] = [
     ...(isAuthed
       ? [
@@ -246,7 +246,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
       heading: "SmartyGym",
       items: [
         { to: "/", label: "Home", Icon: Home },
-        { to: "/about", label: "About", Icon: Info },
+        { to: "/about", label: "About", Icon: Info, className: "lg:hidden" },
         { to: "/how-it-works", label: "How It Works", Icon: BookOpen },
         ...(isAuthed ? [] : [{ to: "/smarty-workouts", label: "Smarty Workouts", Icon: Dumbbell }]),
         ...(isAuthed ? [] : [{ to: "/wod", label: "Workout of the Day", Icon: CalendarCheck }]),
@@ -306,8 +306,8 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
                 {s.heading}
               </div>
               <ul className="space-y-1">
-                {s.items.map(({ to, label, Icon }) => (
-                  <li key={to}>
+                {s.items.map(({ to, label, Icon, className }) => (
+                  <li key={to} className={className}>
                     <Link
                       to={to}
                       onClick={onClose}
