@@ -100,6 +100,7 @@ export function useAuth() {
       setUser(s?.user ?? null);
       setLoading(false);
       void loadProfile(s?.user ?? null);
+      maybeAnnounce(s?.user ?? null);
     });
     return () => {
       active = false;
