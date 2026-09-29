@@ -71,6 +71,21 @@ export function sourceLabel(row: LogbookRow): string {
   return "Smarty Coach";
 }
 
+/**
+ * Smarty Workouts are general workouts. Opening one creates a private copy,
+ * but it only belongs in the logbook once the member does something with it:
+ * completes, favourites, schedules or starts it.
+ */
+export function belongsInLogbook(row: Pick<LogbookRow, "created_by" | "status" | "is_favorite" | "scheduled_at">): boolean {
+  if (!String(row.created_by ?? "").startsWith("smarty:")) return true;
+  return (
+    row.status === "completed" ||
+    Boolean(row.is_favorite) ||
+    Boolean(row.scheduled_at) ||
+    (row.status !== "created" && row.status !== "ready")
+  );
+}
+
 export function dayKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
     d.getDate(),
