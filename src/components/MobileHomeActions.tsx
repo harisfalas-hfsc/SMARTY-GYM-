@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Sparkles, BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
+import { Sparkles, BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, Layers, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
+import smartyWorkoutsImage from "@/assets/smarty-workouts-card.jpg";
 import sharedWorkoutsImage from "@/assets/shared-workouts-card.jpg";
 import founderPhoto from "@/assets/haris-falas-coach.jpg";
 import createWorkoutImage from "@/assets/create-workout-card.jpg";
@@ -21,7 +22,7 @@ import { cn } from "@/lib/utils";
 type CarouselAction = {
   title: string;
   description: string;
-  to: "/create-your-workout" | "/wod" | "/pricing" | "/shared-workouts";
+  to: "/create-your-workout" | "/wod" | "/pricing" | "/shared-workouts" | "/smarty-workouts";
   image: string;
   icon: LucideIcon;
   objectPosition?: string;
@@ -65,6 +66,13 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
       image: createWorkoutImage,
       icon: Dumbbell,
       objectPosition: "center center",
+    },
+    {
+      title: "Smarty Workouts",
+      description: "Ready-made workouts in every category",
+      to: "/smarty-workouts",
+      image: smartyWorkoutsImage,
+      icon: Layers,
     },
     {
       title: "Workout of the Day",
