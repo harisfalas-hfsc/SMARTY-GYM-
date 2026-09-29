@@ -447,3 +447,79 @@ export const startSmartyWorkout = createServerFn({ method: "POST" })
     if (error) return { error: "Could not start this workout. Please try again." };
     return { workoutId: (created as { id: string }).id };
   });
+
+/** Favourite a ready workout directly from its discovery card. */
+export const setSmartyWorkoutFavorite = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; favorite: boolean }) =>
+    z.object({ id: z.string().uuid(), favorite: z.boolean() }).parse(d),
+  )
+  .handler(async ({ context, data }): Promise<{ workoutId: string; favorite: boolean } | { locked: true } | { error: string }> => {
+    const { getAccessStateForUser } = await import("@/lib/eligibility.server");
+    const access = (await getAccessStateForUser(context.supabase as never, context.userId)) as { premium?: boolean };
+    if (!access?.premium) return { locked: true };
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const tag = `smarty:${data.id}`;
+    const { data: existing } = await supabaseAdmin
+      .from("workouts")
+      .select("id")
+      .eq("user_id", context.userId)
+      .eq("created_by", tag)
+      .eq("is_favorite", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (existing) {
+      const workoutId = (existing as { id: string }).id;
+      const { error } = await supabaseAdmin
+        .from("workouts")
+        .update({ is_favorite: data.favorite })
+        .eq("id", workoutId)
+        .eq("user_id", context.userId);
+      if (error) return { error: "Could not update this favourite." };
+      return { workoutId, favorite: data.favorite };
+    }
+
+    if (!data.favorite) return { error: "Could not find this favourite." };
+
+    const { data: src } = await supabaseAdmin
+      .from("smarty_workouts")
+      .select("*")
+      .eq("id", data.id)
+      .eq("is_visible", true)
+      .maybeSingle();
+    if (!src) return { error: "Workout not found" };
+    const s = src as unknown as SmartyWorkout & { description?: string | null };
+    const { data: created, error } = await supabaseAdmin
+      .from("workouts")
+      .insert({
+        user_id: context.userId,
+        status: "created",
+        created_by: tag,
+        is_favorite: true,
+        is_shared: false,
+        is_wod: false,
+        name: s.name,
+        category: s.category,
+        format: s.format,
+        focus: s.focus,
+        difficulty_stars: s.difficulty_stars,
+        duration_min: s.duration_min,
+        duration_label: s.duration_label,
+        equipment: s.equipment ?? [],
+        location: s.location,
+        image_url: s.image_url,
+        description_html: s.description_html,
+        instructions_html: s.instructions_html,
+        tips_html: s.tips_html,
+        main_workout: s.main_workout,
+        tips: [],
+        plan: {},
+      } as never)
+      .select("id")
+      .single();
+    if (error || !created) return { error: "Could not save this favourite." };
+    return { workoutId: (created as { id: string }).id, favorite: true };
+  });
