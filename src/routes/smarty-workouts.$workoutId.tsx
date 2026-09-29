@@ -100,12 +100,12 @@ function Notice({ back, card, title, text, children }: { back: React.ReactNode; 
   const fallback = category && CATEGORY_DETAILS[category] ? CATEGORY_DETAILS[category].image : undefined;
   const bodyweight = card ? card.equipment.length === 0 || card.equipment.every((i) => i.toLowerCase() === "bodyweight") : false;
   return (
-    <div className="mx-auto w-full max-w-xl px-4 py-12 lg:max-w-3xl">
+    <div className="mx-auto w-full max-w-xl px-4 py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       {back}
       {card && (
         <div className="mt-4 overflow-hidden rounded-2xl border-2 border-border bg-card">
           {(card.image_url ?? fallback) && (
-            <div className="relative aspect-[3/2] bg-muted">
+            <div className="relative aspect-[3/2] bg-muted lg:aspect-[16/7]">
               <img src={card.image_url ?? fallback} alt={card.name} className="h-full w-full object-cover" />
               <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold text-primary shadow-sm"><Lock className="h-3.5 w-3.5" />Premium</span>
             </div>

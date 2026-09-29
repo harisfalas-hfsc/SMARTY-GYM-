@@ -311,7 +311,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
                     <Link
                       to={to}
                       onClick={onClose}
-                      className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10${to === "/about" ? " lg:hidden" : ""}`}
+                      className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10"
                       style={{ textDecoration: "none" }}
                     >
                       <span className="grid h-9 w-9 place-items-center rounded-xl brand-gradient-soft text-primary">
