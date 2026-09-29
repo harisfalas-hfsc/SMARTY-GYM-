@@ -1,7 +1,7 @@
 # Roadmap
 
-- [ ] Add Smarty Workouts to mobile and desktop About without changing the desktop homepage.
-- [ ] Explain Smarty Workouts in How It Works and FAQ, with links and accurate access wording.
+- [x] Add Smarty Workouts to mobile and desktop About without changing the desktop homepage.
+- [x] Explain Smarty Workouts in How It Works and FAQ, with links and accurate access wording.
 
 - [x] Replace the mobile About carousel card with Shared Workouts and a new photo.
 - [x] Add a standalone Shared Workouts page and link below Workout of the Day in the menu.
