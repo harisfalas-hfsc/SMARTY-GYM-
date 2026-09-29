@@ -205,7 +205,6 @@ function CategoryPage() {
                       </div>
 
                       <p className="mt-2 w-fit max-w-[calc(100%-2.75rem)] rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-base font-bold leading-tight text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
-                      <p className="mt-1 w-fit rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] text-workout-overlay-muted shadow-sm backdrop-blur-sm">Smarty Workout</p>
 
                       <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
                         <span className="inline-flex w-fit items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm">
