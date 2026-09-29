@@ -1,3 +1,4 @@
+import { priorityIds } from "./priority";
 // Deterministic template ("pack") engine.
 // Builds a fully compliant session straight from the filtered pool — no model
 // involved. Used as the reliability fallback when the AI cannot produce a
@@ -211,8 +212,20 @@ export function buildPackWorkout(
   const used = new Set<string>();
 
   const mainCount = isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
+  // Coach's priority exercises (the 3 × 50 lists) come first; the rest of the
+  // legal pool is only used to top up when too few priority matches exist.
+  // Mobility & Stability and Pilates keep their own specialist vocabulary.
+  const usePriority = input.category !== "MOBILITY & STABILITY" && input.category !== "PILATES";
+  const prio = usePriority ? priorityIds(pool) : new Set<string>();
+  const prioPool = pool.filter((e) => prio.has(e.id));
+  const pickPriorityFirst = (count: number, favs: string[]) => {
+    const first = prioPool.length ? pickBalanced(prioPool, count, { favoriteIds: favs, exclude: used }) : [];
+    if (first.length >= count) return first;
+    const ex = new Set([...used, ...first.map((e) => e.id)]);
+    return [...first, ...pickBalanced(pool, count - first.length, { favoriteIds: favs, exclude: ex })];
+  };
   const mainPicks = fillFromLegalPool(
-    pickBalanced(pool, mainCount, { favoriteIds: favouriteIds, exclude: used }),
+    pickPriorityFirst(mainCount, favouriteIds),
     pool,
     mainCount,
   );
@@ -220,7 +233,7 @@ export function buildPackWorkout(
 
   const finisherPicks = noFinisher
     ? []
-    : fillFromLegalPool(pickBalanced(pool, 3, { exclude: used }), mainPicks.length ? mainPicks : pool, 3);
+    : fillFromLegalPool(pickPriorityFirst(3, []), mainPicks.length ? mainPicks : pool, 3);
   finisherPicks.forEach((e) => used.add(e.id));
 
   const seed = input.seed ?? (mainPicks[0]?.id.length ?? 5) * 31 + input.minutes;

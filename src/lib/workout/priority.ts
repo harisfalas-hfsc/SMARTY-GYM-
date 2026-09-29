@@ -201,3 +201,24 @@ export function priorityIds(library: PoolExercise[]): Set<string> {
   cache.set(library, ids);
   return ids;
 }
+
+/**
+ * Returns a rejection reason when fewer than 70% of the main-workout and
+ * finisher exercises are coach priority exercises; null when compliant.
+ */
+export function priorityShortfall(html: string, library: PoolExercise[], category: string): string | null {
+  if (category === "MOBILITY & STABILITY" || category === "PILATES") return null;
+  const start = html.search(/Main Workout/i);
+  if (start < 0) return null;
+  const rest = html.slice(start);
+  const end = rest.search(/Cool Down/i);
+  const main = end > 0 ? rest.slice(0, end) : rest;
+  const ids = [...main.matchAll(/\{\{exercise:([^:}]+):/g)].map((m) => m[1]!);
+  if (!ids.length) return null;
+  const prio = priorityIds(library);
+  if (prio.size < 6) return null; // environment has too few priority matches to demand it
+  const hits = ids.filter((id) => prio.has(id)).length;
+  return hits / ids.length >= 0.7
+    ? null
+    : `Only ${hits} of ${ids.length} main exercises are coach priority exercises (need at least 70%).`;
+}

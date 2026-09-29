@@ -4,6 +4,7 @@ import { buildWorkoutPrompt, type AthleteContext } from "./prompt.server";
 import { enforceWorkout, estimateWorkMinutes } from "./enforce.server";
 import { validateWorkout } from "./validate.server";
 import { classifyIssues, classifyIssuesForFallback } from "@/lib/workout-validation";
+import { priorityShortfall } from "./priority";
 import { buildPackWorkout, packCopy } from "./pack.server";
 import { buildSessionPlan, scoreWorkout } from "./programming";
 import { parseWorkoutSteps } from "./parse-steps";
@@ -294,6 +295,14 @@ export async function generateWorkoutContent(
     const enforcedSplit = classifyIssues(enforced.errors);
     if (enforcedSplit.structural.length) {
       lastError = enforcedSplit.structural.join(" ");
+      continue;
+    }
+
+    // Coach priority rule: the main work and finisher must be built mostly
+    // from the 3 × 50 priority exercises (Mobility & Stability / Pilates exempt).
+    const prioShort = priorityShortfall(enforced.html, pool, input.category);
+    if (prioShort) {
+      lastError = prioShort;
       continue;
     }
 
