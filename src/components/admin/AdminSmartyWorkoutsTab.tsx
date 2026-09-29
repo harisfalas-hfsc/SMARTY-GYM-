@@ -646,7 +646,7 @@ function MemberSectionsPreview() {
         Preview — members use the sections below on their own copy of this workout.
       </p>
       <section className={box}>
-        <h3 className="text-lg font-bold">Status &amp; schedule</h3>
+        <h3 className="text-lg font-bold">Workout status</h3>
         <p className="mt-1 text-sm text-muted-foreground">Mark it done or not done, or schedule a day and time.</p>
       </section>
       <section className={box}>
