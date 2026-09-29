@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Search, Sparkles, Trash2, Upload } from "lucide-react";
+import { Copy, Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Search, Sparkles, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ import {
   SMARTY_WORKOUT_CATEGORIES,
   adminCreateBlankSmartyWorkout,
   adminCreateSmartyWorkout,
+  adminDuplicateSmartyWorkout,
   adminDeleteSmartyWorkout,
   adminListSmartyWorkouts,
   adminSmartyWorkoutImage,
@@ -27,6 +28,7 @@ import {
 import { CATEGORY_FORMATS, FOCUS_CATEGORIES, STRENGTH_FOCUS, type Category } from "@/lib/workout/spec";
 import { EQUIPMENT, LOCATIONS, TIMES } from "@/lib/coach-options";
 import { categoryLabel, smartyToWorkoutRow } from "@/lib/smarty-workout-row";
+import { SMARTY_DRAFT_EVENT, takeSmartyDraft } from "@/lib/admin-smarty-draft";
 
 const LEVELS = [
   { v: 1, label: "Beginner" },
@@ -49,6 +51,7 @@ export function AdminSmartyWorkoutsTab() {
   const [editing, setEditing] = useState<SmartyWorkout | null>(null);
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
   const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
+  const dup = useServerFn(adminDuplicateSmartyWorkout);
 
   async function startBlank() {
     setBlankBusy(true);
@@ -57,16 +60,28 @@ export function AdminSmartyWorkoutsTab() {
       setBlankBusy(false);
       return toast.error(r.error);
     }
-    const l = await list();
     setBlankBusy(false);
     setChoosing(false);
+    await openDraft(r.id);
+  }
+
+  async function openDraft(id: string) {
+    const l = await list();
     if ("error" in l) return toast.error(l.error);
     setRows(l.workouts);
-    const w = l.workouts.find((x) => x.id === r.id);
+    setLoading(false);
+    const w = l.workouts.find((x) => x.id === id);
     if (w) {
       setDraftId(w.id);
       setEditing(w);
     }
+  }
+
+  async function duplicate(w: SmartyWorkout) {
+    const r = await dup({ data: { source: "smarty", id: w.id } });
+    if ("error" in r) return toast.error(r.error);
+    toast.success("Copy created — edit it and press Save Workout.");
+    await openDraft(r.id);
   }
 
   const load = useCallback(async () => {
@@ -78,7 +93,16 @@ export function AdminSmartyWorkoutsTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
-    void load();
+    const pendingId = takeSmartyDraft();
+    if (pendingId) void openDraft(pendingId);
+    else void load();
+    const onDraft = () => {
+      const id = takeSmartyDraft();
+      if (id) void openDraft(id);
+    };
+    window.addEventListener(SMARTY_DRAFT_EVENT, onDraft);
+    return () => window.removeEventListener(SMARTY_DRAFT_EVENT, onDraft);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load]);
 
   const shown = rows.filter(
@@ -155,6 +179,7 @@ export function AdminSmartyWorkoutsTab() {
                 <div className="mt-2 flex flex-wrap gap-1">
                   <Button size="sm" variant="outline" onClick={() => setViewing(w)}><Eye className="mr-1 h-3.5 w-3.5" />View</Button>
                   <Button size="sm" variant="outline" onClick={() => setEditing(w)}><Pencil className="mr-1 h-3.5 w-3.5" />Edit</Button>
+                  <Button size="sm" variant="outline" onClick={() => void duplicate(w)}><Copy className="mr-1 h-3.5 w-3.5" />Duplicate</Button>
                   <Button size="sm" variant="outline" onClick={() => void toggle(w)}>
                     {w.is_visible ? <><EyeOff className="mr-1 h-3.5 w-3.5" />Hide</> : <><Eye className="mr-1 h-3.5 w-3.5" />Show</>}
                   </Button>

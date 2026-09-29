@@ -201,6 +201,58 @@ export const adminCreateSmartyWorkout = createServerFn({ method: "POST" })
     }
   });
 
+const dupSchema = z.object({ source: z.enum(["smarty", "member"]), id: z.string().uuid() });
+
+/** Copies a Smarty Workout or a member's workout into a new hidden Smarty Workout draft. */
+export const adminDuplicateSmartyWorkout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: z.infer<typeof dupSchema>) => dupSchema.parse(d))
+  .handler(async ({ context, data }): Promise<{ id: string } | { error: string }> => {
+    try {
+      await assertAdmin(context.supabase, context.userId);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const table = data.source === "smarty" ? "smarty_workouts" : "workouts";
+      const { data: src, error: readErr } = await supabaseAdmin
+        .from(table as "smarty_workouts")
+        .select("*")
+        .eq("id", data.id)
+        .maybeSingle();
+      if (readErr) return { error: readErr.message };
+      if (!src) return { error: "Workout not found" };
+      const s = src as Record<string, unknown>;
+      const cats = SMARTY_WORKOUT_CATEGORIES as readonly string[];
+      const rawCat = String(s["category"] ?? "").toUpperCase();
+      const category = cats.includes(rawCat) ? rawCat : "STRENGTH";
+      const str = (k: string) => (s[k] == null ? null : String(s[k]));
+      const { data: row, error } = await supabaseAdmin
+        .from("smarty_workouts")
+        .insert({
+          name: `${String(s["name"] ?? "Workout")} (copy)`.slice(0, 200),
+          category,
+          format: str("format"),
+          focus: str("focus"),
+          difficulty_stars: Math.min(3, Math.max(1, Number(s["difficulty_stars"] ?? 2) || 2)),
+          duration_min: Math.min(180, Math.max(1, Number(s["duration_min"] ?? 30) || 30)),
+          duration_label: str("duration_label"),
+          equipment: Array.isArray(s["equipment"]) ? (s["equipment"] as string[]) : [],
+          location: str("location"),
+          image_url: str("image_url"),
+          description_html: str("description_html"),
+          main_workout: str("main_workout"),
+          instructions_html: str("instructions_html"),
+          tips_html: str("tips_html"),
+          is_visible: false,
+          created_by: context.userId,
+        })
+        .select("id")
+        .single();
+      if (error || !row) return { error: error?.message ?? "Could not duplicate the workout" };
+      return { id: row.id };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Failed" };
+    }
+  });
+
 const blankSchema = z.object({ main_workout: z.string().max(20000) });
 
 /** Manual creation: a hidden draft the admin fills in themselves in the editor (no AI). */
