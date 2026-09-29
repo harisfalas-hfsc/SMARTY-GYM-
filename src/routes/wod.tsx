@@ -147,7 +147,7 @@ function WorkoutCard({ workout }: { workout: WodWorkout }) {
             ? "Recovery"
             : bodyweight
               ? "Bodyweight"
-              : "With equipment"}
+              : "Equipment"}
         </span>
       </p>
       <p className="mt-1 line-clamp-2 text-sm font-extrabold leading-tight">{workout.name}</p>

@@ -60,6 +60,7 @@ import {
   type LogbookFilter as Filter,
 } from "@/lib/logbook/rows";
 import { equipmentBadges } from "@/lib/format/labels";
+import { belongsInLogbook } from "@/lib/logbook/rows";
 import { getSessionLoads } from "@/lib/performance.functions";
 import { ProgressSection } from "@/components/progress/ProgressSection";
 import { SessionDebriefDialog } from "@/components/workout/SessionDebriefDialog";
@@ -891,7 +892,7 @@ function LogbookContent() {
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) throw new Error(error.message);
-    return (data as unknown as Row[]) ?? [];
+    return ((data as unknown as Row[]) ?? []).filter(belongsInLogbook);
   }, []);
 
   const cached = useRemoteData<Row[]>("logbook:list", loadRows, {

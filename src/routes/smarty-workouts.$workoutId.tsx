@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { Clock, Loader2, Lock } from "lucide-react";
+import { Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
@@ -107,7 +107,6 @@ function Notice({ back, card, title, text, children }: { back: React.ReactNode; 
           {(card.image_url ?? fallback) && (
             <div className="relative aspect-[3/2] bg-muted lg:aspect-[16/7]">
               <img src={card.image_url ?? fallback} alt={card.name} className="h-full w-full object-cover" />
-              <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold text-primary shadow-sm"><Lock className="h-3.5 w-3.5" />Premium</span>
             </div>
           )}
           <div className="p-5">
@@ -118,7 +117,7 @@ function Notice({ back, card, title, text, children }: { back: React.ReactNode; 
               <span className="inline-flex items-center gap-1"><Clock className="h-4 w-4 text-primary" />{card.duration_min} min</span>
               <span>{difficultyLabel(card.difficulty_stars)}</span>
               {card.format && <span>{card.format}</span>}
-              <span>{bodyweight ? "No equipment" : card.equipment.join(", ")}</span>
+              <span>{bodyweight ? "Bodyweight" : card.equipment.join(", ")}</span>
             </div>
           </div>
         </div>
