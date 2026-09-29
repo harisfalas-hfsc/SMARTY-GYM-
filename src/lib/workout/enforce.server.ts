@@ -366,19 +366,73 @@ export function estimateSessionMinutes(html: string): number {
   return all;
 }
 
+/**
+ * The block's own declared clock or round count ("EMOM for 27 minutes",
+ * "AMRAP 20 min", "Complete 4 rounds"), read from the intro text of each
+ * section (paragraphs outside the exercise list).
+ */
+function declaredBlocks(html: string): Map<string, { minutes?: number; rounds?: number }> {
+  const out = new Map<string, { minutes?: number; rounds?: number }>();
+  const parts = html.split(/<p[^>]*>[^<]*<strong><u>/i);
+  for (const part of parts.slice(1)) {
+    const title = part.slice(0, part.indexOf("<")).trim();
+    const section = sectionOf(title);
+    if (!section) continue;
+    const intro = part
+      .replace(/<ul[\s\S]*?<\/ul>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+      .slice(title.length)
+      .toLowerCase();
+    const minutes = intro.match(/\b(\d{1,3})\s*(?:-\s*)?(?:min|mins|minute|minutes)\b/)?.[1];
+    const rounds = intro.match(/\b(\d{1,2})\s*(?:continuous\s+)?rounds?\b/)?.[1];
+    out.set(section, {
+      ...(minutes ? { minutes: Number(minutes) } : {}),
+      ...(rounds ? { rounds: Number(rounds) } : {}),
+    });
+  }
+  return out;
+}
+
+function sectionOf(title: string): string | null {
+  const t = title.toLowerCase();
+  for (const name of ["Soft Tissue Preparation", "Activation", "Warm-up", "Main Workout", "Finisher", "Cool-down"]) {
+    if (t.startsWith(name.toLowerCase())) return name;
+  }
+  return null;
+}
+
 function estimateMinutes(html: string, sections: string[], transitionSec: number): number {
   const steps = parseWorkoutSteps(html).filter((s) => sections.includes(s.section));
-  let seconds = 0;
+  const declared = declaredBlocks(html);
+  const perSection = new Map<string, number>();
   for (const step of steps) {
     const timing = parseStepTiming(step);
-    if (timing.mode === "tabata") seconds += timing.rounds * (timing.work + timing.rest);
-    else if (timing.mode === "timed") seconds += timing.seconds + 20;
+    let s = 0;
+    const setsOfTime = step.prescription.match(/(\d+)\s*sets?\s+of\s+(\d+)\s*(?:sec|secs|seconds|s)\b/i);
+    if (timing.mode === "tabata") s += timing.rounds * (timing.work + timing.rest);
+    else if (setsOfTime) s += Number(setsOfTime[1]) * (Number(setsOfTime[2]) + 15);
+    else if (timing.mode === "timed") s += timing.seconds + 20;
     else {
       const sets = Number(step.prescription.match(/(\d+)\s*sets?/i)?.[1] ?? 1);
       const reps = Number(step.prescription.match(/(\d+)\s*reps?/i)?.[1] ?? 12);
-      seconds += sets * (reps * 4 + 60);
+      s += sets * (reps * 4 + 60);
     }
-    seconds += transitionSec;
+    s += transitionSec;
+    perSection.set(step.section, (perSection.get(step.section) ?? 0) + s);
+  }
+  let seconds = 0;
+  for (const [section, est] of perSection) {
+    const d = declared.get(section);
+    const isTabata = /tabata/i.test(section) || steps.some((st) => st.section === section && /tabata/i.test(`${st.subSection ?? ""}`));
+    if (d?.minutes && (section === "Main Workout" || section === "Finisher")) {
+      // A clock-driven block (EMOM / AMRAP / For Time cap) lasts its declared time.
+      seconds += Math.max(est, d.minutes * 60);
+    } else if (d?.rounds && d.rounds > 1 && !isTabata && (section === "Main Workout" || section === "Finisher")) {
+      const perRound = steps
+        .filter((st) => st.section === section)
+        .every((st) => !/\d+\s*sets?/i.test(st.prescription));
+      seconds += perRound ? est * d.rounds : est;
+    } else seconds += est;
   }
   return Math.round(seconds / 60);
 }
