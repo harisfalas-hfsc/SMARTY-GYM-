@@ -168,7 +168,7 @@ export function AdminSmartyWorkoutsTab() {
       <Dialog open={Boolean(viewing)} onOpenChange={(o) => !o && setViewing(null)}>
         <DialogContent className="max-h-[95dvh] w-[calc(100vw-1rem)] max-w-6xl overflow-y-auto p-0 sm:w-full">
           <DialogHeader className="px-4 pt-4"><DialogTitle className="pr-8 text-left">{viewing?.name}</DialogTitle></DialogHeader>
-          {viewing && <WorkoutDisplay workout={smartyToWorkoutRow(viewing)} previewMode onComplete={() => {}} />}
+          {viewing && <WorkoutDisplay workout={smartyToWorkoutRow(viewing)} previewMode onComplete={() => {}}><MemberSectionsPreview /></WorkoutDisplay>}
         </DialogContent>
       </Dialog>
     </div>
@@ -401,7 +401,7 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
         {preview ? (
           <div className="-mx-6">
             <Button variant="outline" size="sm" className="mx-6 mb-2" onClick={() => setPreview(false)}>Back to editor</Button>
-            <WorkoutDisplay workout={smartyToWorkoutRow(w)} previewMode onComplete={() => {}} />
+            <WorkoutDisplay workout={smartyToWorkoutRow(w)} previewMode onComplete={() => {}}><MemberSectionsPreview /></WorkoutDisplay>
           </div>
         ) : (
           <div className="space-y-4 pb-4">
@@ -634,5 +634,28 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</span>
       {children}
     </label>
+  );
+}
+
+/** What members see under the workout on their own copy. Shown for review only. */
+function MemberSectionsPreview() {
+  const box = "mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5";
+  return (
+    <div aria-disabled className="pointer-events-none select-none">
+      <p className="mt-6 rounded-xl bg-muted px-3 py-2 text-center text-xs text-muted-foreground">
+        Preview — members use the sections below on their own copy of this workout.
+      </p>
+      <section className={box}>
+        <h3 className="text-lg font-bold">Status &amp; schedule</h3>
+        <p className="mt-1 text-sm text-muted-foreground">Mark it done or not done, or schedule a day and time.</p>
+      </section>
+      <section className={box}>
+        <h3 className="text-lg font-bold">Log performance</h3>
+        <p className="mt-1 text-sm text-muted-foreground">Sets, reps, weight, time and effort for every exercise.</p>
+      </section>
+      <Button size="lg" className="mt-6 h-14 w-full rounded-2xl text-base font-bold" disabled>
+        I finished this workout
+      </Button>
+    </div>
   );
 }

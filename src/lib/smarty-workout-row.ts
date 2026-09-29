@@ -20,7 +20,7 @@ export function smartyToWorkoutRow(w: SmartyWorkout): WorkoutRow {
     instructions_html: w.instructions_html,
     tips_html: w.tips_html,
     main_workout: w.main_workout,
-    created_by: null,
+    created_by: `smarty:${w.id}`,
     status: "ready",
   };
 }

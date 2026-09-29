@@ -84,6 +84,8 @@ export function WorkoutDisplay({
   children?: React.ReactNode;
 }) {
   const html = workout.main_workout ?? "";
+  // Smarty Workouts are already public for everyone — no sharing.
+  const noShare = String(workout.created_by ?? "").startsWith("smarty");
   const ids = useMemo(() => uniqueTokenIds(html), [html]);
   const steps = useMemo(() => parseWorkoutSteps(html), [html]);
   const softTissue = useMemo(() => extractSoftTissue(html), [html]);
