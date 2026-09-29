@@ -196,8 +196,8 @@ const cache = new WeakMap<PoolExercise[], Set<string>>();
 export function priorityIds(library: PoolExercise[]): Set<string> {
   const hit = cache.get(library);
   if (hit) return hit;
-  const ids = new Set<string>();
-  for (const n of ALL_PRIORITY_NAMES) for (const e of resolvePriority(n, library)) ids.add(e.id);
+  // One closest library match per coach name, for this pool's environment.
+  const ids = new Set(orderedPriority(library).map((e) => e.id));
   cache.set(library, ids);
   return ids;
 }
