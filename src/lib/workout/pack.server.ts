@@ -116,6 +116,20 @@ export function pickBalanced(
   return picked;
 }
 
+/** Fill a prescribed block from the legal pool even when a narrow filter leaves few rows. */
+function fillFromLegalPool(picks: PoolExercise[], pool: PoolExercise[], count: number): PoolExercise[] {
+  if (!pool.length || count <= 0) return [];
+  const out = picks.slice(0, count);
+  let cursor = 0;
+  while (out.length < count) {
+    const next = pool[cursor % pool.length];
+    if (!next) break;
+    out.push(next);
+    cursor += 1;
+  }
+  return out;
+}
+
 type Dose = { text: string; protocol: string | null };
 
 function doseFor(format: Format, level: DifficultyLevel, index: number): Dose {
@@ -197,14 +211,16 @@ export function buildPackWorkout(
   const used = new Set<string>();
 
   const mainCount = isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
-  const mainPicks = pickBalanced(pool, mainCount, { favoriteIds: favouriteIds, exclude: used });
+  const mainPicks = fillFromLegalPool(
+    pickBalanced(pool, mainCount, { favoriteIds: favouriteIds, exclude: used }),
+    pool,
+    mainCount,
+  );
   mainPicks.forEach((e) => used.add(e.id));
 
   const finisherPicks = noFinisher
     ? []
-    : pickBalanced(pool, 3, { exclude: used }).length >= 3
-      ? pickBalanced(pool, 3, { exclude: used })
-      : mainPicks.slice(0, 3);
+    : fillFromLegalPool(pickBalanced(pool, 3, { exclude: used }), mainPicks.length ? mainPicks : pool, 3);
   finisherPicks.forEach((e) => used.add(e.id));
 
   const seed = input.seed ?? (mainPicks[0]?.id.length ?? 5) * 31 + input.minutes;

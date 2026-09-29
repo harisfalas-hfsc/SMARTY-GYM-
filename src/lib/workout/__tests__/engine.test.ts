@@ -3,6 +3,7 @@ import { parseStepTiming, parseWorkoutSteps } from "@/lib/workout/parse-steps";
 import { enforceWorkout } from "@/lib/workout/enforce.server";
 import { isValidName } from "@/lib/workout/generate.server";
 import { filterPool, type PoolExercise } from "@/lib/workout/pool.server";
+import { buildPackWorkout } from "@/lib/workout/pack.server";
 
 const ex = (id: string, name: string, extra: Partial<PoolExercise> = {}): PoolExercise => ({
   id,
@@ -196,5 +197,19 @@ describe("filterPool equipment allowlist", () => {
     });
 
     expect(result.map((item) => item.id)).toEqual(["d1", "k1", "b1"]);
+  });
+});
+
+describe("deterministic delivery fallback", () => {
+  it("fills a complete workout even when only one legal exercise survives", () => {
+    const only = [ex("solo", "bodyweight squat")];
+    const result = buildPackWorkout(only, only, {
+      category: "STRENGTH",
+      format: "REPS & SETS",
+      level: "beginner",
+      minutes: 30,
+    });
+    expect((result.html.match(/\{\{exercise:solo:bodyweight squat\}\}/g) ?? []).length).toBeGreaterThanOrEqual(5);
+    expect(result.html).toContain("Main Workout");
   });
 });
