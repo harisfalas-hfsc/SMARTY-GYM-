@@ -215,7 +215,7 @@ export function WorkoutDisplay({
             </span>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            Created by {workout.created_by ?? "Haris Falas"} · Smarty Coach
+            Created by {!workout.created_by || noShare ? "Haris Falas" : workout.created_by} · Smarty Coach
           </p>
 
           {workout.image_url ? (
