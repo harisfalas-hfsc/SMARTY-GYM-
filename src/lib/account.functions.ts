@@ -67,6 +67,38 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
   });
 
 /**
+ * Fires when a brand-new account signs in for the first time (email or Google),
+ * so the administrator gets an email about every new sign-up.
+ * Only accounts created in the last 2 days qualify; the idempotency key keeps it to one email.
+ */
+export const announceNewSignup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ ok: true }> => {
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data } = await supabaseAdmin.auth.admin.getUserById(context.userId);
+      const u = data?.user;
+      if (!u?.created_at || Date.now() - new Date(u.created_at).getTime() > 2 * 86400000) {
+        return { ok: true };
+      }
+      const meta = (u.user_metadata ?? {}) as Record<string, unknown>;
+      const name = (meta.full_name as string) || (meta.name as string) || "";
+      const provider = (u.app_metadata?.provider as string) || "email";
+      const { notifyAdmins } = await import("@/lib/admin-alert.server");
+      await notifyAdmins({
+        kind: "Member",
+        title: "New sign-up",
+        details: `${name ? name + " — " : ""}${u.email ?? context.userId} created a Smarty Gym account (${provider}) on ${new Date(u.created_at).toUTCString()}.`,
+        link: "https://smartygym.com/admin",
+        dedupeKey: `new-signup-${context.userId}`,
+      });
+    } catch {
+      /* alerts never block sign-in */
+    }
+    return { ok: true };
+  });
+
+/**
  * Fires once, when a member finishes their Training Profile for the first time,
  * so the administrator gets an email about the new active member.
  */
