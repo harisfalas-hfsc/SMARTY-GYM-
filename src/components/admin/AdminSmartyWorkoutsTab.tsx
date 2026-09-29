@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Search, Sparkles, Trash2, Upload } from "lucide-react";
+import { Copy, Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Search, Sparkles, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -179,6 +179,7 @@ export function AdminSmartyWorkoutsTab() {
                 <div className="mt-2 flex flex-wrap gap-1">
                   <Button size="sm" variant="outline" onClick={() => setViewing(w)}><Eye className="mr-1 h-3.5 w-3.5" />View</Button>
                   <Button size="sm" variant="outline" onClick={() => setEditing(w)}><Pencil className="mr-1 h-3.5 w-3.5" />Edit</Button>
+                  <Button size="sm" variant="outline" onClick={() => void duplicate(w)}><Copy className="mr-1 h-3.5 w-3.5" />Duplicate</Button>
                   <Button size="sm" variant="outline" onClick={() => void toggle(w)}>
                     {w.is_visible ? <><EyeOff className="mr-1 h-3.5 w-3.5" />Hide</> : <><Eye className="mr-1 h-3.5 w-3.5" />Show</>}
                   </Button>

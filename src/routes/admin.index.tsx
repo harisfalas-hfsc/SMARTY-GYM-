@@ -35,6 +35,7 @@ import { AdminUsersTab } from "@/components/admin/AdminUsersTab";
 import { AdminRulesTab } from "@/components/admin/AdminRulesTab";
 import { AdminCycleTab } from "@/components/admin/AdminCycleTab";
 import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
+import { SMARTY_DRAFT_EVENT } from "@/lib/admin-smarty-draft";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminSmartyWorkoutsTab } from "@/components/admin/AdminSmartyWorkoutsTab";
 import { AdminMessagesTab } from "@/components/admin/AdminMessagesTab";
@@ -174,6 +175,12 @@ function readSeen(): Record<string, string> {
 function AdminPage() {
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [section, setSection] = useState<SectionKey | null>(null);
+  const [workoutTab, setWorkoutTab] = useState("smarty");
+  useEffect(() => {
+    const onDraft = () => setWorkoutTab("smarty");
+    window.addEventListener(SMARTY_DRAFT_EVENT, onDraft);
+    return () => window.removeEventListener(SMARTY_DRAFT_EVENT, onDraft);
+  }, []);
   const { badges, markSeen } = useAdminBadges(authed === true, section);
   const unreadMessages = badges.messages ?? 0;
 
@@ -246,7 +253,7 @@ function AdminPage() {
           {section === "rules" && <AdminRulesTab />}
           {section === "cycle" && <AdminCycleTab />}
           {section === "workouts" && (
-            <Tabs defaultValue="smarty" className="rounded-2xl border-2 border-blue-400 bg-card p-3 sm:p-4">
+            <Tabs value={workoutTab} onValueChange={setWorkoutTab} className="rounded-2xl border-2 border-blue-400 bg-card p-3 sm:p-4">
               <TabsList className="grid h-auto w-full grid-cols-2">
                 <TabsTrigger value="smarty" className="py-2 font-bold">My Smarty Workouts</TabsTrigger>
                 <TabsTrigger value="members" className="py-2 font-bold">Member workouts</TabsTrigger>

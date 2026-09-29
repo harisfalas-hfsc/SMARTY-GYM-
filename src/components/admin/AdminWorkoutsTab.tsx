@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, Search, RefreshCw, CalendarCheck, Dumbbell, X } from "lucide-react";
+import { Loader2, Search, RefreshCw, CalendarCheck, Dumbbell, X, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +21,9 @@ import {
   type AdminWorkoutDetail,
 } from "@/lib/admin.functions";
 import { formatDateTime } from "@/lib/date-format";
+import { toast } from "sonner";
+import { adminDuplicateSmartyWorkout } from "@/lib/smarty-workouts.functions";
+import { requestSmartyDraft } from "@/lib/admin-smarty-draft";
 
 type Props = {
   /** When set, the archive is scoped to one member (their full logbook). */
@@ -40,6 +43,17 @@ const emptyFacets: AdminWorkoutFacets = {
 export function AdminWorkoutsTab({ userId, title }: Props) {
   const listWorkouts = useServerFn(adminListWorkouts);
   const getWorkout = useServerFn(adminGetWorkout);
+  const duplicateFn = useServerFn(adminDuplicateSmartyWorkout);
+  const [dupBusy, setDupBusy] = useState(false);
+  async function duplicate(id: string) {
+    setDupBusy(true);
+    const r = await duplicateFn({ data: { source: "member", id } });
+    setDupBusy(false);
+    if ("error" in r) return toast.error(r.error);
+    toast.success("Copied into My Smarty Workouts — edit it and press Save Workout.");
+    setOpenId(null);
+    requestSmartyDraft(r.id);
+  }
 
   const [rows, setRows] = useState<AdminWorkoutRow[]>([]);
   const [facets, setFacets] = useState<AdminWorkoutFacets>(emptyFacets);
@@ -364,6 +378,10 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
                   createdAt={detail.created_at}
                   wodDate={detail.is_wod ? detail.wod_date : null}
                 />
+                <Button size="sm" className="mt-3" disabled={dupBusy} onClick={() => void duplicate(detail.id)}>
+                  {dupBusy ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Copy className="mr-1 h-3.5 w-3.5" />}
+                  Duplicate as Smarty Workout
+                </Button>
               </div>
               <WorkoutDisplay workout={detail} previewMode onComplete={() => {}} />
             </div>
