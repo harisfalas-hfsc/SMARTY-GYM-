@@ -251,6 +251,7 @@ function WorkoutPage() {
 
 
 
+      {!String(w.created_by ?? "").startsWith("smarty:") && (
       <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <h3 className="flex items-center gap-2 text-lg font-bold">
           <Share2 className="h-4 w-4 text-primary" /> Smarty Community
@@ -274,6 +275,7 @@ function WorkoutPage() {
           </Button>
         </div>
       </section>
+      )}
 
       {!done ? (
         <Button size="lg" className="mt-6 h-14 w-full rounded-2xl text-base font-bold" onClick={complete}>

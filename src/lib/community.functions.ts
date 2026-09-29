@@ -17,6 +17,16 @@ export const shareWorkout = createServerFn({ method: "POST" })
   .inputValidator((input: { workoutId: string; shared: boolean }) => input)
   .handler(async ({ context, data }) => {
     await requirePremium(context as never);
+    if (data.shared) {
+      const { data: own } = await context.supabase
+        .from("workouts")
+        .select("created_by")
+        .eq("id", data.workoutId)
+        .maybeSingle();
+      if (String((own as { created_by?: string | null } | null)?.created_by ?? "").startsWith("smarty:")) {
+        throw new Error("Smarty Workouts are already published for everyone and cannot be shared.");
+      }
+    }
     const { error } = await context.supabase
       .from("workouts")
       .update({
