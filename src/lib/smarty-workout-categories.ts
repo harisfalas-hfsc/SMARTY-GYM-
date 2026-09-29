@@ -1,7 +1,7 @@
 import { Activity, Dumbbell, Flame, Flower2, HeartPulse, Move3d, Sparkles, Zap, type LucideIcon } from "lucide-react";
 import { SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
 import strengthImage from "@/assets/smarty-workout-categories/strength.jpg";
-import muscleImage from "@/assets/smarty-workout-categories/muscle-building-realistic.jpg";
+import muscleImage from "@/assets/smarty-workout-categories/muscle-building-curl.jpg";
 import calorieImage from "@/assets/smarty-workout-categories/calorie-burning.jpg";
 import cardioImage from "@/assets/smarty-workout-categories/cardio.jpg";
 import metabolicImage from "@/assets/smarty-workout-categories/metabolic-grounded.jpg";
