@@ -245,11 +245,11 @@ export function WorkoutDisplay({
           ) : null}
 
           <Button size="lg" className="mt-6 w-full" onClick={() => setPlayer(true)}>
-            {previewMode ? "Open Player Preview" : "Start Your Workout"}
+            Start Your Workout
           </Button>
         </header>
 
-        <div className="sticky top-2 z-20 mt-5 grid grid-cols-3 gap-2 rounded-2xl border-2 border-blue-400 bg-card/95 p-2 backdrop-blur">
+        <div className={`sticky top-2 z-20 mt-5 grid ${noShare ? "grid-cols-2" : "grid-cols-3"} gap-2 rounded-2xl border-2 border-blue-400 bg-card/95 p-2 backdrop-blur`}>
           <Button
             variant="secondary"
             className="h-11 w-full rounded-xl px-2 text-sm font-semibold"
@@ -267,8 +267,9 @@ export function WorkoutDisplay({
             <Heart
               className={`mr-1.5 h-4 w-4 shrink-0 ${favorite ? "fill-primary text-primary" : ""}`}
             />
-            {previewMode ? "Preview" : favorite ? "Saved" : "Save"}
+            {favorite ? "Saved" : "Save"}
           </Button>
+{!noShare && (
           <Button
             variant="secondary"
             className="h-11 w-full rounded-xl px-2 text-sm font-semibold"
@@ -276,6 +277,7 @@ export function WorkoutDisplay({
           >
             <Share2 className="mr-1.5 h-4 w-4 shrink-0" /> Share
           </Button>
+          )}
         </div>
 
         <article className="workout-html mt-5 rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
