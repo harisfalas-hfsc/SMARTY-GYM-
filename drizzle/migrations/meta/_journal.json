@@ -421,6 +421,13 @@
       "when": 1790661447666,
       "tag": "0059_smarty_workouts",
       "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1790662801730,
+      "tag": "0060_smarty_workouts_card_columns_only",
+      "breakpoints": true
     }
   ]
 }

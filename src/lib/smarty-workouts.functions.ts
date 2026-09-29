@@ -38,10 +38,10 @@ export type SmartyWorkout = {
 
 export type SmartyWorkoutCard = Pick<
   SmartyWorkout,
-  "id" | "name" | "category" | "format" | "difficulty_stars" | "duration_min" | "equipment" | "image_url"
+  "id" | "name" | "category" | "format" | "focus" | "difficulty_stars" | "duration_min" | "equipment" | "location" | "image_url"
 >;
 
-const CARD_COLS = "id,name,category,format,difficulty_stars,duration_min,equipment,image_url";
+const CARD_COLS = "id,name,category,format,focus,difficulty_stars,duration_min,equipment,location,image_url";
 
 async function publicClient() {
   const { createClient } = await import("@supabase/supabase-js");
@@ -88,8 +88,9 @@ export const getSmartyWorkout = createServerFn({ method: "POST" })
       const access = (await getAccessStateForUser(context.supabase as never, context.userId)) as {
         premium?: boolean;
       };
-      if (access?.premium === false) return { locked: true };
-      const { data: row } = await context.supabase
+      if (!access?.premium) return { locked: true };
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: row } = await supabaseAdmin
         .from("smarty_workouts")
         .select("*")
         .eq("id", data.id)
@@ -106,7 +107,8 @@ export const adminListSmartyWorkouts = createServerFn({ method: "POST" })
   .handler(async ({ context }): Promise<{ workouts: SmartyWorkout[] } | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
-      const { data, error } = await context.supabase
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data, error } = await supabaseAdmin
         .from("smarty_workouts")
         .select("*")
         .order("created_at", { ascending: false });

@@ -69,6 +69,7 @@ import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicRecoverAbandonedRouteImport } from './routes/api/public/recover-abandoned'
 import { Route as ApiPublicRetryGenerationsRouteImport } from './routes/api/public/retry-generations'
 import { Route as CommunityWorkoutWorkoutIdRouteImport } from './routes/community.workout.$workoutId'
+import { Route as SmartyWorkoutsCategoryCategoryRouteImport } from './routes/smarty-workouts.category.$category'
 import { Route as ApiPublicBlogCoverFileRouteImport } from './routes/api/public/blog-cover/$file'
 import { Route as ApiPublicHooksDailyRunRouteImport } from './routes/api/public/hooks/daily-run'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -384,6 +385,12 @@ const CommunityWorkoutWorkoutIdRoute =
     path: '/community/workout/$workoutId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SmartyWorkoutsCategoryCategoryRoute =
+  SmartyWorkoutsCategoryCategoryRouteImport.update({
+    id: '/smarty-workouts/category/$category',
+    path: '/smarty-workouts/category/$category',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicBlogCoverFileRoute = ApiPublicBlogCoverFileRouteImport.update({
   id: '/api/public/blog-cover/$file',
   path: '/api/public/blog-cover/$file',
@@ -483,6 +490,7 @@ export interface FileRoutesByFullPath {
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
   '/api/public/retry-generations': typeof ApiPublicRetryGenerationsRoute
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
+  '/smarty-workouts/category/$category': typeof SmartyWorkoutsCategoryCategoryRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -551,6 +559,7 @@ export interface FileRoutesByTo {
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
   '/api/public/retry-generations': typeof ApiPublicRetryGenerationsRoute
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
+  '/smarty-workouts/category/$category': typeof SmartyWorkoutsCategoryCategoryRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -621,6 +630,7 @@ export interface FileRoutesById {
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
   '/api/public/retry-generations': typeof ApiPublicRetryGenerationsRoute
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
+  '/smarty-workouts/category/$category': typeof SmartyWorkoutsCategoryCategoryRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -691,6 +701,7 @@ export interface FileRouteTypes {
     | '/api/public/recover-abandoned'
     | '/api/public/retry-generations'
     | '/community/workout/$workoutId'
+    | '/smarty-workouts/category/$category'
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
@@ -759,6 +770,7 @@ export interface FileRouteTypes {
     | '/api/public/recover-abandoned'
     | '/api/public/retry-generations'
     | '/community/workout/$workoutId'
+    | '/smarty-workouts/category/$category'
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
@@ -828,6 +840,7 @@ export interface FileRouteTypes {
     | '/api/public/recover-abandoned'
     | '/api/public/retry-generations'
     | '/community/workout/$workoutId'
+    | '/smarty-workouts/category/$category'
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
@@ -889,6 +902,7 @@ export interface RootRouteChildren {
   ApiPublicRecoverAbandonedRoute: typeof ApiPublicRecoverAbandonedRoute
   ApiPublicRetryGenerationsRoute: typeof ApiPublicRetryGenerationsRoute
   CommunityWorkoutWorkoutIdRoute: typeof CommunityWorkoutWorkoutIdRoute
+  SmartyWorkoutsCategoryCategoryRoute: typeof SmartyWorkoutsCategoryCategoryRoute
   ApiPublicBlogCoverFileRoute: typeof ApiPublicBlogCoverFileRoute
   ApiPublicHooksDailyRunRoute: typeof ApiPublicHooksDailyRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -1320,6 +1334,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CommunityWorkoutWorkoutIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/smarty-workouts/category/$category': {
+      id: '/smarty-workouts/category/$category'
+      path: '/smarty-workouts/category/$category'
+      fullPath: '/smarty-workouts/category/$category'
+      preLoaderRoute: typeof SmartyWorkoutsCategoryCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/blog-cover/$file': {
       id: '/api/public/blog-cover/$file'
       path: '/api/public/blog-cover/$file'
@@ -1452,6 +1473,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicRecoverAbandonedRoute: ApiPublicRecoverAbandonedRoute,
   ApiPublicRetryGenerationsRoute: ApiPublicRetryGenerationsRoute,
   CommunityWorkoutWorkoutIdRoute: CommunityWorkoutWorkoutIdRoute,
+  SmartyWorkoutsCategoryCategoryRoute: SmartyWorkoutsCategoryCategoryRoute,
   ApiPublicBlogCoverFileRoute: ApiPublicBlogCoverFileRoute,
   ApiPublicHooksDailyRunRoute: ApiPublicHooksDailyRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,

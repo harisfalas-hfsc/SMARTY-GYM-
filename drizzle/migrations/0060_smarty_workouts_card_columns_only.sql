@@ -1,0 +1,2 @@
+REVOKE SELECT ON public.smarty_workouts FROM anon, authenticated;
+GRANT SELECT (id, name, category, format, focus, difficulty_stars, duration_min, duration_label, equipment, location, image_url, is_visible, sort_order, created_at) ON public.smarty_workouts TO anon, authenticated;
