@@ -201,6 +201,43 @@ export const adminCreateSmartyWorkout = createServerFn({ method: "POST" })
     }
   });
 
+const blankSchema = z.object({ main_workout: z.string().max(20000) });
+
+/** Manual creation: a hidden draft the admin fills in themselves in the editor (no AI). */
+export const adminCreateBlankSmartyWorkout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: z.infer<typeof blankSchema>) => blankSchema.parse(d))
+  .handler(async ({ context, data }): Promise<{ id: string } | { error: string }> => {
+    try {
+      await assertAdmin(context.supabase, context.userId);
+      const { data: row, error } = await context.supabase
+        .from("smarty_workouts")
+        .insert({
+          name: "New Workout",
+          category: "STRENGTH",
+          format: "REPS & SETS",
+          focus: null,
+          difficulty_stars: 2,
+          duration_min: 30,
+          duration_label: "30 min",
+          equipment: ["bodyweight"],
+          location: "anywhere",
+          description_html: "",
+          main_workout: data.main_workout,
+          instructions_html: "",
+          tips_html: "",
+          is_visible: false,
+          created_by: context.userId,
+        })
+        .select("id")
+        .single();
+      if (error || !row) return { error: error?.message ?? "Could not create the workout" };
+      return { id: row.id };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Failed" };
+    }
+  });
+
 const updateSchema = z.object({
   id: z.string().uuid(),
   patch: z
