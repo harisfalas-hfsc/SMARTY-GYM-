@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Clock, Gauge, Heart, Loader2, Repeat2, Search, Star, X } from "lucide-react";
+import { CheckCircle2, Clock, Gauge, Heart, Loader2, Repeat2, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,8 +56,6 @@ export const Route = createFileRoute("/smarty-workouts/category/$category")({
 });
 
 const ALL = "all";
-const MAX_STARS = 3;
-
 function CategoryPage() {
   const { category } = Route.useLoaderData();
   const detail = CATEGORY_DETAILS[category];
@@ -194,32 +192,36 @@ function CategoryPage() {
                 const badges = equipmentBadges(w.equipment);
                 return (
                   <div key={w.id} className="relative h-56 overflow-hidden rounded-2xl border-2 border-blue-400 bg-muted transition hover:shadow-lg">
-                    <img src={w.image_url ?? detail.image} alt={w.name} loading="lazy" className="absolute inset-0 h-full w-full object-contain" />
+                    <img src={w.image_url ?? detail.image} alt={w.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                     <Link
                       to="/smarty-workouts/$workoutId"
                       params={{ workoutId: w.id }}
-                      className="relative flex h-full flex-col justify-between p-3 transition hover:bg-primary/10"
+                      className="relative block h-full p-4 transition hover:bg-primary/10"
                     >
-                      <div className="flex items-start justify-between gap-2 pr-11">
-                        <span className="rounded-md border border-primary/40 bg-card/90 px-2 py-1 text-[10px] font-bold uppercase text-primary shadow-sm backdrop-blur-sm">
+                      <div className="flex items-center justify-between gap-2 pr-11">
+                        <span className="rounded-md border border-border bg-card/90 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur-sm">
                           {bw ? "Bodyweight" : "Equipment"}
                         </span>
                       </div>
-                      <div className="space-y-1.5">
-                        <p className="w-fit max-w-full rounded-md border border-border bg-card/90 px-2 py-1 text-sm font-bold leading-tight text-card-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-card-foreground shadow-sm backdrop-blur-sm"><Clock className="h-3 w-3 text-primary" />{w.duration_min} min</span>
-                          <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-card-foreground shadow-sm backdrop-blur-sm"><Gauge className="h-3 w-3 text-primary" />{difficultyLabel(w.difficulty_stars)}</span>
-                          {w.format ? <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-card-foreground shadow-sm backdrop-blur-sm"><Repeat2 className="h-3 w-3 text-primary" />{w.format}</span> : null}
-                          <span className="inline-flex items-center gap-0.5 rounded-md border border-border bg-card/90 px-2 py-1 shadow-sm backdrop-blur-sm">
-                            {Array.from({ length: MAX_STARS }).map((_, i) => <Star key={i} className={`h-3 w-3 ${i < Math.min(MAX_STARS, Math.max(0, Math.round(w.difficulty_stars))) ? "fill-primary text-primary" : "text-muted-foreground/40"}`} />)}
-                          </span>
-                          {user ? <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-card-foreground shadow-sm backdrop-blur-sm">{mine?.done ? <><CheckCircle2 className="h-3 w-3 text-primary" />Done</> : "Not done"}</span> : null}
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {(bw ? ["Bodyweight"] : badges.shown).map((e) => <span key={e} className="rounded-md border border-primary/40 bg-card/90 px-2 py-1 text-[10px] font-semibold capitalize text-primary shadow-sm backdrop-blur-sm">{e}</span>)}
-                          {!bw && badges.overflow ? <span className="rounded-md border border-border bg-card/90 px-2 py-1 text-[10px] text-muted-foreground shadow-sm backdrop-blur-sm">+{badges.overflow}</span> : null}
-                        </div>
+
+                      <p className="mt-2 w-fit max-w-[calc(100%-2.75rem)] rounded-md border border-border bg-card/90 px-2 py-1 text-base font-bold leading-tight text-card-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
+                      <p className="mt-1 w-fit rounded-md border border-border bg-card/90 px-2 py-1 text-[11px] text-muted-foreground shadow-sm backdrop-blur-sm">Smarty Workout</p>
+
+                      <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
+                        <span className="inline-flex w-fit items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-card-foreground shadow-sm backdrop-blur-sm">
+                          <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />{w.duration_min} min
+                        </span>
+                        <span className="inline-flex w-fit items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-card-foreground shadow-sm backdrop-blur-sm">
+                          <Gauge className="h-3.5 w-3.5 shrink-0 text-primary" />{difficultyLabel(w.difficulty_stars)}
+                        </span>
+                        {user ? <span className="inline-flex w-fit items-center gap-1 justify-self-end rounded-md border border-border bg-card/90 px-2 py-1 text-card-foreground shadow-sm backdrop-blur-sm">{mine?.done ? <><CheckCircle2 className="h-3.5 w-3.5 text-primary" />Done</> : "Not done"}</span> : null}
+                      </div>
+
+                      {w.format ? <span className="mt-2 inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2 py-1 text-[11px] text-card-foreground shadow-sm backdrop-blur-sm"><Repeat2 className="h-3.5 w-3.5 text-primary" />{w.format}</span> : null}
+
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {(bw ? ["Bodyweight"] : badges.shown).map((e) => <span key={e} className="rounded-full border border-primary/40 bg-card/90 px-2 py-0.5 text-[10px] font-semibold capitalize text-primary shadow-sm backdrop-blur-sm">{e}</span>)}
+                        {!bw && badges.overflow ? <span className="rounded-full border border-border bg-card/90 px-2 py-0.5 text-[10px] text-muted-foreground shadow-sm backdrop-blur-sm">+{badges.overflow}</span> : null}
                       </div>
                     </Link>
 
