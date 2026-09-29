@@ -70,6 +70,7 @@ import { Route as CommunityWorkoutWorkoutIdRouteImport } from './routes/communit
 import { Route as ApiPublicBlogCoverFileRouteImport } from './routes/api/public/blog-cover/$file'
 import { Route as ApiPublicHooksDailyRunRouteImport } from './routes/api/public/hooks/daily-run'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicWorkoutCoverFileRouteImport } from './routes/api/public/workout-cover/$file'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -387,6 +388,12 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicWorkoutCoverFileRoute =
+  ApiPublicWorkoutCoverFileRouteImport.update({
+    id: '/api/public/workout-cover/$file',
+    path: '/api/public/workout-cover/$file',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -465,6 +472,7 @@ export interface FileRoutesByFullPath {
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/workout-cover/$file': typeof ApiPublicWorkoutCoverFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -530,6 +538,7 @@ export interface FileRoutesByTo {
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/workout-cover/$file': typeof ApiPublicWorkoutCoverFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -597,6 +606,7 @@ export interface FileRoutesById {
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/workout-cover/$file': typeof ApiPublicWorkoutCoverFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -664,6 +674,7 @@ export interface FileRouteTypes {
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
+    | '/api/public/workout-cover/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -729,6 +740,7 @@ export interface FileRouteTypes {
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
+    | '/api/public/workout-cover/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -795,6 +807,7 @@ export interface FileRouteTypes {
     | '/api/public/blog-cover/$file'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
+    | '/api/public/workout-cover/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -853,6 +866,7 @@ export interface RootRouteChildren {
   ApiPublicBlogCoverFileRoute: typeof ApiPublicBlogCoverFileRoute
   ApiPublicHooksDailyRunRoute: typeof ApiPublicHooksDailyRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicWorkoutCoverFileRoute: typeof ApiPublicWorkoutCoverFileRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -1287,6 +1301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/workout-cover/$file': {
+      id: '/api/public/workout-cover/$file'
+      path: '/api/public/workout-cover/$file'
+      fullPath: '/api/public/workout-cover/$file'
+      preLoaderRoute: typeof ApiPublicWorkoutCoverFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
       path: '/lovable/email/auth/preview'
@@ -1392,6 +1413,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicBlogCoverFileRoute: ApiPublicBlogCoverFileRoute,
   ApiPublicHooksDailyRunRoute: ApiPublicHooksDailyRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicWorkoutCoverFileRoute: ApiPublicWorkoutCoverFileRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
