@@ -56,6 +56,7 @@ import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as CommunityWorkoutsRouteImport } from './routes/community.workouts'
 import { Route as SmartyWorkoutsIndexRouteImport } from './routes/smarty-workouts.index'
+import { Route as SmartyWorkoutsWorkoutIdRouteImport } from './routes/smarty-workouts.$workoutId'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as Tools1rmCalculatorRouteImport } from './routes/tools.1rm-calculator'
 import { Route as ToolsRoundsTrackerRouteImport } from './routes/tools.rounds-tracker'
@@ -314,6 +315,11 @@ const SmartyWorkoutsIndexRoute = SmartyWorkoutsIndexRouteImport.update({
   path: '/smarty-workouts/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SmartyWorkoutsWorkoutIdRoute = SmartyWorkoutsWorkoutIdRouteImport.update({
+  id: '/smarty-workouts/$workoutId',
+  path: '/smarty-workouts/$workoutId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsIndexRoute = ToolsIndexRouteImport.update({
   id: '/tools/',
   path: '/tools/',
@@ -460,6 +466,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
   '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
@@ -527,6 +534,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
   '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
@@ -596,6 +604,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
   '/tools/workout-timer': typeof ToolsWorkoutTimerRoute
@@ -665,6 +674,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
     | '/tools/workout-timer'
@@ -732,6 +742,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
     | '/tools/workout-timer'
@@ -800,6 +811,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
     | '/tools/workout-timer'
@@ -861,6 +873,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   CommunityWorkoutsRoute: typeof CommunityWorkoutsRoute
+  SmartyWorkoutsWorkoutIdRoute: typeof SmartyWorkoutsWorkoutIdRoute
   Tools1rmCalculatorRoute: typeof Tools1rmCalculatorRoute
   ToolsRoundsTrackerRoute: typeof ToolsRoundsTrackerRoute
   ToolsWorkoutTimerRoute: typeof ToolsWorkoutTimerRoute
@@ -1216,6 +1229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SmartyWorkoutsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/smarty-workouts/$workoutId': {
+      id: '/smarty-workouts/$workoutId'
+      path: '/smarty-workouts/$workoutId'
+      fullPath: '/smarty-workouts/$workoutId'
+      preLoaderRoute: typeof SmartyWorkoutsWorkoutIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/': {
       id: '/tools/'
       path: '/tools'
@@ -1416,6 +1436,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   CommunityWorkoutsRoute: CommunityWorkoutsRoute,
+  SmartyWorkoutsWorkoutIdRoute: SmartyWorkoutsWorkoutIdRoute,
   Tools1rmCalculatorRoute: Tools1rmCalculatorRoute,
   ToolsRoundsTrackerRoute: ToolsRoundsTrackerRoute,
   ToolsWorkoutTimerRoute: ToolsWorkoutTimerRoute,
