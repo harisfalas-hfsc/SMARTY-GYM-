@@ -227,6 +227,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
             heading: "App",
             items: [
               { to: "/create-your-workout", label: "Create Your Workout", Icon: Sparkles },
+              { to: "/smarty-workouts", label: "Smarty Workouts", Icon: Dumbbell },
               { to: "/wod", label: "Workout of the Day", Icon: CalendarCheck },
               { to: "/shared-workouts", label: "Shared Workouts", Icon: Dumbbell },
               { to: "/smarty-ritual", label: "Smarty Ritual", Icon: Sparkles },
@@ -247,6 +248,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         { to: "/", label: "Home", Icon: Home },
         { to: "/about", label: "About", Icon: Info },
         { to: "/how-it-works", label: "How It Works", Icon: BookOpen },
+        ...(isAuthed ? [] : [{ to: "/smarty-workouts", label: "Smarty Workouts", Icon: Dumbbell }]),
         ...(isAuthed ? [] : [{ to: "/wod", label: "Workout of the Day", Icon: CalendarCheck }]),
         ...(isAuthed ? [] : [{ to: "/shared-workouts", label: "Shared Workouts", Icon: Dumbbell }]),
         ...(isAuthed ? [] : [{ to: "/smarty-ritual", label: "Smarty Ritual", Icon: Sparkles }]),

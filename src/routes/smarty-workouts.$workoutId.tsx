@@ -55,7 +55,7 @@ function SmartyWorkoutPage() {
     return (
       <Notice back={back} title="Premium access required" text="Smarty Workouts are for Premium members. Log in to open this workout.">
         <Button asChild>
-          <Link to="/auth" search={{ redirect: `/smarty-workouts/${workoutId}` } as never}>Log in</Link>
+          <Link to="/auth" search={{ next: `/smarty-workouts/${workoutId}`, mode: "signin" }}>Log in</Link>
         </Button>
       </Notice>
     );
