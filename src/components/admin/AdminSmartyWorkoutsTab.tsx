@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { WorkoutDisplay } from "@/components/workout/WorkoutDisplay";
 import {
   SMARTY_WORKOUT_CATEGORIES,
+  adminCreateBlankSmartyWorkout,
   adminCreateSmartyWorkout,
   adminDeleteSmartyWorkout,
   adminListSmartyWorkouts,
@@ -42,8 +43,31 @@ export function AdminSmartyWorkoutsTab() {
   const [cat, setCat] = useState("all");
   const [vis, setVis] = useState("all");
   const [creating, setCreating] = useState(false);
+  const [choosing, setChoosing] = useState(false);
+  const [blankBusy, setBlankBusy] = useState(false);
+  const [draftId, setDraftId] = useState<string | null>(null);
   const [editing, setEditing] = useState<SmartyWorkout | null>(null);
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
+  const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
+
+  async function startBlank() {
+    setBlankBusy(true);
+    const r = await createBlank({ data: { main_workout: STANDARD_SECTIONS_TEMPLATE } });
+    if ("error" in r) {
+      setBlankBusy(false);
+      return toast.error(r.error);
+    }
+    const l = await list();
+    setBlankBusy(false);
+    setChoosing(false);
+    if ("error" in l) return toast.error(l.error);
+    setRows(l.workouts);
+    const w = l.workouts.find((x) => x.id === r.id);
+    if (w) {
+      setDraftId(w.id);
+      setEditing(w);
+    }
+  }
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -85,7 +109,7 @@ export function AdminSmartyWorkoutsTab() {
           <h2 className="text-lg font-extrabold">Smarty Workouts</h2>
           <p className="text-xs text-muted-foreground">Ready workouts shown on the Smarty Workouts page. New workouts start hidden.</p>
         </div>
-        <Button onClick={() => setCreating(true)}>
+        <Button onClick={() => setChoosing(true)}>
           <Plus className="mr-1 h-4 w-4" /> Create New Workout
         </Button>
       </div>
@@ -142,6 +166,35 @@ export function AdminSmartyWorkoutsTab() {
         </div>
       )}
 
+      <Dialog open={choosing} onOpenChange={(o) => !o && !blankBusy && setChoosing(false)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Create New Workout</DialogTitle>
+            <DialogDescription>How do you want to create this workout?</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => { setChoosing(false); setCreating(true); }}
+              className="rounded-2xl border-2 border-blue-400 bg-card p-4 text-left hover:bg-accent"
+            >
+              <Sparkles className="mb-2 h-6 w-6 text-primary" />
+              <p className="font-bold">Generate with AI</p>
+              <p className="mt-1 text-xs text-muted-foreground">Answer the questions and Smarty builds it. You can edit it afterwards.</p>
+            </button>
+            <button
+              type="button"
+              disabled={blankBusy}
+              onClick={() => void startBlank()}
+              className="rounded-2xl border-2 border-blue-400 bg-card p-4 text-left hover:bg-accent disabled:opacity-60"
+            >
+              {blankBusy ? <Loader2 className="mb-2 h-6 w-6 animate-spin text-primary" /> : <Pencil className="mb-2 h-6 w-6 text-primary" />}
+              <p className="font-bold">Create it myself</p>
+              <p className="mt-1 text-xs text-muted-foreground">Open the editor with all sections ready, write it yourself, and generate or upload the picture.</p>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
       <CreateDialog
         open={creating}
         onClose={() => setCreating(false)}
@@ -158,9 +211,19 @@ export function AdminSmartyWorkoutsTab() {
       {editing && (
         <EditDialog
           workout={editing}
-          onClose={() => setEditing(null)}
+          onClose={async () => {
+            const draft = draftId;
+            setEditing(null);
+            setDraftId(null);
+            if (draft && draft === editing.id) {
+              await remove({ data: { id: draft } });
+              toast.message("Draft discarded — nothing was saved.");
+            }
+            void load();
+          }}
           onSaved={() => {
             setEditing(null);
+            setDraftId(null);
             void load();
           }}
         />
