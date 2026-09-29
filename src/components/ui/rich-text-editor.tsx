@@ -64,6 +64,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  TooltipProvider,
 } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -393,6 +394,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   };
 
   return (
+    <TooltipProvider delayDuration={200}>
     <div className="w-full">
       <div className="border rounded-md">
         {/* Sticky Header: Exercise Search + Toolbar */}
@@ -1528,5 +1530,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         }
       `}</style>
     </div>
+    </TooltipProvider>
   );
 };
