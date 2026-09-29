@@ -22,7 +22,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 import pageHeroImage from "@/assets/about-smartygym-card.jpg";
-import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
 
 
 export const Route = createFileRoute("/about")({
@@ -369,7 +368,6 @@ function AboutPage() {
       </SmartyCard>
 
     </div>
-    <DesktopAboutLanding page="about" />
     </>
   );
 }

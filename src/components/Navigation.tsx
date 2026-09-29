@@ -219,7 +219,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
   const { freeAccessMode } = useFreeAccessMode();
   const sections: {
     heading: string;
-    items: { to: string; label: string; Icon: typeof Home }[];
+    items: { to: string; label: string; Icon: typeof Home; className?: string }[];
   }[] = [
     ...(isAuthed
       ? [
@@ -246,7 +246,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
       heading: "SmartyGym",
       items: [
         { to: "/", label: "Home", Icon: Home },
-        { to: "/about", label: "About", Icon: Info },
+        { to: "/about", label: "About", Icon: Info, className: "lg:hidden" },
         { to: "/how-it-works", label: "How It Works", Icon: BookOpen },
         ...(isAuthed ? [] : [{ to: "/smarty-workouts", label: "Smarty Workouts", Icon: Dumbbell }]),
         ...(isAuthed ? [] : [{ to: "/wod", label: "Workout of the Day", Icon: CalendarCheck }]),
@@ -306,12 +306,12 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
                 {s.heading}
               </div>
               <ul className="space-y-1">
-                {s.items.map(({ to, label, Icon }) => (
+                {s.items.map(({ to, label, Icon, className }) => (
                   <li key={to}>
                     <Link
                       to={to}
                       onClick={onClose}
-                      className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10"
+                      className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10 ${className ?? ""}`}
                       style={{ textDecoration: "none" }}
                     >
                       <span className="grid h-9 w-9 place-items-center rounded-xl brand-gradient-soft text-primary">

@@ -23,8 +23,10 @@ import imgWorkouts from "@/assets/about-desktop/hero-workouts-bright.jpg";
 import imgTools from "@/assets/about-desktop/hero-tools.jpg";
 import imgBlog from "@/assets/about-desktop/hero-blog.jpg";
 import imgAbout from "@/assets/about-smartygym-card.jpg";
+import imgSmartyWorkouts from "@/assets/smarty-workouts-card.jpg";
 import imgCreate from "@/assets/create-workout-card.jpg";
 import imgWod from "@/assets/hero-wod-card.jpg";
+import imgSharedWorkouts from "@/assets/shared-workouts-card.jpg";
 import imgCommunity from "@/assets/community-card.jpg";
 import imgRitual from "@/assets/explore-ritual.png";
 import imgHaris from "@/assets/haris-falas-coach.jpg";
@@ -129,7 +131,7 @@ const aboutSections: Section[] = [
 const homeSections: Section[] = [
   {
     id: "smarty-workouts",
-    image: imgWorkouts,
+    image: imgSmartyWorkouts,
     tag: "Smarty Workouts",
     lead: "Ready workouts, built to",
     accentWord: "train now",
@@ -174,6 +176,38 @@ const homeSections: Section[] = [
       { id: "adaptive", title: "Adaptive", meta: "Matches today's energy and equipment", icon: Brain },
     ],
     cta: { label: "Create Your Own Workout", to: "/create-your-workout" },
+  },
+  {
+    id: "shared-workouts",
+    image: imgSharedWorkouts,
+    tag: "Shared Workouts",
+    lead: "Member-created sessions,",
+    accentWord: "ready to explore",
+    green: false,
+    description:
+      "Browse workouts shared by Smarty Gym members. Open a session, see how it is structured and, when signed in, train it, like it and join the conversation.",
+    items: [
+      { id: "browse", title: "Browse Workouts", meta: "Discover sessions shared by members", icon: BookOpen },
+      { id: "train", title: "Train a Shared Session", meta: "Open and follow the complete workout", icon: Dumbbell },
+      { id: "connect", title: "Join the Community", meta: "Like and comment when signed in", icon: Activity },
+    ],
+    cta: { label: "Explore Shared Workouts", to: "/shared-workouts" },
+  },
+  {
+    id: "smarty-ritual",
+    image: imgRitual,
+    tag: "Smarty Ritual",
+    lead: "Move, reset and recover,",
+    accentWord: "every day",
+    green: true,
+    description:
+      "Open one fresh daily ritual with three practical phases: Morning activation, a Midday reset and an Evening unwind, supporting mobility, energy and recovery around your training.",
+    items: [
+      { id: "morning", title: "Morning", meta: "Start the day with activation", icon: Activity },
+      { id: "midday", title: "Midday", meta: "Reset your body and focus", icon: RefreshCw },
+      { id: "evening", title: "Evening", meta: "Unwind and support recovery", icon: Clock },
+    ],
+    cta: { label: "Open Smarty Ritual", to: "/smarty-ritual" },
   },
   {
     id: "smarty-tools",
