@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Replace and visually verify four Smarty Workouts category photos on phone and desktop.
+
 - [x] Add Smarty Workouts to mobile and desktop About without changing the desktop homepage.
 - [x] Explain Smarty Workouts in How It Works and FAQ, with links and accurate access wording.
 
