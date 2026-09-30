@@ -121,7 +121,7 @@ export function linkExerciseLines(html: string, idx: Map<string, LibraryEntry>):
   return { html: out, linked };
 }
 
-export type WorkoutIssue = { kind: "unlinked" | "bad-id" | "empty-section" | "no-exercises"; section: string; text: string };
+export type WorkoutIssue = { kind: "unlinked" | "bad-id" | "empty-section" | "no-exercises" | "no-sections"; section: string; text: string };
 
 const SECTION_MARKS: Array<[RegExp, string]> = [
   [/🧽/, "Soft Tissue Preparation"],
@@ -138,6 +138,9 @@ export function auditWorkoutHtml(html: string, libIds: Set<string>): WorkoutIssu
   const marks = SECTION_MARKS.map(([re, name]) => ({ name, at: html.search(re) }))
     .filter((m) => m.at >= 0)
     .sort((a, b) => a.at - b.at);
+  if (!marks.some((m) => m.name === "Main Workout")) {
+    issues.push({ kind: "no-sections", section: "Workout", text: "The workout has no Main Workout section." });
+  }
   const sectionAt = (i: number) => {
     let name = "Main Workout";
     for (const m of marks) if (m.at <= i) name = m.name;

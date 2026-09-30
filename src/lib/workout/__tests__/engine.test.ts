@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseStepTiming, parseWorkoutSteps } from "@/lib/workout/parse-steps";
+import { extractSoftTissue, parseStepTiming, parseWorkoutSteps } from "@/lib/workout/parse-steps";
 import { enforceWorkout } from "@/lib/workout/enforce.server";
 import { isValidName } from "@/lib/workout/generate.server";
 import { filterPool, type PoolExercise } from "@/lib/workout/pool.server";
@@ -145,6 +145,18 @@ describe("parseWorkoutSteps", () => {
     expect(steps[1]!.section).toBe("Main Workout");
     expect(steps[5]!.section).toBe("Finisher");
     expect(steps.at(-1)!.section).toBe("Cool-down");
+  });
+});
+
+describe("extractSoftTissue", () => {
+  it("reads legacy plain paragraphs before Activation", () => {
+    const html = '<p>🧽 <strong>Soft Tissue Preparation 5\'</strong></p><p>Foam roll quads and calves.</p><p>🔥 <strong>Activation</strong></p>';
+    expect(extractSoftTissue(html)).toEqual(["Foam roll quads and calves."]);
+  });
+
+  it("does not duplicate paragraphs nested inside list items", () => {
+    const html = '<p>🧽 Soft Tissue Preparation</p><ul><li><p>Foam roll glutes.</p></li></ul><p>🔥 Activation</p>';
+    expect(extractSoftTissue(html)).toEqual(["Foam roll glutes."]);
   });
 });
 
