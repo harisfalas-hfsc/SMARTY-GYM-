@@ -67,14 +67,19 @@ async function assertAdmin(supabase: any, userId: string) {
 }
 
 /** Public: visible ready workouts (card fields only). */
-export const listSmartyWorkouts = createServerFn({ method: "GET" }).handler(
-  async (): Promise<{ workouts: SmartyWorkoutCard[] }> => {
+export const listSmartyWorkouts = createServerFn({ method: "GET" })
+  .inputValidator((d: { category?: string; id?: string } | undefined) => ({
+    category: typeof d?.category === "string" ? d.category.slice(0, 60) : undefined,
+    id: typeof d?.id === "string" ? d.id.slice(0, 80) : undefined,
+  }))
+  .handler(
+  async ({ data: filter }): Promise<{ workouts: SmartyWorkoutCard[] }> => {
     try {
       const db = await publicClient();
-      const { data } = await db
-        .from("smarty_workouts")
-        .select(CARD_COLS)
-        .eq("is_visible", true)
+      let q = db.from("smarty_workouts").select(CARD_COLS).eq("is_visible", true);
+      if (filter.category) q = q.eq("category", filter.category);
+      if (filter.id) q = q.eq("id", filter.id);
+      const { data } = await q
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
       return { workouts: (data ?? []) as SmartyWorkoutCard[] };
