@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { storeSmartyWorkoutImage } from "@/lib/smarty-workouts-image.server";
+import { storeSmartyWorkoutImage } from "./smarty-workouts-image.server";
 
 /** One-off importer: old SMARTY GYM admin_workouts → smarty_workouts (hidden, idempotent via legacy_id). */
 const OLD_URL = "https://cvccrvyimyzrxcwzmxwk.supabase.co";
