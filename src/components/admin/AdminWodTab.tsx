@@ -165,7 +165,7 @@ export function AdminWodTab() {
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-extrabold">{fmt(d.date)}</span>
                       {isToday && <Badge>Today</Badge>}
-                      {d.date === days.find((x) => x.date > today)?.date && <Badge variant="outline">Tomorrow</Badge>}
+                      {today && d.date === shiftISO(today, 1) && <Badge variant="outline">Tomorrow</Badge>}
                       <span className="text-sm text-muted-foreground">Day {d.cycleDay} · {categoryLabel(d.category)} · {d.difficulty ?? "—"}{d.focus ? ` · ${d.focus}` : ""}</span>
                     </div>
                     {!past && (
