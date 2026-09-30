@@ -20,10 +20,10 @@ export const Route = createFileRoute("/smarty-workouts/")({
       {
         name: "description",
         content:
-          "Ready-made workouts by Coach Haris Falas in eight categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates.",
+          "Ready-made workouts by Coach Haris Falas in nine categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability, Pilates and Recovery.",
       },
       { property: "og:title", content: "Smarty Workouts — Ready Workouts | SMARTYGYM" },
-      { property: "og:description", content: "Ready workouts by Haris Falas in eight training categories." },
+      { property: "og:description", content: "Ready workouts by Haris Falas in nine training categories." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/smarty-workouts" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -58,7 +58,7 @@ function SmartyWorkoutsPage() {
         title="Smarty Workouts"
         subtitle={
           <>
-            <span className="font-extrabold text-primary">{counts.total.toLocaleString()}</span> expert-designed workouts across eight categories. Pick a category and start training.
+            <span className="font-extrabold text-primary">{counts.total.toLocaleString()}</span> expert-designed workouts across nine categories. Pick a category and start training.
           </>
         }
       />

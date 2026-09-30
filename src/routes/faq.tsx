@@ -36,7 +36,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "What are Smarty Workouts?",
-    a: `${workoutCount.toLocaleString()} expert-designed workouts by Haris Falas across eight categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates. Anyone can browse the categories and see workout pictures and details; Premium members can open a workout and train it. Choose a category to filter workouts by equipment, duration and difficulty.`,
+    a: `${workoutCount.toLocaleString()} expert-designed workouts by Haris Falas across nine categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability, Pilates and Recovery. Anyone can browse the categories and see workout pictures and details; Premium members can open a workout and train it. Choose a category to filter workouts by equipment, duration and difficulty.`,
   },
   {
     q: "Can I track a Smarty Workout in my logbook?",

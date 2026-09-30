@@ -93,7 +93,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
     name: "Workout of the Day",
     title: "Workout of the Day — SmartyGym",
     description:
-      "Two Workouts of the Day, one bodyweight and one with equipment, built automatically for your profile and sequenced by an 84-day periodization plan.",
+      "Two Workouts of the Day, one bodyweight and one with equipment, picked every midnight from Smarty Workouts by an 84-day periodization plan.",
     keyphrase: "workout of the day",
     keywords: [
       "wod",

@@ -99,7 +99,7 @@ const aboutSections: Section[] = [
     description:
       "Choose a ready Smarty Workout, build one on demand, receive two planned workouts every day, or train what the community shares. Move, reset and recover with a fresh daily ritual.",
     items: [
-      { id: "smarty-workouts", title: "Smarty Workouts", meta: "Ready workouts in eight categories", image: imgWorkouts, to: "/smarty-workouts" },
+      { id: "smarty-workouts", title: "Smarty Workouts", meta: "Ready workouts in nine categories", image: imgWorkouts, to: "/smarty-workouts" },
       { id: "wod", title: "Workout of the Day", meta: "Two planned workouts, every day", image: imgWod, to: "/wod" },
       { id: "create", title: "Create Your Workout", meta: "On demand, whenever you want", image: imgCreate, to: "/create-your-workout" },
       { id: "community", title: "Smarty Community", meta: "Train, like, comment and climb the rankings", image: imgCommunity, to: "/community" },
@@ -137,7 +137,7 @@ const homeSections: Section[] = [
     accentWord: "train now",
     green: true,
     description:
-      "Choose from Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates. Every session is designed by Haris Falas and ready when you are.",
+      "Choose from Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability, Pilates and Recovery. Every session is designed by Haris Falas and ready when you are.",
     items: [
       { id: "strength", title: "Strength & Muscle Building", meta: "Structured sets and reps", icon: Dumbbell },
       { id: "conditioning", title: "Conditioning & Challenge", meta: "Efficient, purposeful formats", icon: Activity },
@@ -153,7 +153,7 @@ const homeSections: Section[] = [
     accentWord: "every day",
     green: false,
     description:
-      "Receive one bodyweight session and one equipment session, programmed around your profile and training history. Open your daily pair and train without having to plan the next step.",
+      "Every midnight one bodyweight and one equipment workout are picked from Smarty Workouts by the 84-day periodization. Everyone can see them; Premium members open and train them.",
     items: [
       { id: "bodyweight", title: "Bodyweight Workout", meta: "Train anywhere", icon: Activity },
       { id: "equipment", title: "Equipment Workout", meta: "Use the gear available to you", icon: Dumbbell },
@@ -297,7 +297,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
     section.id === "smarty-workouts"
       ? {
           ...section,
-          description: `${workoutCount.toLocaleString()} expert-designed workouts by Haris Falas across Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates.`,
+          description: `${workoutCount.toLocaleString()} expert-designed workouts by Haris Falas across Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability, Pilates and Recovery.`,
         }
       : section,
   );
