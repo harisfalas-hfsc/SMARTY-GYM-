@@ -12,8 +12,23 @@ import { adminWodAssign, adminWodCandidates, adminWodOverview, adminWodRepick, t
 import { SLOT_LABEL, type WodSlot } from "@/lib/wod/rules";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { difficultyLabel } from "@/lib/workout/spec";
+import { getDayIn84Cycle, localDateISO } from "@/lib/wod-cycle";
 
 type Candidate = { id: string; name: string; difficulty_stars: number; focus: string | null; duration_min: number; lastUsed: string | null };
+
+function shiftISO(date: string, n: number) {
+  const d = new Date(`${date}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+const TODAY = () => localDateISO(new Date());
+const CYCLE_START = () => shiftISO(TODAY(), -(getDayIn84Cycle(TODAY()) - 1));
+const BLOCK_OF_TODAY = () => Math.ceil(getDayIn84Cycle(TODAY()) / 28) as 1 | 2 | 3;
+
+function fmtLong(date: string) {
+  return new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
+}
 
 function fmt(date: string) {
   return new Intl.DateTimeFormat("en", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
@@ -31,9 +46,14 @@ export function AdminWodTab() {
   const [swap, setSwap] = useState<{ date: string; slot: WodSlot; any: boolean } | null>(null);
   const [list, setList] = useState<Candidate[] | null>(null);
   const [filter, setFilter] = useState("");
+  const [cycleOffset, setCycleOffset] = useState(0);
+  const [block, setBlock] = useState<1 | 2 | 3>(BLOCK_OF_TODAY);
+  const cycleStart = shiftISO(CYCLE_START(), cycleOffset * 84);
+  const blockStart = shiftISO(cycleStart, (block - 1) * 28);
 
   async function load() {
-    const r = await overview({ data: { days: 36 } });
+    setDays(null);
+    const r = await overview({ data: { from: blockStart, days: 28 } });
     if ("error" in r) toast.error(r.error);
     else {
       setToday(r.today);
@@ -43,7 +63,7 @@ export function AdminWodTab() {
   useEffect(() => {
     void load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [blockStart]);
 
   async function doRepick(date: string, slot?: WodSlot, fillOnly = false) {
     setBusy(`${date}:${slot ?? "all"}`);
@@ -94,6 +114,29 @@ export function AdminWodTab() {
           <Button variant={view === "plan" ? "default" : "outline"} size="sm" onClick={() => setView("plan")}>Periodization system</Button>
         </div>
       </div>
+
+      {view === "schedule" && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-3">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setCycleOffset((c) => c - 1)}>Previous cycle</Button>
+            <div className="text-center text-sm">
+              <p className="font-bold">{cycleOffset === 0 ? "Current cycle" : cycleOffset > 0 ? `Cycle +${cycleOffset}` : `Cycle ${cycleOffset}`}</p>
+              <p className="text-xs text-muted-foreground">{fmtLong(cycleStart)} – {fmtLong(shiftISO(cycleStart, 83))}</p>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => setCycleOffset((c) => c + 1)}>Next cycle</Button>
+            {(cycleOffset !== 0 || block !== BLOCK_OF_TODAY()) && (
+              <Button variant="ghost" size="sm" onClick={() => { setCycleOffset(0); setBlock(BLOCK_OF_TODAY()); }}>Go to today</Button>
+            )}
+          </div>
+          <div className="flex gap-2">
+            {([1, 2, 3] as const).map((b) => (
+              <Button key={b} variant={block === b ? "default" : "outline"} size="sm" onClick={() => setBlock(b)}>
+                Block {b} · Days {(b - 1) * 28 + 1}–{b * 28}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {view === "plan" ? (
         <AdminCycleTab />
