@@ -34,6 +34,7 @@ export type SmartyWorkout = {
   sort_order: number;
   created_at: string;
   updated_at: string;
+  legacy_id?: string | null;
 };
 
 export type SmartyWorkoutCard = Pick<
@@ -223,13 +224,17 @@ export const adminDuplicateSmartyWorkout = createServerFn({ method: "POST" })
       const cats = SMARTY_WORKOUT_CATEGORIES as readonly string[];
       const rawCat = String(s["category"] ?? "").toUpperCase();
       const category = cats.includes(rawCat) ? rawCat : "STRENGTH";
+      const { LEGAL_FORMATS } = await import("@/lib/workout/doctrine");
+      const legalFormats = LEGAL_FORMATS[category as keyof typeof LEGAL_FORMATS] ?? ["REPS & SETS"];
+      const sourceFormat = str("format");
+      const format = sourceFormat && (legalFormats as readonly string[]).includes(sourceFormat) ? sourceFormat : legalFormats[0] ?? null;
       const str = (k: string) => (s[k] == null ? null : String(s[k]));
       const { data: row, error } = await supabaseAdmin
         .from("smarty_workouts")
         .insert({
           name: `${String(s["name"] ?? "Workout")} (copy)`.slice(0, 200),
           category,
-          format: str("format"),
+          format,
           focus: str("focus"),
           difficulty_stars: Math.min(3, Math.max(1, Number(s["difficulty_stars"] ?? 2) || 2)),
           duration_min: Math.min(180, Math.max(1, Number(s["duration_min"] ?? 30) || 30)),
@@ -319,7 +324,8 @@ export const adminUpdateSmartyWorkout = createServerFn({ method: "POST" })
   .handler(async ({ context, data }): Promise<{ ok: true } | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
-      const { error } = await context.supabase
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { error } = await supabaseAdmin
         .from("smarty_workouts")
         .update({ ...data.patch, updated_at: new Date().toISOString() })
         .eq("id", data.id);
@@ -336,7 +342,8 @@ export const adminDeleteSmartyWorkout = createServerFn({ method: "POST" })
   .handler(async ({ context, data }): Promise<{ ok: true } | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
-      const { error } = await context.supabase.from("smarty_workouts").delete().eq("id", data.id);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { error } = await supabaseAdmin.from("smarty_workouts").delete().eq("id", data.id);
       if (error) return { error: error.message };
       return { ok: true };
     } catch (e) {
@@ -409,6 +416,7 @@ export const startSmartyWorkout = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
     if (existing) return { workoutId: (existing as { id: string }).id };
+    const { data: previousFavorite } = await supabaseAdmin.from("workouts").select("is_favorite").eq("user_id", context.userId).eq("created_by", tag).eq("is_favorite", true).limit(1).maybeSingle();
     const { data: src } = await supabaseAdmin
       .from("smarty_workouts")
       .select("*")
@@ -425,6 +433,7 @@ export const startSmartyWorkout = createServerFn({ method: "POST" })
         created_by: tag,
         is_shared: false,
         is_wod: false,
+        is_favorite: Boolean(previousFavorite),
         name: s.name,
         category: s.category,
         format: s.format,
