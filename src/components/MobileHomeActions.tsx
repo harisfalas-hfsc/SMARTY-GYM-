@@ -1,3 +1,4 @@
+import { iconTone } from "@/lib/icon-tone";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Sparkles, BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, Layers, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
@@ -207,8 +208,8 @@ export function MobileHomeActions({ showPricing, workoutCount }: { showPricing: 
                   </div>
                   <div className="flex flex-1 flex-col justify-center p-2 text-center">
                     <div className="mb-0.5 flex items-center justify-center gap-1.5">
-                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                        <Icon className="h-3 w-3 text-primary" />
+                      <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${iconTone(action.title)}`}>
+                        <Icon className="h-3 w-3" />
                       </span>
                       <h2 className="whitespace-nowrap text-xs font-bold leading-tight text-foreground">{action.title}</h2>
                     </div>
@@ -289,8 +290,8 @@ export function MobileHomeActions({ showPricing, workoutCount }: { showPricing: 
                     </div>
                     <div className="flex flex-1 flex-col justify-center p-2 text-center">
                       <div className="mb-0.5 flex items-center justify-center gap-1.5">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                          <Icon className="h-3 w-3 text-primary" />
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${iconTone(action.title)}`}>
+                          <Icon className="h-3 w-3" />
                         </span>
                         <h3 className="whitespace-nowrap text-xs font-bold leading-tight text-foreground">{action.title}</h3>
                       </div>
