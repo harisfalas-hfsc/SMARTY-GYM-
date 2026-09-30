@@ -42,6 +42,11 @@ export type SmartyWorkoutCard = Pick<
   "id" | "name" | "category" | "format" | "focus" | "difficulty_stars" | "duration_min" | "equipment" | "location" | "image_url"
 >;
 
+export type SmartyWorkoutCounts = {
+  total: number;
+  byCategory: Record<string, number>;
+};
+
 const CARD_COLS = "id,name,category,format,focus,difficulty_stars,duration_min,equipment,location,image_url";
 
 async function publicClient() {
@@ -75,6 +80,27 @@ export const listSmartyWorkouts = createServerFn({ method: "GET" }).handler(
       return { workouts: (data ?? []) as SmartyWorkoutCard[] };
     } catch {
       return { workouts: [] };
+    }
+  },
+);
+
+/** Public live totals for the visible Smarty Workouts collection. */
+export const getSmartyWorkoutCounts = createServerFn({ method: "GET" }).handler(
+  async (): Promise<SmartyWorkoutCounts> => {
+    const byCategory = Object.fromEntries(SMARTY_WORKOUT_CATEGORIES.map((category) => [category, 0]));
+    try {
+      const db = await publicClient();
+      const { data } = await db
+        .from("smarty_workouts")
+        .select("category")
+        .eq("is_visible", true);
+      for (const row of data ?? []) {
+        const category = String(row.category);
+        if (category in byCategory) byCategory[category] += 1;
+      }
+      return { total: Object.values(byCategory).reduce((sum, count) => sum + count, 0), byCategory };
+    } catch {
+      return { total: 0, byCategory };
     }
   },
 );

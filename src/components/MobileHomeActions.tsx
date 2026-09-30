@@ -36,7 +36,7 @@ type ExploreAction = {
   icon: LucideIcon;
 };
 
-export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
+export function MobileHomeActions({ showPricing, workoutCount }: { showPricing: boolean; workoutCount: number }) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeIndex, setActiveIndex] = useState(0);
   const [exploreApi, setExploreApi] = useState<CarouselApi>();
@@ -61,7 +61,7 @@ export function MobileHomeActions({ showPricing }: { showPricing: boolean }) {
   const carouselActions: CarouselAction[] = [
     {
       title: "Smarty Workouts",
-      description: "Ready-made workouts in every category",
+      description: `${workoutCount.toLocaleString()} expert-designed workouts`,
       to: "/smarty-workouts",
       image: smartyWorkoutsImage,
       icon: Layers,
