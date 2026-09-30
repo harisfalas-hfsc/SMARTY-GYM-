@@ -71,33 +71,33 @@
 }
 
 /* SMARTYGYM brand palette
- * Primary deep blue (light mode): #0000FF; light blue reserved for dark mode.
+ * Primary deep blue (light mode): #0D2BCD; light blue reserved for dark mode.
  * Silver secondary, near-white background.
  */
 :root {
   --radius: 0.75rem;
   /* Light mode: every blue is the standard dark brand blue. */
-  --color-blue-50: #0000FF;
-  --color-blue-100: #0000FF;
-  --color-blue-200: #0000FF;
-  --color-blue-300: #0000FF;
-  --color-blue-400: #0000FF;
-  --color-blue-500: #0000FF;
-  --color-blue-600: #0000FF;
-  --color-blue-700: #0000FF;
-  --color-sky-400: #0000FF;
-  --color-sky-500: #0000FF;
-  --color-cyan-400: #0000FF;
-  --color-cyan-500: #0000FF;
+  --color-blue-50: #0D2BCD;
+  --color-blue-100: #0D2BCD;
+  --color-blue-200: #0D2BCD;
+  --color-blue-300: #0D2BCD;
+  --color-blue-400: #0D2BCD;
+  --color-blue-500: #0D2BCD;
+  --color-blue-600: #0D2BCD;
+  --color-blue-700: #0D2BCD;
+  --color-sky-400: #0D2BCD;
+  --color-sky-500: #0D2BCD;
+  --color-cyan-400: #0D2BCD;
+  --color-cyan-500: #0D2BCD;
   --background: oklch(0.93 0 0);
   --foreground: oklch(0.27 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.27 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.27 0 0);
-  --primary: #0000FF;
+  --primary: #0D2BCD;
   --primary-foreground: oklch(0.97 0.01 240);
-  --primary-hover: #0000CC;
+  --primary-hover: #0A23A6;
   --secondary: oklch(0.82 0 0);
   --secondary-foreground: oklch(0.27 0 0);
   --muted: oklch(0.94 0 0);
@@ -121,24 +121,24 @@
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.91 0 0);
   --input: oklch(0.91 0 0);
-  --ring: #0000FF;
-  --chart-1: #0000FF;
+  --ring: #0D2BCD;
+  --chart-1: #0D2BCD;
   --chart-2: oklch(0.7 0.15 150);
   --chart-3: oklch(0.75 0.16 60);
   --chart-4: oklch(0.65 0.2 20);
   --chart-5: oklch(0.55 0.18 290);
   --sidebar: oklch(0.955 0 0);
   --sidebar-foreground: oklch(0.27 0 0);
-  --sidebar-primary: #0000FF;
+  --sidebar-primary: #0D2BCD;
   --sidebar-primary-foreground: oklch(0.97 0.01 240);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.27 0 0);
   --sidebar-border: oklch(0.91 0 0);
-  --sidebar-ring: #0000FF;
-  --gradient-primary: linear-gradient(135deg, #0000FF 0%, #0000FF 100%);
+  --sidebar-ring: #0D2BCD;
+  --gradient-primary: linear-gradient(135deg, #0D2BCD 0%, #0D2BCD 100%);
   --gradient-brand-soft: linear-gradient(135deg, oklch(0.96 0.03 220), oklch(0.97 0.02 210));
   --shadow-soft: 0 4px 20px rgb(0 0 0 / 0.08);
-  --shadow-primary: 0 4px 20px rgb(0 0 255 / 0.3);
+  --shadow-primary: 0 4px 20px rgb(13 43 205 / 0.3);
   --workout-overlay: oklch(0.22 0 0 / 0.94);
   --workout-overlay-foreground: oklch(0.96 0 0);
   --workout-overlay-muted: oklch(0.75 0 0);

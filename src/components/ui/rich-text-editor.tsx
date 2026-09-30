@@ -700,7 +700,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             </Tooltip>
             <DropdownMenuContent side="bottom" align="center" collisionPadding={8}>
               <div className="grid grid-cols-6 gap-1 p-2">
-                {['#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFA500', '#800080', '#FFC0CB', '#808080', '#FFFFFF'].map((color) => (
+                {['#000000', '#FF0000', '#00FF00', '#0D2BCD', '#FFFF00', '#FF00FF', '#00FFFF', '#FFA500', '#800080', '#FFC0CB', '#808080', '#FFFFFF'].map((color) => (
                   <button
                     key={color}
                     className="w-6 h-6 rounded border border-input"
