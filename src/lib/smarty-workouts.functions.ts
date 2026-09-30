@@ -522,3 +522,40 @@ export const setSmartyWorkoutFavorite = createServerFn({ method: "POST" })
     if (error || !created) return { error: "Could not save this favourite." };
     return { workoutId: (created as { id: string }).id, favorite: true };
   });
+
+/** Admin: import (or refresh) the old SMARTY GYM workouts as hidden Smarty Workouts. */
+export const adminImportOldSmartyWorkouts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    try {
+      await assertAdmin(context.supabase, context.userId);
+      const email = process.env["OLD_SMARTYGYM_ADMIN_EMAIL"];
+      const password = process.env["OLD_SMARTYGYM_ADMIN_PASSWORD"];
+      if (!email || !password) return { error: "Old SMARTY GYM sign-in is not configured" };
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const imp = await import("@/lib/smarty-workouts-import.server");
+      const old = await imp.fetchOldWorkouts(email, password);
+      return { report: await imp.importOldWorkouts(supabaseAdmin as never, old, context.userId) };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Import failed" };
+    }
+  });
+
+/** Admin: publish every transferred (legacy) workout at once. */
+export const adminShowAllTransferred = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ count: number } | { error: string }> => {
+    try {
+      await assertAdmin(context.supabase, context.userId);
+      const { data, error } = await context.supabase
+        .from("smarty_workouts")
+        .update({ is_visible: true })
+        .not("legacy_id", "is", null)
+        .eq("is_visible", false)
+        .select("id");
+      if (error) return { error: error.message };
+      return { count: data?.length ?? 0 };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Failed" };
+    }
+  });
