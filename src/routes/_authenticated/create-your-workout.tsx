@@ -200,7 +200,7 @@ function CoachPage() {
       } | null;
       if (!p) return;
       setName(p.display_name ?? "");
-      setWodMode(Boolean(p.wod_mode));
+      setWodMode(false);
     })();
   }, []);
 
