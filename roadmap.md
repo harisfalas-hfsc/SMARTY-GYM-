@@ -11,7 +11,7 @@
 - [x] Add a standalone Shared Workouts page and link below Workout of the Day in the menu.
 - [x] Verify mobile/desktop navigation and shared-workout browsing without changing Community.
 - [x] Compare the old SMARTYGYM startup response and mobile loading behavior with the current project.
-- [x] Apply only the changes required to prevent the white loading page.
+- [x] Replace the iOS storyboard handoff and Android post-splash window with an uninterrupted black native surface through the first rendered page.
 - [x] Inspect the submitted-app startup recording frame by frame and identify the white native loading view.
 - [ ] Confirm the correction on an installed Android and iOS build (blocked until updated store binaries are built and installed).
 - [x] Remove Micro Workout from Smarty Coach, including automatic and surprise generation paths.

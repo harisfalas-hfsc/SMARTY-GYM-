@@ -11,9 +11,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.backgroundColor = .black
         let bridgeViewController = CAPBridgeViewController()
         bridgeViewController.view.backgroundColor = .black
-        bridgeViewController.bridgedWebView?.isOpaque = false
+        bridgeViewController.bridgedWebView?.isOpaque = true
         bridgeViewController.bridgedWebView?.backgroundColor = .black
         bridgeViewController.bridgedWebView?.scrollView.backgroundColor = .black
+        if #available(iOS 15.0, *) {
+            bridgeViewController.bridgedWebView?.underPageBackgroundColor = .black
+        }
         window?.rootViewController = bridgeViewController
         window?.makeKeyAndVisible()
 
