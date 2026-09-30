@@ -119,17 +119,17 @@ const STEPS = [
 const WOD_STEPS = [
   {
     n: "01",
-    title: "Midnight, Cyprus time",
-    desc: "Picked automatically • Nothing to turn on",
+    title: "Every training day",
+    desc: "Two fresh workouts • Ready for you",
   },
   {
     n: "02",
-    title: "The cycle decides",
-    desc: "Periodized calendar • Same day for everyone",
+    title: "Periodization decides",
+    desc: "A different category and level each day",
   },
   {
     n: "03",
-    title: "Two Smarty Workouts are picked",
+    title: "Two expert workouts",
     desc: "One with equipment • One bodyweight only",
   },
   {
@@ -289,11 +289,11 @@ function HowItWorks() {
            Way 3 — Workout of the Day
         </p>
         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
-          Nothing to turn on. Your training is planned.
+          Your training is planned.
         </h2>
         <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-          Every day you get two ready workouts — one with equipment, one bodyweight only — picked
-          every midnight from Smarty Workouts, the same for everyone. Both follow a scientific periodization plan:
+          Every day you get two ready workouts — one with equipment, one bodyweight only — expertly
+          designed by Coach Haris Falas. Both follow a scientific periodization plan:
           strength, endurance, power, mobility and recovery days are sequenced so you never
           overtrain, never undertrain, and every fitness quality is developed in the right order.
         </p>

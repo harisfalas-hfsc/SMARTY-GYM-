@@ -93,7 +93,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
     name: "Workout of the Day",
     title: "Workout of the Day — SmartyGym",
     description:
-      "Two Workouts of the Day, one bodyweight and one with equipment, picked every midnight from Smarty Workouts by an 84-day periodization plan.",
+      "Two fresh, expertly designed workouts every training day — one with equipment, one without — following a science-based periodization approach by Coach Haris Falas.",
     keyphrase: "workout of the day",
     keywords: [
       "wod",
@@ -104,7 +104,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
       "recovery day workout",
     ],
     summary:
-      "Workout of the Day delivers two ready sessions daily (bodyweight and equipment) for every member, rotated through training categories by an 84-day periodization cycle, with recovery days built in.",
+      "Workout of the Day delivers two ready sessions daily (bodyweight and equipment) for every member, following a science-based periodization approach, with recovery days built in.",
     changefreq: "daily",
     priority: "0.85",
     schemaType: "WebPage",

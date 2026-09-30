@@ -153,7 +153,7 @@ const homeSections: Section[] = [
     accentWord: "every day",
     green: false,
     description:
-      "Every midnight one bodyweight and one equipment workout are picked from Smarty Workouts by the 84-day periodization. Everyone can see them; Premium members open and train them.",
+      "Every training day SmartyGym delivers two fresh, expertly designed workouts — one with equipment and one without. On recovery days, a single guided recovery session. Each day focuses on a different category and difficulty level, following a science-based periodization approach designed by Coach Haris Falas.",
     items: [
       { id: "bodyweight", title: "Bodyweight Workout", meta: "Train anywhere", icon: Activity },
       { id: "equipment", title: "Equipment Workout", meta: "Use the gear available to you", icon: Dumbbell },

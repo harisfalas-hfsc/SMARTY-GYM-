@@ -275,8 +275,8 @@ function AboutPage() {
           </p>
           <p className="mt-2 text-base font-extrabold uppercase">Planned for you, every day</p>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Every midnight two ready Smarty Workouts are picked — one with equipment, one
-            bodyweight only — sequenced by a scientific periodization
+            Every training day you get two fresh, expertly designed workouts — one with equipment,
+            one without — following a science-based periodization
             plan, so you never overtrain, never undertrain and develop every fitness quality in the
             right order. It is like having a personal trainer who already knows what you must do
             today, next week and next month.
