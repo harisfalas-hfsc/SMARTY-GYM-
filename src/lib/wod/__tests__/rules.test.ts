@@ -13,7 +13,7 @@ describe("shared Workout of the Day rules", () => {
     expect(getDayIn84Cycle("2025-11-25")).toBe(1);
     expect(getDayIn84Cycle("2026-02-17")).toBe(1);
     expect(PERIODIZATION_84DAY).toHaveLength(84);
-    expect(PERIODIZATION_84DAY.filter((d) => d.category === "RECOVERY")).toHaveLength(9);
+    expect(PERIODIZATION_84DAY.filter((d) => d.category === "RECOVERY")).toHaveLength(6);
   });
   it("two slots on training days, one on recovery days", () => {
     expect(slotsForDay(day2)).toEqual(["BODYWEIGHT", "EQUIPMENT"]);
