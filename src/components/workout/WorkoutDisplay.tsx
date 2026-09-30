@@ -1,3 +1,4 @@
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import { useMemo, useState } from "react";
 import DOMPurify from "dompurify";
 import { useServerFn } from "@tanstack/react-start";

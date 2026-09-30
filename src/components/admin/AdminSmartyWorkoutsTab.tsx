@@ -1,3 +1,4 @@
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Copy, Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Search, Sparkles, Trash2, Upload } from "lucide-react";
@@ -191,7 +192,7 @@ export function AdminSmartyWorkoutsTab() {
           {shown.map((w) => (
             <div key={w.id} className="flex gap-3 overflow-hidden rounded-2xl border-2 border-blue-400 bg-card p-3">
               <div className="h-20 w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
-                {w.image_url && <img src={w.image_url} alt="" className="h-full w-full object-cover" />}
+                {w.image_url && <img src={coverVariant(w.image_url, 640) ?? undefined} onError={fallbackTo(w.image_url)} loading="lazy" decoding="async" alt="" className="h-full w-full object-cover" />}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="break-words font-semibold leading-snug">{w.name}</p>
@@ -678,7 +679,7 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
             <div className="space-y-4 border-t pt-4">
               <div className="flex flex-col gap-4 sm:flex-row">
                 <div className="aspect-[3/2] w-full shrink-0 overflow-hidden rounded-xl bg-muted sm:w-56">
-                  {w.image_url && <img src={w.image_url} alt="" className="h-full w-full object-cover" />}
+                  {w.image_url && <img src={coverVariant(w.image_url, 640) ?? undefined} onError={fallbackTo(w.image_url)} loading="lazy" decoding="async" alt="" className="h-full w-full object-cover" />}
                 </div>
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center justify-between gap-3">
