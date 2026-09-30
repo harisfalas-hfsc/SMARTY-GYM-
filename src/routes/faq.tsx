@@ -48,7 +48,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "Why should I follow the Workout of the Day?",
-    a: "Because the hard part of training is knowing what to do today. Periodization mixes strength, cardio, metabolic, mobility and recovery in the right order, so you progress without overtraining or undertraining.",
+    a: "Because the hard part of training is knowing what to do today. Following the Workout of the Day is like having a personal trainer in your pocket: every day you receive a structured, professionally organized session, and you never have to worry about what to follow. Our science-based periodization mixes strength, cardio, metabolic, mobility and recovery in the right order, so you progress without overtraining or undertraining.",
   },
   {
     q: "How is it different from choosing a workout myself?",
