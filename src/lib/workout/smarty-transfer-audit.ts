@@ -12,8 +12,11 @@ const strip = (html: string) => html.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g,
 
 export function sectionSequence(html: string): string[] {
   const sections: string[] = [];
-  for (const match of html.matchAll(/<(?:h[1-4]|p|li)\b[^>]*>([\s\S]*?)<\/(?:h[1-4]|p|li)>/gi)) {
-    const section = canonicalSection(strip(match[1] ?? ""));
+  for (const match of html.matchAll(/<(h[1-4]|p|li)\b[^>]*>([\s\S]*?)<\/\1>/gi)) {
+    const tag = (match[1] ?? "").toLowerCase();
+    const text = strip(match[2] ?? "");
+    const looksLikeHeading = tag.startsWith("h") || /^[🧽🔥💪⚡🧘]/u.test(text) || /^(soft tissue preparation|activation|main workout|finisher|cool[- ]?down)\s*:?$/i.test(text);
+    const section = looksLikeHeading ? canonicalSection(text) : null;
     if (section && section !== "Warm-up") sections.push(section);
   }
   return sections;
