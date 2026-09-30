@@ -523,38 +523,137 @@ export const setSmartyWorkoutFavorite = createServerFn({ method: "POST" })
     return { workoutId: (created as { id: string }).id, favorite: true };
   });
 
-/** Admin: import (or refresh) the old SMARTY GYM workouts as hidden Smarty Workouts. */
-export const adminImportOldSmartyWorkouts = createServerFn({ method: "POST" })
+// ---------- Workout check (every Smarty Workout, one job) ----------
+
+async function loadLibrary(db: any): Promise<Array<{ id: string; name: string }>> {
+  const out: Array<{ id: string; name: string }> = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await db.from("exercises").select("id,name").eq("is_active", true).range(from, from + 999);
+    if (error) throw new Error(error.message);
+    out.push(...(data ?? []));
+    if (!data || data.length < 1000) break;
+  }
+  return out;
+}
+
+async function loadAllSmarty(db: any): Promise<Array<{ id: string; name: string; category: string; is_visible: boolean; main_workout: string | null }>> {
+  const out: any[] = [];
+  for (let from = 0; ; from += 500) {
+    const { data, error } = await db
+      .from("smarty_workouts")
+      .select("id,name,category,is_visible,main_workout")
+      .order("name")
+      .range(from, from + 499);
+    if (error) throw new Error(error.message);
+    out.push(...(data ?? []));
+    if (!data || data.length < 500) break;
+  }
+  return out;
+}
+
+export type WorkoutCheckReport = {
+  total: number;
+  clean: number;
+  visible: number;
+  visibleWithIssues: number;
+  names: Array<{ name: string; lines: number; workouts: number }>;
+  workouts: Array<{ id: string; name: string; category: string; is_visible: boolean; issues: Array<{ kind: string; section: string; text: string }> }>;
+};
+
+/** Admin: checks every Smarty Workout for lines the player cannot play. */
+export const adminCheckSmartyWorkouts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .handler(async ({ context }): Promise<{ report: WorkoutCheckReport } | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
-      const email = process.env["OLD_SMARTYGYM_ADMIN_EMAIL"];
-      const password = process.env["OLD_SMARTYGYM_ADMIN_PASSWORD"];
-      if (!email || !password) return { error: "Old SMARTY GYM sign-in is not configured" };
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const imp = await import("@/lib/smarty-workouts-import.server");
-      const old = await imp.fetchOldWorkouts(email, password);
-      return { report: await imp.importOldWorkouts(supabaseAdmin as never, old, context.userId) };
+      const { auditWorkoutHtml, primaryName } = await import("@/lib/workout/link-names");
+      const lib = await loadLibrary(supabaseAdmin);
+      const ids = new Set(lib.map((e) => e.id));
+      const rows = await loadAllSmarty(supabaseAdmin);
+      const names = new Map<string, { lines: number; workouts: Set<string> }>();
+      const workouts: WorkoutCheckReport["workouts"] = [];
+      for (const r of rows) {
+        const issues = auditWorkoutHtml(r.main_workout ?? "", ids);
+        for (const i of issues) {
+          if (i.kind !== "unlinked") continue;
+          const n = primaryName(i.text);
+          const e = names.get(n) ?? { lines: 0, workouts: new Set<string>() };
+          e.lines += 1;
+          e.workouts.add(r.id);
+          names.set(n, e);
+        }
+        if (issues.length) workouts.push({ id: r.id, name: r.name, category: r.category, is_visible: r.is_visible, issues });
+      }
+      return {
+        report: {
+          total: rows.length,
+          clean: rows.length - workouts.length,
+          visible: rows.filter((r) => r.is_visible).length,
+          visibleWithIssues: workouts.filter((w) => w.is_visible).length,
+          names: [...names].map(([name, v]) => ({ name, lines: v.lines, workouts: v.workouts.size })).sort((a, b) => b.lines - a.lines),
+          workouts,
+        },
+      };
     } catch (e) {
-      return { error: e instanceof Error ? e.message : "Import failed" };
+      return { error: e instanceof Error ? e.message : "Check failed" };
     }
   });
 
-/** Admin: publish every transferred (legacy) workout at once. */
-export const adminShowAllTransferred = createServerFn({ method: "POST" })
+/** Admin: links one unmatched exercise name to a library exercise in every Smarty Workout. */
+export const adminLinkExerciseEverywhere = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<{ count: number } | { error: string }> => {
+  .inputValidator((d: { name: string; exerciseId: string }) =>
+    z.object({ name: z.string().min(1).max(120), exerciseId: z.string().min(1).max(20) }).parse(d),
+  )
+  .handler(async ({ context, data }): Promise<{ workouts: number; lines: number } | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
-      const { data, error } = await context.supabase
-        .from("smarty_workouts")
-        .update({ is_visible: true })
-        .not("legacy_id", "is", null)
-        .eq("is_visible", false)
-        .select("id");
-      if (error) return { error: error.message };
-      return { count: data?.length ?? 0 };
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { linkExerciseLines, normName } = await import("@/lib/workout/link-names");
+      const { data: ex } = await supabaseAdmin.from("exercises").select("id,name").eq("id", data.exerciseId).eq("is_active", true).maybeSingle();
+      if (!ex) return { error: "That exercise is not in the library." };
+      const entry = ex as { id: string; name: string };
+      const idx = new Map([[normName(data.name), entry]]);
+      const rows = await loadAllSmarty(supabaseAdmin);
+      let workouts = 0;
+      let lines = 0;
+      for (const r of rows) {
+        const res = linkExerciseLines(r.main_workout ?? "", idx);
+        if (!res.linked) continue;
+        const { error } = await supabaseAdmin.from("smarty_workouts").update({ main_workout: res.html }).eq("id", r.id);
+        if (error) return { error: error.message };
+        // Members' not-yet-started copies get the same fix.
+        await supabaseAdmin
+          .from("workouts")
+          .update({ main_workout: res.html })
+          .eq("created_by", `smarty:${r.id}`)
+          .in("status", ["created", "ready"]);
+        workouts += 1;
+        lines += res.linked;
+      }
+      return { workouts, lines };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Failed" };
+    }
+  });
+
+/** Admin: publishes every hidden Smarty Workout that passes the check. */
+export const adminPublishCheckedWorkouts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ count: number; held: number } | { error: string }> => {
+    try {
+      await assertAdmin(context.supabase, context.userId);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { auditWorkoutHtml } = await import("@/lib/workout/link-names");
+      const ids = new Set((await loadLibrary(supabaseAdmin)).map((e) => e.id));
+      const hidden = (await loadAllSmarty(supabaseAdmin)).filter((r) => !r.is_visible);
+      const ok = hidden.filter((r) => auditWorkoutHtml(r.main_workout ?? "", ids).length === 0).map((r) => r.id);
+      for (let i = 0; i < ok.length; i += 100) {
+        const { error } = await supabaseAdmin.from("smarty_workouts").update({ is_visible: true }).in("id", ok.slice(i, i + 100));
+        if (error) return { error: error.message };
+      }
+      return { count: ok.length, held: hidden.length - ok.length };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed" };
     }
