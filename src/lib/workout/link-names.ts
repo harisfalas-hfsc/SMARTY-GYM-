@@ -52,17 +52,19 @@ export function buildLibraryIndex(lib: LibraryEntry[]): Map<string, LibraryEntry
   return idx;
 }
 
-const QTY = String.raw`(\d+(?:[.,]\d+)?\s*(?:(?:sets?|rounds?)?\s*[x×]\s*\d+\s*)?(?:sets?|rounds?|reps?|rep|seconds?|secs?|sec|s|minutes?|mins?|min|m|meters?|metres?|calories?|cals?|cal|steps?|each( side| leg| arm)?|per side)?\b\.?)`;
+const QTY = String.raw`(\d+(?:[.,]\d+)?(?![\d/])\s*(?:(?:sets?|rounds?)?\s*[x×]\s*\d+\s*)?(?:sets?|rounds?|reps?|rep|seconds?|secs?|sec|s|minutes?|mins?|min|m|meters?|metres?|calories?|cals?|cal|steps?|each( side| leg| arm)?|per side)?\b\.?)`;
 const LEAD_QTY = new RegExp(`^(${QTY}\\s*(?:of\\s+)?)+`, "i");
 const TRAIL_QTY = new RegExp(`(\\s*[x×]?\\s*${QTY})+$`, "i");
 
 function candidates(text: string): string[] {
-  const t = text.replace(/^[•*\s]+/, "").replace(/^(minute|min|round|station|block)\s*\d+\s*[:.)-]\s*/i, "");
+  const t = text.replace(/^[•*\s]+/, "").replace(/^(minute|min|round|station|block)\s*\d+\s*[:.)-]\s*/i, "")
+    .replace(/-(?=\d)/g, " - ");
+  const clean = (x: string) => x.replace(/^(?:\/?\s*(?:each|per)\s+(?:side|leg|arm|direction)|\/\s*side)\s+/i, "").replace(/\s+(?:each|per)\s+(?:side|leg|arm|direction)$/i, "");
   const out = new Set<string>();
   const base = t.trim();
   const head = base.split(/\s[-–—:]\s|:\s|\s[-–—]|,|\(/)[0] ?? base;
   for (const c of [base, head, base.replace(LEAD_QTY, ""), head.replace(LEAD_QTY, ""), head.replace(TRAIL_QTY, ""), base.replace(LEAD_QTY, "").split(/\s[-–—:]\s|,|\(/)[0] ?? ""]) {
-    const s = c.replace(LEAD_QTY, "").replace(TRAIL_QTY, "").trim();
+    const s = clean(clean(c.replace(LEAD_QTY, "")).replace(TRAIL_QTY, "").trim()).trim();
     if (s && s.split(/\s+/).length <= 8) out.add(s);
   }
   return [...out];
