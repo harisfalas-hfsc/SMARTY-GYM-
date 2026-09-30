@@ -71,7 +71,7 @@
 }
 
 /* SMARTYGYM brand palette
- * Primary light blue: HSL 195 82% 55%  =  oklch(~0.75 0.13 220)
+ * Primary deep blue (light mode): oklch(0.42 0.15 240); light blue reserved for dark mode.
  * Silver secondary, near-white background.
  */
 :root {
@@ -82,9 +82,9 @@
   --card-foreground: oklch(0.27 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.27 0 0);
-  --primary: oklch(0.745 0.131 220);
-  --primary-foreground: oklch(0.19 0.04 260);
-  --primary-hover: oklch(0.79 0.13 220);
+  --primary: oklch(0.42 0.15 240);
+  --primary-foreground: oklch(0.97 0.01 240);
+  --primary-hover: oklch(0.36 0.14 240);
   --secondary: oklch(0.82 0 0);
   --secondary-foreground: oklch(0.27 0 0);
   --muted: oklch(0.94 0 0);
@@ -108,21 +108,21 @@
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.91 0 0);
   --input: oklch(0.91 0 0);
-  --ring: oklch(0.745 0.131 220);
-  --chart-1: oklch(0.745 0.131 220);
+  --ring: oklch(0.42 0.15 240);
+  --chart-1: oklch(0.42 0.15 240);
   --chart-2: oklch(0.7 0.15 150);
   --chart-3: oklch(0.75 0.16 60);
   --chart-4: oklch(0.65 0.2 20);
   --chart-5: oklch(0.55 0.18 290);
   --sidebar: oklch(0.955 0 0);
   --sidebar-foreground: oklch(0.27 0 0);
-  --sidebar-primary: oklch(0.745 0.131 220);
-  --sidebar-primary-foreground: oklch(0.19 0.04 260);
+  --sidebar-primary: oklch(0.42 0.15 240);
+  --sidebar-primary-foreground: oklch(0.97 0.01 240);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.27 0 0);
   --sidebar-border: oklch(0.91 0 0);
-  --sidebar-ring: oklch(0.745 0.131 220);
-  --gradient-primary: linear-gradient(135deg, oklch(0.745 0.131 220) 0%, oklch(0.82 0.12 220) 100%);
+  --sidebar-ring: oklch(0.42 0.15 240);
+  --gradient-primary: linear-gradient(135deg, oklch(0.42 0.15 240) 0%, oklch(0.5 0.14 240) 100%);
   --gradient-brand-soft: linear-gradient(135deg, oklch(0.96 0.03 220), oklch(0.97 0.02 210));
   --shadow-soft: 0 4px 20px rgb(0 0 0 / 0.08);
   --shadow-primary: 0 4px 20px rgb(56 189 248 / 0.3);
