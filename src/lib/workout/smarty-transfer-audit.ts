@@ -12,7 +12,7 @@ const strip = (html: string) => html.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g,
 
 export function sectionSequence(html: string): string[] {
   const sections: string[] = [];
-  for (const match of html.matchAll(/<h[1-4]\b[^>]*>([\s\S]*?)<\/h[1-4]>/gi)) {
+  for (const match of html.matchAll(/<(?:h[1-4]|p|li)\b[^>]*>([\s\S]*?)<\/(?:h[1-4]|p|li)>/gi)) {
     const section = canonicalSection(strip(match[1] ?? ""));
     if (section && section !== "Warm-up") sections.push(section);
   }

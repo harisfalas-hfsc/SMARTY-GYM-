@@ -224,11 +224,11 @@ export const adminDuplicateSmartyWorkout = createServerFn({ method: "POST" })
       const cats = SMARTY_WORKOUT_CATEGORIES as readonly string[];
       const rawCat = String(s["category"] ?? "").toUpperCase();
       const category = cats.includes(rawCat) ? rawCat : "STRENGTH";
+      const str = (k: string) => (s[k] == null ? null : String(s[k]));
       const { LEGAL_FORMATS } = await import("@/lib/workout/doctrine");
       const legalFormats = LEGAL_FORMATS[category as keyof typeof LEGAL_FORMATS] ?? ["REPS & SETS"];
       const sourceFormat = str("format");
       const format = sourceFormat && (legalFormats as readonly string[]).includes(sourceFormat) ? sourceFormat : legalFormats[0] ?? null;
-      const str = (k: string) => (s[k] == null ? null : String(s[k]));
       const { data: row, error } = await supabaseAdmin
         .from("smarty_workouts")
         .insert({
@@ -572,10 +572,15 @@ export type WorkoutCheckReport = {
 async function transferredWorkoutAudit(db: any) {
   const { data: rows, error: workoutError } = await db.from("smarty_workouts").select("*").not("legacy_id", "is", null).order("legacy_id");
   if (workoutError) throw new Error(workoutError.message);
-  const { data: exercises, error: exerciseError } = await db.from("exercises").select("id,name,description,instructions,gif_path,is_active").limit(5000);
-  if (exerciseError) throw new Error(exerciseError.message);
+  const exercises: any[] = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await db.from("exercises").select("id,name,description,instructions,gif_path,is_active").range(from, from + 999);
+    if (error) throw new Error(error.message);
+    exercises.push(...(data ?? []));
+    if (!data || data.length < 1000) break;
+  }
   const { auditTransferredWorkouts } = await import("@/lib/workout/smarty-transfer-audit");
-  return auditTransferredWorkouts(rows ?? [], exercises ?? []);
+  return auditTransferredWorkouts(rows ?? [], exercises);
 }
 
 export const adminAuditTransferredWorkouts = createServerFn({ method: "POST" })
