@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Copy, Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Sparkles, Trash2, Upload } from "lucide-react";
+import { Copy, Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Search, Sparkles, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,12 +15,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { WorkoutDisplay } from "@/components/workout/WorkoutDisplay";
 import {
   SMARTY_WORKOUT_CATEGORIES,
+  adminAuditTransferredWorkouts,
   adminCreateBlankSmartyWorkout,
   adminCreateSmartyWorkout,
   adminDuplicateSmartyWorkout,
   adminDeleteSmartyWorkout,
   adminListSmartyWorkouts,
   adminSmartyWorkoutImage,
+  adminSetTransferredVisibility,
   adminUpdateSmartyWorkout,
   type SmartyWorkout,
 } from "@/lib/smarty-workouts.functions";
@@ -43,6 +45,8 @@ export function AdminSmartyWorkoutsTab() {
   const [loading, setLoading] = useState(true);
   const [cat, setCat] = useState("all");
   const [vis, setVis] = useState("all");
+  const [query, setQuery] = useState("");
+  const [bulkBusy, setBulkBusy] = useState(false);
   const [creating, setCreating] = useState(false);
   const [choosing, setChoosing] = useState(false);
   const [blankBusy, setBlankBusy] = useState(false);
@@ -51,6 +55,8 @@ export function AdminSmartyWorkoutsTab() {
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
   const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
   const dup = useServerFn(adminDuplicateSmartyWorkout);
+  const auditTransferred = useServerFn(adminAuditTransferredWorkouts);
+  const setTransferredVisibility = useServerFn(adminSetTransferredVisibility);
 
   async function startBlank() {
     setBlankBusy(true);
@@ -107,8 +113,24 @@ export function AdminSmartyWorkoutsTab() {
   const shown = rows.filter(
     (w) =>
       (cat === "all" || w.category === cat) &&
-      (vis === "all" || (vis === "visible" ? w.is_visible : !w.is_visible)),
+      (vis === "all" || (vis === "visible" ? w.is_visible : !w.is_visible)) &&
+      w.name.toLowerCase().includes(query.trim().toLowerCase()),
   );
+
+  async function bulkVisibility(visible: boolean) {
+    if (!window.confirm(`${visible ? "Publish" : "Hide"} all transferred Smarty Workouts?`)) return;
+    setBulkBusy(true);
+    if (visible) {
+      const checked = await auditTransferred();
+      if ("error" in checked) { setBulkBusy(false); return toast.error(checked.error); }
+      if (!checked.report.ready) { setBulkBusy(false); return toast.error(`${checked.report.workouts.length} workouts need repair. Nothing was published.`); }
+    }
+    const result = await setTransferredVisibility({ data: { visible } });
+    setBulkBusy(false);
+    if ("error" in result) return toast.error(result.error);
+    toast.success(`${result.count} transferred workouts ${visible ? "published" : "hidden"}.`);
+    void load();
+  }
 
   async function toggle(w: SmartyWorkout) {
     const r = await update({ data: { id: w.id, patch: { is_visible: !w.is_visible } } });
@@ -133,13 +155,19 @@ export function AdminSmartyWorkoutsTab() {
           <p className="text-xs text-muted-foreground">Ready workouts shown on the Smarty Workouts page. New workouts start hidden.</p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button variant="outline" disabled={bulkBusy} onClick={() => void bulkVisibility(true)}><Eye className="mr-1 h-4 w-4" />Show all transferred</Button>
+          <Button variant="outline" disabled={bulkBusy} onClick={() => void bulkVisibility(false)}><EyeOff className="mr-1 h-4 w-4" />Hide all transferred</Button>
           <Button onClick={() => setChoosing(true)}>
             <Plus className="mr-1 h-4 w-4" /> Create New Workout
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 sm:max-w-md">
+      <div className="grid gap-2 sm:max-w-2xl sm:grid-cols-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search workouts" className="pl-9" />
+        </div>
         <Select value={cat} onValueChange={setCat}>
           <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>

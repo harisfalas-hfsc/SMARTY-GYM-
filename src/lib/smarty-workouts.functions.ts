@@ -532,7 +532,7 @@ export const setSmartyWorkoutFavorite = createServerFn({ method: "POST" })
     return { workoutId: (created as { id: string }).id, favorite: true };
   });
 
-// ---------- Workout check (every Smarty Workout, one job) ----------
+// ---------- Permanent transferred-workout validation and visibility ----------
 
 async function loadLibrary(db: any): Promise<Array<{ id: string; name: string }>> {
   const out: Array<{ id: string; name: string }> = [];
@@ -569,8 +569,48 @@ export type WorkoutCheckReport = {
   workouts: Array<{ id: string; name: string; category: string; is_visible: boolean; issues: Array<{ kind: string; section: string; text: string }> }>;
 };
 
+async function transferredWorkoutAudit(db: any) {
+  const { data: rows, error: workoutError } = await db.from("smarty_workouts").select("*").not("legacy_id", "is", null).order("legacy_id");
+  if (workoutError) throw new Error(workoutError.message);
+  const { data: exercises, error: exerciseError } = await db.from("exercises").select("id,name,description,instructions,gif_path,is_active").limit(5000);
+  if (exerciseError) throw new Error(exerciseError.message);
+  const { auditTransferredWorkouts } = await import("@/lib/workout/smarty-transfer-audit");
+  return auditTransferredWorkouts(rows ?? [], exercises ?? []);
+}
+
+export const adminAuditTransferredWorkouts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    try {
+      await assertAdmin(context.supabase, context.userId);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      return { report: await transferredWorkoutAudit(supabaseAdmin) };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Audit failed" };
+    }
+  });
+
+export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { visible: boolean }) => z.object({ visible: z.boolean() }).parse(d))
+  .handler(async ({ context, data }): Promise<{ count: number } | { error: string }> => {
+    try {
+      await assertAdmin(context.supabase, context.userId);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      if (data.visible) {
+        const report = await transferredWorkoutAudit(supabaseAdmin);
+        if (!report.ready) return { error: `${report.workouts.length} transferred workouts failed validation. Nothing was published.` };
+      }
+      const { data: changed, error } = await supabaseAdmin.from("smarty_workouts").update({ is_visible: data.visible, updated_at: new Date().toISOString() }).not("legacy_id", "is", null).select("id");
+      if (error) return { error: error.message };
+      return { count: changed?.length ?? 0 };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Visibility update failed" };
+    }
+  });
+
 /** Admin: checks every Smarty Workout for lines the player cannot play. */
-export const adminCheckSmartyWorkouts = createServerFn({ method: "POST" })
+const adminCheckSmartyWorkouts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<{ report: WorkoutCheckReport } | { error: string }> => {
     try {
@@ -610,7 +650,7 @@ export const adminCheckSmartyWorkouts = createServerFn({ method: "POST" })
   });
 
 /** Admin: links one unmatched exercise name to a library exercise in every Smarty Workout. */
-export const adminLinkExerciseEverywhere = createServerFn({ method: "POST" })
+const adminLinkExerciseEverywhere = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { name: string; exerciseId: string }) =>
     z.object({ name: z.string().min(1).max(120), exerciseId: z.string().min(1).max(20) }).parse(d),
@@ -648,7 +688,7 @@ export const adminLinkExerciseEverywhere = createServerFn({ method: "POST" })
   });
 
 /** Admin: publishes every hidden Smarty Workout that passes the check. */
-export const adminPublishCheckedWorkouts = createServerFn({ method: "POST" })
+const adminPublishCheckedWorkouts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<{ count: number; held: number } | { error: string }> => {
     try {
