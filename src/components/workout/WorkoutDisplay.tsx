@@ -221,7 +221,9 @@ export function WorkoutDisplay({
 
           {workout.image_url ? (
             <img
-              src={workout.image_url}
+              src={coverVariant(workout.image_url, 1280) ?? undefined}
+              onError={fallbackTo(workout.image_url)}
+              decoding="async"
               alt={`${workout.name} cover`}
               className="mt-5 h-52 w-full rounded-2xl object-cover"
             />
