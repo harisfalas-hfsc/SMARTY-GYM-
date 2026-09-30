@@ -118,7 +118,7 @@ export function AdminSmartyWorkoutsTab() {
   );
 
   async function bulkVisibility(visible: boolean) {
-    if (!window.confirm(`${visible ? "Publish" : "Hide"} all transferred Smarty Workouts?`)) return;
+    if (!window.confirm(`${visible ? "Publish" : "Hide"} all Smarty Workouts?`)) return;
     setBulkBusy(true);
     if (visible) {
       const checked = await auditTransferred();
@@ -128,7 +128,7 @@ export function AdminSmartyWorkoutsTab() {
     const result = await setTransferredVisibility({ data: { visible } });
     setBulkBusy(false);
     if ("error" in result) return toast.error(result.error);
-    toast.success(`${result.count} transferred workouts ${visible ? "published" : "hidden"}.`);
+    toast.success(`${result.count} Smarty Workouts ${visible ? "published" : "hidden"}.`);
     void load();
   }
 
@@ -155,8 +155,8 @@ export function AdminSmartyWorkoutsTab() {
           <p className="text-xs text-muted-foreground">Ready workouts shown on the Smarty Workouts page. New workouts start hidden.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" disabled={bulkBusy} onClick={() => void bulkVisibility(true)}><Eye className="mr-1 h-4 w-4" />Show all transferred</Button>
-          <Button variant="outline" disabled={bulkBusy} onClick={() => void bulkVisibility(false)}><EyeOff className="mr-1 h-4 w-4" />Hide all transferred</Button>
+          <Button variant="outline" disabled={bulkBusy} onClick={() => void bulkVisibility(true)}><Eye className="mr-1 h-4 w-4" />Show all</Button>
+          <Button variant="outline" disabled={bulkBusy} onClick={() => void bulkVisibility(false)}><EyeOff className="mr-1 h-4 w-4" />Hide all</Button>
           <Button onClick={() => setChoosing(true)}>
             <Plus className="mr-1 h-4 w-4" /> Create New Workout
           </Button>

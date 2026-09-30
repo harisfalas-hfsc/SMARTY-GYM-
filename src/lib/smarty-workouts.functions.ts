@@ -570,7 +570,7 @@ export type WorkoutCheckReport = {
 };
 
 async function transferredWorkoutAudit(db: any) {
-  const { data: rows, error: workoutError } = await db.from("smarty_workouts").select("*").not("legacy_id", "is", null).order("legacy_id");
+  const { data: rows, error: workoutError } = await db.from("smarty_workouts").select("*").order("created_at");
   if (workoutError) throw new Error(workoutError.message);
   const exercises: any[] = [];
   for (let from = 0; ; from += 1000) {
@@ -602,11 +602,15 @@ export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
     try {
       await assertAdmin(context.supabase, context.userId);
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      let q = supabaseAdmin.from("smarty_workouts").update({ is_visible: data.visible, updated_at: new Date().toISOString() });
       if (data.visible) {
         const report = await transferredWorkoutAudit(supabaseAdmin);
-        if (!report.ready) return { error: `${report.workouts.length} transferred workouts failed validation. Nothing was published.` };
+        const failing = report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id);
+        if (failing.length) q = q.not("id", "in", `(${failing.join(",")})`);
+      } else {
+        q = q.not("id", "is", null);
       }
-      const { data: changed, error } = await supabaseAdmin.from("smarty_workouts").update({ is_visible: data.visible, updated_at: new Date().toISOString() }).not("legacy_id", "is", null).select("id");
+      const { data: changed, error } = await q.select("id");
       if (error) return { error: error.message };
       return { count: changed?.length ?? 0 };
     } catch (e) {
