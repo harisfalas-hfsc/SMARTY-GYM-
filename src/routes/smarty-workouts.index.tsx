@@ -6,12 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
-import { SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
+import { getSmartyWorkoutCounts, SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, categorySlug } from "@/lib/smarty-workout-categories";
 import pageHeroImage from "@/assets/smarty-workouts-card.jpg";
 
 export const Route = createFileRoute("/smarty-workouts/")({
+  loader: () => getSmartyWorkoutCounts(),
   head: () => ({
     meta: [
       { name: "keywords", content: withExtendedKeywords("/smarty-workouts", "ready workouts, smarty workouts") },
@@ -33,6 +34,7 @@ export const Route = createFileRoute("/smarty-workouts/")({
 });
 
 function SmartyWorkoutsPage() {
+  const counts = Route.useLoaderData();
   const [api, setApi] = useState<CarouselApi>();
   const [active, setActive] = useState(0);
 
@@ -54,8 +56,14 @@ function SmartyWorkoutsPage() {
         image={pageHeroImage}
         eyebrow="SMARTYGYM"
         title="Smarty Workouts"
-        subtitle="Ready workouts designed by Haris Falas. Pick a category and start training."
+        subtitle="Expert-designed workouts across eight categories. Pick a category and start training."
       />
+
+      <div className="mb-6 flex justify-center">
+        <span className="rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-center text-xs font-extrabold uppercase text-primary sm:text-sm">
+          {counts.total.toLocaleString()} ready workouts designed by Haris Falas
+        </span>
+      </div>
 
       {/* Mobile: same card style as the homepage carousel */}
       <div className="lg:hidden">
@@ -83,6 +91,9 @@ function SmartyWorkoutsPage() {
                   >
                     <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
                       <img src={detail.image} alt={categoryLabel(category)} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_top]" />
+                      <span className="absolute right-2 top-2 rounded-full bg-background/90 px-2.5 py-1 text-[10px] font-extrabold text-foreground shadow-sm backdrop-blur-sm">
+                        {counts.byCategory[category] ?? 0} workouts
+                      </span>
                     </div>
                     <div className="flex flex-1 flex-col justify-center p-2 text-center">
                       <div className="mb-0.5 flex items-center justify-center gap-1.5">
@@ -132,6 +143,9 @@ function SmartyWorkoutsPage() {
             >
               <div className="relative h-48 overflow-hidden bg-muted">
                 <img src={detail.image} alt={categoryLabel(category)} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                <span className="absolute right-3 top-3 rounded-full bg-background/90 px-3 py-1.5 text-xs font-extrabold text-foreground shadow-sm backdrop-blur-sm">
+                  {counts.byCategory[category] ?? 0} workouts
+                </span>
               </div>
               <div className="flex min-h-[190px] flex-col items-center px-5 py-5">
                 <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10"><Icon className="h-6 w-6 text-primary" /></span>

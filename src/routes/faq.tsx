@@ -10,13 +10,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { PageHeader } from "@/components/PageHeader";
+import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 
 const URL = "https://smartygym.com/faq";
 const TITLE = "SmartyGym FAQ — Smarty Coach, workouts & training";
 const DESCRIPTION =
   "Short answers about SmartyGym: how Smarty Coach builds your workout, what is included, equipment, injuries and privacy.";
 
-const ITEMS: { q: string; a: string }[] = [
+const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[] => [
   {
     q: "What is SmartyGym?",
     a: "A personalized training app. Smarty Coach builds a personalized workout for you, today — based on your goal, mood, time, location and equipment.",
@@ -35,7 +36,7 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "What are Smarty Workouts?",
-    a: "Ready workouts in eight categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates. Anyone can browse the categories and see workout pictures and details; Premium members can open a workout and train it. Choose a category to filter workouts by equipment, duration and difficulty.",
+    a: `${workoutCount.toLocaleString()} expert-designed workouts by Haris Falas across eight categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates. Anyone can browse the categories and see workout pictures and details; Premium members can open a workout and train it. Choose a category to filter workouts by equipment, duration and difficulty.`,
   },
   {
     q: "Can I track a Smarty Workout in my logbook?",
@@ -150,23 +151,24 @@ const ITEMS: { q: string; a: string }[] = [
 ];
 
 /** Drops every paid-membership question while Free Access Mode is ON. */
-function visibleItems(freeAccessMode: boolean) {
+function visibleItems(freeAccessMode: boolean, workoutCount: number) {
+  const items = itemsWithWorkoutCount(workoutCount);
   return freeAccessMode
-    ? ITEMS.filter(
+    ? items.filter(
         (it) =>
           !/cost|subscription|subscribed|Unsubscribe/i.test(it.q) &&
           !/€|subscription|subscribed|Unsubscribe|cancel anytime/i.test(it.a),
       )
-    : ITEMS;
+    : items;
 }
 
-const jsonLd = (freeAccessMode: boolean) => ({
+const jsonLd = (freeAccessMode: boolean, workoutCount: number) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "FAQPage",
       "@id": `${URL}#faq`,
-      mainEntity: visibleItems(freeAccessMode).map((it) => ({
+      mainEntity: visibleItems(freeAccessMode, workoutCount).map((it) => ({
         "@type": "Question",
         name: it.q,
         acceptedAnswer: { "@type": "Answer", text: it.a },
@@ -186,9 +188,10 @@ export const Route = createFileRoute("/faq")({
   loader: async () => {
     try {
       const { getFreeAccessMode } = await import("@/lib/free-access.functions");
-      return await getFreeAccessMode();
+      const [access, counts] = await Promise.all([getFreeAccessMode(), getSmartyWorkoutCounts()]);
+      return { ...access, workoutCount: counts.total };
     } catch {
-      return { freeAccessMode: false };
+      return { freeAccessMode: false, workoutCount: 0 };
     }
   },
   head: ({ loaderData }) => ({
@@ -213,7 +216,7 @@ export const Route = createFileRoute("/faq")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(jsonLd(loaderData?.freeAccessMode ?? false)),
+        children: JSON.stringify(jsonLd(loaderData?.freeAccessMode ?? false, loaderData?.workoutCount ?? 0)),
       },
     ],
   }),
@@ -222,7 +225,8 @@ export const Route = createFileRoute("/faq")({
 
 function FAQ() {
   const { freeAccessMode } = useFreeAccessMode();
-  const items = visibleItems(freeAccessMode);
+  const { workoutCount } = Route.useLoaderData();
+  const items = visibleItems(freeAccessMode, workoutCount);
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
       <PageHeader

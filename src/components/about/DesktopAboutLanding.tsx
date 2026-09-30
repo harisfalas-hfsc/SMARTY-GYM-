@@ -290,9 +290,17 @@ function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
 }
 
 /** Desktop-only About layout mirroring the old SmartyGym desktop homepage. */
-export function DesktopAboutLanding({ page = "home" }: { page?: "home" | "about" }) {
+export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?: "home" | "about"; workoutCount?: number }) {
   const [slide, setSlide] = useState(0);
-  const displayedSections = page === "about" ? aboutSections : homeSections;
+  const sections = page === "about" ? aboutSections : homeSections;
+  const displayedSections = sections.map((section) =>
+    section.id === "smarty-workouts"
+      ? {
+          ...section,
+          description: `${workoutCount.toLocaleString()} expert-designed workouts by Haris Falas across Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability and Pilates.`,
+        }
+      : section,
+  );
   useEffect(() => {
     const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 2750);
     return () => clearInterval(id);

@@ -4,8 +4,10 @@ import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
 import pageHeroImage from "@/assets/hero-training.jpg";
+import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 
 export const Route = createFileRoute("/how-it-works")({
+  loader: () => getSmartyWorkoutCounts(),
   head: () => ({
     meta: [
       {
@@ -212,6 +214,7 @@ const TRACKING_STEPS = [
 
 function HowItWorks() {
   const { freeAccessMode } = useFreeAccessMode();
+  const workoutCount = Route.useLoaderData().total;
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
       <PageHeader image={pageHeroImage}
@@ -232,7 +235,7 @@ function HowItWorks() {
            Find a ready workout and train.
          </h2>
          <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-           Explore eight categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic,
+           Explore {workoutCount.toLocaleString()} expert-designed workouts across eight categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic,
            Challenge, Mobility &amp; Stability and Pilates. Open a category to filter by equipment,
            duration and difficulty. Everyone can browse workout pictures and details; Premium members
            can open a workout, train it, log performance and track it in their logbook. These workouts

@@ -22,9 +22,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 import pageHeroImage from "@/assets/about-smartygym-card.jpg";
+import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 
 
 export const Route = createFileRoute("/about")({
+  loader: () => getSmartyWorkoutCounts(),
   head: () => ({
     meta: [
       {
@@ -83,6 +85,7 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
+  const workoutCount = Route.useLoaderData().total;
   return (
     <>
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:hidden">
@@ -242,7 +245,7 @@ function AboutPage() {
           </p>
           <p className="mt-2 text-base font-extrabold uppercase">Ready when you are</p>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Browse ready workouts across eight categories, from Strength and Cardio to Mobility &amp;
+            Browse {workoutCount.toLocaleString()} expert-designed workouts across eight categories, from Strength and Cardio to Mobility &amp;
             Stability and Pilates. See the workout details before choosing one; Premium members can
             open it, train it and track their performance in the logbook.
           </p>

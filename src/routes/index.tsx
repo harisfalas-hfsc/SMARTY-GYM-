@@ -3,10 +3,12 @@ import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
+import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 
 
 
 export const Route = createFileRoute("/")({
+  loader: () => getSmartyWorkoutCounts(),
   head: () => ({
     meta: [
       {
@@ -70,6 +72,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { freeAccessMode } = useFreeAccessMode();
+  const workoutCount = Route.useLoaderData().total;
   return (
     <>
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
@@ -91,12 +94,12 @@ function Home() {
           <span className="text-primary">All in your pocket.</span>
         </p>
 
-        <MobileHomeActions showPricing={!freeAccessMode} />
+        <MobileHomeActions showPricing={!freeAccessMode} workoutCount={workoutCount} />
       </section>
     </div>
 
     {/* DESKTOP — the About landing layout is the homepage */}
-    <DesktopAboutLanding />
+    <DesktopAboutLanding workoutCount={workoutCount} />
     </>
   );
 }
