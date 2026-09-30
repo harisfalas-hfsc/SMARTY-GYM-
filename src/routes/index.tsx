@@ -3,6 +3,7 @@ import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
+import { DesktopHomeStory } from "@/components/home/DesktopHomeStory";
 import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 
 
@@ -100,6 +101,7 @@ function Home() {
 
     {/* DESKTOP — the About landing layout is the homepage */}
     <DesktopAboutLanding workoutCount={workoutCount} />
+    <DesktopHomeStory />
     </>
   );
 }
