@@ -10,6 +10,7 @@ import { difficultyLabel } from "@/lib/workout/spec";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import pageHeroImage from "@/assets/hero-wod-card.jpg";
+import { WodMobileCards } from "@/components/wod/WodMobileCards";
 
 export const Route = createFileRoute("/wod")({
   head: () => ({
@@ -120,7 +121,11 @@ function WodPage() {
           {data.today.cards.length === 0 ? (
             <div className="rounded-lg border-2 border-dashed border-primary/35 px-5 py-10 text-center text-sm text-muted-foreground">Today's workouts are being prepared.</div>
           ) : (
-            <div className={`grid gap-4 ${data.today.cards.length > 1 ? "sm:grid-cols-2" : "mx-auto max-w-xl"}`}>
+            <>
+            <div className="sm:hidden">
+              <WodMobileCards cards={data.today.cards} fallback={pageHeroImage} />
+            </div>
+            <div className={`hidden gap-4 sm:grid ${data.today.cards.length > 1 ? "sm:grid-cols-2" : "mx-auto max-w-xl"}`}>
               {data.today.cards.map(({ slot, workout: w }) => (
                 <div key={slot} className="relative aspect-[3/2] overflow-hidden rounded-lg border border-border bg-card shadow-sm">
                   <img
@@ -147,6 +152,7 @@ function WodPage() {
                 </div>
               ))}
             </div>
+            </>
           )}
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/40 bg-card p-4">
