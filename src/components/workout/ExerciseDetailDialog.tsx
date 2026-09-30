@@ -5,7 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Dumbbell, Loader2, X } from "lucide-react";
+import { ListChecks, Loader2, X } from "lucide-react";
 import { useExerciseMedia } from "./ExerciseMediaProvider";
 import { ExerciseImage } from "@/components/ExerciseImage";
 
@@ -39,11 +39,16 @@ export function ExerciseDetailDialog({
               fallbackClassName="flex h-44 w-full items-center justify-center bg-secondary"
             />
           ) : (
-            <div className="flex h-44 w-full items-center justify-center bg-secondary text-muted-foreground">
+            <div className="min-h-44 w-full bg-secondary p-5 text-foreground">
               {loading ? (
-                <Loader2 className="h-7 w-7 animate-spin text-primary" />
+                <div className="flex h-32 items-center justify-center"><Loader2 className="h-7 w-7 animate-spin text-primary" /></div>
               ) : (
-                <Dumbbell className="h-9 w-9" />
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 font-bold"><ListChecks className="h-5 w-5 text-primary" />Guided demonstration</div>
+                  <ol className="list-decimal space-y-1.5 pl-5 text-sm leading-relaxed">
+                    {(ex?.instructions ?? []).slice(0, 4).map((step, index) => <li key={index}>{step}</li>)}
+                  </ol>
+                </div>
               )}
             </div>
           )}
