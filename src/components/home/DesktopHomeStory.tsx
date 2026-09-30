@@ -168,7 +168,7 @@ export function DesktopHomeStory() {
             <div className="mx-auto grid max-w-4xl grid-cols-6 gap-4">
               {audiences.map(({ label, Icon }) => (
                 <div key={label} className="flex flex-col items-center gap-2 text-center">
-                  <Icon className={`h-7 w-7 ${iconInk(title)}`} />
+                  <Icon className={`h-7 w-7 ${iconInk(label)}`} />
                   <span className="text-sm font-bold text-foreground">{label}</span>
                 </div>
               ))}
