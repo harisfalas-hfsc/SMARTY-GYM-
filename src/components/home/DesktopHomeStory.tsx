@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import {
   Award,
   BookOpen,
@@ -23,6 +24,9 @@ import evidenceBased from "@/assets/home-values/value-evidence-based.webp";
 import structureClarity from "@/assets/home-values/value-structure-clarity.webp";
 import humanConnection from "@/assets/home-values/value-human-connection.webp";
 import resultsDriven from "@/assets/home-values/value-results-driven.webp";
+import exerciseLibrary from "@/assets/explore-exercise-library.jpg";
+import community from "@/assets/community-card.jpg";
+import checkins from "@/assets/explore-checkins.jpg";
 
 const partnerValues = [
   {
@@ -74,7 +78,13 @@ const audiences = [
   { label: "Gym-Goers", Icon: Dumbbell },
 ];
 
-function Heading({ ghost, eyebrow, children }: { ghost: string; eyebrow: string; children: React.ReactNode }) {
+const destinations = [
+  { title: "Exercise Library", text: "Explore the complete movement library with demonstrations and clear exercise information.", image: exerciseLibrary, to: "/exercise-library" },
+  { title: "Smarty Community", text: "Connect around training, activity, shared workouts and the community rankings.", image: community, to: "/community" },
+  { title: "Smarty Check-ins", text: "Record morning readiness and evening recovery so your training reflects how you actually feel.", image: checkins, to: "/smarty-checkins" },
+] as const;
+
+function Heading({ ghost, eyebrow, children }: { ghost: string; eyebrow: string; children: ReactNode }) {
   return (
     <div className="relative mb-12 text-center">
       <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-9 text-[112px] font-black uppercase leading-none text-muted/45">
@@ -111,6 +121,23 @@ function ValueGrid({ items }: { items: typeof promiseValues }) {
 export function DesktopHomeStory() {
   return (
     <div className="hidden lg:block">
+      <section className="border-t border-border bg-background py-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-3 gap-5 px-8">
+          {destinations.map((destination) => (
+            <Link key={destination.title} to={destination.to} className="group overflow-hidden rounded-lg border border-border bg-card">
+              <div className="aspect-[16/9] overflow-hidden">
+                <img src={destination.image} alt={destination.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+              </div>
+              <div className="p-5">
+                <h2 className="text-xl font-black text-foreground group-hover:text-primary">{destination.title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{destination.text}</p>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">Explore <ChevronRight className="h-4 w-4" /></span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section className="border-t border-border bg-background py-20">
         <div className="mx-auto max-w-7xl px-8">
           <Heading ghost="THE GYM" eyebrow="Your Fitness Partner">Anywhere, Anytime.</Heading>
