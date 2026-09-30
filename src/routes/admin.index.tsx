@@ -255,7 +255,7 @@ function AdminPage() {
           {section === "workouts" && (
             <Tabs value={workoutTab} onValueChange={setWorkoutTab} className="rounded-2xl border-2 border-blue-400 bg-card p-3 sm:p-4">
               <TabsList className="grid h-auto w-full grid-cols-2">
-                <TabsTrigger value="smarty" className="py-2 font-bold">My Smarty Workouts</TabsTrigger>
+                <TabsTrigger value="smarty" className="py-2 font-bold">Smarty Workouts</TabsTrigger>
                 <TabsTrigger value="members" className="py-2 font-bold">Member workouts</TabsTrigger>
               </TabsList>
               <TabsContent value="smarty" className="mt-4"><AdminSmartyWorkoutsTab /></TabsContent>

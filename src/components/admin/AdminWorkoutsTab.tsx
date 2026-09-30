@@ -50,7 +50,7 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
     const r = await duplicateFn({ data: { source: "member", id } });
     setDupBusy(false);
     if ("error" in r) return toast.error(r.error);
-    toast.success("Copied into My Smarty Workouts — edit it and press Save Workout.");
+    toast.success("Copied into Smarty Workouts — edit it and press Save Workout.");
     setOpenId(null);
     requestSmartyDraft(r.id);
   }
