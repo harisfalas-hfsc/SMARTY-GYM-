@@ -1,11 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Clock, Gauge, Heart, Loader2, Repeat2, Search, X } from "lucide-react";
+import { Loader2, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { equipmentBadges } from "@/lib/format/labels";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,8 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { listSmartyWorkouts, setSmartyWorkoutFavorite, type SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, categoryFromSlug } from "@/lib/smarty-workout-categories";
-import { CATEGORY_FORMATS, difficultyLabel, type Category } from "@/lib/workout/spec";
-import { coverVariant, fallbackTo } from "@/lib/cover-image";
+import { CATEGORY_FORMATS, type Category } from "@/lib/workout/spec";
+import { WorkoutCard, kindForWorkout } from "@/components/wod/WodMobileCards";
 
 export const Route = createFileRoute("/smarty-workouts/category/$category")({
   loader: ({ params }) => {
@@ -188,65 +187,19 @@ function CategoryPage() {
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((w, index) => {
-                const bw = w.equipment.length === 0 || w.equipment.every((i) => i.toLowerCase() === "bodyweight");
                 const mine = mineById[w.id];
-                const badges = equipmentBadges(w.equipment);
                 return (
-                  <div key={w.id} className="relative h-56 overflow-hidden rounded-2xl border-2 border-blue-400 bg-muted transition hover:shadow-lg">
-                    <img
-                      src={coverVariant(w.image_url, 640) ?? detail.image}
-                      onError={fallbackTo(w.image_url ?? detail.image)}
-                      alt={w.name}
-                      loading={index < 4 ? "eager" : "lazy"}
-                      decoding="async"
-                      width={640}
-                      height={427}
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
-                    <Link
-                      to="/smarty-workouts/$workoutId"
-                      params={{ workoutId: w.id }}
-                      className="relative block h-full p-4 transition hover:bg-primary/10"
-                    >
-                      <p className="w-fit max-w-[calc(100%-2.75rem)] rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-base font-bold leading-tight text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
-
-                      <p className="mt-2 w-fit rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur-sm">
-                        {bw ? "Bodyweight" : "Equipment"}
-                      </p>
-
-                      <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
-                        <span className="inline-flex w-fit items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm">
-                          <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />{w.duration_min} min
-                        </span>
-                        <span className="inline-flex w-fit items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm">
-                          <Gauge className="h-3.5 w-3.5 shrink-0 text-primary" />{difficultyLabel(w.difficulty_stars)}
-                        </span>
-                        {user ? <span className="inline-flex w-fit items-center gap-1 justify-self-end rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{mine?.done ? <><CheckCircle2 className="h-3.5 w-3.5 text-primary" />Done</> : "Not done"}</span> : null}
-                      </div>
-
-                      {w.format ? <span className="mt-2 inline-flex items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] text-workout-overlay-foreground shadow-sm backdrop-blur-sm"><Repeat2 className="h-3.5 w-3.5 text-primary" />{w.format}</span> : null}
-
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {(bw ? ["Bodyweight"] : badges.shown).map((e) => <span key={e} className="rounded-full border border-primary/40 bg-workout-overlay px-2 py-0.5 text-[10px] font-semibold capitalize text-primary shadow-sm backdrop-blur-sm">{e}</span>)}
-                        {!bw && badges.overflow ? <span className="rounded-full border border-workout-overlay-border bg-workout-overlay px-2 py-0.5 text-[10px] text-workout-overlay-muted shadow-sm backdrop-blur-sm">+{badges.overflow}</span> : null}
-                      </div>
-                    </Link>
-
-                    {user ? (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        aria-label={mine?.fav ? "Remove from favourites" : "Mark as favourite"}
-                        aria-pressed={Boolean(mine?.fav)}
-                        disabled={savingFavorite === w.id}
-                        onClick={() => void toggleFavorite(w.id, !mine?.fav)}
-                        className="absolute right-2 top-2 border-workout-overlay-border bg-workout-overlay text-workout-overlay-muted shadow-sm backdrop-blur-sm hover:bg-workout-overlay hover:text-destructive"
-                      >
-                        {savingFavorite === w.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Heart className={`h-5 w-5 ${mine?.fav ? "fill-destructive text-destructive" : ""}`} />}
-                      </Button>
-                    ) : null}
-                  </div>
+                  <WorkoutCard
+                    key={w.id}
+                    workout={w}
+                    kind={kindForWorkout(w)}
+                    fallback={detail.image}
+                    eager={index < 4}
+                    done={Boolean(user && mine?.done)}
+                    favorite={Boolean(mine?.fav)}
+                    onToggleFavorite={user ? () => void toggleFavorite(w.id, !mine?.fav) : undefined}
+                    favoriteBusy={savingFavorite === w.id}
+                  />
                 );
               })}
             </div>

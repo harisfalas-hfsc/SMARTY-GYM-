@@ -1,0 +1,1 @@
+GRANT SELECT (description_html) ON public.smarty_workouts TO anon, authenticated;

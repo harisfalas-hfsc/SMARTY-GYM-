@@ -1,16 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useEffect, useState } from "react";
-import { CalendarDays, Clock, Crown, Gauge, Loader2, Repeat2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Clock, Loader2 } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 import { getTodayWod, type WodDay } from "@/lib/wod.functions";
-import { SLOT_LABEL } from "@/lib/wod/rules";
-import { difficultyLabel } from "@/lib/workout/spec";
-import { categoryLabel } from "@/lib/smarty-workout-row";
-import { coverVariant, fallbackTo } from "@/lib/cover-image";
+import { getCycleDay } from "@/lib/wod-cycle";
 import pageHeroImage from "@/assets/hero-wod-card.jpg";
-import { WodMobileCards } from "@/components/wod/WodMobileCards";
+import { WodMobileCards, WorkoutCard } from "@/components/wod/WodMobileCards";
+import { WodPeriodizationCalendar } from "@/components/wod/WodPeriodizationCalendar";
 
 export const Route = createFileRoute("/wod")({
   head: () => ({
@@ -73,14 +71,6 @@ export const Route = createFileRoute("/wod")({
   component: WodPage,
 });
 
-function formatDate(date: string) {
-  return new Intl.DateTimeFormat("en", { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
-}
-
-function planLine(day: WodDay) {
-  return [categoryLabel(day.category), day.difficulty, day.focus].filter(Boolean).join(" · ");
-}
-
 function WodPage() {
   const [data, setData] = useState<{ today: WodDay; tomorrow: WodDay } | null>(null);
   const [failed, setFailed] = useState(false);
@@ -91,81 +81,73 @@ function WodPage() {
       .catch(() => setFailed(true));
   }, []);
 
+  const yesterday = data ? getCycleDay(shiftDay(data.today.date, -1)) : null;
+
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader
-        image={pageHeroImage}
-        eyebrow="SMARTY GYM"
-        title="Workout of the Day"
-        subtitle="Every day at 00:00 Cyprus time, one bodyweight and one equipment workout are picked from Smarty Workouts, following the 84-day periodization."
-      />
+      <PageHeader image={pageHeroImage} eyebrow="SMARTY GYM" title="Workout of the Day" />
+
+      <Card className="mb-8 border-2 border-primary/40 bg-gradient-to-br from-primary/5 via-background to-primary/5 shadow-primary">
+        <div className="p-4 sm:p-6">
+          <p className="mx-auto hidden max-w-3xl text-center text-base text-muted-foreground sm:block">
+            Every training day <span className="font-semibold text-primary">SmartyGym</span> delivers TWO fresh, expertly designed workouts following a strategic periodization cycle — one with equipment and one without. On recovery days, we provide a single guided recovery session. Each day focuses on a different category and difficulty level. Our workouts follow a science-based periodization approach designed by{" "}
+            <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Coach Haris Falas</Link>
+            , ensuring that within each weekly cycle, you train all fitness parameters. Unlike random workouts you find on YouTube or Instagram, following{" "}
+            <span className="font-semibold text-primary">SmartyGym</span>'s structured program means you can rest assured that your training is reliable, professionally organized, and designed to systematically improve all aspects of your fitness.
+          </p>
+          <p className="mx-auto block max-w-3xl text-center text-sm text-muted-foreground sm:hidden">
+            Our WOD's follow a science-based periodization approach designed by Coach{" "}
+            <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>
+            , ensuring that within each weekly cycle, you train all fitness parameters. Following{" "}
+            <span className="font-semibold text-primary">SmartyGym</span>'s structured program means you can rest assured that your training is reliable, professionally organized, and designed to systematically improve all aspects of your fitness.
+          </p>
+        </div>
+      </Card>
 
       {failed ? (
         <p className="rounded-lg border border-border bg-card p-6 text-center text-sm text-muted-foreground">Workout of the Day is unavailable right now. Please try again shortly.</p>
-      ) : !data ? (
+      ) : !data || !yesterday ? (
         <div className="flex min-h-[20vh] items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
       ) : (
         <>
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-primary">Today · {formatDate(data.today.date)}</p>
-              <p className="mt-1 text-lg font-extrabold">{planLine(data.today)}</p>
-              <p className="text-xs text-muted-foreground">Day {data.today.cycleDay} of the 84-day periodization</p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tomorrow</p>
-              <p className="mt-1 text-sm font-semibold">{planLine(data.tomorrow)}</p>
-            </div>
-          </div>
+          <WodPeriodizationCalendar
+            yesterday={{ date: shiftDay(data.today.date, -1), category: yesterday.category, difficulty: yesterday.difficulty }}
+            today={{ date: data.today.date, category: data.today.category, difficulty: data.today.difficulty }}
+            tomorrow={{ date: data.tomorrow.date, category: data.tomorrow.category, difficulty: data.tomorrow.difficulty }}
+          />
 
           {data.today.cards.length === 0 ? (
-            <div className="rounded-lg border-2 border-dashed border-primary/35 px-5 py-10 text-center text-sm text-muted-foreground">Today's workouts are being prepared.</div>
+            <Card className="border-2 border-dashed border-primary/30">
+              <div className="p-12 text-center">
+                <Clock className="mx-auto mb-4 h-16 w-16 text-primary/50" />
+                <h2 className="mb-2 text-2xl font-bold text-foreground">Today's Workouts are Being Prepared</h2>
+                <p className="text-muted-foreground">Check back <span className="font-semibold text-primary">soon</span> for your fresh Workouts of the Day!</p>
+              </div>
+            </Card>
+          ) : data.today.cards.length === 1 ? (
+            <div className="w-full">
+              <WorkoutCard workout={data.today.cards[0]!.workout} kind={data.today.cards[0]!.slot} fallback={pageHeroImage} />
+            </div>
           ) : (
             <>
-            <div className="sm:hidden">
-              <WodMobileCards cards={data.today.cards} fallback={pageHeroImage} />
-            </div>
-            <div className={`hidden gap-4 sm:grid ${data.today.cards.length > 1 ? "sm:grid-cols-2" : "mx-auto max-w-xl"}`}>
-              {data.today.cards.map(({ slot, workout: w }) => (
-                <div key={slot} className="relative aspect-[3/2] overflow-hidden rounded-lg border border-border bg-card shadow-sm">
-                  <img
-                    src={coverVariant(w.image_url, 640) ?? pageHeroImage}
-                    onError={fallbackTo(w.image_url ?? pageHeroImage)}
-                    alt={w.name}
-                    loading="eager"
-                    decoding="async"
-                    width={640}
-                    height={427}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                  <Link to="/smarty-workouts/$workoutId" params={{ workoutId: w.id }} className="relative block h-full p-4 transition hover:bg-primary/10">
-                    <p className="w-fit rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur-sm">
-                      {SLOT_LABEL[slot]} Workout of the Day
-                    </p>
-                    <p className="mt-2 w-fit max-w-full rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-base font-bold leading-tight text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
-                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-                      <span className="inline-flex items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm"><Clock className="h-3.5 w-3.5 text-primary" />{w.duration_min} min</span>
-                      <span className="inline-flex items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm"><Gauge className="h-3.5 w-3.5 text-primary" />{difficultyLabel(w.difficulty_stars)}</span>
-                      {w.format ? <span className="inline-flex items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm"><Repeat2 className="h-3.5 w-3.5 text-primary" />{w.format}</span> : null}
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
+              <div className="sm:hidden">
+                <WodMobileCards cards={data.today.cards} fallback={pageHeroImage} />
+              </div>
+              <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:gap-6">
+                {data.today.cards.map((c) => (
+                  <WorkoutCard key={c.slot} workout={c.workout} kind={c.slot} fallback={pageHeroImage} />
+                ))}
+              </div>
             </>
           )}
-
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/40 bg-card p-4">
-              <p className="flex items-center gap-2 text-sm"><Crown className="h-4 w-4 text-primary" />Everyone can see the Workout of the Day. Premium members can open and train it.</p>
-              <Button asChild size="sm"><Link to="/pricing">Go Premium</Link></Button>
-            </div>
-
-          <div className="mt-8 rounded-lg border border-border bg-card p-5 text-sm leading-relaxed text-muted-foreground">
-            <h2 className="mb-2 flex items-center gap-2 text-base font-extrabold text-foreground"><CalendarDays className="h-4 w-4 text-primary" />How the Workout of the Day works</h2>
-            <p>Smarty Gym follows an 84-day periodization made of three 28-day blocks. Each day has a planned category and level, so hard and easy days alternate and every quality is trained. At midnight Cyprus time the system picks today's workouts from Smarty Workouts: one bodyweight workout you can do anywhere and one equipment workout. Recovery days have one Recovery workout. A workout is not repeated until every other matching workout has been used.</p>
-          </div>
         </>
       )}
     </div>
   );
+}
+
+function shiftDay(date: string, n: number) {
+  const d = new Date(`${date}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
 }

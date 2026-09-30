@@ -442,6 +442,13 @@
       "when": 1790763889417,
       "tag": "0062_shared_workout_of_the_day",
       "breakpoints": true
+    },
+    {
+      "idx": 63,
+      "version": "7",
+      "when": 1790765618419,
+      "tag": "0063_smarty_workouts_card_description",
+      "breakpoints": true
     }
   ]
 }
