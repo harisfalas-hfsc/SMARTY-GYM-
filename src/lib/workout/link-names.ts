@@ -37,12 +37,12 @@ export function buildLibraryIndex(lib: LibraryEntry[]): Map<string, LibraryEntry
   return idx;
 }
 
-const QTY = String.raw`(\d+(?:[.,]\d+)?\s*(?:x\s*\d+\s*)?(?:reps?|rep|seconds?|secs?|sec|s|minutes?|mins?|min|m|meters?|metres?|calories?|cals?|cal|steps?|each( side| leg| arm)?|per side)?\b\.?)`;
+const QTY = String.raw`(\d+(?:[.,]\d+)?\s*(?:(?:sets?|rounds?)?\s*[x×]\s*\d+\s*)?(?:sets?|rounds?|reps?|rep|seconds?|secs?|sec|s|minutes?|mins?|min|m|meters?|metres?|calories?|cals?|cal|steps?|each( side| leg| arm)?|per side)?\b\.?)`;
 const LEAD_QTY = new RegExp(`^(${QTY}\\s*(?:of\\s+)?)+`, "i");
 const TRAIL_QTY = new RegExp(`(\\s*[x×]?\\s*${QTY})+$`, "i");
 
 function candidates(text: string): string[] {
-  const t = text.replace(/^[•*\s]+/, "");
+  const t = text.replace(/^[•*\s]+/, "").replace(/^(minute|min|round|station|block)\s*\d+\s*[:.)-]\s*/i, "");
   const out = new Set<string>();
   const base = t.trim();
   const head = base.split(/\s[-–—:]\s|:\s|\s[-–—]|,|\(/)[0] ?? base;
