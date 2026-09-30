@@ -610,7 +610,7 @@ export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
   });
 
 /** Admin: checks every Smarty Workout for lines the player cannot play. */
-const adminCheckSmartyWorkouts = createServerFn({ method: "POST" })
+export const adminCheckSmartyWorkouts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<{ report: WorkoutCheckReport } | { error: string }> => {
     try {
@@ -650,7 +650,7 @@ const adminCheckSmartyWorkouts = createServerFn({ method: "POST" })
   });
 
 /** Admin: links one unmatched exercise name to a library exercise in every Smarty Workout. */
-const adminLinkExerciseEverywhere = createServerFn({ method: "POST" })
+export const adminLinkExerciseEverywhere = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { name: string; exerciseId: string }) =>
     z.object({ name: z.string().min(1).max(120), exerciseId: z.string().min(1).max(20) }).parse(d),
@@ -688,7 +688,7 @@ const adminLinkExerciseEverywhere = createServerFn({ method: "POST" })
   });
 
 /** Admin: publishes every hidden Smarty Workout that passes the check. */
-const adminPublishCheckedWorkouts = createServerFn({ method: "POST" })
+export const adminPublishCheckedWorkouts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<{ count: number; held: number } | { error: string }> => {
     try {

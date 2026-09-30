@@ -20,4 +20,4 @@
 - Workout delivery is fail-fast: WOD uses the deterministic library engine immediately; manual generation gets one 18-second AI attempt, then the same library-only fallback.
 - All workout generation (admin Smarty Workouts, member Create Your Workout, daily WOD) goes through generateWorkoutContent in src/lib/workout/generate.server.ts; coach priority lists live only in src/lib/workout/priority.ts — why: one rule package, so every rule change applies to all three.
 - Old SMARTY GYM workouts are imported via src/lib/smarty-workouts-import.server.ts keyed on smarty_workouts.legacy_id — why: re-runs refresh instead of duplicating.
-- Legacy Smarty Workout players accept verified original numeric and curated slug exercise IDs; imported workouts retain their original section HTML and exact exercise records — why: preserve all sections, instructions and movements without substitutions.
+- Legacy Smarty Workout players accept verified original numeric and curated slug exercise IDs; imports retain original HTML/records and bulk publishing is gated by the permanent full-transfer audit — why: preserve content and never mass-publish broken transfers or admin drafts.
