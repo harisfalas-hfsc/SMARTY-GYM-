@@ -1,4 +1,4 @@
-import { Activity, Dumbbell, Flame, Flower2, HeartPulse, Move3d, Sparkles, Zap, type LucideIcon } from "lucide-react";
+import { Activity, Leaf, Dumbbell, Flame, Flower2, HeartPulse, Move3d, Sparkles, Zap, type LucideIcon } from "lucide-react";
 import { SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
 import strengthImage from "@/assets/smarty-workout-categories/strength.jpg";
 import muscleImage from "@/assets/smarty-workout-categories/muscle-building-curl.jpg";
@@ -8,6 +8,7 @@ import metabolicImage from "@/assets/smarty-workout-categories/metabolic-grounde
 import challengeImage from "@/assets/smarty-workout-categories/challenge-realistic.jpg";
 import mobilityImage from "@/assets/smarty-workout-categories/mobility-stability-realistic.jpg";
 import pilatesImage from "@/assets/smarty-workout-categories/pilates.jpg";
+import recoveryImage from "@/assets/smarty-workout-categories/recovery.jpg";
 
 export type SmartyCategory = (typeof SMARTY_WORKOUT_CATEGORIES)[number];
 
@@ -20,6 +21,7 @@ export const CATEGORY_DETAILS: Record<SmartyCategory, { image: string; descripti
   CHALLENGE: { image: challengeImage, description: "Benchmark-style workouts that test your fitness and push you beyond your comfort zone.", Icon: Sparkles },
   "MOBILITY & STABILITY": { image: mobilityImage, description: "Improve joint health, control and movement quality through targeted mobility and stability work.", Icon: Move3d },
   PILATES: { image: pilatesImage, description: "Build core strength, alignment and body awareness through controlled, precise movement.", Icon: Flower2 },
+  RECOVERY: { image: recoveryImage, description: "Gentle sessions of easy movement, breathing, light mobility and stretching that help your body recover between harder days.", Icon: Leaf },
 };
 
 export function categorySlug(category: SmartyCategory): string {

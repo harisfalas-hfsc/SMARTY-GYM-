@@ -135,9 +135,9 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
             for (const d of dates) results.push(await selectWodForDate(db, d));
             const filled = results.flatMap((r) => r.filled.map((f) => `${r.date} ${f.slot}: ${f.name}`));
             const missing = results.flatMap((r) => r.missing.map((m) => `${r.date} ${r.category} ${m}: no matching workout`));
-            wod = { status: missing.length ? "failed" : "ok", summary: `${filled.length} slot(s) filled${missing.length ? `, ${missing.length} without a matching workout` : ""}.` };
+            wod = { status: (missing.length ? "failed" : "ok") as "failed" | "ok", summary: `${filled.length} slot(s) filled${missing.length ? `, ${missing.length} without a matching workout` : ""}.` };
             if (due || filled.length || missing.length) {
-              await recordRun(db, { jobKey: "wod-selection", status: wod.status, changed: filled.length > 0, summary: wod.summary, details: { filled, failures: missing }, trigger: "schedule" });
+              await recordRun(db, { jobKey: "wod-selection", status: wod.status as "failed" | "ok", changed: filled.length > 0, summary: wod.summary, details: { added: filled, failures: missing }, trigger: "schedule" });
             }
             if (missing.length) failures.push(...missing.map((m) => `wod:${m}`));
             if (due) await markJobRan(db, "wod-selection", wodConfig);

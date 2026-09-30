@@ -152,11 +152,11 @@ export const adminRunCronJob = createServerFn({ method: "POST" })
           const results = [await selectWodForDate(db, today), await selectWodForDate(db, addDays(today, 1))];
           const filled = results.flatMap((r) => r.filled.map((f) => `${r.date} ${f.slot}: ${f.name}`));
           const missing = results.flatMap((r) => r.missing.map((m) => `${r.date} ${r.category} ${m}: no matching workout`));
-          const status = missing.length ? "failed" : "ok";
+          const status = (missing.length ? "failed" : "ok") as "failed" | "ok";
           const summary = filled.length
             ? `${filled.length} slot(s) filled${missing.length ? `, ${missing.length} without a matching workout` : ""}.`
             : missing.length ? `${missing.length} slot(s) without a matching workout.` : "Today and tomorrow were already picked — nothing to change.";
-          await recordRun(db, { jobKey: "wod-selection", status, changed: filled.length > 0, summary, details: { filled, failures: missing }, trigger: "manual" });
+          await recordRun(db, { jobKey: "wod-selection", status, changed: filled.length > 0, summary, details: { added: filled, failures: missing }, trigger: "manual" });
           return { status, summary };
         }
 
