@@ -259,6 +259,15 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Mobile view: no pinch or double-tap zoom (scrolling still works). */
+@media (pointer: coarse) {
+  html,
+  body {
+    touch-action: pan-x pan-y;
+  }
+}
+
+
 /* Native-app feel on mobile: hide every scrollbar (page, cards, dialogs,
  * popovers, sheets, drawers). Desktop keeps its scrollbars untouched. */
 @media (max-width: 767px) {
