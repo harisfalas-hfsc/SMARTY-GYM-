@@ -1205,6 +1205,7 @@ export type Database = {
           image_url: string | null
           instructions_html: string | null
           is_visible: boolean
+          legacy_id: string | null
           location: string | null
           main_workout: string | null
           name: string
@@ -1227,6 +1228,7 @@ export type Database = {
           image_url?: string | null
           instructions_html?: string | null
           is_visible?: boolean
+          legacy_id?: string | null
           location?: string | null
           main_workout?: string | null
           name: string
@@ -1249,6 +1251,7 @@ export type Database = {
           image_url?: string | null
           instructions_html?: string | null
           is_visible?: boolean
+          legacy_id?: string | null
           location?: string | null
           main_workout?: string | null
           name?: string

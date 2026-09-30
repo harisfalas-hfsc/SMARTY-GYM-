@@ -1,0 +1,1 @@
+ALTER TABLE public.smarty_workouts ADD COLUMN IF NOT EXISTS legacy_id text UNIQUE;
