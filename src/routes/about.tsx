@@ -245,8 +245,8 @@ function AboutPage() {
           </p>
           <p className="mt-2 text-base font-extrabold uppercase">Ready when you are</p>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Browse {workoutCount.toLocaleString()} expert-designed workouts across eight categories, from Strength and Cardio to Mobility &amp;
-            Stability and Pilates. See the workout details before choosing one; Premium members can
+            Browse {workoutCount.toLocaleString()} expert-designed workouts across nine categories, from Strength and Cardio to Mobility &amp;
+            Stability, Pilates and Recovery. See the workout details before choosing one; Premium members can
             open it, train it and track their performance in the logbook.
           </p>
           <Button asChild className="mt-auto w-full font-extrabold uppercase">
@@ -275,14 +275,14 @@ function AboutPage() {
           </p>
           <p className="mt-2 text-base font-extrabold uppercase">Planned for you, every day</p>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Turn it on once and receive two ready workouts every day — one with equipment, one
-            bodyweight only — adapted to your profile and sequenced by a scientific periodization
+            Every midnight two ready Smarty Workouts are picked — one with equipment, one
+            bodyweight only — sequenced by a scientific periodization
             plan, so you never overtrain, never undertrain and develop every fitness quality in the
             right order. It is like having a personal trainer who already knows what you must do
             today, next week and next month.
           </p>
           <Button asChild className="mt-auto w-full font-extrabold uppercase">
-            <Link to="/wod">Subscribe to Workout of the Day</Link>
+            <Link to="/wod">See the Workout of the Day</Link>
           </Button>
         </div>
 

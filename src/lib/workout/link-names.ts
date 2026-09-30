@@ -153,6 +153,8 @@ export function auditWorkoutHtml(html: string, libIds: Set<string>): WorkoutIssu
   for (const m of flat.matchAll(LINE_RE)) {
     const inner = m[2] ?? "";
     if (/<(ul|ol|li)\b/i.test(inner)) continue;
+    // Section headings ("💪 Main Workout (MIX)") are titles, not exercise lines.
+    if (SECTION_MARKS.some(([re]) => re.test(inner)) && /<(strong|u|b)\b/i.test(inner)) continue;
     const section = sectionAt(m.index ?? 0);
     if (section === "Soft Tissue Preparation") continue;
     const tokens = [...inner.matchAll(new RegExp(EXERCISE_TOKEN_RE.source, "g"))];

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { BellRing, Loader2, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,12 +14,10 @@ import {
 import {
   getDailyHub,
   saveDailySettings,
-  setWodSubscription,
   type DailySettings,
 } from "@/lib/daily.functions";
 import { loadRemote } from "@/lib/remote-data";
 import { useAuth } from "@/hooks/useAuth";
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const ZONES = [
@@ -39,15 +36,12 @@ function hourLabel(h: number) {
   return `${String(h).padStart(2, "0")}:00`;
 }
 
-export function DailyCoachingSettings({ premium = false }: { premium?: boolean }) {
+export function DailyCoachingSettings(_props: { premium?: boolean }) {
   const { user } = useAuth();
-  const { freeAccessMode } = useFreeAccessMode();
   const load = useServerFn(getDailyHub);
   const save = useServerFn(saveDailySettings);
-  const setSub = useServerFn(setWodSubscription);
   const [settings, setSettings] = useState<DailySettings | null>(null);
   const [saving, setSaving] = useState(false);
-  const [wodBusy, setWodBusy] = useState(false);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -56,24 +50,7 @@ export function DailyCoachingSettings({ premium = false }: { premium?: boolean }
       .catch(() => undefined);
   }, [load, user?.id]);
 
-  async function toggleWod(subscribe: boolean) {
-    if (wodBusy) return;
-    setWodBusy(true);
-    try {
-      await setSub({ data: { subscribe } });
-      const hub = await load({});
-      setSettings(hub.settings);
-      toast.success(
-        subscribe
-          ? "Daily plan on. Today's two workouts are in your account."
-          : "Daily plan off. You can create your own workouts again.",
-      );
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not update your subscription.");
-    } finally {
-      setWodBusy(false);
-    }
-  }
+
 
 
   function patch(next: Partial<DailySettings>) {
@@ -149,75 +126,6 @@ export function DailyCoachingSettings({ premium = false }: { premium?: boolean }
         ) : null}
 
         <div className="h-px bg-border" />
-
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-sm font-semibold">Workout of the Day</p>
-            <p className="text-xs text-muted-foreground">
-              {premium
-                ? settings.wod_mode
-                  ? "Daily plan is on. Two workouts land in your account every morning."
-                  : "Turn it on to get two workouts (bodyweight and equipment) every morning."
-                : "Members only. Join Smarty Gym to receive the daily programme."}
-            </p>
-          </div>
-          {premium ? (
-            <Button
-              variant={settings.wod_mode ? "outline" : "default"}
-              className="h-10 shrink-0 rounded-xl"
-              disabled={wodBusy}
-              onClick={() => void toggleWod(!settings.wod_mode)}
-            >
-              {wodBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : settings.wod_mode ? "Turn off" : "Turn on"}
-            </Button>
-          ) : freeAccessMode ? null : (
-            <Link
-              to="/pricing"
-              className="flex h-10 shrink-0 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
-            >
-              See plans
-            </Link>
-          )}
-        </div>
-
-        {premium && settings.wod_mode ? (
-          <>
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-sm font-semibold">Workout ready every day</p>
-                <p className="text-xs text-muted-foreground">
-                  Smarty Coach builds your session before you ask for it.
-                </p>
-              </div>
-              <Switch
-                checked={settings.auto_workout_enabled}
-                onCheckedChange={(v) => patch({ auto_workout_enabled: v })}
-              />
-            </div>
-
-            {settings.auto_workout_enabled ? (
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-sm">Have it ready by</p>
-                <Select
-                  value={String(settings.auto_workout_hour)}
-                  onValueChange={(v) => patch({ auto_workout_hour: Number(v) })}
-                >
-                  <SelectTrigger className="h-10 w-28 rounded-xl">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {HOURS.map((h) => (
-                      <SelectItem key={h} value={String(h)}>
-                        {hourLabel(h)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            ) : null}
-          </>
-        ) : null}
-
 
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm">Time zone</p>

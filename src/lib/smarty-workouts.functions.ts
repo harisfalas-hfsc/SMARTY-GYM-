@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-/** The eight ready-workout categories, in page order. */
+/** The nine ready-workout categories, in page order. */
 export const SMARTY_WORKOUT_CATEGORIES = [
   "STRENGTH",
   "MUSCLE BUILDING",
@@ -12,6 +12,7 @@ export const SMARTY_WORKOUT_CATEGORIES = [
   "CHALLENGE",
   "MOBILITY & STABILITY",
   "PILATES",
+  "RECOVERY",
 ] as const;
 
 export type SmartyWorkout = {
