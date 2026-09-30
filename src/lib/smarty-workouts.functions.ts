@@ -40,7 +40,7 @@ export type SmartyWorkout = {
 
 export type SmartyWorkoutCard = Pick<
   SmartyWorkout,
-  "id" | "name" | "category" | "format" | "focus" | "difficulty_stars" | "duration_min" | "equipment" | "location" | "image_url"
+  "id" | "name" | "category" | "format" | "focus" | "difficulty_stars" | "duration_min" | "equipment" | "location" | "image_url" | "description_html" | "created_at"
 >;
 
 export type SmartyWorkoutCounts = {
@@ -48,7 +48,7 @@ export type SmartyWorkoutCounts = {
   byCategory: Record<string, number>;
 };
 
-const CARD_COLS = "id,name,category,format,focus,difficulty_stars,duration_min,equipment,location,image_url";
+const CARD_COLS = "id,name,category,format,focus,difficulty_stars,duration_min,equipment,location,image_url,description_html,created_at";
 
 async function publicClient() {
   const { createClient } = await import("@supabase/supabase-js");

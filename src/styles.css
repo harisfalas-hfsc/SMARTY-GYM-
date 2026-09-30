@@ -66,6 +66,7 @@
   --color-level-beginner: var(--level-beginner);
   --color-level-intermediate: var(--level-intermediate);
   --color-level-advanced: var(--level-advanced);
+  --color-level-recovery: var(--level-recovery);
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -100,6 +101,7 @@
   --level-beginner: oklch(0.554 0.135 66.4);
   --level-intermediate: oklch(0.527 0.154 150.1);
   --level-advanced: oklch(0.505 0.213 27.5);
+  --level-recovery: oklch(0.623 0.214 259.8);
   --gradient-premium: linear-gradient(90deg, oklch(0.852 0.199 91.9), oklch(0.705 0.213 47.6));
   --gradient-new: linear-gradient(90deg, oklch(0.723 0.219 149.6), oklch(0.596 0.145 163.2));
   --destructive: oklch(0.6 0.22 25);

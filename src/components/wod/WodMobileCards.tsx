@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Clock, Crown, Dumbbell, Home, Layers, Shuffle, Target, TrendingUp } from "lucide-react";
+import { Check, Clock, Dumbbell, Heart, Home, Layers, Shuffle, Target, TrendingUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import type { WodCard } from "@/lib/wod.functions";
 import { difficultyLabel } from "@/lib/workout/spec";
 import { categoryLabel } from "@/lib/smarty-workout-row";
@@ -18,33 +17,73 @@ const LEVEL_TONE: Record<string, string> = {
 };
 
 function stripHtml(html: string | null | undefined) {
-  return (html ?? "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  return (html ?? "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 }
 
-function isNew(createdAt: string | null | undefined) {
-  if (!createdAt) return false;
-  return (Date.now() - new Date(createdAt).getTime()) / 86_400_000 <= 2;
+
+export type WorkoutCardData = {
+  id: string;
+  name: string;
+  category: string;
+  format: string | null;
+  difficulty_stars: number;
+  duration_min: number;
+  image_url: string | null;
+  equipment?: string[];
+  description_html?: string | null;
+  created_at?: string | null;
+};
+
+export type WorkoutCardKind = "BODYWEIGHT" | "EQUIPMENT" | "RECOVERY";
+
+export function kindForWorkout(w: WorkoutCardData): WorkoutCardKind {
+  if (w.category === "RECOVERY") return "RECOVERY";
+  const eq = w.equipment ?? [];
+  return eq.length === 0 || eq.every((i) => i.toLowerCase() === "bodyweight") ? "BODYWEIGHT" : "EQUIPMENT";
 }
 
-/** Old Smarty Gym WOD card (WODCategory.tsx renderWODCard), used on phones. */
-function OldWodCard({ card, fallback }: { card: WodCard; fallback: string }) {
+/**
+ * The one Smarty Gym workout card (old Smarty Gym WOD card design).
+ * Used by Workout of the Day and every Smarty Workouts category page.
+ */
+export function WorkoutCard({
+  workout: w,
+  kind,
+  fallback,
+  eager = true,
+  done,
+  favorite,
+  onToggleFavorite,
+  favoriteBusy,
+}: {
+  workout: WorkoutCardData;
+  kind: WorkoutCardKind;
+  fallback: string;
+  eager?: boolean;
+  done?: boolean;
+  favorite?: boolean;
+  onToggleFavorite?: () => void;
+  favoriteBusy?: boolean;
+}) {
   const navigate = useNavigate();
-  const { freeAccessMode } = useFreeAccessMode();
-  const w = card.workout;
-  const recovery = card.slot === "RECOVERY" || w.category === "RECOVERY";
+  const recovery = kind === "RECOVERY";
   const equipment = recovery
     ? { Icon: Shuffle, label: "Mixed/Minimal", cls: "bg-wod-recovery" }
-    : card.slot === "BODYWEIGHT"
+    : kind === "BODYWEIGHT"
       ? { Icon: Home, label: "No Equipment", cls: "bg-wod-bodyweight" }
       : { Icon: Dumbbell, label: "With Equipment", cls: "bg-wod-equipment" };
   const level = difficultyLabel(w.difficulty_stars);
   const tone = recovery ? "text-level-intermediate" : (LEVEL_TONE[level] ?? "text-level-beginner");
   const desc = stripHtml(w.description_html);
   const open = () => void navigate({ to: "/smarty-workouts/$workoutId", params: { workoutId: w.id } });
+  const fav = (e: MouseEvent) => {
+    e.stopPropagation();
+    onToggleFavorite?.();
+  };
 
   return (
     <Card
-      className="group h-full w-full cursor-pointer overflow-hidden border-2 border-wod-border/60 transition-all duration-300 hover:border-wod-border hover:shadow-xl"
+      className="group flex h-full w-full cursor-pointer flex-col overflow-hidden border-2 border-wod-border/60 transition-all duration-300 hover:border-wod-border hover:shadow-xl"
       onClick={open}
     >
       <div className="relative aspect-video overflow-hidden">
@@ -52,7 +91,7 @@ function OldWodCard({ card, fallback }: { card: WodCard; fallback: string }) {
           src={coverVariant(w.image_url, 640) ?? fallback}
           onError={fallbackTo(w.image_url ?? fallback)}
           alt={`${w.name} - online workout by Haris Falas at SmartyGym`}
-          loading="eager"
+          loading={eager ? "eager" : "lazy"}
           decoding="async"
           width={640}
           height={360}
@@ -62,58 +101,57 @@ function OldWodCard({ card, fallback }: { card: WodCard; fallback: string }) {
           <equipment.Icon className="h-4 w-4" />
           <span className="ml-1">{equipment.label}</span>
         </Badge>
-        {isNew(w.created_at) && (
-          <Badge className="absolute right-3 top-3 border-0 text-wod-badge-foreground [background:var(--gradient-new)]">NEW</Badge>
+        {onToggleFavorite && (
+          <button
+            type="button"
+            aria-label={favorite ? "Remove from favourites" : "Mark as favourite"}
+            aria-pressed={Boolean(favorite)}
+            disabled={favoriteBusy}
+            onClick={fav}
+            className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-workout-overlay-border bg-workout-overlay text-workout-overlay-foreground shadow-sm backdrop-blur-sm"
+          >
+            <Heart className={`h-4 w-4 ${favorite ? "fill-destructive text-destructive" : ""}`} />
+          </button>
         )}
-        {!freeAccessMode && (
+        {done && (
           <div className="absolute bottom-3 right-3">
-            <Badge className="border-0 text-wod-badge-foreground shadow-lg [background:var(--gradient-premium)]">
-              <Crown className="mr-1 h-3 w-3" />
-              Premium
+            <Badge className="border-0 bg-wod-border text-wod-badge-foreground">
+              <Check className="mr-1 h-3 w-3" />
+              Done
             </Badge>
           </div>
         )}
       </div>
 
-      <CardContent className="p-3">
-        <h3 className="mb-1.5 line-clamp-2 min-h-[3.5rem] text-lg font-bold leading-tight text-foreground transition-colors group-hover:text-primary">
+      <CardContent className="flex flex-1 flex-col p-3 sm:p-4">
+        <h3 className="mb-1.5 line-clamp-2 min-h-[3.5rem] text-lg font-bold leading-tight text-foreground transition-colors group-hover:text-primary sm:text-xl">
           {w.name}
         </h3>
         {desc && <p className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm text-muted-foreground">{desc.substring(0, 120)}...</p>}
 
-        <div className="mb-2 space-y-1.5 text-sm">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-            <div className="flex items-center gap-1">
-              <Layers className="h-3 w-3 text-primary" />
-              <span className="font-medium text-muted-foreground">{categoryLabel(w.category).toUpperCase()}</span>
-            </div>
-            <span className="text-muted-foreground">•</span>
-            <div className="flex items-center gap-1">
-              <Target className="h-3 w-3 text-primary" />
-              <span className="font-medium text-wod-format">{w.format || "General"}</span>
-            </div>
-            <span className="text-muted-foreground">•</span>
-            <div className="flex items-center gap-1">
-              <TrendingUp className={`h-3 w-3 ${tone}`} />
-              <span className={`font-medium capitalize ${tone}`}>{recovery ? "All Levels" : level}</span>
-            </div>
-            <span className="text-muted-foreground">•</span>
-            <div className="flex items-center gap-1">
-              <Clock className="h-3 w-3 text-wod-duration" />
-              <span className="font-medium text-wod-duration">{w.duration_min} min</span>
-            </div>
+        <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+          <div className="flex items-center gap-1">
+            <Layers className="h-3 w-3 text-primary" />
+            <span className="font-medium text-muted-foreground">{categoryLabel(w.category).toUpperCase()}</span>
           </div>
-          {!freeAccessMode && (
-            <div className="flex flex-wrap items-center gap-1.5">
-              <Badge className="border-0 py-0.5 text-xs text-wod-badge-foreground [background:var(--gradient-premium)]">
-                <Crown className="mr-1 h-3 w-3" />
-                Premium
-              </Badge>
-            </div>
-          )}
+          <span className="text-muted-foreground">•</span>
+          <div className="flex items-center gap-1">
+            <Target className="h-3 w-3 text-primary" />
+            <span className="font-medium text-wod-format">{w.format || "General"}</span>
+          </div>
+          <span className="text-muted-foreground">•</span>
+          <div className="flex items-center gap-1">
+            <TrendingUp className={`h-3 w-3 ${tone}`} />
+            <span className={`font-medium capitalize ${tone}`}>{recovery ? "All Levels" : level}</span>
+          </div>
+          <span className="text-muted-foreground">•</span>
+          <div className="flex items-center gap-1">
+            <Clock className="h-3 w-3 text-wod-duration" />
+            <span className="font-medium text-wod-duration">{w.duration_min} min</span>
+          </div>
         </div>
 
-        <Button className="w-full" size="sm">View Workout</Button>
+        <Button className="mt-auto w-full" size="sm">View Workout</Button>
       </CardContent>
     </Card>
   );
@@ -135,7 +173,7 @@ export function WodMobileCards({ cards, fallback }: { cards: WodCard[]; fallback
   if (cards.length === 1) {
     return (
       <div className="w-full">
-        <OldWodCard card={cards[0]!} fallback={fallback} />
+        <WorkoutCard workout={cards[0]!.workout} kind={cards[0]!.slot} fallback={fallback} />
       </div>
     );
   }
@@ -146,7 +184,7 @@ export function WodMobileCards({ cards, fallback }: { cards: WodCard[]; fallback
         <CarouselContent className="-ml-2">
           {cards.map((c) => (
             <CarouselItem key={c.slot} className="basis-[85%] pl-2">
-              <OldWodCard card={c} fallback={fallback} />
+              <WorkoutCard workout={c.workout} kind={c.slot} fallback={fallback} />
             </CarouselItem>
           ))}
         </CarouselContent>
