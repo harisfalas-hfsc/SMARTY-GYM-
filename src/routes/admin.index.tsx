@@ -33,7 +33,7 @@ import {
 } from "@/lib/admin.functions";
 import { AdminUsersTab } from "@/components/admin/AdminUsersTab";
 import { AdminRulesTab } from "@/components/admin/AdminRulesTab";
-import { AdminCycleTab } from "@/components/admin/AdminCycleTab";
+import { AdminWodTab } from "@/components/admin/AdminWodTab";
 import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
 import { SMARTY_DRAFT_EVENT } from "@/lib/admin-smarty-draft";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -155,7 +155,7 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
   {
     key: "cycle",
     label: "Workout of the Day",
-    description: "84 day periodization calendar",
+    description: "Daily picks, schedule, overrides and the 84-day plan",
     Icon: CalendarDays,
   },
 ];
@@ -251,7 +251,7 @@ function AdminPage() {
           
           {section === "customers" && <AdminUsersTab />}
           {section === "rules" && <AdminRulesTab />}
-          {section === "cycle" && <AdminCycleTab />}
+          {section === "cycle" && <AdminWodTab />}
           {section === "workouts" && (
             <Tabs value={workoutTab} onValueChange={setWorkoutTab} className="rounded-2xl border-2 border-blue-400 bg-card p-3 sm:p-4">
               <TabsList className="grid h-auto w-full grid-cols-2">
@@ -338,7 +338,6 @@ function AdminHub({
         <Stat label="All workouts" value={stats?.workoutsTotal} help="Every workout generated for every member." />
         <Stat label="Workouts created today" value={stats?.workoutsToday} help="Workouts generated since midnight today." />
         <Stat label="Completed workouts" value={stats?.workoutsCompleted} help="Workouts members have marked completed." />
-        <Stat label="WOD auto-delivery members" value={stats?.wodSubscribers} help="Members who currently have Workout of the Day auto-delivery switched on." />
       </div>
 
       {unreadMessages > 0 && (
