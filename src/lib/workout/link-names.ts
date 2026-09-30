@@ -20,7 +20,22 @@ export function normName(s: string): string {
 }
 
 /** Extra spellings the old site used for exercises that exist in the library. */
-const ALIASES: Record<string, string> = {};
+const ALIASES: Record<string, string> = {
+  "jumping jack": "jack jump (male)",
+  "jumping jacks": "jack jump (male)",
+  "bicycle crunch": "air bike",
+  "wide-grip push-up": "wide hand push up",
+  "wide grip push up": "wide hand push up",
+  "wide push-up": "wide hand push up",
+  "farmer's carry": "farmers walk",
+  "farmer carry": "farmers walk",
+  "world's greatest stretch": "world greatest stretch",
+  "sphinx pose": "sphinx",
+  "side bridge": "side bridge v. 2",
+  "standing calf stretch": "standing calves calf stretch",
+  "cervical side bend stretch": "neck side stretch",
+  "spine stretch forward": "spine stretch",
+};
 
 export function buildLibraryIndex(lib: LibraryEntry[]): Map<string, LibraryEntry> {
   const idx = new Map<string, LibraryEntry>();
@@ -51,6 +66,17 @@ function candidates(text: string): string[] {
     if (s && s.split(/\s+/).length <= 8) out.add(s);
   }
   return [...out];
+}
+
+/** Best-guess exercise name of a plain line (used to group unmatched lines). */
+export function primaryName(text: string): string {
+  const c = candidates(text);
+  return (c.length ? c.reduce((a, b) => (b.length < a.length ? b : a)) : text).toLowerCase();
+}
+
+/** Breathing drills are coaching cues, not library exercises. */
+export function isBreathingCue(text: string): boolean {
+  return /\bbreath(ing)?\b/i.test(text) && !/\d+\s*reps?\b/i.test(text.replace(/breath[\s\S]*/i, ""));
 }
 
 function matchLine(text: string, idx: Map<string, LibraryEntry>): { entry: LibraryEntry; name: string } | null {
@@ -125,7 +151,7 @@ export function auditWorkoutHtml(html: string, libIds: Set<string>): WorkoutIssu
     const tokens = [...inner.matchAll(new RegExp(EXERCISE_TOKEN_RE.source, "g"))];
     const text = stripHtml(inner).replace(new RegExp(EXERCISE_TOKEN_RE.source, "g"), "$2");
     if (!tokens.length) {
-      if (text) issues.push({ kind: "unlinked", section, text });
+      if (text && !isBreathingCue(text)) issues.push({ kind: "unlinked", section, text });
       continue;
     }
     for (const t of tokens) {
