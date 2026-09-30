@@ -122,19 +122,22 @@ export function DesktopHomeStory() {
   return (
     <div className="hidden lg:block">
       <section className="border-t border-border bg-background py-16">
-        <div className="mx-auto grid max-w-7xl grid-cols-3 gap-5 px-8">
-          {destinations.map((destination) => (
-            <Link key={destination.title} to={destination.to} className="group overflow-hidden rounded-lg border border-border bg-card">
-              <div className="aspect-[16/9] overflow-hidden">
-                <img src={destination.image} alt={destination.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-              </div>
-              <div className="p-5">
-                <h2 className="text-xl font-black text-foreground group-hover:text-primary">{destination.title}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{destination.text}</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">Explore <ChevronRight className="h-4 w-4" /></span>
-              </div>
-            </Link>
-          ))}
+        <div className="mx-auto max-w-7xl px-8">
+          <Heading ghost="EXPLORE" eyebrow="More in Smarty Gym">Everything In One Place</Heading>
+          <div className="grid grid-cols-3 gap-5">
+            {destinations.map((destination) => (
+              <Link key={destination.title} to={destination.to} className="group overflow-hidden rounded-lg border border-border bg-card">
+                <div className="aspect-[16/9] overflow-hidden">
+                  <img src={destination.image} alt={destination.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+                </div>
+                <div className="p-5">
+                  <h2 className="text-xl font-black text-foreground group-hover:text-primary">{destination.title}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{destination.text}</p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">Explore <ChevronRight className="h-4 w-4" /></span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

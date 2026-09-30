@@ -348,9 +348,9 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
             </div>
             <div className="mt-5 flex flex-nowrap items-center gap-3">
               {[
-                { to: "/create-your-workout", label: "Create Your Workout" },
+                { to: "/smarty-workouts", label: "Smarty Workouts" },
                 { to: "/wod", label: "Workout of the Day" },
-                { to: "/smarty-ritual", label: "Smarty Ritual" },
+                { to: "/create-your-workout", label: "Create Your Own Workout" },
               ].map((b) => (
                 <Link
                   key={b.to}
