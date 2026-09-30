@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Copy, Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Search, Sparkles, Trash2, Upload } from "lucide-react";
+import { Copy, Eye, EyeOff, ImagePlus, Loader2, Pencil, Plus, Search, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,8 +20,10 @@ import {
   adminCreateSmartyWorkout,
   adminDuplicateSmartyWorkout,
   adminDeleteSmartyWorkout,
-  adminImportOldSmartyWorkouts,
-  adminShowAllTransferred,
+  adminCheckSmartyWorkouts,
+  adminLinkExerciseEverywhere,
+  adminPublishCheckedWorkouts,
+  type WorkoutCheckReport,
   adminListSmartyWorkouts,
   adminSmartyWorkoutImage,
   adminUpdateSmartyWorkout,
@@ -54,31 +56,7 @@ export function AdminSmartyWorkoutsTab() {
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
   const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
   const dup = useServerFn(adminDuplicateSmartyWorkout);
-  const importOld = useServerFn(adminImportOldSmartyWorkouts);
-  const publishAll = useServerFn(adminShowAllTransferred);
-  const [importBusy, setImportBusy] = useState(false);
-
-  async function runImport() {
-    if (!confirm("Import or refresh all workouts from the old SMARTY GYM? New ones arrive hidden.")) return;
-    setImportBusy(true);
-    const r = await importOld();
-    setImportBusy(false);
-    if ("error" in r) return toast.error(r.error);
-    const p = r.report;
-    toast.success(`Imported ${p.imported}, refreshed ${p.updated}. Missing pictures: ${p.missingImages.length}.`);
-    void load();
-  }
-
-  async function showAll() {
-    if (!confirm("Make every transferred workout visible to members?")) return;
-    setImportBusy(true);
-    const r = await publishAll();
-    setImportBusy(false);
-    if ("error" in r) return toast.error(r.error);
-    toast.success(`${r.count} transferred workouts are now visible.`);
-    void load();
-  }
-
+  const [checking, setChecking] = useState(false);
 
   async function startBlank() {
     setBlankBusy(true);
@@ -161,11 +139,8 @@ export function AdminSmartyWorkoutsTab() {
           <p className="text-xs text-muted-foreground">Ready workouts shown on the Smarty Workouts page. New workouts start hidden.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" disabled={importBusy} onClick={() => void runImport()}>
-            {importBusy ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Upload className="mr-1 h-4 w-4" />} Import from old SMARTY GYM
-          </Button>
-          <Button variant="outline" disabled={importBusy} onClick={() => void showAll()}>
-            <Eye className="mr-1 h-4 w-4" /> Show all transferred
+          <Button variant="outline" onClick={() => setChecking(true)}>
+            <Search className="mr-1 h-4 w-4" /> Check all workouts
           </Button>
           <Button onClick={() => setChoosing(true)}>
             <Plus className="mr-1 h-4 w-4" /> Create New Workout
@@ -226,6 +201,12 @@ export function AdminSmartyWorkoutsTab() {
         </div>
       )}
 
+      {checking && (
+        <CheckDialog
+          onClose={() => { setChecking(false); void load(); }}
+          onEdit={(id) => { const w = rows.find((x) => x.id === id); if (w) setEditing(w); }}
+        />
+      )}
       <Dialog open={choosing} onOpenChange={(o) => !o && !blankBusy && setChoosing(false)}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
@@ -294,6 +275,128 @@ export function AdminSmartyWorkoutsTab() {
           {viewing && <WorkoutDisplay workout={smartyToWorkoutRow(viewing)} previewMode onComplete={() => {}}><MemberSectionsPreview /></WorkoutDisplay>}
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function CheckDialog({ onClose, onEdit }: { onClose: () => void; onEdit: (id: string) => void }) {
+  const check = useServerFn(adminCheckSmartyWorkouts);
+  const link = useServerFn(adminLinkExerciseEverywhere);
+  const publish = useServerFn(adminPublishCheckedWorkouts);
+  const [report, setReport] = useState<WorkoutCheckReport | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [picking, setPicking] = useState<string | null>(null);
+  const [q, setQ] = useState("");
+  const [hits, setHits] = useState<Array<{ id: string; name: string }>>([]);
+
+  const run = useCallback(async () => {
+    setBusy(true);
+    const r = await check();
+    setBusy(false);
+    if ("error" in r) return toast.error(r.error);
+    setReport(r.report);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => { void run(); }, [run]);
+
+  useEffect(() => {
+    if (!picking || q.trim().length < 2) { setHits([]); return; }
+    const t = setTimeout(async () => {
+      const { data } = await supabase.from("exercises").select("id,name").eq("is_active", true).ilike("name", `%${q.trim()}%`).order("name").limit(20);
+      setHits((data ?? []) as Array<{ id: string; name: string }>);
+    }, 250);
+    return () => clearTimeout(t);
+  }, [q, picking]);
+
+  async function choose(name: string, ex: { id: string; name: string }) {
+    setBusy(true);
+    const r = await link({ data: { name, exerciseId: ex.id } });
+    setBusy(false);
+    if ("error" in r) return toast.error(r.error);
+    toast.success(`"${name}" now uses ${ex.name} in ${r.workouts} workouts (${r.lines} lines).`);
+    setPicking(null); setQ("");
+    void run();
+  }
+
+  async function publishOk() {
+    if (!confirm("Publish every hidden workout that passes the check? Workouts with problems stay hidden.")) return;
+    setBusy(true);
+    const r = await publish();
+    setBusy(false);
+    if ("error" in r) return toast.error(r.error);
+    toast.success(`${r.count} workouts published. ${r.held} stay hidden until fixed.`);
+    void run();
+  }
+
+  return (
+    <Dialog open onOpenChange={(o) => !o && !busy && onClose()}>
+      <DialogContent className="max-h-[95dvh] max-w-3xl overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Check all workouts</DialogTitle>
+          <DialogDescription>Every line of every Smarty Workout is checked against the exercise library. Only lines linked to a library exercise play in the player with their instructions.</DialogDescription>
+        </DialogHeader>
+        {!report ? (
+          <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
+        ) : (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              <Stat label="Workouts" value={report.total} />
+              <Stat label="Pass the check" value={report.clean} />
+              <Stat label="Need fixing" value={report.total - report.clean} />
+              <Stat label="Visible with problems" value={report.visibleWithIssues} />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" disabled={busy} onClick={() => void run()}>{busy ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Search className="mr-1 h-4 w-4" />}Run check again</Button>
+              <Button disabled={busy || report.clean === 0} onClick={() => void publishOk()}><Eye className="mr-1 h-4 w-4" />Publish workouts that pass</Button>
+            </div>
+            <section>
+              <h3 className="mb-1 font-bold">Exercises not in the library ({report.names.length})</h3>
+              <p className="mb-2 text-xs text-muted-foreground">Pick the library exercise to use instead — it is changed in every workout at once.</p>
+              <div className="space-y-1">
+                {report.names.map((n) => (
+                  <div key={n.name} className="rounded-lg border p-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-semibold">{n.name} <span className="font-normal text-muted-foreground">— {n.lines} lines in {n.workouts} workouts</span></span>
+                      <Button size="sm" variant="outline" disabled={busy} onClick={() => { setPicking(picking === n.name ? null : n.name); setQ(n.name.split(" ")[0] ?? ""); }}>Choose exercise</Button>
+                    </div>
+                    {picking === n.name && (
+                      <div className="mt-2 space-y-1">
+                        <Input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search the exercise library" />
+                        {hits.map((h) => (
+                          <button key={h.id} type="button" disabled={busy} onClick={() => void choose(n.name, h)} className="block w-full rounded-md px-2 py-1 text-left text-sm hover:bg-accent">{h.name}</button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+            <section>
+              <h3 className="mb-1 font-bold">Workouts that need fixing ({report.workouts.length})</h3>
+              <div className="space-y-1">
+                {report.workouts.slice(0, 200).map((w) => (
+                  <div key={w.id} className="flex items-start justify-between gap-2 rounded-lg border p-2">
+                    <div className="min-w-0 text-sm">
+                      <p className="font-semibold">{w.name} <span className="font-normal text-muted-foreground">· {categoryLabel(w.category)}{w.is_visible ? " · Visible" : ""}</span></p>
+                      <p className="text-xs text-muted-foreground">{w.issues.slice(0, 3).map((i) => `${i.section}: ${i.text}`).join(" • ")}{w.issues.length > 3 ? ` • +${w.issues.length - 3} more` : ""}</p>
+                    </div>
+                    <Button size="sm" variant="outline" onClick={() => onEdit(w.id)}><Pencil className="mr-1 h-3.5 w-3.5" />Edit</Button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-xl border p-2 text-center">
+      <p className="text-xl font-extrabold">{value}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
     </div>
   );
 }
