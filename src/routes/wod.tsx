@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { CalendarDays, Clock, Crown, Gauge, Loader2, Repeat2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
-import { useAuth } from "@/hooks/useAuth";
 import { getTodayWod, type WodDay } from "@/lib/wod.functions";
 import { SLOT_LABEL } from "@/lib/wod/rules";
 import { difficultyLabel } from "@/lib/workout/spec";
@@ -82,7 +81,6 @@ function planLine(day: WodDay) {
 }
 
 function WodPage() {
-  const { profile } = useAuth();
   const [data, setData] = useState<{ today: WodDay; tomorrow: WodDay } | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -91,8 +89,6 @@ function WodPage() {
       .then((r) => ("error" in r ? setFailed(true) : setData(r)))
       .catch(() => setFailed(true));
   }, []);
-
-  const premium = Boolean((profile as { premium?: boolean } | null)?.premium);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
@@ -153,12 +149,10 @@ function WodPage() {
             </div>
           )}
 
-          {!premium && (
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/40 bg-card p-4">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/40 bg-card p-4">
               <p className="flex items-center gap-2 text-sm"><Crown className="h-4 w-4 text-primary" />Everyone can see the Workout of the Day. Premium members can open and train it.</p>
               <Button asChild size="sm"><Link to="/pricing">Go Premium</Link></Button>
             </div>
-          )}
 
           <div className="mt-8 rounded-lg border border-border bg-card p-5 text-sm leading-relaxed text-muted-foreground">
             <h2 className="mb-2 flex items-center gap-2 text-base font-extrabold text-foreground"><CalendarDays className="h-4 w-4 text-primary" />How the Workout of the Day works</h2>
