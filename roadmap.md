@@ -25,4 +25,4 @@
 - [ ] Emoji rendering unverified on a real phone (test browser lacks emoji fonts)
 - [ ] Installed Android app is an old binary — needs rebuild/resubmission (no store credentials)
 - [x] Make WOD delivery immediate and cap manual workout generation before guaranteed fallback.
-- [ ] Finish and verify all 529 transferred Smarty Workouts: permanent audit, demonstrations, missing cover, bulk visibility, admin controls, and member player lifecycle.
+- [x] Finish and verify all 529 transferred Smarty Workouts: permanent audit, guided/visual demonstrations, missing cover, safe bulk visibility, admin controls, and member player lifecycle.
