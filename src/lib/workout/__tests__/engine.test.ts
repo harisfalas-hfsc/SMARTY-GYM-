@@ -160,6 +160,15 @@ describe("extractSoftTissue", () => {
   });
 });
 
+describe("legacy exercise ids", () => {
+  it("plays curated slug ids from the original library", () => {
+    const html = '<p>🔥 Activation</p><p>{{exercise:bird-dog:Bird Dog}} - 10 reps each side</p>';
+    expect(parseWorkoutSteps(html)).toMatchObject([
+      { exerciseId: "bird-dog", name: "Bird Dog", prescription: "10 reps each side", section: "Activation" },
+    ]);
+  });
+});
+
 describe("parseStepTiming", () => {
   it("treats reps as manual", () => {
     expect(parseStepTiming({ prescription: "12 reps" }).mode).toBe("manual");

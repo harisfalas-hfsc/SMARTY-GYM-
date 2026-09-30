@@ -89,7 +89,7 @@ function matchLine(text: string, idx: Map<string, LibraryEntry>): { entry: Libra
   return null;
 }
 
-const LI_RE = /<li\b[^>]*>([\s\S]*?)<\/li>/gi;
+const LINE_RE = /<(li|p)\b[^>]*>([\s\S]*?)<\/\1>/gi;
 
 /** Soft tissue section (🧽 … next heading) is plain text by design. */
 function softTissueRange(html: string): [number, number] {
@@ -100,12 +100,13 @@ function softTissueRange(html: string): [number, number] {
   return [start, end === -1 ? html.length : start + end];
 }
 
-/** Links every plain-text exercise list item that matches a library name. */
+/** Links every plain-text exercise line that matches a library name. */
 export function linkExerciseLines(html: string, idx: Map<string, LibraryEntry>): { html: string; linked: number } {
   if (!html) return { html, linked: 0 };
   const [s0, s1] = softTissueRange(html);
   let linked = 0;
-  const out = html.replace(LI_RE, (full, inner: string, offset: number) => {
+  const flat = html.replace(/<li\b[^>]*>\s*(<p\b[\s\S]*?<\/p>)\s*<\/li>/gi, "$1");
+  const out = flat.replace(LINE_RE, (full, _tag: string, inner: string, offset: number) => {
     if (offset >= s0 && offset < s1) return full;
     if (new RegExp(EXERCISE_TOKEN_RE.source).test(inner)) return full;
     if (/<(ul|ol|li)\b/i.test(inner)) return full;
@@ -148,8 +149,9 @@ export function auditWorkoutHtml(html: string, libIds: Set<string>): WorkoutIssu
   };
   const playable = new Map<string, number>();
   for (const m of marks) playable.set(m.name, 0);
-  for (const m of html.matchAll(LI_RE)) {
-    const inner = m[1] ?? "";
+  const flat = html.replace(/<li\b[^>]*>\s*(<p\b[\s\S]*?<\/p>)\s*<\/li>/gi, "$1");
+  for (const m of flat.matchAll(LINE_RE)) {
+    const inner = m[2] ?? "";
     if (/<(ul|ol|li)\b/i.test(inner)) continue;
     const section = sectionAt(m.index ?? 0);
     if (section === "Soft Tissue Preparation") continue;

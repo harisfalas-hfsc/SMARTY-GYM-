@@ -4,9 +4,9 @@ export const EXERCISE_TOKEN_RE = /\{\{exercise:([A-Za-z0-9_-]+):([^}]*)\}\}/g;
 
 export type ExerciseToken = { id: string; name: string; raw: string; index: number };
 
-/** A real library id is short and alphanumeric (0043, 1160). Slugs are rejected. */
+/** Library ids are either the original numeric ids or the curated slug ids. */
 export function isLibraryId(id: string): boolean {
-  return /^[A-Za-z0-9]{2,8}$/.test(id) && /\d/.test(id);
+  return /^[A-Za-z0-9][A-Za-z0-9_-]{1,79}$/.test(id);
 }
 
 export function findTokens(html: string): ExerciseToken[] {
