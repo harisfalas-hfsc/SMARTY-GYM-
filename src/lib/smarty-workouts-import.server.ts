@@ -59,7 +59,7 @@ const str = (v: unknown) => (typeof v === "string" && v.trim() ? v : null);
 
 export function transformOld(o: OldWorkout, exercises: Map<string, string | null>) {
   const category = CATEGORY_MAP[String(o.category ?? "").toUpperCase()];
-  if (!category || String(o.type ?? "workout") !== "workout") return null;
+  if (!category) return null;
   let unmatched = 0;
   const kit = new Set<string>();
   const fix = (html: string | null) =>
