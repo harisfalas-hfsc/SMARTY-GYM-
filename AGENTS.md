@@ -20,4 +20,4 @@
 - Workout delivery is fail-fast: WOD uses the deterministic library engine immediately; manual generation gets one 18-second AI attempt, then the same library-only fallback.
 - All workout generation (admin Smarty Workouts, member Create Your Workout, daily WOD) goes through generateWorkoutContent in src/lib/workout/generate.server.ts; coach priority lists live only in src/lib/workout/priority.ts — why: one rule package, so every rule change applies to all three.
 - All Smarty Workouts are one collection with identical admin controls regardless of origin; imported workouts and media are self-contained in this project — why: no ongoing dependency on another project.
-- Smarty Workout players accept verified numeric and curated slug exercise IDs; bulk publishing is gated by the permanent full-library audit — why: preserve content and never mass-publish broken workouts or admin drafts.
+- Players accept verified numeric/slug exercise IDs; bulk publishing requires the full-library audit. Native startup stays black through launch, window, WebView, and first React frame to prevent white handoffs.
