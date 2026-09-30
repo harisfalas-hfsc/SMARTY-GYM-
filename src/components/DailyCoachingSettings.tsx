@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { BellRing, Loader2, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,12 +14,10 @@ import {
 import {
   getDailyHub,
   saveDailySettings,
-  setWodSubscription,
   type DailySettings,
 } from "@/lib/daily.functions";
 import { loadRemote } from "@/lib/remote-data";
 import { useAuth } from "@/hooks/useAuth";
-import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const ZONES = [
@@ -39,15 +36,12 @@ function hourLabel(h: number) {
   return `${String(h).padStart(2, "0")}:00`;
 }
 
-export function DailyCoachingSettings({ premium = false }: { premium?: boolean }) {
+export function DailyCoachingSettings(_props: { premium?: boolean }) {
   const { user } = useAuth();
-  const { freeAccessMode } = useFreeAccessMode();
   const load = useServerFn(getDailyHub);
   const save = useServerFn(saveDailySettings);
-  const setSub = useServerFn(setWodSubscription);
   const [settings, setSettings] = useState<DailySettings | null>(null);
   const [saving, setSaving] = useState(false);
-  const [wodBusy, setWodBusy] = useState(false);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -56,24 +50,7 @@ export function DailyCoachingSettings({ premium = false }: { premium?: boolean }
       .catch(() => undefined);
   }, [load, user?.id]);
 
-  async function toggleWod(subscribe: boolean) {
-    if (wodBusy) return;
-    setWodBusy(true);
-    try {
-      await setSub({ data: { subscribe } });
-      const hub = await load({});
-      setSettings(hub.settings);
-      toast.success(
-        subscribe
-          ? "Daily plan on. Today's two workouts are in your account."
-          : "Daily plan off. You can create your own workouts again.",
-      );
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not update your subscription.");
-    } finally {
-      setWodBusy(false);
-    }
-  }
+
 
 
   function patch(next: Partial<DailySettings>) {
