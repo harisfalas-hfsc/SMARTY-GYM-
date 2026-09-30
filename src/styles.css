@@ -138,7 +138,7 @@
   --gradient-primary: linear-gradient(135deg, #0D2BCD 0%, #0D2BCD 100%);
   --gradient-brand-soft: linear-gradient(135deg, oklch(0.96 0.03 220), oklch(0.97 0.02 210));
   --shadow-soft: 0 4px 20px rgb(0 0 0 / 0.08);
-  --shadow-primary: 0 4px 20px rgb(0 0 255 / 0.3);
+  --shadow-primary: 0 4px 20px rgb(13 43 205 / 0.3);
   --workout-overlay: oklch(0.22 0 0 / 0.94);
   --workout-overlay-foreground: oklch(0.96 0 0);
   --workout-overlay-muted: oklch(0.75 0 0);
