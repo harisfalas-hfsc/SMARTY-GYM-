@@ -8,7 +8,7 @@
 
 export type CronJobKey =
   | "daily-motivation"
-  | "wod-auto-delivery"
+  | "wod-selection"
   | "schedule-reminders"
   | "checkin-reminders"
   | "seo-refresh"
@@ -75,26 +75,19 @@ export const CRON_JOBS: CronJobDefinition[] = [
     defaults: { enabled: false, hour: 7, minute: 0 },
   },
   {
-    key: "wod-auto-delivery",
-    label: "Workout of the Day auto-delivery",
+    key: "wod-selection",
+    label: "Workout of the Day selection",
     description:
-      "Builds today's Workout of the Day (bodyweight + equipment variants, or one recovery session) for every member with auto-delivery on, then notifies them that it is ready.",
-    timing: "per-member",
-    timingNote:
-      "Runs at each member's own chosen local hour (07:00 by default). Skips members without a complete Training Profile.",
+      "Every night at midnight (Cyprus time) reads the 84-day periodization and picks the shared Workout of the Day from your Smarty Workouts: one bodyweight and one equipment workout matching the day's category, level and strength focus (one Recovery workout on Recovery days). A workout is not repeated until every other matching workout has been used. It also prepares tomorrow in advance, and every hourly check fills any empty slot so the page is never empty. Admin overrides are never replaced.",
+    timing: "fixed",
+    timingNote: "Runs once a day at 00:00 Cyprus time (the hourly scheduler fires at :05). Admin overrides and swaps in Admin → Workout of the Day are kept.",
     sends: [
-      {
-        title: "Your bodyweight Workout of the Day is ready",
-        body: "CATEGORY — workout name (links straight into the workout).",
-      },
-      {
-        title: "Your equipment Workout of the Day is ready",
-        body: "CATEGORY — workout name.",
-      },
+      { title: "Workout of the Day page", body: "Today's two cards (bodyweight + equipment), or one Recovery card, visible to everyone; opening them needs Premium." },
     ],
-    timeEditable: false,
+    timeEditable: true,
     contentEditable: false,
-    defaults: { enabled: false, hour: 7, minute: 0 },
+    runnable: true,
+    defaults: { enabled: true, hour: 0, minute: 0 },
   },
   {
     key: "schedule-reminders",

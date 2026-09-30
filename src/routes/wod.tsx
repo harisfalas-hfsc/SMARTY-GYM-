@@ -1,46 +1,16 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
-import { isOnline } from "@/lib/connectivity";
-import { useServerFn } from "@tanstack/react-start";
-import { loadRemote } from "@/lib/remote-data";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
-import { CheckCircle2, Crown, Dumbbell, Home, Loader2, Play, UserRound } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CalendarDays, Clock, Crown, Gauge, Loader2, Repeat2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
-import { SwipeToExplore } from "@/components/ui/SwipeToExplore";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/carousel";
-import {
-  generateTodayWod,
-  getDailyHub,
-  getPublicWodDays,
-  setWodSubscription,
-} from "@/lib/daily.functions";
-
-import { ParqWaiverDialog } from "@/components/ParqWaiverDialog";
-import { hasParqAck, setParqAck } from "@/lib/parq-ack";
-import { GeneratingDialog } from "@/components/workout/GeneratingDialog";
-import { MembershipRequiredDialog } from "@/components/MembershipRequiredDialog";
-import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/PageHeader";
-import { WodContextNote } from "@/components/performance/WodContextNote";
+import { useAuth } from "@/hooks/useAuth";
+import { getTodayWod, type WodDay } from "@/lib/wod.functions";
+import { SLOT_LABEL } from "@/lib/wod/rules";
+import { difficultyLabel } from "@/lib/workout/spec";
+import { categoryLabel } from "@/lib/smarty-workout-row";
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import pageHeroImage from "@/assets/hero-wod-card.jpg";
-
 
 export const Route = createFileRoute("/wod")({
   head: () => ({
@@ -54,12 +24,12 @@ export const Route = createFileRoute("/wod")({
       {
         name: "description",
         content:
-          "Two Workouts of the Day — one bodyweight, one with equipment — built automatically for your profile every night at midnight.",
+          "Every day at midnight Cyprus time Smarty Gym picks the Workout of the Day from the 84-day periodization: one bodyweight and one equipment workout by Haris Falas.",
       },
       { property: "og:title", content: "Workout of the Day — Smarty Gym" },
       {
         property: "og:description",
-        content: "A balanced daily workout programme adapted to your profile by Smarty Coach.",
+        content: "Today's bodyweight and equipment Workouts of the Day, picked from Smarty Workouts by the 84-day periodization.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/wod" },
@@ -77,7 +47,7 @@ export const Route = createFileRoute("/wod")({
               url: "https://smartygym.com/wod",
               name: "Workout of the Day — Smarty Gym",
               description:
-                "Two Workouts of the Day — one bodyweight, one with equipment — built automatically for your profile every night at midnight.",
+                "Every day at midnight Cyprus time Smarty Gym picks the Workout of the Day from the 84-day periodization: one bodyweight and one equipment workout by Haris Falas.",
               inLanguage: "en",
               isPartOf: { "@id": "https://smartygym.com/#website" },
               about: { "@id": "https://smartygym.com/#software" },
@@ -103,412 +73,99 @@ export const Route = createFileRoute("/wod")({
   component: WodPage,
 });
 
-type Hub = Awaited<ReturnType<typeof getDailyHub>>;
-type DayInfo = {
-  date: string;
-  category: string;
-  difficulty: string;
-  stars: number;
-  focus: string | null;
-  isRecovery: boolean;
-};
-type WodWorkout = Hub["workouts"][number];
-
-function DaySlide({ day, label }: { day: DayInfo; label: string }) {
-  const formatted = new Intl.DateTimeFormat("en", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(`${day.date}T12:00:00Z`));
-
-  return (
-    <div className="flex h-[165px] flex-col justify-center rounded-xl border-2 border-blue-400 bg-card px-3 py-3 text-center transition-all duration-300 hover:border-primary">
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">{label}</p>
-      <p className="mt-0.5 truncate text-[10px] text-muted-foreground">{formatted}</p>
-      <p className="mt-2 line-clamp-2 text-sm font-bold uppercase leading-tight">{day.category}</p>
-      <p className="mx-auto mt-2 w-fit rounded-full bg-primary/15 px-2.5 py-0.5 text-[10px] font-semibold text-primary">
-        {day.difficulty || "Recovery"}
-      </p>
-    </div>
-  );
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat("en", { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
 }
 
-
-function WorkoutCard({ workout }: { workout: WodWorkout }) {
-  const bodyweight = workout.wod_variant === "bodyweight";
-  const Icon = bodyweight ? Home : Dumbbell;
-  return (
-    <div className="rounded-xl border-2 border-blue-400 bg-card p-3 transition-colors hover:border-primary">
-      <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary">
-        <Icon className="h-3.5 w-3.5 shrink-0" />
-        <span className="truncate">
-          {workout.wod_variant === "recovery"
-            ? "Recovery"
-            : bodyweight
-              ? "Bodyweight"
-              : "Equipment"}
-        </span>
-      </p>
-      <p className="mt-1 line-clamp-2 text-sm font-extrabold leading-tight">{workout.name}</p>
-      <p className="mt-1 truncate text-[11px] text-muted-foreground">
-        {workout.duration_min} min · {workout.difficulty_stars}★ ·{" "}
-        {workout.status === "completed" ? "Completed" : "Not done yet"}
-      </p>
-      <Button
-        asChild
-        variant="outline"
-        className="mt-5 h-11 w-full rounded-xl border-2 border-primary/40 bg-transparent text-[14px] font-extrabold text-primary hover:border-primary hover:bg-transparent hover:text-primary"
-      >
-        <Link to="/workout/$workoutId" params={{ workoutId: workout.id }}>
-          <Play className="mr-2 h-4 w-4 shrink-0" />
-          <span className="truncate">Open</span>
-        </Link>
-      </Button>
-    </div>
-  );
+function planLine(day: WodDay) {
+  return [categoryLabel(day.category), day.difficulty, day.focus].filter(Boolean).join(" · ");
 }
 
 function WodPage() {
-  const { user, loading: authLoading } = useAuth();
-  const load = useServerFn(getDailyHub);
-  const loadPublic = useServerFn(getPublicWodDays);
-  const setSub = useServerFn(setWodSubscription);
-  const gen = useServerFn(generateTodayWod);
-  const navigate = useNavigate();
-  const [hub, setHub] = useState<Hub | null>(null);
-  const [publicCycle, setPublicCycle] = useState<Awaited<
-    ReturnType<typeof getPublicWodDays>
-  > | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [building, setBuilding] = useState(false);
-  const [parqOpen, setParqOpen] = useState(false);
-  const [membershipOpen, setMembershipOpen] = useState(false);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(1);
+  const { profile } = useAuth();
+  const [data, setData] = useState<{ today: WodDay; tomorrow: WodDay } | null>(null);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    void loadRemote("wod:public-cycle", () => loadPublic({}))
-      .then(setPublicCycle)
-      .catch(() => setPublicCycle(null));
-  }, [loadPublic]);
+    void getTodayWod()
+      .then((r) => ("error" in r ? setFailed(true) : setData(r)))
+      .catch(() => setFailed(true));
+  }, []);
 
-
-  const onSelect = useCallback(() => {
-    if (!api) return;
-    setCurrent(api.selectedScrollSnap());
-  }, [api]);
-
-  useEffect(() => {
-    if (!api) return;
-    onSelect();
-    api.on("select", onSelect);
-    return () => {
-      api.off("select", onSelect);
-    };
-  }, [api, onSelect]);
-
-  useEffect(() => {
-    if (authLoading || !user) return;
-    void loadRemote("wod:hub", () => load({}), user.id)
-      .then(setHub)
-      .catch(() => setHub(null));
-  }, [authLoading, load, user]);
-
-
-
-  async function refresh() {
-    setHub(await load({}));
-  }
-
-  async function handleSubscribeClick() {
-
-    if (!user) {
-      void navigate({ to: "/auth", search: { next: "/wod", mode: "signup" } });
-      return;
-    }
-    if (!access?.profileComplete || !access.healthAcknowledged) {
-      void navigate({ to: "/profile" });
-      return;
-    }
-    if (!access.premium) {
-      setMembershipOpen(true);
-      return;
-    }
-    if (subscribed) {
-      await toggleSub(false);
-      return;
-    }
-    if (access.readinessFlagged && access.readinessFlags.length > 0 && !hasParqAck()) {
-      setParqOpen(true);
-      return;
-    }
-    setConfirmOpen(true);
-  }
-
-  async function toggleSub(subscribe: boolean) {
-    if (busy || building) return;
-    if (!isOnline()) {
-      toast.error("You must be online to update Workout of the Day.");
-      return;
-    }
-    setBusy(true);
-
-    try {
-      await setSub({ data: { subscribe } });
-      await refresh();
-      if (!subscribe) {
-        toast.success("Daily plan turned off. You can create your own workouts again.");
-        return;
-      }
-      toast.success("You're in. Building today's two workouts now…");
-      setBuilding(true);
-      void gen({})
-        .then(async () => {
-          await refresh();
-          toast.success("Today's two workouts are ready.");
-        })
-        .catch((e: unknown) => {
-          toast.error(
-            e instanceof Error ? e.message : "Today's workouts could not be built yet.",
-          );
-        })
-        .finally(() => setBuilding(false));
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not update your subscription.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-
-  if (authLoading || (user && !hub)) {
-    return (
-      <div className="grid min-h-[50vh] place-items-center">
-        <Loader2 className="h-6 w-6 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-
-  const days = hub?.days;
-  const workouts = hub?.workouts ?? [];
-  const subscribed = hub?.settings.wod_mode ?? false;
-  const access = hub?.access;
-  const daySlides = [
-    { day: (days?.yesterday ?? publicCycle?.yesterday) as DayInfo | undefined, label: "Yesterday" },
-    { day: (days?.today ?? publicCycle?.today) as DayInfo | undefined, label: "Today" },
-    { day: (days?.tomorrow ?? publicCycle?.tomorrow) as DayInfo | undefined, label: "Tomorrow" },
-  ].filter((s): s is { day: DayInfo; label: string } => Boolean(s.day));
+  const premium = Boolean((profile as { premium?: boolean } | null)?.premium);
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-5 px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
-      <PageHeader image={pageHeroImage}
-        className="mb-2"
-        eyebrow="Smarty Coach"
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
+      <PageHeader
+        image={pageHeroImage}
+        eyebrow="SMARTY GYM"
         title="Workout of the Day"
-        subtitle="Your daily programme, chosen for you by Smarty Coach."
+        subtitle="Every day at 00:00 Cyprus time, one bodyweight and one equipment workout are picked from Smarty Workouts, following the 84-day periodization."
       />
 
-      <section className="space-y-3 rounded-2xl border-2 border-primary bg-card px-5 py-5 shadow-sm sm:px-8">
-        <p className="text-center text-[14px] leading-6 text-muted-foreground">
-          <strong className="text-primary">Workout of the Day is two ready workouts every
-          day</strong> — one with equipment and one bodyweight only — built automatically around
-          your Training Profile, so you simply open one and train.
-        </p>
-        <p className="text-center text-[14px] leading-6 text-muted-foreground">
-          Both follow a <strong className="text-primary">scientific periodization plan</strong>:
-          strength, endurance, power, mobility and recovery days are sequenced across the cycle so
-          you never overtrain, never undertrain, and every fitness quality is developed in the right
-          order.
-        </p>
-        <p className="text-center text-[14px] leading-6 text-muted-foreground">
-          Instead of improvising a random workout each day, it is like having a{" "}
-          <strong className="text-primary">personal trainer</strong> who already knows what you must
-          do today, next week and next month — keeping you healthy, progressing and performing
-          better over the long run.
-        </p>
-      </section>
-
-      <WodContextNote />
-
-
-
-      <section className="relative px-1 py-1">
-        <SwipeToExplore onPrev={() => api?.scrollPrev()} onNext={() => api?.scrollNext()} />
-
-        <Carousel
-          setApi={setApi}
-          opts={{ align: "center", loop: true, startIndex: 1 }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-3">
-            {daySlides.map((item) => (
-              <CarouselItem key={item.label} className="basis-[75%] pl-3 md:basis-[32%]">
-                <DaySlide day={item.day} label={item.label} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="-left-4 h-8 w-8 border-border bg-background/80 hover:bg-accent" />
-          <CarouselNext className="-right-4 h-8 w-8 border-border bg-background/80 hover:bg-accent" />
-        </Carousel>
-
-        <div className="mt-3 flex justify-center gap-2">
-          {daySlides.map((item, index) => (
-            <button
-              key={item.label}
-              onClick={() => api?.scrollTo(index)}
-              className={cn(
-                "h-1.5 rounded-full transition-all",
-                current === index ? "w-3 bg-primary" : "w-1.5 bg-primary/30 hover:bg-primary/50",
-              )}
-              aria-label={`Go to ${item.label}`}
-            />
-          ))}
-        </div>
-      </section>
-
-      <GeneratingDialog open={building} onLeave={() => setBuilding(false)} />
-
-      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent className="max-w-md border-2 border-primary">
-          <DialogHeader>
-            <DialogTitle>Subscribe to Workout of the Day?</DialogTitle>
-            <DialogDescription>Here is exactly what you get before anything is built.</DialogDescription>
-          </DialogHeader>
-          <ul className="space-y-2 text-[13px] leading-6 text-muted-foreground">
-            <li>
-              <strong className="text-primary">Training days:</strong> two workouts every day — one
-              with equipment, one bodyweight only.
-            </li>
-            <li>
-              <strong className="text-primary">Recovery days:</strong> one gentle session instead of
-              two.
-            </li>
-            <li>
-              <strong className="text-primary">These are your workouts for the day.</strong> While
-              you are subscribed, creating your own workouts stays paused — unsubscribe any time and
-              it comes straight back.
-            </li>
-            <li>
-              Today&apos;s workouts are built right away, then automatically every night.
-            </li>
-          </ul>
-          <DialogFooter className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="h-11 rounded-xl"
-              onClick={() => setConfirmOpen(false)}
-            >
-              Not now
-            </Button>
-            <Button
-              type="button"
-              className="h-11 rounded-xl font-extrabold"
-              onClick={() => {
-                setConfirmOpen(false);
-                void toggleSub(true);
-              }}
-            >
-              Yes, subscribe
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <MembershipRequiredDialog
-        open={membershipOpen}
-        onOpenChange={setMembershipOpen}
-        title="Unlock your Workout of the Day"
-        description="Every night at midnight Smarty Coach builds two Workouts of the Day for your profile — one bodyweight, one with equipment. Membership keeps them coming, plus unlimited coaching and the full community."
-      />
-
-      <ParqWaiverDialog
-        open={parqOpen}
-        flags={access?.readinessFlags ?? []}
-        confirmLabel="I confirm — continue"
-        onConfirm={() => {
-          setParqAck();
-          setParqOpen(false);
-          setConfirmOpen(true);
-        }}
-        onCancel={() => setParqOpen(false)}
-      />
-
-
-      <section className="flex flex-col items-center gap-5">
-        {workouts.length ? (
-          <div className="grid w-full gap-3 sm:grid-cols-2 lg:gap-5">
-
-            {workouts.map((w) => (
-              <WorkoutCard key={w.id} workout={w} />
-            ))}
+      {failed ? (
+        <p className="rounded-lg border border-border bg-card p-6 text-center text-sm text-muted-foreground">Workout of the Day is unavailable right now. Please try again shortly.</p>
+      ) : !data ? (
+        <div className="flex min-h-[20vh] items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+      ) : (
+        <>
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-primary">Today · {formatDate(data.today.date)}</p>
+              <p className="mt-1 text-lg font-extrabold">{planLine(data.today)}</p>
+              <p className="text-xs text-muted-foreground">Day {data.today.cycleDay} of the 84-day periodization</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tomorrow</p>
+              <p className="mt-1 text-sm font-semibold">{planLine(data.tomorrow)}</p>
+            </div>
           </div>
-        ) : null}
 
-        <Button
-          variant={subscribed ? "outline" : "default"}
-          className={cn(
-            "h-12 w-full rounded-xl text-[15px] font-extrabold lg:w-80",
-            subscribed
-              ? "border-2 border-primary/40 bg-transparent text-primary hover:border-primary hover:bg-transparent hover:text-primary"
-              : "",
+          {data.today.cards.length === 0 ? (
+            <div className="rounded-lg border-2 border-dashed border-primary/35 px-5 py-10 text-center text-sm text-muted-foreground">Today's workouts are being prepared.</div>
+          ) : (
+            <div className={`grid gap-4 ${data.today.cards.length > 1 ? "sm:grid-cols-2" : "mx-auto max-w-xl"}`}>
+              {data.today.cards.map(({ slot, workout: w }) => (
+                <div key={slot} className="relative aspect-[3/2] overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+                  <img
+                    src={coverVariant(w.image_url, 640) ?? pageHeroImage}
+                    onError={fallbackTo(w.image_url ?? pageHeroImage)}
+                    alt={w.name}
+                    loading="eager"
+                    decoding="async"
+                    width={640}
+                    height={427}
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                  <Link to="/smarty-workouts/$workoutId" params={{ workoutId: w.id }} className="relative block h-full p-4 transition hover:bg-primary/10">
+                    <p className="w-fit rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur-sm">
+                      {SLOT_LABEL[slot]} Workout of the Day
+                    </p>
+                    <p className="mt-2 w-fit max-w-full rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-base font-bold leading-tight text-workout-overlay-foreground shadow-sm backdrop-blur-sm">{w.name}</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm"><Clock className="h-3.5 w-3.5 text-primary" />{w.duration_min} min</span>
+                      <span className="inline-flex items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm"><Gauge className="h-3.5 w-3.5 text-primary" />{difficultyLabel(w.difficulty_stars)}</span>
+                      {w.format ? <span className="inline-flex items-center gap-1 rounded-md border border-workout-overlay-border bg-workout-overlay px-2 py-1 text-workout-overlay-foreground shadow-sm backdrop-blur-sm"><Repeat2 className="h-3.5 w-3.5 text-primary" />{w.format}</span> : null}
+                    </div>
+                  </Link>
+                </div>
+              ))}
+            </div>
           )}
-          disabled={busy || building}
-          onClick={() => void handleSubscribeClick()}
-        >
-          {busy || building ? <Loader2 className="mr-2 h-4 w-4 shrink-0 animate-spin" /> : null}
-          <span className="truncate">
-            {building
-              ? "Building today's workouts…"
-              : busy
-                ? "Please wait…"
-                : subscribed
-                  ? "Unsubscribe"
-                  : "Subscribe to Workout of the Day"}
-          </span>
-        </Button>
 
-        {!user ? null : !access?.profileComplete || !access.healthAcknowledged ? (
+          {!premium && (
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/40 bg-card p-4">
+              <p className="flex items-center gap-2 text-sm"><Crown className="h-4 w-4 text-primary" />Everyone can see the Workout of the Day. Premium members can open and train it.</p>
+              <Button asChild size="sm"><Link to="/pricing">Go Premium</Link></Button>
+            </div>
+          )}
 
-          <div className="w-full max-w-xl rounded-2xl border-2 border-primary bg-card p-5 text-center">
-            <UserRound className="mx-auto h-6 w-6 text-primary" />
-            <p className="mt-2 font-extrabold">Complete your Training Profile first</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              Smarty Coach needs your age, level, goal, equipment, environment, duration and safety acknowledgement before it can personalize a workout.
-            </p>
-            <Button asChild className="mt-5 h-12 w-full rounded-xl font-extrabold">
-              <Link to="/profile">Complete Training Profile</Link>
-            </Button>
+          <div className="mt-8 rounded-lg border border-border bg-card p-5 text-sm leading-relaxed text-muted-foreground">
+            <h2 className="mb-2 flex items-center gap-2 text-base font-extrabold text-foreground"><CalendarDays className="h-4 w-4 text-primary" />How the Workout of the Day works</h2>
+            <p>Smarty Gym follows an 84-day periodization made of three 28-day blocks. Each day has a planned category and level, so hard and easy days alternate and every quality is trained. At midnight Cyprus time the system picks today's workouts from Smarty Workouts: one bodyweight workout you can do anywhere and one equipment workout. Recovery days have one Recovery workout. A workout is not repeated until every other matching workout has been used.</p>
           </div>
-        ) : access.premium ? null : (
-          <div className="w-full max-w-xl rounded-2xl border-2 border-primary bg-card p-5 text-center">
-            <Crown className="mx-auto h-6 w-6 text-primary" />
-            <p className="mt-2 font-extrabold">Premium membership required</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              Your profile is ready. Activate your €9.99 monthly membership before joining Workout of the Day.
-            </p>
-            <Button asChild className="mt-5 h-12 w-full rounded-xl font-extrabold">
-              <Link to="/auth">Create your free account</Link>
-            </Button>
-          </div>
-        )}
-        <p className="text-center text-[11px] leading-4 text-muted-foreground">
-          {!user
-            ? "Explore the programme above, then sign in to receive your two personalized workouts every day."
-            : !access?.profileComplete || !access.healthAcknowledged
-              ? "Profile completion and the health acknowledgement are mandatory before any workout can be created."
-              : !access.premium
-                ? "Workout of the Day cannot be activated without a verified premium membership."
-            : subscribed
-            ? "Your two daily workouts arrive automatically. You can still open every workout you already have, but manual generation stays paused until you stop the daily plan."
-            : "Turn the daily plan on and today's two workouts are built right away, then every night automatically. Manual generation is paused while it is on because Smarty Coach already creates your daily pair."}
-        </p>
-
-      </section>
+        </>
+      )}
     </div>
   );
 }
-

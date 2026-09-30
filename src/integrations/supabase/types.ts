@@ -1494,6 +1494,88 @@ export type Database = {
         }
         Relationships: []
       }
+      wod_schedule: {
+        Row: {
+          category: string
+          created_at: string
+          cycle_day: number
+          difficulty: string | null
+          id: string
+          slot: string
+          smarty_workout_id: string
+          source: string
+          strength_focus: string | null
+          updated_at: string
+          wod_date: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          cycle_day: number
+          difficulty?: string | null
+          id?: string
+          slot: string
+          smarty_workout_id: string
+          source?: string
+          strength_focus?: string | null
+          updated_at?: string
+          wod_date: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          cycle_day?: number
+          difficulty?: string | null
+          id?: string
+          slot?: string
+          smarty_workout_id?: string
+          source?: string
+          strength_focus?: string | null
+          updated_at?: string
+          wod_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wod_schedule_smarty_workout_id_fkey"
+            columns: ["smarty_workout_id"]
+            isOneToOne: false
+            referencedRelation: "smarty_workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wod_selection_ledger: {
+        Row: {
+          created_at: string
+          id: string
+          selected_for_date: string
+          slot: string
+          smarty_workout_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          selected_for_date: string
+          slot: string
+          smarty_workout_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          selected_for_date?: string
+          slot?: string
+          smarty_workout_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wod_selection_ledger_smarty_workout_id_fkey"
+            columns: ["smarty_workout_id"]
+            isOneToOne: false
+            referencedRelation: "smarty_workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workout_feedback: {
         Row: {
           attempt: number
