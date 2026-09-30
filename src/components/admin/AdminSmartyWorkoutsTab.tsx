@@ -20,6 +20,8 @@ import {
   adminCreateSmartyWorkout,
   adminDuplicateSmartyWorkout,
   adminDeleteSmartyWorkout,
+  adminImportOldSmartyWorkouts,
+  adminShowAllTransferred,
   adminListSmartyWorkouts,
   adminSmartyWorkoutImage,
   adminUpdateSmartyWorkout,
@@ -52,6 +54,31 @@ export function AdminSmartyWorkoutsTab() {
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
   const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
   const dup = useServerFn(adminDuplicateSmartyWorkout);
+  const importOld = useServerFn(adminImportOldSmartyWorkouts);
+  const publishAll = useServerFn(adminShowAllTransferred);
+  const [importBusy, setImportBusy] = useState(false);
+
+  async function runImport() {
+    if (!confirm("Import or refresh all workouts from the old SMARTY GYM? New ones arrive hidden.")) return;
+    setImportBusy(true);
+    const r = await importOld();
+    setImportBusy(false);
+    if ("error" in r) return toast.error(r.error);
+    const p = r.report;
+    toast.success(`Imported ${p.imported}, refreshed ${p.updated}. Missing pictures: ${p.missingImages.length}.`);
+    void load();
+  }
+
+  async function showAll() {
+    if (!confirm("Make every transferred workout visible to members?")) return;
+    setImportBusy(true);
+    const r = await publishAll();
+    setImportBusy(false);
+    if ("error" in r) return toast.error(r.error);
+    toast.success(`${r.count} transferred workouts are now visible.`);
+    void load();
+  }
+
 
   async function startBlank() {
     setBlankBusy(true);
@@ -133,9 +160,17 @@ export function AdminSmartyWorkoutsTab() {
           <h2 className="text-lg font-extrabold">Smarty Workouts</h2>
           <p className="text-xs text-muted-foreground">Ready workouts shown on the Smarty Workouts page. New workouts start hidden.</p>
         </div>
-        <Button onClick={() => setChoosing(true)}>
-          <Plus className="mr-1 h-4 w-4" /> Create New Workout
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" disabled={importBusy} onClick={() => void runImport()}>
+            {importBusy ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Upload className="mr-1 h-4 w-4" />} Import from old SMARTY GYM
+          </Button>
+          <Button variant="outline" disabled={importBusy} onClick={() => void showAll()}>
+            <Eye className="mr-1 h-4 w-4" /> Show all transferred
+          </Button>
+          <Button onClick={() => setChoosing(true)}>
+            <Plus className="mr-1 h-4 w-4" /> Create New Workout
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:max-w-md">
