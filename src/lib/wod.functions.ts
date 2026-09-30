@@ -20,6 +20,8 @@ export type WodCard = {
     equipment: string[];
     location: string | null;
     image_url: string | null;
+    description_html?: string | null;
+    created_at?: string | null;
   };
 };
 
@@ -32,7 +34,7 @@ export type WodDay = {
   cards: WodCard[];
 };
 
-const CARD = "id,name,category,format,focus,difficulty_stars,duration_min,equipment,location,image_url";
+const CARD = "id,name,category,format,focus,difficulty_stars,duration_min,equipment,location,image_url,description_html,created_at";
 const SLOT_ORDER: Record<string, number> = { BODYWEIGHT: 0, EQUIPMENT: 1, RECOVERY: 2 };
 
 function shift(date: string, days: number) {
