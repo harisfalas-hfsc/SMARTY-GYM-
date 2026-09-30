@@ -94,8 +94,12 @@ export function extractSoftTissue(html: string): string[] {
   const end = rest.search(/🔥|💪|⚡|🧘/);
   const body = end === -1 ? rest : rest.slice(0, end);
   const lines: string[] = [];
-  for (const m of body.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)) {
+  // Legacy workouts often stored this section as plain paragraphs rather than
+  // list items. Read both, while avoiding the paragraph nested inside an <li>.
+  const flat = body.replace(/<li\b[^>]*>\s*(<p\b[\s\S]*?<\/p>)\s*<\/li>/gi, "$1");
+  for (const m of flat.matchAll(/<(?:li|p)\b[^>]*>([\s\S]*?)<\/(?:li|p)>/gi)) {
     const text = stripTokens(stripHtml(m[1] ?? "")).trim();
+    if (/soft tissue preparation/i.test(text)) continue;
     if (text) lines.push(text);
   }
   return lines;
