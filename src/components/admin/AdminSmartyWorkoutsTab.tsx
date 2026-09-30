@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { WorkoutDisplay } from "@/components/workout/WorkoutDisplay";
 import {
   SMARTY_WORKOUT_CATEGORIES,
-  adminAuditTransferredWorkouts,
+
   adminCreateBlankSmartyWorkout,
   adminCreateSmartyWorkout,
   adminDuplicateSmartyWorkout,
@@ -55,7 +55,7 @@ export function AdminSmartyWorkoutsTab() {
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
   const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
   const dup = useServerFn(adminDuplicateSmartyWorkout);
-  const auditTransferred = useServerFn(adminAuditTransferredWorkouts);
+
   const setTransferredVisibility = useServerFn(adminSetTransferredVisibility);
 
   async function startBlank() {
@@ -120,11 +120,6 @@ export function AdminSmartyWorkoutsTab() {
   async function bulkVisibility(visible: boolean) {
     if (!window.confirm(`${visible ? "Publish" : "Hide"} all Smarty Workouts?`)) return;
     setBulkBusy(true);
-    if (visible) {
-      const checked = await auditTransferred();
-      if ("error" in checked) { setBulkBusy(false); return toast.error(checked.error); }
-      if (!checked.report.ready) { setBulkBusy(false); return toast.error(`${checked.report.workouts.length} workouts need repair. Nothing was published.`); }
-    }
     const result = await setTransferredVisibility({ data: { visible } });
     setBulkBusy(false);
     if ("error" in result) return toast.error(result.error);
