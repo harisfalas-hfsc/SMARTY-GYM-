@@ -1,3 +1,4 @@
+import { iconTone } from "@/lib/icon-tone";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronRight, type LucideIcon } from "lucide-react";
@@ -259,8 +260,8 @@ function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
         />
       ) : Icon ? (
         <span className={compact
-          ? "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-          : "flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary lg:h-14 lg:w-14"}>
+          ? `flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md ${iconTone(item.title)}`
+          : `flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md lg:h-14 lg:w-14 ${iconTone(item.title)}`}>
           <Icon className="h-6 w-6" />
         </span>
       ) : null}

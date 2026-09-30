@@ -184,17 +184,13 @@ interface SmartyRowProps {
   tone?: SmartyTone;
 }
 
-export function SmartyRow({ icon, title, subtitle, tone = "cyan" }: SmartyRowProps) {
-  const t = TONE[tone];
+export function SmartyRow({ icon, title, subtitle }: SmartyRowProps) {
   return (
     <div className="grid min-h-14 grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-4">
       {icon && (
         <div
           className={cn(
-            "grid h-10 w-10 flex-none place-items-center rounded-xl border",
-            t.softBorder,
-            t.softBg,
-            t.text,
+            "icon-tone-auto grid h-10 w-10 flex-none place-items-center rounded-xl border",
           )}
         >
           <IconOrEmoji icon={icon} className="h-4 w-4 text-base" />
@@ -225,7 +221,7 @@ export function SmartyPill({ tone = "cyan", icon, children }: SmartyPillProps) {
         t.softBorder,
       )}
     >
-      <div className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-lg", t.softBg, t.text)}>
+      <div className="icon-tone-auto grid h-8 w-8 shrink-0 place-items-center rounded-lg">
         {icon && <IconOrEmoji icon={icon} className="h-4 w-4 text-sm" />}
       </div>
       <span className="text-sm font-medium leading-5 text-foreground">{children}</span>
