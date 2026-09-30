@@ -27,3 +27,4 @@
 - [x] Make WOD delivery immediate and cap manual workout generation before guaranteed fallback.
 - [x] Finish and verify all 529 transferred Smarty Workouts: permanent audit, guided/visual demonstrations, missing cover, safe bulk visibility, admin controls, and member player lifecycle.
 - [x] Add live Smarty Workout totals to the collection, category cards, homepage, About, How It Works and FAQ.
+- [x] Move the live Smarty Workout total into the page description and show number-only category badges.
