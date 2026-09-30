@@ -77,23 +77,25 @@ function Home() {
   return (
     <>
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
-      {/* MOBILE — eyebrow + tight headline + tagline, matching the original design */}
+      {/* MOBILE — hero text lives inside a card sized like the other homepage cards */}
       <section className="py-6 sm:hidden">
-        <p className="text-center text-[11px] font-bold uppercase tracking-[0.28em] text-primary">
-          Science-backed · Expert-designed
-        </p>
-        <h1 className="mt-3 text-center text-[38px] font-extrabold uppercase leading-[1.02] tracking-tight">
-          YOUR GYM
-          <br />
-          <span className="text-primary">RE-IMAGINED.</span>
-        </h1>
-        <p className="mt-4 text-center text-[13px] font-semibold uppercase leading-[1.9] tracking-[0.16em] text-muted-foreground">
-          Expert workouts · Exercise library
-          <br />
-          Blog insights · Smarty tools
-          <br />
-          <span className="text-primary">All in your pocket.</span>
-        </p>
+        <div className="flex h-[200px] flex-col items-center justify-center rounded-xl border-2 border-primary/60 bg-card px-4 text-center">
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-primary">
+            Science-backed · Expert-designed
+          </p>
+          <h1 className="mt-2 text-[32px] font-extrabold uppercase leading-[1.02] tracking-tight">
+            YOUR GYM
+            <br />
+            <span className="text-primary">RE-IMAGINED.</span>
+          </h1>
+          <p className="mt-3 text-[11px] font-semibold uppercase leading-[1.9] tracking-[0.16em] text-muted-foreground">
+            Expert workouts · Exercise library
+            <br />
+            Blog insights · Smarty tools
+            <br />
+            <span className="text-primary">All in your pocket.</span>
+          </p>
+        </div>
 
         <MobileHomeActions showPricing={!freeAccessMode} workoutCount={workoutCount} />
       </section>
