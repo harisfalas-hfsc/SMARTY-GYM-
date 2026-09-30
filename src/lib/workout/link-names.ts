@@ -42,7 +42,7 @@ const LEAD_QTY = new RegExp(`^(${QTY}\\s*(?:of\\s+)?)+`, "i");
 const TRAIL_QTY = new RegExp(`(\\s*[x×]?\\s*${QTY})+$`, "i");
 
 function candidates(text: string): string[] {
-  const t = text.replace(/^[•\-–—*\d.)\s]*(?=[A-Za-z])/, (m) => (/\d/.test(m) && !/^\d+[.)]\s/.test(m) ? m : ""));
+  const t = text.replace(/^[•*\s]+/, "");
   const out = new Set<string>();
   const base = t.trim();
   const head = base.split(/\s[-–—:]\s|:\s|\s[-–—]|,|\(/)[0] ?? base;
