@@ -20,3 +20,4 @@
 - Workout delivery is fail-fast: WOD uses the deterministic library engine immediately; manual generation gets one 18-second AI attempt, then the same library-only fallback.
 - All workout generation (admin Smarty Workouts, member Create Your Workout, daily WOD) goes through generateWorkoutContent in src/lib/workout/generate.server.ts; coach priority lists live only in src/lib/workout/priority.ts — why: one rule package, so every rule change applies to all three.
 - Old SMARTY GYM workouts are imported via src/lib/smarty-workouts-import.server.ts keyed on smarty_workouts.legacy_id — why: re-runs refresh instead of duplicating.
+- Smarty Workout quality: src/lib/workout/link-names.ts links plain-text lines to library exercises by exact normalised name and audits unplayable lines; admin "Check all workouts" uses it and only publishes workouts that pass — why: one check for all 500+ workouts, nothing invented.
