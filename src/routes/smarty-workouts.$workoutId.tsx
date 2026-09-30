@@ -1,3 +1,4 @@
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
@@ -36,11 +37,15 @@ function SmartyWorkoutPage() {
   const [checkout, setCheckout] = useState(false);
   const [card, setCard] = useState<SmartyWorkoutCard | null>(null);
 
+  // The preview card is only shown to visitors / non-members, so members
+  // skip this request and go straight to their workout.
+  const needsCard = (!authLoading && !user) || state.kind === "locked";
   useEffect(() => {
-    void listSmartyWorkouts()
-      .then((r) => setCard(r.workouts.find((w) => w.id === workoutId) ?? null))
+    if (!needsCard) return;
+    void listSmartyWorkouts({ data: { id: workoutId } })
+      .then((r) => setCard(r.workouts[0] ?? null))
       .catch(() => setCard(null));
-  }, [workoutId]);
+  }, [workoutId, needsCard]);
 
   useEffect(() => {
     if (authLoading || !user) return;
@@ -106,7 +111,7 @@ function Notice({ back, card, title, text, children }: { back: React.ReactNode; 
         <div className="mt-4 overflow-hidden rounded-2xl border-2 border-border bg-card">
           {(card.image_url ?? fallback) && (
             <div className="relative aspect-[3/2] bg-muted lg:aspect-[16/7]">
-              <img src={card.image_url ?? fallback} alt={card.name} className="h-full w-full object-cover" />
+              <img src={coverVariant(card.image_url, 1280) ?? fallback} onError={fallbackTo(card.image_url ?? fallback)} alt={card.name} decoding="async" className="h-full w-full object-cover" />
             </div>
           )}
           <div className="p-5">

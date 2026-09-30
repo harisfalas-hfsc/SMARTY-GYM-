@@ -14,6 +14,7 @@ import { listSmartyWorkouts, setSmartyWorkoutFavorite, type SmartyWorkoutCard } 
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, categoryFromSlug } from "@/lib/smarty-workout-categories";
 import { CATEGORY_FORMATS, difficultyLabel, type Category } from "@/lib/workout/spec";
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
 
 export const Route = createFileRoute("/smarty-workouts/category/$category")({
   loader: ({ params }) => {
@@ -69,7 +70,7 @@ function CategoryPage() {
   const showFormat = (CATEGORY_FORMATS[category as Category] ?? []).length > 1;
 
   useEffect(() => {
-    void listSmartyWorkouts()
+    void listSmartyWorkouts({ data: { category } })
       .then((r) => setRows(r.workouts.filter((w) => w.category === category)))
       .catch(() => setRows([]));
   }, [category]);
@@ -186,13 +187,22 @@ function CategoryPage() {
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filtered.map((w) => {
+              {filtered.map((w, index) => {
                 const bw = w.equipment.length === 0 || w.equipment.every((i) => i.toLowerCase() === "bodyweight");
                 const mine = mineById[w.id];
                 const badges = equipmentBadges(w.equipment);
                 return (
                   <div key={w.id} className="relative h-56 overflow-hidden rounded-2xl border-2 border-blue-400 bg-muted transition hover:shadow-lg">
-                    <img src={w.image_url ?? detail.image} alt={w.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                    <img
+                      src={coverVariant(w.image_url, 640) ?? detail.image}
+                      onError={fallbackTo(w.image_url ?? detail.image)}
+                      alt={w.name}
+                      loading={index < 4 ? "eager" : "lazy"}
+                      decoding="async"
+                      width={640}
+                      height={427}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
                     <Link
                       to="/smarty-workouts/$workoutId"
                       params={{ workoutId: w.id }}
