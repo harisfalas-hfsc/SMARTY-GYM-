@@ -1,3 +1,4 @@
+import { iconInk } from "@/lib/icon-tone";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import {
@@ -108,7 +109,7 @@ function ValueGrid({ items }: { items: typeof promiseValues }) {
           </div>
           <div className="p-5">
             <h3 className="flex items-center gap-2 text-lg font-bold text-foreground">
-              <Icon className="h-5 w-5 text-primary" /> {title}
+              <Icon className={`h-5 w-5 ${iconInk(title)}`} /> {title}
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
           </div>
@@ -152,7 +153,7 @@ export function DesktopHomeStory() {
               <article key={title} className="overflow-hidden rounded-lg border border-border bg-card">
                 <img src={image} alt="" loading="lazy" width={703} height={450} className="aspect-[16/9] w-full object-cover" />
                 <div className="p-5">
-                  <h3 className="flex items-center gap-2 font-bold text-foreground"><Icon className="h-5 w-5 text-primary" />{title}</h3>
+                  <h3 className="flex items-center gap-2 font-bold text-foreground"><Icon className={`h-5 w-5 ${iconInk(title)}`} />{title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
                 </div>
               </article>
@@ -167,7 +168,7 @@ export function DesktopHomeStory() {
             <div className="mx-auto grid max-w-4xl grid-cols-6 gap-4">
               {audiences.map(({ label, Icon }) => (
                 <div key={label} className="flex flex-col items-center gap-2 text-center">
-                  <Icon className="h-7 w-7 text-primary" />
+                  <Icon className={`h-7 w-7 ${iconInk(title)}`} />
                   <span className="text-sm font-bold text-foreground">{label}</span>
                 </div>
               ))}
