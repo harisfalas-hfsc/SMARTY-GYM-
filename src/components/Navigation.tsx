@@ -314,7 +314,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
                       className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10"
                       style={{ textDecoration: "none" }}
                     >
-                      <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary">
+                      <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground">
                         <Icon className="h-4 w-4" />
                       </span>
                       {label}
