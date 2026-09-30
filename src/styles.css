@@ -146,6 +146,19 @@
 }
 
 .dark {
+  /* Dark mode keeps the original light blues. */
+  --color-blue-50: oklch(0.97 0.014 254.6);
+  --color-blue-100: oklch(0.932 0.032 255.6);
+  --color-blue-200: oklch(0.882 0.059 254.1);
+  --color-blue-300: oklch(0.809 0.105 251.8);
+  --color-blue-400: oklch(0.707 0.165 254.6);
+  --color-blue-500: oklch(0.623 0.214 259.8);
+  --color-blue-600: oklch(0.546 0.245 262.9);
+  --color-blue-700: oklch(0.488 0.243 264.4);
+  --color-sky-400: oklch(0.746 0.16 232.7);
+  --color-sky-500: oklch(0.685 0.169 237.3);
+  --color-cyan-400: oklch(0.789 0.154 211.5);
+  --color-cyan-500: oklch(0.715 0.143 215.2);
   --background: oklch(0.18 0 0);
   --foreground: oklch(0.96 0 0);
   --card: oklch(0.22 0 0);
