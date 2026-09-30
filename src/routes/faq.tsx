@@ -44,7 +44,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "What is the Workout of the Day?",
-    a: "Every midnight (Cyprus time) the system picks two Smarty Workouts — one bodyweight, one with equipment — following the 84-day periodization plan, which sets the category, difficulty and focus of each day. Recovery days have one Recovery workout. Everyone can see the daily workouts; Premium members can open and train them.",
+    a: "Every training day SmartyGym delivers two fresh, expertly designed workouts — one with equipment and one without. On recovery days, a single guided recovery session. Each day focuses on a different category and difficulty level, following a science-based periodization approach designed by Coach Haris Falas. Within each cycle you train all fitness parameters, so your training is reliable, professionally organized and designed to systematically improve every aspect of your fitness.",
   },
   {
     q: "Why should I follow the Workout of the Day?",
@@ -52,7 +52,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "How is it different from choosing a workout myself?",
-    a: "Choosing manually is random: you repeat what you like and skip what you need. The Workout of the Day is a plan — like a personal trainer deciding for you — ready before you wake up. There is nothing to subscribe to, and you can still create your own workouts any time.",
+    a: "Choosing manually is random: you repeat what you like and skip what you need. The Workout of the Day is a plan — like a personal trainer deciding for you — ready before you wake up, and you can still create your own workouts any time.",
   },
   {
     q: "Do I need equipment?",

@@ -25,7 +25,7 @@ export const Route = createFileRoute("/llms-full.txt")({
           `Site: ${SITE_URL}`,
           `Generated: ${new Date().toISOString().slice(0, 10)}`,
           "",
-          "SmartyGym is an online gym with a personal coach. Smarty Coach builds a complete, personalized session (warm-up, activation, main work, finisher, cool-down) from a library of 1,300+ demonstrated exercises, adapted to each member's goal, mood, available time, location and equipment, and progressed through an 84-day periodization cycle. Every program is designed on the sports science of Haris Falas, BSc Sport Science, NSCA CSCS.",
+          "SmartyGym is an online gym with a personal coach. Smarty Coach builds a complete, personalized session (warm-up, activation, main work, finisher, cool-down) from a library of 1,300+ demonstrated exercises, adapted to each member's goal, mood, available time, location and equipment, and progressed through a science-based periodization approach. Every program is designed on the sports science of Haris Falas, BSc Sport Science, NSCA CSCS.",
           "",
           freeAccessMode
             ? "Access: every feature is currently available to all registered users at no cost."

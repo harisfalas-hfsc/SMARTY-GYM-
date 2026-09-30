@@ -413,7 +413,7 @@ export const TRAINING_TOPICS: TrainingTopic[] = [
       },
       {
         q: "Is the Workout of the Day the same for everyone?",
-        a: "The daily session is the same for every subscriber; the exercise selection is then adapted to your equipment and limitations.",
+        a: "Yes. Every training day there are two expert-designed workouts, one with equipment and one without, so you can pick the one that fits where you train.",
       },
     ],
     related: [

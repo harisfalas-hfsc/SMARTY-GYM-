@@ -16,18 +16,18 @@ export const Route = createFileRoute("/wod")({
       {
         name: "keywords",
         content:
-          withExtendedKeywords("/wod", "workout of the day, wod, daily workout, bodyweight workout of the day, equipment workout of the day, 84 day training cycle, recovery day workout"),
+          withExtendedKeywords("/wod", "workout of the day, wod, daily workout, bodyweight workout of the day, equipment workout of the day, periodized training, recovery day workout"),
       },
       { title: "Workout of the Day — Smarty Gym" },
       {
         name: "description",
         content:
-          "Every day at midnight Cyprus time Smarty Gym picks the Workout of the Day from the 84-day periodization: one bodyweight and one equipment workout by Haris Falas.",
+          "Two fresh, expertly designed workouts every training day — one with equipment, one without — following a science-based periodization approach by Coach Haris Falas.",
       },
       { property: "og:title", content: "Workout of the Day — Smarty Gym" },
       {
         property: "og:description",
-        content: "Today's bodyweight and equipment Workouts of the Day, picked from Smarty Workouts by the 84-day periodization.",
+        content: "Today's two expert-designed workouts — one with equipment, one without.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/wod" },
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/wod")({
               url: "https://smartygym.com/wod",
               name: "Workout of the Day — Smarty Gym",
               description:
-                "Every day at midnight Cyprus time Smarty Gym picks the Workout of the Day from the 84-day periodization: one bodyweight and one equipment workout by Haris Falas.",
+                "Two fresh, expertly designed workouts every training day — one with equipment, one without — following a science-based periodization approach by Coach Haris Falas.",
               inLanguage: "en",
               isPartOf: { "@id": "https://smartygym.com/#website" },
               about: { "@id": "https://smartygym.com/#software" },
