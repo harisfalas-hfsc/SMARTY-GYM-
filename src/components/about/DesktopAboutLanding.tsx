@@ -153,7 +153,7 @@ const homeSections: Section[] = [
     accentWord: "every day",
     green: false,
     description:
-      "Every training day SmartyGym delivers two fresh, expertly designed workouts — one with equipment and one without. On recovery days, a single guided recovery session. Each day focuses on a different category and difficulty level, following a science-based periodization approach designed by Coach Haris Falas.",
+      "Our workouts follow a science-based periodization approach designed by Coach Haris Falas, ensuring that within each weekly cycle, you train all fitness parameters. Unlike random workouts you find on YouTube or Instagram, following SmartyGym's structured program means you can rest assured that your training is reliable, professionally organized, and designed to systematically improve all aspects of your fitness.",
     items: [
       { id: "bodyweight", title: "Bodyweight Workout", meta: "Train anywhere", icon: Activity },
       { id: "equipment", title: "Equipment Workout", meta: "Use the gear available to you", icon: Dumbbell },
