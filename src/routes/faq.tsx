@@ -44,7 +44,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "What is the Workout of the Day?",
-    a: "Two workouts built for you every day — one bodyweight, one with your equipment — following a balanced periodization plan. Smarty Coach picks the category and difficulty; your profile decides the exercises, location and limitations.",
+    a: "Every midnight (Cyprus time) the system picks two Smarty Workouts — one bodyweight, one with equipment — following the 84-day periodization plan, which sets the category, difficulty and focus of each day. Recovery days have one Recovery workout. Everyone can see the daily workouts; Premium members can open and train them.",
   },
   {
     q: "Why should I follow the Workout of the Day?",
@@ -52,7 +52,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "How is it different from choosing a workout myself?",
-    a: "Choosing manually is random: you repeat what you like and skip what you need. The Workout of the Day is a plan — like a personal trainer deciding for you — ready in your account before you wake up. While subscribed you don't generate your own workouts; your two are already made. Unsubscribe anytime and go back to creating them yourself.",
+    a: "Choosing manually is random: you repeat what you like and skip what you need. The Workout of the Day is a plan — like a personal trainer deciding for you — ready before you wake up. There is nothing to subscribe to, and you can still create your own workouts any time.",
   },
   {
     q: "Do I need equipment?",

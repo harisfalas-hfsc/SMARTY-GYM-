@@ -119,8 +119,8 @@ const STEPS = [
 const WOD_STEPS = [
   {
     n: "01",
-    title: "You turn it on",
-    desc: "Training Profile • One tap",
+    title: "Midnight, Cyprus time",
+    desc: "Picked automatically • Nothing to turn on",
   },
   {
     n: "02",
@@ -129,7 +129,7 @@ const WOD_STEPS = [
   },
   {
     n: "03",
-    title: "Two workouts are built",
+    title: "Two Smarty Workouts are picked",
     desc: "One with equipment • One bodyweight only",
   },
   {
@@ -289,13 +289,11 @@ function HowItWorks() {
            Way 3 — Workout of the Day
         </p>
         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
-          {freeAccessMode
-            ? "You turn it on once. Your training is planned."
-            : "You subscribe once. Your training is planned."}
+          Nothing to turn on. Your training is planned.
         </h2>
         <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-          Every day you get two ready workouts — one with equipment, one bodyweight only — built
-          automatically around your Training Profile. Both follow a scientific periodization plan:
+          Every day you get two ready workouts — one with equipment, one bodyweight only — picked
+          every midnight from Smarty Workouts, the same for everyone. Both follow a scientific periodization plan:
           strength, endurance, power, mobility and recovery days are sequenced so you never
           overtrain, never undertrain, and every fitness quality is developed in the right order.
         </p>
