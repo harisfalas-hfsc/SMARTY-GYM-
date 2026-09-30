@@ -36,6 +36,11 @@ const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var q=new URLSearchParams(lo
 // can never trap the website behind a permanent logo screen.
 const NATIVE_FIRST_FRAME_SCRIPT = `(function(){if(!document.documentElement.classList.contains('native-shell'))return;document.documentElement.classList.add('native-first-frame');setTimeout(function(){document.documentElement.classList.remove('native-first-frame')},8000)})();`;
 
+// No pinch/double-tap zoom on touch devices (mobile view and native apps).
+// The viewport meta covers Android/WebViews; iOS Safari ignores user-scalable,
+// so gestures are blocked in JS as a fallback. Desktop pointers are untouched.
+const NO_ZOOM_INIT_SCRIPT = `(function(){try{if(!window.matchMedia('(pointer: coarse)').matches)return;var stop=function(e){e.preventDefault();};document.addEventListener('gesturestart',stop,{passive:false});document.addEventListener('gesturechange',stop,{passive:false});document.addEventListener('gestureend',stop,{passive:false});document.addEventListener('touchmove',function(e){if(e.touches.length>1)stop(e);},{passive:false});document.addEventListener('wheel',function(e){if(e.ctrlKey)stop(e);},{passive:false});}catch(e){}})();`;
+
 
 const KEYWORDS = [
   "personalized workout generator",
@@ -351,7 +356,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" },
       {
         title:
           "SmartyGym — Personalized Workouts with Smarty Coach",
@@ -436,6 +441,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: NATIVE_WRAPPER_INIT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: NATIVE_FIRST_FRAME_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: NO_ZOOM_INIT_SCRIPT }} />
         <style>{`html,body{margin:0;min-height:100%;background:#000}html.native-shell,html.native-shell body,html.native-first-frame,html.native-first-frame body{background:#000}html.native-first-frame body::before{content:"";position:fixed;inset:0;z-index:2147483000;background-color:#000;background-image:url('/icon-512.png');background-position:center;background-size:104px 104px;background-repeat:no-repeat;pointer-events:none}`}</style>
         <HeadContent />
       </head>
