@@ -77,9 +77,9 @@
 :root {
   --radius: 0.75rem;
   /* Light mode: every blue is the standard dark brand blue. */
-  --color-blue-50: #0D2BCD;
-  --color-blue-100: #0D2BCD;
-  --color-blue-200: #0D2BCD;
+  --color-blue-50: oklch(0.955 0.03 266);
+  --color-blue-100: oklch(0.925 0.05 266);
+  --color-blue-200: oklch(0.85 0.09 266);
   --color-blue-300: #0D2BCD;
   --color-blue-400: #0D2BCD;
   --color-blue-500: #0D2BCD;
@@ -143,6 +143,15 @@
   --workout-overlay-foreground: oklch(0.96 0 0);
   --workout-overlay-muted: oklch(0.75 0 0);
   --workout-overlay-border: oklch(0.42 0 0);
+  /* Icon chip palette: each icon gets its own colour, light tint behind it. */
+  --tone-0-fg: #0D2BCD;              --tone-0-bg: oklch(0.94 0.04 266);
+  --tone-1-fg: oklch(0.5 0.15 150);  --tone-1-bg: oklch(0.95 0.05 150);
+  --tone-2-fg: oklch(0.56 0.17 45);  --tone-2-bg: oklch(0.95 0.05 60);
+  --tone-3-fg: oklch(0.48 0.22 303); --tone-3-bg: oklch(0.95 0.04 303);
+  --tone-4-fg: oklch(0.52 0.2 25);   --tone-4-bg: oklch(0.95 0.04 25);
+  --tone-5-fg: oklch(0.5 0.1 200);   --tone-5-bg: oklch(0.95 0.04 200);
+  --tone-6-fg: oklch(0.53 0.12 80);  --tone-6-bg: oklch(0.95 0.06 90);
+  --tone-7-fg: oklch(0.52 0.2 355);  --tone-7-bg: oklch(0.95 0.04 355);
 }
 
 .dark {
@@ -185,6 +194,14 @@
   --input: oklch(0.32 0 0);
   --ring: oklch(0.745 0.131 220);
   --gradient-brand-soft: linear-gradient(135deg, oklch(0.32 0.055 220), oklch(0.29 0.04 210));
+  --tone-0-fg: oklch(0.745 0.131 220); --tone-0-bg: oklch(0.745 0.131 220 / 0.15);
+  --tone-1-fg: oklch(0.79 0.18 150);   --tone-1-bg: oklch(0.79 0.18 150 / 0.15);
+  --tone-2-fg: oklch(0.78 0.16 55);    --tone-2-bg: oklch(0.78 0.16 55 / 0.15);
+  --tone-3-fg: oklch(0.75 0.17 303);   --tone-3-bg: oklch(0.75 0.17 303 / 0.15);
+  --tone-4-fg: oklch(0.72 0.18 22);    --tone-4-bg: oklch(0.72 0.18 22 / 0.15);
+  --tone-5-fg: oklch(0.8 0.12 195);    --tone-5-bg: oklch(0.8 0.12 195 / 0.15);
+  --tone-6-fg: oklch(0.86 0.16 90);    --tone-6-bg: oklch(0.86 0.16 90 / 0.15);
+  --tone-7-fg: oklch(0.76 0.17 355);   --tone-7-bg: oklch(0.76 0.17 355 / 0.15);
   --workout-overlay: oklch(0.22 0 0 / 0.94);
   --workout-overlay-foreground: oklch(0.96 0 0);
   --workout-overlay-muted: oklch(0.75 0 0);
@@ -217,6 +234,22 @@
   .gradient-primary { background: var(--gradient-primary); }
   .brand-gradient-soft { background-image: var(--gradient-brand-soft); }
   .shadow-soft { box-shadow: var(--shadow-soft); }
+  .icon-ink-0 { color: var(--tone-0-fg); }
+  .icon-ink-1 { color: var(--tone-1-fg); }
+  .icon-ink-2 { color: var(--tone-2-fg); }
+  .icon-ink-3 { color: var(--tone-3-fg); }
+  .icon-ink-4 { color: var(--tone-4-fg); }
+  .icon-ink-5 { color: var(--tone-5-fg); }
+  .icon-ink-6 { color: var(--tone-6-fg); }
+  .icon-ink-7 { color: var(--tone-7-fg); }
+  .icon-tone-0, :nth-child(8n+1) > .icon-tone-auto { color: var(--tone-0-fg); background-color: var(--tone-0-bg); border-color: color-mix(in oklab, var(--tone-0-fg) 30%, transparent); }
+  .icon-tone-1, :nth-child(8n+2) > .icon-tone-auto { color: var(--tone-1-fg); background-color: var(--tone-1-bg); border-color: color-mix(in oklab, var(--tone-1-fg) 30%, transparent); }
+  .icon-tone-2, :nth-child(8n+3) > .icon-tone-auto { color: var(--tone-2-fg); background-color: var(--tone-2-bg); border-color: color-mix(in oklab, var(--tone-2-fg) 30%, transparent); }
+  .icon-tone-3, :nth-child(8n+4) > .icon-tone-auto { color: var(--tone-3-fg); background-color: var(--tone-3-bg); border-color: color-mix(in oklab, var(--tone-3-fg) 30%, transparent); }
+  .icon-tone-4, :nth-child(8n+5) > .icon-tone-auto { color: var(--tone-4-fg); background-color: var(--tone-4-bg); border-color: color-mix(in oklab, var(--tone-4-fg) 30%, transparent); }
+  .icon-tone-5, :nth-child(8n+6) > .icon-tone-auto { color: var(--tone-5-fg); background-color: var(--tone-5-bg); border-color: color-mix(in oklab, var(--tone-5-fg) 30%, transparent); }
+  .icon-tone-6, :nth-child(8n+7) > .icon-tone-auto { color: var(--tone-6-fg); background-color: var(--tone-6-bg); border-color: color-mix(in oklab, var(--tone-6-fg) 30%, transparent); }
+  .icon-tone-7, :nth-child(8n+8) > .icon-tone-auto { color: var(--tone-7-fg); background-color: var(--tone-7-bg); border-color: color-mix(in oklab, var(--tone-7-fg) 30%, transparent); }
   .shadow-primary { box-shadow: var(--shadow-primary); }
   .transition-smooth { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }

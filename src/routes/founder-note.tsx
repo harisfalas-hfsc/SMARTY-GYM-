@@ -1,3 +1,4 @@
+import { iconTone } from "@/lib/icon-tone";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Heart, Quote, UserRound } from "lucide-react";
@@ -80,7 +81,7 @@ function NoteCard({
   return (
     <Card className={emphasized ? "bg-primary/5" : undefined}>
       <CardHeader className="flex-row items-center gap-3 space-y-0 pb-4">
-        <span className="shrink-0 rounded-xl bg-primary/10 p-2.5 text-primary">{icon}</span>
+        <span className={`shrink-0 rounded-xl p-2.5 ${iconTone(title)}`}>{icon}</span>
         <CardTitle className="text-base font-extrabold uppercase sm:text-lg">{title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-5">{children}</CardContent>
