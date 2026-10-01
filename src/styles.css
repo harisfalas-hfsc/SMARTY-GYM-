@@ -137,13 +137,13 @@
   --gradient-primary: linear-gradient(135deg, oklch(0.745 0.131 220) 0%, oklch(0.745 0.131 220) 100%);
   --gradient-brand-soft: linear-gradient(135deg, oklch(0.96 0.03 220), oklch(0.97 0.02 210));
   --shadow-soft: 0 4px 20px rgb(0 0 0 / 0.08);
-  --shadow-primary: 0 4px 20px rgb(13 43 205 / 0.3);
+  --shadow-primary: 0 4px 20px oklch(0.745 0.131 220 / 0.3);
   --workout-overlay: oklch(0.22 0 0 / 0.94);
   --workout-overlay-foreground: oklch(0.96 0 0);
   --workout-overlay-muted: oklch(0.75 0 0);
   --workout-overlay-border: oklch(0.42 0 0);
   /* Icon chip palette: each icon gets its own colour, light tint behind it. */
-  --tone-0-fg: #0D2BCD;              --tone-0-bg: oklch(0.94 0.04 266);
+  --tone-0-fg: oklch(0.745 0.131 220); --tone-0-bg: oklch(0.94 0.04 266);
   --tone-1-fg: oklch(0.5 0.15 150);  --tone-1-bg: oklch(0.95 0.05 150);
   --tone-2-fg: oklch(0.56 0.17 45);  --tone-2-bg: oklch(0.95 0.05 60);
   --tone-3-fg: oklch(0.48 0.22 303); --tone-3-bg: oklch(0.95 0.04 303);
