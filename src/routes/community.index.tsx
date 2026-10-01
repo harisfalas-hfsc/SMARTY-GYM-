@@ -139,6 +139,31 @@ const TALK_FILTERS: { value: TalkSortKey; label: string }[] = [
   { value: "discussed", label: "Most discussed" },
 ];
 
+/** Highlight a keyword in the site blue. */
+function Hi({ children }: { children: React.ReactNode }) {
+  return <span className="font-semibold text-primary">{children}</span>;
+}
+
+/** Short per-panel description shown under the main subtitle; changes as you swipe. */
+const PANEL_DESCRIPTIONS: React.ReactNode[] = [
+  <>
+    <Hi>Share</Hi> your own workouts and <Hi>train</Hi> sessions created by other members. Every
+    shared workout is ready to open, save and log.
+  </>,
+  <>
+    Members climb the <Hi>rankings</Hi> by training, sharing and staying consistent. Complete
+    workouts, keep your streak alive and take your place at the top.
+  </>,
+  <>
+    The most completed, liked, rated and discussed workouts rise here. <Hi>Train</Hi> the community
+    favourites and see which sessions everyone loves.
+  </>,
+  <>
+    Real feedback on every shared session. Read what members say, join the conversation and help
+    others <Hi>discover</Hi> their next workout.
+  </>,
+];
+
 /** A distinct badge for every one of the ten positions. */
 const POSITION_BADGES = ["🥇", "🥈", "🥉", "🏅", "🎖️", "⭐", "🔥", "💪", "⚡", "🎯"];
 
@@ -357,7 +382,7 @@ function CommunityPage() {
                 to="/auth"
                 className="font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
               >
-                {access.signedIn ? "Renew membership" : "Join Smarty Gym"}
+                {access.signedIn ? "Renew membership" : "Join SmartyGym"}
               </Link>{" "}
               to open workouts, like, comment, and train shared sessions.
             </>
