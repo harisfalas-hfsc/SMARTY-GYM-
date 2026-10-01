@@ -117,6 +117,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
         .map((c) => {
           let s = 0;
           if (D.patternOf(c) === D.patternOf(ex)) s += 4;
+          else if (!/stretch|mobility/i.test(ex.name)) s -= 6;
           if (D.regionOf(c) === D.regionOf(ex)) s += 3;
           if (wantBw ? fam(c) === "bodyweight" : fam(c) === fam(ex) || fam(c) === mainFamily) s += 5;
           else if (fam(c) !== "bodyweight") s -= 3;
