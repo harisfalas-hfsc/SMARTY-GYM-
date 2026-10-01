@@ -1,3 +1,4 @@
+import type { ErrorComponentProps } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -302,7 +303,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -347,7 +348,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   // at the root so legacy paths win over same-shaped app routes such as
   // /workout/<id>. Nothing else about the request changes.
   beforeLoad: ({ location }) => {
-    if (!location.pathname.toLowerCase().includes(".html")) return;
+    if (!location.pathname.toLowerCase().includes(".html")) return undefined;
     const target = resolveLegacyPath(location.pathname);
     if (target && target !== location.pathname) {
       throw redirect({ href: target, statusCode: 301 });

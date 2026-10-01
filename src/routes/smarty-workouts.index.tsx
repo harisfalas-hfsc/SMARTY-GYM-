@@ -79,6 +79,7 @@ function SmartyWorkoutsPage() {
           <CarouselContent className="-ml-3">
             {SMARTY_WORKOUT_CATEGORIES.map((category, index) => {
               const detail = CATEGORY_DETAILS[category];
+              if (!detail) return null;
               const Icon = detail.Icon;
               return (
                 <CarouselItem key={category} className="basis-[75%] pl-3 sm:basis-[60%]">
@@ -131,6 +132,7 @@ function SmartyWorkoutsPage() {
       <div className="hidden grid-cols-2 gap-6 lg:grid xl:grid-cols-4">
         {SMARTY_WORKOUT_CATEGORIES.map((category) => {
           const detail = CATEGORY_DETAILS[category];
+          if (!detail) return null;
           const Icon = detail.Icon;
           return (
             <Link
