@@ -11,7 +11,7 @@ export type ComplianceWorkout = { id: string; name: string; category: string; fo
 export type ComplianceExercise = PoolExercise & { is_active?: boolean; gif_path?: string | null };
 
 const NO_PRIORITY = new Set<string>(["RECOVERY", "MOBILITY & STABILITY", "PILATES"]);
-const LEVELS: DifficultyLevel[] = ["BEGINNER", "INTERMEDIATE", "ADVANCED"] as DifficultyLevel[];
+const LEVELS: DifficultyLevel[] = ["beginner", "intermediate", "advanced"];
 
 function workRows(html: string, lib: Map<string, ComplianceExercise>) {
   return parseWorkoutSteps(html)
