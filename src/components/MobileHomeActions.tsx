@@ -158,7 +158,7 @@ export function MobileHomeActions({ showPricing, workoutCount }: { showPricing: 
   }, [exploreApi]);
 
   return (
-    <div className="mt-5 sm:hidden">
+    <div className="mt-5 lg:hidden">
       <div className="mb-4 flex items-center justify-center gap-4">
         <Button
           type="button"
