@@ -71,33 +71,32 @@
 }
 
 /* SMARTYGYM brand palette
- * Primary deep blue (light mode): #0D2BCD; light blue reserved for dark mode.
- * Silver secondary, near-white background.
+ * Light mode now uses the dark-view blue (oklch(0.745 0.131 220)) everywhere.
  */
 :root {
   --radius: 0.75rem;
-  /* Light mode: every blue is the standard dark brand blue. */
+  /* Light mode: every blue matches the dark-view blue. */
   --color-blue-50: oklch(0.955 0.03 266);
   --color-blue-100: oklch(0.925 0.05 266);
   --color-blue-200: oklch(0.85 0.09 266);
-  --color-blue-300: #0D2BCD;
-  --color-blue-400: #0D2BCD;
-  --color-blue-500: #0D2BCD;
-  --color-blue-600: #0D2BCD;
-  --color-blue-700: #0D2BCD;
-  --color-sky-400: #0D2BCD;
-  --color-sky-500: #0D2BCD;
-  --color-cyan-400: #0D2BCD;
-  --color-cyan-500: #0D2BCD;
+  --color-blue-300: oklch(0.809 0.105 251.8);
+  --color-blue-400: oklch(0.745 0.131 220);
+  --color-blue-500: oklch(0.745 0.131 220);
+  --color-blue-600: oklch(0.745 0.131 220);
+  --color-blue-700: oklch(0.745 0.131 220);
+  --color-sky-400: oklch(0.745 0.131 220);
+  --color-sky-500: oklch(0.745 0.131 220);
+  --color-cyan-400: oklch(0.745 0.131 220);
+  --color-cyan-500: oklch(0.745 0.131 220);
   --background: oklch(0.93 0 0);
   --foreground: oklch(0.27 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.27 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.27 0 0);
-  --primary: #0D2BCD;
+  --primary: oklch(0.745 0.131 220);
   --primary-foreground: oklch(0.97 0.01 240);
-  --primary-hover: #0A23A6;
+  --primary-hover: oklch(0.79 0.13 220);
   --secondary: oklch(0.82 0 0);
   --secondary-foreground: oklch(0.27 0 0);
   --muted: oklch(0.94 0 0);
@@ -121,30 +120,30 @@
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.91 0 0);
   --input: oklch(0.91 0 0);
-  --ring: #0D2BCD;
-  --chart-1: #0D2BCD;
+  --ring: oklch(0.745 0.131 220);
+  --chart-1: oklch(0.745 0.131 220);
   --chart-2: oklch(0.7 0.15 150);
   --chart-3: oklch(0.75 0.16 60);
   --chart-4: oklch(0.65 0.2 20);
   --chart-5: oklch(0.55 0.18 290);
   --sidebar: oklch(0.955 0 0);
   --sidebar-foreground: oklch(0.27 0 0);
-  --sidebar-primary: #0D2BCD;
+  --sidebar-primary: oklch(0.745 0.131 220);
   --sidebar-primary-foreground: oklch(0.97 0.01 240);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.27 0 0);
   --sidebar-border: oklch(0.91 0 0);
-  --sidebar-ring: #0D2BCD;
-  --gradient-primary: linear-gradient(135deg, #0D2BCD 0%, #0D2BCD 100%);
+  --sidebar-ring: oklch(0.745 0.131 220);
+  --gradient-primary: linear-gradient(135deg, oklch(0.745 0.131 220) 0%, oklch(0.745 0.131 220) 100%);
   --gradient-brand-soft: linear-gradient(135deg, oklch(0.96 0.03 220), oklch(0.97 0.02 210));
   --shadow-soft: 0 4px 20px rgb(0 0 0 / 0.08);
-  --shadow-primary: 0 4px 20px rgb(13 43 205 / 0.3);
+  --shadow-primary: 0 4px 20px oklch(0.745 0.131 220 / 0.3);
   --workout-overlay: oklch(0.22 0 0 / 0.94);
   --workout-overlay-foreground: oklch(0.96 0 0);
   --workout-overlay-muted: oklch(0.75 0 0);
   --workout-overlay-border: oklch(0.42 0 0);
   /* Icon chip palette: each icon gets its own colour, light tint behind it. */
-  --tone-0-fg: #0D2BCD;              --tone-0-bg: oklch(0.94 0.04 266);
+  --tone-0-fg: oklch(0.745 0.131 220); --tone-0-bg: oklch(0.94 0.04 266);
   --tone-1-fg: oklch(0.5 0.15 150);  --tone-1-bg: oklch(0.95 0.05 150);
   --tone-2-fg: oklch(0.56 0.17 45);  --tone-2-bg: oklch(0.95 0.05 60);
   --tone-3-fg: oklch(0.48 0.22 303); --tone-3-bg: oklch(0.95 0.04 303);
