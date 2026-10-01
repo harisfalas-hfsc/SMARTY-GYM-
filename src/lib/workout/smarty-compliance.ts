@@ -10,6 +10,7 @@ import type { Category, DifficultyLevel, Format } from "./spec";
 export type ComplianceWorkout = { id: string; name: string; category: string; format: string | null; difficulty_stars: number; main_workout: string | null };
 export type ComplianceExercise = PoolExercise & { is_active?: boolean; gif_path?: string | null };
 
+const NO_PRIORITY = new Set<string>(["RECOVERY", "MOBILITY & STABILITY", "PILATES"]);
 const LEVELS: DifficultyLevel[] = ["BEGINNER", "INTERMEDIATE", "ADVANCED"] as DifficultyLevel[];
 
 function workRows(html: string, lib: Map<string, ComplianceExercise>) {
@@ -38,7 +39,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   if (rows.length && D.equipmentFamilyViolation(rows, cat, fmt)) s.add("Too many equipment families");
   if (rows.length && D.sequenceViolation(rows, fmt)) s.add("Technical move right after high-fatigue move");
   if (D.cardioDominanceViolation(rows, cat)) s.add("Cardio turned metabolic");
-  if (cat !== "RECOVERY" && rows.length) {
+  if (!NO_PRIORITY.has(cat) && rows.length) {
     const prio = priorityIds(library);
     const hits = rows.filter((r) => prio.has(r.id)).length;
     if (hits / rows.length < 0.7) s.add("Too few priority exercises");
@@ -104,10 +105,10 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
 
   // Finisher removal (non-finisher categories): drop the ⚡ block up to Cool Down.
   if (before.includes("Finisher in a category that never has one")) {
-    html = html.replace(/<h[1-4][^>]*>\s*⚡[\s\S]*?(?=<h[1-4][^>]*>\s*🧘)/u, "");
+    html = html.replace(/<(h[1-4]|p|div)\b[^>]*>(?:(?!<\/?\1)[\s\S])*?⚡[\s\S]*?(?=<(?:h[1-4]|p|div)\b[^>]*>(?:(?!<\/?(?:h[1-4]|p|div))[\s\S])*?🧘)/u, "");
   }
 
-  const candidates = library.filter((e) => prio.has(e.id) && e.is_active !== false && Boolean(e.gif_path?.trim()) && !perExerciseBad(e, cat, fmt));
+  const candidates = library.filter((e) => (NO_PRIORITY.has(cat) || prio.has(e.id)) && e.is_active !== false && Boolean(e.gif_path?.trim()) && !perExerciseBad(e, cat, fmt));
   const score = (h: string) => complianceIssues({ ...w, main_workout: h }, library, lib).length;
   let current = score(html);
 
