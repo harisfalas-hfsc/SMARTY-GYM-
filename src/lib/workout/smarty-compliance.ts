@@ -125,6 +125,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
     for (const ex of order) {
       if (current === 0) break;
       if (prio.has(ex.id) && !perExerciseBad(ex, cat, fmt) && cat !== "CHALLENGE" && cat !== "CARDIO" && !before.includes("Too many equipment families")) continue;
+      const bad = perExerciseBad(ex, cat, fmt);
       const wantBw = cat === "CHALLENGE" || fam(ex) === "bodyweight";
       const pool = candidates.filter((c) => !present.has(c.id) && c.id !== ex.id);
       const ranked = pool
@@ -132,7 +133,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
           let s = 0;
           const pe = patternKey(ex), pc = patternKey(c);
           if (pc === pe || (pe === "arms" && (pc === "push" || pc === "pull"))) s += 4;
-          else if (pe !== "stretch" && pe !== "other") s -= 6;
+          else if (pe !== "stretch" && pe !== "other" && !(bad && (pe === "calf" || pe === "arms"))) s -= 6;
           if (D.regionOf(c) === D.regionOf(ex)) s += 3;
           if (wantBw ? fam(c) === "bodyweight" : fam(c) === fam(ex) || fam(c) === mainFamily) s += 5;
           else if (fam(c) !== "bodyweight") s -= 3;
