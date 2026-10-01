@@ -9,7 +9,7 @@ const lib = [
   ex("3", "inverted row", "body weight", "back"),
   ex("4", "diamond push-up", "body weight", "chest"),
   ex("5", "chin-up", "body weight", "back"),
-  ex("9", "bodyweight standing biceps curl isometric", "body weight", "upper arms"),
+  ex("9", "side push neck stretch", "body weight", "upper arms"),
 ];
 const html = (ids: string[]) =>
   `<h3>💪 Main Workout</h3>${ids.map((i) => `<p>3 sets × 10 reps {{exercise:${i}:${lib.find((e) => e.id === i)!.name}}}</p>`).join("")}<h3>🧘 Cool Down</h3>`;
