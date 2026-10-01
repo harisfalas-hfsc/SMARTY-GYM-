@@ -1,14 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 
-// Real platform brand colors; pale tinted background keeps each icon visible
-// in both light and dark view without changing the icon color.
+// Circle stays on the brand color (border + pale brand tint); only the icon
+// keeps each platform's real brand color, in both light and dark view.
 const socialClass =
-  "p-2 rounded-full border-2 transition-colors hover:opacity-80";
-const instagramClass = `${socialClass} border-[#E1306C] text-[#E1306C] bg-[#E1306C]/10`;
-const facebookClass = `${socialClass} border-[#1877F2] text-[#1877F2] bg-[#1877F2]/10`;
-const tiktokClass = `${socialClass} border-[#010101] dark:border-white text-[#010101] dark:text-white bg-[#010101]/10 dark:bg-white/10`;
-const youtubeClass = `${socialClass} border-[#FF0000] text-[#FF0000] bg-[#FF0000]/10`;
+  "p-2 rounded-full border-2 border-primary bg-primary/10 transition-colors hover:opacity-80";
+const instagramClass = `${socialClass} text-[#E1306C]`;
+const facebookClass = `${socialClass} text-[#1877F2]`;
+const tiktokClass = `${socialClass} text-[#010101] dark:text-white`;
+const youtubeClass = `${socialClass} text-[#FF0000]`;
 
 export function SiteFooter() {
   return (
