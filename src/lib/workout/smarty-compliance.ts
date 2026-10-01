@@ -3,7 +3,7 @@
 // when it breaks a rule, swaps exercises only (dose, sections and text stay).
 import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
-import { priorityIds, priorityShortfall } from "./priority";
+import { priorityIds } from "./priority";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
@@ -38,7 +38,11 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   if (rows.length && D.equipmentFamilyViolation(rows, cat, fmt)) s.add("Too many equipment families");
   if (rows.length && D.sequenceViolation(rows, fmt)) s.add("Technical move right after high-fatigue move");
   if (D.cardioDominanceViolation(rows, cat)) s.add("Cardio turned metabolic");
-  if (priorityShortfall(html, library, w.category)) s.add("Too few priority exercises");
+  if (cat !== "RECOVERY" && rows.length) {
+    const prio = priorityIds(library);
+    const hits = rows.filter((r) => prio.has(r.id)).length;
+    if (hits / rows.length < 0.7) s.add("Too few priority exercises");
+  }
   return [...s];
 }
 
@@ -51,7 +55,7 @@ function workTokens(html: string) {
   const start = html.search(/Main Workout/i);
   if (start < 0) return [];
   const rest = html.slice(start);
-  const end = rest.search(/Cool Down/i);
+  const end = rest.search(/Cool[\s-]?Down/i);
   const stop = end > 0 ? start + end : html.length;
   const re = /\{\{exercise:([A-Za-z0-9_-]+):([^}]*)\}\}/g;
   const out: { id: string; index: number; raw: string }[] = [];
@@ -64,7 +68,7 @@ function workTokens(html: string) {
 function replaceId(html: string, from: string, to: ComplianceExercise): string {
   const start = html.search(/Main Workout/i);
   const head = html.slice(0, start), tail = html.slice(start);
-  const end = tail.search(/Cool Down/i);
+  const end = tail.search(/Cool[\s-]?Down/i);
   const work = end > 0 ? tail.slice(0, end) : tail;
   const after = end > 0 ? tail.slice(end) : "";
   const re = new RegExp(`\\{\\{exercise:${from.replace(/[-]/g, "\\-")}:[^}]*\\}\\}`, "g");
