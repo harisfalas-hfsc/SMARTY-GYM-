@@ -12,7 +12,7 @@ const lib = [
   ex("9", "side push neck stretch", "body weight", "upper arms"),
 ];
 const html = (ids: string[]) =>
-  `<h3>💪 Main Workout</h3>${ids.map((i) => `<p>3 sets × 10 reps {{exercise:${i}:${lib.find((e) => e.id === i)!.name}}}</p>`).join("")}<h3>🧘 Cool Down</h3>`;
+  `<p>💪 <strong>Main Workout (REPS & SETS)</strong></p>${ids.map((i) => `<ul><li><p>3 sets × 10 reps {{exercise:${i}:${lib.find((e) => e.id === i)!.name}}} — Rest 60 sec</p></li></ul>`).join("")}<p>🧘 <strong>Cool Down</strong></p>`;
 
 describe("Smarty Workout rule compliance", () => {
   it("flags a session without enough priority exercises and fixes it by swapping exercises only", () => {
