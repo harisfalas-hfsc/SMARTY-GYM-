@@ -77,6 +77,20 @@ function replaceId(html: string, from: string, to: ComplianceExercise): string {
 
 const fam = (e: ComplianceExercise) => D.equipmentFamilyOf(e.equipment);
 
+const PATTERNS: Array<[string, RegExp]> = [
+  ["stretch", /stretch|mobility|circles?\b|release/i],
+  ["lunge", /lunge|split squat|step[- ]?up|bulgarian/i],
+  ["squat", /squat|leg press|thruster|wall sit|march sit/i],
+  ["hinge", /deadlift|swing|hip thrust|glute bridge|bridge|good morning|hamstring|clean|snatch|hyperextension/i],
+  ["pull", /row|pull[- ]?up|chin|pulldown|pull down|face pull|pullover/i],
+  ["arms", /curl|triceps|extension|kickback/i],
+  ["push", /press|push[- ]?up|dip|fly|bench/i],
+  ["calf", /calf/i],
+  ["core", /plank|crunch|dead bug|bird dog|hollow|leg raise|knee raise|rollout|twist|pallof|sit[- ]?up|v[- ]?up|chop|ab\b|oblique/i],
+  ["conditioning", /burpee|jump|climber|jack|knees|skater|sprint|slam|run|crawl|skip|shuffle|hop|march|step/i],
+];
+const patternKey = (e: { name: string }) => PATTERNS.find(([, re]) => re.test(e.name))?.[0] ?? "other";
+
 /** Swap exercises (only) until the workout complies, accepting a swap only when it reduces the issue count. */
 export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): { html: string; swaps: Array<{ from: string; to: string }>; before: string[]; after: string[] } {
   const lib = new Map(library.map((e) => [e.id, e]));
@@ -116,8 +130,9 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
       const ranked = pool
         .map((c) => {
           let s = 0;
-          if (D.patternOf(c) === D.patternOf(ex)) s += 4;
-          else if (!/stretch|mobility/i.test(ex.name)) s -= 6;
+          const pe = patternKey(ex), pc = patternKey(c);
+          if (pc === pe || (pe === "arms" && (pc === "push" || pc === "pull"))) s += 4;
+          else if (pe !== "stretch" && pe !== "other") s -= 6;
           if (D.regionOf(c) === D.regionOf(ex)) s += 3;
           if (wantBw ? fam(c) === "bodyweight" : fam(c) === fam(ex) || fam(c) === mainFamily) s += 5;
           else if (fam(c) !== "bodyweight") s -= 3;
