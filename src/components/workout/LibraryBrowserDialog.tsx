@@ -24,7 +24,7 @@ type Row = {
 
 function Chips({ items, value, onChange }: { items: string[]; value: string | null; onChange: (v: string | null) => void }) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1">
+    <div className="flex w-full min-w-0 flex-wrap gap-2 pb-1">
       {items.map((it) => (
         <button
           key={it}
@@ -106,19 +106,19 @@ export function LibraryBrowserDialog({
         if (!o) setDetail(null);
       }}
     >
-      <DialogContent className="max-h-[88vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[88vh] overflow-y-auto w-[calc(100vw-2rem)] min-w-0 sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Add to {sectionLabel}</DialogTitle>
         </DialogHeader>
 
         {detail ? (
-          <div className="space-y-3">
+          <div className="min-w-0 space-y-3">
             <Button variant="ghost" size="sm" onClick={() => setDetail(null)}>
               <ArrowLeft className="mr-1 h-4 w-4" /> Back to the list
             </Button>
             <div className="overflow-hidden rounded-2xl border-2 border-primary bg-white">
               {detail.gif_path ? (
-                <ExerciseGif path={detail.gif_path} alt={detail.name} className="mx-auto block max-h-[36vh] w-full object-contain" />
+                <ExerciseGif path={detail.gif_path} alt={detail.name} className="mx-auto block h-[36vh] w-full object-contain" />
               ) : (
                 <div className="flex h-40 items-center justify-center bg-secondary text-muted-foreground">
                   <Dumbbell className="h-8 w-8" />
@@ -143,7 +143,7 @@ export function LibraryBrowserDialog({
             </Button>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="min-w-0 space-y-3">
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input className="h-11 pl-9" placeholder="Search by name…" value={term} onChange={(e) => setTerm(e.target.value)} />
@@ -151,7 +151,7 @@ export function LibraryBrowserDialog({
             <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Body part</p>
             <Chips items={[...BODY_PARTS]} value={part} onChange={setPart} />
             <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Equipment</p>
-            <Chips items={equipmentList} value={equip} onChange={setEquip} />
+            <Chips items={equipmentList.slice(0, 40)} value={equip} onChange={setEquip} />
 
             {loading ? (
               <div className="flex justify-center p-6">
