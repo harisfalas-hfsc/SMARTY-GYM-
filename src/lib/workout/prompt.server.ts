@@ -278,7 +278,7 @@ SOFT TISSUE RULES — lines may only start with: Foam roll, Foam-roll, Foam roll
 ACTIVATION RULES (non-negotiable) — Activation is MOVEMENT PREPARATION, never training.
 - Use ONLY ids from the ACTIVATION LIST below. Ids from the main library are rejected there.
 - Exactly 4 bullets, every one carrying a token: "5-10 reps {{exercise:ID:Name}}" or "15-30 sec {{exercise:ID:Name}}". ONE pass only — never sets (no 3 × 10), never more than 10 reps or 30 sec. Plain-text drills are rejected.
-- Mobility, stability, joint prep and light bodyweight rehearsal of the Main Workout patterns (bodyweight squat, reverse/forward lunge, marching, up to 10 push-ups) are all legal. Pick drills that prepare the patterns that follow.
+- Activation is mobility, dynamic mobility, stability and joint prep ONLY — bodyweight, never equipment, never training moves (no push-ups, lunges, squats, donkey kicks). Pick drills that prepare the patterns that follow.
 - Never near failure, no external load, no conditioning or high impact (burpees, jumps, sprints).
 
 COOL DOWN RULES (non-negotiable)

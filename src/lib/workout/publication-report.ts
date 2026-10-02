@@ -86,7 +86,7 @@ export function publicationRuleReports(
         add("Activation dose above 10 reps / 30 sec or in sets", line("Activation Rule", [["Section", "Activation"], ["Exercise", exerciseName], ["Current", step.prescription], ["Allowed", `maximum ${ACTIVATION_MAX_REPS} reps total or ${ACTIVATION_MAX_SECONDS} sec, with no working sets`]], "Reduce the activation dose."));
       }
       if (!prepAllowed(exerciseName, "activation")) {
-        add("Activation not mobility/stability", line("Activation Vocabulary Rule", [["Section", "Activation"], ["Exercise", exerciseName], ["Equipment", equipmentLabel(row)]], "Use a low-fatigue mobility, stability, joint-preparation, activation, or light movement-rehearsal exercise."));
+        add("Activation not mobility/stability", line("Activation Vocabulary Rule", [["Section", "Activation"], ["Exercise", exerciseName], ["Equipment", equipmentLabel(row)]], "Use a bodyweight mobility, stability, joint-preparation or activation drill — never equipment or training moves."));
       }
     }
     if (step.section === "Cool-down" && !prepAllowed(exerciseName, "cooldown")) {

@@ -364,13 +364,13 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
     let keptStretch = false;
     for (const t of prep) {
       const row = lib.get(t.id); if (!row) continue;
-      const illegal = !prepAllowed(row.name, t.section);
+      const illegal = !prepAllowed(row.name, t.section) || !isBodyweightEquipment(row.equipment);
       const excessStretch = t.section === "activation" && isPassiveStretch(row.name) && (keptStretch || ((keptStretch = true), false));
       if (!illegal && !excessStretch) continue;
       const role: Role = t.section === "activation" ? "Activation" : "Cool Down";
       const cur = allTokens(html).find((x) => x.index === t.index); if (!cur) continue;
       tryApply(cur.index, cur.raw, row, role, illegal ? `Not a ${role} movement` : "Activation must be active mobility, not a second passive stretch", illegal ? `${role} vocabulary` : "Activation mostly passive stretches",
-        (c) => prepAllowed(c.name, t.section) && (t.section !== "activation" || !isPassiveStretch(c.name)), { allowFamilyChange: true, mandatory: true });
+        (c) => prepAllowed(c.name, t.section) && isBodyweightEquipment(c.equipment) && (t.section !== "activation" || !isPassiveStretch(c.name)), { allowFamilyChange: true, mandatory: true });
     }
   }
 
