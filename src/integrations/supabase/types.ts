@@ -1261,6 +1261,78 @@ export type Database = {
         }
         Relationships: []
       }
+      smarty_workouts_backup_premigration_20261002: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description_html: string | null
+          difficulty_stars: number | null
+          duration_label: string | null
+          duration_min: number | null
+          equipment: string[] | null
+          focus: string | null
+          format: string | null
+          id: string | null
+          image_url: string | null
+          instructions_html: string | null
+          is_visible: boolean | null
+          legacy_id: string | null
+          location: string | null
+          main_workout: string | null
+          name: string | null
+          sort_order: number | null
+          tips_html: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean | null
+          legacy_id?: string | null
+          location?: string | null
+          main_workout?: string | null
+          name?: string | null
+          sort_order?: number | null
+          tips_html?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean | null
+          legacy_id?: string | null
+          location?: string | null
+          main_workout?: string | null
+          name?: string | null
+          sort_order?: number | null
+          tips_html?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean
