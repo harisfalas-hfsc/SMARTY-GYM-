@@ -279,7 +279,9 @@ export function buildPackWorkout(
         const ex = new Set([...used, ...first.map((e) => e.id)]);
         const more = usePriority ? orderedPriority(src).filter((e) => !ex.has(e.id)).slice(0, finisherCount - first.length) : [];
         more.forEach((e) => ex.add(e.id));
-        const got = [...first, ...more];
+        const prioMain = usePriority ? new Set(orderedPriority(mainPicks).map((e) => e.id)) : new Set<string>();
+        const reuse = mainPicks.filter((e) => prioMain.has(e.id)).slice(0, Math.max(0, finisherCount - first.length - more.length));
+        const got = [...first, ...more, ...reuse];
         const picks = got.length >= finisherCount ? got : [...got, ...pickBalanced(src, finisherCount - got.length, { exclude: ex })];
         return flowGroup(fillFromLegalPool(picks, src, finisherCount), src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));
       })();
@@ -340,12 +342,13 @@ export function buildPackWorkout(
   blocks.push(heading("💪", `Main Workout (${input.format})`));
   if (protocolLine) blocks.push(para(protocolLine));
   const planned = (d: SessionPlan["main"], e: PoolExercise) => {
-    // Fit the sets to the advertised training time (≈35 sec of work per set plus rest).
-    const blocks = Math.max(1, mainCount + (noFinisher ? 0 : finisherCount * 0.6));
-    const fit = Math.floor((input.minutes * 60) / (blocks * (35 + d.restSec[0])));
-    const sets = Math.max(2, Math.min(d.sets[1], fit));
     // Bodyweight strength work needs more reps than a loaded lift to be a real stimulus.
     const reps = isBodyweight(e) ? Math.max(d.reps?.[1] ?? 10, 10) : (d.reps?.[0] ?? 10);
+    // Fit the sets to the advertised training time (real work per set plus rest).
+    const work = isTimedPosition(e.name) ? (d.seconds?.[0] ?? 30) : reps * 3;
+    const blocks = Math.max(1, mainCount + (noFinisher ? 0 : finisherCount * 0.6));
+    const fit = Math.floor((input.minutes * 60) / (blocks * (work + d.restSec[0])));
+    const sets = Math.max(2, Math.min(d.sets[1], fit));
     const unit = isTimedPosition(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
     return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets. ${d.tempo[0]!.toUpperCase()}${d.tempo.slice(1)}.`;
   };
