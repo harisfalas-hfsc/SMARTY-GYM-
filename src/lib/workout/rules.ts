@@ -7,7 +7,7 @@
 // filter, the post-generation validator and the stored-workout audit all call
 // these two entry points, so no rule can be applied by one and missed by another.
 import * as D from "./doctrine";
-import { prepAllowed, type PrepSection } from "./prep-vocabulary";
+import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-vocabulary";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
 /** Work words that make a "stretch"-named exercise a dynamic movement (pike-to-cobra push-up, dynamic chest stretch). */
@@ -41,6 +41,8 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   if (section !== "work") {
     if (!prepAllowed(e.name, section))
       out.push(section === "activation" ? `"${e.name}" is not an activation (mobility/stability) exercise.` : `"${e.name}" is not a cool-down stretch or mobility exercise.`);
+    if (e.equipment != null && !isBodyweightEquipment(e.equipment))
+      out.push(`"${e.name}" uses ${e.equipment} — ${section === "activation" ? "Activation" : "Cool Down"} never uses equipment.`);
     return out;
   }
   const push = (v: string | null) => { if (v) out.push(v); };

@@ -1,0 +1,3530 @@
+[
+ {
+  "workout": "Flow Foundation",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Solid Pace Session",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Solid Pace Session",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ironwing Pillars",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "Spine Stretch Forward",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Engine Drive Rush",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignite Melt",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Summit Forge Challenge",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Warp",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Furnace Factory Shred",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Furnace Factory Shred",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Stable Compass",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Stable Compass",
+  "section": "activation",
+  "from": "Couch Stretch",
+  "to": "all fours squad stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Stable Compass",
+  "section": "work",
+  "from": "90/90 Hip Rotation",
+  "to": "circles knee stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Stable Compass",
+  "section": "work",
+  "from": "Thread The Needle",
+  "to": "bent knee lying twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Stable Compass",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Stable Compass",
+  "section": "cooldown",
+  "from": "Arm Circles",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Stride",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Gluteal Anchor",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Terra Firmament",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow Ascent",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Current Press UPP-B-I",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Ascent",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Cipher Challenge",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Cipher Challenge",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Forge",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Foundation Forge",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcus Apex Traverse",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Pull Anchor",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Pull Forge",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Anchor Pull Forge",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Pull Forge",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Ground Tempo",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Flux",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Helix",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Melt Reactor Rush",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Current Integral LOW-B-A",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Current Integral LOW-B-A",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Current Integral LOW-B-A",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Engine Drive",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Forge Drive",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Catalyst Current",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Catalyst Current",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Catalyst Current",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Meridian Challenge ",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Meridian Challenge ",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Primal Pulse Protocol",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Core Traverse",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Iron Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "Spine Stretch Forward",
+  "reason": "animation"
+ },
+ {
+  "workout": "Phantom Sprint Assault",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Phantom Sprint Assault",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Sustained Tempo",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Sustained Tempo",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cardio Kickstart Challenge",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align & Restore",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Summit Ascent Trial",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Surge Drive",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Current Press",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Pulse EMOM",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Pulse EMOM",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Atlas Circuit Unbound",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow Rush Drive",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Hinge Press",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Bloom",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Bloom",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Beginner Reformer Basics",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Beginner Reformer Basics",
+  "section": "activation",
+  "from": "Supine Spinal Twist",
+  "to": "bent knee lying twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Gridiron Ascent",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Lower Push - Upper Pull Synthesis",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Lower Push - Upper Pull Synthesis",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcadian Kinetic Drill",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Arcadian Kinetic Drill",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcadian Kinetic Drill",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Mobility Reset",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Atlas Leg Coil",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Atlas Leg Coil",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Atlas Leg Coil",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Hinge & Press",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Hinge & Press",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Barbell Domination Protocol",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cardio Power",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Current LOW-E-A",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Current LOW-E-A",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ultimate Crucible",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Ground",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Pillar Ascent",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Push Hinge",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Drive Catalyst",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Drive Catalyst",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow & Fortify Fusion",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Ascent",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Ascent",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cardio Overdrive",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cardio Overdrive",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow Pulse Journey",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Force",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Force",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Current Integral FUL-B-I",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Cascade Circuit",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Cascade Circuit",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Cascade Circuit",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Ignite Flow",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Balance Blueprint",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Catalyst Pulse Ignite",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Catalyst Pulse Ignite",
+  "section": "work",
+  "from": "Wide-Grip Push-Up",
+  "to": "incline push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Catalyst Pulse Ignite",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Rush Flow (Equipment)",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Crusher",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Crusher",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Crusher",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Spartan Sprint",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Spire",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Activate Burn",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcane Velocity",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Impulse",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keel Anchor Recoil",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keel Anchor Recoil",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Legionary Stance",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Helix Cascade",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Helix Cascade",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Activate",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcadian Forge",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Push Hinge",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Tempo Sprint",
+  "section": "work",
+  "from": "Wide-Grip Push-Up",
+  "to": "incline push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Forge Flow",
+  "section": "cooldown",
+  "from": "assisted prone lying quads stretch",
+  "to": "kneeling lat stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Iron Grip Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Flow Restore",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Push Hinge (Equipment)",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Lower Body Pillar",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Lower Body Pillar",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Drive",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Continuum",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Glute Control",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Ascent LOW-E-I",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Ascent LOW-E-I",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Sweat Storm",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "walking lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignition Drive Surge",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Drive Catalyst Burn",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Loaded Conditioning Session",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Cardio Session",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Lower Body Pillar Foundation",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Lower Body Pillar Foundation",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "Spine Stretch Forward",
+  "reason": "animation"
+ },
+ {
+  "workout": "Acheron Coil",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Acheron Coil",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Acheron Coil",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Control Flow",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Current Integral",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Challenge me UP!",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Challenge me UP!",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Fluid Motion Mastery",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Spartan Bodyweight Strength",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align Ground Flow",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pillar Press Pull",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Surge Drill",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Surge Drill",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "walking lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Trial By Circuit",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Integration Drive",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Loaded Strength Session",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Loaded Strength Session",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Circuit Cascade",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Circuit Cascade",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Circuit Cascade",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Dumbbell Demon Gauntlet",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Atlas Engine",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Total Body Anchor",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Melt Reactor",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Melt Reactor",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "walking lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcus Meridian Shift",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Meridian",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Meridian",
+  "section": "work",
+  "from": "90/90 Hip Rotation",
+  "to": "circles knee stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Meridian",
+  "section": "work",
+  "from": "Thread The Needle",
+  "to": "bent knee lying twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Spire",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Spire",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Spire",
+  "section": "cooldown",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align Ground Flow Breathe",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignition Pulse",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignition Pulse",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Complex",
+  "section": "activation",
+  "from": "Supine Spinal Twist",
+  "to": "bent knee lying twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Glute Core Foundation",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Engine Drive Flash",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Forge Engine",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Restore Flow",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Vortex Calisthenics",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Meridian Weave",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcane Weave",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Balance Restore Flow",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Hinge & Press Foundations",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Upper Body Foundation",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Inferno Tabata Blaze",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Surge",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align Flow Foundation",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Nexus Mobilizer",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ironroot Quads",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Pull Build Rise",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Ground Release",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Press & Hinge",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Press & Hinge",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Core Burst",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Burst Ascend",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Grounding Pillar Stability",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Pulse EMOM",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Pulse EMOM",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Pulse EMOM",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Drive Tabata",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Equilibrium",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Equilibrium",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Rush Tabata",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Peak Drive",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Vortex",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Integration",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align Ground Flow Root",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Meridian Circuit",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Meridian Circuit",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Core Cadence",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Solid Mixed Session",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Solid Mixed Session",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Incessant Motion",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Incessant Motion",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Surge Flow",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignite & Conquer",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Spire Ascent",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Squat & Row",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "Spine Stretch Forward",
+  "reason": "animation"
+ },
+ {
+  "workout": "Crucible Test",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "jump squat",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow State Restore Root",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Current",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Cipher",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "jump squat",
+  "reason": "animation"
+ },
+ {
+  "workout": "Compass Blitz",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Compass Blitz",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Quads",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Compass",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Compass",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Terra Firm Ascent",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Accelerator",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kettlebell Chaos Engine",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kettlebell Chaos Engine",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Pulse Circuit",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Pulse Circuit",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Zenith Gauntlet",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Pulse Circuit Blast",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Athletic Challenge Builder",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Point Flow",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Point Flow",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Engine Drive Strike",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Full Body Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Blast",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Blast",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Engine Drive Surge",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Shadowboxer Burnout",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Shadowboxer Burnout",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Leg Meridian Anchor",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Leg Meridian Anchor",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "Spine Stretch Forward",
+  "reason": "animation"
+ },
+ {
+  "workout": "Metabolic Ignite",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Forge & Flex",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Current",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Warrior Spirit Crucible",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Warrior Spirit Crucible",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Pull Build",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Foundation Pull Build",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Pull Build",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Forged Metabolic Spire",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Traverse",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcadian Press Helix UPP-B-A",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Lower Body Iron Builder",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Lower Body Iron Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Nimbus Cascade",
+  "section": "activation",
+  "from": "Supine Spinal Twist",
+  "to": "bent knee lying twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Mesh Protocol",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arc Reactor Pursuit",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align Ground Core",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Metabolic Advanced Session",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align Flow Foundation Root",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Heat Shredder",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Anchor Full Body",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Builder",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Flow Circuit",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Heat Shred Catalyst",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Glute Core",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignite Drive Core",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Ignite Drive Core",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignite Drive Core",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cardio Tempo Circuit",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Catalyst Drive",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Cascade Forge",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Inferno Engine: Calorie Crusher",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Lower Body Builder",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Lower Body Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Foundation",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Pull Forge",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Pull Forge",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Press-Thrust",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Press-Thrust",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Press-Thrust",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Surge Drive Wave",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ground Align Thrive",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "The Gauntlet Grind Apex",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Endurance Crucible Rise",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Ground Press",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Ground Press",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Ground Press",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Loaded Cardio Session",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow State Sprint",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Challenge Session",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Chest & Back",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow Drive Motion",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Summit Gauntlet",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Forge Ascendant",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Upper Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flowing Ground Restore",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Push Reel",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Upper Body Pillar",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Motion Surge",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align & Restore Flow",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Strength Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "The 200 Trials",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Balance & Ground Flow",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Glute Core (EQ)",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Meridian Weave",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Press Forge",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Drive Surge",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Hip Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "The Gauntlet Grind",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cardio Flow",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cardio Flow",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align Foundation Flow",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cardio Kickstart",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchored Ascent",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchored Ascent",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchored Ascent",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Hip Pivot",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Engine Drive Blast",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Vault",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Vault",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Ascent",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Ascent",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Anchor Ascent",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Metabolic Ignition",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Align Flow Restore",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Push Hinge Rise",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcadian Alignment Flow",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Engine",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bedrock Lift",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bedrock Lift",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Hinge And Hold",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Hinge And Hold",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Metabolic Fury",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Metabolic Fury",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcane Circuit",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Relay Ascent",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Torch",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Melt Reactor Blast",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Engine Tabata",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Glute Core Anchor",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Ascent (EQ)",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arc Reactor Tabata",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Apex Synthesis",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Posterior Pillar",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Posterior Pillar",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Posterior Pillar",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Full Pillar Strength",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Surge Challenge",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Velocity Surge Challenge",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Vertical Tide",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Vertical Tide",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Vertical Tide",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Loaded Engine Session",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Loaded Engine Session",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Builder Max",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Primer",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Zero Gravity Strength Architect",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Leg Day Power Builder",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Leg Day Power Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Titan Strength",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Meltdown",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arsenal Press",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Upper Body Pillar Core",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Tempo Circuit",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Ascent LOW-B-I",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Keystone Ascent LOW-B-I",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Hip & Core Foundation",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Hinge Press",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ember Cascade",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Band-Assisted Restoration Lab",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Pulse",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Cascade Burn",
+  "section": "cooldown",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Calorie Melt Drive",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Drive Catalyst Shift",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Current Integral LOW-E-A",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Current Integral LOW-E-A",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Ember Forge",
+  "section": "cooldown",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Ember Forge",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Total Body Anchor Rise",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Bodywright",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Dumbbell Hurricane Rush",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Dumbbell Hurricane Rush",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Cascade",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Cascade",
+  "section": "cooldown",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arc Reactor",
+  "section": "cooldown",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Synthesis",
+  "section": "activation",
+  "from": "Thoracic Spine Rotation",
+  "to": "Spine Twist",
+  "reason": "animation"
+ },
+ {
+  "workout": "Titan's Bodyweight Forge: Unyielding Strength",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Dynamic Mobility Pro",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "wrist circles",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Pulse Pull",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Foundation Pulse Pull",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "Spine Stretch Forward",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Impulse",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Granite Impulse",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "Spine Stretch Forward",
+  "reason": "animation"
+ },
+ {
+  "workout": "Leg Anchor Builder",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Leg Anchor Builder",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "Spine Stretch Forward",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Current Pull",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Apex Current Pull",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Current Pull",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Drive Catalyst",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Engine Drive Catalyst",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Drive Catalyst",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Ascent",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Granite Ascent",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Ascent",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Press Hinge",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Press Hinge",
+  "section": "activation",
+  "from": "Arm Circles",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Engine Session",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Bodyweight Engine Session",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Engine Session",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Pulse Press",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Foundation Pulse Press",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Foundation Pulse Press",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Protocol",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Apex Protocol",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Protocol",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Legionary Stance LOW-B-I",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Legion Ascent",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Inferno Engine EMOM",
+  "section": "activation",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcadian Press Helix",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Terra Firm",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Forging Press",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Apex Current Press UPP-E-I",
+  "section": "cooldown",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Stability Core",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow Restore Ground",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Vortex Tabata",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Cadence Lock",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Dynamic Joint Sovereignty",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Ground Stability",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ironclad Core & Power",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Tether And Glide",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Tether And Glide",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Velocity Circuit",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Velocity Circuit",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Kinetic Velocity Circuit",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Current MET-E",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Surge Drive Sprint",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Inferno Blitz",
+  "section": "activation",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Inferno Blitz",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Inferno Blitz",
+  "section": "cooldown",
+  "from": "Doorway Chest Stretch",
+  "to": "chest and front of shoulder stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Catalyst Current Drive",
+  "section": "work",
+  "from": "Reverse Lunge",
+  "to": "Forward Lunge",
+  "reason": "animation"
+ },
+ {
+  "workout": "Catalyst Current Drive",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Loaded Control Session",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Summit Gauntlet Forge",
+  "section": "work",
+  "from": "Tuck Jump",
+  "to": "star jump (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Balance Pillar Restore",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Torch Stride",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Axial Helix Integration",
+  "section": "work",
+  "from": "Shoulder CARs",
+  "to": "dynamic chest stretch (male)",
+  "reason": "animation"
+ },
+ {
+  "workout": "Cadence Shift",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Coil Press",
+  "section": "activation",
+  "from": "Cobra Stretch",
+  "to": "upward facing dog",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Drive Catalyst Rev",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Engine Drive Catalyst Rev",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Engine Drive Catalyst Rev",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Core Nexus",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Flow & Restore",
+  "section": "activation",
+  "from": "Cervical Side Bend Stretch",
+  "to": "neck side stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Press & Row Ascent",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Arcadian Cinder Sprint",
+  "section": "activation",
+  "from": "Scapular Wall Slides",
+  "to": "scapula push-up",
+  "reason": "animation"
+ },
+ {
+  "workout": "Granite Zenith Press",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Lower Body Pillar (BW)",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Lower Body Pillar (BW)",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignite Flow Surge",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Ignite Flow Surge",
+  "section": "activation",
+  "from": "Cross-body Shoulder Stretch",
+  "to": "rear deltoid stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignite Flow Surge",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Leg Anchor Pull",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Upper Body Pillar Rise",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Ignite Engine",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Bodyweight Strength Session",
+  "section": "activation",
+  "from": "Side Kick Circles",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Bodyweight Strength Session",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Squat Row Hybrid",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Pulse Drive Fusion",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Press & Pull Command",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Iron Conduit Synergy",
+  "section": "cooldown",
+  "from": "Seated Forward Fold",
+  "to": "hamstring stretch",
+  "reason": "animation"
+ },
+ {
+  "workout": "Solid Reset Session",
+  "section": "cooldown",
+  "from": "lying leg raise flat bench",
+  "to": "hamstring stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Bodyweight Strength Base",
+  "section": "activation",
+  "from": "bear crawl",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Bodyweight Strength Base",
+  "section": "activation",
+  "from": "potty squat",
+  "to": "Cat-cow",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Controlled Stability Routine",
+  "section": "activation",
+  "from": "bear crawl",
+  "to": "Cat-cow",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Steady Core Control",
+  "section": "activation",
+  "from": "bear crawl",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Solid Test Session",
+  "section": "activation",
+  "from": "band side triceps extension",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Solid Test Session",
+  "section": "activation",
+  "from": "band reverse wrist curl",
+  "to": "Cat-cow",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Solid Test Session",
+  "section": "cooldown",
+  "from": "band standing rear delt row",
+  "to": "hamstring stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Solid Test Session",
+  "section": "cooldown",
+  "from": "bodyweight standing close-grip row",
+  "to": "kneeling lat stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Solid Session",
+  "section": "activation",
+  "from": "bear crawl",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Solid Session",
+  "section": "cooldown",
+  "from": "lying leg raise flat bench",
+  "to": "hamstring stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Challenge Intermediate Session",
+  "section": "activation",
+  "from": "bear crawl",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Active Recovery Practice",
+  "section": "activation",
+  "from": "twist hip lift",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Challenge Intermediate Session",
+  "section": "activation",
+  "from": "band shoulder press",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Challenge Intermediate Session",
+  "section": "activation",
+  "from": "bear crawl",
+  "to": "Cat-cow",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Challenge Intermediate Session",
+  "section": "activation",
+  "from": "band alternating biceps curl",
+  "to": "scapula push-up",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Challenge Intermediate Session",
+  "section": "cooldown",
+  "from": "split squats",
+  "to": "hamstring stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Challenge Intermediate Session",
+  "section": "cooldown",
+  "from": "lying elbow to knee",
+  "to": "kneeling lat stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Steady Aerobic Circuit",
+  "section": "activation",
+  "from": "bear crawl",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Strength Beginner Session",
+  "section": "activation",
+  "from": "band single leg calf raise",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Strength Beginner Session",
+  "section": "activation",
+  "from": "side bridge hip abduction",
+  "to": "Cat-cow",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Strength Beginner Session",
+  "section": "cooldown",
+  "from": "lying leg raise flat bench",
+  "to": "hamstring stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Strength Beginner Session",
+  "section": "activation",
+  "from": "bench hip extension",
+  "to": "world greatest stretch",
+  "reason": "prep rule"
+ },
+ {
+  "workout": "Strength Beginner Session",
+  "section": "cooldown",
+  "from": "lying leg raise flat bench",
+  "to": "hamstring stretch",
+  "reason": "prep rule"
+ }
+]

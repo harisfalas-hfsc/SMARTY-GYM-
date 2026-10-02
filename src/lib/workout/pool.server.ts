@@ -1,4 +1,4 @@
-import { isActivationRehearsal } from "./prep-vocabulary";
+import { prepAllowed } from "./prep-vocabulary";
 import { orderedPriority } from "./priority";
 import { priorityIds } from "./priority";
 import { isCardioRhythm, isLegalExercise, isPassiveStretch } from "./rules";
@@ -370,10 +370,9 @@ export const COOLDOWN_OK_RE =
 
 const isBand = (e: PoolExercise) => (e.equipment ?? "").toLowerCase().includes("band");
 
-/** Prep sections may always use bodyweight; bands only when the athlete has them. */
-function prepEquipmentOk(e: PoolExercise, selectedEquipment: string[]): boolean {
-  if (isBodyweight(e)) return true;
-  return isBand(e) && selectedEquipment.includes("bands");
+/** Prep sections (Activation / Cool Down) are bodyweight only — never equipment. */
+function prepEquipmentOk(e: PoolExercise, _selectedEquipment: string[]): boolean {
+  return isBodyweight(e);
 }
 
 function prepFilter(
@@ -387,8 +386,7 @@ function prepFilter(
   return all.filter((e) => {
     if (banned.has(e.id)) return false;
     if (!prepEquipmentOk(e, selectedEquipment)) return false;
-    // Light bodyweight rehearsal (squat, lunge, push-up) is legal Activation prep — prep-vocabulary.ts decides.
-    if (PREP_BAN_RE.test(text(e)) && !(isBodyweight(e) && isActivationRehearsal(e.name))) return false;
+    if (PREP_BAN_RE.test(text(e)) && !prepAllowed(e.name, "activation")) return false;
     if (HOME_APPARATUS_RE.test(text(e))) return false;
     if ((e.difficulty ?? "").toLowerCase() === "advanced") return false;
     if (strict && !match.test(e.name)) return false;

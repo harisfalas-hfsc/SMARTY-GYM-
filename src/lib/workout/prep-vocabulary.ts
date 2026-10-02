@@ -1,7 +1,7 @@
 // THE authoritative Activation / Cool Down vocabulary and dose.
 // Activation = MOVEMENT PREPARATION: mobility, dynamic mobility, stability,
-// joint prep, activation drills and light bodyweight movement rehearsal
-// (bodyweight squat, reverse/forward lunge, marching, up to 10 push-ups).
+// joint prep and activation drills — bodyweight only, never equipment, never
+// training moves (no push-ups, lunges, squats, donkey kicks).
 // Cool Down = recovery: static stretching, gentle mobility, breathing.
 // Neither is ever a training block.
 
@@ -11,8 +11,7 @@ export const ACTIVATION_NAMES = [
   "standing pelvic tilt", "scapula push-up", "incline scapula push up", "plank", "bodyweight incline side plank",
   "kneeling plank tap shoulder", "inchworm", "world greatest stretch", "squat to overhead reach",
   "squat to overhead reach with twist", "posterior step to overhead reach", "wrist circles", "ankle circles",
-  "dynamic chest stretch (male)", "circles knee stretch", "spine twist",
-  "push-up", "incline push-up", "reverse lunge", "forward lunge", "walking lunge", "squat", "quads (bodyweight squat)", "kneeling push-up", "push-up (wall)",
+  "dynamic chest stretch (male)", "circles knee stretch", "spine twist", "pelvic tilt into bridge",
 ];
 
 export const COOLDOWN_NAMES = [
@@ -22,27 +21,17 @@ export const COOLDOWN_NAMES = [
   "butterfly yoga pose", "all fours squad stretch", "lying (side) quads stretch", "hug knees to chest",
   "bent knee lying twist", "calf stretch with hands against wall", "standing calves calf stretch",
   "neck side stretch", "standing lateral stretch", "spine twist", "spine stretch", "back pec stretch",
-  "side lying floor stretch",
+  "side lying floor stretch", "upward facing dog",
 ];
 
 const ACT = new Set(ACTIVATION_NAMES);
 const CD = new Set(COOLDOWN_NAMES);
 const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child|forward fold|spinal twist|sphinx|upward facing dog|cars\b|circles?\b|ankle rocks|thread the needle|90\/90/;
 const ACT_LIKE = /bird dog|dead bug|glute bridge|clamshell|fire hydrant|plank|circles?\b|rotation|inchworm|overhead reach|scapula|cars\b|hundred|pelvic curl|roll-up|corkscrew|hip twist/;
-/** Never preparation in either section: load, conditioning, impact, training work. */
-const BANNED = /lunge|squat|row\b|press|raise|curl|crawl|walk|donkey kick|butt kick|jump|burpee|climber|crunch|dip|calf raise|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell|sprint|box|skater|sit-?up|weighted|band\b|trx|suspen|medicine|smith|lever/;
-/**
- * Light bodyweight movement rehearsal — legal in Activation ONLY (never Cool Down):
- * plain bodyweight squat, reverse / forward / walking lunge, marching and plain or
- * incline push-ups. Loaded, jumping, split or skill variants stay illegal.
- */
-const REHEARSAL = /\b(squat|lunge|march(ing)?|push-?up)\b/;
-const REHEARSAL_BAN =
-  /jump|jumping|plyo|split|bulgarian|pistol|sissy|shrimp|cossack|archer|diamond|decline|clap|pike|one arm|single arm|spider|weighted|dumbbell|barbell|kettlebell|band|smith|cable|lever|trx|suspen|medicine|ball|box|bench|step|overhead squat|front squat|back squat|hack|goblet|deficit|curtsy|curtsey|lateral|side|clock|kick|handstand|superman|planche|hindu|one leg|single leg|\bsit\b|hold|high knee|tap|plus|reverse grip|close-grip|pilates|lower arms|elbow|potty|wide|twist|drop/;
-export const isActivationRehearsal = (name: string) => {
-  const n = norm(name);
-  return REHEARSAL.test(n) && !REHEARSAL_BAN.test(n);
-};
+/** Never preparation in either section: load, equipment, conditioning, impact, training work. */
+const BANNED = /lunge|squat(?! to overhead reach)|row\b|press|raise|curl|crawl|walk|kick|jump|burpee|climber|crunch|dip|calf raise|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell|sprint|box|skater|sit-?up|weighted|band\b|trx|suspen|medicine|smith|lever|roller|ball\b|bench/;
+/** Activation and Cool Down never use equipment — bodyweight only. */
+export const isBodyweightEquipment = (equipment: string | null | undefined) => /body ?weight/i.test(equipment ?? "");
 const norm = (n: string) => n.trim().toLowerCase();
 
 export type PrepSection = "activation" | "cooldown";
@@ -51,7 +40,6 @@ export function prepAllowed(name: string, section: PrepSection): boolean {
   const n = norm(name);
   // Activation may also use cool-down mobility/stretches; cool down stays static/mobility.
   if (section === "cooldown" ? CD.has(n) : ACT.has(n) || CD.has(n)) return true;
-  if (section === "activation" && isActivationRehearsal(n)) return true;
   if (BANNED.test(n)) return false;
   return section === "cooldown" ? CD_LIKE.test(n) : ACT_LIKE.test(n) || CD_LIKE.test(n);
 }

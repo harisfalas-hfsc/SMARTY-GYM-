@@ -3,16 +3,17 @@ import { activationDoseViolation, clampActivationDoses, prepAllowed } from "../p
 
 describe("activation and cool down vocabulary", () => {
   it("rejects work, conditioning and loaded exercises", () => {
-    for (const n of ["Donkey Kick", "Crab Walk", "Bear Crawl", "Inverted Row", "Burpee", "Jump Squat", "dumbbell rear lunge", "barbell full squat", "diamond push-up"]) {
+    for (const n of ["Donkey Kick", "Crab Walk", "Bear Crawl", "Inverted Row", "Burpee", "Jump Squat", "dumbbell rear lunge", "barbell full squat", "diamond push-up", "Dumbbell Upright Row"]) {
       expect(prepAllowed(n, "activation")).toBe(false);
       expect(prepAllowed(n, "cooldown")).toBe(false);
     }
   });
-  it("allows light bodyweight movement rehearsal in Activation only", () => {
-    for (const n of ["Squat", "Reverse Lunge", "Forward Lunge", "walking lunge", "push-up", "incline push-up", "scapula push-up"]) {
-      expect(prepAllowed(n, "activation")).toBe(true);
+  it("never allows training moves (push-ups, lunges, squats) in Activation or Cool Down", () => {
+    for (const n of ["Squat", "Reverse Lunge", "Forward Lunge", "walking lunge", "push-up", "Push-Up", "incline push-up", "Wide-Grip Push-Up"]) {
+      expect(prepAllowed(n, "activation")).toBe(false);
       expect(prepAllowed(n, "cooldown")).toBe(false);
     }
+    expect(prepAllowed("scapula push-up", "activation")).toBe(true);
   });
   it("accepts mobility, stability and stretches", () => {
     expect(prepAllowed("Bird Dog", "activation")).toBe(true);
