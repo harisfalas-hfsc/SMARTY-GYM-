@@ -331,10 +331,10 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
           aria-hidden="true"
         />
         <div className="relative z-10 h-full">
-          <div className="mx-auto w-full max-w-[1080px] px-6 pt-[144px]">
+          <div className={`mx-auto w-full max-w-[1080px] px-6 ${page === "about" ? "pt-[144px]" : "pt-[118px]"}`}>
             <div className="w-[640px] max-w-full text-left">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{page === "about" ? "About Smarty Gym" : "Smarty Gym"}</p>
-              <h2 className="mt-2 text-[60px] font-extrabold uppercase leading-[1.05] tracking-tight text-hero-foreground">
+              {page === "about" && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">About Smarty Gym</p>}
+              <h2 className={`text-[60px] font-extrabold uppercase leading-[1.05] tracking-tight text-hero-foreground ${page === "about" ? "mt-2" : ""}`}>
                 <span className="block whitespace-nowrap">Your Gym Re-imagined</span>
                 <span className="block whitespace-nowrap text-primary">Anywhere, Anytime.</span>
               </h2>
