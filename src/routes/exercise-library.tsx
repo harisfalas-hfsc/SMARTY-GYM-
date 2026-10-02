@@ -21,9 +21,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Search, X, Dumbbell, Heart, ThumbsDown, Plus } from "lucide-react";
+import { Loader2, Search, X, Dumbbell, Heart, ThumbsDown, Plus, Check, Trash2, ArrowLeft } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { DRAFT_SECTIONS, addToDraft, type DraftSection } from "@/lib/manual-workout-draft";
+import {
+  DRAFT_EVENT,
+  DRAFT_SECTIONS,
+  addToDraft,
+  isDraftSection,
+  loadDraft,
+  removeFromDraft,
+  type DraftSection,
+  type ManualDraft,
+} from "@/lib/manual-workout-draft";
 import { toast } from "sonner";
 import { ExerciseGif } from "@/components/ExerciseGif";
 import { PageHeader } from "@/components/PageHeader";
@@ -44,6 +53,8 @@ const DESCRIPTION =
 
 
 export const Route = createFileRoute("/exercise-library")({
+  validateSearch: (search: Record<string, unknown>): { section?: DraftSection } =>
+    isDraftSection(search.section) ? { section: search.section } : {},
   loader: async () => {
     try {
       const { getExerciseSchemaList } = await import("@/lib/seo/exercise-schema.functions");
@@ -192,9 +203,8 @@ function PreferenceButtons({
   const touchOpen = useRef(false);
   const addOpenRef = useRef(false);
   const swallowTouchClick = useRef(false);
-  if (direct) {
-    return (
-      <div className="mt-2 flex flex-wrap items-center gap-2">
+  const directControls = direct ? (
+      <>
         {direct.added > 0 ? (
           <>
             <span className="inline-flex h-8 items-center gap-1 rounded-full bg-primary px-3 text-xs font-bold text-primary-foreground">
@@ -217,11 +227,10 @@ function PreferenceButtons({
             <Plus className="h-3.5 w-3.5" /> Add
           </button>
         )}
-      </div>
-    );
-  }
+      </>
+  ) : null;
   return (
-    <div className="mt-2 flex items-center gap-2">
+    <div className="mt-2 flex flex-wrap items-center gap-2">
       <button
         type="button"
         disabled={busy}
@@ -248,7 +257,7 @@ function PreferenceButtons({
       >
         <ThumbsDown className="h-4 w-4" />
       </button>
-      {onAdd ? (
+      {directControls ? directControls : onAdd ? (
         <DropdownMenu
           modal={false}
           open={addOpen}
