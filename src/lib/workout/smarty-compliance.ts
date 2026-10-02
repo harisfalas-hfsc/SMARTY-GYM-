@@ -146,7 +146,8 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
   }
 
   const candidates = library.filter((e) => (NO_PRIORITY.has(cat) || prio.has(e.id)) && e.is_active !== false && Boolean(e.gif_path?.trim()) && !perExerciseBad(e, w));
-  const score = (h: string) => complianceIssues({ ...w, main_workout: h }, library, lib).length;
+  // Instance-weighted: every rule type counts 10, every still-illegal row 1.
+  const score = (h: string) => complianceIssues({ ...w, main_workout: h }, library, lib).length * 10 + workRows(h, lib).filter((r) => perExerciseBad(r, w)).length;
   let current = score(html);
 
   for (let pass = 0; pass < 3 && current > 0; pass++) {
@@ -193,7 +194,53 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
       }
     }
   }
+  html = fixHoldDoses(html, lib);
+  html = fitDuration({ ...w, main_workout: html }, library, lib);
   const after = complianceIssues({ ...w, main_workout: html }, library, lib);
   if (after.length >= before.length && after.every((a) => before.includes(a)) && after.length === before.length && swaps.length === 0) return { html: w.main_workout ?? "", swaps, before, after: before };
   return { html, swaps, before, after };
+}
+
+/** A hold left in a non-flow category keeps its place but is dosed in time. */
+function fixHoldDoses(html: string, lib: Map<string, ComplianceExercise>): string {
+  return html.replace(/(<li\b[^>]*>(?:(?!<\/li>)[\s\S])*?)\b(\d+)\s*reps?\b((?:(?!<\/li>)[\s\S])*?\{\{exercise:([A-Za-z0-9_-]+):[^}]*\}\})/g, (m, pre, _n, mid, id) => {
+    const name = lib.get(id)?.name ?? "";
+    return D.STATIC_HOLD_RE.test(name) ? `${pre}30 sec${mid}` : m;
+  });
+}
+
+/**
+ * Brings Main + Finisher inside the advertised duration by trimming the
+ * declared clock / rounds / sets — exercises and text stay untouched.
+ */
+function fitDuration(w: ComplianceWorkout, library: ComplianceExercise[], lib: Map<string, ComplianceExercise>): string {
+  let html = w.main_workout ?? "";
+  const t = w.duration_min;
+  if (!t) return html;
+  const over = (h: string) => Boolean(D.durationOverflowViolation(estimateWorkMinutes(h), t));
+  const sectionSlice = (h: string, start: RegExp, end: RegExp) => {
+    const a = h.search(start); if (a < 0) return null;
+    const rest = h.slice(a + 5); const b = rest.search(end);
+    return [a, b < 0 ? h.length : a + 5 + b] as const;
+  };
+  const trim = (h: string, start: RegExp, end: RegExp, re: RegExp, min: number): string | null => {
+    const r = sectionSlice(h, start, end); if (!r) return null;
+    const body = h.slice(r[0], r[1]); let changed = false;
+    const nb = body.replace(re, (m: string, n: string) => { const v = Number(n); if (changed || v <= min) return m; changed = true; return m.replace(n, String(v - 1)); });
+    return changed ? h.slice(0, r[0]) + nb + h.slice(r[1]) : null;
+  };
+  const MAIN = /Main Workout/i, FIN = /⚡|Finisher/, END_MAIN = /⚡|🧘|Cool/, END_FIN = /🧘|Cool/;
+  const steps: Array<() => string | null> = [
+    () => trim(html, FIN, END_FIN, /\b(\d{1,2})\s*rounds?\b/i, 2),
+    () => trim(html, MAIN, END_MAIN, /\b(\d{1,3})\s*(?:-\s*)?(?:min|mins|minute|minutes)\b/i, 10),
+    () => trim(html, MAIN, END_MAIN, /\b(\d{1,2})\s*rounds?\b/i, 2),
+    () => trim(html, MAIN, END_MAIN, /\b(\d)\s*sets?\b/i, 2),
+  ];
+  for (let guard = 0; guard < 120 && over(html); guard++) {
+    let progressed = false;
+    for (const step of steps) { const n = step(); if (n) { html = n; progressed = true; break; } }
+    if (!progressed) break;
+  }
+  void library; void lib;
+  return html;
 }
