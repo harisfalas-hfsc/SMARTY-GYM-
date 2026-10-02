@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 const ITEMS = [
   { to: "/smarty-workouts", label: "Workouts", Icon: Dumbbell },
   { to: "/wod", label: "WOD", Icon: CalendarCheck },
-  { to: "/create-your-workout", label: "Create", Icon: Sparkles },
+  { to: "/create-your-own-workout", label: "Create", Icon: Sparkles },
   { to: "/logbook", label: "Logbook", Icon: BookOpen },
 ] as const;
 

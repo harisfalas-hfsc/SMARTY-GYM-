@@ -682,7 +682,7 @@ function WhyInvestInSmartyGym() {
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Button asChild size="lg" className="gap-2">
-                <Link to="/create-your-workout">
+                <Link to="/create-your-own-workout">
                   <Sparkles className="h-5 w-5" />
                   Start Your Journey
                 </Link>

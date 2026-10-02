@@ -640,7 +640,7 @@ function ProfilePage() {
             <Button
               onClick={() => {
                 setSaved(false);
-                navigate({ to: "/create-your-workout" });
+                navigate({ to: "/create-your-own-workout" });
               }}
             >
               {wasOnboarded ? "Create a workout" : "Continue"}

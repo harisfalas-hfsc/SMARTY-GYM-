@@ -335,7 +335,7 @@ export function ProgressSection() {
       </section>
 
       <Button asChild>
-        <Link to="/create-your-workout">Train now</Link>
+        <Link to="/create-your-own-workout">Train now</Link>
       </Button>
 
       {unlocked.length > 0 && <BadgeUnlockedToast names={unlocked} onClose={() => setUnlocked([])} />}

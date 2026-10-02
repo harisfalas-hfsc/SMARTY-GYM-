@@ -508,7 +508,7 @@ function ExerciseLibraryPage() {
 
       <div className="mt-6 text-center text-xs text-muted-foreground">
         Want these exercises built into a session?{" "}
-        <Link to="/create-your-workout" className="font-semibold text-primary">
+        <Link to="/create-your-own-workout" className="font-semibold text-primary">
           Ask Smarty Coach →
         </Link>
       </div>

@@ -741,7 +741,7 @@ function ScheduledView({
           Nothing scheduled yet. Open a workout and pick a date to plan it.
         </p>
         <Button asChild className="mt-4 h-11 rounded-2xl">
-          <Link to="/create-your-workout">Create your workout</Link>
+          <Link to="/create-your-own-workout">Create your own workout</Link>
         </Button>
       </div>
     );
@@ -1120,7 +1120,7 @@ function LogbookContent() {
               </p>
               {!noSavedCopy && (
                 <Button asChild className="mt-4 h-11 rounded-2xl">
-                  <Link to="/create-your-workout">Create your workout</Link>
+                  <Link to="/create-your-own-workout">Create your own workout</Link>
                 </Button>
               )}
             </div>

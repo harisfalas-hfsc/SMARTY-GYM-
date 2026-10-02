@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 type CarouselAction = {
   title: string;
   description: string;
-  to: "/create-your-workout" | "/wod" | "/pricing" | "/shared-workouts" | "/smarty-workouts";
+  to: "/create-your-own-workout" | "/wod" | "/pricing" | "/shared-workouts" | "/smarty-workouts";
   image: string;
   icon: LucideIcon;
   objectPosition?: string;
@@ -75,9 +75,9 @@ export function MobileHomeActions({ showPricing, workoutCount }: { showPricing: 
       icon: CalendarCheck,
     },
     {
-      title: "Create Your Workout",
+      title: "Create Your Own Workout",
       description: "Get a personalized workout built for you",
-      to: "/create-your-workout",
+      to: "/create-your-own-workout",
       image: createWorkoutImage,
       icon: Dumbbell,
       objectPosition: "center center",

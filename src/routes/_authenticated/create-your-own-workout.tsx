@@ -59,10 +59,10 @@ import { getMyAccessState } from "@/lib/access.functions";
 import { PageHeader } from "@/components/PageHeader";
 import { createLocalWorkout } from "@/lib/local-workouts";
 
-export const Route = createFileRoute("/_authenticated/create-your-workout")({
+export const Route = createFileRoute("/_authenticated/create-your-own-workout")({
   head: () => ({
     meta: [
-      { title: "Create Your Workout — your personal workout today" },
+      { title: "Create Your Own Workout — your personal workout today" },
       {
         name: "description",
         content:
@@ -300,7 +300,7 @@ function CoachPage() {
       <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
         <PageHeader
           className="mb-6"
-          eyebrow="Create Your Workout"
+          eyebrow="Create Your Own Workout"
           title="Complete your training profile first"
           subtitle="Your workout builds around you — it needs your profile before the first workout."
         />
@@ -323,7 +323,7 @@ function CoachPage() {
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
         className="mb-6"
-        eyebrow="Create Your Workout"
+        eyebrow="Create Your Own Workout"
         title={name ? `${name}, what's your workout today?` : "What's your workout today?"}
         subtitle="Your workout builder already knows your profile. Answer below — or let it decide for you."
       />
