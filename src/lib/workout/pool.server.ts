@@ -1,4 +1,5 @@
 import { priorityIds } from "./priority";
+import { isLegalExercise } from "./rules";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Category, DifficultyLevel, EquipmentMode, Format, StrengthFocus } from "./spec";
 import {
@@ -231,17 +232,18 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // 0. HUMAN REALISM — before anything else. Circus gymnastics, levers,
   //    Turkish get-ups, pistol squats and technical Olympic lifting are never
   //    handed to a normal adult client, in any category or format.
-  pool = pool.filter((e) => !humanRealismViolation(e));
+  // ONE rule engine (rules.ts): realism, category vocabulary, micro, dynamic
+  // format, flow and static-hold rules are all decided there.
+  pool = pool.filter((e) => isLegalExercise(e, { category: f.category, format: f.format ?? "REPS & SETS" }));
 
   // 1. Category vocabulary legality (doctrine §3/§7/§8/§14) — one definition,
   //    applied before anything else.
-  pool = pool.filter((e) => !categoryExerciseViolation(e, f.category));
 
   // MICRO WORKOUT: hard equipment-free rule. Bodyweight and everyday indoor
   // environment only (floor, wall, chair, desk, sofa) — never training
   // apparatus. The athlete's normal equipment preferences do not apply here.
   const isMicro = f.category === "MICRO-WORKOUTS";
-  if (isMicro) pool = pool.filter((e) => isBodyweight(e) && !microExerciseViolation(e));
+  if (isMicro) pool = pool.filter((e) => isBodyweight(e));
 
 
   // 2. Exact equipment allowlist. Never widen a user's choices to all equipment.
@@ -256,11 +258,10 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // 2b. CATEGORY + FORMAT equipment legality (doctrine §10-§13, §24). Selected
   //     equipment is not enough: a dynamic conditioning format may never carry
   //     barbell, rack, bench, cable, Smith or selectorized machine work.
-  if (f.format)
-    pool = pool.filter((e) => !dynamicExerciseViolation(e, f.category, f.format!));
+
   // 2c. Flow doctrine — no balance tools or isolation machines in
   //     continuous-flow categories or clock-driven formats.
-  pool = pool.filter((e) => !flowSpecialtyViolation(e, f.category, f.format ?? "REPS & SETS"));
+
 
   // 3. Difficulty (§16). The requested tier is programmed as-is. A thin tier is
   //    only ever filled from EASIER material: Beginner never inherits Advanced
@@ -273,7 +274,7 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // same fundamental exercises; only a Beginner is kept away from rows the
   // library itself marks as advanced skill material.
   if (f.level === "beginner") {
-    const safe = pool.filter((e) => (e.difficulty ?? "").toLowerCase() !== "advanced");
+    const safe = pool.filter((e) => isLegalExercise(e, { category: f.category, format: f.format ?? "REPS & SETS", level: "beginner" }));
     if (safe.length >= 12) pool = safe;
   }
 
@@ -288,8 +289,7 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   }
 
   // 4. Static-hold guardrail for momentum / conditioning categories.
-  const momentum: Category[] = ["CARDIO", "CALORIE BURNING", "METABOLIC", "CHALLENGE"];
-  if (momentum.includes(f.category)) pool = pool.filter((e) => !STATIC_HOLD_RE.test(e.name));
+  //    (decided by the rule engine in the first filter above)
 
   // 4b. CHALLENGE vocabulary preference — when the library carries Smarty
   //     tags, a challenge is built from challenge/hiit/cardio-tagged material
