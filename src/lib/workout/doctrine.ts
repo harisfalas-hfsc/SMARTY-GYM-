@@ -134,7 +134,7 @@ export const CARDIO_RHYTHM_RE =
 
 /** Isolated trunk work — weak Challenge vocabulary (at most one per block). */
 export const CORE_ISOLATION_RE =
-  /\b(crunch|sit-?up|russian twist|leg raise|knee raise|v-?up|flutter kick|scissor|oblique|bicycle)\b/i;
+  /\b(crunch|sit-?up|russian twist|leg raise|knee raise|v-?up|flutter kick|scissor|oblique|bicycle|dead bug|bird dog|superman|side bend|jackknife)\b/i;
 
 /** Static holds break momentum categories. */
 export const STATIC_HOLD_RE =

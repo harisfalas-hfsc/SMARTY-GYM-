@@ -193,7 +193,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
           let s = 0;
           const pe = patternKey(ex), pc = patternKey(c);
           if (pc === pe || (pe === "arms" && (pc === "push" || pc === "pull"))) s += 4;
-          else if (pe !== "stretch" && pe !== "other" && !(bad && (pe === "calf" || pe === "arms" || cat === "RECOVERY" || cat === "MOBILITY & STABILITY"))) s -= 6;
+          else if (pe !== "stretch" && pe !== "other" && !bad) s -= 6;
           if (cat === "CARDIO" && !isCardioRhythm(ex.name) && isCardioRhythm(c.name)) s += 12;
           if (cat === "CHALLENGE" && D.CORE_ISOLATION_RE.test(ex.name) && patternKey(c) === "conditioning") s += 12;
           if ((cat === "STRENGTH" || cat === "MUSCLE BUILDING") && bad && patternKey(ex) === "conditioning" && ["squat", "lunge", "hinge", "push", "pull"].includes(patternKey(c))) s += 10;
