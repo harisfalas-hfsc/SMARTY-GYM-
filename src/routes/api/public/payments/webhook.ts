@@ -14,7 +14,7 @@ function priceIdOf(item: any): string | null {
   return item?.price?.lookup_key ?? item?.price?.metadata?.lovable_external_id ?? item?.price?.id ?? null;
 }
 
-async function upsertSubscription(subscription: any, env: StripeEnv) {
+async function upsertSubscription(subscription: any, env: StripeEnv, eventCreated?: number) {
   const item = subscription.items?.data?.[0];
   const userId = subscription.metadata?.userId;
   const supabase = await db();
@@ -31,17 +31,21 @@ async function upsertSubscription(subscription: any, env: StripeEnv) {
     current_period_end: iso(item?.current_period_end ?? subscription.current_period_end),
     cancel_at_period_end: Boolean(subscription.cancel_at_period_end),
     environment: env,
-    last_event_at: subscription.created ?? null,
+    last_event_at: iso(eventCreated ?? null),
     updated_at: new Date().toISOString(),
   };
 
   const { data: existing } = await supabase
     .from("subscriptions")
-    .select("id")
+    .select("id,last_event_at")
     .eq("provider_subscription_id", subscription.id)
     .maybeSingle();
 
   if (existing?.id) {
+    // Ignore events older than the newest one already applied (out-of-order delivery).
+    const prev = existing.last_event_at ? new Date(existing.last_event_at).getTime() : 0;
+    const next = row.last_event_at ? new Date(row.last_event_at).getTime() : 0;
+    if (prev && next && next < prev) return;
     await supabase.from("subscriptions").update(row).eq("id", existing.id);
     return;
   }
@@ -83,12 +87,23 @@ async function markCanceled(subscription: any, env: StripeEnv) {
 }
 
 async function handleWebhook(req: Request, env: StripeEnv) {
-  const event = await verifyWebhook(req, env);
+  const event = (await verifyWebhook(req, env)) as { id?: string; type: string; created?: number; data: { object: any } };
+
+  // Each Stripe event is applied once, even if Stripe delivers it again.
+  if (event.id) {
+    const { error: dupe } = await (await db())
+      .from("stripe_events")
+      .insert({ id: event.id, type: event.type });
+    if (dupe) {
+      if ((dupe as { code?: string }).code === "23505") return;
+      throw new Error(dupe.message);
+    }
+  }
 
   switch (event.type) {
     case "customer.subscription.created":
     case "customer.subscription.updated":
-      await upsertSubscription(event.data.object, env);
+      await upsertSubscription(event.data.object, env, event.created);
       break;
     case "customer.subscription.deleted":
       await markCanceled(event.data.object, env);
@@ -114,7 +129,7 @@ async function handleWebhook(req: Request, env: StripeEnv) {
       break;
     }
     case "customer.subscription.paused":
-      await upsertSubscription(event.data.object, env);
+      await upsertSubscription(event.data.object, env, event.created);
       break;
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
