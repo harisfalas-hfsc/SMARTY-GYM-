@@ -156,7 +156,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
   const prio = priorityIds(library);
   const cat = w.category as Category;
   const fmt = (w.format ?? "") as Format;
-  let html = w.main_workout ?? "";
+  let html = clampActivationDoses(w.main_workout ?? "", isTimedPosition);
   const before = complianceIssues(w, library, lib);
   const swaps: Array<{ from: string; to: string }> = [];
   if (!before.length) return { html, swaps, before, after: before };
