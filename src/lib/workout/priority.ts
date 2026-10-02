@@ -215,7 +215,7 @@ export function priorityShareViolation(workIds: string[], library: PoolExercise[
   // movements than the legal pool actually holds.
   const unique = [...new Set(workIds)];
   const hits = unique.filter((id) => prio.has(id)).length;
-  const need = Math.min(Math.ceil(unique.length * PRIORITY_SHARE), prio.size);
+  const need = Math.min(Math.round(unique.length * PRIORITY_SHARE), prio.size);
   return hits >= need
     ? null
     : `Only ${hits} of ${workIds.length} main exercises are coach priority exercises (need at least ${PRIORITY_SHARE * 100}%).`;
