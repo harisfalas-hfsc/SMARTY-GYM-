@@ -141,11 +141,11 @@ export const STATIC_HOLD_RE =
   /\b(hold|plank|isometric|wall sit|hollow|l-?sit|bridge hold|static)\b/i;
 
 const PILATES_BAN_RE =
-  /\b(kettlebell|barbell|machine|cable|smith|sled|jump|jumping|plyo|burpee|sprint|box jump|snatch|clean|jerk|thruster)\b/i;
+  /\b(dip|boxing|hook|jab|punch|uppercut|balance board|kettlebell|barbell|machine|cable|smith|sled|jump|jumping|plyo|burpee|sprint|box jump|snatch|clean|jerk|thruster)\b/i;
 
 /** §8 — Mobility & Stability is light: no heavy loading, no conditioning. */
 const MOBILITY_BAN_RE =
-  /\b(jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|push-?up|pushup|crunch|sit-?up|leg raise|kettlebell|barbell|smith|leverage|sled|machine|cable|box jump|deadlift|bench press|squat rack|heavy|curl|shrug|pullover|fly|kickback|triceps extension|lateral raise|front raise)\b/i;
+  /\b(dip|boxing|hook|jab|punch|uppercut|crawl|jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|push-?up|pushup|crunch|sit-?up|leg raise|kettlebell|barbell|smith|leverage|sled|machine|cable|box jump|deadlift|bench press|squat rack|heavy|curl|shrug|pullover|fly|kickback|triceps extension|lateral raise|front raise)\b/i;
 
 /**
  * §3 — RECOVERY is controlled recovery work: breathing, gentle mobility,
@@ -153,7 +153,7 @@ const MOBILITY_BAN_RE =
  * It may never turn into strength, conditioning, HIIT or metabolic work.
  */
 const RECOVERY_BAN_RE =
-  /\b(jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|crunch|sit-?up|deadlift|bench press|heavy|barbell|kettlebell|machine|cable|smith|leverage|sled|swing|box jump|mountain climber|high knee|skater|battle rope|jump rope|rower|row erg|skierg|assault bike|air bike|treadmill|push-?up|pushup|pull-?up|chin-?up|dip|squat jump|run|carry|dumbbell|curl|press|step[- ]?up|lunge|weighted|medicine ball|shrug|pullover|fly)\b/i;
+  /\b(crawl|split squats?|row|boxing|hook|jab|punch|uppercut|jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|crunch|sit-?up|deadlift|bench press|heavy|barbell|kettlebell|machine|cable|smith|leverage|sled|swing|box jump|mountain climber|high knee|skater|battle rope|jump rope|rower|row erg|skierg|assault bike|air bike|treadmill|push-?up|pushup|pull-?up|chin-?up|dip|squat jump|run|carry|dumbbell|curl|press|step[- ]?up|lunge|weighted|medicine ball|shrug|pullover|fly)\b/i;
 
 const MICRO_BAN_RE =
   /\b(dumbbell|kettlebell|barbell|band|machine|bike|rower|rope|treadmill|sled|cable|smith|ez|olympic|medicine ball|bosu|stability ball|pull-?up|chin-?up|hang(ing)?|dip bar|parallette|bench press|box jump|doorway|door frame)\b/i;

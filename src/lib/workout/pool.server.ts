@@ -167,7 +167,7 @@ const EQUIPMENT_LABELS: Record<string, string[]> = {
   kettlebells: ["kettlebell"],
   barbell: ["barbell", "ez barbell", "olympic barbell", "trap bar"],
   bands: ["band", "resistance band"],
-  trx: ["assisted"],
+  trx: [],
   machines: [
     "cable",
     "leverage machine",
@@ -196,6 +196,8 @@ export function matchesSelectedEquipment(
     ),
   );
   if (known) return true;
+  // TRX / suspension work is catalogued by name ("suspended row"), not equipment.
+  if (selected.includes("trx") && /\b(suspended|suspension|trx)\b/i.test(e.name)) return true;
   // "Other" free-text: only honoured when the library actually has that apparatus.
   if (selected.includes("other") && custom.length) {
     return custom.some(

@@ -360,6 +360,7 @@ export async function generateWorkoutContent(
     cooldownPool,
     seed,
     finisher: Boolean(plan.finisher),
+    plan,
   });
   const enforcedPack = enforceWorkout(pack.html, pool, enforceOpts);
 
