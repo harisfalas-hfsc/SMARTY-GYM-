@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { ArrowDown, ArrowUp, Loader2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { LibraryBrowserDialog } from "@/components/workout/LibraryBrowserDialog";
 import { createManualWorkout } from "@/lib/manual-workout.functions";
 import {
   DRAFT_EVENT,
@@ -26,7 +25,6 @@ function SectionCard({
   draft: ManualDraft;
   onChange: (d: ManualDraft) => void;
 }) {
-  const [open, setOpen] = useState(false);
   const list = draft.sections[section.id];
 
   const update = (next: typeof list) =>
@@ -69,10 +67,11 @@ function SectionCard({
           </div>
         ))}
       </div>
-      <Button variant="outline" className="mt-3 h-11 w-full rounded-2xl font-bold" onClick={() => setOpen(true)}>
-        <Plus className="mr-2 h-4 w-4" /> Browse the Exercise Library
+      <Button asChild variant="outline" className="mt-3 h-11 w-full rounded-2xl font-bold">
+        <Link to="/exercise-library">
+          <Plus className="mr-2 h-4 w-4" /> Browse the Exercise Library
+        </Link>
       </Button>
-      <LibraryBrowserDialog open={open} onOpenChange={setOpen} section={section.id} sectionLabel={section.label} />
     </section>
   );
 }
@@ -141,6 +140,19 @@ export function ManualWorkoutBuilder({ premium, onLocked }: { premium: boolean |
       ))}
       <Button className="h-14 w-full rounded-2xl text-base font-extrabold" disabled={busy} onClick={() => void submit()}>
         {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : "Create my workout"}
+      </Button>
+      <Button
+        variant="outline"
+        className="h-12 w-full rounded-2xl font-bold text-destructive"
+        disabled={busy}
+        onClick={() => {
+          if (window.confirm("Discard this workout and remove all its exercises?")) {
+            clearDraft();
+            toast.success("Workout discarded. You can start a new one.");
+          }
+        }}
+      >
+        <Trash2 className="mr-2 h-4 w-4" /> Discard workout
       </Button>
     </div>
   );
