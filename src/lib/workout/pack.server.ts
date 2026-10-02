@@ -238,7 +238,7 @@ export function buildPackWorkout(
   const favouriteIds = input.favoriteIds ?? [];
   const used = new Set<string>();
 
-  const mainCount = input.plan ? Math.max(3, input.plan.mainCount[1]) : isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
+  const mainCount = input.plan ? Math.max(3, input.minutes <= 20 ? input.plan.mainCount[0] : input.plan.mainCount[1]) : isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
   const finisherCount = input.plan ? Math.max(input.plan.finisherCount[0], 1) : 3;
   // Coach's priority exercises (the 3 × 50 lists) come first; the rest of the
   // legal pool is only used to top up when too few priority matches exist.
@@ -329,7 +329,9 @@ export function buildPackWorkout(
   blocks.push(heading("💪", `Main Workout (${input.format})`));
   if (protocolLine) blocks.push(para(protocolLine));
   const planned = (d: SessionPlan["main"], e: PoolExercise) => {
-    const sets = d.sets[1];
+    // Fit the sets to the advertised training time (≈35 sec of work per set plus rest).
+    const fit = Math.floor((input.minutes * 60) / (Math.max(1, mainCount) * (35 + d.restSec[0])));
+    const sets = Math.max(2, Math.min(d.sets[1], fit));
     // Bodyweight strength work needs more reps than a loaded lift to be a real stimulus.
     const reps = isBodyweight(e) ? Math.max(d.reps?.[1] ?? 10, 10) : (d.reps?.[0] ?? 10);
     const unit = isTimedPosition(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
