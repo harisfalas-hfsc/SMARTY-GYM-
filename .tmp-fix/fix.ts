@@ -69,21 +69,23 @@ function fix(w: any, html: string, log: any[], gate: boolean) {
   }
   return html;
 }
+const upd: any[] = [];
 const log: any[] = []; const sql: string[] = []; const fixed = new Map<string, string>();
 let before = 0, after = 0;
 for (const w of sw) {
   const h0 = w.main_workout ?? ""; before += hard(w, h0) ? 1 : 0;
   const h = fix(w, h0, log, true); after += hard(w, h) ? 1 : 0;
   fixed.set(w.name, h);
-  if (h !== h0) sql.push(`update public.smarty_workouts set main_workout = $q$${h}$q$, updated_at = now() where id = '${w.id}';`);
+  if (h !== h0) upd.push({ t: "smarty_workouts", id: w.id, h }); if (h !== h0) sql.push(`update public.smarty_workouts set main_workout = $q$${h}$q$, updated_at = now() where id = '${w.id}';`);
 }
 for (const u of uw) {
   const src = fixed.get(u.name);
   const h0 = u.main_workout ?? "";
   const h = src ?? fix({ name: u.name }, h0, log, false);
-  if (h !== h0) sql.push(`update public.workouts set main_workout = $q$${h}$q$, updated_at = now() where id = '${u.id}';`);
+  if (h !== h0) upd.push({ t: "workouts", id: u.id, h }); if (h !== h0) sql.push(`update public.workouts set main_workout = $q$${h}$q$, updated_at = now() where id = '${u.id}';`);
 }
 writeFileSync("/tmp/a/updates.sql", sql.join("\n"));
 writeFileSync("/dev-server/audits/smarty-workouts-gif-prep-changes-2026-10-02.json", JSON.stringify(log, null, 1));
 const c: Record<string, number> = {}; for (const l of log) c[l.reason] = (c[l.reason] ?? 0) + 1;
 console.log({ before, after, updates: sql.length, ...c, workoutsTouched: new Set(log.map((l) => l.workout)).size });
+writeFileSync("/tmp/a/upd.json", JSON.stringify(upd));
