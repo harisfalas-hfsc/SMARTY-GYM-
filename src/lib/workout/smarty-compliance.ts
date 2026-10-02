@@ -238,7 +238,21 @@ function fitDuration(w: ComplianceWorkout, library: ComplianceExercise[], lib: M
   ];
   for (let guard = 0; guard < 120 && over(html); guard++) {
     let progressed = false;
-    for (const step of steps) { const n = step(); if (n) { html = n; progressed = true; break; } }
+    const cur = estimateWorkMinutes(html);
+    for (const step of steps) { const n = step(); if (n && estimateWorkMinutes(n) < cur) { html = n; progressed = true; break; } }
+    if (!progressed) break;
+  }
+  // Prep allowances: shorten timed Activation / Cool Down lines (never below 20 sec).
+  const prepOver = (h: string) => Boolean(D.activationOverflowViolation(estimateActivationMinutes(h), t) || D.cooldownOverflowViolation(estimateCooldownMinutes(h), t));
+  const prepSteps: Array<() => string | null> = [
+    () => trim(html, /🔥|Activation/, /💪|Main Workout/, /\b(\d{2,3})\s*(?:sec|s)\b/gi, 20),
+    () => trim(html, /🔥|Activation/, /💪|Main Workout/, /\b(\d{1,2})\s*reps?\b/gi, 6),
+    () => trim(html, /🧘|Cool/, /$^/, /\b(\d{2,3})\s*(?:sec|s)\b/gi, 20),
+  ];
+  for (let guard = 0; guard < 200 && prepOver(html); guard++) {
+    const cur = estimateActivationMinutes(html) + estimateCooldownMinutes(html);
+    let progressed = false;
+    for (const step of prepSteps) { const n = step(); if (n && estimateActivationMinutes(n) + estimateCooldownMinutes(n) < cur) { html = n; progressed = true; break; } }
     if (!progressed) break;
   }
   void library; void lib;
