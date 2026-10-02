@@ -14,7 +14,7 @@ export const generateWorkout = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { withProblemReport } = await import("@/lib/errors/report.server");
     return withProblemReport(
-      { source: "workout-generation", route: "/create-your-workout", userId: context.userId },
+      { source: "workout-generation", route: "/create-your-own-workout", userId: context.userId },
       async () => {
         const { requireWorkoutAccess } = await import("@/lib/eligibility.server");
         await requireWorkoutAccess(context.supabase as never, context.userId, {

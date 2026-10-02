@@ -10,7 +10,8 @@
 <!-- LOVABLE:END -->
 
 - Keep the standalone Shared Workouts page backed by the existing public community-workout view and access guard, so its listing stays consistent without duplicating workout rules or altering Community.
-- The workout creator's canonical route is `/create-your-workout`; `/coach` exists only as a redirect so old bookmarks still work.
+- The workout creator's canonical route is `/create-your-own-workout`; `/create-your-workout` and `/coach` are redirects only — why: old bookmarks keep working.
+- Member-built (Build It Yourself) workouts are saved by createManualWorkout (src/lib/manual-workout.functions.ts) as normal workouts with category MY OWN WORKOUT, bypassing the generation engine and its doctrine — why: the member chooses their own exercises; Smarty rules apply only to coach/admin workouts.
 
 - Smarty Ritual rotation is computed from app_settings.ritual_anchor_date + position (src/lib/ritual-schedule.ts); no nightly job, so page and admin schedule never drift.
 - Ritual exports are generated client-side as real DOCX and paginated PDF files with embedded emoji artwork; this preserves formatting and avoids mislabeled HTML or print-window downloads.

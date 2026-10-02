@@ -229,7 +229,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
             items: [
               { to: "/smarty-workouts", label: "Smarty Workouts", Icon: Dumbbell },
               { to: "/wod", label: "Workout of the Day", Icon: CalendarCheck },
-              { to: "/create-your-workout", label: "Create Your Workout", Icon: Sparkles },
+              { to: "/create-your-own-workout", label: "Create Your Own Workout", Icon: Sparkles },
               { to: "/shared-workouts", label: "Shared Workouts", Icon: Dumbbell },
               { to: "/smarty-ritual", label: "Smarty Ritual", Icon: Sparkles },
               { to: "/smarty-checkins", label: "Smarty Check-ins", Icon: ClipboardCheck },

@@ -102,11 +102,11 @@ const aboutSections: Section[] = [
     items: [
       { id: "smarty-workouts", title: "Smarty Workouts", meta: "Ready workouts in nine categories", image: imgWorkouts, to: "/smarty-workouts" },
       { id: "wod", title: "Workout of the Day", meta: "Two planned workouts, every day", image: imgWod, to: "/wod" },
-      { id: "create", title: "Create Your Workout", meta: "On demand, whenever you want", image: imgCreate, to: "/create-your-workout" },
+      { id: "create", title: "Create Your Own Workout", meta: "On demand, whenever you want", image: imgCreate, to: "/create-your-own-workout" },
       { id: "community", title: "Smarty Community", meta: "Train, like, comment and climb the rankings", image: imgCommunity, to: "/community" },
       { id: "ritual", title: "Smarty Ritual", meta: "Morning, Midday and Evening phases", image: imgRitual, to: "/smarty-ritual" },
     ],
-    cta: { label: "Create Your Workout", to: "/create-your-workout" },
+    cta: { label: "Create Your Own Workout", to: "/create-your-own-workout" },
   },
   {
     id: "track",
@@ -176,7 +176,7 @@ const homeSections: Section[] = [
       { id: "science", title: "Science-informed", meta: "Coherent, coach-like programming", icon: FlaskConical },
       { id: "adaptive", title: "Adaptive", meta: "Matches today's energy and equipment", icon: Brain },
     ],
-    cta: { label: "Create Your Own Workout", to: "/create-your-workout" },
+    cta: { label: "Create Your Own Workout", to: "/create-your-own-workout" },
   },
   {
     id: "shared-workouts",
@@ -351,7 +351,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
               {[
                 { to: "/smarty-workouts", label: "Smarty Workouts" },
                 { to: "/wod", label: "Workout of the Day" },
-                { to: "/create-your-workout", label: "Create Your Own Workout" },
+                { to: "/create-your-own-workout", label: "Create Your Own Workout" },
               ].map((b) => (
                 <Link
                   key={b.to}

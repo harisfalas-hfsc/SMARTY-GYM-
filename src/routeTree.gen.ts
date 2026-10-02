@@ -19,6 +19,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BestOnlineFitnessPlatformRouteImport } from './routes/best-online-fitness-platform'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CreateYourWorkoutRouteImport } from './routes/create-your-workout'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as ExerciseLibraryRouteImport } from './routes/exercise-library'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -41,7 +42,7 @@ import { Route as TheSmartyMethodRouteImport } from './routes/the-smarty-method'
 import { Route as WhyInvestInSmartygymRouteImport } from './routes/why-invest-in-smartygym'
 import { Route as WodRouteImport } from './routes/wod'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
-import { Route as AuthenticatedCreateYourWorkoutRouteImport } from './routes/_authenticated/create-your-workout'
+import { Route as AuthenticatedCreateYourOwnWorkoutRouteImport } from './routes/_authenticated/create-your-own-workout'
 import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
 import { Route as AuthenticatedLogbookRouteImport } from './routes/_authenticated/logbook'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
@@ -127,6 +128,11 @@ const CoachRoute = CoachRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateYourWorkoutRoute = CreateYourWorkoutRouteImport.update({
+  id: '/create-your-workout',
+  path: '/create-your-workout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DisclaimerRoute = DisclaimerRouteImport.update({
@@ -239,10 +245,10 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedCreateYourWorkoutRoute =
-  AuthenticatedCreateYourWorkoutRouteImport.update({
-    id: '/create-your-workout',
-    path: '/create-your-workout',
+const AuthenticatedCreateYourOwnWorkoutRoute =
+  AuthenticatedCreateYourOwnWorkoutRouteImport.update({
+    id: '/create-your-own-workout',
+    path: '/create-your-own-workout',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedInboxRoute = AuthenticatedInboxRouteImport.update({
@@ -440,6 +446,7 @@ export interface FileRoutesByFullPath {
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/coach': typeof CoachRoute
   '/contact': typeof ContactRoute
+  '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
   '/faq': typeof FaqRoute
@@ -462,7 +469,7 @@ export interface FileRoutesByFullPath {
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/create-your-workout': typeof AuthenticatedCreateYourWorkoutRoute
+  '/create-your-own-workout': typeof AuthenticatedCreateYourOwnWorkoutRoute
   '/inbox': typeof AuthenticatedInboxRoute
   '/logbook': typeof AuthenticatedLogbookRoute
   '/messages': typeof AuthenticatedMessagesRoute
@@ -509,6 +516,7 @@ export interface FileRoutesByTo {
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/coach': typeof CoachRoute
   '/contact': typeof ContactRoute
+  '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
   '/faq': typeof FaqRoute
@@ -531,7 +539,7 @@ export interface FileRoutesByTo {
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/create-your-workout': typeof AuthenticatedCreateYourWorkoutRoute
+  '/create-your-own-workout': typeof AuthenticatedCreateYourOwnWorkoutRoute
   '/inbox': typeof AuthenticatedInboxRoute
   '/logbook': typeof AuthenticatedLogbookRoute
   '/messages': typeof AuthenticatedMessagesRoute
@@ -580,6 +588,7 @@ export interface FileRoutesById {
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/coach': typeof CoachRoute
   '/contact': typeof ContactRoute
+  '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
   '/faq': typeof FaqRoute
@@ -602,7 +611,7 @@ export interface FileRoutesById {
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
-  '/_authenticated/create-your-workout': typeof AuthenticatedCreateYourWorkoutRoute
+  '/_authenticated/create-your-own-workout': typeof AuthenticatedCreateYourOwnWorkoutRoute
   '/_authenticated/inbox': typeof AuthenticatedInboxRoute
   '/_authenticated/logbook': typeof AuthenticatedLogbookRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
@@ -651,6 +660,7 @@ export interface FileRouteTypes {
     | '/best-online-fitness-platform'
     | '/coach'
     | '/contact'
+    | '/create-your-workout'
     | '/disclaimer'
     | '/exercise-library'
     | '/faq'
@@ -673,7 +683,7 @@ export interface FileRouteTypes {
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/account'
-    | '/create-your-workout'
+    | '/create-your-own-workout'
     | '/inbox'
     | '/logbook'
     | '/messages'
@@ -720,6 +730,7 @@ export interface FileRouteTypes {
     | '/best-online-fitness-platform'
     | '/coach'
     | '/contact'
+    | '/create-your-workout'
     | '/disclaimer'
     | '/exercise-library'
     | '/faq'
@@ -742,7 +753,7 @@ export interface FileRouteTypes {
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/account'
-    | '/create-your-workout'
+    | '/create-your-own-workout'
     | '/inbox'
     | '/logbook'
     | '/messages'
@@ -790,6 +801,7 @@ export interface FileRouteTypes {
     | '/best-online-fitness-platform'
     | '/coach'
     | '/contact'
+    | '/create-your-workout'
     | '/disclaimer'
     | '/exercise-library'
     | '/faq'
@@ -812,7 +824,7 @@ export interface FileRouteTypes {
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/_authenticated/account'
-    | '/_authenticated/create-your-workout'
+    | '/_authenticated/create-your-own-workout'
     | '/_authenticated/inbox'
     | '/_authenticated/logbook'
     | '/_authenticated/messages'
@@ -861,6 +873,7 @@ export interface RootRouteChildren {
   BestOnlineFitnessPlatformRoute: typeof BestOnlineFitnessPlatformRoute
   CoachRoute: typeof CoachRoute
   ContactRoute: typeof ContactRoute
+  CreateYourWorkoutRoute: typeof CreateYourWorkoutRoute
   DisclaimerRoute: typeof DisclaimerRoute
   ExerciseLibraryRoute: typeof ExerciseLibraryRoute
   FaqRoute: typeof FaqRoute
@@ -982,6 +995,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create-your-workout': {
+      id: '/create-your-workout'
+      path: '/create-your-workout'
+      fullPath: '/create-your-workout'
+      preLoaderRoute: typeof CreateYourWorkoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/disclaimer': {
@@ -1138,11 +1158,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/create-your-workout': {
-      id: '/_authenticated/create-your-workout'
-      path: '/create-your-workout'
-      fullPath: '/create-your-workout'
-      preLoaderRoute: typeof AuthenticatedCreateYourWorkoutRouteImport
+    '/_authenticated/create-your-own-workout': {
+      id: '/_authenticated/create-your-own-workout'
+      path: '/create-your-own-workout'
+      fullPath: '/create-your-own-workout'
+      preLoaderRoute: typeof AuthenticatedCreateYourOwnWorkoutRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/inbox': {
@@ -1395,7 +1415,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
-  AuthenticatedCreateYourWorkoutRoute: typeof AuthenticatedCreateYourWorkoutRoute
+  AuthenticatedCreateYourOwnWorkoutRoute: typeof AuthenticatedCreateYourOwnWorkoutRoute
   AuthenticatedInboxRoute: typeof AuthenticatedInboxRoute
   AuthenticatedLogbookRoute: typeof AuthenticatedLogbookRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
@@ -1407,7 +1427,8 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
-  AuthenticatedCreateYourWorkoutRoute: AuthenticatedCreateYourWorkoutRoute,
+  AuthenticatedCreateYourOwnWorkoutRoute:
+    AuthenticatedCreateYourOwnWorkoutRoute,
   AuthenticatedInboxRoute: AuthenticatedInboxRoute,
   AuthenticatedLogbookRoute: AuthenticatedLogbookRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
@@ -1432,6 +1453,7 @@ const rootRouteChildren: RootRouteChildren = {
   BestOnlineFitnessPlatformRoute: BestOnlineFitnessPlatformRoute,
   CoachRoute: CoachRoute,
   ContactRoute: ContactRoute,
+  CreateYourWorkoutRoute: CreateYourWorkoutRoute,
   DisclaimerRoute: DisclaimerRoute,
   ExerciseLibraryRoute: ExerciseLibraryRoute,
   FaqRoute: FaqRoute,
