@@ -463,6 +463,13 @@
       "when": 1790937967165,
       "tag": "0065_server_side_membership_and_stripe_events",
       "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "7",
+      "when": 1790938245658,
+      "tag": "0066_lock_shared_workout_raw_reads",
+      "breakpoints": true
     }
   ]
 }
