@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { ArrowDown, ArrowUp, Loader2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useExerciseLibrary } from "@/hooks/useExerciseLibrary";
+import { LibraryBrowserDialog } from "@/components/workout/LibraryBrowserDialog";
 import { createManualWorkout } from "@/lib/manual-workout.functions";
 import {
   DRAFT_EVENT,
   DRAFT_SECTIONS,
-  addToDraft,
   clearDraft,
   loadDraft,
   saveDraft,
@@ -27,9 +26,7 @@ function SectionCard({
   draft: ManualDraft;
   onChange: (d: ManualDraft) => void;
 }) {
-  const { searchExercises } = useExerciseLibrary();
-  const [q, setQ] = useState("");
-  const results = useMemo(() => searchExercises(q, 8), [q, searchExercises]);
+  const [open, setOpen] = useState(false);
   const list = draft.sections[section.id];
 
   const update = (next: typeof list) =>
@@ -72,30 +69,10 @@ function SectionCard({
           </div>
         ))}
       </div>
-      <Input
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder={`Search the library to add to ${section.label}`}
-        className="mt-3"
-      />
-      {results.length ? (
-        <div className="mt-2 space-y-1">
-          {results.map((r) => (
-            <button
-              key={r.id}
-              type="button"
-              className="flex w-full items-center justify-between rounded-xl border border-border px-3 py-2 text-left text-sm capitalize hover:border-primary"
-              onClick={() => {
-                addToDraft(section.id as DraftSection, r);
-                setQ("");
-              }}
-            >
-              <span className="truncate">{r.name}</span>
-              <Plus className="h-4 w-4 shrink-0 text-primary" />
-            </button>
-          ))}
-        </div>
-      ) : null}
+      <Button variant="outline" className="mt-3 h-11 w-full rounded-2xl font-bold" onClick={() => setOpen(true)}>
+        <Plus className="mr-2 h-4 w-4" /> Browse the Exercise Library
+      </Button>
+      <LibraryBrowserDialog open={open} onOpenChange={setOpen} section={section.id} sectionLabel={section.label} />
     </section>
   );
 }
@@ -152,7 +129,7 @@ export function ManualWorkoutBuilder({ premium, onLocked }: { premium: boolean |
           className="mt-3"
         />
         <p className="mt-2 text-xs text-muted-foreground">
-          Pick exercises below, or tap <strong>Add to workout</strong> on any exercise in the{" "}
+          Browse the library for each part below, or tap <strong>Add to workout</strong> on any exercise in the{" "}
           <Link to="/exercise-library" className="font-semibold text-primary">
             Exercise Library
           </Link>
