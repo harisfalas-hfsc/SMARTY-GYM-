@@ -1,5 +1,5 @@
 import { priorityIds } from "./priority";
-import { isCardioRhythm, isLegalExercise } from "./rules";
+import { isCardioRhythm, isLegalExercise, isPassiveStretch } from "./rules";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Category, DifficultyLevel, EquipmentMode, Format, StrengthFocus } from "./spec";
 import {
@@ -398,7 +398,13 @@ function prepFilter(
 /** Prep sections obey the one rule engine (rules.ts / prep-vocabulary). */
 function enginePrep(pool: PoolExercise[], section: "activation" | "cooldown"): PoolExercise[] {
   const ok = pool.filter((e) => isLegalExercise(e, { category: "STRENGTH" as Category, format: "REPS & SETS" as Format, section }));
-  return ok.length >= 4 ? ok : pool;
+  const out = ok.length >= 4 ? ok : pool;
+  // Activation is active mobility / stability (rules.ts activationRuleBreak): keep passive stretches out when possible.
+  if (section === "activation") {
+    const active = out.filter((e) => !isPassiveStretch(e.name));
+    if (active.length >= 4) return active;
+  }
+  return out;
 }
 
 export function buildActivationPool(

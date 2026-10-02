@@ -4,8 +4,8 @@
 import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds } from "./priority";
-import { prepTokens, prepAllowed } from "./prep-vocabulary";
-import { isTimedPosition, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
+import { prepTokens, prepAllowed, ACTIVATION_NAMES } from "./prep-vocabulary";
+import { isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -33,7 +33,6 @@ function blockShortfall(html: string, lib: Map<string, ComplianceExercise>, cat:
   for (const block of [rowsIn(html, lib, "Main Workout"), finisherRows(html, lib)]) {
     if (!block.length) continue;
     if (cat === "CARDIO") n += Math.max(0, Math.ceil(block.length * 0.6) - block.filter((e) => isCardioRhythm(e.name)).length);
-    if (cat === "CHALLENGE") n += Math.max(0, block.filter((e) => D.CORE_ISOLATION_RE.test(e.name)).length - 1);
   }
   return n;
 }
@@ -71,6 +70,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     if (exerciseRuleBreaks({ name, equipment: null, body_part: null, target_muscle: null } as never, { ...ctx, section: t.section }).length)
       s.add(t.section === "activation" ? "Activation not mobility/stability" : "Cool Down not stretch/mobility");
   }
+  if (activationRuleBreak(prep.filter((t) => t.section === "activation").map((t) => lib.get(t.id)?.name ?? t.name))) s.add("Activation mostly passive stretches");
   for (const sec of ["activation", "cooldown"] as const) {
     const ids = prep.filter((t) => t.section === sec).map((t) => t.id);
     if (ids.length < 2) s.add(sec === "activation" ? "Activation has fewer than 2 movements" : "Cool Down has fewer than 2 movements");
@@ -100,7 +100,8 @@ function ruleLabel(v: string): string {
   if (/legal format|must be programmed/.test(v)) return "Format not allowed for category";
   if (/passive stretch/.test(v)) return "Passive stretch in Mobility & Stability work";
   if (/rhythmic aerobic/.test(v)) return "Cardio block not mostly aerobic";
-  if (/isolated core/.test(v)) return "Challenge block has more than one isolated core exercise";
+  if (/isolated core work/.test(v)) return "Isolated core work in Cardio/Challenge";
+  if (/plyometric or cardio drill/.test(v)) return "Plyometric/cardio drill in Strength work";
   return v.replace(/"[^"]*"/g, "X").slice(0, 90);
 }
 
@@ -194,7 +195,8 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
           if (pc === pe || (pe === "arms" && (pc === "push" || pc === "pull"))) s += 4;
           else if (pe !== "stretch" && pe !== "other" && !(bad && (pe === "calf" || pe === "arms" || cat === "RECOVERY" || cat === "MOBILITY & STABILITY"))) s -= 6;
           if (cat === "CARDIO" && !isCardioRhythm(ex.name) && isCardioRhythm(c.name)) s += 12;
-          if (cat === "CHALLENGE" && D.CORE_ISOLATION_RE.test(ex.name) && !D.CORE_ISOLATION_RE.test(c.name) && patternKey(c) === "conditioning") s += 12;
+          if (cat === "CHALLENGE" && D.CORE_ISOLATION_RE.test(ex.name) && patternKey(c) === "conditioning") s += 12;
+          if ((cat === "STRENGTH" || cat === "MUSCLE BUILDING") && bad && patternKey(ex) === "conditioning" && ["squat", "lunge", "hinge", "push", "pull"].includes(patternKey(c))) s += 10;
           if (cat === "MOBILITY & STABILITY" && prepAllowed(c.name, "activation")) s += 5;
           if (cat === "RECOVERY" && (prepAllowed(c.name, "activation") || prepAllowed(c.name, "cooldown"))) s += 5;
           if (D.regionOf(c) === D.regionOf(ex)) s += 3;
@@ -218,12 +220,40 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
       }
     }
   }
+  html = fixActivation(html, library, lib);
   html = fixHoldDoses(html, lib);
   html = capLightSets(html, cat);
   html = fitDuration({ ...w, main_workout: html }, library, lib);
   const after = complianceIssues({ ...w, main_workout: html }, library, lib);
   if (after.length >= before.length && after.every((a) => before.includes(a)) && after.length === before.length && swaps.length === 0 && html === (w.main_workout ?? "")) return { html: w.main_workout ?? "", swaps, before, after: before };
   return { html, swaps, before, after };
+}
+
+/** Activation keeps one passive stretch at most; the rest become active mobility / stability moves. */
+function fixActivation(html: string, library: ComplianceExercise[], lib: Map<string, ComplianceExercise>): string {
+  const act = prepTokens(html).filter((t) => t.section === "activation");
+  const names = act.map((t) => lib.get(t.id)?.name ?? t.name);
+  if (!activationRuleBreak(names)) return html;
+  const used = new Set(prepTokens(html).map((t) => t.id));
+  const byName = new Map(library.filter((e) => e.is_active !== false && e.gif_path?.trim()).map((e) => [e.name.toLowerCase(), e]));
+  const pool = ACTIVATION_NAMES.map((n) => byName.get(n)).filter((e): e is ComplianceExercise => Boolean(e) && !isPassiveStretch(e!.name));
+  const main = workRows(html, lib);
+  const lower = main.filter((r) => D.regionOf(r) === "lower").length >= main.length / 2;
+  pool.sort((a, b) => Number((D.regionOf(b) === "lower") === lower) - Number((D.regionOf(a) === "lower") === lower));
+  let keptStretch = false;
+  const plan: Array<{ index: number; raw: string; to: ComplianceExercise }> = [];
+  for (let i = 0; i < act.length; i++) {
+    if (!isPassiveStretch(names[i]!)) continue;
+    if (!keptStretch) { keptStretch = true; continue; }
+    const to = pool.find((c) => !used.has(c.id));
+    if (!to) break;
+    used.add(to.id);
+    plan.push({ index: act[i]!.index, raw: act[i]!.raw, to });
+  }
+  for (const p of plan.reverse()) html = html.slice(0, p.index) + `{{exercise:${p.to.id}:${p.to.name}}}` + html.slice(p.index + p.raw.length);
+  // A swapped-in movement is dosed in reps, not stretch seconds.
+  for (const p of plan) html = html.replace(new RegExp(`\\b30 sec(\\s*\\{\\{exercise:${p.to.id.replace(/-/g, "\\-")}:)`), "8 reps$1");
+  return html;
 }
 
 /** Recovery / Mobility & Stability: set ladders capped at the light-category maximum. */
