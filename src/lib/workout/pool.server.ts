@@ -1,5 +1,5 @@
 import { priorityIds } from "./priority";
-import { isLegalExercise } from "./rules";
+import { isCardioRhythm, isLegalExercise } from "./rules";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Category, DifficultyLevel, EquipmentMode, Format, StrengthFocus } from "./spec";
 import {
@@ -280,6 +280,9 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
     const rest = pool.filter((e) => !HIGH_FATIGUE_CONDITIONING_RE.test(e.name));
     if (rest.length >= 12)
       pool = [...rest, ...hot.slice(0, Math.max(1, Math.ceil(rest.length * 0.05)))];
+    // The block must be mostly rhythmic aerobic work (rules.ts) — keep the pool that way.
+    const rhythm = pool.filter((e) => isCardioRhythm(e.name));
+    if (rhythm.length >= 6) pool = [...rhythm, ...pool.filter((e) => !isCardioRhythm(e.name)).slice(0, Math.floor(rhythm.length / 2))];
   }
 
   // 4. Static-hold guardrail for momentum / conditioning categories.
