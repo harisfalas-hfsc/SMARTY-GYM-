@@ -385,6 +385,29 @@ function ExerciseLibraryPage() {
   }
 
   const navigate = useNavigate();
+  const { section: targetSection } = Route.useSearch();
+  const targetLabel = targetSection ? DRAFT_SECTIONS.find((s) => s.id === targetSection)!.label : "";
+  const [draft, setDraft] = useState<ManualDraft | null>(null);
+  useEffect(() => {
+    const sync = () => setDraft(loadDraft());
+    sync();
+    window.addEventListener(DRAFT_EVENT, sync);
+    return () => window.removeEventListener(DRAFT_EVENT, sync);
+  }, []);
+  const sectionList = targetSection && draft ? draft.sections[targetSection] : [];
+  const backToWorkout = () => navigate({ to: "/create-your-own-workout", search: { mode: "build" } });
+  function directFor(ex: { id: string; name: string }) {
+    if (!targetSection) return undefined;
+    return {
+      added: sectionList.filter((x) => x.id === ex.id).length,
+      onAdd: () => {
+        if (!user) return void toast.error("Sign in to build your own workout.");
+        if (!prefs?.premium) return void toast.error("Building your own workout is part of the premium membership.");
+        addToDraft(targetSection, ex);
+      },
+      onRemove: () => removeFromDraft(targetSection, ex.id),
+    };
+  }
   function addExercise(section: DraftSection, ex: { id: string; name: string }) {
     if (!user) {
       toast.error("Sign in to build your own workout.");
@@ -510,6 +533,17 @@ function ExerciseLibraryPage() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      {targetSection ? (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-primary bg-card p-3">
+          <p className="min-w-0 text-sm">
+            Adding to <strong className="text-primary">{targetLabel}</strong>. Tap <strong>Add</strong> on any
+            exercise, tap <strong>Remove</strong> to take it out.
+          </p>
+          <Button size="sm" className="shrink-0 rounded-full font-bold" onClick={backToWorkout}>
+            <ArrowLeft className="mr-1 h-4 w-4" /> Back
+          </Button>
+        </div>
+      ) : null}
       <PageHeader image={pageHeroImage}
         eyebrow="Exercise library"
         title={
@@ -617,6 +651,7 @@ function ExerciseLibraryPage() {
                         onLike={() => mark(ex.id, "like")}
                         onDislike={() => mark(ex.id, "dislike")}
                         onAdd={(sec) => addExercise(sec, ex)}
+                        direct={directFor(ex)}
                       />
                     </div>
                   </div>
@@ -634,6 +669,17 @@ function ExerciseLibraryPage() {
           Ask Smarty Coach →
         </Link>
       </div>
+
+      {targetSection ? (
+        <div className="fixed inset-x-0 bottom-[5.5rem] z-40 flex justify-center px-4 lg:bottom-6">
+          <Button
+            className="h-12 rounded-full px-6 text-sm font-extrabold shadow-xl"
+            onClick={backToWorkout}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to my workout · {targetLabel} ({sectionList.length})
+          </Button>
+        </div>
+      ) : null}
 
       <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
         <DialogContent className="max-h-[78vh] w-[calc(100vw-3rem)] max-w-md gap-0 overflow-y-auto overflow-x-hidden rounded-2xl border-2 border-primary p-0 sm:max-h-[86vh] sm:w-full sm:max-w-lg [&>button]:hidden [&>div:first-child]:hidden">
@@ -672,6 +718,7 @@ function ExerciseLibraryPage() {
                   onLike={() => mark(selected.id, "like")}
                   onDislike={() => mark(selected.id, "dislike")}
                   onAdd={(sec) => addExercise(sec, selected)}
+                  direct={directFor(selected)}
                 />
 
                 <div className="grid grid-cols-2 gap-2 text-sm">
