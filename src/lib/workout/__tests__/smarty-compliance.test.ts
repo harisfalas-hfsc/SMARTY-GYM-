@@ -10,9 +10,14 @@ const lib = [
   ex("0004", "diamond push-up", "body weight", "chest"),
   ex("0005", "chin-up", "body weight", "back"),
   ex("0009", "side push neck stretch", "body weight", "upper arms"),
+  ex("0010", "Bird Dog", "body weight", "back"),
+  ex("0011", "Glute Bridge", "body weight", "upper legs"),
+  ex("0012", "hamstring stretch", "body weight", "upper legs"),
+  ex("0013", "Pigeon Pose", "body weight", "upper legs"),
 ];
+const li = (dose: string, id: string, name: string) => `<ul><li><p>${dose} {{exercise:${id}:${name}}}</p></li></ul>`;
 const html = (ids: string[]) =>
-  `<p>💪 <strong>Main Workout (REPS & SETS)</strong></p>${ids.map((i) => `<ul><li><p>3 sets × 10 reps {{exercise:${i}:${lib.find((e) => e.id === i)!.name}}} — Rest 60 sec</p></li></ul>`).join("")}<p>🧘 <strong>Cool Down</strong></p>`;
+  `<p>🔥 <strong>Activation</strong></p>${li("10 reps", "0010", "Bird Dog")}${li("10 reps", "0011", "Glute Bridge")}<p>💪 <strong>Main Workout (REPS & SETS)</strong></p>${ids.map((i) => `<ul><li><p>3 sets × 10 reps {{exercise:${i}:${lib.find((e) => e.id === i)!.name}}} — Rest 60 sec</p></li></ul>`).join("")}<p>🧘 <strong>Cool Down</strong></p>${li("30 sec", "0012", "hamstring stretch")}${li("30 sec", "0013", "Pigeon Pose")}`;
 
 describe("Smarty Workout rule compliance", () => {
   it("flags a session without enough priority exercises and fixes it by swapping exercises only", () => {
