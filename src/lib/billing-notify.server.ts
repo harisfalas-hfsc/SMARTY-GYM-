@@ -45,18 +45,24 @@ export async function runRenewalReminders(db: DB): Promise<number> {
   const now = Date.now();
   const horizon = new Date(now + 3 * DAY_MS + 60 * 60 * 1000).toISOString();
 
-  const { data, error } = await db
-    .from("subscriptions")
-    .select("user_id,current_period_end,status,cancel_at_period_end")
-    .in("status", ["active", "trialing"])
-    .eq("cancel_at_period_end", false)
-    .not("current_period_end", "is", null)
-    .lte("current_period_end", horizon)
-    .gte("current_period_end", new Date(now).toISOString())
-    .limit(2000);
-  if (error) throw new Error(error.message);
-
-  const rows = (data ?? []) as Array<{ user_id: string; current_period_end: string }>;
+  // Read every matching member, 1,000 at a time — no upper cap.
+  const rows: Array<{ user_id: string; current_period_end: string }> = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await db
+      .from("subscriptions")
+      .select("user_id,current_period_end,status,cancel_at_period_end")
+      .in("status", ["active", "trialing"])
+      .eq("cancel_at_period_end", false)
+      .not("current_period_end", "is", null)
+      .lte("current_period_end", horizon)
+      .gte("current_period_end", new Date(now).toISOString())
+      .order("user_id")
+      .range(from, from + 999);
+    if (error) throw new Error(error.message);
+    const page = (data ?? []) as Array<{ user_id: string; current_period_end: string }>;
+    rows.push(...page);
+    if (page.length < 1000) break;
+  }
   let sent = 0;
 
   for (const row of rows) {

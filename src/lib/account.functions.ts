@@ -16,6 +16,10 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
     const email = (context.claims?.email as string | undefined) ?? context.userId;
 
     // Stop any live recurring payment first, so a deleted member is never charged again.
+    // If any cancellation fails, nothing is deleted.
+    const BLOCKED =
+      "We couldn't cancel your membership payment, so your account was not deleted. Please try again or contact us.";
+    let cancelFailed = false;
     try {
       const { data: subs } = await (supabaseAdmin as any)
         .from("subscriptions")
@@ -39,13 +43,20 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
             const stripe = createStripeClient(sub.environment === "live" ? "live" : "sandbox");
             await stripe.subscriptions.cancel(sub.provider_subscription_id!);
           } catch (e) {
-            console.error("[delete-account] could not cancel subscription:", e);
+            const code = (e as { code?: string; raw?: { code?: string } })?.raw?.code ?? (e as { code?: string })?.code;
+            // Already gone at Stripe = nothing left to charge.
+            if (code !== "resource_missing") {
+              cancelFailed = true;
+              console.error("[delete-account] could not cancel subscription:", e);
+            }
           }
         }
       }
     } catch (e) {
       console.error("[delete-account] subscription lookup failed:", e);
+      cancelFailed = true;
     }
+    if (cancelFailed) return { error: BLOCKED };
 
     const { error } = await supabaseAdmin.auth.admin.deleteUser(context.userId);
     if (error) return { error: error.message };

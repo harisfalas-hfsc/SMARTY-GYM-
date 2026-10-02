@@ -31,6 +31,7 @@ export const getSessionFeedback = createServerFn({ method: "POST" })
     attempt: input.attempt && input.attempt > 0 ? Number(input.attempt) : null,
   }))
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const db = context.supabase as never as { from: (t: string) => any };
     let q = db
       .from("workout_feedback")
@@ -97,6 +98,7 @@ export const saveSessionFeedback = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const { supabase, userId } = context;
     const db = supabase as never as { from: (t: string) => any };
     const { nextAttemptNumber } = await import("@/lib/performance.server");

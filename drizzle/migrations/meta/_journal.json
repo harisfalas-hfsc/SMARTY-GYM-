@@ -456,6 +456,13 @@
       "when": 1790924691420,
       "tag": "0064_smarty_workouts_premigration_backup",
       "breakpoints": true
+    },
+    {
+      "idx": 65,
+      "version": "7",
+      "when": 1790937967165,
+      "tag": "0065_server_side_membership_and_stripe_events",
+      "breakpoints": true
     }
   ]
 }

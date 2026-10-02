@@ -102,7 +102,13 @@ function localWeekday(now: Date, timeZone: string): number {
 export function isDueNow(config: CronJobConfig, now = new Date()): boolean {
   if (!config.enabled) return false;
   const tz = config.timezone || SITE_TIMEZONE;
-  if (localHour(now, tz) !== config.hour) return false;
+  // Due at the first hourly tick at or after the configured hour:minute (local time).
+  const hour = localHour(now, tz);
+  const minute = Number(
+    new Intl.DateTimeFormat("en-US", { timeZone: tz, minute: "2-digit" }).format(now),
+  );
+  const configuredMinute = config.minute ?? 0;
+  if (hour < config.hour || (hour === config.hour && minute < configuredMinute)) return false;
   const def = CRON_JOB_BY_KEY[config.key];
   if (def?.timing === "weekly" && localWeekday(now, tz) !== (def.weekday ?? 0)) return false;
   return config.last_run_on !== localDateISO(now, tz);

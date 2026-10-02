@@ -3,6 +3,7 @@ import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getMyAccessState } from "@/lib/access.functions";
 import { isSupabaseConfigured } from "@/integrations/supabase/config";
+import { isOnline } from "@/lib/connectivity";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
 
 /**
@@ -23,18 +24,43 @@ export function PremiumGate({
     isSupabaseConfigured() ? "checking" : "allowed",
   );
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
     let active = true;
     void getMyAccessState({})
-      .then((a) => active && setState(a?.premium === false ? "locked" : "allowed"))
-      // Offline / network failure: keep saved data readable on the device.
-      .catch(() => active && setState("allowed"));
+      .then((a) => {
+        if (!active) return;
+        setFailed(false);
+        setState(a?.premium === true ? "allowed" : "locked");
+      })
+      // Offline: keep data already on the device readable. Online but the check
+      // failed: stay locked and offer a retry (never assume access).
+      .catch(() => {
+        if (!active) return;
+        if (!isOnline()) return setState("allowed");
+        setFailed(true);
+        setState("locked");
+      });
     return () => {
       active = false;
     };
-  }, []);
+  }, [attempt]);
+
+  if (state === "locked" && failed) {
+    return (
+      <div className="mx-auto max-w-xl px-4 py-16 text-center">
+        <Lock className="mx-auto h-8 w-8 text-primary" />
+        <h1 className="mt-3 text-xl font-extrabold uppercase tracking-tight">Couldn't check your membership</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Please check your connection and try again.</p>
+        <Button className="mt-5 h-12 rounded-2xl font-bold" onClick={() => setAttempt((n) => n + 1)}>
+          Try again
+        </Button>
+      </div>
+    );
+  }
 
   if (state === "checking") return <div className="min-h-[50vh]" />;
   if (state === "allowed") return <>{children}</>;
