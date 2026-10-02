@@ -58,8 +58,11 @@ import { isSupabaseConfigured } from "@/integrations/supabase/config";
 import { getMyAccessState } from "@/lib/access.functions";
 import { PageHeader } from "@/components/PageHeader";
 import { createLocalWorkout } from "@/lib/local-workouts";
+import { ManualWorkoutBuilder } from "@/components/workout/ManualWorkoutBuilder";
 
 export const Route = createFileRoute("/_authenticated/create-your-own-workout")({
+  validateSearch: (s: Record<string, unknown>): { mode?: "coach" | "build" } =>
+    s["mode"] === "build" ? { mode: "build" } : {},
   head: () => ({
     meta: [
       { title: "Create Your Own Workout — your personal workout today" },
