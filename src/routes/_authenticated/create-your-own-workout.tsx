@@ -306,7 +306,7 @@ function CoachPage() {
           type="button"
           onClick={() => navigate({ to: "/create-your-own-workout", search: { mode: m }, replace: true })}
           className={`h-11 rounded-2xl text-sm font-extrabold transition-colors ${
-            mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+            (mode ?? "coach") === m ? "bg-primary text-primary-foreground" : "text-muted-foreground"
           }`}
         >
           {m === "coach" ? "Smarty Coach" : "Build It Yourself"}
