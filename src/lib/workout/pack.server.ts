@@ -348,7 +348,7 @@ export function buildPackWorkout(
     const work = isTimedPosition(e.name) ? (d.seconds?.[0] ?? 30) : reps * 5;
     const blocks = Math.max(1, mainCount + (noFinisher ? 0 : finisherCount * 0.6));
     const fit = Math.floor((input.minutes * 60) / (blocks * (work + d.restSec[0])));
-    const sets = Math.max(2, Math.min(d.sets[1], fit));
+    const sets = Math.max(1, Math.min(d.sets[1], fit));
     const unit = isTimedPosition(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
     return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets. ${d.tempo[0]!.toUpperCase()}${d.tempo.slice(1)}.`;
   };
