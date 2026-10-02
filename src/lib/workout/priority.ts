@@ -115,6 +115,7 @@ export const PRIORITY_ALIASES: Record<string, string[]> = {
   "Crunch": ["crunch floor"],
   "Leg Raise": ["lying leg raise flat bench"],
   "Jumping Jack": ["jack jump (male)", "star jump (male)"],
+  "Burpee": ["burpee", "jack burpee"],
   "High Knees": ["high knee against wall"],
   "Shuttle Run": ["run"],
   "Sprint": ["run"],
@@ -155,10 +156,12 @@ export const PRIORITY_ALIASES: Record<string, string[]> = {
  */
 export function resolvePriority(name: string, library: PoolExercise[], max = 2): PoolExercise[] {
   const byName = new Map(library.map((e) => [e.name.toLowerCase(), e] as const));
-  const aliased = (PRIORITY_ALIASES[name] ?? [])
+  // The library's own exact spelling always wins, then hand-checked aliases.
+  const exact = byName.get(name.toLowerCase());
+  const aliased = [...(exact ? [name] : []), ...(PRIORITY_ALIASES[name] ?? [])]
     .map((n) => byName.get(n.toLowerCase()))
     .filter((e): e is PoolExercise => !!e);
-  if (aliased.length) return aliased.slice(0, max);
+  if (aliased.length) return [...new Map(aliased.map((e) => [e.id, e])).values()].slice(0, max);
   const want = tokens(name);
   if (!want.length) return [];
   const scored: { e: PoolExercise; extra: number }[] = [];
@@ -238,8 +241,9 @@ export function orderedPriority(pool: PoolExercise[]): PoolExercise[] {
   const out: PoolExercise[] = [];
   const seen = new Set<string>();
   for (const n of names) {
-    const e = resolvePriority(n, pool, 1)[0];
-    if (e && !seen.has(e.id)) {
+    // Up to two library spellings per coach movement (e.g. burpee / jack burpee).
+    for (const e of resolvePriority(n, pool, 2)) {
+      if (seen.has(e.id)) continue;
       seen.add(e.id);
       out.push(e);
     }
