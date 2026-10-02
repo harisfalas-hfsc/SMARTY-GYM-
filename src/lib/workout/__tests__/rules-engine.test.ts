@@ -10,6 +10,30 @@ const ex = (id: string, name: string, equipment = "body weight"): PoolExercise =
 });
 
 describe("one rule engine", () => {
+  const kb = (id: string, name: string) => ex(id, name, "kettlebell");
+  const db = (id: string, name: string) => ex(id, name, "dumbbell");
+  const ctxM = { category: "METABOLIC" as const, format: "AMRAP" as const, level: "intermediate" as const };
+  it("dynamic formats must flow: no picking the same implement back up", () => {
+    const tour = [kb("1", "kettlebell swing"), db("2", "dumbbell thruster"), kb("3", "kettlebell goblet squat"), ex("4", "burpee")];
+    expect(workoutRuleBreaks(tour, tour, ctxM, []).some((v) => /same equipment back up/.test(v))).toBe(true);
+    const flow = [kb("1", "kettlebell swing"), kb("2", "kettlebell goblet squat"), ex("3", "burpee"), ex("4", "push-up")];
+    expect(workoutRuleBreaks(flow, flow, ctxM, []).filter((v) => /station|equipment back up/.test(v))).toEqual([]);
+  });
+  it("a dynamic Finisher never brings in new equipment", () => {
+    const main = [kb("1", "kettlebell swing"), kb("2", "kettlebell goblet squat"), ex("3", "burpee")];
+    const fin = [db("4", "dumbbell thruster"), ex("5", "push-up"), ex("6", "jumping jack")];
+    expect(workoutRuleBreaks([...main, ...fin], main, ctxM, fin).some((v) => /Finisher introduces new equipment/.test(v))).toBe(true);
+  });
+  it("a Strength Finisher is shorter than the Main Workout", () => {
+    const main = [ex("1", "push-up"), ex("2", "pull-up"), ex("3", "reverse lunge")];
+    const fin = [ex("4", "inverted row"), ex("5", "glute bridge"), ex("6", "split squat")];
+    expect(workoutRuleBreaks([...main, ...fin], main, { category: "STRENGTH", format: "REPS & SETS", level: "intermediate" }, fin).some((v) => /shorter than the Main/.test(v))).toBe(true);
+  });
+  it("single-arm is not high-skill by itself", () => {
+    for (const n of ["dumbbell one arm bent-over row", "kettlebell one arm swing"]) expect(exerciseRuleBreaks(ex("9", n, "kettlebell"), { category: "METABOLIC", format: "AMRAP" }).filter((v) => /high-skill/.test(v))).toEqual([]);
+    expect(exerciseRuleBreaks(ex("9", "single arm push-up"), { category: "METABOLIC", format: "AMRAP" }).some((v) => /high-skill/.test(v))).toBe(true);
+  });
+
   it("keeps loaded strength work out of Recovery", () => {
     expect(isLegalExercise(ex("1684", "dumbbell step up single leg balance with bicep curl", "dumbbell"), { category: "RECOVERY", format: "MIX" })).toBe(false);
     expect(isLegalExercise(ex("b", "Bird Dog"), { category: "RECOVERY", format: "MIX" })).toBe(true);
@@ -60,7 +84,8 @@ describe("one rule engine", () => {
   });
 
   it("keeps work exercises out of Activation and Cool Down", () => {
-    expect(isLegalExercise(ex("0662", "Push-Up"), { category: "CHALLENGE", format: "AMRAP", section: "activation" })).toBe(false);
+    expect(isLegalExercise(ex("0662", "Burpee"), { category: "CHALLENGE", format: "AMRAP", section: "activation" })).toBe(false);
+    expect(isLegalExercise(ex("0662", "Push-Up"), { category: "CHALLENGE", format: "AMRAP", section: "cooldown" })).toBe(false);
     expect(isLegalExercise(ex("b", "Bird Dog"), { category: "CHALLENGE", format: "AMRAP", section: "activation" })).toBe(true);
   });
 
