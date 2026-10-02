@@ -185,7 +185,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
     for (const ex of order) {
       if (current === 0) break;
       if (prio.has(ex.id) && !perExerciseBad(ex, w) && cat !== "CHALLENGE" && cat !== "CARDIO" && !before.includes("Too many equipment families")) continue;
-      const bad = perExerciseBad(ex, w);
+      const bad = perExerciseBad(ex, w) || (cat === "CARDIO" && !isCardioRhythm(ex.name));
       const wantBw = cat === "CHALLENGE" || fam(ex) === "bodyweight";
       const pool = candidates.filter((c) => !present.has(c.id) && c.id !== ex.id);
       const ranked = pool
