@@ -238,7 +238,7 @@ export function buildPackWorkout(
   const favouriteIds = input.favoriteIds ?? [];
   const used = new Set<string>();
 
-  const mainCount = input.plan ? input.plan.mainCount[0] : isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
+  const mainCount = input.plan ? Math.max(3, input.plan.mainCount[1]) : isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
   const finisherCount = input.plan ? Math.max(input.plan.finisherCount[0], 1) : 3;
   // Coach's priority exercises (the 3 × 50 lists) come first; the rest of the
   // legal pool is only used to top up when too few priority matches exist.
@@ -266,7 +266,7 @@ export function buildPackWorkout(
         // Finisher keeps the Main Workout's equipment flow: no new station for the last minutes.
         const fams = new Set(mainPicks.map((e) => equipmentFamilyOf(e.equipment)));
         const flowPool = pool.filter((e) => fams.has(equipmentFamilyOf(e.equipment)) || equipmentFamilyOf(e.equipment) === "bodyweight");
-        const src = flow && flowPool.length >= 3 ? flowPool : pool;
+        const src = flowPool.length >= finisherCount ? flowPool : pool;
         const first = usePriority ? pickPriorityByPattern(src, finisherCount, { exclude: used, seed: (input.seed ?? input.minutes) + 7, conditioningFirst: flow }) : [];
         const ex = new Set([...used, ...first.map((e) => e.id)]);
         const picks = first.length >= finisherCount ? first : [...first, ...pickBalanced(src, finisherCount - first.length, { exclude: ex })];
@@ -329,8 +329,10 @@ export function buildPackWorkout(
   blocks.push(heading("💪", `Main Workout (${input.format})`));
   if (protocolLine) blocks.push(para(protocolLine));
   const planned = (d: SessionPlan["main"], e: PoolExercise) => {
-    const sets = d.sets[0];
-    const unit = isTimedPosition(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${d.reps?.[0] ?? 10} reps`;
+    const sets = d.sets[1];
+    // Bodyweight strength work needs more reps than a loaded lift to be a real stimulus.
+    const reps = isBodyweight(e) ? Math.max(d.reps?.[1] ?? 10, 10) : (d.reps?.[0] ?? 10);
+    const unit = isTimedPosition(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
     return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets. ${d.tempo[0]!.toUpperCase()}${d.tempo.slice(1)}.`;
   };
   mainPicks.forEach((e, i) => {
