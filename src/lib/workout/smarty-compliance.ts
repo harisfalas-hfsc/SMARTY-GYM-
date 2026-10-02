@@ -4,7 +4,7 @@
 import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds, priorityShareViolation } from "./priority";
-import { replacementConfidence, variationTier, type Confidence } from "./movement";
+import { classify, isRelated, replacementConfidence, variationTier, type Confidence } from "./movement";
 import { prepTokens, prepAllowed, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
 import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
@@ -256,7 +256,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
   const pickFor = (fromRow: ComplianceExercise, role: Role, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean }) => {
     const present = new Set(allTokens(html).map((t) => t.id));
     const ranked = usable
-      .filter((c) => !present.has(c.id) && allowed(c))
+      .filter((c) => !present.has(c.id) && isRelated(classify(fromRow).primary, classify(c).primary) && allowed(c))
       .map((c) => ({ c, conf: replacementConfidence(fromRow, c, opts) }))
       .filter((x) => x.conf !== "LOW")
       .sort((x, y) =>
