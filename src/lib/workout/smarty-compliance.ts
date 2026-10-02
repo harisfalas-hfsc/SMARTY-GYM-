@@ -247,7 +247,9 @@ function fitDuration(w: ComplianceWorkout, library: ComplianceExercise[], lib: M
   const prepSteps: Array<() => string | null> = [
     () => trim(html, /🔥|Activation/, /💪|Main Workout/, /\b(\d{2,3})\s*(?:sec|s)\b/gi, 20),
     () => trim(html, /🔥|Activation/, /💪|Main Workout/, /\b(\d{1,2})\s*reps?\b/gi, 6),
+    () => trim(html, /🔥|Activation/, /💪|Main Workout/, /\b(\d)\s*(?:sets?|rounds?)\b/gi, 1),
     () => trim(html, /🧘|Cool/, /$^/, /\b(\d{2,3})\s*(?:sec|s)\b/gi, 20),
+    () => trim(html, /🧘|Cool/, /$^/, /\b(\d)\s*(?:sets?|rounds?|min|mins|minutes?)\b/gi, 1),
   ];
   for (let guard = 0; guard < 200 && prepOver(html); guard++) {
     const cur = estimateActivationMinutes(html) + estimateCooldownMinutes(html);
