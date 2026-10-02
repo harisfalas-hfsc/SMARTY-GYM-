@@ -190,7 +190,7 @@ const SETUP_EQUIPMENT_RE =
 
 /** Movement names that are setup-, rack-, bench- or spotter-dependent. */
 const SETUP_MOVEMENT_RE =
-  /\b(bench press|jm press|jm bench|guillotine|floor press|rack|power rack|squat rack|pin press|back squat|front squat|full squat|hack squat|overhead squat|zercher|good morning|leg press|leg extension|leg curl machine|lying leg curl|seated leg curl|pec deck|lat pulldown|pulldown|crossover|cable fly|cable crossover|machine chest press|machine shoulder press|chest press machine|smith|spotter|clean and press|clean and jerk|power clean|hang clean|muscle snatch|one-?arm snatch|snatch|jerk|preacher curl)\b/i;
+  /\b(bench press|leg (?:wide |narrow )?press|sled 45|jm press|jm bench|guillotine|floor press|rack|power rack|squat rack|pin press|back squat|front squat|full squat|hack squat|overhead squat|zercher|good morning|leg press|leg extension|leg curl machine|lying leg curl|seated leg curl|pec deck|lat pulldown|pulldown|crossover|cable fly|cable crossover|machine chest press|machine shoulder press|chest press machine|smith|spotter|clean and press|clean and jerk|power clean|hang clean|muscle snatch|one-?arm snatch|snatch|jerk|preacher curl)\b/i;
 
 /** Machine-strength names that must never be treated as cardio. */
 const MACHINE_STRENGTH_RE =
