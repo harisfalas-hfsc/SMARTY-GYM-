@@ -279,7 +279,7 @@ describe("clock-driven format contract", () => {
   const ex = (name: string, equipment: string | null = "body weight") => ({ name, equipment });
   const CLOCK = ["AMRAP", "EMOM", "CIRCUIT", "TABATA", "FOR TIME"] as const;
 
-  it("rejects high-skill and single-limb movements in every clock format", () => {
+  it("rejects high-skill movements in every clock format (judged by skill, not by 'one-arm')", () => {
     for (const f of CLOCK) {
       for (const n of [
         "Handstand Push-Up",
@@ -288,7 +288,7 @@ describe("clock-driven format contract", () => {
         "Planche Hold",
         "Muscle-Up",
         "Nordic Hamstring Curl",
-        "One-Arm Dumbbell Press",
+        "One-Arm Push-Up",
       ]) {
         expect(dynamicExerciseViolation(ex(n), "CALORIE BURNING", f)).toBeTruthy();
       }

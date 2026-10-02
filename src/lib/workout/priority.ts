@@ -9,53 +9,44 @@
  */
 import type { PoolExercise } from "./pool.server";
 
+// TIER 1 — the simplest effective, most familiar movement first. Technically
+// advanced or skill movements (Turkish get-up, pistol, muscle-up, planche,
+// levers, handstands, Olympic lifts, snatches, cleans) are NOT priority; they
+// stay legal only where the doctrine permits them.
 export const PRIORITY_BODYWEIGHT = [
-  "Push-Up", "Incline Push-Up", "Decline Push-Up", "Diamond Push-Up", "Pike Push-Up",
-  "Hand-Release Push-Up", "Shoulder Tap", "Plank to Push-Up", "Pull-Up", "Chin-Up",
-  "Neutral-Grip Pull-Up", "Inverted Row", "Bodyweight Squat", "Jump Squat", "Split Squat",
-  "Reverse Lunge", "Forward Lunge", "Walking Lunge", "Lateral Lunge", "Bulgarian Split Squat",
-  "Step-Up", "Single-Leg Squat", "Glute Bridge", "Single-Leg Glute Bridge", "Hip Thrust",
-  "Calf Raise", "Plank", "Side Plank", "Dead Bug", "Bird Dog", "Mountain Climber",
-  "Hollow Body Hold", "Sit-Up", "Crunch", "V-Up", "Leg Raise", "Russian Twist", "Burpee",
-  "Broad Jump", "Tuck Jump", "Jumping Jack", "High Knees", "Butt Kicks", "Skater",
-  "Bear Crawl", "Crab Walk", "Inchworm", "Shuttle Run", "Sprint", "Plank Jack",
+  "Bodyweight Squat", "Reverse Lunge", "Forward Lunge", "Walking Lunge", "Split Squat",
+  "Bulgarian Split Squat", "Step-Up", "Push-Up", "Wide-Grip Push-Up", "Incline Push-Up",
+  "Diamond Push-Up", "Pull-Up", "Chin-Up", "Inverted Row", "Glute Bridge", "Hip Thrust",
+  "Calf Raise", "Sit-Up", "Crunch", "Leg Raise", "Dead Bug", "Plank", "Side Plank",
+  "Mountain Climber", "Burpee", "Jumping Jack", "High Knees", "Butt Kicks", "Skater",
+  "Bear Crawl", "Inchworm", "Shuttle Run", "Sprint", "Jump Squat", "Decline Push-Up",
+  "Shoulder Tap", "Single-Leg Glute Bridge", "Bird Dog", "Lateral Lunge", "Neutral-Grip Pull-Up",
 ];
 
 export const PRIORITY_EQUIPMENT = [
-  "Dumbbell Bench Press", "Dumbbell Shoulder Press", "Dumbbell Row", "Single-Arm Dumbbell Row",
-  "Goblet Squat", "Dumbbell Reverse Lunge", "Dumbbell Walking Lunge",
-  "Dumbbell Bulgarian Split Squat", "Dumbbell Romanian Deadlift",
-  "Single-Leg Dumbbell Romanian Deadlift", "Dumbbell Deadlift", "Dumbbell Hip Thrust",
-  "Dumbbell Thruster", "Dumbbell Clean", "Dumbbell Snatch", "Dumbbell Push Press",
-  "Dumbbell Devil Press", "Dumbbell Renegade Row",
-  "Kettlebell Goblet Squat", "Kettlebell Swing", "Kettlebell Deadlift",
-  "Kettlebell Romanian Deadlift", "Kettlebell Clean", "Kettlebell Press",
-  "Kettlebell Push Press", "Kettlebell Snatch", "Kettlebell Row", "Kettlebell Reverse Lunge",
-  "Kettlebell Front Rack Squat", "Turkish Get-Up", "Kettlebell Clean & Press",
-  "Kettlebell Thruster",
-  "TRX Row", "TRX Single-Arm Row", "TRX Push-Up", "TRX Squat", "TRX Reverse Lunge",
-  "TRX Split Squat", "TRX Mountain Climber", "TRX Knee Tuck",
-  "Medicine Ball Slam", "Medicine Ball Chest Pass", "Medicine Ball Rotational Throw",
-  "Medicine Ball Overhead Throw", "Medicine Ball Squat to Press", "Medicine Ball Russian Twist",
-  "Medicine Ball Lunge", "Medicine Ball Sit-Up",
-  "Barbell Deadlift", "Barbell Back Squat",
+  "Goblet Squat", "Dumbbell Squat", "Dumbbell Reverse Lunge", "Dumbbell Forward Lunge",
+  "Dumbbell Walking Lunge", "Dumbbell Romanian Deadlift", "Dumbbell Row", "Single-Arm Dumbbell Row",
+  "Dumbbell Bench Press", "Dumbbell Shoulder Press", "Dumbbell Push Press", "Dumbbell Thruster",
+  "Single-Arm Dumbbell Thruster", "Dumbbell Bulgarian Split Squat", "Dumbbell Deadlift", "Dumbbell Hip Thrust",
+  "Kettlebell Goblet Squat", "Kettlebell Swing", "Single-Arm Kettlebell Swing", "Kettlebell Deadlift",
+  "Kettlebell Row", "Kettlebell Press", "Kettlebell Push Press", "Kettlebell Thruster", "Kettlebell Reverse Lunge",
+  "TRX Row", "TRX Push-Up", "TRX Squat", "TRX Reverse Lunge", "TRX Split Squat", "TRX Mountain Climber",
+  "Medicine Ball Slam", "Medicine Ball Squat to Press", "Medicine Ball Lunge", "Medicine Ball Sit-Up",
+  "Medicine Ball Chest Pass",
 ];
 
 export const PRIORITY_FULL_GYM = [
-  "Leg Press", "Leg Extension", "Leg Curl", "Hack Squat", "Smith Machine Squat",
-  "Smith Machine Reverse Lunge", "Hip Thrust Machine", "Glute Kickback Machine",
-  "Seated Calf Raise", "Standing Calf Raise",
-  "Machine Chest Press", "Incline Chest Press Machine", "Pec Deck", "Cable Chest Fly",
-  "Machine Shoulder Press", "Cable Lateral Raise", "Dumbbell Bench Press",
-  "Dumbbell Incline Bench Press", "Barbell Bench Press", "Barbell Overhead Press",
-  "Lat Pulldown", "Seated Cable Row", "Chest-Supported Row Machine", "Assisted Pull-Up",
-  "Pull-Up", "Chin-Up", "Cable Straight-Arm Pulldown", "Machine High Row", "Barbell Row",
-  "Single-Arm Dumbbell Row",
-  "Cable Biceps Curl", "Dumbbell Biceps Curl", "Hammer Curl", "Preacher Curl Machine",
-  "Cable Triceps Pushdown", "Overhead Cable Triceps Extension", "Assisted Dip", "Triceps Dip",
-  "Cable Crunch", "Machine Ab Crunch", "Hanging Knee Raise", "Hanging Leg Raise",
-  "Cable Wood Chop", "Cable Pallof Press", "Ab Wheel Rollout",
-  "Barbell Deadlift", "Romanian Deadlift", "Kettlebell Swing", "Dumbbell Thruster",
+  "Barbell Bench Press", "Incline Bench Press", "Barbell Back Squat", "Smith Machine Squat", "Hack Squat",
+  "Leg Press", "Leg Extension", "Leg Curl", "Hip Thrust", "Lat Pulldown", "Seated Cable Row",
+  "Chest-Supported Row Machine", "Machine Chest Press", "Pec Deck", "Machine Shoulder Press",
+  "Barbell Row", "Dumbbell Row", "Romanian Deadlift", "Barbell Deadlift", "Dumbbell Bench Press",
+  "Dumbbell Incline Bench Press", "Barbell Overhead Press", "Assisted Pull-Up", "Pull-Up", "Chin-Up",
+  "Single-Arm Dumbbell Row", "Seated Calf Raise", "Standing Calf Raise",
+  // Common gym accessories — familiar, after the compound staples.
+  "Cable Biceps Curl", "Dumbbell Biceps Curl", "Hammer Curl", "Cable Triceps Pushdown",
+  "Overhead Cable Triceps Extension", "Triceps Dip", "Cable Lateral Raise", "Cable Chest Fly",
+  "Cable Crunch", "Hanging Knee Raise", "Hanging Leg Raise", "Cable Pallof Press",
+  "Kettlebell Swing", "Dumbbell Thruster",
 ];
 
 export const ALL_PRIORITY_NAMES = Array.from(
@@ -101,12 +92,17 @@ function tokens(s: string): string[] {
 export const PRIORITY_ALIASES: Record<string, string[]> = {
   "Push-Up": ["push-up"],
   "Hand-Release Push-Up": ["push-up"],
-  "Pike Push-Up": ["pike-to-cobra push-up"],
-  "Plank to Push-Up": ["push-up to side plank"],
-  "Bodyweight Squat": ["squat to overhead reach", "bodyweight drop jump squat"],
+  "Bodyweight Squat": ["squat", "quads (bodyweight squat)", "squat to overhead reach"],
+  "Wide-Grip Push-Up": ["wide-grip push-up"],
+  "Reverse Lunge": ["reverse lunge", "dumbbell rear lunge"],
+  "Jump Squat": ["jump squat"],
+  "Dumbbell Squat": ["dumbbell squat", "dumbbell goblet squat"],
+  "Dumbbell Forward Lunge": ["dumbbell lunge"],
+  "Single-Arm Dumbbell Thruster": ["dumbbell one arm thruster", "dumbbell thruster"],
+  "Single-Arm Kettlebell Swing": ["kettlebell one arm swing", "kettlebell swing"],
+  "Incline Bench Press": ["barbell incline bench press", "dumbbell incline bench press"],
   "Split Squat": ["split squats"],
-  "Reverse Lunge": ["dumbbell rear lunge", "barbell rear lunge"],
-  "Forward Lunge": ["forward lunge (male)", "walking lunge"],
+  "Forward Lunge": ["forward lunge", "forward lunge (male)", "walking lunge"],
   "Bulgarian Split Squat": ["split squats", "dumbbell single leg split squat"],
   "Step-Up": ["dumbbell step-up", "barbell step-up"],
   "Glute Bridge": ["low glute bridge on floor", "glute bridge march"],
@@ -118,13 +114,11 @@ export const PRIORITY_ALIASES: Record<string, string[]> = {
   "Sit-Up": ["sit-up with arms on chest", "arms overhead full sit-up (male)"],
   "Crunch": ["crunch floor"],
   "Leg Raise": ["lying leg raise flat bench"],
-  "Tuck Jump": ["star jump (male)", "forward jump"],
-  "Broad Jump": ["forward jump"],
   "Jumping Jack": ["jack jump (male)", "star jump (male)"],
+  "Burpee": ["burpee", "jack burpee"],
   "High Knees": ["high knee against wall"],
   "Shuttle Run": ["run"],
   "Sprint": ["run"],
-  "Plank Jack": ["jack burpee"],
   "Dumbbell Shoulder Press": ["dumbbell one arm shoulder press", "dumbbell arnold press"],
   "Dumbbell Row": ["dumbbell bent over row"],
   "Single-Arm Dumbbell Row": ["dumbbell one arm bent-over row"],
@@ -133,26 +127,18 @@ export const PRIORITY_ALIASES: Record<string, string[]> = {
   "Dumbbell Bulgarian Split Squat": ["dumbbell single leg split squat"],
   "Dumbbell Hip Thrust": ["barbell glute bridge"],
   "Dumbbell Thruster": ["kettlebell thruster", "barbell thruster"],
-  "Dumbbell Renegade Row": ["kettlebell alternating renegade row"],
-  "Dumbbell Devil Press": ["burpee", "dumbbell push press"],
   "Kettlebell Deadlift": ["kettlebell sumo high pull"],
   "Kettlebell Reverse Lunge": ["kettlebell lunge pass through"],
-  "Kettlebell Clean & Press": ["kettlebell one arm clean and jerk"],
   "TRX Row": ["suspended row", "inverted row with straps"],
-  "TRX Single-Arm Row": ["suspended row"],
   "TRX Push-Up": ["suspended push-up"],
   "TRX Split Squat": ["suspended split squat"],
   "TRX Reverse Lunge": ["suspended split squat"],
-  "TRX Knee Tuck": ["suspended reverse crunch"],
   "TRX Mountain Climber": ["suspended abdominal fallout"],
   "Medicine Ball Slam": ["medicine ball overhead slam"],
-  "Medicine Ball Rotational Throw": ["medicine ball supine chest throw"],
   "Medicine Ball Squat to Press": ["medicine ball chest push from 3 point stance"],
   "Barbell Back Squat": ["barbell full squat", "barbell high bar squat"],
   "Smith Machine Squat": ["smith squat", "smith full squat"],
-  "Smith Machine Reverse Lunge": ["smith single leg split squat"],
   "Hip Thrust Machine": ["barbell glute bridge"],
-  "Glute Kickback Machine": ["cable kickback", "cable standing hip extension"],
   "Pec Deck": ["cable middle fly", "dumbbell fly"],
   "Cable Chest Fly": ["cable standing fly", "cable middle fly"],
   "Lat Pulldown": ["cable lat pulldown full range of motion", "cable pulldown"],
@@ -160,10 +146,7 @@ export const PRIORITY_ALIASES: Record<string, string[]> = {
   "Barbell Row": ["barbell bent over row", "barbell pendlay row"],
   "Barbell Overhead Press": ["barbell seated overhead press"],
   "Cable Crunch": ["cable kneeling crunch"],
-  "Machine Ab Crunch": ["lever seated crunch"],
-  "Cable Wood Chop": ["band horizontal pallof press"],
   "Cable Pallof Press": ["band horizontal pallof press", "band vertical pallof press"],
-  "Ab Wheel Rollout": ["wheel rollout", "standing wheel rollerout"],
   "Triceps Dip": ["triceps dip", "bench dip (knees bent)"],
 };
 
@@ -173,10 +156,12 @@ export const PRIORITY_ALIASES: Record<string, string[]> = {
  */
 export function resolvePriority(name: string, library: PoolExercise[], max = 2): PoolExercise[] {
   const byName = new Map(library.map((e) => [e.name.toLowerCase(), e] as const));
-  const aliased = (PRIORITY_ALIASES[name] ?? [])
+  // The library's own exact spelling always wins, then hand-checked aliases.
+  const exact = byName.get(name.toLowerCase());
+  const aliased = [...(exact ? [name] : []), ...(PRIORITY_ALIASES[name] ?? [])]
     .map((n) => byName.get(n.toLowerCase()))
     .filter((e): e is PoolExercise => !!e);
-  if (aliased.length) return aliased.slice(0, max);
+  if (aliased.length) return [...new Map(aliased.map((e) => [e.id, e])).values()].slice(0, max);
   const want = tokens(name);
   if (!want.length) return [];
   const scored: { e: PoolExercise; extra: number }[] = [];
@@ -184,10 +169,12 @@ export function resolvePriority(name: string, library: PoolExercise[], max = 2):
     const have = tokens(e.name);
     if (!want.every((w) => have.includes(w))) continue;
     if (/\(.*pov\)|\bv\.\s*\d/i.test(e.name)) continue; // camera-angle duplicates
+    // A modifier that changes the movement is a different exercise, not the coach's one.
+    if (/\b(side|reverse grip|depth|sit|wall|ski|back and forth|push to|drop|hanging|march|with straps|bench|on box|clap|one leg|single leg)\b/i.test(e.name) && !/\b(side|reverse grip|depth|sit|wall|ski|drop|hanging|march|bench|single leg|one leg)\b/i.test(name)) continue;
     scored.push({ e, extra: have.length - want.length });
   }
   scored.sort((a, b) => a.extra - b.extra || a.e.name.length - b.e.name.length);
-  return scored.filter((s) => s.extra <= 2).slice(0, max).map((s) => s.e);
+  return scored.filter((s) => s.extra <= 1).slice(0, max).map((s) => s.e);
 }
 
 const cache = new WeakMap<PoolExercise[], Set<string>>();
@@ -215,12 +202,23 @@ export function priorityShortfall(html: string, library: PoolExercise[], categor
   const main = end > 0 ? rest.slice(0, end) : rest;
   const ids = [...main.matchAll(/\{\{exercise:([^:}]+):/g)].map((m) => m[1]!);
   if (!ids.length) return null;
+  return priorityShareViolation(ids, library);
+}
+
+/** THE 70% priority-share rule, shared by the generator and the stored-workout audit. */
+export const PRIORITY_SHARE = 0.7;
+export function priorityShareViolation(workIds: string[], library: PoolExercise[]): string | null {
+  if (!workIds.length) return null;
   const prio = priorityIds(library);
-  if (prio.size < 6) return null; // environment has too few priority matches to demand it
-  const hits = ids.filter((id) => prio.has(id)).length;
-  return hits / ids.length >= 0.7
+  if (!prio.size) return null; // the legal pool holds no priority movement — never force one
+  // Preference subordinate to hard rules: never demand more distinct priority
+  // movements than the legal pool actually holds.
+  const unique = [...new Set(workIds)];
+  const hits = unique.filter((id) => prio.has(id)).length;
+  const need = Math.min(Math.round(unique.length * PRIORITY_SHARE), prio.size);
+  return hits >= need
     ? null
-    : `Only ${hits} of ${ids.length} main exercises are coach priority exercises (need at least 70%).`;
+    : `Only ${hits} of ${workIds.length} main exercises are coach priority exercises (need at least ${PRIORITY_SHARE * 100}%).`;
 }
 
 type Env = "BODYWEIGHT" | "EQUIPMENT" | "FULL_GYM";
@@ -249,8 +247,9 @@ export function orderedPriority(pool: PoolExercise[]): PoolExercise[] {
   const out: PoolExercise[] = [];
   const seen = new Set<string>();
   for (const n of names) {
-    const e = resolvePriority(n, pool, 1)[0];
-    if (e && !seen.has(e.id)) {
+    // Up to two library spellings per coach movement (e.g. burpee / jack burpee).
+    for (const e of resolvePriority(n, pool, 2)) {
+      if (seen.has(e.id)) continue;
       seen.add(e.id);
       out.push(e);
     }

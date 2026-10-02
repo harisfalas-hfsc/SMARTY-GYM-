@@ -1,10 +1,11 @@
+import { isLegalExercise } from "./rules";
 // Deterministic rule compliance for ready-made Smarty Workouts.
 // Audits a stored workout against the same doctrine the engine enforces and,
 // when it breaks a rule, swaps exercises only (dose, sections and text stay).
 import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
-import { priorityIds } from "./priority";
-import { prepTokens, prepAllowed, ACTIVATION_NAMES } from "./prep-vocabulary";
+import { priorityIds, priorityShareViolation } from "./priority";
+import { prepTokens, prepAllowed, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
 import { isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import type { PoolExercise } from "./pool.server";
@@ -70,6 +71,8 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     if (exerciseRuleBreaks({ name, equipment: null, body_part: null, target_muscle: null } as never, { ...ctx, section: t.section }).length)
       s.add(t.section === "activation" ? "Activation not mobility/stability" : "Cool Down not stretch/mobility");
   }
+  for (const st of steps.filter((x) => x.section === "Activation" || x.section === "Warm-up"))
+    if (activationDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Activation dose above 10 reps / 30 sec or in sets");
   if (activationRuleBreak(prep.filter((t) => t.section === "activation").map((t) => lib.get(t.id)?.name ?? t.name))) s.add("Activation mostly passive stretches");
   for (const sec of ["activation", "cooldown"] as const) {
     const ids = prep.filter((t) => t.section === sec).map((t) => t.id);
@@ -83,9 +86,8 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     if (D.cooldownOverflowViolation(estimateCooldownMinutes(html), t)) s.add("Cool Down too long");
   }
   if (!NO_PRIORITY.has(cat) && rows.length) {
-    const prio = priorityIds(library);
-    const hits = rows.filter((r) => prio.has(r.id)).length;
-    if (hits / rows.length < 0.7) s.add("Too few priority exercises");
+    const legal = library.filter((e) => isLegalExercise(e, { category: cat as never, format: (w.format ?? "REPS & SETS") as never }));
+    if (priorityShareViolation(rows.map((r) => r.id), legal)) s.add("Too few priority exercises");
   }
   return [...s];
 }
@@ -156,7 +158,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
   const prio = priorityIds(library);
   const cat = w.category as Category;
   const fmt = (w.format ?? "") as Format;
-  let html = w.main_workout ?? "";
+  let html = clampActivationDoses(w.main_workout ?? "", isTimedPosition);
   const before = complianceIssues(w, library, lib);
   const swaps: Array<{ from: string; to: string }> = [];
   if (!before.length) return { html, swaps, before, after: before };

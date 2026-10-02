@@ -14,6 +14,7 @@ const lib = [
   ex("0011", "Glute Bridge", "body weight", "upper legs"),
   ex("0012", "hamstring stretch", "body weight", "upper legs"),
   ex("0013", "Pigeon Pose", "body weight", "upper legs"),
+  ex("0015", "triceps dip", "body weight", "upper arms"),
 ];
 const li = (dose: string, id: string, name: string) => `<ul><li><p>${dose} {{exercise:${id}:${name}}}</p></li></ul>`;
 const html = (ids: string[]) =>
@@ -21,7 +22,7 @@ const html = (ids: string[]) =>
 
 describe("Smarty Workout rule compliance", () => {
   it("flags a session without enough priority exercises and fixes it by swapping exercises only", () => {
-    const w = { id: "w", name: "W", category: "STRENGTH", format: "REPS & SETS", difficulty_stars: 2, main_workout: html(["0009", "0001", "0002"]) };
+    const w = { id: "w", name: "W", category: "STRENGTH", format: "REPS & SETS", difficulty_stars: 2, main_workout: html(["0009", "0015", "0001"]) };
     expect(complianceIssues(w, lib)).toContain("Too few priority exercises");
     const r = remediate(w, lib);
     expect(r.after).toEqual([]);

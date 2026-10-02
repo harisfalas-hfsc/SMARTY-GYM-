@@ -1,3 +1,5 @@
+import { isActivationRehearsal } from "./prep-vocabulary";
+import { orderedPriority } from "./priority";
 import { priorityIds } from "./priority";
 import { isCardioRhythm, isLegalExercise, isPassiveStretch } from "./rules";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -166,7 +168,7 @@ const EQUIPMENT_LABELS: Record<string, string[]> = {
   kettlebells: ["kettlebell"],
   barbell: ["barbell", "ez barbell", "olympic barbell", "trap bar"],
   bands: ["band", "resistance band"],
-  trx: ["assisted"],
+  trx: [],
   machines: [
     "cable",
     "leverage machine",
@@ -195,6 +197,8 @@ export function matchesSelectedEquipment(
     ),
   );
   if (known) return true;
+  // TRX / suspension work is catalogued by name ("suspended row"), not equipment.
+  if (selected.includes("trx") && /\b(suspended|suspension|trx)\b/i.test(e.name)) return true;
   // "Other" free-text: only honoured when the library actually has that apparatus.
   if (selected.includes("other") && custom.length) {
     return custom.some(
@@ -269,7 +273,7 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // library itself marks as advanced skill material.
   if (f.level === "beginner") {
     const safe = pool.filter((e) => isLegalExercise(e, { category: f.category, format: f.format ?? "REPS & SETS", level: "beginner" }));
-    if (safe.length >= 12) pool = safe;
+    if (safe.length >= 3) pool = safe;
   }
 
   // 3b. CARDIO stays aerobic (§4). High-fatigue conditioning vocabulary is
@@ -295,7 +299,11 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
     const tagged = pool.filter((e) =>
       (e.smarty_tags ?? []).some((t) => ["challenge", "hiit", "cardio"].includes(t)),
     );
-    if (tagged.length >= 12) pool = tagged;
+    // Tags narrow the vocabulary but never remove the coach's priority movements (priority.ts).
+    if (tagged.length >= 12) {
+      const prio = new Set(orderedPriority(pool).map((e) => e.id));
+      pool = pool.filter((e) => prio.has(e.id) || tagged.includes(e));
+    }
   }
 
   // 5. Body focus (§15) — a HARD filter for EVERY category that carries one.
@@ -350,7 +358,7 @@ export function nameStem(name: string): string {
 
 /** Movement-prep vocabulary: dynamic mobility, activation and patterning. */
 export const ACTIVATION_OK_RE =
-  /\b(bridge|bird dog|dead bug|clamshell|circle|circles|leg swing|swing leg|march|walkout|inchworm|cat|scapular|wall slide|pull-?apart|hip opener|ankle|good morning|dynamic|rotation|twist|reach|crawl|glute|abduction|adduction|shoulder|hip|thoracic|lunge|squat|stretch|mobility|activation|band)\b/i;
+  /\b(bridge|bird dog|dead bug|clamshell|circle|circles|leg swing|swing leg|march|walkout|inchworm|cat|scapular|wall slide|pull-?apart|hip opener|ankle|good morning|dynamic|rotation|twist|reach|crawl|glute|abduction|adduction|shoulder|hip|thoracic|lunge|squat|push-?up|stretch|mobility|activation|band)\b/i;
 
 /** Never movement prep — load, impact, skill or maximal strength. */
 export const PREP_BAN_RE =
@@ -379,7 +387,8 @@ function prepFilter(
   return all.filter((e) => {
     if (banned.has(e.id)) return false;
     if (!prepEquipmentOk(e, selectedEquipment)) return false;
-    if (PREP_BAN_RE.test(text(e))) return false;
+    // Light bodyweight rehearsal (squat, lunge, push-up) is legal Activation prep — prep-vocabulary.ts decides.
+    if (PREP_BAN_RE.test(text(e)) && !(isBodyweight(e) && isActivationRehearsal(e.name))) return false;
     if (HOME_APPARATUS_RE.test(text(e))) return false;
     if ((e.difficulty ?? "").toLowerCase() === "advanced") return false;
     if (strict && !match.test(e.name)) return false;

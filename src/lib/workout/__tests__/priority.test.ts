@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { priorityIds, resolvePriority } from "../priority";
+import { ALL_PRIORITY_NAMES, priorityIds, resolvePriority } from "../priority";
 import type { PoolExercise } from "../pool.server";
 
 const ex = (id: string, name: string) => ({ id, name }) as PoolExercise;
@@ -19,6 +19,9 @@ describe("coach priority exercises", () => {
     expect(resolvePriority("Goblet Squat", lib)[0].name).toBe("dumbbell goblet squat");
     expect(resolvePriority("TRX Row", lib)[0].name).toBe("suspended row");
     expect(resolvePriority("Seated Cable Row", lib)[0].name).toBe("cable seated row");
+  });
+  it("keeps advanced skill movements out of every priority list", () => {
+    for (const n of ALL_PRIORITY_NAMES) expect(/turkish|get-?up|pistol|muscle-?up|planche|lever|handstand|snatch|clean/i.test(n)).toBe(false);
   });
   it("never invents an exercise that is not in the library", () => {
     expect(resolvePriority("Bird Dog", lib)).toEqual([]);

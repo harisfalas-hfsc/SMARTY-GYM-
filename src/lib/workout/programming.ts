@@ -15,6 +15,7 @@ import {
   doctrinePrompt,
   HUMAN_REALISM_PROMPT,
 
+  countTransitions,
   equipmentFamilyOf,
   isRepsAndSetsOnly,
   legalFormats,
@@ -387,12 +388,8 @@ function intensityDirective(stars: number, category: Category): string {
 /** §12/§32 — one authoritative family definition, owned by the doctrine. */
 export { equipmentFamilyOf as equipmentFamily } from "./doctrine";
 
-/** Number of station changes across an ordered list of exercises. */
-export function countTransitions(families: string[]): number {
-  let switches = 0;
-  for (let i = 1; i < families.length; i++) if (families[i] !== families[i - 1]) switches += 1;
-  return switches;
-}
+/** Station-change count — defined once in the doctrine. */
+export { countTransitions } from "./doctrine";
 
 function transitionBudget(category: Category, format: Format, mainMax: number): number {
   const dense =

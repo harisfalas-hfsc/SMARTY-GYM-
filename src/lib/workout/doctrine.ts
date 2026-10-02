@@ -141,11 +141,11 @@ export const STATIC_HOLD_RE =
   /\b(hold|plank|isometric|wall sit|hollow|l-?sit|bridge hold|static)\b/i;
 
 const PILATES_BAN_RE =
-  /\b(kettlebell|barbell|machine|cable|smith|sled|jump|jumping|plyo|burpee|sprint|box jump|snatch|clean|jerk|thruster)\b/i;
+  /\b(dip|boxing|hook|jab|punch|uppercut|balance board|kettlebell|barbell|machine|cable|smith|sled|jump|jumping|plyo|burpee|sprint|box jump|snatch|clean|jerk|thruster|mountain climber|high knees?|butt kicks?|skater|jacks?|run|running)\b/i;
 
 /** §8 — Mobility & Stability is light: no heavy loading, no conditioning. */
 const MOBILITY_BAN_RE =
-  /\b(jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|push-?up|pushup|crunch|sit-?up|leg raise|kettlebell|barbell|smith|leverage|sled|machine|cable|box jump|deadlift|bench press|squat rack|heavy|curl|shrug|pullover|fly|kickback|triceps extension|lateral raise|front raise)\b/i;
+  /\b(dip|boxing|hook|jab|punch|uppercut|crawl|jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|push-?up|pushup|crunch|sit-?up|leg raise|kettlebell|barbell|smith|leverage|sled|machine|cable|box jump|deadlift|bench press|squat rack|heavy|curl|shrug|pullover|fly|kickback|triceps extension|lateral raise|front raise|mountain climber|high knees?|butt kicks?|skater|jacks?|run|running|sprint|body-up)\b/i;
 
 /**
  * §3 — RECOVERY is controlled recovery work: breathing, gentle mobility,
@@ -153,7 +153,7 @@ const MOBILITY_BAN_RE =
  * It may never turn into strength, conditioning, HIIT or metabolic work.
  */
 const RECOVERY_BAN_RE =
-  /\b(jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|crunch|sit-?up|deadlift|bench press|heavy|barbell|kettlebell|machine|cable|smith|leverage|sled|swing|box jump|mountain climber|high knee|skater|battle rope|jump rope|rower|row erg|skierg|assault bike|air bike|treadmill|push-?up|pushup|pull-?up|chin-?up|dip|squat jump|run|carry|dumbbell|curl|press|step[- ]?up|lunge|weighted|medicine ball|shrug|pullover|fly)\b/i;
+  /\b(crawl|split squats?|row|boxing|hook|jab|punch|uppercut|jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|crunch|sit-?up|deadlift|bench press|heavy|barbell|kettlebell|machine|cable|smith|leverage|sled|swing|box jump|mountain climber|high knee|skater|battle rope|jump rope|rower|row erg|skierg|assault bike|air bike|treadmill|push-?up|pushup|pull-?up|chin-?up|dip|squat jump|run|carry|dumbbell|curl|press|step[- ]?up|lunge|weighted|medicine ball|shrug|pullover|fly)\b/i;
 
 const MICRO_BAN_RE =
   /\b(dumbbell|kettlebell|barbell|band|machine|bike|rower|rope|treadmill|sled|cable|smith|ez|olympic|medicine ball|bosu|stability ball|pull-?up|chin-?up|hang(ing)?|dip bar|parallette|bench press|box jump|doorway|door frame)\b/i;
@@ -190,19 +190,22 @@ const SETUP_EQUIPMENT_RE =
 
 /** Movement names that are setup-, rack-, bench- or spotter-dependent. */
 const SETUP_MOVEMENT_RE =
-  /\b(bench press|jm press|jm bench|guillotine|floor press|rack|power rack|squat rack|pin press|back squat|front squat|full squat|hack squat|overhead squat|zercher|good morning|leg press|leg extension|leg curl machine|lying leg curl|seated leg curl|pec deck|lat pulldown|pulldown|crossover|cable fly|cable crossover|machine chest press|machine shoulder press|chest press machine|smith|spotter|clean and press|clean and jerk|power clean|hang clean|muscle snatch|one-?arm snatch|snatch|jerk|preacher curl)\b/i;
+  /\b(bench press|leg (?:wide |narrow )?press|sled 45|jm press|jm bench|guillotine|floor press|rack|power rack|squat rack|pin press|back squat|front squat|full squat|hack squat|overhead squat|zercher|good morning|leg press|leg extension|leg curl machine|lying leg curl|seated leg curl|pec deck|lat pulldown|pulldown|crossover|cable fly|cable crossover|machine chest press|machine shoulder press|chest press machine|smith|spotter|clean and press|clean and jerk|power clean|hang clean|muscle snatch|one-?arm snatch|snatch|jerk|preacher curl)\b/i;
 
 /** Machine-strength names that must never be treated as cardio. */
 const MACHINE_STRENGTH_RE =
   /\b(leverage|smith|selectorized|pec deck|lat pulldown|leg press|leg extension|leg curl|machine (chest|shoulder|row|press)|cable)\b/i;
 
 /**
- * High-skill gymnastic and single-limb movements. Nobody hits a handstand
+ * High-skill gymnastic movements. Skill is judged by technical complexity,
+ * never by the words "one-arm" / "single-arm": a single-arm dumbbell row,
+ * kettlebell swing or dumbbell thruster is normal training vocabulary; a
+ * one-arm push-up or pull-up is skill work. Nobody hits a handstand
  * push-up or a pistol squat under a running clock in a conditioning session —
  * these are skill work, never calorie-burning vocabulary.
  */
 export const HIGH_SKILL_RE =
-  /\b(handstand|hand stand|pistol|shrimp squat|archer|planche|front lever|back lever|human flag|muscle-?up|nordic|one-?arm|one arm|single-?arm|single arm|one-?legged squat|iron cross|turkish get-?up|get-?up|windmill|bent press)\b/i;
+  /\b(handstand|hand stand|pistol|shrimp squat|archer|planche|front lever|back lever|human flag|muscle-?up|nordic|(?:one|single)[- ]?arm (?:push-?up|pull-?up|chin-?up|handstand)|one-?legged squat|iron cross|turkish get-?up|get-?up|windmill|bent press)\b/i;
 
 /**
  * HUMAN REALISM (global).
@@ -385,7 +388,7 @@ export function dynamicExerciseViolation(
 
   const implementPower = isImplementPower(e.name);
   if (HIGH_SKILL_RE.test(name) && !(implementPower && !/\b(turkish|get-?up|windmill)\b/.test(name)))
-    return `"${e.name}" is a high-skill or single-limb movement and is never programmed inside a ${format} session.`;
+    return `"${e.name}" is a high-skill gymnastic movement and is never programmed inside a ${format} session.`;
 
   const isErgo = ERGOMETER_RE.test(both) && !MACHINE_STRENGTH_RE.test(name);
   if (isErgo) return null;
@@ -686,6 +689,41 @@ export function equipmentFamilyViolation(
   if (families.size > limit)
     return `The session spans ${families.size} equipment families (${[...families].join(", ")}) — a ${format} ${category} session may use at most ${limit} beyond bodyweight.`;
   return null;
+}
+
+/** Number of station (equipment-family) changes across an ordered list. */
+export function countTransitions(families: string[]): number {
+  let switches = 0;
+  for (let i = 1; i < families.length; i++) if (families[i] !== families[i - 1]) switches += 1;
+  return switches;
+}
+
+/**
+ * §13 HUMAN FLOW — HARD rule for clock-driven formats. A dynamic block is a
+ * flow, not a tour of the gym: every implement family is one contiguous block
+ * (bodyweight moves may sit between, the implement is never picked up twice),
+ * and the block changes station at most ceil(n/2) times. AVAILABLE equipment
+ * is never PREFERRED equipment — the format decides.
+ */
+export function stationFlowViolation(exercises: ExerciseLike[], format: Format, label = "Main Workout"): string | null {
+  if (!isDynamicFormat(format) || exercises.length < 3) return null;
+  const fams = exercises.map((e) => equipmentFamilyOf(e.equipment));
+  const implementRuns = fams.filter((f) => f !== "bodyweight").filter((f, i, a) => i === 0 || a[i - 1] !== f);
+  if (new Set(implementRuns).size !== implementRuns.length)
+    return `${label} picks the same equipment back up after switching away — group each implement into one block so the ${format} flows.`;
+  const changes = countTransitions(fams);
+  const budget = Math.ceil(exercises.length / 2);
+  if (changes > budget)
+    return `${label} changes station ${changes} times (limit ${budget}) — a ${format} must flow without constant equipment changes.`;
+  return null;
+}
+
+/** §15 — a dynamic Finisher keeps the Main Workout's equipment; no new station for the last minutes. */
+export function finisherFlowViolation(main: ExerciseLike[], finisher: ExerciseLike[], format: Format): string | null {
+  if (!isDynamicFormat(format) || !finisher.length || !main.length) return null;
+  const mainFams = new Set(main.map((e) => equipmentFamilyOf(e.equipment)));
+  const added = finisher.map((e) => equipmentFamilyOf(e.equipment)).filter((f) => f !== "bodyweight" && !mainFams.has(f));
+  return added.length ? `The Finisher introduces new equipment (${[...new Set(added)].join(", ")}) — it must keep the Main Workout's flow.` : null;
 }
 
 // --- 19. Time math ----------------------------------------------------------

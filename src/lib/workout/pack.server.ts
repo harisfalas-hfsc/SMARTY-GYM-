@@ -1,11 +1,14 @@
-import { pickPriorityByPattern } from "./priority";
+import { orderedPriority, pickPriorityByPattern } from "./priority";
 // Deterministic template ("pack") engine.
 // Builds a fully compliant session straight from the filtered pool — no model
 // involved. Used as the reliability fallback when the AI cannot produce a
 // workout that passes enforcement + validation.
 import type { PoolExercise } from "./pool.server";
 import { pickPrep, STRETCH_RE } from "./pool.server";
-import { dominantRegion, regionOf } from "./doctrine";
+import { dominantRegion, equipmentFamilyLimit, equipmentFamilyOf, isDynamicFormat, regionOf } from "./doctrine";
+import type { SessionPlan } from "./programming";
+import { prepAllowed } from "./prep-vocabulary";
+import { isCardioRhythm, isTimedPosition, LIGHT_SET_CAP } from "./rules";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
@@ -19,7 +22,37 @@ export type PackInput = {
   activationPool?: PoolExercise[];
   cooldownPool?: PoolExercise[];
   seed?: number;
+  /** Blueprint decision (programming.ts) — authoritative. No Finisher when false. */
+  finisher?: boolean;
+  /** The session blueprint — counts and doses come from here when present. */
+  plan?: Pick<SessionPlan, "mainCount" | "finisherCount" | "main" | "finisher">;
 };
+
+/**
+ * Human flow: keep at most the legal number of implement families (replacing
+ * stray rows with legal rows from the kept families or bodyweight) and, in a
+ * timed format, group each implement into one contiguous block.
+ */
+function flowGroup(picks: PoolExercise[], pool: PoolExercise[], input: PackInput, used: Set<string>): PoolExercise[] {
+  const fam = (e: PoolExercise) => equipmentFamilyOf(e.equipment);
+  const counts = new Map<string, number>();
+  for (const e of picks) if (fam(e) !== "bodyweight") counts.set(fam(e), (counts.get(fam(e)) ?? 0) + 1);
+  const keep = new Set([...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, equipmentFamilyLimit(input.category, input.format)).map(([f]) => f));
+  const ok = (e: PoolExercise) => fam(e) === "bodyweight" || keep.has(fam(e));
+  const taken = new Set([...used, ...picks.map((e) => e.id)]);
+  let out = picks.map((e) => {
+    if (ok(e)) return e;
+    const alt = pool.find((x) => ok(x) && !taken.has(x.id));
+    if (!alt) return e;
+    taken.add(alt.id);
+    return alt;
+  });
+  if (isDynamicFormat(input.format)) {
+    const order = [...new Set(out.map(fam))];
+    out = [...out].sort((a, b) => order.indexOf(fam(a)) - order.indexOf(fam(b)));
+  }
+  return out;
+}
 
 
 export type PackResult = { html: string; name: string; blocks: string[] };
@@ -49,12 +82,6 @@ const ACTIVATION_FALLBACK = [
   "8 reps each side World’s greatest stretch — slow and controlled",
   "20 sec Dead bug hold — breathe, no arching",
 ];
-
-const ACTIVATION_OK_RE =
-  /\b(bridge|bird dog|dead bug|clamshell|circle|swing leg|leg swing|march|walkout|cat|scapular|band pull|wall slide|hip opener|arm circle|ankle|good morning|inchworm|lunge|squat)\b/i;
-
-const ACTIVATION_BAN_RE =
-  /\b(barbell|dumbbell|kettlebell|machine|cable|smith|sled|weighted|deadlift|bench press|pull-?up|chin-?up|muscle-?up|burpee|box jump|sprint|dip|clean|snatch|jerk|thruster)\b/i;
 
 const isBodyweight = (e: PoolExercise) => (e.equipment ?? "").toLowerCase().includes("body weight");
 
@@ -133,8 +160,9 @@ function fillFromLegalPool(picks: PoolExercise[], pool: PoolExercise[], count: n
 
 type Dose = { text: string; protocol: string | null };
 
-function doseFor(format: Format, level: DifficultyLevel, index: number): Dose {
-  const sets = level === "beginner" ? 3 : level === "advanced" ? 5 : 4;
+function doseFor(format: Format, level: DifficultyLevel, index: number, light = false): Dose {
+  // Recovery / Mobility & Stability never exceed the light-category set cap (rules.ts).
+  const sets = Math.min(level === "beginner" ? 3 : level === "advanced" ? 5 : 4, light ? LIGHT_SET_CAP : 99);
   const reps = level === "beginner" ? 10 : level === "advanced" ? 8 : 10;
   const rest = level === "beginner" ? 90 : level === "advanced" ? 60 : 75;
   const work = level === "beginner" ? 30 : level === "advanced" ? 45 : 40;
@@ -207,34 +235,56 @@ export function buildPackWorkout(
   const isMicro = input.category === "MICRO-WORKOUTS";
   const isRecovery = input.category === "RECOVERY";
   // HARD RULE: Micro Workout and Pilates never get a finisher.
-  const noFinisher = isMicro || isRecovery || input.category === "PILATES";
+  const noFinisher = input.finisher === undefined ? isMicro || isRecovery || input.category === "PILATES" : !input.finisher;
   const favouriteIds = input.favoriteIds ?? [];
   const used = new Set<string>();
 
-  const mainCount = isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
+  const mainCount = input.plan ? Math.max(3, input.minutes <= 20 ? input.plan.mainCount[0] : input.plan.mainCount[1]) : isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
+  const finisherCount = input.plan ? Math.max(input.plan.finisherCount[0], 1) : 3;
   // Coach's priority exercises (the 3 × 50 lists) come first; the rest of the
   // legal pool is only used to top up when too few priority matches exist.
   // Mobility & Stability and Pilates keep their own specialist vocabulary.
-  const usePriority = input.category !== "MOBILITY & STABILITY" && input.category !== "PILATES";
+  const usePriority = input.category !== "MOBILITY & STABILITY" && input.category !== "PILATES" && input.category !== "RECOVERY";
   const flow = input.format !== "REPS & SETS";
+  // CARDIO blocks are rhythmic aerobic work (rules.ts): draw them from the rhythm vocabulary.
+  const rhythmPool = pool.filter((e) => isCardioRhythm(e.name) && !/burpee|mountain climber|skater|sprint|jump squat|tuck|depth/i.test(e.name));
+  const workPool = input.category === "CARDIO" && rhythmPool.length >= 4 ? rhythmPool : pool;
   const pickPriorityFirst = (count: number, favs: string[]) => {
     const first = usePriority
-      ? pickPriorityByPattern(pool, count, { exclude: used, seed: input.seed ?? input.minutes, conditioningFirst: flow })
+      ? pickPriorityByPattern(workPool, count, { exclude: used, seed: input.seed ?? input.minutes, conditioningFirst: flow })
       : [];
     if (first.length >= count) return first;
     const ex = new Set([...used, ...first.map((e) => e.id)]);
-    return [...first, ...pickBalanced(pool, count - first.length, { favoriteIds: favs, exclude: ex })];
+    // Any remaining priority movement comes before non-priority filler.
+    const more = usePriority ? orderedPriority(workPool).filter((e) => !ex.has(e.id)).slice(0, count - first.length) : [];
+    if (first.length + more.length >= count) return [...first, ...more];
+    more.forEach((e) => ex.add(e.id));
+    return [...first, ...more, ...pickBalanced(workPool, count - first.length, { favoriteIds: favs, exclude: ex })];
   };
-  const mainPicks = fillFromLegalPool(
+  const mainPicks = flowGroup(fillFromLegalPool(
     pickPriorityFirst(mainCount, favouriteIds),
     pool,
     mainCount,
-  );
+  ), pool, input, used);
   mainPicks.forEach((e) => used.add(e.id));
 
   const finisherPicks = noFinisher
     ? []
-    : fillFromLegalPool(pickPriorityFirst(3, []), mainPicks.length ? mainPicks : pool, 3);
+    : (() => {
+        // Finisher keeps the Main Workout's equipment flow: no new station for the last minutes.
+        const fams = new Set(mainPicks.map((e) => equipmentFamilyOf(e.equipment)));
+        const flowPool = workPool.filter((e) => fams.has(equipmentFamilyOf(e.equipment)) || equipmentFamilyOf(e.equipment) === "bodyweight");
+        const src = flowPool.length >= finisherCount ? flowPool : workPool;
+        const first = usePriority ? pickPriorityByPattern(src, finisherCount, { exclude: used, seed: (input.seed ?? input.minutes) + 7, conditioningFirst: flow }) : [];
+        const ex = new Set([...used, ...first.map((e) => e.id)]);
+        const more = usePriority ? orderedPriority(src).filter((e) => !ex.has(e.id)).slice(0, finisherCount - first.length) : [];
+        more.forEach((e) => ex.add(e.id));
+        const prioMain = usePriority ? new Set(orderedPriority(mainPicks).map((e) => e.id)) : new Set<string>();
+        const reuse = mainPicks.filter((e) => prioMain.has(e.id)).slice(0, Math.max(0, finisherCount - first.length - more.length));
+        const got = [...first, ...more, ...reuse];
+        const picks = got.length >= finisherCount ? got : [...got, ...pickBalanced(src, finisherCount - got.length, { exclude: ex })];
+        return flowGroup(fillFromLegalPool(picks, src, finisherCount), src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));
+      })();
   finisherPicks.forEach((e) => used.add(e.id));
 
   const seed = input.seed ?? (mainPicks[0]?.id.length ?? 5) * 31 + input.minutes;
@@ -261,8 +311,7 @@ export function buildPackWorkout(
     : pickBalanced(library, 4, {
         filter: (e) =>
           isBodyweight(e) &&
-          ACTIVATION_OK_RE.test(e.name) &&
-          !ACTIVATION_BAN_RE.test(`${e.name} ${e.equipment ?? ""}`) &&
+          prepAllowed(e.name, "activation") &&
           (e.difficulty ?? "").toLowerCase() !== "advanced",
       })) as PoolExercise[];
 
@@ -283,7 +332,7 @@ export function buildPackWorkout(
   if (!isMicro) {
     blocks.push(heading("🔥", "Activation 5'"));
     if (activationPicks.length >= 3) {
-      activationPicks.forEach((e) => blocks.push(li(`10 reps ${token(e)} — slow and controlled`)));
+      activationPicks.forEach((e) => blocks.push(li(`${isTimedPosition(e.name) ? "30 sec" : "8 reps"} ${token(e)} — slow and controlled`)));
     } else {
       ACTIVATION_FALLBACK.forEach((line) => blocks.push(li(line)));
     }
@@ -292,15 +341,35 @@ export function buildPackWorkout(
   const protocolLine = roundsFor(input.format, input.minutes, mainPicks.length);
   blocks.push(heading("💪", `Main Workout (${input.format})`));
   if (protocolLine) blocks.push(para(protocolLine));
+  const planned = (d: SessionPlan["main"], e: PoolExercise) => {
+    // Bodyweight strength work needs more reps than a loaded lift to be a real stimulus.
+    const reps = isBodyweight(e) ? Math.max(d.reps?.[1] ?? 10, 10) : (d.reps?.[0] ?? 10);
+    // Fit the sets to the advertised training time (real work per set plus rest).
+    const work = isTimedPosition(e.name) ? (d.seconds?.[0] ?? 30) : reps * 5;
+    const blocks = Math.max(1, mainCount + (noFinisher ? 0 : finisherCount * 0.6));
+    const fit = Math.floor((input.minutes * 60) / (blocks * (work + d.restSec[0])));
+    const sets = Math.max(1, Math.min(d.sets[1], fit));
+    const unit = isTimedPosition(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
+    return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets. ${d.tempo[0]!.toUpperCase()}${d.tempo.slice(1)}.`;
+  };
   mainPicks.forEach((e, i) => {
-    const dose = doseFor(input.format, input.level, i);
-    blocks.push(li(`${dose.text} ${token(e)}${dose.protocol ? ` — ${dose.protocol}` : ""}`));
+    if (input.format === "REPS & SETS" && input.plan) return void blocks.push(li(planned(input.plan.main, e)));
+    const dose = doseFor(input.format, input.level, i, input.category === "RECOVERY" || input.category === "MOBILITY & STABILITY");
+    const text = isTimedPosition(e.name) && /reps/.test(dose.text) ? dose.text.replace(/\d+ reps/, "30 sec") : dose.text;
+    blocks.push(li(`${text} ${token(e)}${dose.protocol ? ` — ${dose.protocol}` : ""}`));
   });
 
   if (finisherPicks.length) {
-    blocks.push(heading("⚡", "Finisher (For Time)"));
-    blocks.push(para("3 rounds for time. Move well, keep breathing, stop if form breaks."));
-    finisherPicks.forEach((e) => blocks.push(li(`12 reps ${token(e)}`)));
+    const lifting = input.category === "STRENGTH" || input.category === "MUSCLE BUILDING";
+    if (lifting && input.plan?.finisher) {
+      // Complementary accessory work on the same objective — never a second workout, never cardio.
+      blocks.push(heading("⚡", "Finisher (Accessory)"));
+      finisherPicks.forEach((e) => blocks.push(li(planned(input.plan!.finisher!, e))));
+    } else {
+      blocks.push(heading("⚡", "Finisher (For Time)"));
+      blocks.push(para("2 rounds for time. Move well, keep breathing, stop if form breaks."));
+      finisherPicks.forEach((e) => blocks.push(li(`${isTimedPosition(e.name) ? "30 sec" : "10 reps"} ${token(e)}`)));
+    }
   }
 
   if (!isMicro) {

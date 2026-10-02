@@ -3,6 +3,8 @@ import { EXERCISE_TOKEN_RE, findTokens, isLibraryId, stripHtml } from "./tokens"
 import { pickPrep, STRETCH_RE, type PoolExercise } from "./pool.server";
 import { parseStepTiming, parseWorkoutSteps } from "./parse-steps";
 import { categoryAllowsFinisher } from "./doctrine";
+import { clampActivationDoses } from "./prep-vocabulary";
+import { isTimedPosition } from "./rules";
 
 
 export type EnforceResult = {
@@ -301,14 +303,15 @@ export function enforceWorkout(
   // Doctrine: some categories never carry a finisher at all — if the model
   // produced one anyway, the section is dropped rather than validated.
   const finisherAllowed = categoryAllowsFinisher(opts.category);
-  if (!finisherAllowed) {
+  // The blueprint (programming.ts) is authoritative: no Finisher unless it asks for one.
+  if (!finisherAllowed || opts.requireFinisher === false) {
     const before = sections.length;
     sections = sections.filter((s) => s.name !== "Finisher");
     if (sections.length !== before)
-      warnings.push(`Removed the Finisher section — ${opts.category} never carries one.`);
+      warnings.push(finisherAllowed ? "Removed the Finisher section — this session's blueprint has none." : `Removed the Finisher section — ${opts.category} never carries one.`);
     counts.delete("Finisher");
   }
-  const requiresFinisher = finisherAllowed && (opts.requireFinisher ?? true);
+  const requiresFinisher = finisherAllowed && opts.requireFinisher === true;
 
   const mainMin = opts.mainMin ?? 4;
   const main = counts.get("Main Workout") ?? 0;
@@ -322,7 +325,8 @@ export function enforceWorkout(
   }
 
 
-  const finalHtml = joinSections(sections);
+  // Activation dose ceiling (prep-vocabulary.ts): one pass, ≤10 reps / ≤30 sec.
+  const finalHtml = clampActivationDoses(joinSections(sections), isTimedPosition);
 
   // ---- Layer 6: duration integrity -------------------------------------------
   const workMinutes = estimateWorkMinutes(finalHtml);

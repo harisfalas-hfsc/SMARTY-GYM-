@@ -277,8 +277,9 @@ SOFT TISSUE RULES — lines may only start with: Foam roll, Foam-roll, Foam roll
 
 ACTIVATION RULES (non-negotiable) — Activation is MOVEMENT PREPARATION, never training.
 - Use ONLY ids from the ACTIVATION LIST below. Ids from the main library are rejected there.
-- Exactly 4 bullets, every one carrying a token: "10 reps {{exercise:ID:Name}}" or "30 sec {{exercise:ID:Name}}". Plain-text drills are rejected.
-- Never near failure, never a strength or high-impact movement, no external load.
+- Exactly 4 bullets, every one carrying a token: "5-10 reps {{exercise:ID:Name}}" or "15-30 sec {{exercise:ID:Name}}". ONE pass only — never sets (no 3 × 10), never more than 10 reps or 30 sec. Plain-text drills are rejected.
+- Mobility, stability, joint prep and light bodyweight rehearsal of the Main Workout patterns (bodyweight squat, reverse/forward lunge, marching, up to 10 push-ups) are all legal. Pick drills that prepare the patterns that follow.
+- Never near failure, no external load, no conditioning or high impact (burpees, jumps, sprints).
 
 COOL DOWN RULES (non-negotiable)
 - Use ONLY ids from the COOL DOWN LIST below. Ids from the main library are rejected there.
@@ -334,7 +335,9 @@ ${input.focus ? `\nFOCUS SPLIT RULES\n${FOCUS_RULES[input.focus]}` : ""}
 ${input.plan ? planPrompt(input.plan) : ""}
 
 QUALITY GATE (your workout is rejected if it fails)
-- Every count, rep range, rest window and transition budget in the SESSION BLUEPRINT above.
+- Every count, rep range, rest window and transition budget in the SESSION BLUEPRINT above. If the blueprint has no Finisher, write none.
+- In a timed format, group each piece of equipment into ONE block (never pick an implement back up after switching away) and keep the Finisher on the Main Workout's equipment. Available equipment is not preferred equipment.
+- Prefer the most familiar, simplest effective exercise (PRIORITY list) whenever it is legal.
 - Main Workout at least ${input.plan ? input.plan.mainCount[0] : 4} exercises; ${input.plan && !input.plan.finisher ? "no Finisher section at all" : `Finisher at least ${input.plan ? input.plan.finisherCount[0] : 3}`}.
 - Activation exactly 4 token lines from the ACTIVATION LIST; Cool Down exactly 3 token lines from the COOL DOWN LIST.
 - Every token line in 💪 and ⚡ carries a dose BEFORE the token.
