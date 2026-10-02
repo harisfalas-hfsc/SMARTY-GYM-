@@ -219,6 +219,7 @@ function PreferenceButtons({
       </button>
       {onAdd ? (
         <DropdownMenu
+          modal={false}
           open={addOpen}
           onOpenChange={(open) => {
             addOpenRef.current = open;
@@ -244,6 +245,13 @@ function PreferenceButtons({
                 if (!touchOpen.current) return;
                 if (swallowTouchClick.current) {
                   swallowTouchClick.current = false;
+                  return;
+                }
+                // While the menu is open Radix blocks pointer events outside
+                // it, so a second tap can deliver only this click — close.
+                if (addOpenRef.current) {
+                  addOpenRef.current = false;
+                  setAddOpen(false);
                   return;
                 }
                 addOpenRef.current = true;
