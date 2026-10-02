@@ -1,6 +1,6 @@
 {
- "workouts": 353,
- "swaps": 858,
+ "workouts": 284,
+ "swaps": 690,
  "report": [
   {
    "id": "513d00de-41f6-4bcd-b88e-1ed2c95043fc",
@@ -37,22 +37,6 @@
      "section": "activation",
      "from": "side hip abduction",
      "to": "Clamshell"
-    },
-    {
-     "section": "activation",
-     "from": "The Hundred",
-     "to": "dead bug"
-    }
-   ]
-  },
-  {
-   "id": "d382b995-99b3-4fa4-845f-ca216904b6f4",
-   "name": "Furnace Factory Shred",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
     }
    ]
   },
@@ -143,17 +127,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -170,11 +144,6 @@
      "section": "activation",
      "from": "Donkey Kick",
      "to": "Clamshell"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "standing pelvic tilt"
     },
     {
      "section": "cooldown",
@@ -194,17 +163,6 @@
    ]
   },
   {
-   "id": "0619fad4-f58f-47ad-977e-e0d02f4809a2",
-   "name": "Foundation Pull Anchor",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "69af15a3-769a-48c8-a928-ee749bbc294f",
    "name": "Canyon Ascent",
    "changes": [
@@ -212,17 +170,6 @@
      "section": "activation",
      "from": "Bear Crawl",
      "to": "Bird Dog"
-    }
-   ]
-  },
-  {
-   "id": "09a5a8cd-f3a3-4a8d-869a-912889db2d7d",
-   "name": "Cadence Flux",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -302,11 +249,6 @@
      "section": "activation",
      "from": "Donkey Kick",
      "to": "Clamshell"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "standing pelvic tilt"
     },
     {
      "section": "cooldown",
@@ -405,28 +347,12 @@
     {
      "section": "activation",
      "from": "walking high knees lunge",
-     "to": "standing pelvic tilt"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Bird Dog"
     },
     {
      "section": "cooldown",
      "from": "front plank with twist",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "e9d690dd-445f-40b6-bbfd-4a0df71f6cef",
-   "name": "Foundation Forge Drive",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -494,17 +420,6 @@
    ]
   },
   {
-   "id": "c7b93822-f4af-42b0-b413-48776675d760",
-   "name": "Kinetic Pulse EMOM",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
-    }
-   ]
-  },
-  {
    "id": "f4ccb295-f29c-445a-9ec5-d7ac6aa087a7",
    "name": "Arcadian Kinetic Drill",
    "changes": [
@@ -516,17 +431,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -559,11 +464,6 @@
     {
      "section": "cooldown",
      "from": "bodyweight standing calf raise",
-     "to": "runners stretch"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
      "to": "hamstring stretch"
     }
    ]
@@ -575,11 +475,6 @@
     {
      "section": "activation",
      "from": "walking high knees lunge",
-     "to": "standing pelvic tilt"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Bird Dog"
     },
     {
@@ -602,11 +497,6 @@
      "section": "activation",
      "from": "Donkey Kick",
      "to": "Clamshell"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "standing pelvic tilt"
     },
     {
      "section": "cooldown",
@@ -659,28 +549,6 @@
      "section": "cooldown",
      "from": "Push-Up",
      "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "22e296a7-6f43-4d49-bb6b-47fdd2489920",
-   "name": "Foundation Push Hinge",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "0c389e82-d8d4-4367-805e-444a8d89675c",
-   "name": "Gridiron Ascent",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -755,11 +623,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -782,17 +645,6 @@
      "section": "activation",
      "from": "straight leg outer hip abductor",
      "to": "Clamshell"
-    }
-   ]
-  },
-  {
-   "id": "9f58e9e7-03bb-4b41-817c-1a40d930e760",
-   "name": "Beginner Reformer Basics",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Supine Spinal Twist",
-     "to": "Bird Dog"
     }
    ]
   },
@@ -856,11 +708,6 @@
     {
      "section": "activation",
      "from": "walking high knees lunge",
-     "to": "standing pelvic tilt"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Bird Dog"
     },
     {
@@ -904,17 +751,6 @@
      "section": "cooldown",
      "from": "front plank with twist",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "aa48b2b3-c8f9-44ce-8d92-3d661faa828e",
-   "name": "Engine Activate Burn",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -978,21 +814,11 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
     },
     {
      "section": "cooldown",
      "from": "bodyweight standing calf raise",
-     "to": "runners stretch"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
      "to": "hamstring stretch"
     }
    ]
@@ -1010,17 +836,6 @@
      "section": "cooldown",
      "from": "front plank with twist",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "622a4868-e756-4568-912c-709482f911e8",
-   "name": "Iron Pillar Ascent",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1051,17 +866,6 @@
    ]
   },
   {
-   "id": "8f2a67b5-a37f-489e-bec1-83acc9dc739b",
-   "name": "Iron Grip Builder",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "3b90380d-c963-441e-928f-f06217aed8ea",
    "name": "Cadence Pulse Rhythm",
    "changes": [
@@ -1079,28 +883,12 @@
     {
      "section": "activation",
      "from": "walking high knees lunge",
-     "to": "standing pelvic tilt"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Bird Dog"
     },
     {
      "section": "cooldown",
      "from": "front plank with twist",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "679d0e4b-285a-4369-a364-91e29d169960",
-   "name": "Foundation Push Hinge (Equipment)",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1138,17 +926,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1198,22 +976,6 @@
      "section": "activation",
      "from": "Pelvic Curl",
      "to": "Fire Hydrant"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "Pigeon Pose"
-    }
-   ]
-  },
-  {
-   "id": "98537b7a-4af1-4c99-acc3-129d7183ca4f",
-   "name": "Kinetic Cascade Circuit",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
     }
    ]
   },
@@ -1225,50 +987,6 @@
      "section": "activation",
      "from": "Bear Crawl",
      "to": "Bird Dog"
-    }
-   ]
-  },
-  {
-   "id": "0d8c51b3-7112-4f59-988e-37992bde1a80",
-   "name": "Engine Activate",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "7f76d0c4-30c3-4df6-940f-632514b024f4",
-   "name": "Engine Ignite Flow",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "f771f816-8234-4d0d-9574-f1ddbb31647c",
-   "name": "Calorie Crusher",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "1d9e80d5-9997-47e0-aba8-44f261b5d952",
-   "name": "Catalyst Pulse Ignite",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1337,28 +1055,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "91fefabe-40a5-410b-937a-dbfb98c6f3c9",
-   "name": "Ignition Drive Surge",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1381,11 +1078,6 @@
      "section": "activation",
      "from": "Jumping Jack",
      "to": "standing pelvic tilt"
-    },
-    {
-     "section": "cooldown",
-     "from": "sphinx",
-     "to": "Sphinx Pose"
     }
    ]
   },
@@ -1478,17 +1170,6 @@
    ]
   },
   {
-   "id": "6ab2a4d2-d0ef-4914-b457-e0309d4b3d40",
-   "name": "Anchor Push Hinge",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "484210a5-3a86-4fc7-9bd1-d4ab23cd40fe",
    "name": "Cadence Awaken Flow",
    "changes": [
@@ -1576,11 +1257,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1592,11 +1268,6 @@
      "section": "cooldown",
      "from": "Crab Walk",
      "to": "Cat-cow"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1640,11 +1311,6 @@
      "section": "activation",
      "from": "Donkey Kick",
      "to": "Clamshell"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "standing pelvic tilt"
     },
     {
      "section": "cooldown",
@@ -1696,33 +1362,7 @@
     {
      "section": "cooldown",
      "from": "bodyweight standing calf raise",
-     "to": "runners stretch"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
      "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "8c832b69-9bd8-42ca-a116-9d6e95192ca1",
-   "name": "Advanced Power Pilates",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Roll-up",
-     "to": "Plank"
-    },
-    {
-     "section": "activation",
-     "from": "Corkscrew",
-     "to": "pelvic tilt"
-    },
-    {
-     "section": "activation",
-     "from": "Hip Twist",
-     "to": "dead bug"
     }
    ]
   },
@@ -1770,17 +1410,6 @@
      "section": "cooldown",
      "from": "Wide-Grip Push-Up",
      "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "fdf4e16e-de76-4792-8b50-f119c35a262a",
-   "name": "Engine Drive Catalyst Burn",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1845,11 +1474,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -1866,11 +1490,6 @@
      "section": "activation",
      "from": "Donkey Kick",
      "to": "Clamshell"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "standing pelvic tilt"
     },
     {
      "section": "cooldown",
@@ -1912,11 +1531,6 @@
      "section": "activation",
      "from": "Squat Jump",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "calf push stretch with hands against wall",
-     "to": "Pigeon Pose"
     }
    ]
   },
@@ -1962,17 +1576,6 @@
    ]
   },
   {
-   "id": "4f5fe6fd-f9b0-4f85-9148-c708cbdb1f1e",
-   "name": "Spartan Bodyweight Strength",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "99500bdc-cf89-4c87-9804-c6098c11046c",
    "name": "Arc Furnace",
    "changes": [
@@ -1980,17 +1583,6 @@
      "section": "activation",
      "from": "Bear Crawl",
      "to": "Bird Dog"
-    }
-   ]
-  },
-  {
-   "id": "e6aefcdc-9041-4d9f-94de-fdd850a61999",
-   "name": "Pillar Press Pull",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -2021,17 +1613,6 @@
    ]
   },
   {
-   "id": "51f0f808-a7bf-47e1-a243-41447b76befa",
-   "name": "Axial Meridian Weave",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "c722804c-0354-4804-8b41-50ac6204953f",
    "name": "Loaded Strength Session",
    "changes": [
@@ -2043,28 +1624,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "9d3c6e1f-70d5-448b-b4b3-e5a4f3b2d5b7",
-   "name": "Total Body Anchor",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -2080,17 +1640,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -2111,17 +1661,6 @@
    ]
   },
   {
-   "id": "d8ca8fab-c020-4e48-8ca4-e5cc6a09432d",
-   "name": "Cadence Complex",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Supine Spinal Twist",
-     "to": "Bird Dog"
-    }
-   ]
-  },
-  {
    "id": "ef0ba49c-c72a-47de-adb1-48efcb01d763",
    "name": "Circuit Cascade",
    "changes": [
@@ -2133,17 +1672,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -2227,11 +1756,6 @@
      "section": "activation",
      "from": "side bridge",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "upward facing dog",
-     "to": "Sphinx Pose"
     }
    ]
   },
@@ -2243,11 +1767,6 @@
      "section": "cooldown",
      "from": "Crab Walk",
      "to": "Cat-cow"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -2264,17 +1783,6 @@
      "section": "cooldown",
      "from": "tuck crunch",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "5e181695-609f-4485-a6db-5e76b3e22dd6",
-   "name": "Hinge & Press Foundations",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -2338,17 +1846,6 @@
    ]
   },
   {
-   "id": "6c3a6b4e-6788-4fc0-a167-e167fa18247e",
-   "name": "Foundation Pull Build Rise",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "ffffd3cd-da25-4d2c-a6b6-ee8a304e7ed1",
    "name": "Axial Current",
    "changes": [
@@ -2387,28 +1884,6 @@
      "section": "cooldown",
      "from": "Push-Up",
      "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "eeb29c67-3fd5-4026-9848-4e9435e66adb",
-   "name": "Calorie Pulse EMOM",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "04a3d98c-5c6e-425e-a6e5-9e98ca7ce282",
-   "name": "Engine Drive Tabata",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -2513,17 +1988,6 @@
    ]
   },
   {
-   "id": "4e057189-f427-4de0-8e7e-d38e0e239a08",
-   "name": "Kinetic Meridian Circuit",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
-    }
-   ]
-  },
-  {
    "id": "1af97798-f6b7-46ed-8474-3ab3783c2a38",
    "name": "Apex Flux Challenge",
    "changes": [
@@ -2550,28 +2014,6 @@
     {
      "section": "cooldown",
      "from": "Wide-Grip Push-Up",
-     "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "b0916bef-a040-47a7-8872-02aeb1a076e8",
-   "name": "Solid Mixed Session",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "a71b5e30-233e-40ac-9cdd-d2a88825bfdd",
-   "name": "Incessant Motion",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Cat-cow"
     }
    ]
@@ -2624,28 +2066,12 @@
    ]
   },
   {
-   "id": "a49452c8-c276-459b-b829-338dde758cf7",
-   "name": "Ignite & Conquer",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "dc5b6df9-0904-4ccf-a843-89b5b8e2de1a",
    "name": "Foundation Squat & Row",
    "changes": [
     {
      "section": "cooldown",
      "from": "donkey calf raise",
-     "to": "runners stretch"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
      "to": "hamstring stretch"
     }
    ]
@@ -2747,11 +2173,6 @@
      "section": "cooldown",
      "from": "Crab Walk",
      "to": "Cat-cow"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -2768,17 +2189,6 @@
      "section": "cooldown",
      "from": "front plank with twist",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "2cca64e8-ffde-40e5-b1d3-6149c863c2ff",
-   "name": "Kettlebell Chaos Engine",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
     }
    ]
   },
@@ -2814,17 +2224,6 @@
     {
      "section": "cooldown",
      "from": "Crab Walk",
-     "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "7ecaa540-15bc-49be-8812-b2becbad1195",
-   "name": "Kinetic Pulse Circuit",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Cat-cow"
     }
    ]
@@ -2939,17 +2338,6 @@
    ]
   },
   {
-   "id": "2c46e188-c8e3-4d1f-a9fb-ade49555df24",
-   "name": "Foundation Full Body Builder",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "9014f943-003a-42ab-bda2-fd3e9c37bce3",
    "name": "Torch Engine Drive Surge",
    "changes": [
@@ -2972,43 +2360,11 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
     },
     {
      "section": "cooldown",
      "from": "bodyweight standing calf raise",
-     "to": "runners stretch"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "2f6def02-2e25-4ae7-8741-bc01ed83d6ed",
-   "name": "Upper Body Foundation",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "d125cb63-4fc1-40b3-81fc-e148b2196a63",
-   "name": "Forge & Flex",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
      "to": "hamstring stretch"
     }
    ]
@@ -3041,17 +2397,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -3068,11 +2414,6 @@
      "section": "activation",
      "from": "Donkey Kick",
      "to": "Clamshell"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "standing pelvic tilt"
     },
     {
      "section": "cooldown",
@@ -3141,17 +2482,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -3195,11 +2526,6 @@
    "id": "2f953d33-dec1-4dc0-b2ef-21c10d443f1a",
    "name": "Nimbus Cascade",
    "changes": [
-    {
-     "section": "activation",
-     "from": "Supine Spinal Twist",
-     "to": "scapula push-up"
-    },
     {
      "section": "activation",
      "from": "Crab Walk",
@@ -3351,17 +2677,6 @@
    ]
   },
   {
-   "id": "e8bb83e6-309e-48b5-971e-c3da707c2693",
-   "name": "Iron Anchor Full Body",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "227828bf-3576-4d05-91e9-01ca7301cc28",
    "name": "Iron Builder",
    "changes": [
@@ -3427,11 +2742,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -3484,17 +2794,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -3502,11 +2802,6 @@
    "id": "dc8bc64e-01b9-4d0e-b32f-e29871ba4ae2",
    "name": "Iron Cascade Forge",
    "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Bird Dog"
-    },
     {
      "section": "cooldown",
      "from": "front plank with twist",
@@ -3522,17 +2817,6 @@
      "section": "activation",
      "from": "Bear Crawl",
      "to": "Bird Dog"
-    }
-   ]
-  },
-  {
-   "id": "6fc6110e-154e-494c-9bc7-f1f11dd76947",
-   "name": "Catalyst Drive",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -3579,17 +2863,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -3642,11 +2916,6 @@
     {
      "section": "activation",
      "from": "walking high knees lunge",
-     "to": "standing pelvic tilt"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Bird Dog"
     },
     {
@@ -3776,17 +3045,6 @@
    ]
   },
   {
-   "id": "e71e8588-d084-4427-bf59-bd6ac99351f7",
-   "name": "Iron Chest & Back",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "aa44b6d1-a163-4014-9afd-a9970d4b71c0",
    "name": "Summit Ascent",
    "changes": [
@@ -3866,17 +3124,6 @@
      "section": "cooldown",
      "from": "Push-Up",
      "to": "Cat-cow"
-    }
-   ]
-  },
-  {
-   "id": "a341cf71-b9cc-4e8e-ad20-079e517c908c",
-   "name": "Anchor Upper Builder",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -4094,17 +3341,6 @@
    ]
   },
   {
-   "id": "3dff2ba9-a9ea-45c6-b8f4-c2d95793ce00",
-   "name": "Upper Body Pillar",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "4de366cd-366f-4f1b-a67a-c44048ff4c49",
    "name": "Pulse Ascent",
    "changes": [
@@ -4158,17 +3394,6 @@
    ]
   },
   {
-   "id": "91b1e63d-bc1a-47fb-9afd-2a79bb6f7802",
-   "name": "Bodyweight Strength Builder",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "57860efb-b738-4f4e-a50e-36f406af6971",
    "name": "The 200 Trials",
    "changes": [
@@ -4200,17 +3425,6 @@
    ]
   },
   {
-   "id": "5186db66-bcbe-4c46-bf32-325d7644c948",
-   "name": "Foundation Press Forge",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "6fca80e2-2db9-4a24-8763-8a57a9cc1782",
    "name": "Foundation Glute Core (EQ)",
    "changes": [
@@ -4218,11 +3432,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -4234,11 +3443,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -4359,11 +3563,6 @@
     {
      "section": "activation",
      "from": "walking high knees lunge",
-     "to": "standing pelvic tilt"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Bird Dog"
     },
     {
@@ -4418,11 +3617,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -4523,17 +3717,6 @@
    ]
   },
   {
-   "id": "e0cdbc23-9ba0-432a-b61c-b450c452298a",
-   "name": "Foundation Push Hinge Rise",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "b57cbffa-8b57-4320-bd5d-b431b110699d",
    "name": "Ignite Calorie Scorch",
    "changes": [
@@ -4606,17 +3789,6 @@
      "section": "cooldown",
      "from": "russian twist",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "f67a7de2-f141-4ec5-a1fd-29d243bd78e2",
-   "name": "Metabolic Fury",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
     }
    ]
   },
@@ -4795,11 +3967,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -4896,11 +4063,6 @@
      "section": "cooldown",
      "from": "Crab Walk",
      "to": "Cat-cow"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -4912,11 +4074,6 @@
      "section": "cooldown",
      "from": "Crab Walk",
      "to": "Cat-cow"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -4943,28 +4100,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "12262c3b-165f-4876-b576-e2b2532202df",
-   "name": "Engine Primer",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5024,17 +4160,6 @@
    ]
   },
   {
-   "id": "98b98d9d-8c92-429a-8cdd-e7918b84d125",
-   "name": "Engine Tempo Circuit",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "3a454d73-7b6f-41ba-9d14-c9e699c75fb3",
    "name": "Cadence Pulse Trail",
    "changes": [
@@ -5042,22 +4167,6 @@
      "section": "activation",
      "from": "side hip abduction",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "seated calf stretch",
-     "to": "Pigeon Pose"
-    }
-   ]
-  },
-  {
-   "id": "90eb7f13-f43c-4645-b67b-33dd6a0ffefa",
-   "name": "Upper Body Pillar Core",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5079,11 +4188,6 @@
      "section": "activation",
      "from": "Jumping Jack",
      "to": "Bird Dog"
-    },
-    {
-     "section": "cooldown",
-     "from": "calf push stretch with hands against wall",
-     "to": "Pigeon Pose"
     }
    ]
   },
@@ -5121,11 +4225,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5142,17 +4241,6 @@
      "section": "cooldown",
      "from": "tuck crunch",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "bbe3fd80-6653-4d88-8e4a-c03fa6ec1065",
-   "name": "Granite Hinge Press",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5228,17 +4316,6 @@
    ]
   },
   {
-   "id": "59ca6fec-31ca-4728-8c56-9c0b81523e48",
-   "name": "Engine Drive Catalyst Shift",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "08e947d3-dfa7-4be8-a01e-faa5dba8501f",
    "name": "Iron Ember Forge",
    "changes": [
@@ -5272,17 +4349,6 @@
    ]
   },
   {
-   "id": "8a0de87d-4ebd-48de-aad7-1314f43abd6f",
-   "name": "Total Body Anchor Rise",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "f130c9a3-8c12-4fc2-9c40-e7be3d4b2c85",
    "name": "Axial Girdle",
    "changes": [
@@ -5312,11 +4378,6 @@
      "section": "activation",
      "from": "Jumping Jack",
      "to": "standing pelvic tilt"
-    },
-    {
-     "section": "cooldown",
-     "from": "sphinx",
-     "to": "Sphinx Pose"
     }
    ]
   },
@@ -5348,28 +4409,12 @@
     {
      "section": "activation",
      "from": "walking high knees lunge",
-     "to": "standing pelvic tilt"
-    },
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
      "to": "Bird Dog"
     },
     {
      "section": "cooldown",
      "from": "front plank with twist",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "c07cfb0e-0705-4b82-8c70-16b4253ff62c",
-   "name": "Titan's Bodyweight Forge: Unyielding Strength",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5411,21 +4456,11 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
     },
     {
      "section": "cooldown",
      "from": "donkey calf raise",
-     "to": "runners stretch"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
      "to": "hamstring stretch"
     }
    ]
@@ -5442,21 +4477,11 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
     },
     {
      "section": "cooldown",
      "from": "bodyweight standing calf raise",
-     "to": "runners stretch"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
      "to": "hamstring stretch"
     }
    ]
@@ -5473,21 +4498,11 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
     },
     {
      "section": "cooldown",
      "from": "bodyweight standing calf raise",
-     "to": "runners stretch"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
      "to": "hamstring stretch"
     }
    ]
@@ -5504,17 +4519,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5530,17 +4535,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5556,17 +4551,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5582,17 +4567,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5608,17 +4583,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5634,17 +4599,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -5932,17 +4887,6 @@
    ]
   },
   {
-   "id": "2005b5b4-a7a5-4e58-b528-30aec7741cdb",
-   "name": "Ironclad Core & Power",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "9e46b02c-8d1f-4b74-bbef-beabf3f8fc90",
    "name": "Axial Current MET-E",
    "changes": [
@@ -5955,17 +4899,6 @@
      "section": "cooldown",
      "from": "tuck crunch",
      "to": "Spine Twist"
-    }
-   ]
-  },
-  {
-   "id": "fc83ac50-fe03-4879-a894-f435aa04a472",
-   "name": "Kinetic Velocity Circuit",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
     }
    ]
   },
@@ -6006,17 +4939,6 @@
    ]
   },
   {
-   "id": "f1ccbd56-7fc6-4ae6-89ba-0f16e79891a4",
-   "name": "Inferno Blitz",
-   "changes": [
-    {
-     "section": "activation",
-     "from": "Shoulder CARs",
-     "to": "Cat-cow"
-    }
-   ]
-  },
-  {
    "id": "bf4f70b6-3b12-467a-a654-9eede22bb132",
    "name": "Catalyst Current Drive",
    "changes": [
@@ -6024,11 +4946,6 @@
      "section": "cooldown",
      "from": "Crab Walk",
      "to": "Cat-cow"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -6106,17 +5023,6 @@
    ]
   },
   {
-   "id": "77fbb0de-ea6c-4c05-92b1-4ff2478bb523",
-   "name": "Cadence Shift",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "5e118a80-b409-466a-98ac-7f2261abb9b4",
    "name": "Engine Drive Catalyst Rev",
    "changes": [
@@ -6128,17 +5034,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -6161,22 +5057,6 @@
      "section": "activation",
      "from": "hanging leg hip raise",
      "to": "dead bug"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "fec53599-6496-48de-92cb-4ac1e3e1c1e5",
-   "name": "Cadence Current Weave",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "seated calf stretch",
-     "to": "Pigeon Pose"
     }
    ]
   },
@@ -6218,25 +5098,9 @@
    ]
   },
   {
-   "id": "d98f2be6-522c-44f5-be37-7c798ab7b2c8",
-   "name": "Press & Row Ascent",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
    "id": "f1b5aa60-6e94-45c9-8a9e-f613e60c9329",
    "name": "Arcadian Cinder Sprint",
    "changes": [
-    {
-     "section": "activation",
-     "from": "seated calf stretch",
-     "to": "Clamshell"
-    },
     {
      "section": "cooldown",
      "from": "front plank with twist",
@@ -6256,28 +5120,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "556d9497-d271-47e5-9141-77067af87724",
-   "name": "Granite Zenith Press",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -6293,39 +5136,7 @@
     {
      "section": "activation",
      "from": "Donkey Kick",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "5015355a-6a4d-4e57-92ed-14e98f9804c5",
-   "name": "Leg Anchor Pull",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "7bbd03fe-bc86-482b-855d-9edfeebc684e",
-   "name": "Upper Body Pillar Rise",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   },
@@ -6341,72 +5152,7 @@
     {
      "section": "activation",
      "from": "bench hip extension",
-     "to": "Fire Hydrant"
-    },
-    {
-     "section": "activation",
-     "from": "Side Kick Circles",
      "to": "Clamshell"
-    },
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "5476a4d0-014f-4ec0-adad-8d2fca1ec5b9",
-   "name": "Ignite Engine",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "54d3ba5a-abfc-455c-a0be-deb4da95f0dd",
-   "name": "Squat Row Hybrid",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "29cbb8ad-f015-4637-8438-571d9297a3d8",
-   "name": "Pulse Drive Fusion",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "de48ed69-d82f-4214-bb62-59e5bee7fe29",
-   "name": "Press & Pull Command",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
-    }
-   ]
-  },
-  {
-   "id": "0c1fe58f-b4c8-4232-95a1-f9eefc2674b4",
-   "name": "Iron Conduit Synergy",
-   "changes": [
-    {
-     "section": "cooldown",
-     "from": "Seated Forward Fold",
-     "to": "hamstring stretch"
     }
    ]
   }

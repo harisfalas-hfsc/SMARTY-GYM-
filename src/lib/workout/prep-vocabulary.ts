@@ -22,9 +22,9 @@ export const COOLDOWN_NAMES = [
 
 const ACT = new Set(ACTIVATION_NAMES);
 const CD = new Set(COOLDOWN_NAMES);
-const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child/;
-const ACT_LIKE = /bird dog|dead bug|glute bridge|clamshell|fire hydrant|plank|circles?\b|rotation|inchworm|overhead reach|scapula/;
-const BANNED = /lunge|row\b|press|raise|curl|crawl|walk|kick|jump|burpee|climber|crunch|dip|calf|squat jump|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell/;
+const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child|forward fold|spinal twist|sphinx|upward facing dog/;
+const ACT_LIKE = /bird dog|dead bug|glute bridge|clamshell|fire hydrant|plank|circles?\b|rotation|inchworm|overhead reach|scapula|cars\b|hundred|pelvic curl|roll-up|corkscrew|hip twist/;
+const BANNED = /lunge|row\b|press|raise|curl|crawl|walk|donkey kick|butt kick|jump|burpee|climber|crunch|dip|calf raise|squat jump|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell/;
 const norm = (n: string) => n.trim().toLowerCase();
 
 export type PrepSection = "activation" | "cooldown";
