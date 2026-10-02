@@ -4,7 +4,7 @@ import { Facebook, Instagram, Youtube } from "lucide-react";
 // Circle stays on the brand color (border + pale brand tint); only the icon
 // keeps each platform's real brand color, in both light and dark view.
 const socialClass =
-  "p-2 rounded-full border-2 border-primary bg-primary/10 transition-colors hover:opacity-80";
+  "p-2 rounded-full border-2 border-primary transition-colors hover:opacity-80";
 const instagramClass = `${socialClass} text-[#E1306C]`;
 const facebookClass = `${socialClass} text-[#1877F2]`;
 const tiktokClass = `${socialClass} text-[#010101] dark:text-white`;
