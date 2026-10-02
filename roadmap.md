@@ -30,4 +30,4 @@
 - [x] Move the live Smarty Workout total into the page description and show number-only category badges.
 - [x] Make blocked admin publishing messages identify the exact rule, section, exercise, dose limits, equipment, and required correction without changing workout rules or saved workouts.
 - [x] Pre-release audit fixes: server-side membership gate, safe account deletion, Stripe event order, no auto-admin, cron minute, no member cap, PremiumGate retry, CI workflow.
-- [ ] Add in-app Change email / Change password to Account (from second audit; awaiting approval)
+- [x] In-app Change email / Change password on Account; shared workouts readable only via safe public view
