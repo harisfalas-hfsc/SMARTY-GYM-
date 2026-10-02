@@ -22,7 +22,7 @@ export const COOLDOWN_NAMES = [
 
 const ACT = new Set(ACTIVATION_NAMES);
 const CD = new Set(COOLDOWN_NAMES);
-const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child|forward fold|spinal twist|sphinx|upward facing dog/;
+const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child|forward fold|spinal twist|sphinx|upward facing dog|cars\b|circles?\b|ankle rocks|thread the needle|90\/90/;
 const ACT_LIKE = /bird dog|dead bug|glute bridge|clamshell|fire hydrant|plank|circles?\b|rotation|inchworm|overhead reach|scapula|cars\b|hundred|pelvic curl|roll-up|corkscrew|hip twist/;
 const BANNED = /lunge|row\b|press|raise|curl|crawl|walk|donkey kick|butt kick|jump|burpee|climber|crunch|dip|calf raise|squat jump|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell/;
 const norm = (n: string) => n.trim().toLowerCase();
@@ -44,7 +44,7 @@ export function prepTokens(html: string): Array<{ section: PrepSection; id: stri
   const out: Array<{ section: PrepSection; id: string; name: string; index: number; raw: string }> = [];
   const act = html.search(/Activation/i);
   const main = html.search(/Main Workout/i);
-  const cd = html.search(/Cool[\s-]?Down/i);
+  const cd = html.search(/🧘|Cool[\s-]?Down/i);
   const ranges: Array<[PrepSection, number, number]> = [];
   if (act >= 0) ranges.push(["activation", act, main > act ? main : html.length]);
   if (cd >= 0) ranges.push(["cooldown", cd, html.length]);
