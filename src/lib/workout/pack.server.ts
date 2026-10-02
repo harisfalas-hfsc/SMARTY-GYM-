@@ -345,7 +345,7 @@ export function buildPackWorkout(
     // Bodyweight strength work needs more reps than a loaded lift to be a real stimulus.
     const reps = isBodyweight(e) ? Math.max(d.reps?.[1] ?? 10, 10) : (d.reps?.[0] ?? 10);
     // Fit the sets to the advertised training time (real work per set plus rest).
-    const work = isTimedPosition(e.name) ? (d.seconds?.[0] ?? 30) : reps * 3;
+    const work = isTimedPosition(e.name) ? (d.seconds?.[0] ?? 30) : reps * 5;
     const blocks = Math.max(1, mainCount + (noFinisher ? 0 : finisherCount * 0.6));
     const fit = Math.floor((input.minutes * 60) / (blocks * (work + d.restSec[0])));
     const sets = Math.max(2, Math.min(d.sets[1], fit));
