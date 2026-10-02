@@ -11,6 +11,7 @@ import {
 import { Check, ChevronLeft, ChevronRight, Cylinder, Dumbbell, Flag, Minus, Pause, Play, Plus, RotateCcw, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ExerciseImage } from "@/components/ExerciseImage";
+import { ExerciseDetailDialog } from "./ExerciseDetailDialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useKeepScreenAwake } from "@/hooks/useKeepScreenAwake";
@@ -800,17 +801,31 @@ function PlayerSlideView({
   onPrevious: () => void;
   onNext: () => void;
 }) {
+  const [infoOpen, setInfoOpen] = useState(false);
   return (
     <SlideShell
       media={
         <>
-          <ExerciseImage
-            path={gifPath}
-            url={gifUrl}
-            alt={`${step.name} demonstration`}
-            className="block h-full w-full rounded-none bg-neutral-50 object-contain"
-            fallbackClassName="flex h-full w-full items-center justify-center bg-neutral-50"
-          />
+          <button
+            type="button"
+            onClick={() => step.exerciseId && setInfoOpen(true)}
+            aria-label={`See full instructions for ${step.name}`}
+            className="relative block h-full w-full"
+          >
+            <ExerciseImage
+              path={gifPath}
+              url={gifUrl}
+              alt={`${step.name} demonstration`}
+              className="block h-full w-full rounded-none bg-neutral-50 object-contain"
+              fallbackClassName="flex h-full w-full items-center justify-center bg-neutral-50"
+            />
+            {step.exerciseId ? (
+              <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-background/90 px-2.5 py-0.5 text-[11px] font-bold text-primary shadow">
+                Tap for full instructions
+              </span>
+            ) : null}
+          </button>
+          <ExerciseDetailDialog exerciseId={infoOpen ? step.exerciseId : null} onClose={() => setInfoOpen(false)} />
           <SlideNavigation
             canGoPrevious={canGoPrevious}
             canGoNext={canGoNext}
