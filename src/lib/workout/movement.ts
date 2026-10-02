@@ -65,7 +65,24 @@ const RELATED: Record<string, Pattern[]> = {
   carry: ["anti-rotation"],
 };
 
-export type Movement = { primary: Pattern; patterns: Pattern[]; objective: Objective; family: string; difficulty: string };
+/** The base movement inside a pattern (push-up vs dip, jump vs butt kick). HIGH confidence needs the same one. */
+const KEYS: Array<[string, RegExp]> = [
+  ["side plank", /side plank|side bridge/i], ["plank", /plank/i], ["wall sit", /wall sit|march sit/i],
+  ["push-up", /push[- ]?up/i], ["dip", /\bdip/i], ["fly", /\bfly|flye|pec deck/i],
+  ["push press", /push press|thruster/i], ["overhead press", /overhead press|shoulder press|military|arnold|seated press/i],
+  ["bench press", /bench press|chest press|floor press|incline press|decline press/i],
+  ["pull-up", /pull[- ]?up|chin[- ]?up/i], ["pulldown", /pulldown|pull down/i], ["row", /\brow/i],
+  ["step-up", /step[- ]?up/i], ["lunge", /lunge|split squat|bulgarian/i], ["squat", /squat|leg press/i],
+  ["deadlift", /deadlift|rdl|romanian|good morning/i], ["swing", /swing/i], ["bridge", /bridge|hip thrust/i],
+  ["sit-up", /sit[- ]?up/i], ["crunch", /crunch/i], ["leg raise", /leg raise|knee raise/i], ["twist", /twist|chop|russian/i],
+  ["burpee", /burpee/i], ["climber", /climber/i], ["jack", /\bjacks?\b|jumping jack|star jump/i], ["high knee", /high knee/i],
+  ["butt kick", /butt kick/i], ["skater", /skater/i], ["jump", /jump|hop|bound/i], ["run", /\brun|jog|sprint/i],
+  ["crawl", /crawl|crab walk/i], ["clean", /clean|snatch/i], ["curl", /curl/i], ["triceps", /triceps|skull|kickback/i],
+  ["calf", /calf|heel raise/i], ["carry", /carry|farmer/i], ["dead bug", /dead bug|bird dog/i], ["stretch", /stretch|pose\b/i],
+];
+const keyOf = (name: string) => KEYS.find(([, re]) => re.test(name))?.[0] ?? null;
+
+export type Movement = { key: string | null; primary: Pattern; patterns: Pattern[]; objective: Objective; family: string; difficulty: string };
 
 const cache = new Map<string, Movement>();
 
@@ -89,7 +106,7 @@ export function classify(e: Row): Movement {
     : primary === "conditioning" || primary === "locomotion" ? "conditioning"
     : ["rotation", "anti-rotation", "anti-extension", "core flexion", "core stability"].includes(primary) ? "core"
     : "resistance";
-  const m: Movement = { primary, patterns, objective, family: equipmentFamilyOf(e.equipment), difficulty: (e.difficulty ?? "").toLowerCase() };
+  const m: Movement = { key: keyOf(e.name), primary, patterns, objective, family: equipmentFamilyOf(e.equipment), difficulty: (e.difficulty ?? "").toLowerCase() };
   cache.set(key, m);
   return m;
 }
@@ -106,7 +123,7 @@ const levelGap = (a: string, b: string) => {
 
 /**
  * How faithfully `to` replaces `from`.
- * HIGH   — same primary pattern, same objective, same equipment family, similar difficulty
+ * HIGH   — same base movement and primary pattern, same objective, same equipment family, similar difficulty
  *          (and every secondary pattern of the original is still trained, e.g. push-up to side plank).
  * MEDIUM — closely related pattern with the same objective, or same pattern on another family.
  * LOW    — anything else (different pattern or a different stimulus).
@@ -116,7 +133,7 @@ export function replacementConfidence(from: Row, to: Row, opts: { allowFamilyCha
   if (a.objective !== b.objective) return "LOW";
   const sameFamily = a.family === b.family || opts.allowFamilyChange === true;
   const keepsSecondary = a.patterns.slice(1).every((p) => b.patterns.some((q) => isRelated(p, q)));
-  if (a.primary === b.primary && sameFamily && keepsSecondary && levelGap(a.difficulty, b.difficulty) <= 1) return "HIGH";
+  if (a.primary === b.primary && a.key === b.key && sameFamily && keepsSecondary && levelGap(a.difficulty, b.difficulty) <= 1) return "HIGH";
   if (isRelated(a.primary, b.primary)) return "MEDIUM";
   return "LOW";
 }
