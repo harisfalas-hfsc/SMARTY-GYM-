@@ -5,7 +5,7 @@ import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds, priorityShareViolation } from "./priority";
 import { classify, isRelated, replacementConfidence, variationTier, type Confidence } from "./movement";
-import { prepTokens, prepAllowed, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
+import { prepTokens, prepAllowed, isBodyweightEquipment, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
 import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import type { PoolExercise } from "./pool.server";
