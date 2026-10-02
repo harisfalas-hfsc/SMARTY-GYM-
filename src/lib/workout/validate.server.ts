@@ -5,6 +5,7 @@
 import { matchesSelectedEquipment, nameStem, type PoolExercise } from "./pool.server";
 import { findTokens, isLibraryId, stripHtml } from "./tokens";
 import { parseWorkoutSteps } from "./parse-steps";
+import { exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks } from "./rules";
 import {
   estimateActivationMinutes,
   estimateCooldownMinutes,
@@ -141,26 +142,11 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
       ) {
         errors.push(`"${row.name}" is not a bodyweight exercise.`);
       }
-      // 2a-bis. Human realism — no gymnastics, levers or technical Olympic work.
-      const real = humanRealismViolation(row);
-      if (real) errors.push(real);
-      // 2a-ter. Environment realism — outdoors means portable equipment only.
+      // 2a. ONE rule engine (rules.ts) — realism, category vocabulary,
+      //     micro, dynamic format, flow, static holds, level.
+      for (const v of exerciseRuleBreaks(row, { category: opts.category, format: opts.format, level: opts.level })) errors.push(v);
       const loc = locationEquipmentViolation(row, opts.location ?? null);
       if (loc) errors.push(loc);
-      // 2b. Format legality — no setup-heavy apparatus in a dynamic format.
-      const dyn = dynamicExerciseViolation(row, opts.category, opts.format);
-      if (dyn) errors.push(dyn);
-      // 2b-bis. Flow — no balance tools / isolation machines in flow sessions.
-      const flow = flowSpecialtyViolation(row, opts.category, opts.format);
-      if (flow) errors.push(flow);
-
-      // 2c. Category vocabulary legality (Pilates, Mobility, Recovery, Micro,
-      //     Challenge) — one shared definition with the pool filter.
-      const cat = categoryExerciseViolation(row, opts.category);
-      if (cat) errors.push(cat);
-      if (opts.category === "MICRO-WORKOUTS" && microExerciseViolation(row)) {
-        errors.push(`"${row.name}" needs equipment or a special setup, which a micro-workout never uses.`);
-      }
       // 2d. Focus legality — a focus is a hard gate, not a preference.
       if (opts.focus) {
         const fv = focusViolation(row, opts.focus);
@@ -185,16 +171,6 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
     categoryAllowsFinisher(opts.category) && (opts.requireFinisher ?? true);
   if (!categoryAllowsFinisher(opts.category) && finisher.length) {
     errors.push(`${opts.category} sessions never carry a Finisher.`);
-  }
-
-  // 4b. CHALLENGE is a full-body, majority-bodyweight benchmark at the level
-  //     the athlete selected — a structural error, so the block regenerates.
-  if (opts.category === "CHALLENGE") {
-    const work = [...main, ...finisher]
-      .map((s) => libraryById.get(s.exerciseId))
-      .filter((e): e is NonNullable<typeof e> => Boolean(e));
-    const bv = challengeBalanceViolation(work, opts.level);
-    if (bv) errors.push(bv);
   }
 
   const wantsActivation = opts.requireActivation ?? opts.category !== "MICRO-WORKOUTS";
@@ -222,6 +198,8 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
     if (!/\d/.test(step.prescription)) {
       errors.push(`"${step.name}" has no prescribed dose.`);
     }
+    const hd = holdDoseViolation(step.name, step.prescription);
+    if (hd) errors.push(hd);
   }
 
   // 5. Repetition guard — a session should not recycle the same two movements.
@@ -252,15 +230,9 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
   // 6c. Equipment families — the athlete must never assemble a gym mid-session.
   const workRows = rowsOf([...main, ...finisher].map((s) => s.exerciseId));
   if (workRows.length) {
-    const fam = equipmentFamilyViolation(workRows, opts.category, opts.format);
-    if (fam) errors.push(fam);
-    // 6d. Sequencing realism — never a technical movement straight after a
-    //     high-fatigue one under a running clock.
-    const seq = sequenceViolation(rowsOf(main.map((s) => s.exerciseId)), opts.format);
-    if (seq) errors.push(seq);
-    // 6e. Cardio stays aerobic — it may never turn into a metabolic session.
-    const cardio = cardioDominanceViolation(rowsOf(main.map((s) => s.exerciseId)), opts.category);
-    if (cardio) errors.push(cardio);
+    // 6c-6e. Workout-level rules (Challenge balance, equipment families,
+    //        sequencing, Cardio dominance) — the one rule engine.
+    for (const v of workoutRuleBreaks(workRows, rowsOf(main.map((s) => s.exerciseId)), { category: opts.category, format: opts.format, level: opts.level }).filter((v) => v !== categoryFormatViolation(opts.category, opts.format))) errors.push(v);
     // 6f. Mood and biometrics change the DOSE, and the change is verified here
     //     rather than merely requested in the prompt.
     const mainRows = rowsOf([...main, ...finisher].map((s) => s.exerciseId));
