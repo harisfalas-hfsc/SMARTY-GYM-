@@ -31,7 +31,7 @@ for (const [label, cat, eq, loc] of S) for (const minutes of [10,20,30,45,60]) f
       if (r.format !== "REPS & SETS" && fams.some((f) => f === "machine" || f === "cable")) issues.push("MACHINE IN DYNAMIC");
     }
     if (["STRENGTH","MUSCLE BUILDING","MOBILITY & STABILITY","PILATES"].includes(cat) && r.format !== "REPS & SETS") issues.push("WRONG FORMAT " + r.format);
-    if (issues.length) { bad++; for (const i of issues) tally[i] = (tally[i] ?? 0) + 1; if (ex.length < 12) ex.push(`${label} ${minutes}' ${stars}*: ${issues.join("; ")}`); }
+    if (issues.length) { bad++; for (const i of issues) tally[i] = (tally[i] ?? 0) + 1; ex.push(`${label} ${minutes}' ${stars}*: ${issues.join("; ")}`); }
     if (minutes === 30 && stars === 2 && process.env.SHOW) console.log(`${label} 30' int [${r.format}]: ` + steps.filter((s) => s.section !== "Cool-down").map((s) => `${s.section[0]}:${s.prescription.slice(0,14)} ${map.get(s.exerciseId)?.name ?? s.name}`).join(" | ").slice(0, 600));
   } catch (e) { errs++; ex.push(`${label} ${minutes}' ${stars}*: ERROR ${(e as Error).message.slice(0,100)}`); }
 }
