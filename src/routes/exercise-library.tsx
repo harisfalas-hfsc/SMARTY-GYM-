@@ -214,10 +214,19 @@ function PreferenceButtons({
         <ThumbsDown className="h-4 w-4" />
       </button>
       {onAdd ? (
-        <DropdownMenu>
+        <DropdownMenu open={addOpen} onOpenChange={setAddOpen}>
           <DropdownMenuTrigger asChild>
             <button
               type="button"
+              onPointerDown={(e) => {
+                touchOpen.current = e.pointerType === "touch";
+                // On touch, open on tap (click) instead of press, so a scroll
+                // that starts on the button never opens the menu.
+                if (touchOpen.current) e.preventDefault();
+              }}
+              onClick={() => {
+                if (touchOpen.current) setAddOpen(true);
+              }}
               className="inline-flex h-8 items-center gap-1 rounded-full border border-primary px-3 text-xs font-bold text-primary"
             >
               <Plus className="h-3.5 w-3.5" /> Add to workout
