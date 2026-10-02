@@ -7,7 +7,19 @@ Your rules weren't wrong. My earlier check used only part of them.
 - When I swapped in priority exercises, "bodyweight incline side plank" was on the priority list, so it went into a Challenge AMRAP. On top of that, it was prescribed as "10 reps", which makes no sense for a hold.
 - Several other filter rules were skipped the same way, and so were the structure checks (duration budgets, doses, whether the activation suits the main work).
 
-## What the new audit checks: every rule, on every workout
+## Step 0: one rule engine instead of two layers
+Before any audit, I merge the two layers into a single rule engine, so there is only one set of rules.
+- Every rule lives in one place, with one entry per exercise and one per workout. That covers today's filter rules, today's checker rules, the Activation and Cool Down vocabulary, and the format, structure, duration, level and equipment rules.
+- Each user of the rules asks this one engine:
+  - the Workout of the Day
+  - Create Your Workout
+  - admin Smarty Workouts generation
+  - the audit and fix of stored workouts
+- The exercise filter keeps an exercise only if the engine allows it. The checker rejects a workout only if the engine finds a break. No rule exists anywhere else.
+- A test blocks any new rule from being added outside the engine. Another test proves the filter and the checker always agree. Whatever the filter allows, the checker accepts, and the other way round.
+- Workouts you generate today come out the same, because no rule is relaxed. The only change is that nothing can be checked against half the rules again.
+
+## What the new audit checks: every rule in the one engine, on every workout
 
 **1. Activation and Cool Down**
 - Only mobility, stability and stretch movements, 2 to 4 per section, no repeats.
