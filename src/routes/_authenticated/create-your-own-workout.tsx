@@ -364,6 +364,8 @@ function CoachPage() {
         subtitle="Your workout builder already knows your profile. Answer below — or let it decide for you."
       />
 
+      {modeToggle}
+
       <PendingGenerationCard />
 
       {resuming && !busy ? (
