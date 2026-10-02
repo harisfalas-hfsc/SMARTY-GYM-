@@ -141,11 +141,11 @@ export const STATIC_HOLD_RE =
   /\b(hold|plank|isometric|wall sit|hollow|l-?sit|bridge hold|static)\b/i;
 
 const PILATES_BAN_RE =
-  /\b(dip|boxing|hook|jab|punch|uppercut|balance board|kettlebell|barbell|machine|cable|smith|sled|jump|jumping|plyo|burpee|sprint|box jump|snatch|clean|jerk|thruster)\b/i;
+  /\b(dip|boxing|hook|jab|punch|uppercut|balance board|kettlebell|barbell|machine|cable|smith|sled|jump|jumping|plyo|burpee|sprint|box jump|snatch|clean|jerk|thruster|mountain climber|high knees?|butt kicks?|skater|jacks?|run|running)\b/i;
 
 /** §8 — Mobility & Stability is light: no heavy loading, no conditioning. */
 const MOBILITY_BAN_RE =
-  /\b(dip|boxing|hook|jab|punch|uppercut|crawl|jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|push-?up|pushup|crunch|sit-?up|leg raise|kettlebell|barbell|smith|leverage|sled|machine|cable|box jump|deadlift|bench press|squat rack|heavy|curl|shrug|pullover|fly|kickback|triceps extension|lateral raise|front raise)\b/i;
+  /\b(dip|boxing|hook|jab|punch|uppercut|crawl|jump|jumping|plyo|burpee|sprint|snatch|clean|jerk|thruster|push-?up|pushup|crunch|sit-?up|leg raise|kettlebell|barbell|smith|leverage|sled|machine|cable|box jump|deadlift|bench press|squat rack|heavy|curl|shrug|pullover|fly|kickback|triceps extension|lateral raise|front raise|mountain climber|high knees?|butt kicks?|skater|jacks?|run|running|sprint|body-up|stretch)\b/i;
 
 /**
  * §3 — RECOVERY is controlled recovery work: breathing, gentle mobility,

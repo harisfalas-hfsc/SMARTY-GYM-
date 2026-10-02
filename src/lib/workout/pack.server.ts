@@ -244,7 +244,7 @@ export function buildPackWorkout(
   // Coach's priority exercises (the 3 × 50 lists) come first; the rest of the
   // legal pool is only used to top up when too few priority matches exist.
   // Mobility & Stability and Pilates keep their own specialist vocabulary.
-  const usePriority = input.category !== "MOBILITY & STABILITY" && input.category !== "PILATES";
+  const usePriority = input.category !== "MOBILITY & STABILITY" && input.category !== "PILATES" && input.category !== "RECOVERY";
   const flow = input.format !== "REPS & SETS";
   // CARDIO blocks are rhythmic aerobic work (rules.ts): draw them from the rhythm vocabulary.
   const rhythmPool = pool.filter((e) => isCardioRhythm(e.name) && !/burpee|mountain climber|skater|sprint|jump squat|tuck|depth/i.test(e.name));
