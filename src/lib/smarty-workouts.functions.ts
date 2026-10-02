@@ -361,7 +361,7 @@ export const adminUpdateSmartyWorkout = createServerFn({ method: "POST" })
       if ("is_visible" in data.patch || "main_workout" in data.patch || "category" in data.patch || "format" in data.patch || "equipment" in data.patch) {
         const { publishRuleBreaks } = await import("@/lib/smarty-rule-gate.server");
         const breaks = await publishRuleBreaks(supabaseAdmin, data.id, data.patch);
-        if (breaks.length) return { error: `Cannot publish — this workout breaks the Smarty rules: ${breaks.join("; ")}. Fix it, or keep it hidden.` };
+        if (breaks.length) return { error: breaks.join("\n\n") };
       }
       const { error } = await supabaseAdmin
         .from("smarty_workouts")
