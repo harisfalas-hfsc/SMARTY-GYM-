@@ -178,17 +178,48 @@ function PreferenceButtons({
   onLike,
   onDislike,
   onAdd,
+  direct,
 }: {
   state: "like" | "dislike" | "none";
   busy: boolean;
   onLike: () => void;
   onDislike: () => void;
   onAdd?: (section: DraftSection) => void;
+  /** Set when the member came from one section of Build It Yourself: one tap adds, tap again removes. */
+  direct?: { added: number; onAdd: () => void; onRemove: () => void };
 }) {
   const [addOpen, setAddOpen] = useState(false);
   const touchOpen = useRef(false);
   const addOpenRef = useRef(false);
   const swallowTouchClick = useRef(false);
+  if (direct) {
+    return (
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        {direct.added > 0 ? (
+          <>
+            <span className="inline-flex h-8 items-center gap-1 rounded-full bg-primary px-3 text-xs font-bold text-primary-foreground">
+              <Check className="h-3.5 w-3.5" /> Added{direct.added > 1 ? ` ×${direct.added}` : ""}
+            </span>
+            <button
+              type="button"
+              onClick={direct.onRemove}
+              className="inline-flex h-8 items-center gap-1 rounded-full border border-destructive px-3 text-xs font-bold text-destructive"
+            >
+              <Trash2 className="h-3.5 w-3.5" /> Remove
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={direct.onAdd}
+            className="inline-flex h-8 items-center gap-1 rounded-full border border-primary px-3 text-xs font-bold text-primary"
+          >
+            <Plus className="h-3.5 w-3.5" /> Add
+          </button>
+        )}
+      </div>
+    );
+  }
   return (
     <div className="mt-2 flex items-center gap-2">
       <button
