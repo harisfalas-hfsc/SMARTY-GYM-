@@ -8,7 +8,7 @@ import { pickPrep, STRETCH_RE } from "./pool.server";
 import { dominantRegion, equipmentFamilyLimit, equipmentFamilyOf, isDynamicFormat, regionOf } from "./doctrine";
 import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
-import { isCardioRhythm, isTimedPosition } from "./rules";
+import { isCardioRhythm, isTimedPosition, LIGHT_SET_CAP } from "./rules";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
@@ -160,8 +160,9 @@ function fillFromLegalPool(picks: PoolExercise[], pool: PoolExercise[], count: n
 
 type Dose = { text: string; protocol: string | null };
 
-function doseFor(format: Format, level: DifficultyLevel, index: number): Dose {
-  const sets = level === "beginner" ? 3 : level === "advanced" ? 5 : 4;
+function doseFor(format: Format, level: DifficultyLevel, index: number, light = false): Dose {
+  // Recovery / Mobility & Stability never exceed the light-category set cap (rules.ts).
+  const sets = Math.min(level === "beginner" ? 3 : level === "advanced" ? 5 : 4, light ? LIGHT_SET_CAP : 99);
   const reps = level === "beginner" ? 10 : level === "advanced" ? 8 : 10;
   const rest = level === "beginner" ? 90 : level === "advanced" ? 60 : 75;
   const work = level === "beginner" ? 30 : level === "advanced" ? 45 : 40;
@@ -246,7 +247,7 @@ export function buildPackWorkout(
   const usePriority = input.category !== "MOBILITY & STABILITY" && input.category !== "PILATES";
   const flow = input.format !== "REPS & SETS";
   // CARDIO blocks are rhythmic aerobic work (rules.ts): draw them from the rhythm vocabulary.
-  const rhythmPool = pool.filter((e) => isCardioRhythm(e.name));
+  const rhythmPool = pool.filter((e) => isCardioRhythm(e.name) && !/burpee|mountain climber|skater|sprint|jump squat|tuck|depth/i.test(e.name));
   const workPool = input.category === "CARDIO" && rhythmPool.length >= 4 ? rhythmPool : pool;
   const pickPriorityFirst = (count: number, favs: string[]) => {
     const first = usePriority
@@ -268,8 +269,8 @@ export function buildPackWorkout(
     : (() => {
         // Finisher keeps the Main Workout's equipment flow: no new station for the last minutes.
         const fams = new Set(mainPicks.map((e) => equipmentFamilyOf(e.equipment)));
-        const flowPool = pool.filter((e) => fams.has(equipmentFamilyOf(e.equipment)) || equipmentFamilyOf(e.equipment) === "bodyweight");
-        const src = flowPool.length >= finisherCount ? flowPool : pool;
+        const flowPool = workPool.filter((e) => fams.has(equipmentFamilyOf(e.equipment)) || equipmentFamilyOf(e.equipment) === "bodyweight");
+        const src = flowPool.length >= finisherCount ? flowPool : workPool;
         const first = usePriority ? pickPriorityByPattern(src, finisherCount, { exclude: used, seed: (input.seed ?? input.minutes) + 7, conditioningFirst: flow }) : [];
         const ex = new Set([...used, ...first.map((e) => e.id)]);
         const picks = first.length >= finisherCount ? first : [...first, ...pickBalanced(src, finisherCount - first.length, { exclude: ex })];
@@ -333,7 +334,8 @@ export function buildPackWorkout(
   if (protocolLine) blocks.push(para(protocolLine));
   const planned = (d: SessionPlan["main"], e: PoolExercise) => {
     // Fit the sets to the advertised training time (≈35 sec of work per set plus rest).
-    const fit = Math.floor((input.minutes * 60) / (Math.max(1, mainCount) * (35 + d.restSec[0])));
+    const blocks = Math.max(1, mainCount + (noFinisher ? 0 : finisherCount * 0.6));
+    const fit = Math.floor((input.minutes * 60) / (blocks * (35 + d.restSec[0])));
     const sets = Math.max(2, Math.min(d.sets[1], fit));
     // Bodyweight strength work needs more reps than a loaded lift to be a real stimulus.
     const reps = isBodyweight(e) ? Math.max(d.reps?.[1] ?? 10, 10) : (d.reps?.[0] ?? 10);
@@ -342,7 +344,7 @@ export function buildPackWorkout(
   };
   mainPicks.forEach((e, i) => {
     if (input.format === "REPS & SETS" && input.plan) return void blocks.push(li(planned(input.plan.main, e)));
-    const dose = doseFor(input.format, input.level, i);
+    const dose = doseFor(input.format, input.level, i, input.category === "RECOVERY" || input.category === "MOBILITY & STABILITY");
     const text = isTimedPosition(e.name) && /reps/.test(dose.text) ? dose.text.replace(/\d+ reps/, "30 sec") : dose.text;
     blocks.push(li(`${text} ${token(e)}${dose.protocol ? ` — ${dose.protocol}` : ""}`));
   });
