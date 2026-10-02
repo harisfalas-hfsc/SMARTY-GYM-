@@ -392,6 +392,12 @@ function prepFilter(
  * a focus (or an explicit region) is known, the pool is biased to that region
  * so a lower-body strength day never opens with arm-band drills.
  */
+/** Prep sections obey the one rule engine (rules.ts / prep-vocabulary). */
+function enginePrep(pool: PoolExercise[], section: "activation" | "cooldown"): PoolExercise[] {
+  const ok = pool.filter((e) => isLegalExercise(e, { category: "STRENGTH" as Category, format: "REPS & SETS" as Format, section }));
+  return ok.length >= 4 ? ok : pool;
+}
+
 export function buildActivationPool(
   all: PoolExercise[],
   opts: {
@@ -409,12 +415,12 @@ export function buildActivationPool(
       : prepFilter(all, opts.selectedEquipment, disliked, ACTIVATION_OK_RE, false);
 
   const region = opts.region ?? focusRegion(opts.focus ?? null);
-  if (region === "full") return base;
+  if (region === "full") return enginePrep(base, "activation");
   const relevant = base.filter((e) => {
     const r = regionOf(e);
     return r === region || r === "full" || (region === "lower" && r === "core");
   });
-  return relevant.length >= 6 ? relevant : base;
+  return enginePrep(relevant.length >= 6 ? relevant : base, "activation");
 }
 
 
@@ -427,8 +433,8 @@ export function buildCooldownPool(
   const strict = prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, true).filter(
     (e) => STRETCH_RE.test(e.name) || COOLDOWN_OK_RE.test(e.name),
   );
-  if (strict.length >= 6) return strict;
-  return prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, false);
+  if (strict.length >= 6) return enginePrep(strict, "cooldown");
+  return enginePrep(prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, false), "cooldown");
 }
 
 /** Deterministic, rotating selection so two sessions rarely open the same way. */
