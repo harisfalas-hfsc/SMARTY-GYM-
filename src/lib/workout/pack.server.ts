@@ -1,4 +1,4 @@
-import { pickPriorityByPattern } from "./priority";
+import { orderedPriority, pickPriorityByPattern } from "./priority";
 // Deterministic template ("pack") engine.
 // Builds a fully compliant session straight from the filtered pool — no model
 // involved. Used as the reliability fallback when the AI cannot produce a
@@ -255,7 +255,11 @@ export function buildPackWorkout(
       : [];
     if (first.length >= count) return first;
     const ex = new Set([...used, ...first.map((e) => e.id)]);
-    return [...first, ...pickBalanced(workPool, count - first.length, { favoriteIds: favs, exclude: ex })];
+    // Any remaining priority movement comes before non-priority filler.
+    const more = usePriority ? orderedPriority(workPool).filter((e) => !ex.has(e.id)).slice(0, count - first.length) : [];
+    if (first.length + more.length >= count) return [...first, ...more];
+    more.forEach((e) => ex.add(e.id));
+    return [...first, ...more, ...pickBalanced(workPool, count - first.length, { favoriteIds: favs, exclude: ex })];
   };
   const mainPicks = flowGroup(fillFromLegalPool(
     pickPriorityFirst(mainCount, favouriteIds),
@@ -273,7 +277,10 @@ export function buildPackWorkout(
         const src = flowPool.length >= finisherCount ? flowPool : workPool;
         const first = usePriority ? pickPriorityByPattern(src, finisherCount, { exclude: used, seed: (input.seed ?? input.minutes) + 7, conditioningFirst: flow }) : [];
         const ex = new Set([...used, ...first.map((e) => e.id)]);
-        const picks = first.length >= finisherCount ? first : [...first, ...pickBalanced(src, finisherCount - first.length, { exclude: ex })];
+        const more = usePriority ? orderedPriority(src).filter((e) => !ex.has(e.id)).slice(0, finisherCount - first.length) : [];
+        more.forEach((e) => ex.add(e.id));
+        const got = [...first, ...more];
+        const picks = got.length >= finisherCount ? got : [...got, ...pickBalanced(src, finisherCount - got.length, { exclude: ex })];
         return flowGroup(fillFromLegalPool(picks, src, finisherCount), src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));
       })();
   finisherPicks.forEach((e) => used.add(e.id));
