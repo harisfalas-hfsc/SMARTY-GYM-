@@ -187,6 +187,8 @@ function PreferenceButtons({
 }) {
   const [addOpen, setAddOpen] = useState(false);
   const touchOpen = useRef(false);
+  const addOpenRef = useRef(false);
+  const swallowTouchClick = useRef(false);
   return (
     <div className="mt-2 flex items-center gap-2">
       <button
@@ -216,18 +218,36 @@ function PreferenceButtons({
         <ThumbsDown className="h-4 w-4" />
       </button>
       {onAdd ? (
-        <DropdownMenu open={addOpen} onOpenChange={setAddOpen}>
+        <DropdownMenu
+          open={addOpen}
+          onOpenChange={(open) => {
+            addOpenRef.current = open;
+            setAddOpen(open);
+          }}
+        >
           <DropdownMenuTrigger asChild>
             <button
               type="button"
               onPointerDown={(e) => {
                 touchOpen.current = e.pointerType === "touch";
-                // On touch, open on tap (click) instead of press, so a scroll
-                // that starts on the button never opens the menu.
-                if (touchOpen.current) e.preventDefault();
+                if (touchOpen.current) {
+                  // Open on tap (click) instead of press, so a scroll that
+                  // starts on the button never opens the menu.
+                  e.preventDefault();
+                  // If the menu is already open, Radix's outside-press
+                  // dismissal closes it before the click arrives; swallow the
+                  // click instead of re-opening the menu.
+                  swallowTouchClick.current = addOpenRef.current;
+                }
               }}
               onClick={() => {
-                if (touchOpen.current) setAddOpen(true);
+                if (!touchOpen.current) return;
+                if (swallowTouchClick.current) {
+                  swallowTouchClick.current = false;
+                  return;
+                }
+                addOpenRef.current = true;
+                setAddOpen(true);
               }}
               className="inline-flex h-8 items-center gap-1 rounded-full border border-primary px-3 text-xs font-bold text-primary"
             >
