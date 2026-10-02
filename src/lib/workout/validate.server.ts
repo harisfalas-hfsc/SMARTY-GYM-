@@ -173,16 +173,6 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
     errors.push(`${opts.category} sessions never carry a Finisher.`);
   }
 
-  // 4b. CHALLENGE is a full-body, majority-bodyweight benchmark at the level
-  //     the athlete selected — a structural error, so the block regenerates.
-  if (opts.category === "CHALLENGE") {
-    const work = [...main, ...finisher]
-      .map((s) => libraryById.get(s.exerciseId))
-      .filter((e): e is NonNullable<typeof e> => Boolean(e));
-    const bv = challengeBalanceViolation(work, opts.level);
-    if (bv) errors.push(bv);
-  }
-
   const wantsActivation = opts.requireActivation ?? opts.category !== "MICRO-WORKOUTS";
   const wantsCooldown = opts.requireCooldown ?? opts.category !== "MICRO-WORKOUTS";
   const mainMin = opts.mainMin ?? 4;
@@ -208,6 +198,8 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
     if (!/\d/.test(step.prescription)) {
       errors.push(`"${step.name}" has no prescribed dose.`);
     }
+    const hd = holdDoseViolation(step.name, step.prescription);
+    if (hd) errors.push(hd);
   }
 
   // 5. Repetition guard — a session should not recycle the same two movements.
@@ -238,15 +230,9 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
   // 6c. Equipment families — the athlete must never assemble a gym mid-session.
   const workRows = rowsOf([...main, ...finisher].map((s) => s.exerciseId));
   if (workRows.length) {
-    const fam = equipmentFamilyViolation(workRows, opts.category, opts.format);
-    if (fam) errors.push(fam);
-    // 6d. Sequencing realism — never a technical movement straight after a
-    //     high-fatigue one under a running clock.
-    const seq = sequenceViolation(rowsOf(main.map((s) => s.exerciseId)), opts.format);
-    if (seq) errors.push(seq);
-    // 6e. Cardio stays aerobic — it may never turn into a metabolic session.
-    const cardio = cardioDominanceViolation(rowsOf(main.map((s) => s.exerciseId)), opts.category);
-    if (cardio) errors.push(cardio);
+    // 6c-6e. Workout-level rules (Challenge balance, equipment families,
+    //        sequencing, Cardio dominance) — the one rule engine.
+    for (const v of workoutRuleBreaks(workRows, rowsOf(main.map((s) => s.exerciseId)), { category: opts.category, format: opts.format, level: opts.level }).filter((v) => v !== categoryFormatViolation(opts.category, opts.format))) errors.push(v);
     // 6f. Mood and biometrics change the DOSE, and the change is verified here
     //     rather than merely requested in the prompt.
     const mainRows = rowsOf([...main, ...finisher].map((s) => s.exerciseId));
