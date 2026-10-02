@@ -138,6 +138,14 @@ function replaceId(html: string, from: string, to: ComplianceExercise): string {
 
 const fam = (e: ComplianceExercise) => D.equipmentFamilyOf(e.equipment);
 
+/** Swaps rejected by the coach: Crab Walk is never auto-swapped to Bear Crawl, and an advanced pistol squat is never introduced as a substitute. */
+function bannedSwap(from: ComplianceExercise, to: ComplianceExercise, _w: ComplianceWorkout): boolean {
+  if (/crab walk/i.test(from.name) && /bear/i.test(to.name)) return true;
+  if (/pistol|one[- ]leg squat/i.test(to.name) && !/pistol|one[- ]leg squat/i.test(from.name)) return true;
+  if (/advanced/i.test(to.difficulty ?? "") && !/advanced/i.test(from.difficulty ?? "")) return true;
+  return false;
+}
+
 /** Preferences, not hard rules: reported, but they never block publishing or force a swap. */
 export const PREFERENCE_ISSUES = new Set(["Too few priority exercises"]);
 export const hardIssues = (issues: string[]) => issues.filter((i) => !PREFERENCE_ISSUES.has(i));
@@ -213,7 +221,7 @@ const allTokens = (html: string) => [...html.matchAll(/\{\{exercise:([A-Za-z0-9_
  * scored HIGH / MEDIUM / LOW; only HIGH is applied. Priority share is a
  * preference: a non-priority exercise is only swapped for an equivalent (HIGH) one.
  */
-export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[]): MigrationPlan {
+export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[], mode: { resolve?: boolean } = {}): MigrationPlan {
   const lib = new Map(library.map((e) => [e.id, e]));
   const prio = priorityIds(library);
   const cat = w.category as Category;
@@ -253,12 +261,12 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
 
   // 3. Replacements.
   const usable = library.filter((e) => e.is_active !== false && Boolean(e.gif_path?.trim()));
-  const pickFor = (fromRow: ComplianceExercise, role: Role, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean }) => {
+  const pickFor = (fromRow: ComplianceExercise, role: Role, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean; anyPattern?: boolean }) => {
     const present = new Set(allTokens(html).map((t) => t.id));
     const ranked = usable
-      .filter((c) => !present.has(c.id) && isRelated(classify(fromRow).primary, classify(c).primary) && allowed(c))
+      .filter((c) => !present.has(c.id) && !bannedSwap(fromRow, c, w) && (opts.anyPattern || isRelated(classify(fromRow).primary, classify(c).primary)) && allowed(c))
       .map((c) => ({ c, conf: replacementConfidence(fromRow, c, opts) }))
-      .filter((x) => x.conf !== "LOW")
+      .filter((x) => x.conf !== "LOW" || opts.anyPattern)
       .sort((x, y) =>
         Number(y.conf === "HIGH") - Number(x.conf === "HIGH") ||
         Number(opts.wantPriority ? prio.has(y.c.id) : 0) - Number(opts.wantPriority ? prio.has(x.c.id) : 0) ||
@@ -272,7 +280,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
   };
   const sameTarget = (a: ComplianceExercise, b: ComplianceExercise) => Boolean(a.target_muscle) && (a.target_muscle ?? "").toLowerCase() === (b.target_muscle ?? "").toLowerCase();
   const workLegal = (c: ComplianceExercise) => !perExerciseBad(c, w);
-  const tryApply = (index: number, raw: string, fromRow: ComplianceExercise, role: Role, reason: string, rule: string, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean; mandatory: boolean }) => {
+  const tryApply = (index: number, raw: string, fromRow: ComplianceExercise, role: Role, reason: string, rule: string, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean; anyPattern?: boolean; mandatory: boolean }) => {
     const curIssues = issues(html);
     for (const { c, conf } of pickFor(fromRow, role, allowed, opts).slice(0, 12)) {
       const next = replaceToken(html, index, raw, c);
@@ -281,12 +289,51 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
       const better = hardIssues(ni).length < hardIssues(curIssues).length || (opts.wantPriority && ni.length < curIssues.length) || (opts.mandatory && noNew && hardCount(next) <= hardCount(html));
       if (!noNew || !better) continue;
       if (conf === "HIGH") { html = next; changes.push({ kind: "replace", role, from: fromRow.name, fromId: fromRow.id, to: c.name, toId: c.id, reason, rule, confidence: "HIGH", applied: true }); return "applied"; }
+      if (opts.mandatory && mode.resolve) { html = next; changes.push({ kind: "replace", role, from: fromRow.name, fromId: fromRow.id, to: c.name, toId: c.id, reason: `${reason} — closest legal coaching equivalent`, rule, confidence: conf, applied: true }); return "applied"; }
       if (opts.mandatory) { changes.push({ kind: "replace", role, from: fromRow.name, fromId: fromRow.id, to: c.name, toId: c.id, reason, rule, confidence: "MEDIUM", applied: false }); return "review"; }
       return "none";
     }
     if (opts.mandatory) changes.push({ kind: "replace", role, from: fromRow.name, fromId: fromRow.id, reason: `${reason} — no equivalent legal exercise in the library`, rule, confidence: "LOW", applied: false });
     return "none";
   };
+
+  /**
+   * Coaching decisions for what the one-to-one planner could not solve:
+   * a Finisher keeps the session's equipment (bodyweight conversion, else the
+   * extra movement is dropped); a work row breaking a rule takes the closest
+   * legal movement of the same objective; a prep row takes legal prep vocabulary.
+   */
+  function resolveRemaining() {
+    const mainFams = () => new Set(rowsIn(html, lib, "Main Workout").map(fam));
+    for (let pass = 0; pass < 3 && hardIssues(issues(html)).length; pass++) {
+      for (const t of allTokens(html)) {
+        const cur = allTokens(html).find((x) => x.index === t.index && x.id === t.id); if (!cur) continue;
+        const row = lib.get(cur.id); if (!row) continue;
+        const role = roleOfIndex(html, cur.index);
+        if (role === "Finisher" && /Finisher introduces new equipment/.test(issues(html).join("|")) && !mainFams().has(fam(row)) && fam(row) !== "bodyweight") {
+          const r = tryApply(cur.index, cur.raw, row, role, "Finisher converted to the session's equipment / bodyweight", "Equipment flow", (c) => workLegal(c) && (mainFams().has(fam(c)) || fam(c) === "bodyweight"), { allowFamilyChange: true, anyPattern: true, mandatory: true });
+          if (r !== "applied") dropBlock(cur.index, row, role, "Finisher simplified: movement needing new equipment removed");
+          continue;
+        }
+        if ((role === "Main Workout" || role === "Finisher") && exerciseRuleBreaks(row, ctx).length) {
+          const r = tryApply(cur.index, cur.raw, row, role, exerciseRuleBreaks(row, ctx)[0]!, ruleLabel(exerciseRuleBreaks(row, ctx)[0]!), workLegal, { allowFamilyChange: true, anyPattern: true, mandatory: true });
+          if (r !== "applied") dropBlock(cur.index, row, role, "Movement removed: no legal equivalent for this category");
+        }
+      }
+      // Remaining flow/structure issues: try regrouping again after swaps.
+      for (const [start, end] of [[/Main Workout/i, /⚡|🧘|Cool/], [/⚡/, /🧘|Cool/]] as const) {
+        const next = groupByFamily(html, start, end, lib);
+        if (next !== html && hardCount(next) < hardCount(html)) { html = next; changes.push({ kind: "reorder", reason: "Regrouped after replacements", rule: "Equipment flow", confidence: "N/A", applied: true }); }
+      }
+    }
+  }
+  function dropBlock(index: number, row: ComplianceExercise, role: Role, reason: string) {
+    const sec = role === "Finisher" ? sectionBlocks(html, /⚡/, /🧘|Cool/) : sectionBlocks(html, /Main Workout/i, /⚡|🧘|Cool/);
+    if (!sec || sec.length < 3) return;
+    const b = sec.find((x) => x.s <= index && index < x.e); if (!b) return;
+    const next = html.slice(0, b.s) + html.slice(b.e);
+    if (hardCount(next) < hardCount(html)) { html = next; changes.push({ kind: "replace", role, from: row.name, fromId: row.id, to: "(removed)", reason, rule: "Coaching redesign", confidence: "N/A", applied: true }); }
+  }
 
   // 3a. Mandatory: work rows that break a hard rule.
   for (const t of allTokens(html)) {
@@ -338,6 +385,8 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
       tryApply(cur.index, cur.raw, row, role, "Equivalent coach priority exercise", "Too few priority exercises", (c) => prio.has(c.id) && workLegal(c), { wantPriority: true, mandatory: false });
     }
   }
+
+  if (mode.resolve && hardIssues(issues(html)).length) resolveRemaining();
 
   const after = issues(html);
   const hardAfter = hardIssues(after);
