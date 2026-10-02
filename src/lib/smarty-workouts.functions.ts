@@ -357,6 +357,12 @@ export const adminUpdateSmartyWorkout = createServerFn({ method: "POST" })
     try {
       await assertAdmin(context.supabase, context.userId);
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      // Same hard rules as the generator: a rule-breaking workout cannot be published.
+      if ("is_visible" in data.patch || "main_workout" in data.patch || "category" in data.patch || "format" in data.patch || "equipment" in data.patch) {
+        const { publishRuleBreaks } = await import("@/lib/smarty-rule-gate.server");
+        const breaks = await publishRuleBreaks(supabaseAdmin, data.id, data.patch);
+        if (breaks.length) return { error: `Cannot publish — this workout breaks the Smarty rules: ${breaks.join("; ")}. Fix it, or keep it hidden.` };
+      }
       const { error } = await supabaseAdmin
         .from("smarty_workouts")
         .update({ ...data.patch, updated_at: new Date().toISOString() })
@@ -637,7 +643,8 @@ export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
       let q = supabaseAdmin.from("smarty_workouts").update({ is_visible: data.visible, updated_at: new Date().toISOString() });
       if (data.visible) {
         const report = await transferredWorkoutAudit(supabaseAdmin);
-        const failing = report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id);
+        const { ruleFailingIds } = await import("@/lib/smarty-rule-gate.server");
+        const failing = [...new Set([...report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id), ...(await ruleFailingIds(supabaseAdmin))])];
         if (failing.length) q = q.not("id", "in", `(${failing.join(",")})`);
       } else {
         q = q.not("id", "is", null);
