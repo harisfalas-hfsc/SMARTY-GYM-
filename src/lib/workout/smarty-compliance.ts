@@ -5,7 +5,7 @@ import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds } from "./priority";
 import { prepTokens, prepAllowed } from "./prep-vocabulary";
-import { isStaticHold, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
+import { isStaticHold, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -21,6 +21,21 @@ function workRows(html: string, lib: Map<string, ComplianceExercise>) {
     .filter((s) => s.section === "Main Workout" || s.section === "Finisher")
     .map((s) => lib.get(s.exerciseId))
     .filter((e): e is ComplianceExercise => Boolean(e));
+}
+
+const rowsIn = (html: string, lib: Map<string, ComplianceExercise>, section: string) =>
+  parseWorkoutSteps(html).filter((s) => s.section === section).map((s) => lib.get(s.exerciseId)).filter((e): e is ComplianceExercise => Boolean(e));
+const finisherRows = (html: string, lib: Map<string, ComplianceExercise>) => rowsIn(html, lib, "Finisher");
+
+/** How far a workout is from the block-share rules (Cardio rhythm, Challenge core cap). */
+function blockShortfall(html: string, lib: Map<string, ComplianceExercise>, cat: string): number {
+  let n = 0;
+  for (const block of [rowsIn(html, lib, "Main Workout"), finisherRows(html, lib)]) {
+    if (!block.length) continue;
+    if (cat === "CARDIO") n += Math.max(0, Math.ceil(block.length * 0.6) - block.filter((e) => isCardioRhythm(e.name)).length);
+    if (cat === "CHALLENGE") n += Math.max(0, block.filter((e) => D.CORE_ISOLATION_RE.test(e.name)).length - 1);
+  }
+  return n;
 }
 
 const isBodyweightWorkout = (w: ComplianceWorkout) =>
@@ -43,10 +58,12 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   if (!D.categoryAllowsFinisher(cat) && steps.some((x) => x.section === "Finisher")) s.add("Finisher in a category that never has one");
   if (mainRows.length < 3) s.add("Main Workout has fewer than 3 exercises");
   for (const r of rows) for (const v of exerciseRuleBreaks(r, ctx)) s.add(ruleLabel(v));
-  for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level })) s.add(ruleLabel(v));
+  const finRows = finisherRows(html, lib);
+  for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level }, finRows)) s.add(ruleLabel(v));
   for (const st of workSteps) {
     if (!/\d/.test(st.prescription)) s.add("Exercise without a dose");
     if (holdDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Hold dosed in reps");
+    if (doseRuleBreak(cat, st.prescription)) s.add("Too many sets for a light category");
   }
   const prep = prepTokens(html);
   for (const t of prep) {
@@ -81,6 +98,9 @@ function ruleLabel(v: string): string {
   if (/stretching or mobility work/.test(v)) return "Stretch/mobility move in Challenge work";
   if (/Pilates|Mobility & Stability never|Recovery session|Micro Workout|micro-workout/.test(v)) return "Exercise outside category vocabulary";
   if (/legal format|must be programmed/.test(v)) return "Format not allowed for category";
+  if (/passive stretch/.test(v)) return "Passive stretch in Mobility & Stability work";
+  if (/rhythmic aerobic/.test(v)) return "Cardio block not mostly aerobic";
+  if (/isolated core/.test(v)) return "Challenge block has more than one isolated core exercise";
   return v.replace(/"[^"]*"/g, "X").slice(0, 90);
 }
 
@@ -147,7 +167,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
 
   const candidates = library.filter((e) => (NO_PRIORITY.has(cat) || prio.has(e.id)) && e.is_active !== false && Boolean(e.gif_path?.trim()) && !perExerciseBad(e, w));
   // Instance-weighted: every rule type counts 10, every still-illegal row 1.
-  const score = (h: string) => complianceIssues({ ...w, main_workout: h }, library, lib).length * 10 + workRows(h, lib).filter((r) => perExerciseBad(r, w)).length;
+  const score = (h: string) => complianceIssues({ ...w, main_workout: h }, library, lib).length * 10 + workRows(h, lib).filter((r) => perExerciseBad(r, w)).length + blockShortfall(h, lib, cat);
   let current = score(html);
 
   for (let pass = 0; pass < 3 && current > 0; pass++) {
@@ -173,6 +193,10 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
           const pe = patternKey(ex), pc = patternKey(c);
           if (pc === pe || (pe === "arms" && (pc === "push" || pc === "pull"))) s += 4;
           else if (pe !== "stretch" && pe !== "other" && !(bad && (pe === "calf" || pe === "arms"))) s -= 6;
+          if (cat === "CARDIO" && !isCardioRhythm(ex.name) && isCardioRhythm(c.name)) s += 12;
+          if (cat === "CHALLENGE" && D.CORE_ISOLATION_RE.test(ex.name) && !D.CORE_ISOLATION_RE.test(c.name) && patternKey(c) === "conditioning") s += 12;
+          if (cat === "MOBILITY & STABILITY" && prepAllowed(c.name, "activation")) s += 5;
+          if (cat === "RECOVERY" && (prepAllowed(c.name, "activation") || prepAllowed(c.name, "cooldown"))) s += 5;
           if (D.regionOf(c) === D.regionOf(ex)) s += 3;
           if (wantBw ? fam(c) === "bodyweight" : fam(c) === fam(ex) || fam(c) === mainFamily) s += 5;
           else if (fam(c) !== "bodyweight") s -= 3;
@@ -195,10 +219,21 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
     }
   }
   html = fixHoldDoses(html, lib);
+  html = capLightSets(html, cat);
   html = fitDuration({ ...w, main_workout: html }, library, lib);
   const after = complianceIssues({ ...w, main_workout: html }, library, lib);
   if (after.length >= before.length && after.every((a) => before.includes(a)) && after.length === before.length && swaps.length === 0 && html === (w.main_workout ?? "")) return { html: w.main_workout ?? "", swaps, before, after: before };
   return { html, swaps, before, after };
+}
+
+/** Recovery / Mobility & Stability: set ladders capped at the light-category maximum. */
+function capLightSets(html: string, cat: Category): string {
+  if (!doseRuleBreak(cat, "9 sets")) return html;
+  const a = html.search(/Main Workout/i); if (a < 0) return html;
+  const rest = html.slice(a); const b = rest.search(/🧘|Cool[\s-]?Down/i);
+  const end = b < 0 ? html.length : a + b;
+  const body = html.slice(a, end).replace(/\b(\d+)(\s*sets?)\b/gi, (m, n: string, t: string) => (doseRuleBreak(cat, m) ? `4${t}` : m));
+  return html.slice(0, a) + body + html.slice(end);
 }
 
 /** A hold left in a non-flow category keeps its place but is dosed in time. */
