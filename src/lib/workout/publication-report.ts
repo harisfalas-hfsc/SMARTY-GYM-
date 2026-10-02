@@ -15,7 +15,7 @@ import {
   type ComplianceExercise,
   type ComplianceWorkout,
 } from "./smarty-compliance";
-import { legalFormats, type Category, type DifficultyLevel, type Format } from "./spec";
+import type { Category, DifficultyLevel, Format } from "./spec";
 import {
   LIGHT_SET_CAP,
   doseRuleBreak,
@@ -100,6 +100,15 @@ export function publicationRuleReports(
   const finisherRows = finisherSteps.map((step) => lib.get(step.exerciseId)).filter((row): row is ComplianceExercise => Boolean(row));
   const workRows = [...mainRows, ...finisherRows];
 
+  if (blockingIssues.includes("Finisher introduces new equipment")) {
+    const mainFamilies = new Set(mainRows.map((row) => D.equipmentFamilyOf(row.equipment)));
+    const row = finisherRows.find((candidate) => {
+      const family = D.equipmentFamilyOf(candidate.equipment);
+      return family !== "bodyweight" && !mainFamilies.has(family);
+    });
+    add("Finisher introduces new equipment", line("Equipment Flow Rule", [["Section", "Finisher"], ["Exercise", row?.name], ["Equipment", equipmentLabel(row)]], "This introduces new equipment that was not used in the Main Workout. Use existing workout equipment or bodyweight."));
+  }
+
   if (mainRows.length < 3) add("Main Workout has fewer than 3 exercises", line("Workout Structure Rule", [["Section", "Main Workout"], ["Current", `${mainRows.length} exercises`], ["Allowed", "at least 3 exercises"]], "Add enough legal Main Workout exercises."));
   if (!D.categoryAllowsFinisher(category) && finisherSteps.length) add("Finisher in a category that never has one", line("Finisher Structure Rule", [["Section", "Finisher"], ["Current", `${finisherSteps.length} exercises`], ["Allowed", `no Finisher for ${category}`]], "Remove the Finisher section exercises."));
 
@@ -132,7 +141,7 @@ export function publicationRuleReports(
   }
 
   const formatIssue = D.categoryFormatViolation(category, format);
-  if (formatIssue) add("Format not allowed for category", line("Category Format Rule", [["Current", `${category} / ${format || "No format"}`], ["Allowed", legalFormats(category).join(", ")]], "Choose one of the allowed formats for this category."));
+  if (formatIssue) add("Format not allowed for category", line("Category Format Rule", [["Current", `${category} / ${format || "No format"}`], ["Allowed", D.legalFormats(category).join(", ")]], "Choose one of the allowed formats for this category."));
 
   const activation = sectionSteps(steps, "Activation");
   const cooldown = sectionSteps(steps, "Cool-down");
