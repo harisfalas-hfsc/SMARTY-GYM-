@@ -231,10 +231,10 @@ function fitDuration(w: ComplianceWorkout, library: ComplianceExercise[], lib: M
   };
   const MAIN = /Main Workout/i, FIN = /⚡|Finisher/, END_MAIN = /⚡|🧘|Cool/, END_FIN = /🧘|Cool/;
   const steps: Array<() => string | null> = [
-    () => trim(html, FIN, END_FIN, /\b(\d{1,2})\s*rounds?\b/i, 2),
-    () => trim(html, MAIN, END_MAIN, /\b(\d{1,3})\s*(?:-\s*)?(?:min|mins|minute|minutes)\b/i, 10),
-    () => trim(html, MAIN, END_MAIN, /\b(\d{1,2})\s*rounds?\b/i, 2),
-    () => trim(html, MAIN, END_MAIN, /\b(\d)\s*sets?\b/i, 2),
+    () => trim(html, FIN, END_FIN, /\b(\d{1,2})\s*rounds?\b/gi, 2),
+    () => trim(html, MAIN, END_MAIN, /\b(\d{1,3})\s*(?:-\s*)?(?:min|mins|minute|minutes)\b/gi, 10),
+    () => trim(html, MAIN, END_MAIN, /\b(\d{1,2})\s*rounds?\b/gi, 2),
+    () => trim(html, MAIN, END_MAIN, /\b(\d)\s*sets?\b/gi, 2),
   ];
   for (let guard = 0; guard < 120 && over(html); guard++) {
     let progressed = false;
