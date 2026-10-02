@@ -15,6 +15,7 @@ import {
   doctrinePrompt,
   HUMAN_REALISM_PROMPT,
 
+  countTransitions,
   equipmentFamilyOf,
   isRepsAndSetsOnly,
   legalFormats,

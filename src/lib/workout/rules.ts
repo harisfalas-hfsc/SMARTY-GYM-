@@ -1,4 +1,8 @@
 // THE single SmartyGym rule engine.
+// Rule hierarchy when rules conflict: 1 safety/injury, 2 library legality,
+// 3 category, 4 format, 5 equipment, 6 location, 7 focus, 8 difficulty,
+// 9 human realism & flow, 10 priority preference, 11 variety. Priority is a
+// preference inside the legal system and never overrides 1-9.
 // Every per-exercise and per-workout rule is decided here. The exercise pool
 // filter, the post-generation validator and the stored-workout audit all call
 // these two entry points, so no rule can be applied by one and missed by another.
@@ -104,6 +108,13 @@ export function workoutRuleBreaks(
   if (ctx.category === "CHALLENGE") push(D.challengeBalanceViolation(work, ctx.level));
   if (work.length) push(D.equipmentFamilyViolation(work, ctx.category, ctx.format));
   if (main.length) push(D.sequenceViolation(main, ctx.format));
+  // Human flow (hard): station continuity in Main and Finisher, no new equipment in the Finisher.
+  push(D.stationFlowViolation(main, ctx.format, "Main Workout"));
+  push(D.stationFlowViolation(finisher, ctx.format, "Finisher"));
+  push(D.finisherFlowViolation(main, finisher, ctx.format));
+  // Strength / Muscle Building Finisher is complementary accessory work, never a second workout.
+  if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && finisher.length && finisher.length >= main.length)
+    out.push(`The ${ctx.category} Finisher must be shorter than the Main Workout — it complements it, never repeats it.`);
   push(D.cardioDominanceViolation(main, ctx.category));
   for (const [label, block] of [["Main Workout", main], ["Finisher", finisher]] as const) {
     if (!block.length) continue;
