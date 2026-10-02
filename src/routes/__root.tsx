@@ -474,6 +474,7 @@ function RootComponent() {
           </main>
           <SiteFooter />
           <Toaster />
+          <SisterAppsPopup />
           <CheckinModalManager />
           <BottomNav />
         </div>
