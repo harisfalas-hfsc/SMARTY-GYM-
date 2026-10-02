@@ -117,6 +117,7 @@ export const deleteComment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { commentId: string }) => input)
   .handler(async ({ context, data }) => {
+    await requirePremium(context);
     const { error } = await context.supabase
       .from("community_comments")
       .update({ deleted_at: new Date().toISOString() } as never)

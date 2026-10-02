@@ -6,6 +6,7 @@ export const getWorkoutPerformance = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { workoutId: string }) => ({ workoutId: String(input.workoutId) }))
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const { loadWorkoutPerformance } = await import("@/lib/performance.server");
     return loadWorkoutPerformance(context.supabase as never, context.userId, data.workoutId);
   });
@@ -15,6 +16,7 @@ export const getPerformanceOverview = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(() => ({}))
   .handler(async ({ context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const { loadPerformanceOverview } = await import("@/lib/performance.server");
     return loadPerformanceOverview(context.supabase as never, context.userId);
   });
@@ -28,6 +30,7 @@ export const getCoachRecommendation = createServerFn({ method: "POST" })
     format: input.format ?? null,
   }))
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const { loadPerformanceOverview } = await import("@/lib/performance.server");
     const { recommend, wodContextNote } = await import("@/lib/coach-rules");
     const { loadCheckinSignal } = await import("@/lib/checkins.server");
@@ -73,6 +76,7 @@ export const getWodContext = createServerFn({ method: "POST" })
     format: input?.format ?? null,
   }))
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const { loadPerformanceOverview } = await import("@/lib/performance.server");
     const { wodContextNote } = await import("@/lib/coach-rules");
     const overview = await loadPerformanceOverview(context.supabase as never, context.userId);
@@ -101,6 +105,7 @@ export const startWorkoutAttempt = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { workoutId: string }) => ({ workoutId: String(input.workoutId) }))
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const { nextAttemptNumber } = await import("@/lib/performance.server");
     const attempt = await nextAttemptNumber(context.supabase as never, context.userId, data.workoutId);
     return { attempt };
@@ -128,6 +133,7 @@ export const saveWorkoutResult = createServerFn({ method: "POST" })
     }) => input,
   )
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const { supabase, userId } = context;
     const { loadWorkoutPerformance, nextAttemptNumber } = await import("@/lib/performance.server");
     const { analysisNote } = await import("@/lib/performance/analysis");
@@ -237,6 +243,7 @@ export const savePerformanceEdits = createServerFn({ method: "POST" })
     rows: Array.isArray(input.rows) ? input.rows : [],
   }))
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const { supabase, userId } = context;
     const { recalcAttempt } = await import("@/lib/performance.server");
     const db = supabase as never as { from: (t: string) => any };
@@ -297,6 +304,7 @@ export const getSessionLoads = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(() => ({}))
   .handler(async ({ context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const db = context.supabase as never as { from: (t: string) => any };
     const { data, error } = await db
       .from("workout_results")

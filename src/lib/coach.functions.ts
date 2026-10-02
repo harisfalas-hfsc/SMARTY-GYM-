@@ -105,6 +105,7 @@ export const setWorkoutMeta = createServerFn({ method: "POST" })
     }) => input,
   )
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const patch: Record<string, unknown> = {};
     if (typeof data.is_favorite === "boolean") patch["is_favorite"] = data.is_favorite;
     if (data.rating !== undefined) patch["rating"] = data.rating;
@@ -125,6 +126,7 @@ export const setWorkoutStatus = createServerFn({ method: "POST" })
     (input: { workoutId: string; status?: string; scheduled_at?: string | null }) => input,
   )
   .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
     const patch: Record<string, unknown> = {};
     if (data.status) {
       patch["status"] = data.status;
