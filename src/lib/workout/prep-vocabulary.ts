@@ -1,5 +1,9 @@
-// Activation and Cool Down vocabulary. Priority exercises are for the work
-// sections only — these two sections use mobility, stability and stretches.
+// THE authoritative Activation / Cool Down vocabulary and dose.
+// Activation = MOVEMENT PREPARATION: mobility, dynamic mobility, stability,
+// joint prep, activation drills and light bodyweight movement rehearsal
+// (bodyweight squat, reverse/forward lunge, marching, up to 10 push-ups).
+// Cool Down = recovery: static stretching, gentle mobility, breathing.
+// Neither is ever a training block.
 
 export const ACTIVATION_NAMES = [
   "bird dog", "cat-cow", "clamshell", "fire hydrant", "glute bridge", "glute bridge march",
@@ -8,6 +12,7 @@ export const ACTIVATION_NAMES = [
   "kneeling plank tap shoulder", "inchworm", "world greatest stretch", "squat to overhead reach",
   "squat to overhead reach with twist", "posterior step to overhead reach", "wrist circles", "ankle circles",
   "dynamic chest stretch (male)", "circles knee stretch", "spine twist",
+  "push-up", "incline push-up", "reverse lunge", "forward lunge (male)", "walking lunge", "bodyweight squat", "air squat",
 ];
 
 export const COOLDOWN_NAMES = [
@@ -24,7 +29,20 @@ const ACT = new Set(ACTIVATION_NAMES);
 const CD = new Set(COOLDOWN_NAMES);
 const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child|forward fold|spinal twist|sphinx|upward facing dog|cars\b|circles?\b|ankle rocks|thread the needle|90\/90/;
 const ACT_LIKE = /bird dog|dead bug|glute bridge|clamshell|fire hydrant|plank|circles?\b|rotation|inchworm|overhead reach|scapula|cars\b|hundred|pelvic curl|roll-up|corkscrew|hip twist/;
-const BANNED = /lunge|row\b|press|raise|curl|crawl|walk|donkey kick|butt kick|jump|burpee|climber|crunch|dip|calf raise|squat jump|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell/;
+/** Never preparation in either section: load, conditioning, impact, training work. */
+const BANNED = /lunge|squat|row\b|press|raise|curl|crawl|walk|donkey kick|butt kick|jump|burpee|climber|crunch|dip|calf raise|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell|sprint|box|skater|sit-?up|weighted|band\b|trx|suspen|medicine|smith|lever/;
+/**
+ * Light bodyweight movement rehearsal — legal in Activation ONLY (never Cool Down):
+ * plain bodyweight squat, reverse / forward / walking lunge, marching and plain or
+ * incline push-ups. Loaded, jumping, split or skill variants stay illegal.
+ */
+const REHEARSAL = /\b(squat|lunge|march(ing)?|push-?up)\b/;
+const REHEARSAL_BAN =
+  /jump|jumping|plyo|split|bulgarian|pistol|sissy|shrimp|cossack|archer|diamond|decline|clap|pike|one arm|single arm|spider|weighted|dumbbell|barbell|kettlebell|band|smith|cable|lever|trx|suspen|medicine|ball|box|bench|step|overhead squat|front squat|back squat|hack|goblet|deficit|curtsy|lateral|side/;
+export const isActivationRehearsal = (name: string) => {
+  const n = norm(name);
+  return REHEARSAL.test(n) && !REHEARSAL_BAN.test(n);
+};
 const norm = (n: string) => n.trim().toLowerCase();
 
 export type PrepSection = "activation" | "cooldown";
@@ -33,8 +51,28 @@ export function prepAllowed(name: string, section: PrepSection): boolean {
   const n = norm(name);
   // Activation may also use cool-down mobility/stretches; cool down stays static/mobility.
   if (section === "cooldown" ? CD.has(n) : ACT.has(n) || CD.has(n)) return true;
+  if (section === "activation" && isActivationRehearsal(n)) return true;
   if (BANNED.test(n)) return false;
   return section === "cooldown" ? CD_LIKE.test(n) : ACT_LIKE.test(n) || CD_LIKE.test(n);
+}
+
+/** Activation dose ceiling: 10 reps, 30 sec, one pass — never working sets. */
+export const ACTIVATION_MAX_REPS = 10;
+export const ACTIVATION_MAX_SECONDS = 30;
+
+/** Rule break for one Activation line's prescription, or null. */
+export function activationDoseViolation(name: string, line: string): string | null {
+  const dose = line.replace(/\brest\b[^.;,]*/gi, "");
+  if (/\b\d+\s*(sets?|rounds?)\b|\b\d+\s*[x×]\s*\d+/i.test(dose))
+    return `"${name}" in Activation is prescribed as working sets — Activation is one controlled pass of preparation.`;
+  for (const m of dose.matchAll(/\b(\d+)\s*(?:-\s*(\d+)\s*)?reps?\b/gi))
+    if (Number(m[2] ?? m[1]) > ACTIVATION_MAX_REPS)
+      return `"${name}" in Activation exceeds ${ACTIVATION_MAX_REPS} reps — preparation, not volume.`;
+  for (const m of dose.matchAll(/\b(\d+)\s*(?:-\s*(\d+)\s*)?(sec|seconds|s|min|minutes?)\b/gi)) {
+    const v = Number(m[2] ?? m[1]) * (/^m/i.test(m[3]!) ? 60 : 1);
+    if (v > ACTIVATION_MAX_SECONDS) return `"${name}" in Activation exceeds ${ACTIVATION_MAX_SECONDS} sec — keep preparation short.`;
+  }
+  return null;
 }
 
 const TOKEN = /\{\{exercise:([A-Za-z0-9_-]+):([^}]*)\}\}/g;
