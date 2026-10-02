@@ -43,6 +43,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
+import { SignInDetails } from "@/components/account/SignInDetails";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
@@ -313,6 +314,8 @@ function Account() {
           <MembershipCheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
         </section>
       )}
+
+      <SignInDetails email={user?.email} />
 
       <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <p className="font-bold">Delete account</p>
