@@ -1,0 +1,2991 @@
+[
+ {
+  "id": "513d00de-41f6-4bcd-b88e-1ed2c95043fc",
+  "name": "Deep Stretch & Decompress",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "74ea3ebd-b9d2-4fcd-826a-4e620fb27200",
+  "name": "Solid Lift Session",
+  "category": "STRENGTH",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "8ca2b4a6-196a-4f76-ab0b-fe2040e9d557",
+  "name": "Summit Forge Challenge",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "bddd303f-d7bb-40e3-96af-e477af0b7138",
+  "name": "Granite Descent Challenge",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "5496ec76-0fbb-417d-bd05-394af533f0e7",
+  "name": "Flow Restore Ease",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "0b93da4b-8e51-467b-bf75-e70fe2209c96",
+  "name": "Arcadian Release",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "fc0e19a8-9e20-4463-afda-010fbddbf5a4",
+  "name": "Ascension Ascent Apex",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "107d303f-d2cd-40a9-9c9d-7ccca8c4a15c",
+  "name": "Athletic Recovery Session",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f6f00441-d4f0-401c-a61c-28863e44c7fc",
+  "name": "Cadence Warp",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "12028b48-0e39-43fd-a64b-b1e0a9184f2a",
+  "name": "Flow State Restore",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "c5125e40-3348-457b-b678-cf7898c6197e",
+  "name": "Granite Flow Restore",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "4f12a42d-a657-48b2-a26e-86e9571b9785",
+  "name": "Total Body Renewal",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "d382b995-99b3-4fa4-845f-ca216904b6f4",
+  "name": "Furnace Factory Shred",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "9568c66f-5a2b-4643-89bd-f86976dd20d3",
+  "name": "Flow State Drive",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "f434a9ae-56d4-44ed-8b57-b9ca215c0bf3",
+  "name": "Mindful Recovery Session",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "3b90380d-c963-441e-928f-f06217aed8ea",
+  "name": "Cadence Pulse Rhythm",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "13efe140-d106-4cbf-8564-e65cc459051a",
+  "name": "Recovery Tempo Circuit",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "882efd68-71c3-4b2d-987d-01a361336889",
+  "name": "Flow Restore",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "ae259fce-7c7f-482b-a5c2-8f9d0f9b5e8f",
+  "name": "Flow Ascent",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "a4f924b0-cebb-47b4-8bd0-3c52e160b68f",
+  "name": "Tempo Engine Weave",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f74570cb-185b-4788-a2f4-c237e2807062",
+  "name": "Hip Liberation Flow",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "ff9e7789-f542-4a48-9948-09f47f9cb606",
+  "name": "Gauntlet Drive",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "06509d13-6d28-4048-b18c-0e2e24e0806e",
+  "name": "Flow & Restore Ease",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "b6048069-4456-4b1f-9e6f-5dbc13ea63ae",
+  "name": "Flow State Restore Ease",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "42ec24ff-9946-46e1-b366-8ac7dd0aec6c",
+  "name": "Flow Restore Breathe",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "cd849064-7e3a-4506-bd9e-8128cee98c6a",
+  "name": "Flow Restore Calm",
+  "category": "RECOVERY",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "1ea98670-e91a-4709-ab44-1604430c7f4e",
+  "name": "Kinetic Cipher Challenge",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "5b058537-ee84-4c63-b756-947586a7bb49",
+  "name": "Primal Pulse Protocol",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "4c638e7c-bf89-4b69-9619-8dfe6b5d5924",
+  "name": "Torch Engine Drive Rush",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "11f545d7-dcce-42b7-828b-0aa87ac29827",
+  "name": "Catalyst Current",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "7fc84aaa-2cae-47d8-867a-2f969a74d84a",
+  "name": "Arcus Vortex",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "13dee89c-4c8d-4fdd-a0c0-ec67be665cc7",
+  "name": "Cadence Ground Tempo",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "12f0d6d2-3cb1-432e-b8a1-384efcce561a",
+  "name": "Peak Drive Test",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "9247d5cc-bff3-431a-9ea1-95c53984770c",
+  "name": "Kinetic Meridian Challenge ",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "6ce8a102-61e7-4719-9123-22b7e03c673d",
+  "name": "Torch Engine Drive",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "04894f29-4756-4735-aec1-0db17ace3bd1",
+  "name": "Sustained Tempo",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "9989090d-1bd0-41c5-9d3a-57eff1c33266",
+  "name": "Endure Threshold Trial",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "dc439002-9b70-4908-9d3c-f8770de9faf0",
+  "name": "Pulse Surge Drive",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "0e342ae5-322a-444c-a48e-d2a4e61e30e3",
+  "name": "Apex Protocol EMOM",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "c7b93822-f4af-42b0-b413-48776675d760",
+  "name": "Kinetic Pulse EMOM",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "a2be9da9-0bc1-4c78-b692-956ba05989cb",
+  "name": "Flow Rush Drive",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f4ccb295-f29c-445a-9ec5-d7ac6aa087a7",
+  "name": "Arcadian Kinetic Drill",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "4ad6059d-a77a-4b5c-af43-8411b362e243",
+  "name": "Granite Compass Ascent",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "b48e683e-b097-42f1-94a1-16bf1fc44590",
+  "name": "Summit Ascent Trial",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "13109669-255c-4252-ae28-ae208bfe4365",
+  "name": "Phantom Sprint Assault",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "04e642cf-87c6-4287-9730-a89c816ebd68",
+  "name": "Ultimate Crucible",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "22e296a7-6f43-4d49-bb6b-47fdd2489920",
+  "name": "Foundation Push Hinge",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "pike-to-cobra push-up",
+    "to": "diamond push-up"
+   }
+  ]
+ },
+ {
+  "id": "0c389e82-d8d4-4367-805e-444a8d89675c",
+  "name": "Gridiron Ascent",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "70e7c640-f45f-4595-ab9d-6590d5a810c3",
+  "name": "Flow Pulse Journey",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "523b056e-5414-4495-8e25-bb7ff6abdcb8",
+  "name": "Summit Scramble",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "753e73d9-eb07-4a76-85f4-ca7f8c2a5dc5",
+  "name": "Granite Glute Control",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "hanging leg raise",
+    "to": "russian twist"
+   }
+  ]
+ },
+ {
+  "id": "1b6c5565-eac5-4f71-8b8e-df4f4674c870",
+  "name": "Torch Drive",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "6f86b7a5-449d-412c-88e9-1d65812b5b3a",
+  "name": "Arcane Velocity",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "6828e9a4-3bde-4963-862f-70f1ea131a70",
+  "name": "Pulse Rush Flow (Equipment)",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "aa48b2b3-c8f9-44ce-8d92-3d661faa828e",
+  "name": "Engine Activate Burn",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f3eeef8d-a132-4b26-af36-5b617436df3a",
+  "name": "Cardio Power",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "788c6be7-f54c-4e8b-bac9-5cca346a02bb",
+  "name": "Apex Impulse",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "19ae8100-9d89-40a8-a1af-a40f0f7b815b",
+  "name": "Lower Body Pillar Foundation",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "pike-to-cobra push-up",
+    "to": "decline push-up"
+   }
+  ]
+ },
+ {
+  "id": "5837f555-a3f1-474f-8672-7ac4ae7dbcfc",
+  "name": "Bodyweight Gauntlet Grind",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "1289def8-ccf0-48c6-8dcb-30cc79ad9c86",
+  "name": "Cardio Overdrive",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "009ad861-765e-4249-bfa1-5ff2806b3d85",
+  "name": "Anchor Precision Flow",
+  "category": "MOBILITY & STABILITY",
+  "before": [
+   "Activation too long"
+  ],
+  "after": [
+   "Activation too long"
+  ],
+  "swaps": []
+ },
+ {
+  "id": "0d8c51b3-7112-4f59-988e-37992bde1a80",
+  "name": "Engine Activate",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "7f76d0c4-30c3-4df6-940f-632514b024f4",
+  "name": "Engine Ignite Flow",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f771f816-8234-4d0d-9574-f1ddbb31647c",
+  "name": "Calorie Crusher",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "ed9a2199-4c24-4669-a4d2-3c0408ff2ef3",
+  "name": "Trial By Circuit",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "4bd2c40d-e6f8-4f7a-90b3-83768fd9e6f5",
+  "name": "Endurance Drive",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "2299e555-3b6d-49f0-868b-5f4234fd6c8d",
+  "name": "Velocity Compass Blitz",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "91fefabe-40a5-410b-937a-dbfb98c6f3c9",
+  "name": "Ignition Drive Surge",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "b1c4c282-dc47-4858-bc5e-ec9272e249d7",
+  "name": "Endurance Flow",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "86edaefb-082b-49c2-b225-450b6382be26",
+  "name": "Bodyweight Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "1f27e6af-8c61-43ed-a5bf-5f65eccf7f23",
+  "name": "Granite Cascade AMRAP",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "4b0a3955-2da2-4b86-94c9-05b0575e687c",
+  "name": "Kinetic Sprout",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "460edfbe-5ef8-4ad0-b1de-803d0fb4c751",
+  "name": "Velocity Surge",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "29e1e026-5416-4632-abdc-8af6a0c6a3a5",
+  "name": "Drive Catalyst",
+  "category": "METABOLIC",
+  "before": [
+   "Advanced exercise in a Beginner workout",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "Dumbbell Renegade Row",
+    "to": "dumbbell bent over row"
+   }
+  ]
+ },
+ {
+  "id": "5a1510e5-3a10-4478-b9d9-0b6fadd62ddd",
+  "name": "Dumbbell Demon Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "e72a187f-e705-4863-8128-3cf5c3dbf9e6",
+  "name": "The Gauntlet Drive",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "e125fcc6-fad9-4985-a272-158da1aaafe7",
+  "name": "Ignite Melt",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "c86f50d4-2226-40e8-a042-3ca2b11f1a01",
+  "name": "Solid Pace Session",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "8a881cae-da44-4fbf-b524-1f9376af4eff",
+  "name": "Bodyweight Cardio Session",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "251ebf92-2541-473c-8262-16244caaaa03",
+  "name": "Loaded Conditioning Session",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "8f0b00b2-e323-4091-b1ab-f278599c7dad",
+  "name": "Endurance Ladder",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "fdf4e16e-de76-4792-8b50-f119c35a262a",
+  "name": "Engine Drive Catalyst Burn",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "e4503af2-daa1-4b96-bd0b-b42cf3595bed",
+  "name": "Summit Ascent (EQ)",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "73b420c4-b82e-4ed6-b563-9c163053c5d6",
+  "name": "Glute Core Foundation",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "hanging leg raise",
+    "to": "russian twist"
+   }
+  ]
+ },
+ {
+  "id": "3facb85e-7aea-407b-bab3-bdd147421c5c",
+  "name": "Challenge me UP!",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "7de3870d-06b7-4b75-8b0e-b8d1b6a9251d",
+  "name": "Endurance Crucible Forge",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "d8ca8fab-c020-4e48-8ca4-e5cc6a09432d",
+  "name": "Cadence Complex",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "ef0ba49c-c72a-47de-adb1-48efcb01d763",
+  "name": "Circuit Cascade",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "6e1725ed-c6ed-4498-9a40-006f34e3e50d",
+  "name": "Ascension Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "2fca7a54-1b15-4958-b545-b4c6c05aca07",
+  "name": "Anchor Meridian",
+  "category": "MOBILITY & STABILITY",
+  "before": [
+   "Activation too long"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "3d9c72b4-86b7-40b6-9198-6129405b6caa",
+  "name": "Ignition Pulse",
+  "category": "METABOLIC",
+  "before": [
+   "Advanced exercise in a Beginner workout",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "Dumbbell Renegade Row",
+    "to": "dumbbell bent over row"
+   }
+  ]
+ },
+ {
+  "id": "8620279d-6de9-43df-ae35-d6de2e2624a4",
+  "name": "Vortex Calisthenics",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "52c07f78-79d2-4c7e-8a7a-d52d1cdd1118",
+  "name": "Kinetic Surge",
+  "category": "METABOLIC",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "Dumbbell Renegade Row",
+    "to": "dumbbell bent over row"
+   }
+  ]
+ },
+ {
+  "id": "a620a42f-b90f-43ec-bb28-c6676aaad0ea",
+  "name": "Mesa Metabolic Flow",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "cbc2919c-17f5-4f96-9162-30ef7fb0e90e",
+  "name": "Velocity Forge Engine",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "09a534b5-51a4-445b-b273-67200f3c3d48",
+  "name": "Velocity Burst Ascend",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "04a3d98c-5c6e-425e-a6e5-9e98ca7ce282",
+  "name": "Engine Drive Tabata",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "5e68c384-28b9-468f-891d-5eb5a7271de9",
+  "name": "Forge Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "df720dd2-852e-4b81-bf84-809cab886f33",
+  "name": "Pulse Rush Tabata",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "e07be054-4719-47e3-9f13-2ab5dbd39133",
+  "name": "Endurance Crucible",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "a9f2d5ec-9188-4ef4-a175-44432bb831ba",
+  "name": "Pulse Peak Drive",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "a4e60812-379a-4341-86a9-729bc592ae76",
+  "name": "Kinetic Vortex",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "4e057189-f427-4de0-8e7e-d38e0e239a08",
+  "name": "Kinetic Meridian Circuit",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "1af97798-f6b7-46ed-8474-3ab3783c2a38",
+  "name": "Apex Flux Challenge",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "aa81b01b-7492-4b73-8c92-3f2a1b2db5cd",
+  "name": "Velocity Core Cadence",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "b0916bef-a040-47a7-8872-02aeb1a076e8",
+  "name": "Solid Mixed Session",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "a71b5e30-233e-40ac-9cdd-d2a88825bfdd",
+  "name": "Incessant Motion",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "15cb6738-856c-4f4a-8121-0cad249c2b5c",
+  "name": "Pulse Surge Flow",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "632e3535-e943-4340-becb-f873a4b65304",
+  "name": "Endurance Crucible Apex",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "a49452c8-c276-459b-b829-338dde758cf7",
+  "name": "Ignite & Conquer",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "2387b26d-ceaa-4852-a6b2-2350257bed7e",
+  "name": "Kinetic Spire Ascent",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "dc5b6df9-0904-4ccf-a843-89b5b8e2de1a",
+  "name": "Foundation Squat & Row",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "pike-to-cobra push-up",
+    "to": "diamond push-up"
+   }
+  ]
+ },
+ {
+  "id": "c02d558b-4b5e-4f37-a25b-cd8efb102783",
+  "name": "Crucible Test",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "079d87d2-9cb6-4c35-9705-cb9ae77cadaa",
+  "name": "Velocity Current",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "ee0267af-e395-4c4b-a0bc-7162bbe821c3",
+  "name": "Cadence Cipher",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "561026e9-c026-464b-b5b3-3e01bea3f2c2",
+  "name": "Compass Blitz",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "a44223f7-ddb5-430c-89ba-b377706fb11b",
+  "name": "Velocity Compass",
+  "category": "METABOLIC",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "Dumbbell Renegade Row",
+    "to": "dumbbell bent over row"
+   }
+  ]
+ },
+ {
+  "id": "f130a522-0963-4bf3-9e00-0c1e90620946",
+  "name": "Engine Accelerator",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "2cca64e8-ffde-40e5-b1d3-6149c863c2ff",
+  "name": "Kettlebell Chaos Engine",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "7ecaa540-15bc-49be-8812-b2becbad1195",
+  "name": "Kinetic Pulse Circuit",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "6586257d-3ebe-45eb-84d9-29751cc9f2fd",
+  "name": "Zenith Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "42379463-114a-433c-9bb6-8856b86ebf2a",
+  "name": "Kinetic Pulse Circuit Blast",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "8168be85-5b68-4fe7-88e2-ab3f4f8642cb",
+  "name": "Athletic Challenge Builder",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "3e794425-3e27-4fbf-ad71-15539d61a83e",
+  "name": "Ascension Ascent",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "dffaadba-1cee-40ac-bab1-aef844bae204",
+  "name": "Granite Core Press",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "6ca059f6-5684-4d40-8db2-02faf1dbf548",
+  "name": "Torch Engine Drive Strike",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "9014f943-003a-42ab-bda2-fd3e9c37bce3",
+  "name": "Torch Engine Drive Surge",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "50f134fc-3fa3-4600-b9c2-d7cbc6732a9b",
+  "name": "Leg Meridian Anchor",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "pike-to-cobra push-up",
+    "to": "decline push-up"
+   }
+  ]
+ },
+ {
+  "id": "5686b9ee-b1dd-4fce-bdfd-d885ba7090ce",
+  "name": "Cadence Current",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "4f812d6a-5845-413b-81dd-1ecc23f5abb9",
+  "name": "Warrior Spirit Crucible",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "bfd0f2c3-0221-4f07-b75e-f983de444616",
+  "name": "Forged Metabolic Spire",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "a21f340a-878f-431a-9c96-24be12c5730d",
+  "name": "Forge Catalyst",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "2f953d33-dec1-4dc0-b2ef-21c10d443f1a",
+  "name": "Nimbus Cascade",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "cbf91f09-f43d-422d-8f65-e884c495658f",
+  "name": "Iron Mesh Protocol",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "c7f4b376-a8da-4594-8706-4b09496be08c",
+  "name": "Arc Reactor Pursuit",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "85d8adf7-a845-40e8-8d37-79075c890070",
+  "name": "Metabolic Advanced Session",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "147bc5e4-00cd-4c54-9484-0260db704a6b",
+  "name": "The Grinder",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "1af94ae9-7d41-4fa5-948c-b3edb0cfa78b",
+  "name": "Heat Shredder",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "137e868c-3452-4c18-a589-8034290951f2",
+  "name": "Pulse Ascent Circuit",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "6c55bbb7-5aaf-41ae-8041-50337a10a4f0",
+  "name": "Resistance Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "46e8c2d1-2bce-4ef0-9453-52c202ea4af4",
+  "name": "Heat Shred Catalyst",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f27f673a-2526-4c3f-b847-506d35b819c6",
+  "name": "Calorie Melt Catalyst",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "a35860c6-71d0-4ec9-b81d-e68d3db99df5",
+  "name": "Endurance Crucible Test",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "162d69c8-6cd2-43f1-baa5-c35689c2f12c",
+  "name": "Ignite Drive Core",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "28d3e7db-2403-4f11-884e-5da0cc1123a0",
+  "name": "Cardio Tempo Circuit",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "6fc6110e-154e-494c-9bc7-f1f11dd76947",
+  "name": "Catalyst Drive",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "dc8bc64e-01b9-4d0e-b32f-e29871ba4ae2",
+  "name": "Iron Cascade Forge",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "147e6ff4-998c-49b3-86a0-fef738f2ea94",
+  "name": "Inferno Engine: Calorie Crusher",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "13c7c55a-0c04-43a0-a287-3ca421257318",
+  "name": "The Crucible Circuit",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "41db9d33-7db5-401e-b53f-080dc16097a6",
+  "name": "Peak Stamina Trial",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "7373a727-df6e-4ffe-b6a0-15658a89c565",
+  "name": "Pulse Surge Drive Wave",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "7bfd6fee-6a47-4992-8213-2d0518ddb516",
+  "name": "The Gauntlet Grind Apex",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "8a54823c-9a7f-407e-bc33-66992ee70601",
+  "name": "Endurance Crucible Rise",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "205e906b-c173-448d-bffb-6d1248a06073",
+  "name": "Flow State Sprint",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "0e51c005-e603-40b2-acb1-2ab9f348beb0",
+  "name": "Bodyweight Challenge Session",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "992b9d18-5928-4a5e-843c-da8ff58c4129",
+  "name": "Granite Climb Circuit",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "a18eb167-5076-476d-b502-8c4fd8b01afe",
+  "name": "Flow Drive Motion",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "aa44b6d1-a163-4014-9afd-a9970d4b71c0",
+  "name": "Summit Ascent",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "ee8600b5-8055-4382-bf4e-fb337ec19f18",
+  "name": "Summit Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "3c5bd53f-d90f-4b66-b0e4-06feb9ab00c4",
+  "name": "Velocity Core",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "dc67fe2f-6be6-4c3b-887c-dac3302220d1",
+  "name": "Barbell Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "79ba1fe8-56c3-45a9-9d5c-3e1a68ae4e20",
+  "name": "Trial Ascent",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "39ce69ba-5a4e-4dca-9560-f7973d021848",
+  "name": "Endure The Surge",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "3adad699-da06-4a72-b0fe-051dbac48d8d",
+  "name": "Summit Forge",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "8e65ef3f-0bf1-459d-a714-815df89c4f99",
+  "name": "Crucible Ascent",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "075623bf-3d9a-4396-977b-4dae4cd32280",
+  "name": "Granite Ascent Surge",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "9f0007b6-a043-4ef3-872d-4862b325a1cb",
+  "name": "Cadence Push Reel",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "4de366cd-366f-4f1b-a67a-c44048ff4c49",
+  "name": "Pulse Ascent",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "c28508ff-ded2-41e3-b9c7-be1f95a411b1",
+  "name": "Motion Surge",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "0e722b54-042f-4add-8ba7-83cdb2c75d2e",
+  "name": "Arcane Descent Test",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "57860efb-b738-4f4e-a50e-36f406af6971",
+  "name": "The 200 Trials",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "9bf886dd-d6c0-483b-8692-58101136b500",
+  "name": "Pulse Drive Surge",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "4107cb14-0421-4cee-b8f0-53c7889f6db1",
+  "name": "Endurance Summit",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "31456d65-a19a-4292-bab7-d967acb88eee",
+  "name": "Intermediate Core Balance",
+  "category": "PILATES",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "3cce5ccd-ff60-43a6-9382-0cea87b4bfa8",
+  "name": "Circuit Surge",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "724400c7-b646-49ac-8cdb-132a6b7cd5fa",
+  "name": "The Gauntlet Grind",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "0b911cf3-e4c5-47ae-9e73-0a4b8660519f",
+  "name": "Cardio Kickstart",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "bb3cc472-fa09-46b9-a93f-dfdaee3e4918",
+  "name": "Core Tempo Circuit",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "8e65d2db-7544-4ddc-a07b-07c507166d15",
+  "name": "Torch Engine Drive Blast",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "17d109fd-cbba-42e3-9dde-aaf07e1f6b51",
+  "name": "Summit Gauntlet Apex",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "8c32d01a-b361-4c9f-a5ef-ae8c3808345e",
+  "name": "Kinetic Ascent",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "b57cbffa-8b57-4320-bd5d-b431b110699d",
+  "name": "Ignite Calorie Scorch",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "e7c2c55c-b0f9-4f28-9c9b-ccf556b95adb",
+  "name": "Torch Engine",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f67a7de2-f141-4ec5-a1fd-29d243bd78e2",
+  "name": "Metabolic Fury",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "a6e52ca7-c33f-4d8b-96d1-3df01923a377",
+  "name": "Arcane Circuit",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "00228216-3015-4717-a886-bfd0c5839121",
+  "name": "Trial Cascade",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "83ec4d74-f626-43e7-9c7d-dfde01c40106",
+  "name": "Relay Ascent",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "240921f0-b66e-4e6e-8923-f8a9bb5b70df",
+  "name": "Crucible Gauntlet",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "1f23fc69-0348-401f-be2b-a310783f1cd7",
+  "name": "Calorie Melt Reactor Blast",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "76a94108-7181-4371-ada8-ec7f69d895bc",
+  "name": "Pulse Ascent (EQ)",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "b1e3dee0-f872-48fe-af83-43eb148d6f72",
+  "name": "Pulse Engine",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "d729f0ff-57e1-44d4-9bb1-148f0ad0802c",
+  "name": "Velocity Surge Challenge",
+  "category": "METABOLIC",
+  "before": [
+   "Advanced exercise in a Beginner workout",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "Dumbbell Renegade Row",
+    "to": "dumbbell bent over row"
+   }
+  ]
+ },
+ {
+  "id": "ee23ad30-94ee-4105-ab25-6c1c15e05f39",
+  "name": "Loaded Engine Session",
+  "category": "METABOLIC",
+  "before": [
+   "Advanced exercise in a Beginner workout",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "Dumbbell Renegade Row",
+    "to": "dumbbell bent over row"
+   }
+  ]
+ },
+ {
+  "id": "1813e299-6b6d-4af8-a627-2524d45d79d2",
+  "name": "Engine Builder Max",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "eb47457c-fb6a-4136-80d3-96f6b04ad900",
+  "name": "Metabolic Torchflow",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "4e9f3285-7a19-4a6e-9d0c-f0dcf633cb19",
+  "name": "Shred Catalyst",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "12262c3b-165f-4876-b576-e2b2532202df",
+  "name": "Engine Primer",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "c5467863-65d2-4b06-bf59-547e153bcfbb",
+  "name": "Cadence Coil Tabata",
+  "category": "METABOLIC",
+  "before": [
+   "Activation too long"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "885ad425-5918-43c2-a13b-d6e044088441",
+  "name": "Calorie Meltdown",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "98b98d9d-8c92-429a-8cdd-e7918b84d125",
+  "name": "Engine Tempo Circuit",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f51d389c-10dc-4e1b-9bb5-071c2bce30f6",
+  "name": "Cadence Coil Sprint",
+  "category": "CARDIO",
+  "before": [
+   "CARDIO is an aerobic session, not a metabolic one: X, X are high-fatigue conditioning move"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "jack burpee",
+    "to": "jack jump (male)"
+   }
+  ]
+ },
+ {
+  "id": "e2e90ba8-7b44-4fca-aa79-dce5d25cc093",
+  "name": "Trial Gauntlet Grinder",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "9ca4daed-b713-4392-a5c1-75fdb5297b35",
+  "name": "Kinetic Flow Cycle",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "bbe3fd80-6653-4d88-8e4a-c03fa6ec1065",
+  "name": "Granite Hinge Press",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "pike-to-cobra push-up",
+    "to": "diamond push-up"
+   }
+  ]
+ },
+ {
+  "id": "43ea6c6a-7e90-48f1-ba76-9b5aca02deb7",
+  "name": "Ember Cascade",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "c401694e-b478-4ebd-b86b-68939f32fe51",
+  "name": "Calorie Melt Drive",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "d549a076-dc8c-4b15-8581-052f5a222a05",
+  "name": "Cadence Current Flow",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "4bfe5dff-785f-4cd0-9d95-b38ceccde532",
+  "name": "Tempo Rower Rhythm",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "59ca6fec-31ca-4728-8c56-9c0b81523e48",
+  "name": "Engine Drive Catalyst Shift",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "08e947d3-dfa7-4be8-a01e-faa5dba8501f",
+  "name": "Iron Ember Forge",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "80872609-37e5-4353-9dd3-74f05ab45843",
+  "name": "Dumbbell Hurricane Rush",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "850572ba-5742-4801-a622-f85906ec01d6",
+  "name": "Kinetic Cascade",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "d66a3232-c4c5-404c-9c35-2bd61510f063",
+  "name": "Leg Anchor Builder",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "pike-to-cobra push-up",
+    "to": "decline push-up"
+   }
+  ]
+ },
+ {
+  "id": "8d1df287-5984-4e41-9ff5-e67d9a216c49",
+  "name": "Granite Impulse",
+  "category": "STRENGTH",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "pike-to-cobra push-up",
+    "to": "decline push-up"
+   }
+  ]
+ },
+ {
+  "id": "f5d9fb40-d424-4e33-8387-ced432964028",
+  "name": "Engine Drive Catalyst",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "9e7dfd91-d2dd-48e6-9cb8-e3ba52d22113",
+  "name": "Bodyweight Engine Session",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "70f91583-f507-485e-b2d1-829e03cec805",
+  "name": "Apex Protocol",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "2990a0a3-4fea-49d3-adbd-2e592736895c",
+  "name": "Inferno Tabata Blaze",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "0d7d8e8d-0f70-4a94-9312-fe82c9a62f3b",
+  "name": "Inferno Engine EMOM",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "53ff8118-2a17-4604-a053-1d1d35a8a0f1",
+  "name": "Kinetic Vortex Tabata",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Activation too long"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f27c77f7-946e-458c-b3fe-d924558eded5",
+  "name": "Axial Current Initiate",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "9c94b901-fd8a-4505-91db-998549cb8350",
+  "name": "Forge Pinnacle",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "9e46b02c-8d1f-4b74-bbef-beabf3f8fc90",
+  "name": "Axial Current MET-E",
+  "category": "METABOLIC",
+  "before": [
+   "Advanced exercise in a Beginner workout"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "Dumbbell Renegade Row",
+    "to": "dumbbell bent over row"
+   }
+  ]
+ },
+ {
+  "id": "e299f026-70dc-47ae-ad0e-6c8d74122464",
+  "name": "Forge Fury",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "eece6e41-fa1c-4a61-b01c-342cd0d965f1",
+  "name": "Metabolic Surge",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f1ccbd56-7fc6-4ae6-89ba-0f16e79891a4",
+  "name": "Inferno Blitz",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "bf4f70b6-3b12-467a-a654-9eede22bb132",
+  "name": "Catalyst Current Drive",
+  "category": "METABOLIC",
+  "before": [
+   "Advanced exercise in a Beginner workout",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "Dumbbell Renegade Row",
+    "to": "dumbbell bent over row"
+   }
+  ]
+ },
+ {
+  "id": "6a292dca-1fd6-4fc6-8110-cd555cf66440",
+  "name": "Summit Gauntlet Forge",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "6128e8ca-750e-4521-af34-7f6c5dd624d5",
+  "name": "Summit Complex",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "11875742-a1cd-435d-bb31-fc3cb8e25319",
+  "name": "Torch Stride",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "77fbb0de-ea6c-4c05-92b1-4ff2478bb523",
+  "name": "Cadence Shift",
+  "category": "METABOLIC",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "5e118a80-b409-466a-98ac-7f2261abb9b4",
+  "name": "Engine Drive Catalyst Rev",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "1193efb3-ee2d-4471-93e9-790c2bfc78cc",
+  "name": "Pulse Rush Flow (Bodyweight)",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "a755fbcc-1e81-4e0b-9265-efff668c6543",
+  "name": "Granite Coil Press",
+  "category": "CHALLENGE",
+  "before": [
+   "Static hold in a flow category",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "bodyweight incline side plank",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "fec53599-6496-48de-92cb-4ac1e3e1c1e5",
+  "name": "Cadence Current Weave",
+  "category": "CARDIO",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "6ae9b506-0dc2-4d9e-ab62-9b9fcfd5a229",
+  "name": "Flow Shift Surge",
+  "category": "CARDIO",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ },
+ {
+  "id": "08695fd7-d396-4dfe-a4cc-a8fd5dac06ce",
+  "name": "Iron Will Endurance Test",
+  "category": "CHALLENGE",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "f1b5aa60-6e94-45c9-8a9e-f613e60c9329",
+  "name": "Arcadian Cinder Sprint",
+  "category": "CALORIE BURNING",
+  "before": [
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": []
+ },
+ {
+  "id": "a9600862-ec71-4be4-af2f-f784a73ba5ad",
+  "name": "Ignite Flow Surge",
+  "category": "METABOLIC",
+  "before": [
+   "Static hold in a flow category",
+   "Hold dosed in reps",
+   "Work time exceeds the advertised duration"
+  ],
+  "after": [],
+  "swaps": [
+   {
+    "from": "reverse plank with leg lift",
+    "to": "crunch floor"
+   }
+  ]
+ }
+]
