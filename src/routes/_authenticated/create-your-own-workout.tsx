@@ -321,7 +321,7 @@ function CoachPage() {
         <PageHeader
           className="mb-6"
           eyebrow="Create Your Own Workout"
-          title="Build it yourself"
+          title={name ? `${name}, what's your workout today?` : "What's your workout today?"}
           subtitle="Choose your own exercises from the Exercise Library for every part of your workout."
         />
         {modeToggle}
