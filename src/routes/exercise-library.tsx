@@ -185,6 +185,8 @@ function PreferenceButtons({
   onDislike: () => void;
   onAdd?: (section: DraftSection) => void;
 }) {
+  const [addOpen, setAddOpen] = useState(false);
+  const touchOpen = useRef(false);
   return (
     <div className="mt-2 flex items-center gap-2">
       <button
