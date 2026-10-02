@@ -46,6 +46,20 @@ export function addToDraft(section: DraftSection, ex: { id: string; name: string
   saveDraft(d);
 }
 
+/** Removes the most recently added copy of an exercise from one section. */
+export function removeFromDraft(section: DraftSection, id: string) {
+  const d = loadDraft();
+  const list = d.sections[section];
+  const idx = list.map((x) => x.id).lastIndexOf(id);
+  if (idx < 0) return;
+  list.splice(idx, 1);
+  saveDraft(d);
+}
+
+export function isDraftSection(v: unknown): v is DraftSection {
+  return v === "activation" || v === "main" || v === "finisher" || v === "cooldown";
+}
+
 export function draftCount(d: ManualDraft) {
   return Object.values(d.sections).reduce((n, s) => n + s.length, 0);
 }
