@@ -5,7 +5,7 @@
 import { matchesSelectedEquipment, nameStem, type PoolExercise } from "./pool.server";
 import { findTokens, isLibraryId, stripHtml } from "./tokens";
 import { parseWorkoutSteps } from "./parse-steps";
-import { exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks } from "./rules";
+import { doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks } from "./rules";
 import {
   estimateActivationMinutes,
   estimateCooldownMinutes,

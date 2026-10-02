@@ -36,6 +36,8 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   push(D.flowSpecialtyViolation(e, ctx.category, ctx.format));
   if (MOMENTUM_CATEGORIES.includes(ctx.category) && D.STATIC_HOLD_RE.test(e.name))
     out.push(`"${e.name}" is a static hold, which breaks the flow of a ${ctx.category} session.`);
+  if (ctx.category === "MOBILITY & STABILITY" && D.PASSIVE_STRETCH_RE.test(e.name))
+    out.push(`"${e.name}" is a passive stretch — it belongs in the Cool Down, not Mobility & Stability main work.`);
   if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
     out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
   if (ctx.bodyweightOnly && !/body ?weight/i.test(e.equipment ?? ""))
@@ -55,11 +57,23 @@ export function holdDoseViolation(name: string, line: string): string | null {
   return null;
 }
 
+/** Light categories are programmed in a few quality sets, never long set ladders. */
+export const LIGHT_SET_CAP = 4;
+export function doseRuleBreak(category: Category, line: string): string | null {
+  if (category !== "RECOVERY" && category !== "MOBILITY & STABILITY") return null;
+  const m = /\b(\d+)\s*sets?\b/i.exec(line);
+  if (m && Number(m[1]) > LIGHT_SET_CAP) return `${category} is programmed in at most ${LIGHT_SET_CAP} sets per exercise.`;
+  return null;
+}
+
+export const isCardioRhythm = (name: string) => D.CARDIO_RHYTHM_RE.test(name);
+
 /** Workout-level rules over the work rows (Main + Finisher). */
 export function workoutRuleBreaks(
   work: RuleExercise[],
   main: RuleExercise[],
   ctx: { category: Category; format: Format; level: DifficultyLevel },
+  finisher: RuleExercise[] = work.slice(main.length),
 ): string[] {
   const out: string[] = [];
   const push = (v: string | null) => { if (v) out.push(v); };
@@ -68,5 +82,12 @@ export function workoutRuleBreaks(
   if (work.length) push(D.equipmentFamilyViolation(work, ctx.category, ctx.format));
   if (main.length) push(D.sequenceViolation(main, ctx.format));
   push(D.cardioDominanceViolation(main, ctx.category));
+  for (const [label, block] of [["Main Workout", main], ["Finisher", finisher]] as const) {
+    if (!block.length) continue;
+    if (ctx.category === "CARDIO" && block.filter((e) => isCardioRhythm(e.name)).length / block.length < 0.6)
+      out.push(`CARDIO ${label} must be mostly rhythmic aerobic work (runs, jacks, high knees, skips, step-ups), not strength moves.`);
+    if (ctx.category === "CHALLENGE" && block.filter((e) => D.CORE_ISOLATION_RE.test(e.name)).length > 1)
+      out.push(`CHALLENGE ${label} allows at most one isolated core exercise — a challenge is full-body work.`);
+  }
   return out;
 }
