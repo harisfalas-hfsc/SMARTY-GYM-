@@ -197,7 +197,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
   html = fixHoldDoses(html, lib);
   html = fitDuration({ ...w, main_workout: html }, library, lib);
   const after = complianceIssues({ ...w, main_workout: html }, library, lib);
-  if (after.length >= before.length && after.every((a) => before.includes(a)) && after.length === before.length && swaps.length === 0) return { html: w.main_workout ?? "", swaps, before, after: before };
+  if (after.length >= before.length && after.every((a) => before.includes(a)) && after.length === before.length && swaps.length === 0 && html === (w.main_workout ?? "")) return { html: w.main_workout ?? "", swaps, before, after: before };
   return { html, swaps, before, after };
 }
 
