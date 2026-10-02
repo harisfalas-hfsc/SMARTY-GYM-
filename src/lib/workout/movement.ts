@@ -68,10 +68,10 @@ const RELATED: Record<string, Pattern[]> = {
 /** The base movement inside a pattern (push-up vs dip, jump vs butt kick). HIGH confidence needs the same one. */
 const KEYS: Array<[string, RegExp]> = [
   ["side plank", /side plank|side bridge/i], ["plank", /plank/i], ["wall sit", /wall sit|march sit/i],
-  ["push-up", /push[- ]?up/i], ["dip", /\bdip/i], ["fly", /\bfly|flye|pec deck/i],
+  ["pike", /pike/i], ["push-up", /push[- ]?up/i], ["dip", /\bdip/i], ["fly", /\bfly|flye|pec deck/i],
   ["push press", /push press|thruster/i], ["overhead press", /overhead press|shoulder press|military|arnold|seated press/i],
   ["bench press", /bench press|chest press|floor press|incline press|decline press/i],
-  ["pull-up", /pull[- ]?up|chin[- ]?up/i], ["pulldown", /pulldown|pull down/i], ["row", /\brow/i],
+  ["upright row", /upright row/i], ["pull-up", /pull[- ]?up|chin[- ]?up/i], ["pulldown", /pulldown|pull down/i], ["row", /\brow/i],
   ["step-up", /step[- ]?up/i], ["lunge", /lunge|split squat|bulgarian/i], ["squat", /squat|leg press/i],
   ["deadlift", /deadlift|rdl|romanian|good morning/i], ["swing", /swing/i], ["bridge", /bridge|hip thrust/i],
   ["sit-up", /sit[- ]?up/i], ["crunch", /crunch/i], ["leg raise", /leg raise|knee raise/i], ["twist", /twist|chop|russian/i],
@@ -137,7 +137,7 @@ export function replacementConfidence(from: Row, to: Row, opts: { allowFamilyCha
   if (a.objective !== b.objective) return "LOW";
   const sameFamily = a.family === b.family || opts.allowFamilyChange === true;
   const keepsSecondary = a.patterns.slice(1).every((p) => b.patterns.some((q) => isRelated(p, q)));
-  if (a.primary === b.primary && a.key === b.key && Math.abs(variationTier(from.name) - variationTier(to.name)) <= 1 && variationTier(from.name) * variationTier(to.name) >= 0 && sameFamily && keepsSecondary && levelGap(a.difficulty, b.difficulty) <= 1) return "HIGH";
+  if (a.primary === b.primary && a.key !== null && a.key === b.key && Math.abs(variationTier(from.name) - variationTier(to.name)) <= 1 && variationTier(from.name) * variationTier(to.name) >= 0 && sameFamily && keepsSecondary && levelGap(a.difficulty, b.difficulty) <= 1) return "HIGH";
   if (isRelated(a.primary, b.primary)) return "MEDIUM";
   return "LOW";
 }
