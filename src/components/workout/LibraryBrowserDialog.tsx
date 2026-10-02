@@ -160,7 +160,7 @@ export function LibraryBrowserDialog({
             ) : rows.length ? (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {rows.map((r) => (
-                  <div key={r.id} className="overflow-hidden rounded-2xl border border-border">
+                  <div key={r.id} className="min-w-0 overflow-hidden rounded-2xl border border-border">
                     <button type="button" className="block w-full text-left" onClick={() => setDetail(r)}>
                       <div className="aspect-square bg-white">
                         {r.gif_path ? (
