@@ -1,4 +1,5 @@
 import { isActivationRehearsal } from "./prep-vocabulary";
+import { orderedPriority } from "./priority";
 import { priorityIds } from "./priority";
 import { isCardioRhythm, isLegalExercise, isPassiveStretch } from "./rules";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -272,7 +273,7 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // library itself marks as advanced skill material.
   if (f.level === "beginner") {
     const safe = pool.filter((e) => isLegalExercise(e, { category: f.category, format: f.format ?? "REPS & SETS", level: "beginner" }));
-    if (safe.length >= 12) pool = safe;
+    if (safe.length >= 3) pool = safe;
   }
 
   // 3b. CARDIO stays aerobic (§4). High-fatigue conditioning vocabulary is
@@ -298,7 +299,11 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
     const tagged = pool.filter((e) =>
       (e.smarty_tags ?? []).some((t) => ["challenge", "hiit", "cardio"].includes(t)),
     );
-    if (tagged.length >= 12) pool = tagged;
+    // Tags narrow the vocabulary but never remove the coach's priority movements (priority.ts).
+    if (tagged.length >= 12) {
+      const prio = new Set(orderedPriority(pool).map((e) => e.id));
+      pool = pool.filter((e) => prio.has(e.id) || tagged.includes(e));
+    }
   }
 
   // 5. Body focus (§15) — a HARD filter for EVERY category that carries one.

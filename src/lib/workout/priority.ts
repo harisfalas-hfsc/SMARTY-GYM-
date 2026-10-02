@@ -169,10 +169,12 @@ export function resolvePriority(name: string, library: PoolExercise[], max = 2):
     const have = tokens(e.name);
     if (!want.every((w) => have.includes(w))) continue;
     if (/\(.*pov\)|\bv\.\s*\d/i.test(e.name)) continue; // camera-angle duplicates
+    // A modifier that changes the movement is a different exercise, not the coach's one.
+    if (/\b(side|reverse grip|depth|sit|wall|ski|back and forth|push to|drop|hanging|march|with straps|bench|on box|clap|one leg|single leg)\b/i.test(e.name) && !/\b(side|reverse grip|depth|sit|wall|ski|drop|hanging|march|bench|single leg|one leg)\b/i.test(name)) continue;
     scored.push({ e, extra: have.length - want.length });
   }
   scored.sort((a, b) => a.extra - b.extra || a.e.name.length - b.e.name.length);
-  return scored.filter((s) => s.extra <= 2).slice(0, max).map((s) => s.e);
+  return scored.filter((s) => s.extra <= 1).slice(0, max).map((s) => s.e);
 }
 
 const cache = new WeakMap<PoolExercise[], Set<string>>();

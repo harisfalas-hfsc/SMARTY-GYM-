@@ -8,7 +8,7 @@ import { pickPrep, STRETCH_RE } from "./pool.server";
 import { dominantRegion, equipmentFamilyLimit, equipmentFamilyOf, isDynamicFormat, regionOf } from "./doctrine";
 import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
-import { isTimedPosition } from "./rules";
+import { isCardioRhythm, isTimedPosition } from "./rules";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
@@ -245,13 +245,16 @@ export function buildPackWorkout(
   // Mobility & Stability and Pilates keep their own specialist vocabulary.
   const usePriority = input.category !== "MOBILITY & STABILITY" && input.category !== "PILATES";
   const flow = input.format !== "REPS & SETS";
+  // CARDIO blocks are rhythmic aerobic work (rules.ts): draw them from the rhythm vocabulary.
+  const rhythmPool = pool.filter((e) => isCardioRhythm(e.name));
+  const workPool = input.category === "CARDIO" && rhythmPool.length >= 4 ? rhythmPool : pool;
   const pickPriorityFirst = (count: number, favs: string[]) => {
     const first = usePriority
-      ? pickPriorityByPattern(pool, count, { exclude: used, seed: input.seed ?? input.minutes, conditioningFirst: flow })
+      ? pickPriorityByPattern(workPool, count, { exclude: used, seed: input.seed ?? input.minutes, conditioningFirst: flow })
       : [];
     if (first.length >= count) return first;
     const ex = new Set([...used, ...first.map((e) => e.id)]);
-    return [...first, ...pickBalanced(pool, count - first.length, { favoriteIds: favs, exclude: ex })];
+    return [...first, ...pickBalanced(workPool, count - first.length, { favoriteIds: favs, exclude: ex })];
   };
   const mainPicks = flowGroup(fillFromLegalPool(
     pickPriorityFirst(mainCount, favouriteIds),

@@ -11,7 +11,7 @@ const map = new Map(lib.map((e: any) => [e.id, e]));
 const S: [string, string, string[], string][] = [
   ["BW STRENGTH","STRENGTH",["bodyweight"],"anywhere"],["BW MUSCLE BUILDING","MUSCLE BUILDING",["bodyweight"],"anywhere"],
   ["BW METABOLIC","METABOLIC",["bodyweight"],"anywhere"],["BW CARDIO","CARDIO",["bodyweight"],"anywhere"],["BW CHALLENGE","CHALLENGE",["bodyweight"],"anywhere"],
-  ["DB METABOLIC","METABOLIC",["dumbbells"],"home"],["KB METABOLIC","METABOLIC",["kettlebells"],"home"],["TRX METABOLIC","METABOLIC",["trx"],"home"],["MB METABOLIC","METABOLIC",["other"],"home"],
+  ["DB METABOLIC","METABOLIC",["dumbbells"],"home"],["KB METABOLIC","METABOLIC",["kettlebells"],"home"],["TRX METABOLIC","METABOLIC",["trx","bodyweight"],"home"],["MB METABOLIC","METABOLIC",["other","bodyweight"],"home"],
   ["GYM STRENGTH","STRENGTH",["dumbbells","barbell","machines","cables","bench","rack","kettlebells"],"gym"],["GYM MUSCLE BUILDING","MUSCLE BUILDING",["dumbbells","barbell","machines","cables","bench","rack"],"gym"],
   ["GYM METABOLIC (full gym)","METABOLIC",["dumbbells","barbell","machines","cables","bench","rack","kettlebells"],"gym"],
   ["MOBILITY","MOBILITY & STABILITY",["bodyweight"],"anywhere"],["PILATES","PILATES",["bodyweight"],"anywhere"],["RECOVERY","RECOVERY",["bodyweight"],"anywhere"],
