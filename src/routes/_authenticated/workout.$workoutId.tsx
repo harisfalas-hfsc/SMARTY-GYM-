@@ -71,7 +71,7 @@ function WorkoutPage() {
     try {
       await removeWorkout({ data: { workoutId } });
       toast.success("Workout deleted.");
-      navigate({ to: "/logbook" });
+      navigate({ to: "/logbook", search: { filter: "all" as const, view: "list" as const } });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not delete the workout.");
       setDeleting(false);
