@@ -166,7 +166,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
     html = html.replace(/<(h[1-4]|p|div)\b[^>]*>(?:(?!<\/?\1)[\s\S])*?⚡[\s\S]*?(?=<(?:h[1-4]|p|div)\b[^>]*>(?:(?!<\/?(?:h[1-4]|p|div))[\s\S])*?🧘)/u, "");
   }
 
-  const candidates = library.filter((e) => (NO_PRIORITY.has(cat) || prio.has(e.id)) && e.is_active !== false && Boolean(e.gif_path?.trim()) && !perExerciseBad(e, w));
+  const candidates = library.filter((e) => (NO_PRIORITY.has(cat) || prio.has(e.id) || (cat === "CARDIO" && isCardioRhythm(e.name))) && e.is_active !== false && Boolean(e.gif_path?.trim()) && !perExerciseBad(e, w));
   // Instance-weighted: every rule type counts 10, every still-illegal row 1.
   const score = (h: string) => complianceIssues({ ...w, main_workout: h }, library, lib).length * 10 + workRows(h, lib).filter((r) => perExerciseBad(r, w)).length + blockShortfall(h, lib, cat);
   let current = score(html);

@@ -87,7 +87,9 @@ export function doseRuleBreak(category: Category, line: string): string | null {
   return null;
 }
 
-export const isCardioRhythm = (name: string) => D.CARDIO_RHYTHM_RE.test(name);
+/** Words that make a "walk"/"run"/"march"/"bike" name something other than aerobic rhythm work. */
+const NOT_RHYTHM_RE = /\b(glute bridge|bridge|farmers?|monster|sit|air bike|lunge|hands bike|split squat|crab|bear|duck)\b/i;
+export const isCardioRhythm = (name: string) => D.CARDIO_RHYTHM_RE.test(name) && !NOT_RHYTHM_RE.test(name);
 
 /** Workout-level rules over the work rows (Main + Finisher). */
 export function workoutRuleBreaks(
