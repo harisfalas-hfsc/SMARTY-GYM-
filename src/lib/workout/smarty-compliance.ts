@@ -1,3 +1,4 @@
+import { isLegalExercise } from "./rules";
 // Deterministic rule compliance for ready-made Smarty Workouts.
 // Audits a stored workout against the same doctrine the engine enforces and,
 // when it breaks a rule, swaps exercises only (dose, sections and text stay).
@@ -85,7 +86,8 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     if (D.cooldownOverflowViolation(estimateCooldownMinutes(html), t)) s.add("Cool Down too long");
   }
   if (!NO_PRIORITY.has(cat) && rows.length) {
-    if (priorityShareViolation(rows.map((r) => r.id), library)) s.add("Too few priority exercises");
+    const legal = library.filter((e) => isLegalExercise(e, { category: cat as never, format: (w.format ?? "REPS & SETS") as never }));
+    if (priorityShareViolation(rows.map((r) => r.id), legal)) s.add("Too few priority exercises");
   }
   return [...s];
 }
