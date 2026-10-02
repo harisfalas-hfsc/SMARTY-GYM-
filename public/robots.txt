@@ -5,6 +5,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -24,6 +25,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -43,6 +45,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -62,6 +65,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -81,6 +85,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -100,6 +105,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -119,6 +125,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -138,6 +145,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -157,6 +165,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -176,6 +185,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -195,6 +205,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -214,6 +225,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -233,6 +245,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -252,6 +265,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -272,6 +286,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -291,6 +306,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -310,6 +326,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -329,6 +346,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -348,6 +366,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -367,6 +386,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -386,6 +406,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -405,6 +426,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -424,6 +446,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -443,6 +466,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -462,6 +486,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -481,6 +506,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -500,6 +526,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -519,6 +546,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -538,6 +566,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -557,6 +586,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -576,6 +606,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -595,6 +626,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -614,6 +646,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -633,6 +666,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -652,6 +686,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -671,6 +706,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -690,6 +726,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -709,6 +746,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -728,6 +766,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -747,6 +786,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -766,6 +806,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -785,6 +826,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -804,6 +846,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -823,6 +866,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile
@@ -842,6 +886,7 @@ Disallow: /admin/
 Disallow: /auth
 Disallow: /reset-password
 Disallow: /account
+Disallow: /create-your-own-workout
 Disallow: /create-your-workout
 Disallow: /smarty-ritual
 Disallow: /profile

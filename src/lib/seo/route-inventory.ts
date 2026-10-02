@@ -68,6 +68,7 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/_authenticated/account": "private",
   "/_authenticated/create-your-own-workout": "private",
   "/coach": "redirect",
+  "/create-your-workout": "redirect",
   "/_authenticated/inbox": "private",
   "/_authenticated/logbook": "private",
   "/_authenticated/messages": "private",
