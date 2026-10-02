@@ -210,7 +210,7 @@ export const PRIORITY_SHARE = 0.7;
 export function priorityShareViolation(workIds: string[], library: PoolExercise[]): string | null {
   if (!workIds.length) return null;
   const prio = priorityIds(library);
-  if (prio.size < 6) return null; // the legal pool cannot supply priority movements — never force them
+  if (!prio.size) return null; // the legal pool holds no priority movement — never force one
   // Preference subordinate to hard rules: never demand more distinct priority
   // movements than the legal pool actually holds.
   const unique = [...new Set(workIds)];
