@@ -45,9 +45,11 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
 
 export const isLegalExercise = (e: RuleExercise, ctx: ExerciseRuleContext) => exerciseRuleBreaks(e, ctx).length === 0;
 
+export const isStaticHold = (name: string) => D.STATIC_HOLD_RE.test(name);
+
 /** Holds (plank, wall sit, hollow …) must be dosed in time, never in reps. */
 export function holdDoseViolation(name: string, line: string): string | null {
-  if (!D.STATIC_HOLD_RE.test(name)) return null;
+  if (!isStaticHold(name)) return null;
   if (/\b\d+\s*(reps?|x)\b/i.test(line) && !/\b\d+\s*(sec|s|min)\b/i.test(line))
     return `"${name}" is a hold but is dosed in reps.`;
   return null;

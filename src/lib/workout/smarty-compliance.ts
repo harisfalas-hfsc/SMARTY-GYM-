@@ -5,7 +5,7 @@ import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds } from "./priority";
 import { prepTokens, prepAllowed } from "./prep-vocabulary";
-import { exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
+import { isStaticHold, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -205,7 +205,7 @@ export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): 
 function fixHoldDoses(html: string, lib: Map<string, ComplianceExercise>): string {
   return html.replace(/(<li\b[^>]*>(?:(?!<\/li>)[\s\S])*?)\b(\d+)\s*reps?\b((?:(?!<\/li>)[\s\S])*?\{\{exercise:([A-Za-z0-9_-]+):[^}]*\}\})/g, (m, pre, _n, mid, id) => {
     const name = lib.get(id)?.name ?? "";
-    return D.STATIC_HOLD_RE.test(name) ? `${pre}30 sec${mid}` : m;
+    return isStaticHold(name) ? `${pre}30 sec${mid}` : m;
   });
 }
 
