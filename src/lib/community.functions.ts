@@ -20,11 +20,15 @@ export const shareWorkout = createServerFn({ method: "POST" })
     if (data.shared) {
       const { data: own } = await context.supabase
         .from("workouts")
-        .select("created_by")
+        .select("created_by,community_source_id")
         .eq("id", data.workoutId)
         .maybeSingle();
-      if (String((own as { created_by?: string | null } | null)?.created_by ?? "").startsWith("smarty:")) {
+      const o = own as { created_by?: string | null; community_source_id?: string | null } | null;
+      if (String(o?.created_by ?? "").startsWith("smarty:")) {
         throw new Error("Smarty Workouts are already published for everyone and cannot be shared.");
+      }
+      if (o?.community_source_id || o?.created_by === "community") {
+        throw new Error("This workout came from the community and is already shared by its creator.");
       }
     }
     const { error } = await context.supabase
