@@ -5,7 +5,7 @@
 import { matchesSelectedEquipment, nameStem, type PoolExercise } from "./pool.server";
 import { findTokens, isLibraryId, stripHtml } from "./tokens";
 import { parseWorkoutSteps } from "./parse-steps";
-import { exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks } from "./rules";
+import { doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks } from "./rules";
 import {
   estimateActivationMinutes,
   estimateCooldownMinutes,
@@ -200,6 +200,8 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
     }
     const hd = holdDoseViolation(step.name, step.prescription);
     if (hd) errors.push(hd);
+    const dr = doseRuleBreak(opts.category, step.prescription);
+    if (dr) errors.push(dr);
   }
 
   // 5. Repetition guard — a session should not recycle the same two movements.
@@ -232,7 +234,7 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
   if (workRows.length) {
     // 6c-6e. Workout-level rules (Challenge balance, equipment families,
     //        sequencing, Cardio dominance) — the one rule engine.
-    for (const v of workoutRuleBreaks(workRows, rowsOf(main.map((s) => s.exerciseId)), { category: opts.category, format: opts.format, level: opts.level }).filter((v) => v !== categoryFormatViolation(opts.category, opts.format))) errors.push(v);
+    for (const v of workoutRuleBreaks(workRows, rowsOf(main.map((s) => s.exerciseId)), { category: opts.category, format: opts.format, level: opts.level }, rowsOf(finisher.map((s) => s.exerciseId))).filter((v) => v !== categoryFormatViolation(opts.category, opts.format))) errors.push(v);
     // 6f. Mood and biometrics change the DOSE, and the change is verified here
     //     rather than merely requested in the prompt.
     const mainRows = rowsOf([...main, ...finisher].map((s) => s.exerciseId));

@@ -6,6 +6,17 @@ import * as D from "./doctrine";
 import { prepAllowed, type PrepSection } from "./prep-vocabulary";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
+/** Work words that make a "stretch"-named exercise a dynamic movement (pike-to-cobra push-up, dynamic chest stretch). */
+const MOVING_WORDS_RE = /\b(push-?up|press|jump|squat|lunge|row|curl|walk|crawl|plank|circles?|swings?|world'?s? greatest|dynamic|reach|march)\b/i;
+export const isPassiveStretch = (name: string) => D.PASSIVE_STRETCH_RE.test(name) && !MOVING_WORDS_RE.test(name);
+
+/** Plyometric / cardio drill vocabulary — conditioning, never Strength or Muscle Building work. */
+const STRENGTH_BAN_RE =
+  /\b(jump|jumping|bound|hop|hopping|burpee|plyo|plyometric|skater|sprint|jacks?|butt kicks?|high knees?|mountain climber|run|running|jog|jogging|skip|skipping|shuffle|march|inchworm|bird dog|crawl)\b/i;
+
+/** Pilates is controlled mat work: no dumbbell curls, crawls or pike presses. */
+const PILATES_EXTRA_BAN_RE = /\b(dumbbell|curl|crawl|crab walk|pike|press|roller)\b/i;
+
 export type RuleExercise = D.ExerciseLike & { id?: string; difficulty?: string | null; smarty_tags?: string[] | null };
 
 export type ExerciseRuleContext = {
@@ -36,6 +47,14 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   push(D.flowSpecialtyViolation(e, ctx.category, ctx.format));
   if (MOMENTUM_CATEGORIES.includes(ctx.category) && D.STATIC_HOLD_RE.test(e.name))
     out.push(`"${e.name}" is a static hold, which breaks the flow of a ${ctx.category} session.`);
+  if ((ctx.category === "MOBILITY & STABILITY" || ctx.category === "PILATES") && isPassiveStretch(e.name))
+    out.push(`"${e.name}" is a passive stretch — it belongs in the Cool Down, not ${ctx.category} main work.`);
+  if (ctx.category === "PILATES" && PILATES_EXTRA_BAN_RE.test(`${e.name} ${e.equipment ?? ""}`))
+    out.push(`"${e.name}" is loaded, crawling or pressing work, which Pilates never uses.`);
+  if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && STRENGTH_BAN_RE.test(e.name))
+    out.push(`"${e.name}" is a plyometric or cardio drill — ${ctx.category} work is controlled loaded or bodyweight strength.`);
+  if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && D.CORE_ISOLATION_RE.test(e.name))
+    out.push(`"${e.name}" is isolated core work — ${ctx.category} work is rhythmic or full-body movement.`);
   if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
     out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
   if (ctx.bodyweightOnly && !/body ?weight/i.test(e.equipment ?? ""))
@@ -47,19 +66,37 @@ export const isLegalExercise = (e: RuleExercise, ctx: ExerciseRuleContext) => ex
 
 export const isStaticHold = (name: string) => D.STATIC_HOLD_RE.test(name);
 
-/** Holds (plank, wall sit, hollow …) must be dosed in time, never in reps. */
+/** Positions held still — static holds and passive stretches — are dosed in time. */
+export const isTimedPosition = (name: string) => isStaticHold(name) || isPassiveStretch(name);
+
+/** Holds (plank, wall sit, hollow …) and passive stretches must be dosed in time, never in reps. */
 export function holdDoseViolation(name: string, line: string): string | null {
-  if (!isStaticHold(name)) return null;
-  if (/\b\d+\s*(reps?|x)\b/i.test(line) && !/\b\d+\s*(sec|s|min)\b/i.test(line))
-    return `"${name}" is a hold but is dosed in reps.`;
+  if (!isTimedPosition(name)) return null;
+  const dose = line.replace(/\brest\b[^.;,]*/gi, "");
+  if (/\b\d+\s*(reps?|x)\b/i.test(dose) && !/\b\d+\s*(sec|s|min)\b/i.test(dose))
+    return `"${name}" is a hold or stretch but is dosed in reps.`;
   return null;
 }
+
+/** Light categories are programmed in a few quality sets, never long set ladders. */
+export const LIGHT_SET_CAP = 4;
+export function doseRuleBreak(category: Category, line: string): string | null {
+  if (category !== "RECOVERY" && category !== "MOBILITY & STABILITY") return null;
+  const m = /\b(\d+)\s*sets?\b/i.exec(line);
+  if (m && Number(m[1]) > LIGHT_SET_CAP) return `${category} is programmed in at most ${LIGHT_SET_CAP} sets per exercise.`;
+  return null;
+}
+
+/** Words that make a "walk"/"run"/"march"/"bike" name something other than aerobic rhythm work. */
+const NOT_RHYTHM_RE = /\b(glute bridge|bridge|farmers?|monster|sit|air bike|lunge|hands bike|split squat|crab|bear|duck)\b/i;
+export const isCardioRhythm = (name: string) => D.CARDIO_RHYTHM_RE.test(name) && !NOT_RHYTHM_RE.test(name);
 
 /** Workout-level rules over the work rows (Main + Finisher). */
 export function workoutRuleBreaks(
   work: RuleExercise[],
   main: RuleExercise[],
   ctx: { category: Category; format: Format; level: DifficultyLevel },
+  finisher: RuleExercise[] = work.slice(main.length),
 ): string[] {
   const out: string[] = [];
   const push = (v: string | null) => { if (v) out.push(v); };
@@ -68,5 +105,17 @@ export function workoutRuleBreaks(
   if (work.length) push(D.equipmentFamilyViolation(work, ctx.category, ctx.format));
   if (main.length) push(D.sequenceViolation(main, ctx.format));
   push(D.cardioDominanceViolation(main, ctx.category));
+  for (const [label, block] of [["Main Workout", main], ["Finisher", finisher]] as const) {
+    if (!block.length) continue;
+    if (ctx.category === "CARDIO" && block.filter((e) => !isCardioRhythm(e.name)).length > 1)
+      out.push(`CARDIO ${label} must be rhythmic aerobic work (runs, jacks, high knees, skips, step-ups) — at most one strength-type move.`);
+  }
   return out;
+}
+
+/** Activation is active mobility and stability: at most one passive stretch. */
+export function activationRuleBreak(names: string[]): string | null {
+  return names.filter(isPassiveStretch).length > 1
+    ? "Activation is mostly passive stretching — it must be active mobility and stability work (one stretch at most)."
+    : null;
 }
