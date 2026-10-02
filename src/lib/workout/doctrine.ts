@@ -130,7 +130,7 @@ export const PASSIVE_STRETCH_RE =
 
 /** Repeatable rhythmic / aerobic vocabulary that defines a Cardio block. */
 export const CARDIO_RHYTHM_RE =
-  /\b(run|running|jog|jogging|walk|walking|march|marching|bike|cycling|rowing machine|rower|row erg|elliptical|stair|stepper|step-?up|ski ?erg|skierg|treadmill|jump rope|skipping|skip|shuttle|sprint|jack|jacks|high knees?|butt kicks?|skater|shuffle|mountain climber|plank jack|hop|hopping|bound|cross jacks?|seal jacks?)\b/i;
+  /\b(run|running|jog|jogging|(?<!crab |bear |duck )walk|(?<!crab |bear |duck )walking|march|marching|bike|cycling|rowing machine|rower|row erg|elliptical|stair|stepper|step-?up|ski ?erg|skierg|treadmill|jump rope|skipping|skip|shuttle|sprint|jack|jacks|high knees?|butt kicks?|skater|shuffle|mountain climber|plank jack|hop|hopping|bound|cross jacks?|seal jacks?)\b/i;
 
 /** Isolated trunk work — weak Challenge vocabulary (at most one per block). */
 export const CORE_ISOLATION_RE =

@@ -5,7 +5,7 @@ import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds } from "./priority";
 import { prepTokens, prepAllowed } from "./prep-vocabulary";
-import { isStaticHold, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
+import { isTimedPosition, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -62,9 +62,9 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level }, finRows)) s.add(ruleLabel(v));
   for (const st of workSteps) {
     if (!/\d/.test(st.prescription)) s.add("Exercise without a dose");
-    if (holdDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Hold dosed in reps");
     if (doseRuleBreak(cat, st.prescription)) s.add("Too many sets for a light category");
   }
+  for (const st of steps) if (holdDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Hold or stretch dosed in reps");
   const prep = prepTokens(html);
   for (const t of prep) {
     const name = lib.get(t.id)?.name ?? t.name;
@@ -240,7 +240,7 @@ function capLightSets(html: string, cat: Category): string {
 function fixHoldDoses(html: string, lib: Map<string, ComplianceExercise>): string {
   return html.replace(/(<li\b[^>]*>(?:(?!<\/li>)[\s\S])*?)\b(\d+)\s*reps?\b((?:(?!<\/li>)[\s\S])*?\{\{exercise:([A-Za-z0-9_-]+):[^}]*\}\})/g, (m, pre, _n, mid, id) => {
     const name = lib.get(id)?.name ?? "";
-    return isStaticHold(name) ? `${pre}30 sec${mid}` : m;
+    return isTimedPosition(name) ? `${pre}30 sec${mid}` : m;
   });
 }
 

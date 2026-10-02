@@ -49,11 +49,15 @@ export const isLegalExercise = (e: RuleExercise, ctx: ExerciseRuleContext) => ex
 
 export const isStaticHold = (name: string) => D.STATIC_HOLD_RE.test(name);
 
-/** Holds (plank, wall sit, hollow …) must be dosed in time, never in reps. */
+/** Positions held still — static holds and passive stretches — are dosed in time. */
+export const isTimedPosition = (name: string) =>
+  isStaticHold(name) || (D.PASSIVE_STRETCH_RE.test(name) && !/world'?s? greatest|dynamic|circles?|swings?|walk/i.test(name));
+
+/** Holds (plank, wall sit, hollow …) and passive stretches must be dosed in time, never in reps. */
 export function holdDoseViolation(name: string, line: string): string | null {
-  if (!isStaticHold(name)) return null;
+  if (!isTimedPosition(name)) return null;
   if (/\b\d+\s*(reps?|x)\b/i.test(line) && !/\b\d+\s*(sec|s|min)\b/i.test(line))
-    return `"${name}" is a hold but is dosed in reps.`;
+    return `"${name}" is a hold or stretch but is dosed in reps.`;
   return null;
 }
 
