@@ -136,6 +136,7 @@ function Grid({ children }: { children: React.ReactNode }) {
 
 function CoachPage() {
   const navigate = useNavigate();
+  const { mode } = Route.useSearch();
   const run = useServerFn(generateWorkout);
   const [goal, setGoal] = useState<string>("");
   const [focus, setFocus] = useState<string>("");
@@ -294,6 +295,38 @@ function CoachPage() {
   }
 
 
+  const modeToggle = (
+    <div className="mb-6 grid grid-cols-2 gap-2 rounded-3xl border-2 border-primary bg-card p-1.5">
+      {(["coach", "build"] as const).map((m) => (
+        <button
+          key={m}
+          type="button"
+          onClick={() => navigate({ to: "/create-your-own-workout", search: { mode: m }, replace: true })}
+          className={`h-11 rounded-2xl text-sm font-extrabold transition-colors ${
+            mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+          }`}
+        >
+          {m === "coach" ? "Smarty Coach" : "Build It Yourself"}
+        </button>
+      ))}
+    </div>
+  );
+
+  if (mode === "build") {
+    return (
+      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
+        <PageHeader
+          className="mb-6"
+          eyebrow="Create Your Own Workout"
+          title="Build it yourself"
+          subtitle="Choose your own exercises from the Exercise Library for every part of your workout."
+        />
+        {modeToggle}
+        <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+        <ManualWorkoutBuilder premium={premium} onLocked={() => setMembershipOpen(true)} />
+      </div>
+    );
+  }
 
   if (profileReady === false) {
     return (
