@@ -22,6 +22,9 @@ export const COOLDOWN_NAMES = [
 
 const ACT = new Set(ACTIVATION_NAMES);
 const CD = new Set(COOLDOWN_NAMES);
+const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child/;
+const ACT_LIKE = /bird dog|dead bug|glute bridge|clamshell|fire hydrant|plank|circles?\b|rotation|inchworm|overhead reach|scapula/;
+const BANNED = /lunge|row\b|press|raise|curl|crawl|walk|kick|jump|burpee|climber|crunch|dip|calf|squat jump|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell/;
 const norm = (n: string) => n.trim().toLowerCase();
 
 export type PrepSection = "activation" | "cooldown";
@@ -29,7 +32,9 @@ export type PrepSection = "activation" | "cooldown";
 export function prepAllowed(name: string, section: PrepSection): boolean {
   const n = norm(name);
   // Activation may also use cool-down mobility/stretches; cool down stays static/mobility.
-  return section === "cooldown" ? CD.has(n) : ACT.has(n) || CD.has(n);
+  if (section === "cooldown" ? CD.has(n) : ACT.has(n) || CD.has(n)) return true;
+  if (BANNED.test(n)) return false;
+  return section === "cooldown" ? CD_LIKE.test(n) : ACT_LIKE.test(n) || CD_LIKE.test(n);
 }
 
 const TOKEN = /\{\{exercise:([A-Za-z0-9_-]+):([^}]*)\}\}/g;
