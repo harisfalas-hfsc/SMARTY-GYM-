@@ -197,12 +197,15 @@ const MACHINE_STRENGTH_RE =
   /\b(leverage|smith|selectorized|pec deck|lat pulldown|leg press|leg extension|leg curl|machine (chest|shoulder|row|press)|cable)\b/i;
 
 /**
- * High-skill gymnastic and single-limb movements. Nobody hits a handstand
+ * High-skill gymnastic movements. Skill is judged by technical complexity,
+ * never by the words "one-arm" / "single-arm": a single-arm dumbbell row,
+ * kettlebell swing or dumbbell thruster is normal training vocabulary; a
+ * one-arm push-up or pull-up is skill work. Nobody hits a handstand
  * push-up or a pistol squat under a running clock in a conditioning session —
  * these are skill work, never calorie-burning vocabulary.
  */
 export const HIGH_SKILL_RE =
-  /\b(handstand|hand stand|pistol|shrimp squat|archer|planche|front lever|back lever|human flag|muscle-?up|nordic|one-?arm|one arm|single-?arm|single arm|one-?legged squat|iron cross|turkish get-?up|get-?up|windmill|bent press)\b/i;
+  /\b(handstand|hand stand|pistol|shrimp squat|archer|planche|front lever|back lever|human flag|muscle-?up|nordic|(?:one|single)[- ]?arm (?:push-?up|pull-?up|chin-?up|handstand)|one-?legged squat|iron cross|turkish get-?up|get-?up|windmill|bent press)\b/i;
 
 /**
  * HUMAN REALISM (global).
@@ -385,7 +388,7 @@ export function dynamicExerciseViolation(
 
   const implementPower = isImplementPower(e.name);
   if (HIGH_SKILL_RE.test(name) && !(implementPower && !/\b(turkish|get-?up|windmill)\b/.test(name)))
-    return `"${e.name}" is a high-skill or single-limb movement and is never programmed inside a ${format} session.`;
+    return `"${e.name}" is a high-skill gymnastic movement and is never programmed inside a ${format} session.`;
 
   const isErgo = ERGOMETER_RE.test(both) && !MACHINE_STRENGTH_RE.test(name);
   if (isErgo) return null;
@@ -686,6 +689,41 @@ export function equipmentFamilyViolation(
   if (families.size > limit)
     return `The session spans ${families.size} equipment families (${[...families].join(", ")}) — a ${format} ${category} session may use at most ${limit} beyond bodyweight.`;
   return null;
+}
+
+/** Number of station (equipment-family) changes across an ordered list. */
+export function countTransitions(families: string[]): number {
+  let switches = 0;
+  for (let i = 1; i < families.length; i++) if (families[i] !== families[i - 1]) switches += 1;
+  return switches;
+}
+
+/**
+ * §13 HUMAN FLOW — HARD rule for clock-driven formats. A dynamic block is a
+ * flow, not a tour of the gym: every implement family is one contiguous block
+ * (bodyweight moves may sit between, the implement is never picked up twice),
+ * and the block changes station at most ceil(n/2) times. AVAILABLE equipment
+ * is never PREFERRED equipment — the format decides.
+ */
+export function stationFlowViolation(exercises: ExerciseLike[], format: Format, label = "Main Workout"): string | null {
+  if (!isDynamicFormat(format) || exercises.length < 3) return null;
+  const fams = exercises.map((e) => equipmentFamilyOf(e.equipment));
+  const implementRuns = fams.filter((f) => f !== "bodyweight").filter((f, i, a) => i === 0 || a[i - 1] !== f);
+  if (new Set(implementRuns).size !== implementRuns.length)
+    return `${label} picks the same equipment back up after switching away — group each implement into one block so the ${format} flows.`;
+  const changes = countTransitions(fams);
+  const budget = Math.ceil(exercises.length / 2);
+  if (changes > budget)
+    return `${label} changes station ${changes} times (limit ${budget}) — a ${format} must flow without constant equipment changes.`;
+  return null;
+}
+
+/** §15 — a dynamic Finisher keeps the Main Workout's equipment; no new station for the last minutes. */
+export function finisherFlowViolation(main: ExerciseLike[], finisher: ExerciseLike[], format: Format): string | null {
+  if (!isDynamicFormat(format) || !finisher.length || !main.length) return null;
+  const mainFams = new Set(main.map((e) => equipmentFamilyOf(e.equipment)));
+  const added = finisher.map((e) => equipmentFamilyOf(e.equipment)).filter((f) => f !== "bodyweight" && !mainFams.has(f));
+  return added.length ? `The Finisher introduces new equipment (${[...new Set(added)].join(", ")}) — it must keep the Main Workout's flow.` : null;
 }
 
 // --- 19. Time math ----------------------------------------------------------
