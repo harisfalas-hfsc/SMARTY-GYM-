@@ -211,8 +211,12 @@ export function priorityShareViolation(workIds: string[], library: PoolExercise[
   if (!workIds.length) return null;
   const prio = priorityIds(library);
   if (prio.size < 6) return null; // the legal pool cannot supply priority movements — never force them
-  const hits = workIds.filter((id) => prio.has(id)).length;
-  return hits / workIds.length >= PRIORITY_SHARE
+  // Preference subordinate to hard rules: never demand more distinct priority
+  // movements than the legal pool actually holds.
+  const unique = [...new Set(workIds)];
+  const hits = unique.filter((id) => prio.has(id)).length;
+  const need = Math.min(Math.ceil(unique.length * PRIORITY_SHARE), prio.size);
+  return hits >= need
     ? null
     : `Only ${hits} of ${workIds.length} main exercises are coach priority exercises (need at least ${PRIORITY_SHARE * 100}%).`;
 }
