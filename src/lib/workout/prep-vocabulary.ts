@@ -75,6 +75,28 @@ export function activationDoseViolation(name: string, line: string): string | nu
   return null;
 }
 
+/**
+ * Brings every Activation line inside the dose ceiling (one pass, ≤10 reps or
+ * ≤30 sec). Used by the generator's enforcer and by the stored-workout repair,
+ * so both apply the identical rule. `timed` decides holds/stretches → seconds.
+ */
+export function clampActivationDoses(html: string, timed: (name: string) => boolean): string {
+  const act = html.search(/Activation/i);
+  if (act < 0) return html;
+  const rest = html.slice(act);
+  const endRel = rest.search(/Main Workout|💪/i);
+  const end = endRel > 0 ? act + endRel : html.length;
+  const seg = html.slice(act, end).replace(
+    /(<p[^>]*>)([^<{]*?)(\{\{exercise:[A-Za-z0-9_-]+:([^}]*)\}\})([^<]*)/g,
+    (all, open: string, pre: string, tok: string, name: string, post: string) => {
+      if (!activationDoseViolation(name, `${pre} ${post}`)) return all;
+      const note = activationDoseViolation(name, post) ? "" : post;
+      return `${open}${timed(name) ? "30 sec" : "8 reps"} ${tok}${note || " — slow and controlled"}`;
+    },
+  );
+  return html.slice(0, act) + seg + html.slice(end);
+}
+
 const TOKEN = /\{\{exercise:([A-Za-z0-9_-]+):([^}]*)\}\}/g;
 
 /** Token spans in the Activation and Cool Down sections. */

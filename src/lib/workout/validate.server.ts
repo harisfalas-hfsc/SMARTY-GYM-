@@ -5,6 +5,7 @@
 import { matchesSelectedEquipment, nameStem, type PoolExercise } from "./pool.server";
 import { findTokens, isLibraryId, stripHtml } from "./tokens";
 import { parseWorkoutSteps } from "./parse-steps";
+import { activationDoseViolation } from "./prep-vocabulary";
 import { doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks } from "./rules";
 import {
   estimateActivationMinutes,
@@ -167,10 +168,16 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
   const finisher = steps.filter((s) => s.section === "Finisher");
   const activation = steps.filter((s) => s.section === "Activation" || s.section === "Warm-up");
   const cooldown = steps.filter((s) => s.section === "Cool-down");
-  const requiresFinisher =
-    categoryAllowsFinisher(opts.category) && (opts.requireFinisher ?? true);
+  // The blueprint is authoritative: a Finisher only when it asks for one.
+  const requiresFinisher = categoryAllowsFinisher(opts.category) && opts.requireFinisher === true;
   if (!categoryAllowsFinisher(opts.category) && finisher.length) {
     errors.push(`${opts.category} sessions never carry a Finisher.`);
+  } else if (opts.requireFinisher === false && finisher.length) {
+    errors.push("This session's blueprint has no Finisher, but one was written.");
+  }
+  for (const step of activation) {
+    const v = activationDoseViolation(step.name, step.prescription);
+    if (v) errors.push(v);
   }
 
   const wantsActivation = opts.requireActivation ?? opts.category !== "MICRO-WORKOUTS";
