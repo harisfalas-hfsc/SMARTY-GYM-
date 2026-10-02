@@ -12,7 +12,7 @@ export const ACTIVATION_NAMES = [
   "kneeling plank tap shoulder", "inchworm", "world greatest stretch", "squat to overhead reach",
   "squat to overhead reach with twist", "posterior step to overhead reach", "wrist circles", "ankle circles",
   "dynamic chest stretch (male)", "circles knee stretch", "spine twist",
-  "push-up", "incline push-up", "reverse lunge", "forward lunge (male)", "walking lunge", "bodyweight squat", "air squat",
+  "push-up", "incline push-up", "reverse lunge", "forward lunge", "walking lunge", "squat", "quads (bodyweight squat)", "kneeling push-up", "push-up (wall)",
 ];
 
 export const COOLDOWN_NAMES = [
@@ -38,7 +38,7 @@ const BANNED = /lunge|squat|row\b|press|raise|curl|crawl|walk|donkey kick|butt k
  */
 const REHEARSAL = /\b(squat|lunge|march(ing)?|push-?up)\b/;
 const REHEARSAL_BAN =
-  /jump|jumping|plyo|split|bulgarian|pistol|sissy|shrimp|cossack|archer|diamond|decline|clap|pike|one arm|single arm|spider|weighted|dumbbell|barbell|kettlebell|band|smith|cable|lever|trx|suspen|medicine|ball|box|bench|step|overhead squat|front squat|back squat|hack|goblet|deficit|curtsy|lateral|side/;
+  /jump|jumping|plyo|split|bulgarian|pistol|sissy|shrimp|cossack|archer|diamond|decline|clap|pike|one arm|single arm|spider|weighted|dumbbell|barbell|kettlebell|band|smith|cable|lever|trx|suspen|medicine|ball|box|bench|step|overhead squat|front squat|back squat|hack|goblet|deficit|curtsy|curtsey|lateral|side|clock|kick|handstand|superman|planche|hindu|one leg|single leg|\bsit\b|hold|high knee|tap|plus|reverse grip|close-grip|pilates|lower arms|elbow|potty|wide|twist|drop/;
 export const isActivationRehearsal = (name: string) => {
   const n = norm(name);
   return REHEARSAL.test(n) && !REHEARSAL_BAN.test(n);
