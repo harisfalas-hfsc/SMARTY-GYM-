@@ -62,3 +62,55 @@ export const createManualWorkout = createServerFn({ method: "POST" })
     if (insErr) throw new Error(insErr.message);
     return { id: (inserted as { id: string }).id };
   });
+
+/**
+ * Permanently deletes a member-built workout and everything attached to it
+ * (sharing, likes, ratings, comments, completions, logged sets, results,
+ * feedback, records, notifications) so it no longer counts anywhere.
+ * Coach and Smarty workouts can never be deleted here.
+ */
+export const deleteManualWorkout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ workoutId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { data: row, error } = await context.supabase
+      .from("workouts")
+      .select("id,user_id,category")
+      .eq("id", data.workoutId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!row || row.user_id !== context.userId) throw new Error("Workout not found.");
+    if (row.category !== MANUAL_CATEGORY) throw new Error("Only workouts you built yourself can be deleted.");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const id = data.workoutId;
+    const byWorkout = [
+      "community_comments",
+      "community_ratings",
+      "community_reactions",
+      "set_logs",
+      "workout_feedback",
+      "workout_results",
+      "personal_records",
+      "notifications",
+      "workout_seo",
+    ] as const;
+    for (const t of byWorkout) {
+      const { error: e } = await supabaseAdmin.from(t).delete().eq("workout_id", id);
+      if (e) throw new Error("Could not delete the workout. Please try again.");
+    }
+    const steps = [
+      supabaseAdmin.from("community_completions").delete().or(`workout_id.eq.${id},copy_workout_id.eq.${id}`),
+      supabaseAdmin.from("community_reports").delete().eq("target_id", id),
+      supabaseAdmin.from("workout_generation_requests").update({ workout_id: null }).eq("workout_id", id),
+      supabaseAdmin.from("workouts").update({ community_source_id: null }).eq("community_source_id", id),
+    ];
+    for (const s of steps) {
+      const { error: e } = await s;
+      if (e) throw new Error("Could not delete the workout. Please try again.");
+    }
+    const { error: delErr } = await supabaseAdmin.from("workouts").delete().eq("id", id).eq("user_id", context.userId);
+    if (delErr) throw new Error("Could not delete the workout. Please try again.");
+    const { recomputeProgress } = await import("@/lib/progress.server");
+    await recomputeProgress(supabaseAdmin as never, context.userId).catch(() => undefined);
+    return { ok: true };
+  });
