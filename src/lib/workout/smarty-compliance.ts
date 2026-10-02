@@ -32,7 +32,7 @@ function blockShortfall(html: string, lib: Map<string, ComplianceExercise>, cat:
   let n = 0;
   for (const block of [rowsIn(html, lib, "Main Workout"), finisherRows(html, lib)]) {
     if (!block.length) continue;
-    if (cat === "CARDIO") n += Math.max(0, Math.ceil(block.length * 0.6) - block.filter((e) => isCardioRhythm(e.name)).length);
+    if (cat === "CARDIO") n += Math.max(0, block.filter((e) => !isCardioRhythm(e.name)).length - 1);
   }
   return n;
 }
