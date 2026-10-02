@@ -21,7 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Search, X, Dumbbell, Heart, ThumbsDown } from "lucide-react";
+import { Loader2, Search, X, Dumbbell, Heart, ThumbsDown, Plus } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DRAFT_SECTIONS, addToDraft, type DraftSection } from "@/lib/manual-workout-draft";
 import { toast } from "sonner";
 import { ExerciseGif } from "@/components/ExerciseGif";
 import { PageHeader } from "@/components/PageHeader";
@@ -175,11 +177,13 @@ function PreferenceButtons({
   busy,
   onLike,
   onDislike,
+  onAdd,
 }: {
   state: "like" | "dislike" | "none";
   busy: boolean;
   onLike: () => void;
   onDislike: () => void;
+  onAdd?: (section: DraftSection) => void;
 }) {
   return (
     <div className="mt-2 flex items-center gap-2">
@@ -209,6 +213,25 @@ function PreferenceButtons({
       >
         <ThumbsDown className="h-4 w-4" />
       </button>
+      {onAdd ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              className="inline-flex h-8 items-center gap-1 rounded-full border border-primary px-3 text-xs font-bold text-primary"
+            >
+              <Plus className="h-3.5 w-3.5" /> Add to workout
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            {DRAFT_SECTIONS.map((s) => (
+              <DropdownMenuItem key={s.id} onSelect={() => onAdd(s.id)}>
+                {s.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : null}
       {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" /> : null}
     </div>
   );
@@ -280,6 +303,25 @@ function ExerciseLibraryPage() {
     } finally {
       setSavingId(null);
     }
+  }
+
+  const navigate = useNavigate();
+  function addExercise(section: DraftSection, ex: { id: string; name: string }) {
+    if (!user) {
+      toast.error("Sign in to build your own workout.");
+      return;
+    }
+    if (!prefs?.premium) {
+      toast.error("Building your own workout is part of the premium membership.");
+      return;
+    }
+    addToDraft(section, ex);
+    toast.success(`Added to ${DRAFT_SECTIONS.find((s) => s.id === section)!.label}.`, {
+      action: {
+        label: "Go to my workout",
+        onClick: () => navigate({ to: "/create-your-own-workout", search: { mode: "build" } }),
+      },
+    });
   }
 
   const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -495,6 +537,7 @@ function ExerciseLibraryPage() {
                         busy={savingId === ex.id}
                         onLike={() => mark(ex.id, "like")}
                         onDislike={() => mark(ex.id, "dislike")}
+                        onAdd={(sec) => addExercise(sec, ex)}
                       />
                     </div>
                   </div>
@@ -549,6 +592,7 @@ function ExerciseLibraryPage() {
                   busy={savingId === selected.id}
                   onLike={() => mark(selected.id, "like")}
                   onDislike={() => mark(selected.id, "dislike")}
+                  onAdd={(sec) => addExercise(sec, selected)}
                 />
 
                 <div className="grid grid-cols-2 gap-2 text-sm">
