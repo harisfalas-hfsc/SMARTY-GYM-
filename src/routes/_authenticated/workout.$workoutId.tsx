@@ -1,4 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { deleteManualWorkout } from "@/lib/manual-workout.functions";
+import { MANUAL_CATEGORY } from "@/lib/manual-workout";
+import { Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRemoteData } from "@/lib/remote-data";
@@ -54,6 +57,26 @@ function WorkoutPage() {
   const online = useOnlineStatus();
   const saveShare = useServerFn(shareWorkout);
   const readFeedback = useServerFn(getSessionFeedback);
+  const removeWorkout = useServerFn(deleteManualWorkout);
+  const navigate = useNavigate();
+  const [deleting, setDeleting] = useState(false);
+  async function deleteWorkout() {
+    if (
+      !window.confirm(
+        "Delete this workout for good? It will also be removed from the community, with its likes, ratings and comments, and from your progress and training load. This can't be undone.",
+      )
+    )
+      return;
+    setDeleting(true);
+    try {
+      await removeWorkout({ data: { workoutId } });
+      toast.success("Workout deleted.");
+      navigate({ to: "/logbook", search: { filter: "all" as const, view: "list" as const } });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not delete the workout.");
+      setDeleting(false);
+    }
+  }
 
   const load = useCallback(async () => {
     if (!isSupabaseConfigured()) {
@@ -276,6 +299,18 @@ function WorkoutPage() {
         </div>
       </section>
       )}
+
+      {w.category === MANUAL_CATEGORY ? (
+        <Button
+          variant="outline"
+          className="mt-6 h-12 w-full rounded-2xl border-destructive font-bold text-destructive"
+          disabled={deleting}
+          onClick={() => void deleteWorkout()}
+        >
+          {deleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+          Delete this workout
+        </Button>
+      ) : null}
 
       {!done ? (
         <Button size="lg" className="mt-6 h-14 w-full rounded-2xl text-base font-bold" onClick={complete}>
