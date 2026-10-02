@@ -1,3 +1,4 @@
+import { isActivationRehearsal } from "./prep-vocabulary";
 import { priorityIds } from "./priority";
 import { isCardioRhythm, isLegalExercise, isPassiveStretch } from "./rules";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -350,7 +351,7 @@ export function nameStem(name: string): string {
 
 /** Movement-prep vocabulary: dynamic mobility, activation and patterning. */
 export const ACTIVATION_OK_RE =
-  /\b(bridge|bird dog|dead bug|clamshell|circle|circles|leg swing|swing leg|march|walkout|inchworm|cat|scapular|wall slide|pull-?apart|hip opener|ankle|good morning|dynamic|rotation|twist|reach|crawl|glute|abduction|adduction|shoulder|hip|thoracic|lunge|squat|stretch|mobility|activation|band)\b/i;
+  /\b(bridge|bird dog|dead bug|clamshell|circle|circles|leg swing|swing leg|march|walkout|inchworm|cat|scapular|wall slide|pull-?apart|hip opener|ankle|good morning|dynamic|rotation|twist|reach|crawl|glute|abduction|adduction|shoulder|hip|thoracic|lunge|squat|push-?up|stretch|mobility|activation|band)\b/i;
 
 /** Never movement prep — load, impact, skill or maximal strength. */
 export const PREP_BAN_RE =
@@ -379,7 +380,8 @@ function prepFilter(
   return all.filter((e) => {
     if (banned.has(e.id)) return false;
     if (!prepEquipmentOk(e, selectedEquipment)) return false;
-    if (PREP_BAN_RE.test(text(e))) return false;
+    // Light bodyweight rehearsal (squat, lunge, push-up) is legal Activation prep — prep-vocabulary.ts decides.
+    if (PREP_BAN_RE.test(text(e)) && !(isBodyweight(e) && isActivationRehearsal(e.name))) return false;
     if (HOME_APPARATUS_RE.test(text(e))) return false;
     if ((e.difficulty ?? "").toLowerCase() === "advanced") return false;
     if (strict && !match.test(e.name)) return false;

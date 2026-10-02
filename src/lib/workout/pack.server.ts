@@ -5,7 +5,9 @@ import { pickPriorityByPattern } from "./priority";
 // workout that passes enforcement + validation.
 import type { PoolExercise } from "./pool.server";
 import { pickPrep, STRETCH_RE } from "./pool.server";
-import { dominantRegion, regionOf } from "./doctrine";
+import { dominantRegion, equipmentFamilyOf, regionOf } from "./doctrine";
+import { prepAllowed } from "./prep-vocabulary";
+import { isTimedPosition } from "./rules";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
@@ -19,6 +21,8 @@ export type PackInput = {
   activationPool?: PoolExercise[];
   cooldownPool?: PoolExercise[];
   seed?: number;
+  /** Blueprint decision (programming.ts) — authoritative. No Finisher when false. */
+  finisher?: boolean;
 };
 
 
@@ -49,12 +53,6 @@ const ACTIVATION_FALLBACK = [
   "8 reps each side World’s greatest stretch — slow and controlled",
   "20 sec Dead bug hold — breathe, no arching",
 ];
-
-const ACTIVATION_OK_RE =
-  /\b(bridge|bird dog|dead bug|clamshell|circle|swing leg|leg swing|march|walkout|cat|scapular|band pull|wall slide|hip opener|arm circle|ankle|good morning|inchworm|lunge|squat)\b/i;
-
-const ACTIVATION_BAN_RE =
-  /\b(barbell|dumbbell|kettlebell|machine|cable|smith|sled|weighted|deadlift|bench press|pull-?up|chin-?up|muscle-?up|burpee|box jump|sprint|dip|clean|snatch|jerk|thruster)\b/i;
 
 const isBodyweight = (e: PoolExercise) => (e.equipment ?? "").toLowerCase().includes("body weight");
 
@@ -207,7 +205,7 @@ export function buildPackWorkout(
   const isMicro = input.category === "MICRO-WORKOUTS";
   const isRecovery = input.category === "RECOVERY";
   // HARD RULE: Micro Workout and Pilates never get a finisher.
-  const noFinisher = isMicro || isRecovery || input.category === "PILATES";
+  const noFinisher = input.finisher === undefined ? isMicro || isRecovery || input.category === "PILATES" : !input.finisher;
   const favouriteIds = input.favoriteIds ?? [];
   const used = new Set<string>();
 
@@ -234,7 +232,16 @@ export function buildPackWorkout(
 
   const finisherPicks = noFinisher
     ? []
-    : fillFromLegalPool(pickPriorityFirst(3, []), mainPicks.length ? mainPicks : pool, 3);
+    : (() => {
+        // Finisher keeps the Main Workout's equipment flow: no new station for the last minutes.
+        const fams = new Set(mainPicks.map((e) => equipmentFamilyOf(e.equipment)));
+        const flowPool = pool.filter((e) => fams.has(equipmentFamilyOf(e.equipment)) || equipmentFamilyOf(e.equipment) === "bodyweight");
+        const src = flow && flowPool.length >= 3 ? flowPool : pool;
+        const first = usePriority ? pickPriorityByPattern(src, 3, { exclude: used, seed: (input.seed ?? input.minutes) + 7, conditioningFirst: flow }) : [];
+        const ex = new Set([...used, ...first.map((e) => e.id)]);
+        const picks = first.length >= 3 ? first : [...first, ...pickBalanced(src, 3 - first.length, { exclude: ex })];
+        return fillFromLegalPool(picks, mainPicks.length ? mainPicks : pool, 3);
+      })();
   finisherPicks.forEach((e) => used.add(e.id));
 
   const seed = input.seed ?? (mainPicks[0]?.id.length ?? 5) * 31 + input.minutes;
@@ -261,8 +268,7 @@ export function buildPackWorkout(
     : pickBalanced(library, 4, {
         filter: (e) =>
           isBodyweight(e) &&
-          ACTIVATION_OK_RE.test(e.name) &&
-          !ACTIVATION_BAN_RE.test(`${e.name} ${e.equipment ?? ""}`) &&
+          prepAllowed(e.name, "activation") &&
           (e.difficulty ?? "").toLowerCase() !== "advanced",
       })) as PoolExercise[];
 
@@ -283,7 +289,7 @@ export function buildPackWorkout(
   if (!isMicro) {
     blocks.push(heading("🔥", "Activation 5'"));
     if (activationPicks.length >= 3) {
-      activationPicks.forEach((e) => blocks.push(li(`10 reps ${token(e)} — slow and controlled`)));
+      activationPicks.forEach((e) => blocks.push(li(`${isTimedPosition(e.name) ? "30 sec" : "8 reps"} ${token(e)} — slow and controlled`)));
     } else {
       ACTIVATION_FALLBACK.forEach((line) => blocks.push(li(line)));
     }
