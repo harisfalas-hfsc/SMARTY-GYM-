@@ -4,7 +4,7 @@
 import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds, priorityShareViolation } from "./priority";
-import { replacementConfidence, type Confidence } from "./movement";
+import { replacementConfidence, variationTier, type Confidence } from "./movement";
 import { prepTokens, prepAllowed, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
 import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
@@ -262,12 +262,15 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
       .sort((x, y) =>
         Number(y.conf === "HIGH") - Number(x.conf === "HIGH") ||
         Number(opts.wantPriority ? prio.has(y.c.id) : 0) - Number(opts.wantPriority ? prio.has(x.c.id) : 0) ||
+        Number(sameTarget(y.c, fromRow)) - Number(sameTarget(x.c, fromRow)) ||
+        Math.abs(variationTier(x.c.name) - variationTier(fromRow.name)) - Math.abs(variationTier(y.c.name) - variationTier(fromRow.name)) ||
         Number(D.regionOf(y.c) === D.regionOf(fromRow)) - Number(D.regionOf(x.c) === D.regionOf(fromRow)) ||
         Number(prio.has(y.c.id)) - Number(prio.has(x.c.id)) ||
         x.c.name.localeCompare(y.c.name));
     void role;
     return ranked;
   };
+  const sameTarget = (a: ComplianceExercise, b: ComplianceExercise) => Boolean(a.target_muscle) && (a.target_muscle ?? "").toLowerCase() === (b.target_muscle ?? "").toLowerCase();
   const workLegal = (c: ComplianceExercise) => !perExerciseBad(c, w);
   const tryApply = (index: number, raw: string, fromRow: ComplianceExercise, role: Role, reason: string, rule: string, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean; mandatory: boolean }) => {
     const curIssues = issues(html);

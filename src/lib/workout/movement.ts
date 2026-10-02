@@ -80,6 +80,10 @@ const KEYS: Array<[string, RegExp]> = [
   ["crawl", /crawl|crab walk/i], ["clean", /clean|snatch/i], ["curl", /curl/i], ["triceps", /triceps|skull|kickback/i],
   ["calf", /calf|heel raise/i], ["carry", /carry|farmer/i], ["dead bug", /dead bug|bird dog/i], ["stretch", /stretch|pose\b/i],
 ];
+/** Variation difficulty read from the name: regressions vs progressions of the same movement. */
+const EASY_RE = /\b(wall|incline|kneeling|knee|modified|assisted|box|bench|elevated|half|partial|band assisted)\b/i;
+const HARD_RE = /\b(diamond|decline|archer|clap|plyo|explosive|one arm|single arm|one leg|single leg|pistol|deficit|weighted|tempo|pause)\b/i;
+export const variationTier = (name: string) => (HARD_RE.test(name) ? 1 : EASY_RE.test(name) ? -1 : 0);
 const keyOf = (name: string) => KEYS.find(([, re]) => re.test(name))?.[0] ?? null;
 
 export type Movement = { key: string | null; primary: Pattern; patterns: Pattern[]; objective: Objective; family: string; difficulty: string };
@@ -133,7 +137,7 @@ export function replacementConfidence(from: Row, to: Row, opts: { allowFamilyCha
   if (a.objective !== b.objective) return "LOW";
   const sameFamily = a.family === b.family || opts.allowFamilyChange === true;
   const keepsSecondary = a.patterns.slice(1).every((p) => b.patterns.some((q) => isRelated(p, q)));
-  if (a.primary === b.primary && a.key === b.key && sameFamily && keepsSecondary && levelGap(a.difficulty, b.difficulty) <= 1) return "HIGH";
+  if (a.primary === b.primary && a.key === b.key && Math.abs(variationTier(from.name) - variationTier(to.name)) <= 1 && variationTier(from.name) * variationTier(to.name) >= 0 && sameFamily && keepsSecondary && levelGap(a.difficulty, b.difficulty) <= 1) return "HIGH";
   if (isRelated(a.primary, b.primary)) return "MEDIUM";
   return "LOW";
 }
