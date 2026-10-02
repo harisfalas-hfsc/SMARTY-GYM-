@@ -167,7 +167,7 @@ function WorkoutPage() {
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <h1 className="text-xl font-extrabold uppercase tracking-tight">Members only</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {(w as { is_wod?: boolean }).is_wod
+          {(w as { is_wod?: boolean } | null)?.is_wod
             ? "The Workout of the Day is part of the Smarty Gym membership. Join to open today's two workouts and get a new pair every morning."
             : "This workout is safely kept in your account. Renew your Smarty Gym membership to open it again."}
         </p>
