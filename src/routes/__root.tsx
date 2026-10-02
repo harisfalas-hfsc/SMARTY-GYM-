@@ -19,6 +19,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navigation } from "../components/Navigation";
 import { SiteFooter } from "../components/SiteFooter";
 import { Toaster } from "../components/ui/sonner";
+import { SisterAppsPopup } from "../components/growth/SisterAppsPopup";
 import { CheckinModalManager } from "@/components/checkins/CheckinModalManager";
 import { BottomNav } from "../components/BottomNav";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
@@ -473,6 +474,7 @@ function RootComponent() {
           </main>
           <SiteFooter />
           <Toaster />
+          <SisterAppsPopup />
           <CheckinModalManager />
           <BottomNav />
         </div>
