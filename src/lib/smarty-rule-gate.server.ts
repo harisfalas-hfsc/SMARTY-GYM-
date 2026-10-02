@@ -2,6 +2,7 @@
 // in "Create it myself") can only be visible when it passes the same hard rules
 // the generator obeys — complianceIssues() is built on the one rule engine.
 import { complianceIssues, hardIssues, type ComplianceExercise, type ComplianceWorkout } from "@/lib/workout/smarty-compliance";
+import { publicationRuleReports } from "@/lib/workout/publication-report";
 
 async function loadRuleLibrary(db: any): Promise<ComplianceExercise[]> {
   const out: ComplianceExercise[] = [];
@@ -22,7 +23,9 @@ export async function publishRuleBreaks(db: any, id: string, patch: Record<strin
   if (error || !row) throw new Error(error?.message ?? "Workout not found");
   const next = { ...row, ...patch } as ComplianceWorkout & { is_visible: boolean };
   if (!next.is_visible) return [];
-  return hardIssues(complianceIssues(next, await loadRuleLibrary(db)));
+  const library = await loadRuleLibrary(db);
+  const breaks = hardIssues(complianceIssues(next, library));
+  return publicationRuleReports(next, library, breaks);
 }
 
 /** Ids of every workout that breaks the hard rules (used by Show all). */

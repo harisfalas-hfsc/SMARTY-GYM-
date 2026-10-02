@@ -57,9 +57,9 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   const mainRows = steps.filter((x) => x.section === "Main Workout").map((x) => lib.get(x.exerciseId)).filter((e): e is ComplianceExercise => Boolean(e));
   if (!D.categoryAllowsFinisher(cat) && steps.some((x) => x.section === "Finisher")) s.add("Finisher in a category that never has one");
   if (mainRows.length < 3) s.add("Main Workout has fewer than 3 exercises");
-  for (const r of rows) for (const v of exerciseRuleBreaks(r, ctx)) s.add(ruleLabel(v));
+  for (const r of rows) for (const v of exerciseRuleBreaks(r, ctx)) s.add(complianceRuleLabel(v));
   const finRows = finisherRows(html, lib);
-  for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level }, finRows)) s.add(ruleLabel(v));
+  for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level }, finRows)) s.add(complianceRuleLabel(v));
   for (const st of workSteps) {
     if (!/\d/.test(st.prescription)) s.add("Exercise without a dose");
     if (doseRuleBreak(cat, st.prescription)) s.add("Too many sets for a light category");
@@ -93,7 +93,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
 }
 
 /** Stable category label for a rule message (exercise names stripped). */
-function ruleLabel(v: string): string {
+export function complianceRuleLabel(v: string): string {
   if (/static hold/.test(v)) return "Static hold in a flow category";
   if (/advanced material/.test(v)) return "Advanced exercise in a Beginner workout";
   if (/not a bodyweight/.test(v)) return "Equipment exercise in a bodyweight workout";
@@ -316,7 +316,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
           continue;
         }
         if ((role === "Main Workout" || role === "Finisher") && exerciseRuleBreaks(row, ctx).length) {
-          const r = tryApply(cur.index, cur.raw, row, role, exerciseRuleBreaks(row, ctx)[0]!, ruleLabel(exerciseRuleBreaks(row, ctx)[0]!), workLegal, { allowFamilyChange: true, anyPattern: true, mandatory: true });
+          const r = tryApply(cur.index, cur.raw, row, role, exerciseRuleBreaks(row, ctx)[0]!, complianceRuleLabel(exerciseRuleBreaks(row, ctx)[0]!), workLegal, { allowFamilyChange: true, anyPattern: true, mandatory: true });
           if (r !== "applied") dropBlock(cur.index, row, role, "Movement removed: no legal equivalent for this category");
         }
       }
@@ -344,7 +344,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
     if (!breaks.length) continue;
     const cur = allTokens(html).find((x) => x.index === t.index && x.id === t.id);
     if (!cur) continue;
-    tryApply(cur.index, cur.raw, row, role, breaks[0]!, ruleLabel(breaks[0]!), workLegal, { mandatory: true });
+    tryApply(cur.index, cur.raw, row, role, breaks[0]!, complianceRuleLabel(breaks[0]!), workLegal, { mandatory: true });
   }
 
   // 3b. Mandatory: a Finisher that brings in new equipment — same movement on the Main Workout's equipment.
