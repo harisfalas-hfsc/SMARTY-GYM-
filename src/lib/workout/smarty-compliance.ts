@@ -4,6 +4,7 @@
 import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds } from "./priority";
+import { prepAllowed, prepTokens } from "./prep-vocabulary";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
@@ -43,6 +44,9 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     const prio = priorityIds(library);
     const hits = rows.filter((r) => prio.has(r.id)).length;
     if (hits / rows.length < 0.7) s.add("Too few priority exercises");
+  }
+  for (const t of prepTokens(html)) {
+    if (!prepAllowed(lib.get(t.id)?.name ?? t.name, t.section)) s.add(t.section === "activation" ? "Activation not mobility/stability" : "Cool Down not stretch/mobility");
   }
   return [...s];
 }

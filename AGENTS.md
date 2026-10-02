@@ -22,3 +22,4 @@
 - All Smarty Workouts are one collection with identical admin controls regardless of origin; imported workouts and media are self-contained in this project — why: no ongoing dependency on another project.
 - Players accept verified numeric/slug exercise IDs; bulk publishing requires the full-library audit. Native startup stays black through launch, window, WebView, and first React frame to prevent white handoffs.
 - Ready-made Smarty Workouts are kept rule-compliant by src/lib/workout/smarty-compliance.ts (doctrine + priority, swaps exercises only) — why: the stored library obeys the same rules as generated workouts without AI rewrites.
+- Activation and Cool Down use only the mobility/stability/stretch vocabulary in src/lib/workout/prep-vocabulary.ts (checked by complianceIssues) — why: priority exercises belong to the work sections only.
