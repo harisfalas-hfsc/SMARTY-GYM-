@@ -76,7 +76,7 @@ export function holdDoseViolation(name: string, line: string): string | null {
 /** Light categories are programmed in a few quality sets, never long set ladders. */
 export const LIGHT_SET_CAP = 4;
 export function doseRuleBreak(category: Category, line: string): string | null {
-  if (category !== "RECOVERY" && category !== "MOBILITY & STABILITY" && category !== "PILATES") return null;
+  if (category !== "RECOVERY" && category !== "MOBILITY & STABILITY") return null;
   const m = /\b(\d+)\s*sets?\b/i.exec(line);
   if (m && Number(m[1]) > LIGHT_SET_CAP) return `${category} is programmed in at most ${LIGHT_SET_CAP} sets per exercise.`;
   return null;
