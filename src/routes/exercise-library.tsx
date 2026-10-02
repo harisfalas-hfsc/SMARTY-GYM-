@@ -21,9 +21,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Search, X, Dumbbell, Heart, ThumbsDown, Plus } from "lucide-react";
+import { Loader2, Search, X, Dumbbell, Heart, ThumbsDown, Plus, Check, Trash2, ArrowLeft } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { DRAFT_SECTIONS, addToDraft, type DraftSection } from "@/lib/manual-workout-draft";
+import {
+  DRAFT_EVENT,
+  DRAFT_SECTIONS,
+  addToDraft,
+  isDraftSection,
+  loadDraft,
+  removeFromDraft,
+  type DraftSection,
+  type ManualDraft,
+} from "@/lib/manual-workout-draft";
 import { toast } from "sonner";
 import { ExerciseGif } from "@/components/ExerciseGif";
 import { PageHeader } from "@/components/PageHeader";
@@ -44,6 +53,8 @@ const DESCRIPTION =
 
 
 export const Route = createFileRoute("/exercise-library")({
+  validateSearch: (search: Record<string, unknown>): { section?: DraftSection } =>
+    isDraftSection(search.section) ? { section: search.section } : {},
   loader: async () => {
     try {
       const { getExerciseSchemaList } = await import("@/lib/seo/exercise-schema.functions");
@@ -178,19 +189,48 @@ function PreferenceButtons({
   onLike,
   onDislike,
   onAdd,
+  direct,
 }: {
   state: "like" | "dislike" | "none";
   busy: boolean;
   onLike: () => void;
   onDislike: () => void;
   onAdd?: (section: DraftSection) => void;
+  /** Set when the member came from one section of Build It Yourself: one tap adds, tap again removes. */
+  direct?: { added: number; onAdd: () => void; onRemove: () => void };
 }) {
   const [addOpen, setAddOpen] = useState(false);
   const touchOpen = useRef(false);
   const addOpenRef = useRef(false);
   const swallowTouchClick = useRef(false);
+  const directControls = direct ? (
+      <>
+        {direct.added > 0 ? (
+          <>
+            <span className="inline-flex h-8 items-center gap-1 rounded-full bg-primary px-3 text-xs font-bold text-primary-foreground">
+              <Check className="h-3.5 w-3.5" /> Added{direct.added > 1 ? ` ×${direct.added}` : ""}
+            </span>
+            <button
+              type="button"
+              onClick={direct.onRemove}
+              className="inline-flex h-8 items-center gap-1 rounded-full border border-destructive px-3 text-xs font-bold text-destructive"
+            >
+              <Trash2 className="h-3.5 w-3.5" /> Remove
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={direct.onAdd}
+            className="inline-flex h-8 items-center gap-1 rounded-full border border-primary px-3 text-xs font-bold text-primary"
+          >
+            <Plus className="h-3.5 w-3.5" /> Add
+          </button>
+        )}
+      </>
+  ) : null;
   return (
-    <div className="mt-2 flex items-center gap-2">
+    <div className="mt-2 flex flex-wrap items-center gap-2">
       <button
         type="button"
         disabled={busy}
@@ -217,7 +257,7 @@ function PreferenceButtons({
       >
         <ThumbsDown className="h-4 w-4" />
       </button>
-      {onAdd ? (
+      {directControls ? directControls : onAdd ? (
         <DropdownMenu
           modal={false}
           open={addOpen}
@@ -345,6 +385,29 @@ function ExerciseLibraryPage() {
   }
 
   const navigate = useNavigate();
+  const { section: targetSection } = Route.useSearch();
+  const targetLabel = targetSection ? DRAFT_SECTIONS.find((s) => s.id === targetSection)!.label : "";
+  const [draft, setDraft] = useState<ManualDraft | null>(null);
+  useEffect(() => {
+    const sync = () => setDraft(loadDraft());
+    sync();
+    window.addEventListener(DRAFT_EVENT, sync);
+    return () => window.removeEventListener(DRAFT_EVENT, sync);
+  }, []);
+  const sectionList = targetSection && draft ? draft.sections[targetSection] : [];
+  const backToWorkout = () => navigate({ to: "/create-your-own-workout", search: { mode: "build" } });
+  function directFor(ex: { id: string; name: string }) {
+    if (!targetSection) return undefined;
+    return {
+      added: sectionList.filter((x) => x.id === ex.id).length,
+      onAdd: () => {
+        if (!user) return void toast.error("Sign in to build your own workout.");
+        if (!prefs?.premium) return void toast.error("Building your own workout is part of the premium membership.");
+        addToDraft(targetSection, ex);
+      },
+      onRemove: () => removeFromDraft(targetSection, ex.id),
+    };
+  }
   function addExercise(section: DraftSection, ex: { id: string; name: string }) {
     if (!user) {
       toast.error("Sign in to build your own workout.");
@@ -470,6 +533,17 @@ function ExerciseLibraryPage() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
+      {targetSection ? (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-primary bg-card p-3">
+          <p className="min-w-0 text-sm">
+            Adding to <strong className="text-primary">{targetLabel}</strong>. Tap <strong>Add</strong> on any
+            exercise, tap <strong>Remove</strong> to take it out.
+          </p>
+          <Button size="sm" className="shrink-0 rounded-full font-bold" onClick={backToWorkout}>
+            <ArrowLeft className="mr-1 h-4 w-4" /> Back
+          </Button>
+        </div>
+      ) : null}
       <PageHeader image={pageHeroImage}
         eyebrow="Exercise library"
         title={
@@ -577,6 +651,7 @@ function ExerciseLibraryPage() {
                         onLike={() => mark(ex.id, "like")}
                         onDislike={() => mark(ex.id, "dislike")}
                         onAdd={(sec) => addExercise(sec, ex)}
+                        direct={directFor(ex)}
                       />
                     </div>
                   </div>
@@ -594,6 +669,17 @@ function ExerciseLibraryPage() {
           Ask Smarty Coach →
         </Link>
       </div>
+
+      {targetSection ? (
+        <div className="fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4 lg:bottom-6">
+          <Button
+            className="h-12 rounded-full px-6 text-sm font-extrabold shadow-xl"
+            onClick={backToWorkout}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to my workout · {targetLabel} ({sectionList.length})
+          </Button>
+        </div>
+      ) : null}
 
       <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
         <DialogContent className="max-h-[78vh] w-[calc(100vw-3rem)] max-w-md gap-0 overflow-y-auto overflow-x-hidden rounded-2xl border-2 border-primary p-0 sm:max-h-[86vh] sm:w-full sm:max-w-lg [&>button]:hidden [&>div:first-child]:hidden">
@@ -632,6 +718,7 @@ function ExerciseLibraryPage() {
                   onLike={() => mark(selected.id, "like")}
                   onDislike={() => mark(selected.id, "dislike")}
                   onAdd={(sec) => addExercise(sec, selected)}
+                  direct={directFor(selected)}
                 />
 
                 <div className="grid grid-cols-2 gap-2 text-sm">

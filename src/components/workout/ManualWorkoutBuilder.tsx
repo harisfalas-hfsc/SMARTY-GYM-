@@ -41,35 +41,52 @@ function SectionCard({
     <section className="rounded-3xl border-2 border-primary bg-card p-5">
       <h2 className="text-lg font-extrabold">{section.label}</h2>
       <div className="mt-3 space-y-2">
+        {list.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No exercises yet.</p>
+        ) : null}
         {list.map((ex, i) => (
-          <div key={ex.key} className="flex items-center gap-2 rounded-2xl border border-border p-2">
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold capitalize">{ex.name}</p>
-              <Input
-                value={ex.dose}
-                onChange={(e) =>
-                  update(list.map((x) => (x.key === ex.key ? { ...x, dose: e.target.value.slice(0, 60) } : x)))
-                }
-                placeholder="e.g. 3 × 10 reps or 30 sec"
-                className="mt-1 h-8 text-xs"
-                aria-label={`Reps or time for ${ex.name}`}
-              />
+          <div key={ex.key} className="rounded-2xl border border-border p-3">
+            <div className="flex items-center gap-2">
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-xs font-extrabold text-primary-foreground">
+                {i + 1}
+              </span>
+              <p className="min-w-0 flex-1 truncate text-sm font-semibold capitalize">{ex.name}</p>
             </div>
-            <Button size="icon" variant="ghost" onClick={() => move(i, -1)} aria-label="Move up">
-              <ArrowUp className="h-4 w-4" />
-            </Button>
-            <Button size="icon" variant="ghost" onClick={() => move(i, 1)} aria-label="Move down">
-              <ArrowDown className="h-4 w-4" />
-            </Button>
-            <Button size="icon" variant="ghost" onClick={() => update(list.filter((x) => x.key !== ex.key))} aria-label="Remove">
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
+            <Input
+              value={ex.dose}
+              onChange={(e) =>
+                update(list.map((x) => (x.key === ex.key ? { ...x, dose: e.target.value.slice(0, 60) } : x)))
+              }
+              placeholder="e.g. 3 × 10 reps or 30 sec"
+              className="mt-2 h-9 text-sm"
+              aria-label={`Reps or time for ${ex.name}`}
+            />
+            <div className="mt-2 flex flex-wrap gap-2">
+              {list.length > 1 ? (
+                <>
+                  <Button size="sm" variant="outline" className="h-8 rounded-full text-xs" disabled={i === 0} onClick={() => move(i, -1)}>
+                    <ArrowUp className="mr-1 h-3.5 w-3.5" /> Do earlier
+                  </Button>
+                  <Button size="sm" variant="outline" className="h-8 rounded-full text-xs" disabled={i === list.length - 1} onClick={() => move(i, 1)}>
+                    <ArrowDown className="mr-1 h-3.5 w-3.5" /> Do later
+                  </Button>
+                </>
+              ) : null}
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 rounded-full border-destructive text-xs text-destructive"
+                onClick={() => update(list.filter((x) => x.key !== ex.key))}
+              >
+                <Trash2 className="mr-1 h-3.5 w-3.5" /> Remove
+              </Button>
+            </div>
           </div>
         ))}
       </div>
       <Button asChild variant="outline" className="mt-3 h-11 w-full rounded-2xl font-bold">
-        <Link to="/exercise-library">
-          <Plus className="mr-2 h-4 w-4" /> Browse the Exercise Library
+        <Link to="/exercise-library" search={{ section: section.id }}>
+          <Plus className="mr-2 h-4 w-4" /> Add exercises to {section.label}
         </Link>
       </Button>
     </section>
