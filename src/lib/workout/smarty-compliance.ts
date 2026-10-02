@@ -226,7 +226,7 @@ function fitDuration(w: ComplianceWorkout, library: ComplianceExercise[], lib: M
   const trim = (h: string, start: RegExp, end: RegExp, re: RegExp, min: number): string | null => {
     const r = sectionSlice(h, start, end); if (!r) return null;
     const body = h.slice(r[0], r[1]); let changed = false;
-    const nb = body.replace(re, (m: string, n: string) => { const v = Number(n); if (changed || v <= min) return m; changed = true; return m.replace(n, String(v - 1)); });
+    const nb = body.replace(re, (m: string, n: string) => { const v = Number(n); if (v <= min) return m; changed = true; return m.replace(n, String(v - 1)); });
     return changed ? h.slice(0, r[0]) + nb + h.slice(r[1]) : null;
   };
   const MAIN = /Main Workout/i, FIN = /⚡|Finisher/, END_MAIN = /⚡|🧘|Cool/, END_FIN = /🧘|Cool/;
