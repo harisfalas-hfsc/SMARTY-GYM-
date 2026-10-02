@@ -671,7 +671,7 @@ function ExerciseLibraryPage() {
       </div>
 
       {targetSection ? (
-        <div className="fixed inset-x-0 bottom-[5.5rem] z-40 flex justify-center px-4 lg:bottom-6">
+        <div className="fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4 lg:bottom-6">
           <Button
             className="h-12 rounded-full px-6 text-sm font-extrabold shadow-xl"
             onClick={backToWorkout}
