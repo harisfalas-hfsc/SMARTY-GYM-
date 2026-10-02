@@ -1,12 +1,12 @@
-import { isLegalExercise } from "./rules";
 // Deterministic rule compliance for ready-made Smarty Workouts.
 // Audits a stored workout against the same doctrine the engine enforces and,
 // when it breaks a rule, swaps exercises only (dose, sections and text stay).
 import * as D from "./doctrine";
 import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds, priorityShareViolation } from "./priority";
+import { classify, isRelated, replacementConfidence, variationTier, type Confidence } from "./movement";
 import { prepTokens, prepAllowed, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
-import { isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
+import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -138,124 +138,222 @@ function replaceId(html: string, from: string, to: ComplianceExercise): string {
 
 const fam = (e: ComplianceExercise) => D.equipmentFamilyOf(e.equipment);
 
-const PATTERNS: Array<[string, RegExp]> = [
-  ["stretch", /stretch|mobility|circles?\b|release/i],
-  ["lunge", /lunge|split squat|step[- ]?up|bulgarian/i],
-  ["squat", /squat|leg press|thruster|wall sit|march sit/i],
-  ["hinge", /deadlift|swing|hip thrust|glute bridge|bridge|good morning|hamstring|clean|snatch|hyperextension/i],
-  ["pull", /row|pull[- ]?up|chin|pulldown|pull down|face pull|pullover/i],
-  ["arms", /curl|triceps|extension|kickback/i],
-  ["push", /press|push[- ]?up|dip|fly|bench/i],
-  ["calf", /calf/i],
-  ["core", /plank|crunch|dead bug|bird dog|hollow|leg raise|knee raise|rollout|twist|pallof|sit[- ]?up|v[- ]?up|chop|ab\b|oblique/i],
-  ["conditioning", /burpee|jump|climber|jack|knees|skater|sprint|slam|run|crawl|skip|shuffle|hop|march|step/i],
-];
-const patternKey = (e: { name: string }) => PATTERNS.find(([, re]) => re.test(e.name))?.[0] ?? "other";
+/** Preferences, not hard rules: reported, but they never block publishing or force a swap. */
+export const PREFERENCE_ISSUES = new Set(["Too few priority exercises"]);
+export const hardIssues = (issues: string[]) => issues.filter((i) => !PREFERENCE_ISSUES.has(i));
 
-/** Swap exercises (only) until the workout complies, accepting a swap only when it reduces the issue count. */
-export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): { html: string; swaps: Array<{ from: string; to: string }>; before: string[]; after: string[] } {
+export type Role = "Activation" | "Main Workout" | "Finisher" | "Cool Down";
+export type MigrationChange = {
+  kind: "dose" | "reorder" | "replace";
+  role?: Role;
+  from?: string; fromId?: string;
+  to?: string; toId?: string;
+  reason: string;
+  rule: string;
+  confidence: Confidence | "N/A";
+  applied: boolean;
+};
+export type MigrationPlan = {
+  id: string; name: string; category: string; format: string | null;
+  before: string[]; after: string[];
+  html: string;
+  changes: MigrationChange[];
+  /** pass = already compliant · fixed = only safe changes · review = needs a MEDIUM swap approved · manual = needs a coaching decision */
+  status: "pass" | "fixed" | "review" | "manual";
+  /** Priority share left below target because no equivalent priority movement exists. */
+  priorityKept: boolean;
+};
+
+/** One ul/li block per exercise inside a section — the unit that is reordered. */
+function sectionBlocks(html: string, start: RegExp, end: RegExp) {
+  const a = html.search(start); if (a < 0) return null;
+  const restIdx = html.slice(a + 5).search(end);
+  const b = restIdx < 0 ? html.length : a + 5 + restIdx;
+  const body = html.slice(a, b);
+  const blocks: { s: number; e: number; id: string }[] = [];
+  const re = /<ul\b[^>]*>(?:(?!<\/ul>)[\s\S])*?\{\{exercise:([A-Za-z0-9_-]+):[^}]*\}\}(?:(?!<\/ul>)[\s\S])*?<\/ul>/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(body))) blocks.push({ s: a + m.index, e: a + m.index + m[0].length, id: m[1]! });
+  return blocks;
+}
+
+/** Reorder a section so every equipment family is one contiguous block (first-appearance order, stable). */
+function groupByFamily(html: string, start: RegExp, end: RegExp, lib: Map<string, ComplianceExercise>): string {
+  const blocks = sectionBlocks(html, start, end);
+  if (!blocks || blocks.length < 3) return html;
+  const famOf = (id: string) => { const r = lib.get(id); return r ? fam(r) : "bodyweight"; };
+  const order: string[] = [];
+  for (const b of blocks) { const f = famOf(b.id); if (!order.includes(f)) order.push(f); }
+  const sorted = [...blocks].sort((x, y) => order.indexOf(famOf(x.id)) - order.indexOf(famOf(y.id)) || blocks.indexOf(x) - blocks.indexOf(y));
+  if (sorted.every((b, i) => b === blocks[i])) return html;
+  const texts = sorted.map((b) => html.slice(b.s, b.e));
+  let out = html;
+  for (let i = blocks.length - 1; i >= 0; i--) out = out.slice(0, blocks[i]!.s) + texts[i] + out.slice(blocks[i]!.e);
+  return out;
+}
+
+const roleOfIndex = (html: string, index: number): Role => {
+  const fin = html.search(/⚡/), cd = html.search(/🧘|Cool[\s-]?Down/i), main = html.search(/Main Workout/i);
+  if (cd >= 0 && index > cd) return "Cool Down";
+  if (fin >= 0 && index > fin) return "Finisher";
+  if (main >= 0 && index > main) return "Main Workout";
+  return "Activation";
+};
+
+function replaceToken(html: string, index: number, raw: string, to: ComplianceExercise) {
+  return html.slice(0, index) + `{{exercise:${to.id}:${to.name}}}` + html.slice(index + raw.length);
+}
+
+const allTokens = (html: string) => [...html.matchAll(/\{\{exercise:([A-Za-z0-9_-]+):([^}]*)\}\}/g)].map((m) => ({ id: m[1]!, raw: m[0], index: m.index! }));
+
+/**
+ * Coaching-aware migration plan for one stored workout.
+ * Order: dose-only repairs → reordering → replacements. Every replacement keeps
+ * the exercise's role, movement pattern, objective and equipment family and is
+ * scored HIGH / MEDIUM / LOW; only HIGH is applied. Priority share is a
+ * preference: a non-priority exercise is only swapped for an equivalent (HIGH) one.
+ */
+export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[]): MigrationPlan {
   const lib = new Map(library.map((e) => [e.id, e]));
   const prio = priorityIds(library);
   const cat = w.category as Category;
-  const fmt = (w.format ?? "") as Format;
-  let html = clampActivationDoses(w.main_workout ?? "", isTimedPosition);
-  const before = complianceIssues(w, library, lib);
-  const swaps: Array<{ from: string; to: string }> = [];
-  if (!before.length) return { html, swaps, before, after: before };
+  const ctx = ctxOf(w);
+  const orig = w.main_workout ?? "";
+  const issues = (h: string) => complianceIssues({ ...w, main_workout: h }, library, lib);
+  const hardCount = (h: string) => hardIssues(issues(h)).length;
+  const before = issues(orig);
+  const changes: MigrationChange[] = [];
+  const base = { id: w.id, name: w.name, category: w.category, format: w.format };
+  if (!before.length) return { ...base, before, after: before, html: orig, changes, status: "pass", priorityKept: false };
 
-  // Finisher removal (non-finisher categories): drop the ⚡ block up to Cool Down.
-  if (before.includes("Finisher in a category that never has one")) {
-    html = html.replace(/<(h[1-4]|p|div)\b[^>]*>(?:(?!<\/?\1)[\s\S])*?⚡[\s\S]*?(?=<(?:h[1-4]|p|div)\b[^>]*>(?:(?!<\/?(?:h[1-4]|p|div))[\s\S])*?🧘)/u, "");
+  // 1. Dose-only repairs (exercises untouched).
+  let html = orig;
+  const doseSteps: Array<[string, (h: string) => string]> = [
+    ["Activation dose above 10 reps / 30 sec or in sets", (h) => clampActivationDoses(h, isTimedPosition)],
+    ["Hold or stretch dosed in reps", (h) => fixHoldDoses(h, lib)],
+    ["Too many sets for a light category", (h) => capLightSets(h, cat)],
+    ["Work time exceeds the advertised duration", (h) => fitDuration({ ...w, main_workout: h }, library, lib)],
+  ];
+  for (const [rule, fn] of doseSteps) {
+    if (!before.includes(rule) && !before.some((b) => /too long/.test(b))) continue;
+    const next = fn(html);
+    if (next !== html && hardCount(next) <= hardCount(html)) { html = next; changes.push({ kind: "dose", reason: "Dose adjusted, exercises unchanged", rule, confidence: "N/A", applied: true }); }
   }
 
-  const candidates = library.filter((e) => (NO_PRIORITY.has(cat) || prio.has(e.id) || (cat === "CARDIO" && isCardioRhythm(e.name))) && e.is_active !== false && Boolean(e.gif_path?.trim()) && !perExerciseBad(e, w));
-  // Instance-weighted: every rule type counts 10, every still-illegal row 1.
-  const score = (h: string) => complianceIssues({ ...w, main_workout: h }, library, lib).length * 10 + workRows(h, lib).filter((r) => perExerciseBad(r, w)).length + blockShortfall(h, lib, cat);
-  let current = score(html);
-
-  for (let pass = 0; pass < 3 && current > 0; pass++) {
-    const tokens = workTokens(html);
-    const present = new Set(tokens.map((t) => t.id));
-    const rows = workRows(html, lib);
-    const families = new Map<string, number>();
-    for (const r of rows) families.set(fam(r), (families.get(fam(r)) ?? 0) + 1);
-    const mainFamily = [...families.entries()].filter(([f]) => f !== "bodyweight").sort((a, b) => b[1] - a[1])[0]?.[0];
-    const seen = new Set<string>();
-    // Worst offenders first: rule-breaking rows, then non-priority rows.
-    const order = tokens.map((t) => lib.get(t.id)).filter((e): e is ComplianceExercise => Boolean(e) && !seen.has(e!.id) && (seen.add(e!.id), true));
-    order.sort((a, b) => Number(perExerciseBad(b, w)) - Number(perExerciseBad(a, w)) || Number(prio.has(a.id)) - Number(prio.has(b.id)));
-    for (const ex of order) {
-      if (current === 0) break;
-      if (prio.has(ex.id) && !perExerciseBad(ex, w) && cat !== "CHALLENGE" && cat !== "CARDIO" && !before.includes("Too many equipment families")) continue;
-      const bad = perExerciseBad(ex, w) || (cat === "CARDIO" && !isCardioRhythm(ex.name));
-      const wantBw = cat === "CHALLENGE" || fam(ex) === "bodyweight";
-      const pool = candidates.filter((c) => !present.has(c.id) && c.id !== ex.id);
-      const ranked = pool
-        .map((c) => {
-          let s = 0;
-          const pe = patternKey(ex), pc = patternKey(c);
-          if (pc === pe || (pe === "arms" && (pc === "push" || pc === "pull"))) s += 4;
-          else if (pe !== "stretch" && pe !== "other" && !bad) s -= 6;
-          if (cat === "CARDIO" && !isCardioRhythm(ex.name) && isCardioRhythm(c.name)) s += 12;
-          if (cat === "CHALLENGE" && D.CORE_ISOLATION_RE.test(ex.name) && patternKey(c) === "conditioning") s += 12;
-          if ((cat === "STRENGTH" || cat === "MUSCLE BUILDING") && bad && patternKey(ex) === "conditioning" && ["squat", "lunge", "hinge", "push", "pull"].includes(patternKey(c))) s += 10;
-          if (cat === "MOBILITY & STABILITY" && prepAllowed(c.name, "activation")) s += 5;
-          if (cat === "RECOVERY" && (prepAllowed(c.name, "activation") || prepAllowed(c.name, "cooldown"))) s += 5;
-          if (D.regionOf(c) === D.regionOf(ex)) s += 3;
-          if (wantBw ? fam(c) === "bodyweight" : fam(c) === fam(ex) || fam(c) === mainFamily) s += 5;
-          else if (fam(c) !== "bodyweight") s -= 3;
-          return { c, s };
-        })
-        .filter((x) => x.s >= 7)
-        .sort((a, b) => b.s - a.s || a.c.name.localeCompare(b.c.name))
-        .slice(0, 6);
-      for (const { c } of ranked) {
-        const next = replaceId(html, ex.id, c);
-        const sc = score(next);
-        if (sc < current || (sc === current && !prio.has(ex.id) && current > 0 && complianceIssues({ ...w, main_workout: next }, library, lib).includes("Too few priority exercises"))) {
-          // accept strict improvements, or progress toward the 70% priority share
-          if (sc > current) continue;
-          html = next; current = sc; present.add(c.id); present.delete(ex.id);
-          swaps.push({ from: ex.name, to: c.name });
-          break;
-        }
-      }
+  // 2. Reorder before replacing: group each implement into one block.
+  for (const [role, start, end] of [["Main Workout", /Main Workout/i, /⚡|🧘|Cool/], ["Finisher", /⚡/, /🧘|Cool/]] as const) {
+    const cur = issues(html);
+    if (!cur.some((i) => /station|picks the same equipment back up/i.test(i) && i.includes(role === "Main Workout" ? "Main" : "Finisher"))) continue;
+    const next = groupByFamily(html, start, end, lib);
+    if (next !== html && hardCount(next) < hardCount(html) && issues(next).every((i) => cur.includes(i))) {
+      html = next;
+      changes.push({ kind: "reorder", role, reason: "Exercises regrouped so each implement is one contiguous block", rule: "Equipment flow", confidence: "N/A", applied: true });
     }
   }
-  html = fixActivation(html, library, lib);
-  html = fixHoldDoses(html, lib);
-  html = capLightSets(html, cat);
-  html = fitDuration({ ...w, main_workout: html }, library, lib);
-  const after = complianceIssues({ ...w, main_workout: html }, library, lib);
-  if (after.length >= before.length && after.every((a) => before.includes(a)) && after.length === before.length && swaps.length === 0 && html === (w.main_workout ?? "")) return { html: w.main_workout ?? "", swaps, before, after: before };
-  return { html, swaps, before, after };
+
+  // 3. Replacements.
+  const usable = library.filter((e) => e.is_active !== false && Boolean(e.gif_path?.trim()));
+  const pickFor = (fromRow: ComplianceExercise, role: Role, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean }) => {
+    const present = new Set(allTokens(html).map((t) => t.id));
+    const ranked = usable
+      .filter((c) => !present.has(c.id) && isRelated(classify(fromRow).primary, classify(c).primary) && allowed(c))
+      .map((c) => ({ c, conf: replacementConfidence(fromRow, c, opts) }))
+      .filter((x) => x.conf !== "LOW")
+      .sort((x, y) =>
+        Number(y.conf === "HIGH") - Number(x.conf === "HIGH") ||
+        Number(opts.wantPriority ? prio.has(y.c.id) : 0) - Number(opts.wantPriority ? prio.has(x.c.id) : 0) ||
+        Number(sameTarget(y.c, fromRow)) - Number(sameTarget(x.c, fromRow)) ||
+        Math.abs(variationTier(x.c.name) - variationTier(fromRow.name)) - Math.abs(variationTier(y.c.name) - variationTier(fromRow.name)) ||
+        Number(D.regionOf(y.c) === D.regionOf(fromRow)) - Number(D.regionOf(x.c) === D.regionOf(fromRow)) ||
+        Number(prio.has(y.c.id)) - Number(prio.has(x.c.id)) ||
+        x.c.name.localeCompare(y.c.name));
+    void role;
+    return ranked;
+  };
+  const sameTarget = (a: ComplianceExercise, b: ComplianceExercise) => Boolean(a.target_muscle) && (a.target_muscle ?? "").toLowerCase() === (b.target_muscle ?? "").toLowerCase();
+  const workLegal = (c: ComplianceExercise) => !perExerciseBad(c, w);
+  const tryApply = (index: number, raw: string, fromRow: ComplianceExercise, role: Role, reason: string, rule: string, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean; mandatory: boolean }) => {
+    const curIssues = issues(html);
+    for (const { c, conf } of pickFor(fromRow, role, allowed, opts).slice(0, 12)) {
+      const next = replaceToken(html, index, raw, c);
+      const ni = issues(next);
+      const noNew = ni.every((i) => curIssues.includes(i));
+      const better = hardIssues(ni).length < hardIssues(curIssues).length || (opts.wantPriority && ni.length < curIssues.length) || (opts.mandatory && noNew && hardCount(next) <= hardCount(html));
+      if (!noNew || !better) continue;
+      if (conf === "HIGH") { html = next; changes.push({ kind: "replace", role, from: fromRow.name, fromId: fromRow.id, to: c.name, toId: c.id, reason, rule, confidence: "HIGH", applied: true }); return "applied"; }
+      if (opts.mandatory) { changes.push({ kind: "replace", role, from: fromRow.name, fromId: fromRow.id, to: c.name, toId: c.id, reason, rule, confidence: "MEDIUM", applied: false }); return "review"; }
+      return "none";
+    }
+    if (opts.mandatory) changes.push({ kind: "replace", role, from: fromRow.name, fromId: fromRow.id, reason: `${reason} — no equivalent legal exercise in the library`, rule, confidence: "LOW", applied: false });
+    return "none";
+  };
+
+  // 3a. Mandatory: work rows that break a hard rule.
+  for (const t of allTokens(html)) {
+    const role = roleOfIndex(html, t.index);
+    if (role !== "Main Workout" && role !== "Finisher") continue;
+    const row = lib.get(t.id); if (!row) continue;
+    const breaks = exerciseRuleBreaks(row, ctx);
+    if (!breaks.length) continue;
+    const cur = allTokens(html).find((x) => x.index === t.index && x.id === t.id);
+    if (!cur) continue;
+    tryApply(cur.index, cur.raw, row, role, breaks[0]!, ruleLabel(breaks[0]!), workLegal, { mandatory: true });
+  }
+
+  // 3b. Mandatory: a Finisher that brings in new equipment — same movement on the Main Workout's equipment.
+  if (issues(html).some((i) => /Finisher introduces new equipment/.test(i))) {
+    const mainFams = new Set(rowsIn(html, lib, "Main Workout").map(fam));
+    for (const t of allTokens(html)) {
+      if (roleOfIndex(html, t.index) !== "Finisher") continue;
+      const row = lib.get(t.id); if (!row || mainFams.has(fam(row)) || fam(row) === "bodyweight") continue;
+      const cur = allTokens(html).find((x) => x.index === t.index); if (!cur) continue;
+      tryApply(cur.index, cur.raw, row, "Finisher", "Finisher must keep the Main Workout's equipment", "Equipment flow", (c) => workLegal(c) && (mainFams.has(fam(c)) || fam(c) === "bodyweight"), { allowFamilyChange: true, mandatory: true });
+    }
+  }
+
+  // 3c. Mandatory: Activation / Cool Down tokens outside the prep vocabulary (and excess passive stretches in Activation).
+  {
+    const prep = prepTokens(html);
+    let keptStretch = false;
+    for (const t of prep) {
+      const row = lib.get(t.id); if (!row) continue;
+      const illegal = !prepAllowed(row.name, t.section);
+      const excessStretch = t.section === "activation" && isPassiveStretch(row.name) && (keptStretch || ((keptStretch = true), false));
+      if (!illegal && !excessStretch) continue;
+      const role: Role = t.section === "activation" ? "Activation" : "Cool Down";
+      const cur = allTokens(html).find((x) => x.index === t.index); if (!cur) continue;
+      tryApply(cur.index, cur.raw, row, role, illegal ? `Not a ${role} movement` : "Activation must be active mobility, not a second passive stretch", illegal ? `${role} vocabulary` : "Activation mostly passive stretches",
+        (c) => prepAllowed(c.name, t.section) && (t.section !== "activation" || !isPassiveStretch(c.name)), { allowFamilyChange: true, mandatory: true });
+    }
+  }
+
+  // 3d. Preference: priority share — only genuinely equivalent (HIGH) priority swaps, never MEDIUM.
+  if (!NO_PRIORITY.has(cat)) {
+    for (const t of allTokens(html)) {
+      if (!issues(html).includes("Too few priority exercises")) break;
+      const role = roleOfIndex(html, t.index);
+      if (role !== "Main Workout" && role !== "Finisher") continue;
+      const row = lib.get(t.id); if (!row || prio.has(row.id)) continue;
+      const cur = allTokens(html).find((x) => x.index === t.index); if (!cur) continue;
+      tryApply(cur.index, cur.raw, row, role, "Equivalent coach priority exercise", "Too few priority exercises", (c) => prio.has(c.id) && workLegal(c), { wantPriority: true, mandatory: false });
+    }
+  }
+
+  const after = issues(html);
+  const hardAfter = hardIssues(after);
+  const priorityKept = after.includes("Too few priority exercises");
+  const status: MigrationPlan["status"] = !hardAfter.length
+    ? "fixed"
+    : changes.some((c) => !c.applied && c.confidence === "MEDIUM") && !changes.some((c) => !c.applied && c.confidence === "LOW") && !hardAfter.some((i) => /station|equipment|back up/i.test(i) && !changes.some((c) => c.rule === "Equipment flow" && c.confidence === "MEDIUM"))
+      ? "review"
+      : "manual";
+  return { ...base, before, after, html, changes, status, priorityKept };
 }
 
-/** Activation keeps one passive stretch at most; the rest become active mobility / stability moves. */
-function fixActivation(html: string, library: ComplianceExercise[], lib: Map<string, ComplianceExercise>): string {
-  const act = prepTokens(html).filter((t) => t.section === "activation");
-  const names = act.map((t) => lib.get(t.id)?.name ?? t.name);
-  if (!activationRuleBreak(names)) return html;
-  const used = new Set(prepTokens(html).map((t) => t.id));
-  const byName = new Map(library.filter((e) => e.is_active !== false && e.gif_path?.trim()).map((e) => [e.name.toLowerCase(), e]));
-  const pool = ACTIVATION_NAMES.map((n) => byName.get(n)).filter((e): e is ComplianceExercise => Boolean(e) && !isPassiveStretch(e!.name));
-  const main = workRows(html, lib);
-  const lower = main.filter((r) => D.regionOf(r) === "lower").length >= main.length / 2;
-  pool.sort((a, b) => Number((D.regionOf(b) === "lower") === lower) - Number((D.regionOf(a) === "lower") === lower));
-  let keptStretch = false;
-  const plan: Array<{ index: number; raw: string; to: ComplianceExercise }> = [];
-  for (let i = 0; i < act.length; i++) {
-    if (!isPassiveStretch(names[i]!)) continue;
-    if (!keptStretch) { keptStretch = true; continue; }
-    const to = pool.find((c) => !used.has(c.id));
-    if (!to) break;
-    used.add(to.id);
-    plan.push({ index: act[i]!.index, raw: act[i]!.raw, to });
-  }
-  for (const p of plan.reverse()) html = html.slice(0, p.index) + `{{exercise:${p.to.id}:${p.to.name}}}` + html.slice(p.index + p.raw.length);
-  // A swapped-in movement is dosed in reps, not stretch seconds.
-  for (const p of plan) html = html.replace(new RegExp(`\\b30 sec(\\s*\\{\\{exercise:${p.to.id.replace(/-/g, "\\-")}:)`), "8 reps$1");
-  return html;
+/** Applies only safe (HIGH / dose / reorder) changes — kept for callers of the old API. */
+export function remediate(w: ComplianceWorkout, library: ComplianceExercise[]): { html: string; swaps: Array<{ from: string; to: string }>; before: string[]; after: string[] } {
+  const p = planMigration(w, library);
+  return { html: p.html, swaps: p.changes.filter((c) => c.kind === "replace" && c.applied).map((c) => ({ from: c.from!, to: c.to! })), before: p.before, after: p.after };
 }
 
 /** Recovery / Mobility & Stability: set ladders capped at the light-category maximum. */

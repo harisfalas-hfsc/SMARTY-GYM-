@@ -1,0 +1,4416 @@
+{
+ "dryRun": true,
+ "savedToDatabase": false,
+ "total": 530,
+ "workouts": [
+  {
+   "id": "d382b995-99b3-4fa4-845f-ca216904b6f4",
+   "name": "Furnace Factory Shred",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "fc0e19a8-9e20-4463-afda-010fbddbf5a4",
+   "name": "Ascension Ascent Apex",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up (wall) v. 2",
+     "fromId": "0658",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "ff9e7789-f542-4a48-9948-09f47f9cb606",
+   "name": "Gauntlet Drive",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "5b058537-ee84-4c63-b756-947586a7bb49",
+   "name": "Primal Pulse Protocol",
+   "category": "METABOLIC",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "b48e683e-b097-42f1-94a1-16bf1fc44590",
+   "name": "Summit Ascent Trial",
+   "category": "CHALLENGE",
+   "format": "MIX",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "f4ccb295-f29c-445a-9ec5-d7ac6aa087a7",
+   "name": "Arcadian Kinetic Drill",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "4c638e7c-bf89-4b69-9619-8dfe6b5d5924",
+   "name": "Torch Engine Drive Rush",
+   "category": "CALORIE BURNING",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "98537b7a-4af1-4c99-acc3-129d7183ca4f",
+   "name": "Kinetic Cascade Circuit",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "2299e555-3b6d-49f0-868b-5f4234fd6c8d",
+   "name": "Velocity Compass Blitz",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "b72da45a-f855-4bf3-add3-6d9255d63238",
+   "name": "Kinetic Forge Flow",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "4b0a3955-2da2-4b86-94c9-05b0575e687c",
+   "name": "Kinetic Sprout",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up plus",
+     "fromId": "3145",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "0f0c578a-ff69-412f-b8b4-3ea8ea09ca9d",
+   "name": "Axial Citadel",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "power point plank",
+     "fromId": "3665",
+     "to": "Plank",
+     "toId": "forearm-plank",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "fdf4e16e-de76-4792-8b50-f119c35a262a",
+   "name": "Engine Drive Catalyst Burn",
+   "category": "METABOLIC",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "elbow lift - reverse push-up",
+     "fromId": "1772",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "b1294697-af80-4661-a33a-f45a97be51ad",
+   "name": "Acheron Coil",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "3609e0fa-ed69-46dc-9183-4d5f6d8c558b",
+   "name": "Kinetic Descent",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "e72a187f-e705-4863-8128-3cf5c3dbf9e6",
+   "name": "The Gauntlet Drive",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "883d2dd4-ff14-4248-a54f-44d3a4a52471",
+   "name": "Calorie Melt Reactor",
+   "category": "CALORIE BURNING",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Main Workout changes station 4 times (limit 3) — a TABATA must flow without constant equip"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Main Workout",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "a620a42f-b90f-43ec-bb28-c6676aaad0ea",
+   "name": "Mesa Metabolic Flow",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "elbow lift - reverse push-up",
+     "fromId": "1772",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "4e057189-f427-4de0-8e7e-d38e0e239a08",
+   "name": "Kinetic Meridian Circuit",
+   "category": "METABOLIC",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "a71b5e30-233e-40ac-9cdd-d2a88825bfdd",
+   "name": "Incessant Motion",
+   "category": "METABOLIC",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "2387b26d-ceaa-4852-a6b2-2350257bed7e",
+   "name": "Kinetic Spire Ascent",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "f6a617e6-dff9-4089-a5c4-e4c4265346a3",
+   "name": "Granite Quads",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "2cca64e8-ffde-40e5-b1d3-6149c863c2ff",
+   "name": "Kettlebell Chaos Engine",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "6ca059f6-5684-4d40-8db2-02faf1dbf548",
+   "name": "Torch Engine Drive Strike",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "9014f943-003a-42ab-bda2-fd3e9c37bce3",
+   "name": "Torch Engine Drive Surge",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "bfd0f2c3-0221-4f07-b75e-f983de444616",
+   "name": "Forged Metabolic Spire",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "46e8c2d1-2bce-4ef0-9453-52c202ea4af4",
+   "name": "Heat Shred Catalyst",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "13c7c55a-0c04-43a0-a287-3ca421257318",
+   "name": "The Crucible Circuit",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "e71e8588-d084-4427-bf59-bd6ac99351f7",
+   "name": "Iron Chest & Back",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "kettlebell alternating renegade row",
+     "fromId": "0521",
+     "to": "kettlebell alternating row",
+     "toId": "0522",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "075623bf-3d9a-4396-977b-4dae4cd32280",
+   "name": "Granite Ascent Surge",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "3cce5ccd-ff60-43a6-9382-0cea87b4bfa8",
+   "name": "Circuit Surge",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "985ecab6-0353-4bfc-8fa7-9a7dd5d0dadc",
+   "name": "Anchor Ascent",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "00228216-3015-4717-a886-bfd0c5839121",
+   "name": "Trial Cascade",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "e2e90ba8-7b44-4fca-aa79-dce5d25cc093",
+   "name": "Trial Gauntlet Grinder",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "23931f52-ddcf-4f02-af7d-d7de13f0f07e",
+   "name": "Granite Ascent",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "377012dd-812e-4dac-acd6-bde71c38078a",
+   "name": "Foundation Pulse Press",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "c3e67304-0b0f-44bc-b34f-cec322d67c26",
+   "name": "Apex Forging Press",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "kettlebell alternating renegade row",
+     "fromId": "0521",
+     "to": "kettlebell alternating row",
+     "toId": "0522",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "11a98bfe-01c5-475e-93e2-9196efd425ac",
+   "name": "Anchor Stability Reform",
+   "category": "PILATES",
+   "format": "REPS & SETS",
+   "status": "review",
+   "before": [
+    "Exercise outside category vocabulary"
+   ],
+   "after": [
+    "Exercise outside category vocabulary"
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "exercise ball dip",
+     "fromId": "1744",
+     "to": "band close-grip push-up",
+     "toId": "0975",
+     "reason": "\"exercise ball dip\" is loaded or conditioning work, which Pilates never uses.",
+     "rule": "Exercise outside category vocabulary",
+     "confidence": "MEDIUM",
+     "applied": false
+    }
+   ]
+  },
+  {
+   "id": "17b4e306-066a-4247-bdea-57b32136d569",
+   "name": "Granite Core Nexus",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "power point plank",
+     "fromId": "3665",
+     "to": "Plank",
+     "toId": "forearm-plank",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "9db31bef-559b-472d-a7ad-5ae042dd8465",
+   "name": "Center Balance Flow Grace",
+   "category": "PILATES",
+   "format": "REPS & SETS",
+   "status": "review",
+   "before": [
+    "Exercise outside category vocabulary"
+   ],
+   "after": [
+    "Exercise outside category vocabulary"
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "exercise ball dip",
+     "fromId": "1744",
+     "to": "band close-grip push-up",
+     "toId": "0975",
+     "reason": "\"exercise ball dip\" is loaded or conditioning work, which Pilates never uses.",
+     "rule": "Exercise outside category vocabulary",
+     "confidence": "MEDIUM",
+     "applied": false
+    }
+   ]
+  },
+  {
+   "id": "556d9497-d271-47e5-9141-77067af87724",
+   "name": "Granite Zenith Press",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "kettlebell alternating renegade row",
+     "fromId": "0521",
+     "to": "kettlebell alternating row",
+     "toId": "0522",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "b5db92eb-1f25-44db-9563-60236335a679",
+   "name": "Terra Firmament",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "47ef680c-0994-4f5e-9375-c0963ae49eb1",
+   "name": "Axial Core Pillar",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "power point plank",
+     "fromId": "3665",
+     "to": "Plank",
+     "toId": "forearm-plank",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "69af15a3-769a-48c8-a928-ee749bbc294f",
+   "name": "Canyon Ascent",
+   "category": "CHALLENGE",
+   "format": "MIX",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "jump squat v. 2",
+     "fromId": "0513",
+     "to": "jump squat",
+     "toId": "0514",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "7fc84aaa-2cae-47d8-867a-2f969a74d84a",
+   "name": "Arcus Vortex",
+   "category": "CARDIO",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "0e342ae5-322a-444c-a48e-d2a4e61e30e3",
+   "name": "Apex Protocol EMOM",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "12f0d6d2-3cb1-432e-b8a1-384efcce561a",
+   "name": "Peak Drive Test",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "c7b93822-f4af-42b0-b413-48776675d760",
+   "name": "Kinetic Pulse EMOM",
+   "category": "METABOLIC",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "0c389e82-d8d4-4367-805e-444a8d89675c",
+   "name": "Gridiron Ascent",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up plus",
+     "fromId": "3145",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "04e642cf-87c6-4287-9730-a89c816ebd68",
+   "name": "Ultimate Crucible",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "5837f555-a3f1-474f-8672-7ac4ae7dbcfc",
+   "name": "Bodyweight Gauntlet Grind",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "009ad861-765e-4249-bfa1-5ff2806b3d85",
+   "name": "Anchor Precision Flow",
+   "category": "MOBILITY & STABILITY",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "f771f816-8234-4d0d-9574-f1ddbb31647c",
+   "name": "Calorie Crusher",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "1f27e6af-8c61-43ed-a5bf-5f65eccf7f23",
+   "name": "Granite Cascade AMRAP",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "0d8c51b3-7112-4f59-988e-37992bde1a80",
+   "name": "Engine Activate",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "elbow lift - reverse push-up",
+     "fromId": "1772",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "ee25930c-d061-4895-a92d-17ec120b974a",
+   "name": "Tempo Sprint",
+   "category": "CHALLENGE",
+   "format": "TABATA",
+   "status": "review",
+   "before": [
+    "The Finisher introduces new equipment (dumbbell) — it must keep the Main Workout's flow."
+   ],
+   "after": [
+    "The Finisher introduces new equipment (dumbbell) — it must keep the Main Workout's flow."
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "dumbbell upright row",
+     "fromId": "0437",
+     "to": "inverted row with straps",
+     "toId": "0498",
+     "reason": "Finisher must keep the Main Workout's equipment",
+     "rule": "Equipment flow",
+     "confidence": "MEDIUM",
+     "applied": false
+    }
+   ]
+  },
+  {
+   "id": "1b6c5565-eac5-4f71-8b8e-df4f4674c870",
+   "name": "Torch Drive",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "modified push up to lower arms",
+     "fromId": "1421",
+     "to": "incline push-up",
+     "toId": "0493",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "6a638e25-4e56-4653-8291-50d5232495ed",
+   "name": "Helix Integration",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "e4503af2-daa1-4b96-bd0b-b42cf3595bed",
+   "name": "Summit Ascent (EQ)",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "9810563b-606b-48b5-9650-1c25c5c5d3e7",
+   "name": "Velocity Surge Drill",
+   "category": "CALORIE BURNING",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Main Workout changes station 4 times (limit 3) — a TABATA must flow without constant equip"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Main Workout",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "c722804c-0354-4804-8b41-50ac6204953f",
+   "name": "Loaded Strength Session",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "ef0ba49c-c72a-47de-adb1-48efcb01d763",
+   "name": "Circuit Cascade",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "6e1725ed-c6ed-4498-9a40-006f34e3e50d",
+   "name": "Ascension Gauntlet",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "2fca7a54-1b15-4958-b545-b4c6c05aca07",
+   "name": "Anchor Meridian",
+   "category": "MOBILITY & STABILITY",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "7de3870d-06b7-4b75-8b0e-b8d1b6a9251d",
+   "name": "Endurance Crucible Forge",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "2990a0a3-4fea-49d3-adbd-2e592736895c",
+   "name": "Inferno Tabata Blaze",
+   "category": "METABOLIC",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "09a534b5-51a4-445b-b273-67200f3c3d48",
+   "name": "Velocity Burst Ascend",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "a4e60812-379a-4341-86a9-729bc592ae76",
+   "name": "Kinetic Vortex",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "1af97798-f6b7-46ed-8474-3ab3783c2a38",
+   "name": "Apex Flux Challenge",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "7ecaa540-15bc-49be-8812-b2becbad1195",
+   "name": "Kinetic Pulse Circuit",
+   "category": "METABOLIC",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "d9aec8bc-c35b-44ec-8728-16de08d29b20",
+   "name": "Shadowboxer Burnout",
+   "category": "CALORIE BURNING",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "a21f340a-878f-431a-9c96-24be12c5730d",
+   "name": "Forge Catalyst",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "147bc5e4-00cd-4c54-9484-0260db704a6b",
+   "name": "The Grinder",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "a35860c6-71d0-4ec9-b81d-e68d3db99df5",
+   "name": "Endurance Crucible Test",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "162d69c8-6cd2-43f1-baa5-c35689c2f12c",
+   "name": "Ignite Drive Core",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "6fc6110e-154e-494c-9bc7-f1f11dd76947",
+   "name": "Catalyst Drive",
+   "category": "METABOLIC",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up plus",
+     "fromId": "3145",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "41db9d33-7db5-401e-b53f-080dc16097a6",
+   "name": "Peak Stamina Trial",
+   "category": "CHALLENGE",
+   "format": "MIX",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "5a81be4d-8825-42bf-a17d-fa4b7c3209a3",
+   "name": "Keystone Press-Thrust",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "9b4cda3b-a75a-48d9-a2f8-304fd50bd464",
+   "name": "Forge Ascendant",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "kettlebell alternating renegade row",
+     "fromId": "0521",
+     "to": "kettlebell alternating row",
+     "toId": "0522",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "3adad699-da06-4a72-b0fe-051dbac48d8d",
+   "name": "Summit Forge",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "f1cde239-8b38-480a-9425-525c36b0eb3d",
+   "name": "Crucible Cascade",
+   "category": "CHALLENGE",
+   "format": "TABATA",
+   "status": "manual",
+   "before": [
+    "The Finisher introduces new equipment (dumbbell) — it must keep the Main Workout's flow.",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "The Finisher introduces new equipment (dumbbell) — it must keep the Main Workout's flow."
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "dumbbell single leg squat",
+     "fromId": "0411",
+     "to": "one leg squat",
+     "toId": "1476",
+     "reason": "Finisher must keep the Main Workout's equipment",
+     "rule": "Equipment flow",
+     "confidence": "HIGH",
+     "applied": true
+    },
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "4107cb14-0421-4cee-b8f0-53c7889f6db1",
+   "name": "Endurance Summit",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "bb3cc472-fa09-46b9-a93f-dfdaee3e4918",
+   "name": "Core Tempo Circuit",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "0979844e-b887-4ee0-83f3-70cdad9e839c",
+   "name": "Summit Crusher",
+   "category": "CHALLENGE",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "elbow lift - reverse push-up",
+     "fromId": "1772",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "b57cbffa-8b57-4320-bd5d-b431b110699d",
+   "name": "Ignite Calorie Scorch",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "83ec4d74-f626-43e7-9c7d-dfde01c40106",
+   "name": "Relay Ascent",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "240921f0-b66e-4e6e-8923-f8a9bb5b70df",
+   "name": "Crucible Gauntlet",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "1813e299-6b6d-4af8-a627-2524d45d79d2",
+   "name": "Engine Builder Max",
+   "category": "METABOLIC",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up plus",
+     "fromId": "3145",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "fc8b1c19-478e-4617-b5f8-da56d4d4b438",
+   "name": "Pivot & Refine",
+   "category": "PILATES",
+   "format": "REPS & SETS",
+   "status": "review",
+   "before": [
+    "Exercise outside category vocabulary"
+   ],
+   "after": [
+    "Exercise outside category vocabulary"
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "exercise ball dip",
+     "fromId": "1744",
+     "to": "band close-grip push-up",
+     "toId": "0975",
+     "reason": "\"exercise ball dip\" is loaded or conditioning work, which Pilates never uses.",
+     "rule": "Exercise outside category vocabulary",
+     "confidence": "MEDIUM",
+     "applied": false
+    }
+   ]
+  },
+  {
+   "id": "799744e8-15b1-4864-a2f0-c9528e2d041b",
+   "name": "Leg Day Power Builder",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "ee5dbc77-4120-4129-af9e-08981d25a960",
+   "name": "Anchor Balance Flow",
+   "category": "PILATES",
+   "format": "REPS & SETS",
+   "status": "review",
+   "before": [
+    "Exercise outside category vocabulary"
+   ],
+   "after": [
+    "Exercise outside category vocabulary"
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "exercise ball dip",
+     "fromId": "1744",
+     "to": "band close-grip push-up",
+     "toId": "0975",
+     "reason": "\"exercise ball dip\" is loaded or conditioning work, which Pilates never uses.",
+     "rule": "Exercise outside category vocabulary",
+     "confidence": "MEDIUM",
+     "applied": false
+    }
+   ]
+  },
+  {
+   "id": "f51d389c-10dc-4e1b-9bb5-071c2bce30f6",
+   "name": "Cadence Coil Sprint",
+   "category": "CARDIO",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "9ca4daed-b713-4392-a5c1-75fdb5297b35",
+   "name": "Kinetic Flow Cycle",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up plus",
+     "fromId": "3145",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "c7033a31-9df0-4ef0-985e-4cffb29e0929",
+   "name": "Centrum Pilates Form",
+   "category": "PILATES",
+   "format": "REPS & SETS",
+   "status": "review",
+   "before": [
+    "Exercise outside category vocabulary"
+   ],
+   "after": [
+    "Exercise outside category vocabulary"
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "exercise ball dip",
+     "fromId": "1744",
+     "to": "band close-grip push-up",
+     "toId": "0975",
+     "reason": "\"exercise ball dip\" is loaded or conditioning work, which Pilates never uses.",
+     "rule": "Exercise outside category vocabulary",
+     "confidence": "MEDIUM",
+     "applied": false
+    }
+   ]
+  },
+  {
+   "id": "70f91583-f507-485e-b2d1-829e03cec805",
+   "name": "Apex Protocol",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "34df84c2-3548-44dc-881e-85a91a91ba33",
+   "name": "Kinetic Cascade Apex",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "9c94b901-fd8a-4505-91db-998549cb8350",
+   "name": "Forge Pinnacle",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "6128e8ca-750e-4521-af34-7f6c5dd624d5",
+   "name": "Summit Complex",
+   "category": "CHALLENGE",
+   "format": "MIX",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "a755fbcc-1e81-4e0b-9265-efff668c6543",
+   "name": "Granite Coil Press",
+   "category": "CHALLENGE",
+   "format": "MIX",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "a9600862-ec71-4be4-af2f-f784a73ba5ad",
+   "name": "Ignite Flow Surge",
+   "category": "METABOLIC",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "09f29efc-555b-4433-9394-d2138a2900bb",
+   "name": "Gluteal Anchor",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "power point plank",
+     "fromId": "3665",
+     "to": "Plank",
+     "toId": "forearm-plank",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "5b9259fc-5572-474a-b201-15294566c1b8",
+   "name": "Axial Current Integral LOW-B-A",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "4ad6059d-a77a-4b5c-af43-8411b362e243",
+   "name": "Granite Compass Ascent",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "9989090d-1bd0-41c5-9d3a-57eff1c33266",
+   "name": "Endure Threshold Trial",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "523b056e-5414-4495-8e25-bb7ff6abdcb8",
+   "name": "Summit Scramble",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "6f86b7a5-449d-412c-88e9-1d65812b5b3a",
+   "name": "Arcane Velocity",
+   "category": "CALORIE BURNING",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "modified push up to lower arms",
+     "fromId": "1421",
+     "to": "incline push-up",
+     "toId": "0493",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "91fefabe-40a5-410b-937a-dbfb98c6f3c9",
+   "name": "Ignition Drive Surge",
+   "category": "METABOLIC",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up plus",
+     "fromId": "3145",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "23d36d64-9536-4155-8073-aef5d655f7af",
+   "name": "Arcane Flow Sequence",
+   "category": "PILATES",
+   "format": "REPS & SETS",
+   "status": "review",
+   "before": [
+    "Exercise outside category vocabulary"
+   ],
+   "after": [
+    "Exercise outside category vocabulary"
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "exercise ball dip",
+     "fromId": "1744",
+     "to": "band close-grip push-up",
+     "toId": "0975",
+     "reason": "\"exercise ball dip\" is loaded or conditioning work, which Pilates never uses.",
+     "rule": "Exercise outside category vocabulary",
+     "confidence": "MEDIUM",
+     "applied": false
+    }
+   ]
+  },
+  {
+   "id": "86edaefb-082b-49c2-b225-450b6382be26",
+   "name": "Bodyweight Gauntlet",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up (wall) v. 2",
+     "fromId": "0658",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "10fb2347-fd03-4adb-9988-0b87fbca63c5",
+   "name": "Ascension Gauntlet Apex",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "c86f50d4-2226-40e8-a042-3ca2b11f1a01",
+   "name": "Solid Pace Session",
+   "category": "CARDIO",
+   "format": "CIRCUIT",
+   "status": "review",
+   "before": [
+    "The Finisher introduces new equipment (ball) — it must keep the Main Workout's flow.",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "The Finisher introduces new equipment (ball) — it must keep the Main Workout's flow."
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "medicine ball catch and overhead throw",
+     "fromId": "1353",
+     "to": "gironda sternum chin",
+     "toId": "0466",
+     "reason": "Finisher must keep the Main Workout's equipment",
+     "rule": "Equipment flow",
+     "confidence": "MEDIUM",
+     "applied": false
+    },
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "kettlebell alternating renegade row",
+     "fromId": "0521",
+     "to": "kettlebell alternating row",
+     "toId": "0522",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "e125fcc6-fad9-4985-a272-158da1aaafe7",
+   "name": "Ignite Melt",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "d8ca8fab-c020-4e48-8ca4-e5cc6a09432d",
+   "name": "Cadence Complex",
+   "category": "METABOLIC",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "elbow lift - reverse push-up",
+     "fromId": "1772",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "d687fd56-dfe2-46e3-a966-969f167f5152",
+   "name": "Ironroot Quads",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "a702bfb6-6ec0-4ea8-8eb9-bb6c7f1a4e8c",
+   "name": "Iron Current",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets",
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    },
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "janda sit-up",
+     "fromId": "0508",
+     "to": "arms overhead full sit-up (male)",
+     "toId": "3204",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "eeb29c67-3fd5-4026-9848-4e9435e66adb",
+   "name": "Calorie Pulse EMOM",
+   "category": "CALORIE BURNING",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "632e3535-e943-4340-becb-f873a4b65304",
+   "name": "Endurance Crucible Apex",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "3e794425-3e27-4fbf-ad71-15539d61a83e",
+   "name": "Ascension Ascent",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up (wall) v. 2",
+     "fromId": "0658",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "2f953d33-dec1-4dc0-b2ef-21c10d443f1a",
+   "name": "Nimbus Cascade",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "85d8adf7-a845-40e8-8d37-79075c890070",
+   "name": "Metabolic Advanced Session",
+   "category": "METABOLIC",
+   "format": "EMOM",
+   "status": "review",
+   "before": [
+    "The Finisher introduces new equipment (ball) — it must keep the Main Workout's flow.",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "The Finisher introduces new equipment (ball) — it must keep the Main Workout's flow.",
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "medicine ball catch and overhead throw",
+     "fromId": "1353",
+     "to": "gironda sternum chin",
+     "toId": "0466",
+     "reason": "Finisher must keep the Main Workout's equipment",
+     "rule": "Equipment flow",
+     "confidence": "MEDIUM",
+     "applied": false
+    }
+   ]
+  },
+  {
+   "id": "1af94ae9-7d41-4fa5-948c-b3edb0cfa78b",
+   "name": "Heat Shredder",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "2fa61f96-07b9-47bd-9ef1-fd28cf9482a9",
+   "name": "Lower Body Builder",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "squat to overhead reach",
+     "fromId": "1685",
+     "to": "quads (bodyweight squat)",
+     "toId": "3533",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "992b9d18-5928-4a5e-843c-da8ff58c4129",
+   "name": "Granite Climb Circuit",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "79ba1fe8-56c3-45a9-9d5c-3e1a68ae4e20",
+   "name": "Trial Ascent",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "0e722b54-042f-4add-8ba7-83cdb2c75d2e",
+   "name": "Arcane Descent Test",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "a6e52ca7-c33f-4d8b-96d1-3df01923a377",
+   "name": "Arcane Circuit",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Main Workout picks the same equipment back up after switching away — group each implement ",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Main Workout",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "7a521ba2-f2ac-43c4-80b6-f6e64f658e92",
+   "name": "Posterior Pillar",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "eb47457c-fb6a-4136-80d3-96f6b04ad900",
+   "name": "Metabolic Torchflow",
+   "category": "CALORIE BURNING",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "4e9f3285-7a19-4a6e-9d0c-f0dcf633cb19",
+   "name": "Shred Catalyst",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "59ca6fec-31ca-4728-8c56-9c0b81523e48",
+   "name": "Engine Drive Catalyst Shift",
+   "category": "METABOLIC",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "elbow lift - reverse push-up",
+     "fromId": "1772",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "08e947d3-dfa7-4be8-a01e-faa5dba8501f",
+   "name": "Iron Ember Forge",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "review",
+   "before": [
+    "Finisher picks the same equipment back up after switching away — group each implement into",
+    "The Finisher introduces new equipment (rope) — it must keep the Main Workout's flow.",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "The Finisher introduces new equipment (rope) — it must keep the Main Workout's flow."
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Finisher",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    },
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "battling ropes",
+     "fromId": "0128",
+     "to": "dumbbell alternate side press",
+     "toId": "0286",
+     "reason": "Finisher must keep the Main Workout's equipment",
+     "rule": "Equipment flow",
+     "confidence": "MEDIUM",
+     "applied": false
+    },
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "diamond push-up",
+     "toId": "0283",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "850572ba-5742-4801-a622-f85906ec01d6",
+   "name": "Kinetic Cascade",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "f5d9fb40-d424-4e33-8387-ced432964028",
+   "name": "Engine Drive Catalyst",
+   "category": "METABOLIC",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "7e5d36ae-bde0-42cb-9718-bc6050231b0f",
+   "name": "Legionary Stance LOW-B-I",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "squat to overhead reach",
+     "fromId": "1685",
+     "to": "quads (bodyweight squat)",
+     "toId": "3533",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "53ff8118-2a17-4604-a053-1d1d35a8a0f1",
+   "name": "Kinetic Vortex Tabata",
+   "category": "CALORIE BURNING",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "3255d462-1150-4d13-b98b-be5f372da62a",
+   "name": "Ember Cascade Burn",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "e299f026-70dc-47ae-ad0e-6c8d74122464",
+   "name": "Forge Fury",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "eece6e41-fa1c-4a61-b01c-342cd0d965f1",
+   "name": "Metabolic Surge",
+   "category": "METABOLIC",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets",
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    },
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "crunch (hands overhead)",
+     "fromId": "0267",
+     "to": "crunch floor",
+     "toId": "0274",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "5e118a80-b409-466a-98ac-7f2261abb9b4",
+   "name": "Engine Drive Catalyst Rev",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "f1b5aa60-6e94-45c9-8a9e-f613e60c9329",
+   "name": "Arcadian Cinder Sprint",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "bddd303f-d7bb-40e3-96af-e477af0b7138",
+   "name": "Granite Descent Challenge",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "6ce8a102-61e7-4719-9123-22b7e03c673d",
+   "name": "Torch Engine Drive",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "11f545d7-dcce-42b7-828b-0aa87ac29827",
+   "name": "Catalyst Current",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "e78eb721-b05c-4b19-8ac1-f3b79b325195",
+   "name": "Ember Step Ladder",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "788c6be7-f54c-4e8b-bac9-5cca346a02bb",
+   "name": "Apex Impulse",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "16bfb001-16ce-42fe-9855-dce70810e455",
+   "name": "Arcadian Forge",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "kettlebell alternating renegade row",
+     "fromId": "0521",
+     "to": "kettlebell alternating row",
+     "toId": "0522",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "484210a5-3a86-4fc7-9bd1-d4ab23cd40fe",
+   "name": "Cadence Awaken Flow",
+   "category": "CARDIO",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "3e1147c2-2bd2-4f05-ae2a-df78827bd9b2",
+   "name": "Sweat Storm",
+   "category": "CALORIE BURNING",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Main Workout changes station 4 times (limit 3) — a TABATA must flow without constant equip"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Main Workout",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "251ebf92-2541-473c-8262-16244caaaa03",
+   "name": "Loaded Conditioning Session",
+   "category": "CALORIE BURNING",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "modified push up to lower arms",
+     "fromId": "1421",
+     "to": "incline push-up",
+     "toId": "0493",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "99500bdc-cf89-4c87-9804-c6098c11046c",
+   "name": "Arc Furnace",
+   "category": "CALORIE BURNING",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "5a1510e5-3a10-4478-b9d9-0b6fadd62ddd",
+   "name": "Dumbbell Demon Gauntlet",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "8f0b00b2-e323-4091-b1ab-f278599c7dad",
+   "name": "Endurance Ladder",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "push-up (wall) v. 2",
+     "fromId": "0658",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "8620279d-6de9-43df-ae35-d6de2e2624a4",
+   "name": "Vortex Calisthenics",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "17d109fd-cbba-42e3-9dde-aaf07e1f6b51",
+   "name": "Summit Gauntlet Apex",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "3ae85fa0-e9f1-4392-a214-4d7d0af3270c",
+   "name": "Challenge Tempo Circuit",
+   "category": "CHALLENGE",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "elbow lift - reverse push-up",
+     "fromId": "1772",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "04a3d98c-5c6e-425e-a6e5-9e98ca7ce282",
+   "name": "Engine Drive Tabata",
+   "category": "METABOLIC",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "e07be054-4719-47e3-9f13-2ab5dbd39133",
+   "name": "Endurance Crucible",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "b0916bef-a040-47a7-8872-02aeb1a076e8",
+   "name": "Solid Mixed Session",
+   "category": "METABOLIC",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "8502ee0c-8ad1-4539-921a-6112bfbb255d",
+   "name": "Apex Current",
+   "category": "CHALLENGE",
+   "format": "MIX",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "jump squat v. 2",
+     "fromId": "0513",
+     "to": "jump squat",
+     "toId": "0514",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "561026e9-c026-464b-b5b3-3e01bea3f2c2",
+   "name": "Compass Blitz",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "f130a522-0963-4bf3-9e00-0c1e90620946",
+   "name": "Engine Accelerator",
+   "category": "METABOLIC",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "elbow lift - reverse push-up",
+     "fromId": "1772",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "42379463-114a-433c-9bb6-8856b86ebf2a",
+   "name": "Kinetic Pulse Circuit Blast",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "dffaadba-1cee-40ac-bab1-aef844bae204",
+   "name": "Granite Core Press",
+   "category": "CHALLENGE",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "258b14a1-136a-4a9f-a901-4f1e080a3c45",
+   "name": "Foundation Pull Build",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "feb0efb1-7bf4-473b-b092-e139119c8a89",
+   "name": "Keystone Press",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "cbf91f09-f43d-422d-8f65-e884c495658f",
+   "name": "Iron Mesh Protocol",
+   "category": "METABOLIC",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "ade3ba3b-fc83-43ec-8870-f2c71fef2819",
+   "name": "Kinetic Flow Circuit",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Main Workout picks the same equipment back up after switching away — group each implement ",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Main Workout",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "f27f673a-2526-4c3f-b847-506d35b819c6",
+   "name": "Calorie Melt Catalyst",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "manual",
+   "before": [
+    "The Finisher introduces new equipment (rope, dumbbell) — it must keep the Main Workout's f"
+   ],
+   "after": [
+    "The Finisher introduces new equipment (rope, dumbbell) — it must keep the Main Workout's f"
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "battling ropes",
+     "fromId": "0128",
+     "reason": "Finisher must keep the Main Workout's equipment — no equivalent legal exercise in the library",
+     "rule": "Equipment flow",
+     "confidence": "LOW",
+     "applied": false
+    },
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Dumbbell Goblet Squat",
+     "fromId": "1760",
+     "to": "quads (bodyweight squat)",
+     "toId": "3533",
+     "reason": "Finisher must keep the Main Workout's equipment",
+     "rule": "Equipment flow",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "dc8bc64e-01b9-4d0e-b32f-e29871ba4ae2",
+   "name": "Iron Cascade Forge",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "review",
+   "before": [
+    "Finisher picks the same equipment back up after switching away — group each implement into",
+    "The Finisher introduces new equipment (rope) — it must keep the Main Workout's flow.",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "The Finisher introduces new equipment (rope) — it must keep the Main Workout's flow."
+   ],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Finisher",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    },
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "battling ropes",
+     "fromId": "0128",
+     "to": "dumbbell alternate side press",
+     "toId": "0286",
+     "reason": "Finisher must keep the Main Workout's equipment",
+     "rule": "Equipment flow",
+     "confidence": "MEDIUM",
+     "applied": false
+    },
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "diamond push-up",
+     "toId": "0283",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "147e6ff4-998c-49b3-86a0-fef738f2ea94",
+   "name": "Inferno Engine: Calorie Crusher",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "aa44b6d1-a163-4014-9afd-a9970d4b71c0",
+   "name": "Summit Ascent",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "3c5bd53f-d90f-4b66-b0e4-06feb9ab00c4",
+   "name": "Velocity Core",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "39ce69ba-5a4e-4dca-9560-f7973d021848",
+   "name": "Endure The Surge",
+   "category": "CHALLENGE",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "8e65ef3f-0bf1-459d-a714-815df89c4f99",
+   "name": "Crucible Ascent",
+   "category": "CHALLENGE",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "01f4b9b4-1d7a-49fd-ad58-e760c8d20c85",
+   "name": "Summit Endurance Trial",
+   "category": "CHALLENGE",
+   "format": "MIX",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "jump squat v. 2",
+     "fromId": "0513",
+     "to": "jump squat",
+     "toId": "0514",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "e7c2c55c-b0f9-4f28-9c9b-ccf556b95adb",
+   "name": "Torch Engine",
+   "category": "CALORIE BURNING",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "f67a7de2-f141-4ec5-a1fd-29d243bd78e2",
+   "name": "Metabolic Fury",
+   "category": "METABOLIC",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "1f23fc69-0348-401f-be2b-a310783f1cd7",
+   "name": "Calorie Melt Reactor Blast",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "modified push up to lower arms",
+     "fromId": "1421",
+     "to": "incline push-up",
+     "toId": "0493",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "c70087d2-fc85-4f6d-ad5f-fd9ca531cc2d",
+   "name": "Vertical Tide",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "c5467863-65d2-4b06-bf59-547e153bcfbb",
+   "name": "Cadence Coil Tabata",
+   "category": "METABOLIC",
+   "format": "TABATA",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets",
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    },
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "janda sit-up",
+     "fromId": "0508",
+     "to": "arms overhead full sit-up (male)",
+     "toId": "3204",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "885ad425-5918-43c2-a13b-d6e044088441",
+   "name": "Calorie Meltdown",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Main Workout picks the same equipment back up after switching away — group each implement ",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Main Workout",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "3a454d73-7b6f-41ba-9d14-c9e699c75fb3",
+   "name": "Cadence Pulse Trail",
+   "category": "CARDIO",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "43ea6c6a-7e90-48f1-ba76-9b5aca02deb7",
+   "name": "Ember Cascade",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Finisher",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "c401694e-b478-4ebd-b86b-68939f32fe51",
+   "name": "Calorie Melt Drive",
+   "category": "CALORIE BURNING",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Main Workout picks the same equipment back up after switching away — group each implement ",
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": [
+    {
+     "kind": "reorder",
+     "role": "Main Workout",
+     "reason": "Exercises regrouped so each implement is one contiguous block",
+     "rule": "Equipment flow",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "9e7dfd91-d2dd-48e6-9cb8-e3ba52d22113",
+   "name": "Bodyweight Engine Session",
+   "category": "METABOLIC",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [
+    "Too few priority exercises"
+   ],
+   "priorityKeptBelowTarget": true,
+   "changes": []
+  },
+  {
+   "id": "016db19a-aa41-4b48-b484-c67c5252a313",
+   "name": "Cadence Helix Flow",
+   "category": "METABOLIC",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "1dc26bbd-cc43-4d08-ad97-40a83edb18b4",
+   "name": "Terra Firm",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "squat to overhead reach",
+     "fromId": "1685",
+     "to": "quads (bodyweight squat)",
+     "toId": "3533",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "3d8f572d-1c51-4140-952c-e5c1c8f916d8",
+   "name": "Obsidian Burn Cascade",
+   "category": "CALORIE BURNING",
+   "format": "AMRAP",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "fc83ac50-fe03-4879-a894-f435aa04a472",
+   "name": "Kinetic Velocity Circuit",
+   "category": "CALORIE BURNING",
+   "format": "CIRCUIT",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "f1ccbd56-7fc6-4ae6-89ba-0f16e79891a4",
+   "name": "Inferno Blitz",
+   "category": "CALORIE BURNING",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "Crab Walk",
+     "fromId": "bw-crab-walk",
+     "to": "Bear Crawl",
+     "toId": "3360",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "fec53599-6496-48de-92cb-4ac1e3e1c1e5",
+   "name": "Cadence Current Weave",
+   "category": "CARDIO",
+   "format": "EMOM",
+   "status": "fixed",
+   "before": [
+    "Activation dose above 10 reps / 30 sec or in sets"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "dose",
+     "reason": "Dose adjusted, exercises unchanged",
+     "rule": "Activation dose above 10 reps / 30 sec or in sets",
+     "confidence": "N/A",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "08695fd7-d396-4dfe-a4cc-a8fd5dac06ce",
+   "name": "Iron Will Endurance Test",
+   "category": "CHALLENGE",
+   "format": "FOR TIME",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "close-grip push-up",
+     "fromId": "0259",
+     "to": "push-up",
+     "toId": "0662",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  },
+  {
+   "id": "4025a0ce-0ed1-434e-95bd-796951d0599e",
+   "name": "Lower Body Pillar (BW)",
+   "category": "STRENGTH",
+   "format": "REPS & SETS",
+   "status": "fixed",
+   "before": [
+    "Too few priority exercises"
+   ],
+   "after": [],
+   "priorityKeptBelowTarget": false,
+   "changes": [
+    {
+     "kind": "replace",
+     "role": "Main Workout",
+     "from": "squat to overhead reach",
+     "fromId": "1685",
+     "to": "quads (bodyweight squat)",
+     "toId": "3533",
+     "reason": "Equivalent coach priority exercise",
+     "rule": "Too few priority exercises",
+     "confidence": "HIGH",
+     "applied": true
+    }
+   ]
+  }
+ ]
+}

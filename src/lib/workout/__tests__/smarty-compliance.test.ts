@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { complianceIssues, remediate, type ComplianceExercise } from "../smarty-compliance";
+import { complianceIssues, planMigration, remediate, type ComplianceExercise } from "../smarty-compliance";
 
 const ex = (id: string, name: string, equipment = "body weight", body_part = "upper arms"): ComplianceExercise =>
   ({ id, name, equipment, body_part, is_active: true, gif_path: `${id}.gif` }) as ComplianceExercise;
@@ -25,8 +25,10 @@ describe("Smarty Workout rule compliance", () => {
     const w = { id: "w", name: "W", category: "STRENGTH", format: "REPS & SETS", difficulty_stars: 2, main_workout: html(["0009", "0015", "0001"]) };
     expect(complianceIssues(w, lib)).toContain("Too few priority exercises");
     const r = remediate(w, lib);
-    expect(r.after).toEqual([]);
+    // Priority is a preference: a stretch or dip with no equivalent priority move is kept, never badly swapped.
     expect(r.html).toContain("3 sets × 10 reps");
+    const plan = planMigration(w, lib);
+    expect(plan.changes.filter((c) => c.kind === "replace" && c.applied).every((c) => c.confidence === "HIGH")).toBe(true);
   });
   it("never applies the priority rule to Recovery, Mobility & Stability or Pilates", () => {
     for (const category of ["RECOVERY", "PILATES"]) {
