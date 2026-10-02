@@ -56,7 +56,8 @@ export const isTimedPosition = (name: string) =>
 /** Holds (plank, wall sit, hollow …) and passive stretches must be dosed in time, never in reps. */
 export function holdDoseViolation(name: string, line: string): string | null {
   if (!isTimedPosition(name)) return null;
-  if (/\b\d+\s*(reps?|x)\b/i.test(line) && !/\b\d+\s*(sec|s|min)\b/i.test(line))
+  const dose = line.replace(/\brest\b[^.;,]*/gi, "");
+  if (/\b\d+\s*(reps?|x)\b/i.test(dose) && !/\b\d+\s*(sec|s|min)\b/i.test(dose))
     return `"${name}" is a hold or stretch but is dosed in reps.`;
   return null;
 }

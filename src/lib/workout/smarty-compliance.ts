@@ -238,7 +238,7 @@ function capLightSets(html: string, cat: Category): string {
 
 /** A hold left in a non-flow category keeps its place but is dosed in time. */
 function fixHoldDoses(html: string, lib: Map<string, ComplianceExercise>): string {
-  return html.replace(/(<li\b[^>]*>(?:(?!<\/li>)[\s\S])*?)\b(\d+)\s*reps?\b((?:(?!<\/li>)[\s\S])*?\{\{exercise:([A-Za-z0-9_-]+):[^}]*\}\})/g, (m, pre, _n, mid, id) => {
+  return html.replace(/(<(li|p)\b[^>]*>(?:(?!<\/\2>)[\s\S])*?)\b(\d+)\s*reps?\b((?:(?!<\/\2>)[\s\S])*?\{\{exercise:([A-Za-z0-9_-]+):[^}]*\}\})/g, (m, pre, _t, _n, mid, id) => {
     const name = lib.get(id)?.name ?? "";
     return isTimedPosition(name) ? `${pre}30 sec${mid}` : m;
   });
