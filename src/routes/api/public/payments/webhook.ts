@@ -91,14 +91,24 @@ async function handleWebhook(req: Request, env: StripeEnv) {
 
   // Each Stripe event is applied once, even if Stripe delivers it again.
   if (event.id) {
-    const { error: dupe } = await (await db())
+    const { data: seen } = await (await db())
       .from("stripe_events")
-      .insert({ id: event.id, type: event.type });
-    if (dupe) {
-      if ((dupe as { code?: string }).code === "23505") return;
-      throw new Error(dupe.message);
-    }
+      .select("id")
+      .eq("id", event.id)
+      .maybeSingle();
+    if (seen) return;
   }
+  await applyEvent(event, env);
+  // Recorded only after it was applied, so a failed event is retried by Stripe.
+  if (event.id) {
+    await (await db()).from("stripe_events").upsert({ id: event.id, type: event.type });
+  }
+}
+
+async function applyEvent(
+  event: { id?: string; type: string; created?: number; data: { object: any } },
+  env: StripeEnv,
+) {
 
   switch (event.type) {
     case "customer.subscription.created":
