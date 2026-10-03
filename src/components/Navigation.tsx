@@ -39,7 +39,6 @@ import {
 
 export function Navigation() {
   const { user, displayName, loading } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const router = useRouter();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
