@@ -13,14 +13,6 @@ import { setWorkoutMeta, setWorkoutStatus } from "@/lib/coach.functions";
 import { toast } from "sonner";
 import { MAX_STARS, normalizeStars } from "@/lib/workout/spec";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Loader2,
   Star,
   Clock,
