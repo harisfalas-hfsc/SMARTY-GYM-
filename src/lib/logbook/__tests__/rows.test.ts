@@ -79,10 +79,46 @@ describe("anchorDate", () => {
 });
 
 describe("sourceLabel", () => {
-  it("distinguishes WOD, community copies and coach sessions", () => {
+  it("distinguishes WOD, community copies, own and coach sessions", () => {
     expect(sourceLabel(row({ is_wod: true }))).toBe("Workout of the Day");
     expect(sourceLabel(row({ created_by: "community" }))).toBe("Community copy");
-    expect(sourceLabel(row())).toBe("Smarty Coach");
+    expect(sourceLabel(row({ created_by: "smarty:abc" }))).toBe("Smarty Workout");
+    expect(sourceLabel(row({ created_by: null, category: "MY OWN WORKOUT" }))).toBe("Created by me");
+    expect(sourceLabel(row())).toBe("Created by Smarty Coach");
+  });
+});
+
+describe("source filter", () => {
+  const rows = [
+    row({ id: "smarty", created_by: "smarty:1" }),
+    row({ id: "wod", is_wod: true }),
+    row({ id: "coach", created_by: "smarty_coach" }),
+    row({ id: "own", created_by: null, category: "MY OWN WORKOUT" }),
+    row({ id: "copy", created_by: "community" }),
+  ];
+
+  it("narrows to Smarty Workouts including the WOD", () => {
+    expect(filterRows(rows, { filters: [], sources: ["smarty"] }).map((r) => r.id).sort()).toEqual([
+      "smarty",
+      "wod",
+    ]);
+  });
+
+  it("narrows to Smarty Coach and My Own Workouts", () => {
+    expect(filterRows(rows, { filters: [], sources: ["coach"] }).map((r) => r.id)).toEqual(["coach"]);
+    expect(filterRows(rows, { filters: [], sources: ["own"] }).map((r) => r.id)).toEqual(["own"]);
+  });
+
+  it("combines sources as any-of and stacks with status filters", () => {
+    expect(
+      filterRows(rows, { filters: [], sources: ["coach", "own"] }).map((r) => r.id).sort(),
+    ).toEqual(["coach", "own"]);
+    expect(
+      filterRows(
+        [row({ id: "own-done", created_by: null, category: "MY OWN WORKOUT", status: "completed" }), ...rows],
+        { filters: ["completed"], sources: ["own"] },
+      ).map((r) => r.id),
+    ).toEqual(["own-done"]);
   });
 });
 

@@ -49,6 +49,7 @@ import {
 } from "@/lib/date-format";
 import {
   LOGBOOK_FILTERS as FILTERS,
+  LOGBOOK_SOURCES as SOURCES,
   anchorDate,
   dayKey,
   equipmentOptions as equipmentOptionsOf,
@@ -56,8 +57,11 @@ import {
   filterRows,
   matchesFilter as matches,
   parseFilters,
+  parseSources,
   sourceLabel,
+  workoutSource,
   type LogbookFilter as Filter,
+  type LogbookSource as Source,
 } from "@/lib/logbook/rows";
 import { equipmentBadges } from "@/lib/format/labels";
 import { belongsInLogbook } from "@/lib/logbook/rows";
@@ -69,13 +73,14 @@ import { getSessionFeedback, type SessionFeedback } from "@/lib/feedback.functio
 import { getLocalWorkouts } from "@/lib/local-workouts";
 
 type View = "list" | "calendar" | "progress";
-type LogSearch = { filter: string; view: View; equip?: string };
+type LogSearch = { filter: string; view: View; equip?: string; src?: string };
 
 
 export const Route = createFileRoute("/_authenticated/logbook")({
   validateSearch: (search: Record<string, unknown>): LogSearch => ({
     filter: String(search["filter"] ?? "all"),
     equip: String(search["equip"] ?? "all"),
+    src: String(search["src"] ?? "all"),
     view:
       search["view"] === "calendar" || search["view"] === "scheduled"
         ? ("calendar" as const)
@@ -171,7 +176,21 @@ function WorkoutCard({
         </div>
 
         <p className="mt-1 pr-10 font-bold leading-tight">{r.name}</p>
-        <p className="mt-0.5 text-[11px] text-muted-foreground">{sourceLabel(r)}</p>
+        <p className="mt-1">
+          <span
+            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold ${
+              workoutSource(r) === "smarty"
+                ? "border-primary/50 bg-primary/10 text-primary"
+                : workoutSource(r) === "own"
+                  ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                  : workoutSource(r) === "community"
+                    ? "border-border bg-muted text-muted-foreground"
+                    : "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+            }`}
+          >
+            {sourceLabel(r)}
+          </span>
+        </p>
 
         <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
           <span className="inline-flex items-center gap-1 text-muted-foreground">
@@ -847,6 +866,7 @@ function Logbook() {
 function LogbookContent() {
   const { filter, view } = Route.useSearch();
   const equip = Route.useSearch().equip ?? "all";
+  const src = Route.useSearch().src ?? "all";
   const navigate = useNavigate({ from: "/logbook" });
   const [rows, setRows] = useState<Row[] | null>(null);
   const [busy, setBusy] = useState(false);
@@ -902,6 +922,7 @@ function LogbookContent() {
   const noSavedCopy = !online && cached.error !== null;
 
   const active = useMemo(() => parseFilters(filter), [filter]);
+  const activeSources = useMemo(() => parseSources(src), [src]);
 
   // Logged sessions power the calendar's day/period training-load totals.
   const fetchSessionLoads = useServerFn(getSessionLoads);
@@ -991,6 +1012,11 @@ function LogbookContent() {
     void navigate({ search: (p: LogSearch) => ({ ...p, filter: value }) });
   }
 
+  function setSources(next: Source[]) {
+    const value = next.length ? next.join(",") : "all";
+    void navigate({ search: (p: LogSearch) => ({ ...p, src: value }) });
+  }
+
   if (!rows)
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
@@ -999,9 +1025,9 @@ function LogbookContent() {
     );
 
   // Multiple filters combine as "any of" — pick favourites + scheduled to see both.
-  const filtered = filterRows(rows, { filters: active, equipment: equip });
+  const filtered = filterRows(rows, { filters: active, sources: activeSources, equipment: equip });
   const equipmentOptions = equipmentOptionsOf(rows);
-  const menuLabel = filterMenuLabel(active, equip);
+  const menuLabel = filterMenuLabel(active, equip, activeSources);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
@@ -1080,6 +1106,24 @@ function LogbookContent() {
                     className="h-11"
                   >
                     {f.label} · {rows.filter((r) => matches(r, f.id)).length}
+                  </DropdownMenuCheckboxItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Source</DropdownMenuLabel>
+                {SOURCES.map((s) => (
+                  <DropdownMenuCheckboxItem
+                    key={s.id}
+                    checked={activeSources.includes(s.id)}
+                    onCheckedChange={(checked) =>
+                      setSources(
+                        checked
+                          ? [...activeSources, s.id]
+                          : activeSources.filter((a) => a !== s.id),
+                      )
+                    }
+                    className="h-11"
+                  >
+                    {s.label} · {rows.filter((r) => workoutSource(r) === s.id).length}
                   </DropdownMenuCheckboxItem>
                 ))}
                 {equipmentOptions.length ? (

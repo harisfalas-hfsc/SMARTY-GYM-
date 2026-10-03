@@ -7,6 +7,7 @@ export type LogbookRow = {
   id: string;
   name: string;
   status: string;
+  category?: string | null;
   is_favorite: boolean | null;
   is_wod: boolean | null;
   created_by: string | null;
@@ -41,16 +42,44 @@ export function matchesFilter(row: LogbookRow, filter: LogbookFilter): boolean {
   return Boolean(row.scheduled_at);
 }
 
-/** Filters combine as "any of"; equipment narrows the result. */
+export type LogbookSource = "smarty" | "coach" | "own";
+
+export const LOGBOOK_SOURCES: { id: LogbookSource; label: string }[] = [
+  { id: "smarty", label: "Smarty Workouts" },
+  { id: "coach", label: "Smarty Coach" },
+  { id: "own", label: "My Own Workouts" },
+];
+
+export const LOGBOOK_SOURCE_IDS = LOGBOOK_SOURCES.map((s) => s.id) as string[];
+
+export function parseSources(value: string | null | undefined): LogbookSource[] {
+  return String(value ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => LOGBOOK_SOURCE_IDS.includes(s)) as LogbookSource[];
+}
+
+/** Where a logbook workout came from. Community copies stay visible under "All". */
+export function workoutSource(row: LogbookRow): LogbookSource | "community" {
+  if (row.is_wod || String(row.created_by ?? "").startsWith("smarty:")) return "smarty";
+  if (row.created_by === "member" || row.created_by === "community") return "community";
+  if (row.category === "MY OWN WORKOUT") return "own";
+  return "coach";
+}
+
+/** Status filters combine as "any of"; source and equipment narrow the result. */
 export function filterRows<T extends LogbookRow>(
   rows: readonly T[],
-  options: { filters: LogbookFilter[]; equipment?: string },
+  options: { filters: LogbookFilter[]; sources?: LogbookSource[]; equipment?: string },
 ): T[] {
   const byStatus = options.filters.length
     ? rows.filter((r) => options.filters.some((f) => matchesFilter(r, f)))
     : [...rows];
+  const bySource = options.sources?.length
+    ? byStatus.filter((r) => options.sources!.includes(workoutSource(r) as LogbookSource))
+    : byStatus;
   const equip = options.equipment ?? "all";
-  return equip === "all" ? byStatus : byStatus.filter((r) => (r.equipment ?? []).includes(equip));
+  return equip === "all" ? bySource : bySource.filter((r) => (r.equipment ?? []).includes(equip));
 }
 
 export function equipmentOptions(rows: readonly LogbookRow[]): string[] {
@@ -68,7 +97,8 @@ export function sourceLabel(row: LogbookRow): string {
   if (row.is_wod) return "Workout of the Day";
   if (row.created_by === "member" || row.created_by === "community") return "Community copy";
   if (String(row.created_by ?? "").startsWith("smarty:")) return "Smarty Workout";
-  return "Smarty Coach";
+  if (row.category === "MY OWN WORKOUT") return "Created by me";
+  return "Created by Smarty Coach";
 }
 
 /**
@@ -102,12 +132,22 @@ export function dotClass(row: LogbookRow): string {
   return "bg-muted-foreground/50";
 }
 
-export function filterMenuLabel(filters: LogbookFilter[], equipment: string): string {
+export function filterMenuLabel(
+  filters: LogbookFilter[],
+  equipment: string,
+  sources: LogbookSource[] = [],
+): string {
   const base =
     filters.length === 0
       ? "All workouts"
       : filters.length === 1
         ? (LOGBOOK_FILTERS.find((f) => f.id === filters[0])?.label ?? "All workouts")
         : `${filters.length} filters`;
-  return equipment === "all" ? base : `${base} · ${equipment}`;
+  const withSource =
+    sources.length === 0
+      ? base
+      : sources.length === 1
+        ? (LOGBOOK_SOURCES.find((s) => s.id === sources[0])?.label ?? base)
+        : `${base} · ${sources.length} sources`;
+  return equipment === "all" ? withSource : `${withSource} · ${equipment}`;
 }
