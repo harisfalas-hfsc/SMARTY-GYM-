@@ -73,7 +73,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { freeAccessMode } = useFreeAccessMode();
-  const workoutCount = Route.useLoaderData().total;
+  const workoutCount = Route.useLoaderData()?.total ?? 0;
   return (
     <>
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">

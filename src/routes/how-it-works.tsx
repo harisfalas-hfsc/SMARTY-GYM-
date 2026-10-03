@@ -181,7 +181,7 @@ const TRACKING_STEPS = [
 
 function HowItWorks() {
   const { freeAccessMode } = useFreeAccessMode();
-  const workoutCount = Route.useLoaderData().total;
+  const workoutCount = Route.useLoaderData()?.total ?? 0;
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
       <PageHeader image={pageHeroImage}

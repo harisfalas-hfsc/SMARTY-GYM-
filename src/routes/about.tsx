@@ -86,7 +86,7 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
-  const workoutCount = Route.useLoaderData().total;
+  const workoutCount = Route.useLoaderData()?.total ?? 0;
   return (
     <>
     <DesktopAboutLanding page="about" workoutCount={workoutCount} />
