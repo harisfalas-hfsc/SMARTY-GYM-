@@ -166,13 +166,6 @@ export function Navigation() {
                   </>
                 )}
 
-                <DropdownMenuItem onSelect={() => toggleTheme()}>
-                  {theme === "dark" ? (
-                    <><Sun className="h-4 w-4 mr-2" /> Light mode</>
-                  ) : (
-                    <><Moon className="h-4 w-4 mr-2" /> Dark mode</>
-                  )}
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="h-4 w-4 mr-2" /> Sign out
                 </DropdownMenuItem>
