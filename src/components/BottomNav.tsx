@@ -25,7 +25,7 @@ export function BottomNav() {
         aria-label="Primary"
       >
       <ul className="mx-auto grid max-w-lg grid-cols-5">
-        {ITEMS.map(({ to, label, Icon }) => {
+        {ITEMS.map(({ to, label, Icon, iconColor }) => {
           const active = pathname === to || pathname.startsWith(`${to}/`);
           return (
             <li key={to}>
@@ -39,7 +39,7 @@ export function BottomNav() {
                 }`}
                 style={{ textDecoration: "none" }}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className={`h-5 w-5 ${iconColor}`} />
                 {label}
               </Link>
             </li>
