@@ -79,7 +79,9 @@ export function filterRows<T extends LogbookRow>(
     ? byStatus.filter((r) => options.sources!.includes(workoutSource(r) as LogbookSource))
     : byStatus;
   const equip = options.equipment ?? "all";
-  return equip === "all" ? bySource : bySource.filter((r) => (r.equipment ?? []).includes(equip));
+  if (equip === "all") return bySource;
+  if (equip === "bodyweight") return bySource.filter((r) => (r.equipment ?? []).length === 0);
+  return bySource.filter((r) => (r.equipment ?? []).includes(equip));
 }
 
 export function equipmentOptions(rows: readonly LogbookRow[]): string[] {
@@ -149,5 +151,6 @@ export function filterMenuLabel(
       : sources.length === 1
         ? (LOGBOOK_SOURCES.find((s) => s.id === sources[0])?.label ?? base)
         : `${base} · ${sources.length} sources`;
-  return equipment === "all" ? withSource : `${withSource} · ${equipment}`;
+  if (equipment === "all") return withSource;
+  return `${withSource} · ${equipment === "bodyweight" ? "Bodyweight" : equipment}`;
 }
