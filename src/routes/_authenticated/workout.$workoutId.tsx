@@ -63,7 +63,9 @@ function WorkoutPage() {
   async function deleteWorkout() {
     if (
       !window.confirm(
-        "Delete this workout for good? It will also be removed from the community, with its likes, ratings and comments, and from your progress and training load. This can't be undone.",
+        shared
+          ? "Delete this workout from your logbook? It will be removed from your progress and training load, but it stays in Shared Workouts for the members who saved, completed or liked it. This can't be undone."
+          : "Delete this workout for good? It will be removed from your progress and training load. This can't be undone.",
       )
     )
       return;
