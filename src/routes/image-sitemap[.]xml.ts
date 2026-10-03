@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SITE_URL } from "@/lib/seo/site";
+import { listPublicSmartyWorkouts, smartyWorkoutSearchData } from "@/lib/seo/smarty-workout-public.server";
 
 const BASE_URL = SITE_URL;
 
@@ -65,6 +66,11 @@ export const Route = createFileRoute("/image-sitemap.xml")({
                 },
               ],
             });
+          }
+          for (const workout of await listPublicSmartyWorkouts()) {
+            const seo = smartyWorkoutSearchData(workout);
+            if (!seo.image) continue;
+            pages.push({ path: `/smarty-workouts/${workout.id}`, images: [{ loc: seo.image, title: seo.imageTitle, caption: seo.description }] });
           }
         } catch (error) {
           console.error("[seo/image-sitemap] published covers lookup failed", error);

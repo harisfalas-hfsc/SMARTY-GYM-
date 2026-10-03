@@ -48,7 +48,7 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/community/": "indexable",
   "/shared-workouts": "indexable",
   "/smarty-workouts/": "indexable",
-  "/smarty-workouts/$workoutId": "noindex",
+  "/smarty-workouts/$workoutId": "indexable",
   "/smarty-workouts/category/$category": "indexable",
   "/smarty-ritual": "noindex",
   "/smarty-checkins": "noindex",

@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Index the 530 visible Smarty Workout covers and public preview pages with factual, workout-specific search metadata while keeping exercise content Premium-only.
+
 - [x] Audit and upgrade machine-readable search discovery, route inventory, sitemaps, private crawl rules, factual AI descriptions, internal intent phrases, and changed-URL IndexNow delivery without changing page layouts.
 - [x] Temporarily exclude research/comparison pages with unverified statistics or rankings from indexing while preserving their appearance.
 - [ ] Verify and correct unsupported claims/charts on the existing research/comparison pages before restoring indexing (blocked by source verification and the requirement to preserve visible page appearance).

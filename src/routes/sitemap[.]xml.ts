@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { STATIC_SITEMAP_ENTRIES } from "@/lib/seo/route-inventory";
 import { SITE_URL } from "@/lib/seo/site";
+import { listPublicSmartyWorkouts, smartyWorkoutSearchData } from "@/lib/seo/smarty-workout-public.server";
 const BASE_URL = SITE_URL;
 
 interface SitemapEntry {
@@ -135,7 +136,24 @@ export const Route = createFileRoute("/sitemap.xml")({
           }
         }
 
-        const entries = [...base, ...articles, ...sharedWorkouts];
+        let smartyWorkouts: SitemapEntry[];
+        try {
+          smartyWorkouts = (await listPublicSmartyWorkouts()).map((workout) => {
+            const seo = smartyWorkoutSearchData(workout);
+            return {
+              path: `/smarty-workouts/${workout.id}`,
+              lastmod: workout.updated_at.slice(0, 10),
+              changefreq: "monthly" as const,
+              priority: "0.6",
+              ...(seo.image ? { image: { loc: seo.image, title: seo.imageTitle, caption: seo.description } } : {}),
+            };
+          });
+        } catch (error) {
+          console.error("[seo/sitemap] public Smarty Workouts lookup failed", error);
+          return new Response("Sitemap source temporarily unavailable", { status: 503, headers: { "Cache-Control": "no-store" } });
+        }
+
+        const entries = [...base, ...articles, ...sharedWorkouts, ...smartyWorkouts];
         const urls = entries.map((e) =>
           [
             "  <url>",
