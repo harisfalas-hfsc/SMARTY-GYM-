@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { RefreshCw, X } from "lucide-react";
+import { isRecoverablePageImportError } from "@/lib/recoverable-page-error";
 
 /**
  * Branded "new version available" prompt.
@@ -9,15 +10,6 @@ import { RefreshCw, X } from "lucide-react";
  * of letting that surface as a crash, we catch the failure and offer a
  * one-tap refresh that heals the session.
  */
-function isStaleChunkError(message: unknown): boolean {
-  if (typeof message !== "string") return false;
-  return (
-    message.includes("Failed to fetch dynamically imported module") ||
-    message.includes("error loading dynamically imported module") ||
-    message.includes("Importing a module script failed")
-  );
-}
-
 export function UpdatePrompt() {
   const [visible, setVisible] = useState(false);
 
@@ -32,13 +24,13 @@ export function UpdatePrompt() {
     };
     const onRejection = (event: PromiseRejectionEvent) => {
       const reason = event.reason;
-      if (isStaleChunkError(reason?.message) || isStaleChunkError(reason)) {
+      if (isRecoverablePageImportError(reason)) {
         event.preventDefault();
         show();
       }
     };
     const onError = (event: ErrorEvent) => {
-      if (isStaleChunkError(event.message)) {
+      if (isRecoverablePageImportError(event.message)) {
         event.preventDefault();
         show();
       }
