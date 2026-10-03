@@ -7,6 +7,7 @@ export type LogbookRow = {
   id: string;
   name: string;
   status: string;
+  category?: string | null;
   is_favorite: boolean | null;
   is_wod: boolean | null;
   created_by: string | null;
