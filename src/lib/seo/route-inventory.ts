@@ -6,13 +6,7 @@
  */
 import { TRAINING_TOPIC_SLUGS } from "@/lib/seo/training-topics";
 
-export type RouteClass =
-  | "indexable"
-  | "noindex"
-  | "private"
-  | "admin"
-  | "utility"
-  | "redirect";
+export type RouteClass = "indexable" | "noindex" | "private" | "admin" | "utility" | "redirect";
 
 export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
 

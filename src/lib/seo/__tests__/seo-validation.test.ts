@@ -34,10 +34,7 @@ function routeIds(): string[] {
 describe("SEO validation", () => {
   it("every page route (not raw files/API) is classified", () => {
     const pageIds = routeIds().filter(
-      (id) =>
-        !id.startsWith("/api/") &&
-        !id.startsWith("/lovable/") &&
-        !/\.(xml|txt)$/.test(id),
+      (id) => !id.startsWith("/api/") && !id.startsWith("/lovable/") && !/\.(xml|txt)$/.test(id),
     );
     const missing = pageIds.filter((id) => !(id in ROUTE_CLASSIFICATION));
     expect(missing).toEqual([]);
@@ -61,7 +58,9 @@ describe("SEO validation", () => {
     expect(robots).toContain("Sitemap: https://smartygym.com/sitemap.xml");
     expect(robots).toContain("User-agent: *\nAllow: /");
     expect(robots).not.toMatch(/^Disallow: \/\s*$/m);
-    for (const p of PRIVATE_PREFIXES.filter((p) => !["/auth", "/reset-password", "/checkout"].includes(p))) {
+    for (const p of PRIVATE_PREFIXES.filter(
+      (p) => !["/auth", "/reset-password", "/checkout"].includes(p),
+    )) {
       expect(robots).toContain(`Disallow: ${p}`);
     }
   });
@@ -91,16 +90,37 @@ describe("SEO validation", () => {
     expect(MASTER_PHRASES.length).toBeGreaterThanOrEqual(300);
     expect(new Set(SEO_GRAPH.map((e) => e.id)).size).toBe(SEO_GRAPH.length);
     expect(SEO_GRAPH.every((e) => e.canonical.startsWith("https://smartygym.com/"))).toBe(true);
-    expect(SEO_GRAPH.every((e) => !e.indexable || STATIC_SITEMAP_ENTRIES.some((s) => e.canonical === `https://smartygym.com${s.path}`))).toBe(true);
+    expect(
+      SEO_GRAPH.every(
+        (e) =>
+          !e.indexable ||
+          STATIC_SITEMAP_ENTRIES.some((s) => e.canonical === `https://smartygym.com${s.path}`),
+      ),
+    ).toBe(true);
   });
 
   it("never submits outside, query-bearing, or private URLs to IndexNow", () => {
-    expect(normalizeIndexNowUrls(["/blog", "https://smartygym.com/blog", "https://evil.example/", "/admin", "/checkout/return", "/blog?token=secret", "/create-your-workout", "/auth", "/coach", "/w/secret"])).toEqual(["https://smartygym.com/blog"]);
+    expect(
+      normalizeIndexNowUrls([
+        "/blog",
+        "https://smartygym.com/blog",
+        "https://evil.example/",
+        "/admin",
+        "/checkout/return",
+        "/blog?token=secret",
+        "/create-your-workout",
+        "/auth",
+        "/coach",
+        "/w/secret",
+      ]),
+    ).toEqual(["https://smartygym.com/blog"]);
   });
 
   it("states paid and free access without inventing AI authorship or recommendations", () => {
     expect(aiText(false)).toContain("EUR 9.99 per month");
     expect(aiText(true)).toContain("currently have free access");
-    expect(aiText(false)).not.toMatch(/we recommend|best in the world|every workout is AI-generated/i);
+    expect(aiText(false)).not.toMatch(
+      /we recommend|best in the world|every workout is AI-generated/i,
+    );
   });
 });
