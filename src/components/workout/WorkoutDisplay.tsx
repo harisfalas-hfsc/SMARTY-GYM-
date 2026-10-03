@@ -216,7 +216,13 @@ export function WorkoutDisplay({
             </span>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            Created by {!workout.created_by || noShare ? "Haris Falas" : workout.created_by} · Smarty Coach
+            {workout.category === "MY OWN WORKOUT"
+              ? "Created by me"
+              : noShare
+                ? "Smarty Workout by Haris Falas"
+                : workout.created_by === "community"
+                  ? "Shared by a SmartyGym member"
+                  : "Created by Smarty Coach"}
           </p>
 
           {workout.image_url ? (
