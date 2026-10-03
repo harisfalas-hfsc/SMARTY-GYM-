@@ -266,9 +266,11 @@ function SharedWorkoutPage() {
             : "Shared workouts open with an active SmartyGym membership."}
         </p>
         <div className="mt-4 grid gap-2">
-          <Button asChild className="h-12 rounded-2xl font-bold">
-            <Link to="/auth">{access.signedIn ? "Renew membership" : "See membership"}</Link>
-          </Button>
+          {!(error && access.premium) && (
+            <Button asChild className="h-12 rounded-2xl font-bold">
+              <Link to="/auth">{access.signedIn ? "Renew membership" : "See membership"}</Link>
+            </Button>
+          )}
           <Button asChild variant="secondary" className="h-12 rounded-2xl">
             <Link to="/community">Back to community</Link>
           </Button>
