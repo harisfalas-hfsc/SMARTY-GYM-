@@ -79,7 +79,7 @@ function Home() {
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
       {/* MOBILE — hero text lives inside a card sized like the other homepage cards */}
       <section className="py-6 lg:hidden">
-        <div className="flex h-[200px] flex-col items-center justify-center rounded-xl border-2 border-primary/60 bg-card px-4 text-center">
+        <div className="flex flex-col items-center justify-center px-4 text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-primary">
             Science-backed · Expert-designed
           </p>
