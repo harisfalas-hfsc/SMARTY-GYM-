@@ -8,9 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 
 const URL = "https://smartygym.com/founder-note";
-const TITLE = "A Note From The Founder | SmartyGym";
+const TITLE = "A Note From The Founder | Smarty Gym";
 const DESCRIPTION =
-  "Haris Falas explains why he created SmartyGym and his mission to make expert, science-based fitness guidance available worldwide.";
+  "Haris Falas explains why he created Smarty Gym and his mission to make expert, science-based fitness guidance available worldwide.";
 
 export const Route = createFileRoute("/founder-note")({
   head: () => ({
