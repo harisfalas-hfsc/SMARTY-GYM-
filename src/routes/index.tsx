@@ -93,7 +93,7 @@ function Home() {
             <br />
             Blog insights · Smarty tools
             <br />
-            <span className="text-primary">All in your pocket.</span>
+            <span className="text-chart-2">All in your pocket.</span>
           </p>
         </div>
 
