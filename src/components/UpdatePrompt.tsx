@@ -75,7 +75,10 @@ export function UpdatePrompt({ forceVisible = false }: { forceVisible?: boolean 
             <button
               type="button"
               aria-label="Dismiss"
-              onClick={() => setVisible(false)}
+              onClick={() => {
+                setVisible(false);
+                if (forceVisible) window.location.assign("/");
+              }}
               className="flex-shrink-0 text-muted-foreground transition-colors hover:text-foreground"
             >
               <X className="h-4 w-4" />
