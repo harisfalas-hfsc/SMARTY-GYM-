@@ -131,6 +131,12 @@ const SOURCE_STYLE: Record<string, string> = {
   community: "border-fuchsia-400/60 bg-fuchsia-400/10 text-fuchsia-400",
 };
 
+const SOURCE_DOT: Record<Source, string> = {
+  smarty: "bg-primary",
+  coach: "bg-amber-400",
+  own: "bg-emerald-400",
+};
+
 function dotClass(r: Row) {
   if (r.status === "completed") return "bg-primary";
   const tone = scheduleTone(r.scheduled_at, false);
