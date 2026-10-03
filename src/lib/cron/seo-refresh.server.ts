@@ -9,6 +9,7 @@ import type { CronJobConfig } from "@/lib/cron/jobs.server";
 import { optimizeArticles } from "@/lib/seo/article-optimizer.server";
 import { optimizeSharedWorkouts } from "@/lib/seo/workout-seo.server";
 import { submitToIndexNow } from "@/lib/seo/indexnow.server";
+import { runSeoHealth, healthLines, type SeoHealthItem } from "@/lib/seo/seo-health.server";
 
 type DB = SupabaseClient;
 
@@ -21,6 +22,8 @@ export interface SeoRefreshResult {
   failures: string[];
   counts: { exercises: number; workouts: number; articles: number };
   emailed: boolean;
+  /** Weekly SEO health checks (sitemap, metadata, structured data, Google, gaps). */
+  health?: SeoHealthItem[];
   /** Content optimization performed in this run. */
   optimization?: {
     articles: number;
@@ -98,6 +101,9 @@ export async function runSeoRefresh(
   }
 
   let submitted = 0;
+  const health = await runSeoHealth(db).catch((e): SeoHealthItem[] => [
+    { number: 1, key: "health", label: "SEO health checks", status: "fail", detail: e instanceof Error ? e.message : String(e) },
+  ]);
 
   const optimization = {
     articles: articleRun?.optimized ?? 0,
@@ -124,6 +130,7 @@ export async function runSeoRefresh(
       counts: { exercises: 0, workouts: 0, articles: 0 },
       emailed: false,
       optimization,
+      health,
     };
     result.emailed = await emailReport(result, startedAt, options.trigger);
     return result;
@@ -164,11 +171,13 @@ export async function runSeoRefresh(
           counts: built.counts,
           emailed: false,
           optimization,
+          health,
         },
         startedAt,
         options.trigger,
       ),
       optimization,
+      health,
     };
   }
 
@@ -206,6 +215,7 @@ export async function runSeoRefresh(
     counts: built.counts,
     emailed: false,
     optimization,
+    health,
   };
 
   result.emailed = await emailReport(result, startedAt, options.trigger);
@@ -241,7 +251,7 @@ async function emailReport(
           startedAt: startedAt.toISOString(),
           finishedAt: finishedAt.toISOString(),
           durationSec: Math.max(1, Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000)),
-          summary: result.summary,
+          summary: [result.summary, ...healthLines(result.health ?? [])].join("\n"),
           added: result.added.slice(0, 120),
           addedCount: result.added.length,
           total: result.total,
