@@ -114,7 +114,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
     name: "Exercise Library",
     title: "Exercise Library — 1,300+ demonstrated exercises",
     description:
-      "Browse every exercise Smarty Coach can program: animated demonstrations filtered by muscle group, equipment, movement pattern and difficulty.",
+      "Browse the exercise library by muscle group, equipment, movement pattern and difficulty; demonstrations are available for supported movements.",
     keyphrase: "exercise library",
     keywords: [
       "exercise database",
@@ -328,7 +328,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
     name: "Haris Falas",
     title: "Haris Falas — sports scientist, CSCS strength coach",
     description:
-      "Haris Falas, BSc Sport Science and NSCA CSCS, is the sports scientist behind every SmartyGym program: 20+ years coaching strength and conditioning.",
+      "Haris Falas, BSc Sport Science and NSCA CSCS, is the sports scientist behind SmartyGym's training methodology.",
     keyphrase: "haris falas",
     keywords: [
       "sports scientist",
@@ -337,7 +337,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
       "fitness expert",
     ],
     summary:
-      "Haris Falas is the sports scientist behind SmartyGym: BSc Sport Science, NSCA CSCS, EXOS Performance and Rehab Specialist, FMS Specialist, ACE Medical Exercise Specialist, with 20+ years of coaching.",
+      "Haris Falas is the sports scientist behind SmartyGym's methodology. Read his background and approach to strength and conditioning.",
     changefreq: "monthly",
     priority: "0.7",
     schemaType: "ProfilePage",

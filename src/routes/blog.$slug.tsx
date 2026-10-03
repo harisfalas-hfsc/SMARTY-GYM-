@@ -36,7 +36,6 @@ interface Article {
   focus_keyphrase?: string | null;
   seo_keywords?: string[] | null;
   image_alt?: string | null;
-  seo_faq?: { question: string; answer: string }[] | null;
 }
 
 async function loadArticle(slug: string): Promise<Article> {
@@ -82,7 +81,6 @@ export const Route = createFileRoute("/blog/$slug")({
       meta: [
         { title },
         { name: "description", content: description },
-        ...(keywords.length ? [{ name: "keywords", content: keywords.join(", ") }] : []),
         {
           name: "robots",
           content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
