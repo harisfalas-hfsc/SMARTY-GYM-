@@ -1,11 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, CalendarCheck, Dumbbell, Sparkles } from "lucide-react";
+import { BookOpen, CalendarCheck, Dumbbell, Share2, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const ITEMS = [
   { to: "/smarty-workouts", label: "Workouts", Icon: Dumbbell },
   { to: "/wod", label: "WOD", Icon: CalendarCheck },
   { to: "/create-your-own-workout", label: "Create", Icon: Sparkles },
+  { to: "/shared-workouts", label: "Shared", Icon: Share2 },
   { to: "/logbook", label: "Logbook", Icon: BookOpen },
 ] as const;
 
@@ -23,7 +24,7 @@ export function BottomNav() {
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label="Primary"
       >
-      <ul className="mx-auto grid max-w-lg grid-cols-4">
+      <ul className="mx-auto grid max-w-lg grid-cols-5">
         {ITEMS.map(({ to, label, Icon }) => {
           const active = pathname === to || pathname.startsWith(`${to}/`);
           return (
