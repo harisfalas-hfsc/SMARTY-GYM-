@@ -1,7 +1,7 @@
 /**
  * Extended, background-only search phrases per public page. Added on top of each
- * page's existing keywords (never replacing them) and read by the keywords meta
- * tag, the keyword index and the AI-crawler files. Nothing here renders on screen.
+ * page's existing keywords for internal intent research. Do not publish the
+ * entire list in meta tags or AI-crawler files. Nothing here renders on screen.
  *
  * Carried over from the old SmartyGym search setup, limited to what is true today
  * (no programs, nutrition calculators, shop or other sites).
@@ -14,7 +14,6 @@ export const BRAND_KEYWORDS = [
   "smartygym.com",
   "smarty gym online",
   "smartygym app",
-  "smart gym online",
   "online gym",
   "virtual gym",
   "digital gym",
@@ -159,7 +158,6 @@ export const EXTENDED_PAGE_KEYWORDS: Record<string, string[]> = {
     "why expert-designed training wins",
     "performance across life roles",
     "the online fitness platform revolution",
-    "best online fitness platforms 2026",
     "physical inactivity crisis",
     "fitness accessibility anywhere anytime",
     "fitness research",
@@ -195,21 +193,9 @@ export const EXTENDED_PAGE_KEYWORDS: Record<string, string[]> = {
     "coach haris falas",
   ],
   "/best-online-fitness-platform": [
-    "best online fitness platforms 2026",
-    "best online fitness platform",
-    "best online gym 2026",
-    "top 10 online fitness platforms",
-    "best fitness apps 2026",
-    "best workout platform",
     "online fitness platform comparison",
-    "smartygym vs peloton",
-    "smartygym vs nike training club",
-    "smartygym vs apple fitness+",
-    "smartygym vs les mills",
-    "smartygym vs freeletics",
     "peloton alternative",
     "freeletics alternative",
-    "human-designed workouts",
     "online personal training platform",
     "smartygym.com",
     "smarty gym",
@@ -318,7 +304,7 @@ export const EXTENDED_PAGE_KEYWORDS: Record<string, string[]> = {
     "who is haris falas",
   ],
   "/haris-falas": FOUNDER_KEYWORDS,
-  "/founder-note": ["note from the founder", "haris falas", "coach haris", "hfsc", "why smarty gym was built", "25 years in fitness"],
+   "/founder-note": ["note from the founder", "haris falas", "coach haris", "hfsc", "why smarty gym was built"],
   "/community": [
     "smarty community",
     "fitness community",
@@ -363,7 +349,7 @@ export function mergeKeywords(existing: string[], path: string): string[] {
   return out;
 }
 
-/** For a route's keywords meta `content` string: keeps the original and appends. */
+/** Legacy route metadata: keep a short relevant subset, not the intent database. */
 export function withExtendedKeywords(path: string, content: string): string {
-  return mergeKeywords(content.split(","), path).join(", ");
+  return mergeKeywords(content.split(","), path).filter((phrase) => !/\b(best|leading|#1|100% human|0% ai)\b/i.test(phrase)).slice(0, 8).join(", ");
 }

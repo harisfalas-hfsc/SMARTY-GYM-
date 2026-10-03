@@ -351,7 +351,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "SmartyGym — Personalized Workouts with Smarty Coach",
       },
       { name: "description", content: SITE_DESCRIPTION },
-      { name: "keywords", content: KEYWORDS },
       { name: "author", content: "SmartyGym" },
       {
         name: "robots",

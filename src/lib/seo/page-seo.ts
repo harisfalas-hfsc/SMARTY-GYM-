@@ -433,7 +433,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
   },
 ];
 
-/** Registry with the extended background keywords appended to each page. */
+/** Registry with internal intent phrases, not a meta-keyword dump. */
 export const PAGE_SEO: PageSeo[] = BASE_PAGE_SEO.map((p) => ({
   ...p,
   keywords: mergeKeywords(p.keywords, p.path),
