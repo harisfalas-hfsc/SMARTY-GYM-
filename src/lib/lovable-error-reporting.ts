@@ -61,7 +61,10 @@ export function reportLovableError(error: unknown, context: Record<string, unkno
     filename: window.location.pathname,
   });
 
-  // Also tell the admin: this is a real member-facing crash.
+  // Also tell the admin: this is a real member-facing crash. Errors raised while
+  // the site is being edited (development server) are not visitor crashes, so
+  // they stay in the editor's telemetry and never send an owner email.
+  if (import.meta.env.DEV) return;
   void (async () => {
     try {
       const { reportClientProblem } = await import("@/lib/errors.functions");
