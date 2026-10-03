@@ -27,7 +27,16 @@ import {
   TrendingUp,
   CalendarRange,
   CalendarCheck,
+  Check,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { PageHeader } from "@/components/PageHeader";
 import { PeriodTrendChart } from "@/components/performance/PeriodTrendChart";
 import {
