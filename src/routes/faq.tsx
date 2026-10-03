@@ -15,16 +15,20 @@ import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 const URL = "https://smartygym.com/faq";
 const TITLE = "SmartyGym FAQ — Smarty Coach, workouts & training";
 const DESCRIPTION =
-  "Short answers about SmartyGym: how Smarty Coach builds your workout, what is included, equipment, injuries and privacy.";
+  "Answers about SmartyGym: create a workout with Smarty Coach or build it yourself, share workouts, track progress and manage your membership.";
 
 const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[] => [
   {
     q: "What is SmartyGym?",
-    a: "A personalized training app. Smarty Coach builds a personalized workout for you, today — based on your goal, mood, time, location and equipment.",
+    a: "An online gym with ready workouts and Create Your Own Workout: choose Smarty Coach to build around your answers, or Build It Yourself from the Exercise Library.",
   },
   {
     q: "How does Smarty Coach build my workout?",
     a: "You answer five quick questions. Smarty Coach reads your profile, fitness level and training history, then builds the session from our exercise library.",
+  },
+  {
+    q: "Can I build my own workout instead of using Smarty Coach?",
+    a: "Yes. Create Your Own Workout offers two options: answer Smarty Coach's questions, or choose Build It Yourself to browse the Exercise Library and select exercises for Activation, Main Workout, Finisher and Cool Down. You can explore both options before signing up; saving a workout requires membership.",
   },
   {
     q: "What does it cost?",
@@ -72,7 +76,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "Can I see my past workouts?",
-    a: "Yes — every workout is saved to your logbook and can be repeated anytime.",
+    a: "Yes. Your saved workouts are in your logbook. Completed training remains in your progress even if a creator later deletes a shared workout.",
   },
   {
     q: "Does the app track what I actually do in a session?",
@@ -96,12 +100,16 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "Does the app work offline?",
-    a: "Yes. Your workouts, logbook, exercise library and the player keep working with no signal, and everything you log syncs automatically when you are back online.",
+    a: "You need a connection to load workouts and save training. Exercise demonstrations already loaded on your device may remain available temporarily, but offline training and automatic syncing are not guaranteed.",
   },
 
   {
     q: "What is the Smarty Community?",
-    a: "The social area of the app. Members share their workouts exactly as Smarty Coach generated them, and every other member can open, train, like and comment on them.",
+    a: "The social area of the app. Members can share workouts they created with Smarty Coach or Build It Yourself. Other members can discover, train, like and comment on those workouts.",
+  },
+  {
+    q: "Can I unshare or delete a workout I created?",
+    a: "Yes. You can share, unshare or delete your own Smarty Coach or Build It Yourself workout. Unsharing removes it from Shared Workouts. Deleting removes the workout from everyone's logbooks and removes its likes, favourites and comments, but completed training remains in each person's progress. A workout you saved from Shared Workouts cannot be re-shared or deleted by you; its creator controls it.",
   },
   {
     q: "What happens when I open a shared workout?",

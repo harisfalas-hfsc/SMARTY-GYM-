@@ -260,9 +260,10 @@ function AboutPage() {
           </p>
           <p className="mt-2 text-base font-extrabold uppercase">On demand, whenever you want</p>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Answer a short questionnaire — goal, mood, time, place, equipment — and Smarty Coach
-            builds a complete one-off session around your Training Profile and your history. Ideal
-            when your day, your energy or your available gear changes.
+            Choose Smarty Coach to build around your answers and Training Profile, or Build It Yourself
+            by picking exercises from the Exercise Library for each part of your session. Explore both
+            before signing up; membership is needed to save. Train when it suits you, choose your own
+            exercises and keep your progress in one logbook.
           </p>
           <Button asChild className="mt-auto w-full font-extrabold uppercase">
             <Link to="/create-your-own-workout">Create your own workout</Link>
@@ -292,9 +293,10 @@ function AboutPage() {
           </p>
           <p className="mt-2 text-base font-extrabold uppercase">Train with the community</p>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Open a workout shared by another member, train it exactly as it was generated, mark it
-            completed, like it and leave a short comment. Climb the member and workout rankings and
-            see who is training, what they are training and what the community says about it.
+            Share your own Smarty Coach or Build It Yourself workout, or train one another member shares.
+            Like and comment, or unshare your creation to remove it from Shared Workouts. Deleting your
+            creation removes it for everyone and clears its likes, comments and favourites, but completed
+            training remains in each member's progress. Saved shared workouts cannot be re-shared or deleted by you.
           </p>
           <Button asChild className="mt-auto w-full font-extrabold uppercase">
             <Link to="/community">Open Smarty Community</Link>
