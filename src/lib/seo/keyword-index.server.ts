@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { TRAINING_TOPICS } from "@/lib/seo/training-topics";
 import { PAGE_KEYWORDS } from "@/lib/seo/page-keywords";
-import { MASTER_PHRASES } from "@/lib/seo/keyword-clusters";
+import { MASTER_PHRASES, exerciseIntentPhrases } from "@/lib/seo/keyword-clusters";
 
 type DB = SupabaseClient;
 
@@ -176,7 +176,7 @@ export async function buildKeywordIndex(
   const formats = collect(workouts.map((w) => w.format));
   const focuses = collect(workouts.map((w) => w.focus));
   const exerciseNames = collect(
-    [...exercises.map((e) => e.name), ...exercises.map((e) => e.tags)],
+    [...exercises.map((e) => e.name), ...exercises.map((e) => e.tags), ...exerciseIntentPhrases(exercises)],
     6000,
   );
   const workoutNames = collect(workouts.map((w) => w.name), 6000);

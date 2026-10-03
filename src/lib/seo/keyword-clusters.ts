@@ -39,3 +39,13 @@ export const COMPETITOR_TOPIC_GAPS = Object.freeze({
   "Apple Fitness+": ["browser-based workouts", "equipment selection"],
   "SmartGym / Smart Gym": ["clear SmartyGym founder and domain identity"],
 });
+
+/** Exercise-specific search intent is derived at refresh time from active library rows. */
+export function exerciseIntentPhrases(exercises: { name: string; target_muscle: string | null; equipment: string | null }[]): string[] {
+  return [...new Set(exercises.flatMap((e) => [
+    `${e.name} exercise`,
+    `${e.name} form`,
+    ...(e.equipment ? [`${e.equipment} ${e.name}`] : []),
+    ...(e.target_muscle ? [`${e.name} ${e.target_muscle}`] : []),
+  ]).map((v) => v.trim().toLowerCase()).filter((v) => v.length > 5 && v.length <= 70))].sort();
+}
