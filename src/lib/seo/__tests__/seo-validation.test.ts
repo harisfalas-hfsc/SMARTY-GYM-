@@ -42,7 +42,8 @@ describe("SEO validation", () => {
     };
     const seo = smartyWorkoutSearchData(card);
     expect(seo.title).toContain(card.name);
-    expect(seo.description).toContain("30-minute recovery workout");
+    expect(seo.description).toContain("30-minute active recovery");
+    expect(seo.description).toContain("MIX format");
     expect(seo.image).toBe("https://smartygym.com/api/public/workout-cover/example.png");
     expect(seo.description).not.toMatch(/activation|finisher|main workout|cool down/i);
   });
