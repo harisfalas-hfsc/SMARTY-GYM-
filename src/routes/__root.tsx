@@ -105,7 +105,6 @@ const JSONLD_GRAPH = {
       image: OG_IMAGE,
       description:
         "SmartyGym creates personalized workouts through Smarty Coach, built on the coaching expertise of sports scientist Haris Falas.",
-      foundingDate: "2024",
       email: "smartygym@outlook.com",
       knowsAbout: [
         "Strength training",
@@ -236,37 +235,9 @@ const JSONLD_GRAPH = {
         "Progress tracking and workout feedback loop",
         "Workout timer, rounds tracker and 1RM calculator",
       ],
-      keywords: KEYWORDS,
     },
   ],
 };
-
-/** Paid offer node — omitted entirely while Global Free Access Mode is ON. */
-const PAID_OFFER = {
-  "@type": "Offer",
-  price: "9.99",
-  priceCurrency: "EUR",
-  category: "subscription",
-  availability: "https://schema.org/InStock",
-  url: `${SITE_URL}/pricing`,
-};
-
-const FREE_OFFER = {
-  "@type": "Offer",
-  price: "0",
-  priceCurrency: "EUR",
-  availability: "https://schema.org/InStock",
-  url: SITE_URL,
-};
-
-function jsonLdGraph(freeAccessMode: boolean) {
-  const graph = JSONLD_GRAPH["@graph"].map((node: Record<string, unknown>) =>
-    node["@type"] === "WebApplication" || node["@type"] === "SoftwareApplication"
-      ? { ...node, offers: freeAccessMode ? FREE_OFFER : PAID_OFFER }
-      : node,
-  );
-  return { ...JSONLD_GRAPH, "@graph": graph };
-}
 
 
 function NotFoundComponent() {
@@ -399,7 +370,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(jsonLdGraph(true)),
+        children: JSON.stringify(JSONLD_GRAPH),
       },
       {
         async: true,
