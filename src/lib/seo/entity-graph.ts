@@ -52,7 +52,7 @@ export const SEO_ENTITIES: SeoEntity[] = core.map(([id, path, name, type, topic,
     keywords: page ? [page.keyphrase, ...page.keywords] : [topic],
     parent, related: core.filter(([other]) => other !== id && (other === parent || id === "smartygym")).map(([other]) => other),
     children: core.filter(([, , , , , owner]) => owner === id).map(([other]) => other),
-    indexable: true,
+    indexable: !["categories", "formats", "programs"].includes(id) || id === "programs" && !TRAINING_TOPICS.some((t) => t.slug === "workout-programs"),
     ...(id === "haris-falas" ? { expertise: ["Sports Science", "Strength and Conditioning"] } : {}),
     ...(id === "smartygym" ? { author: "haris-falas" } : {}),
   };
