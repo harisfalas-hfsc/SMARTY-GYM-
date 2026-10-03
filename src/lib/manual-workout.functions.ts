@@ -77,7 +77,7 @@ export const deleteManualWorkout = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { data: row, error } = await context.supabase
       .from("workouts")
-      .select("id,user_id,category,created_by,community_source_id")
+      .select("id,user_id,category,created_by,community_source_id,is_shared")
       .eq("id", data.workoutId)
       .maybeSingle();
     if (error) throw new Error(error.message);
@@ -87,6 +87,47 @@ export const deleteManualWorkout = createServerFn({ method: "POST" })
     if (row.category !== MANUAL_CATEGORY) throw new Error("Only workouts you built yourself can be deleted.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const id = data.workoutId;
+
+    // A shared workout belongs to the community: members may have completed,
+    // favourited or logged it. Deleting it from the creator's logbook must not
+    // remove it from Shared Workouts — so the workout itself is kept and only
+    // the creator's personal data on it is removed. Ownership passes to an
+    // admin account so the creator can no longer edit or delete it.
+    if (row.is_shared) {
+      const { data: adminRole } = await supabaseAdmin
+        .from("user_roles")
+        .select("user_id")
+        .eq("role", "admin")
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      const keeper = (adminRole as { user_id: string } | null)?.user_id;
+      if (!keeper) throw new Error("Could not delete the workout. Please try again.");
+      const personalTables = ["set_logs", "workout_results", "workout_feedback", "personal_records"] as const;
+      for (const t of personalTables) {
+        const { error: e } = await supabaseAdmin.from(t).delete().eq("workout_id", id).eq("user_id", context.userId);
+        if (e) throw new Error("Could not delete the workout. Please try again.");
+      }
+      await supabaseAdmin.from("notifications").delete().eq("workout_id", id).eq("user_id", context.userId);
+      const { error: e } = await supabaseAdmin
+        .from("workouts")
+        .update({
+          user_id: keeper,
+          status: "created",
+          completed_at: null,
+          is_favorite: false,
+          rating: null,
+          user_note: null,
+          scheduled_at: null,
+        } as never)
+        .eq("id", id)
+        .eq("user_id", context.userId);
+      if (e) throw new Error("Could not delete the workout. Please try again.");
+      const { recomputeProgress } = await import("@/lib/progress.server");
+      await recomputeProgress(supabaseAdmin as never, context.userId).catch(() => undefined);
+      return { ok: true, keptShared: true };
+    }
+
     const byWorkout = [
       "community_comments",
       "community_ratings",
