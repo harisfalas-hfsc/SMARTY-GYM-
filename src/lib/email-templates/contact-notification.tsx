@@ -21,10 +21,10 @@ interface Props {
 const Email = ({ name, email, subject, message }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>New contact message on Smarty Gym</Preview>
+    <Preview>New contact message on SmartyGym</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM — SUPPORT</Text>
+        <Text style={brand}>SMARTYGYM — SUPPORT</Text>
         <Heading style={heading}>New contact message</Heading>
         <Text style={label}>From</Text>
         <Text style={text}>

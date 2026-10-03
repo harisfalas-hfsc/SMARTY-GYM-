@@ -143,7 +143,7 @@ export function WorkoutDisplay({
     workout.duration_label ?? `${workout.duration_min} min`,
     workout.location,
   ].filter(Boolean);
-  const shareTitle = `${workout.name} — Smarty Gym`;
+  const shareTitle = `${workout.name} — SmartyGym`;
   const shareText = `${workout.name} · ${shareBits.join(" · ")}`;
 
   async function copyShareLink() {

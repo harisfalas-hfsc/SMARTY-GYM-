@@ -8,9 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 
 const URL = "https://smartygym.com/founder-note";
-const TITLE = "A Note From The Founder | Smarty Gym";
+const TITLE = "A Note From The Founder | SmartyGym";
 const DESCRIPTION =
-  "Haris Falas explains why he created Smarty Gym and his mission to make expert, science-based fitness guidance available worldwide.";
+  "Haris Falas explains why he created SmartyGym and his mission to make expert, science-based fitness guidance available worldwide.";
 
 export const Route = createFileRoute("/founder-note")({
   head: () => ({
@@ -96,7 +96,7 @@ function FounderNotePage() {
         <div className="mx-auto mb-6 h-28 w-28 overflow-hidden rounded-full border-4 border-primary sm:h-36 sm:w-36">
           <img
             src={harisPhoto}
-            alt="Haris Falas — founder of Smarty Gym"
+            alt="Haris Falas — founder of SmartyGym"
             className="h-full w-full object-cover object-center"
             width={320}
             height={320}
@@ -119,7 +119,7 @@ function FounderNotePage() {
       <div className="mt-8 space-y-6">
         <NoteCard icon={<Quote size={20} />} title="Why I built this">
           <Paragraph>
-            <Brand>Smarty Gym</Brand> is a powerful online gym that brings personal,
+            <Brand>SmartyGym</Brand> is a powerful online gym that brings personal,
             science-based training to you wherever you are. It gives you workouts shaped around
             your goals, your level, your available time, your training environment, and the
             equipment you have.
@@ -134,7 +134,7 @@ function FounderNotePage() {
           <Paragraph>
             Everything here carries my experience, knowledge, and standards as a sports
             scientist and coach. I create the training principles behind your workouts, write the
-            educational articles, build the tools, and continue developing Smarty Gym so it can
+            educational articles, build the tools, and continue developing SmartyGym so it can
             become a complete online gym that fits anyone.
           </Paragraph>
         </NoteCard>
@@ -147,7 +147,7 @@ function FounderNotePage() {
             need.
           </Paragraph>
           <Paragraph>
-            Smarty Gym belongs to the <strong className="text-foreground">Smarty family</strong>,
+            SmartyGym belongs to the <strong className="text-foreground">Smarty family</strong>,
             together with <a href="https://smartydiet.com" target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-2">Smarty Diet</a>,
             created to support personalised nutrition, and <a href="https://smartymove.com" target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-2">Smarty Move</a>,
             created for movement analysis, movement quality, and corrective guidance. Each one
@@ -158,13 +158,13 @@ function FounderNotePage() {
             My mission is to give people everywhere the opportunity to benefit from real expertise
             and science-based training anytime, anywhere—no matter where they train or what
             equipment they have. I want to help people build healthier, stronger, and more
-            fulfilling lives, and I will keep growing Smarty Gym toward that purpose.
+            fulfilling lives, and I will keep growing SmartyGym toward that purpose.
           </Paragraph>
         </NoteCard>
 
         <NoteCard icon={<Heart size={20} />} title="My promise to you" emphasized>
           <Paragraph>
-            I will keep applying my knowledge, experience, and care to every part of Smarty Gym.
+            I will keep applying my knowledge, experience, and care to every part of SmartyGym.
             My promise is to keep improving it, expanding it, and building a trusted online gym
             that helps you train with purpose and confidence wherever life takes you.
           </Paragraph>

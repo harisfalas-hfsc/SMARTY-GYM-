@@ -261,7 +261,7 @@ function SharedWorkoutPage() {
         <p className="mt-2 text-sm text-muted-foreground">
           {error && access.premium
             ? error
-            : "Shared workouts open with an active Smarty Gym membership."}
+            : "Shared workouts open with an active SmartyGym membership."}
         </p>
         <div className="mt-4 grid gap-2">
           <Button asChild className="h-12 rounded-2xl font-bold">

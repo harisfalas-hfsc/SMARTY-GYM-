@@ -226,7 +226,7 @@ function AdminPage() {
           </div>
           <h1 className="mt-4 text-xl font-extrabold">Admin access only</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            This area is restricted to Smarty Gym administrators.
+            This area is restricted to SmartyGym administrators.
           </p>
         </div>
       </Shell>
@@ -240,7 +240,7 @@ function AdminPage() {
       <PageHeader
         eyebrow="Administration"
         title={active ? active.label : "Admin panel"}
-        subtitle={active ? active.description : "Everything that runs Smarty Gym"}
+        subtitle={active ? active.description : "Everything that runs SmartyGym"}
       />
 
       {section ? (

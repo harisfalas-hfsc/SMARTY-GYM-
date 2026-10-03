@@ -55,7 +55,7 @@ const Email = ({
     <Preview>{`New article published — ${title || 'Fitness article'}`}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM — BLOG</Text>
+        <Text style={brand}>SMARTYGYM — BLOG</Text>
         <Heading style={heading}>New article published</Heading>
 
         <Text style={label}>Title</Text>

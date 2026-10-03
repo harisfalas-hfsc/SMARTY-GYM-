@@ -124,7 +124,7 @@ export function DesktopHomeStory() {
     <div className="hidden lg:block">
       <section className="border-t border-border bg-background py-16">
         <div className="mx-auto max-w-7xl px-8">
-          <Heading ghost="EXPLORE" eyebrow="More in Smarty Gym">Everything In One Place</Heading>
+          <Heading ghost="EXPLORE" eyebrow="More in SmartyGym">Everything In One Place</Heading>
           <div className="grid grid-cols-3 gap-5">
             {destinations.map((destination) => (
               <Link key={destination.title} to={destination.to} className="group overflow-hidden rounded-lg border border-border bg-card">
@@ -146,7 +146,7 @@ export function DesktopHomeStory() {
         <div className="mx-auto max-w-7xl px-8">
           <Heading ghost="THE GYM" eyebrow="Your Fitness Partner">Anywhere, Anytime.</Heading>
           <p className="mx-auto max-w-4xl text-center text-lg leading-relaxed text-muted-foreground">
-            Smarty Gym gives you a complete training system when life changes the plan. Train at home, at your gym, outdoors or while travelling with expert workouts, personalized sessions and clear guidance from start to finish.
+            SmartyGym gives you a complete training system when life changes the plan. Train at home, at your gym, outdoors or while travelling with expert workouts, personalized sessions and clear guidance from start to finish.
           </p>
           <div className="mt-10 grid grid-cols-4 gap-5">
             {partnerValues.map(({ title, text, image, Icon }) => (
@@ -160,11 +160,11 @@ export function DesktopHomeStory() {
             ))}
           </div>
           <div className="mt-10 flex items-center justify-center gap-8">
-            <Link to="/why-invest-in-smartygym" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline">Why Smarty Gym <ChevronRight className="h-4 w-4" /></Link>
+            <Link to="/why-invest-in-smartygym" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline">Why SmartyGym <ChevronRight className="h-4 w-4" /></Link>
             <Link to="/the-smarty-method" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"><BookOpen className="h-4 w-4" /> Discover The Smarty Method <ChevronRight className="h-4 w-4" /></Link>
           </div>
           <div className="mt-12 border-t border-border pt-8">
-            <p className="mb-5 text-center text-sm font-bold uppercase tracking-[0.24em] text-muted-foreground">Who is Smarty Gym for?</p>
+            <p className="mb-5 text-center text-sm font-bold uppercase tracking-[0.24em] text-muted-foreground">Who is SmartyGym for?</p>
             <div className="mx-auto grid max-w-4xl grid-cols-6 gap-4">
               {audiences.map(({ label, Icon }) => (
                 <div key={label} className="flex flex-col items-center gap-2 text-center">
@@ -179,12 +179,12 @@ export function DesktopHomeStory() {
 
       <section className="bg-muted/20 py-20">
         <div className="mx-auto max-w-7xl px-8">
-          <Heading ghost="THE PROMISE" eyebrow="Why Smarty Gym">Built for Real Life</Heading>
+          <Heading ghost="THE PROMISE" eyebrow="Why SmartyGym">Built for Real Life</Heading>
           <ValueGrid items={promiseValues} />
           <div className="mt-10 border-l-4 border-primary bg-card px-10 py-9 text-center">
-            <h3 className="text-3xl font-black uppercase text-foreground">The Smarty Gym Promise</h3>
+            <h3 className="text-3xl font-black uppercase text-foreground">The SmartyGym Promise</h3>
             <p className="mx-auto mt-4 max-w-4xl text-base leading-relaxed text-muted-foreground">
-              Every part of Smarty Gym is built to remove confusion and help you train with purpose. You get structure, flexibility and guidance that fit your goals, your level and the reality of your day.
+              Every part of SmartyGym is built to remove confusion and help you train with purpose. You get structure, flexibility and guidance that fit your goals, your level and the reality of your day.
             </p>
             <p className="mt-4 font-bold text-primary">Real coaching principles. Useful technology. Training that moves with you.</p>
           </div>
@@ -203,15 +203,15 @@ export function DesktopHomeStory() {
           <Heading ghost="THE COACH" eyebrow="A Word From">Haris Falas</Heading>
           <div className="grid grid-cols-[300px_minmax(0,1fr)] gap-12 border-t border-border pt-10">
             <div>
-              <img src={harisPhoto} alt="Haris Falas, founder of Smarty Gym" loading="lazy" className="aspect-[4/5] w-full rounded-lg object-cover" />
+              <img src={harisPhoto} alt="Haris Falas, founder of SmartyGym" loading="lazy" className="aspect-[4/5] w-full rounded-lg object-cover" />
               <Link to="/haris-falas" className="mt-5 inline-flex items-center gap-1.5 text-lg font-bold text-primary hover:underline">Haris Falas <ChevronRight className="h-5 w-5" /></Link>
               <p className="mt-1 text-sm text-muted-foreground">Founder · Sports Scientist · Strength & Conditioning Coach</p>
             </div>
             <div className="space-y-5 text-lg leading-relaxed text-muted-foreground">
               <p>For more than twenty years, I have coached athletes, teams and everyday people who want to train with purpose. People rarely struggle because they do not care. They struggle because they do not have a clear plan they can trust.</p>
-              <p className="font-bold text-foreground">That is why I created Smarty Gym.</p>
+              <p className="font-bold text-foreground">That is why I created SmartyGym.</p>
               <p>My goal is to make professional training simpler: ready expert workouts, personalized daily sessions, clear exercise guidance and meaningful tracking, whether you train at home, outdoors or inside a gym.</p>
-              <p>Smarty Gym is for people who want more than random exercises. It is a system designed to help you feel stronger, move better, understand your training and keep progressing one session at a time.</p>
+              <p>SmartyGym is for people who want more than random exercises. It is a system designed to help you feel stronger, move better, understand your training and keep progressing one session at a time.</p>
               <blockquote className="border-l-4 border-primary bg-card p-5 font-semibold text-foreground">Your Gym Re-imagined. Anywhere, Anytime.</blockquote>
             </div>
           </div>

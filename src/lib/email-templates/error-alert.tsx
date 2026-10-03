@@ -49,7 +49,7 @@ const Email = ({
     <Preview>{`Problem: ${message || 'unknown error'}`}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM — PROBLEM DETECTED</Text>
+        <Text style={brand}>SMARTYGYM — PROBLEM DETECTED</Text>
         <Heading style={heading}>{message || 'Unknown error'}</Heading>
 
         <Text style={label}>What happened</Text>

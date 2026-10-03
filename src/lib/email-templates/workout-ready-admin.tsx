@@ -19,7 +19,7 @@ const Email = ({ userName, userEmail, userId, sessionId, stage, workoutName, wor
     <Preview>A previously failed workout has been delivered</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM — RECOVERED</Text>
+        <Text style={brand}>SMARTYGYM — RECOVERED</Text>
         <Heading style={heading}>Workout delivered after a failure</Heading>
         <Text style={label}>Member</Text>
         <Text style={text}>{`${userName || 'Unknown'} <${userEmail || 'no email'}>`}</Text>

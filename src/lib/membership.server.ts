@@ -2,7 +2,7 @@
 // Mirrors public.has_active_membership() in the database, so the screen, the
 // server functions and direct database reads all agree.
 export const MEMBERSHIP_REQUIRED_MESSAGE =
-  "An active Smarty Gym membership is required. Your saved data is kept — renew to open it again.";
+  "An active SmartyGym membership is required. Your saved data is kept — renew to open it again.";
 
 export async function requireActiveMembership(context: { supabase: unknown; userId: string }) {
   const { getAccessStateForUser } = await import("@/lib/eligibility.server");

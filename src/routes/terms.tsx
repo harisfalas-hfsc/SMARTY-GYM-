@@ -50,27 +50,27 @@ function Terms() {
   return (
     <LegalLayout title="Terms & Conditions" icon={<FileText className="h-5 w-5" />}>
       <p>
-        Welcome to <strong>Smarty Gym</strong> (smartygym.com). By accessing or using our
+        Welcome to <strong>SmartyGym</strong> (smartygym.com). By accessing or using our
         personalized training service, you agree to comply with and be bound by the
-        following Terms &amp; Conditions. Please read them carefully before using Smarty Gym.
+        following Terms &amp; Conditions. Please read them carefully before using SmartyGym.
       </p>
 
       <h2>1. Acceptance of Terms</h2>
       <p>
-        By accessing or using Smarty Gym, you confirm that you have read, understood, and agree
+        By accessing or using SmartyGym, you confirm that you have read, understood, and agree
         to these Terms &amp; Conditions. If you do not agree, please do not use our website or app.
       </p>
 
       <h2>2. Eligibility</h2>
       <p>
-        You must be at least 18 years old to use Smarty Gym. Users between 13 and 18 may only
-        use Smarty Gym with the supervision and explicit consent of a parent or legal guardian.
+        You must be at least 18 years old to use SmartyGym. Users between 13 and 18 may only
+        use SmartyGym with the supervision and explicit consent of a parent or legal guardian.
       </p>
 
-      <h2>3. What Smarty Gym Is</h2>
+      <h2>3. What SmartyGym Is</h2>
       <p>
-        Smarty Gym is an online gym that creates personalized training sessions.
-        Specifically, Smarty Gym provides:
+        SmartyGym is an online gym that creates personalized training sessions.
+        Specifically, SmartyGym provides:
       </p>
       <ul>
         <li>Up to two personalized workouts per day, tailored to your goals, equipment, and fitness level.</li>
@@ -80,7 +80,7 @@ function Terms() {
         <li>Access to your workout history from your account at any time.</li>
       </ul>
       <p>
-        Smarty Gym is intended for <strong>personal educational and fitness purposes only</strong>{" "}
+        SmartyGym is intended for <strong>personal educational and fitness purposes only</strong>{" "}
         and is <strong>not a substitute for medical or professional training advice</strong>,
         diagnosis, or treatment.
       </p>
@@ -98,7 +98,7 @@ function Terms() {
           <h2>5. Access to the Service</h2>
           <ul>
             <li>
-              All Smarty Gym features — daily workouts, the full exercise library, the training
+              All SmartyGym features — daily workouts, the full exercise library, the training
               tools and your logbook — are available to every registered user at no cost.
             </li>
             <li>
@@ -112,7 +112,7 @@ function Terms() {
           <h2>5. Membership &amp; Pricing</h2>
           <ul>
             <li>
-              Smarty Gym offers a single paid membership priced at <strong>€9.99 per month</strong>,
+              SmartyGym offers a single paid membership priced at <strong>€9.99 per month</strong>,
               which gives you access to up to 2 generated workouts per day, the full exercise
               library, our training tools, and your workout logbook.
             </li>
@@ -192,19 +192,19 @@ function Terms() {
       <h2>10. Acceptable Use</h2>
       <p>You agree NOT to:</p>
       <ul>
-        <li>Reverse engineer, decompile, or attempt to extract the source code of Smarty Gym.</li>
-        <li>Use Smarty Gym for any unlawful, harmful, or fraudulent purpose.</li>
+        <li>Reverse engineer, decompile, or attempt to extract the source code of SmartyGym.</li>
+        <li>Use SmartyGym for any unlawful, harmful, or fraudulent purpose.</li>
         <li>Upload malicious content or attempt to interfere with the service.</li>
         <li>Resell, sublicense, or share access to your account or generated workouts.</li>
-        <li>Use Smarty Gym to provide medical or training advice to other people.</li>
+        <li>Use SmartyGym to provide medical or training advice to other people.</li>
       </ul>
 
       <h2>11. Intellectual Property</h2>
       <p>
-        All content, branding, methodology, source code, and copy in Smarty Gym are the
-        intellectual property of <strong>Smarty Gym</strong> and are protected by copyright,
+        All content, branding, methodology, source code, and copy in SmartyGym are the
+        intellectual property of <strong>SmartyGym</strong> and are protected by copyright,
         trademark, and other intellectual property laws. You receive a limited, personal,
-        non-transferable, non-exclusive license to use Smarty Gym for personal, non-commercial
+        non-transferable, non-exclusive license to use SmartyGym for personal, non-commercial
         purposes only.
       </p>
 
@@ -221,9 +221,9 @@ function Terms() {
 
       <h2>13. Limitation of Liability</h2>
       <p>
-        To the fullest extent permitted by law, Smarty Gym shall not be liable for any
+        To the fullest extent permitted by law, SmartyGym shall not be liable for any
         indirect, incidental, consequential, special, punitive, or exemplary damages arising from
-        your use of Smarty Gym, including but not limited to injury, loss of data, lost
+        your use of SmartyGym, including but not limited to injury, loss of data, lost
         profits, or business interruption. Nothing in these Terms excludes liability that cannot be
         excluded under applicable consumer protection law.
       </p>
@@ -231,7 +231,7 @@ function Terms() {
       <h2>14. Changes to These Terms</h2>
       <p>
         We may update these Terms from time to time. We will notify users of material changes via
-        the app or email. Continued use of Smarty Gym after changes take effect constitutes
+        the app or email. Continued use of SmartyGym after changes take effect constitutes
         acceptance of the updated Terms.
       </p>
 
@@ -244,7 +244,7 @@ function Terms() {
 
       <h2>16. Contact</h2>
       <p>
-        For questions about these Terms, contact <strong>Smarty Gym</strong> at{" "}
+        For questions about these Terms, contact <strong>SmartyGym</strong> at{" "}
         <a href="mailto:smartygym@outlook.com">smartygym@outlook.com</a>.
       </p>
     </LegalLayout>

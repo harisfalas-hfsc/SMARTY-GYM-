@@ -17,7 +17,7 @@ const Email = ({ name, amount, attempt, nextAttempt, manageUrl, final }: Props) 
     <Preview>{final ? 'Your membership has been paused' : 'We could not take your membership payment'}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM</Text>
+        <Text style={brand}>SMARTYGYM</Text>
         <Heading style={heading}>
           {final ? 'Your membership has been paused' : 'We could not take your payment'}
         </Heading>
@@ -46,7 +46,7 @@ const Email = ({ name, amount, attempt, nextAttempt, manageUrl, final }: Props) 
         </Text>
         <Hr style={hr} />
         <Text style={footer}>Haris Falas — BSc Sports Science, EXOS Specialist, CSCS</Text>
-        <Text style={footer}>Smarty Gym</Text>
+        <Text style={footer}>SmartyGym</Text>
       </Container>
     </Body>
   </Html>
@@ -55,7 +55,7 @@ const Email = ({ name, amount, attempt, nextAttempt, manageUrl, final }: Props) 
 export const template = {
   component: Email,
   subject: (data: Record<string, any>) =>
-    data['final'] ? 'Your Smarty Gym membership has been paused' : 'Your Smarty Gym payment did not go through',
+    data['final'] ? 'Your SmartyGym membership has been paused' : 'Your SmartyGym payment did not go through',
   displayName: 'Payment failed (member)',
   previewData: {
     name: 'Alex',

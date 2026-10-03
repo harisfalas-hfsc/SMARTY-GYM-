@@ -21,10 +21,10 @@ interface Props {
 const Email = ({ alertType, title, details, link }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>New item waiting in the Smarty Gym admin panel</Preview>
+    <Preview>New item waiting in the SmartyGym admin panel</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM — ADMIN</Text>
+        <Text style={brand}>SMARTYGYM — ADMIN</Text>
         <Heading style={heading}>{title || 'New admin item'}</Heading>
         <Text style={label}>Type</Text>
         <Text style={text}>{alertType || 'notification'}</Text>

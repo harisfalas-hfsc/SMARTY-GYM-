@@ -1,4 +1,4 @@
-// Smarty Gym Training Categories — the public-facing brief for every
+// SmartyGym Training Categories — the public-facing brief for every
 // workout category the engine can generate. Each description must match the
 // generation doctrine: if a rule changes in src/lib/workout/doctrine.ts,
 // the matching brief here must be updated too.

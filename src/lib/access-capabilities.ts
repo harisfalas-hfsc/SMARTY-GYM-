@@ -63,7 +63,7 @@ function membershipGate(access: AccessLike): Capability | null {
   return {
     allowed: false,
     action: "membership",
-    reason: "An active Smarty Gym membership is required.",
+    reason: "An active SmartyGym membership is required.",
   };
 }
 

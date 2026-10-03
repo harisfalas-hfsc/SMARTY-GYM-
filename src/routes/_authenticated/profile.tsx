@@ -530,7 +530,7 @@ function ProfilePage() {
               <p className="text-sm font-bold">You answered yes to at least one question</p>
               <p className="text-sm leading-5">
                 Please speak to your doctor before you start training, and tell them which
-                question you answered yes to. Smarty Gym is not medical advice. If you choose
+                question you answered yes to. SmartyGym is not medical advice. If you choose
                 to train anyway you do so at your own responsibility — start easy, stop
                 immediately if you feel pain, chest tightness, dizziness or breathlessness, and
                 get medical help if symptoms continue.

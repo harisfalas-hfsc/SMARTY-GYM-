@@ -14,7 +14,7 @@ const Email = ({ name, workoutName, workoutUrl }: Props) => (
     <Preview>Your workout is ready</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM</Text>
+        <Text style={brand}>SMARTYGYM</Text>
         <Heading style={heading}>Your workout is ready</Heading>
         <Text style={text}>{name ? `Hi ${name},` : 'Hi,'}</Text>
         <Text style={text}>
@@ -28,7 +28,7 @@ const Email = ({ name, workoutName, workoutUrl }: Props) => (
         ) : null}
         <Hr style={hr} />
         <Text style={footer}>Haris Falas — BSc Sports Science, EXOS Specialist, CSCS</Text>
-        <Text style={footer}>Smarty Gym</Text>
+        <Text style={footer}>SmartyGym</Text>
       </Container>
     </Body>
   </Html>

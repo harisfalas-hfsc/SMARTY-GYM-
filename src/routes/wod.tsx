@@ -85,7 +85,7 @@ function WodPage() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-      <PageHeader image={pageHeroImage} eyebrow="SMARTY GYM" title="Workout of the Day" />
+      <PageHeader image={pageHeroImage} eyebrow="SMARTYGYM" title="Workout of the Day" />
 
       <Card className="mb-8 border-2 border-primary/40 bg-gradient-to-br from-primary/5 via-background to-primary/5 shadow-primary">
         <div className="p-4 sm:p-6">

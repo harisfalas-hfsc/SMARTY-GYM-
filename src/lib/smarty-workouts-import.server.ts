@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { storeSmartyWorkoutImage } from "./smarty-workouts-image.server";
 
-/** One-off importer: old SMARTY GYM admin_workouts → smarty_workouts (hidden, idempotent via legacy_id). */
+/** One-off importer: old SMARTYGYM admin_workouts → smarty_workouts (hidden, idempotent via legacy_id). */
 const OLD_URL = "https://cvccrvyimyzrxcwzmxwk.supabase.co";
 const OLD_ANON =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2Y2NydnlpbXl6cnhjd3pteHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MTc2NjIsImV4cCI6MjA3NjE5MzY2Mn0.XU_h4CYRiQ7VN079laFHSVMrzB6urOhQZFoTagU_Wno";
@@ -35,7 +35,7 @@ export async function fetchOldWorkouts(email: string, password: string, anonKey:
     headers: { apikey: anonKey, "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-  if (!auth.ok) throw new Error(`Old SMARTY GYM sign-in failed (${auth.status})`);
+  if (!auth.ok) throw new Error(`Old SMARTYGYM sign-in failed (${auth.status})`);
   const { access_token } = (await auth.json()) as { access_token: string };
   const res = await fetch(`${OLD_URL}/rest/v1/admin_workouts?select=*&limit=2000`, {
     headers: { apikey: anonKey, Authorization: `Bearer ${access_token}` },

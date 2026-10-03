@@ -3,7 +3,7 @@ import { getDayIn84Cycle, type CycleDay } from "@/lib/wod-cycle";
 import { candidatesForSlot, slotsForDay, type WodCandidate, type WodSlot } from "@/lib/wod/rules";
 
 /**
- * Shared Workout of the Day picker — same behaviour as the old SMARTY GYM
+ * Shared Workout of the Day picker — same behaviour as the old SMARTYGYM
  * `select-wod-from-library`: reads the 84-day periodization for the date and
  * fills only the missing slots (BODYWEIGHT + EQUIPMENT, or one RECOVERY) from
  * the visible Smarty Workouts. Exhaustion-first rotation: never-used workouts

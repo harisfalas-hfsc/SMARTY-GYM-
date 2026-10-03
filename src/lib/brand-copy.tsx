@@ -7,7 +7,7 @@ import { Link } from "@tanstack/react-router";
 export function GymDescription() {
   return (
     <>
-      Smarty Gym is your online gym anywhere, anytime. Tell your coach how you
+      SmartyGym is your online gym anywhere, anytime. Tell your coach how you
       feel, what you want to achieve and what you have to train with — and get
       a complete properly programmed session built for you, whenever and
       wherever you train. Built on the sports science and training philosophy

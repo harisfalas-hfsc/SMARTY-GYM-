@@ -1,4 +1,4 @@
-// Client-safe Workout of the Day matching rules (ported from the old SMARTY GYM picker).
+// Client-safe Workout of the Day matching rules (ported from the old SMARTYGYM picker).
 import { type CycleDay } from "@/lib/wod-cycle";
 
 export type WodSlot = "BODYWEIGHT" | "EQUIPMENT" | "RECOVERY";

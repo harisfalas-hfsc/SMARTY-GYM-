@@ -43,7 +43,7 @@ export function kindForWorkout(w: WorkoutCardData): WorkoutCardKind {
 }
 
 /**
- * The one Smarty Gym workout card (old Smarty Gym WOD card design).
+ * The one SmartyGym workout card (old SmartyGym WOD card design).
  * Used by Workout of the Day and every Smarty Workouts category page.
  */
 export function WorkoutCard({
