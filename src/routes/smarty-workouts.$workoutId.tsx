@@ -89,7 +89,7 @@ function SmartyWorkoutPage() {
       <Notice back={back} card={card} title="Premium access required" text="Smarty Workouts are for Premium members. Log in or join SmartyGym to open this workout.">
         <div className="flex flex-wrap justify-center gap-2">
           <Button asChild>
-            <Link to="/auth" search={{ next: `/smarty-workouts/${workoutId}`, mode: "signup" }}>Join SmartyGym</Link>
+            <Link to="/auth" search={{ next: `/smarty-workouts/${workoutId}`, mode: "signup" }}>Join now</Link>
           </Button>
           <Button asChild variant="outline">
             <Link to="/auth" search={{ next: `/smarty-workouts/${workoutId}`, mode: "signin" }}>Log in</Link>

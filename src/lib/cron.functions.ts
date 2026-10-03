@@ -176,7 +176,7 @@ export const adminRunCronJob = createServerFn({ method: "POST" })
           status: result.status,
           changed: result.changed,
           summary: result.summary,
-          details: { added: result.added.slice(0, 200), failures: result.failures },
+          details: { added: result.added.slice(0, 200), failures: result.failures, items: result.health },
           trigger: "manual",
         });
         if (result.status !== "failed") await markJobRan(db, "seo-refresh", config);
