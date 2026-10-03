@@ -10,7 +10,7 @@ import { isRecoverablePageImportError } from "@/lib/recoverable-page-error";
  * of letting that surface as a crash, we catch the failure and offer a
  * one-tap refresh that heals the session.
  */
-export function UpdatePrompt() {
+export function UpdatePrompt({ forceVisible = false }: { forceVisible?: boolean }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export function UpdatePrompt() {
     };
   }, []);
 
-  if (!visible) return null;
+  if (!visible && !forceVisible) return null;
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-20 z-[9990] flex justify-center px-4 sm:bottom-6">
