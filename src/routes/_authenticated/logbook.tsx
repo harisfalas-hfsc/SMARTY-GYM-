@@ -1225,7 +1225,7 @@ function LogbookContent() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="shrink-0"
+                    className="shrink-0 transition-colors active:border-primary active:bg-primary active:text-primary-foreground"
                     onClick={() => {
                       setActive([]);
                       setSources([]);
@@ -1234,7 +1234,11 @@ function LogbookContent() {
                   >
                     Reset
                   </Button>
-                  <Button type="button" className="w-full" onClick={() => setFiltersOpen(false)}>
+                  <Button
+                    type="button"
+                    className="w-full transition-transform active:bg-primary-hover active:scale-[0.98]"
+                    onClick={() => setFiltersOpen(false)}
+                  >
                     Show {filtered.length} workout{filtered.length === 1 ? "" : "s"}
                   </Button>
                 </div>
