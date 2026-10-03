@@ -222,14 +222,14 @@ export async function runSeoRefresh(
   return result;
 }
 
-/** Local weekly checks only. Google coverage is checked separately in Search Console. */
+/** Local source checks; Google checks live in seo-health.server.ts. */
 function auditStatus(counts: SeoRefreshResult["counts"], failures: string[]): string {
   const checks = [
     `${counts.exercises > 0 ? "PASS" : "WARNING"} active exercise sources: ${counts.exercises}`,
     `${counts.articles > 0 ? "PASS" : "WARNING"} published article sources: ${counts.articles}`,
     `${failures.length ? "ERROR" : "PASS"} background refresh and submission: ${failures.length ? failures.length + " failure(s)" : "no reported errors"}`,
   ];
-  return `Weekly local SEO audit — ${checks.join("; ")}. Google crawl and indexing status not checked by this job.`;
+  return `Weekly local SEO audit — ${checks.join("; ")}. Google sitemap and indexing sample are listed in the health checks below.`;
 }
 
 async function emailReport(
