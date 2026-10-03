@@ -48,6 +48,7 @@ export const Route = createFileRoute("/why-invest-in-smartygym")({
   head: () => ({
     meta: [
       { title: "Why Invest in SmartyGym | Structured Fitness" },
+      { name: "robots", content: "noindex, follow" },
       {
         name: "description",
         content:

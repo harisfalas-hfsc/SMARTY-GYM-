@@ -179,6 +179,7 @@ export const Route = createFileRoute("/best-online-fitness-platform")({
   head: () => ({
     meta: [
       { title: TITLE },
+      { name: "robots", content: "noindex, follow" },
       { name: "description", content: DESC },
       {
         name: "keywords",
