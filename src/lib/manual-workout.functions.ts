@@ -90,19 +90,9 @@ export const deleteManualWorkout = createServerFn({ method: "POST" })
 
     // A shared workout belongs to the community: members may have completed,
     // favourited or logged it. Deleting it from the creator's logbook must not
-    // remove it from Shared Workouts — so the workout itself is kept and only
-    // the creator's personal data on it is removed. Ownership passes to an
-    // admin account so the creator can no longer edit or delete it.
+    // remove it from Shared Workouts — the workout itself is kept, flagged out
+    // of the creator's logbook, and only the creator's personal data is removed.
     if (row.is_shared) {
-      const { data: adminRole } = await supabaseAdmin
-        .from("user_roles")
-        .select("user_id")
-        .eq("role", "admin")
-        .order("created_at", { ascending: true })
-        .limit(1)
-        .maybeSingle();
-      const keeper = (adminRole as { user_id: string } | null)?.user_id;
-      if (!keeper) throw new Error("Could not delete the workout. Please try again.");
       const personalTables = ["set_logs", "workout_results", "workout_feedback", "personal_records"] as const;
       for (const t of personalTables) {
         const { error: e } = await supabaseAdmin.from(t).delete().eq("workout_id", id).eq("user_id", context.userId);
@@ -112,7 +102,7 @@ export const deleteManualWorkout = createServerFn({ method: "POST" })
       const { error: e } = await supabaseAdmin
         .from("workouts")
         .update({
-          user_id: keeper,
+          removed_from_logbook: true,
           status: "created",
           completed_at: null,
           is_favorite: false,
