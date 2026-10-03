@@ -23,7 +23,7 @@ function fullDate(date: string) {
   return new Intl.DateTimeFormat("en", { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
 }
 
-/** Old Smarty Gym WODPeriodizationCalendar: Yesterday / Today / Tomorrow. */
+/** Old SmartyGym WODPeriodizationCalendar: Yesterday / Today / Tomorrow. */
 export function WodPeriodizationCalendar({ yesterday, today, tomorrow }: { yesterday: CalendarDay; today: CalendarDay; tomorrow: CalendarDay }) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(1);

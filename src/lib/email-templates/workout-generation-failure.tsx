@@ -38,7 +38,7 @@ const Email = ({
     <Preview>{urgent ? 'A member is still waiting for a workout' : 'A workout generation failed'}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM — {urgent ? 'URGENT' : 'ALERT'}</Text>
+        <Text style={brand}>SMARTYGYM — {urgent ? 'URGENT' : 'ALERT'}</Text>
         <Heading style={heading}>
           {urgent ? 'A member is still without their workout' : 'Workout generation failed'}
         </Heading>

@@ -46,7 +46,7 @@ function SharePreviewPage() {
       <div className="mx-auto max-w-xl px-4 py-16 text-center lg:max-w-6xl">
         <p className="text-muted-foreground">This workout is no longer available.</p>
         <Button asChild className="mt-4 h-12 rounded-2xl">
-          <Link to="/">Go to Smarty Gym</Link>
+          <Link to="/">Go to SmartyGym</Link>
         </Button>
       </div>
     );
@@ -99,7 +99,7 @@ function SharePreviewPage() {
               <Link to="/auth">Sign in to open it</Link>
             </Button>
             <Button asChild variant="secondary" className="h-12 rounded-2xl">
-              <Link to="/how-it-works">How Smarty Gym works</Link>
+              <Link to="/how-it-works">How SmartyGym works</Link>
             </Button>
           </div>
         </div>

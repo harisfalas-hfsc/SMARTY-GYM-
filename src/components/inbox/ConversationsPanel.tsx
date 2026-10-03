@@ -363,7 +363,7 @@ export function ConversationsPanel({
                           <p
                             className={`mb-1 text-xs font-bold ${m.sender === "admin" ? "text-primary" : "text-foreground"}`}
                           >
-                            {m.sender === "admin" ? "Smarty Gym reply" : "Your message"}
+                            {m.sender === "admin" ? "SmartyGym reply" : "Your message"}
                           </p>
                           <p className="whitespace-pre-wrap">{m.body}</p>
                           <p className="mt-1 text-[10px] text-muted-foreground">

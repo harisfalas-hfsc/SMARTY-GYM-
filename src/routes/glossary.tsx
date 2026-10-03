@@ -227,7 +227,7 @@ function GlossaryPage() {
 
       <section aria-labelledby="training-categories" className="mt-8">
         <h2 id="training-categories" className="text-xs font-semibold uppercase tracking-wider text-primary">
-          Smarty Gym Training Categories
+          SmartyGym Training Categories
         </h2>
         <Accordion type="single" collapsible className="mt-3 rounded-2xl border-2 border-primary px-4">
           {TRAINING_CATEGORIES.map((cat) => (
@@ -256,7 +256,7 @@ function GlossaryPage() {
           Training Guides
         </h2>
         <p className="mt-2 text-muted-foreground">
-          In-depth guides on how Smarty Gym trains you online — personalized workouts, strength, cardio,
+          In-depth guides on how SmartyGym trains you online — personalized workouts, strength, cardio,
           metabolic conditioning, mobility and home training.
         </p>
         <ul className="mt-3 divide-y divide-border rounded-2xl border-2 border-primary px-4">

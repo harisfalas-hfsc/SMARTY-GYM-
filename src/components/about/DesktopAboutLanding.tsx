@@ -65,11 +65,11 @@ const aboutSections: Section[] = [
     accentWord: "in your pocket",
     green: true,
     description:
-      "Smarty Gym is a real gym that lives on your phone — open anywhere, anytime. Every session is structured around proven training principles, not a lucky shuffle of exercises. Early morning, lunch break, late night, abroad or on the road: Smarty Coach builds a session that respects your body, schedule and space.",
+      "SmartyGym is a real gym that lives on your phone — open anywhere, anytime. Every session is structured around proven training principles, not a lucky shuffle of exercises. Early morning, lunch break, late night, abroad or on the road: Smarty Coach builds a session that respects your body, schedule and space.",
     items: [
       { id: "why", title: "Why Invest in SmartyGym", meta: "What makes the platform different", image: imgAbout, to: "/why-invest-in-smartygym" },
       { id: "method", title: "The Smarty Method", meta: "The science behind every session", image: imgLibrary, to: "/the-smarty-method" },
-      { id: "haris", title: "Sports Scientist Haris Falas", meta: "The coach behind Smarty Gym", image: imgHaris, to: "/haris-falas" },
+      { id: "haris", title: "Sports Scientist Haris Falas", meta: "The coach behind SmartyGym", image: imgHaris, to: "/haris-falas" },
     ],
     cta: { label: "Why Invest in SmartyGym", to: "/why-invest-in-smartygym" },
   },
@@ -116,7 +116,7 @@ const aboutSections: Section[] = [
     accentWord: "remembered",
     green: false,
     description:
-      "Smarty Gym does not stop when the session ends. What you actually did, how it felt and how it compares with last time all feed back into your next workout.",
+      "SmartyGym does not stop when the session ends. What you actually did, how it felt and how it compares with last time all feed back into your next workout.",
     items: [
       { id: "debrief", title: "One session debrief", meta: "RPE, feel, enjoyment and notes.", icon: ClipboardCheck },
       { id: "logbook", title: "Logbook & calendar", meta: "Saved, scheduled, favourited or repeated.", icon: NotebookPen },
@@ -186,7 +186,7 @@ const homeSections: Section[] = [
     accentWord: "ready to explore",
     green: false,
     description:
-      "Browse workouts shared by Smarty Gym members. Open a session, see how it is structured and, when signed in, train it, like it and join the conversation.",
+      "Browse workouts shared by SmartyGym members. Open a session, see how it is structured and, when signed in, train it, like it and join the conversation.",
     items: [
       { id: "browse", title: "Browse Workouts", meta: "Discover sessions shared by members", icon: BookOpen },
       { id: "train", title: "Train a Shared Session", meta: "Open and follow the complete workout", icon: Dumbbell },
@@ -218,7 +218,7 @@ const homeSections: Section[] = [
     accentWord: "always ready",
     green: false,
     description:
-      "Use focused tools for the moments around your workout: calculate training loads, track rounds and keep your session timing clear without leaving Smarty Gym.",
+      "Use focused tools for the moments around your workout: calculate training loads, track rounds and keep your session timing clear without leaving SmartyGym.",
     items: [
       { id: "calculator", title: "1RM Calculator", meta: "Estimate and plan your working loads", icon: TrendingUp, to: "/tools/1rm-calculator" },
       { id: "timer", title: "Workout Timer", meta: "Time intervals and training blocks", icon: Clock, to: "/tools/workout-timer" },
@@ -333,7 +333,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
         <div className="relative z-10 h-full">
           <div className={`mx-auto w-full max-w-[1080px] px-6 ${page === "about" ? "pt-[144px]" : "pt-[118px]"}`}>
             <div className="w-[640px] max-w-full text-left">
-              {page === "about" && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">About Smarty Gym</p>}
+              {page === "about" && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">About SmartyGym</p>}
               <h2 className={`text-[60px] font-extrabold uppercase leading-[1.05] tracking-tight text-hero-foreground ${page === "about" ? "mt-2" : ""}`}>
                 <span className="block whitespace-nowrap">Your Gym Re-imagined</span>
                 <span className="block whitespace-nowrap text-primary">Anywhere, Anytime.</span>

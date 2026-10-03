@@ -115,7 +115,7 @@ function AboutPage() {
           }
           description={
             <>
-              Smarty Gym is a real gym that lives on your phone — open{" "}
+              SmartyGym is a real gym that lives on your phone — open{" "}
               <span className="font-semibold text-foreground">anywhere, anytime</span>. Every
               session inside is structured around{" "}
               <span className="font-semibold text-foreground">proven training principles</span> —
@@ -231,7 +231,7 @@ function AboutPage() {
       <p className="mt-6 text-center text-sm font-bold leading-snug sm:text-base">
         Choose a ready workout or create one for today.
         <br />
-        <span className="text-primary">Train your way with Smarty Gym.</span>
+        <span className="text-primary">Train your way with SmartyGym.</span>
       </p>
 
       <h2 className="mt-10 text-center text-xl font-extrabold uppercase sm:text-2xl">
@@ -327,7 +327,7 @@ function AboutPage() {
             <span className="text-primary">tracked, measured & remembered</span>
           </>
         }
-        description="Smarty Gym does not stop when the session ends. What you actually did, how it felt, and how it compares with last time all feed back into your next workout."
+        description="SmartyGym does not stop when the session ends. What you actually did, how it felt, and how it compares with last time all feed back into your next workout."
         className="mx-auto mt-6 max-w-xl lg:max-w-none"
       >
         <div className="grid gap-3 sm:grid-cols-2">

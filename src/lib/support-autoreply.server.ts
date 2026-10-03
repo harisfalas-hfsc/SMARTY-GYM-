@@ -2,7 +2,7 @@ import { classifySupportMessage, escalationMessage } from "@/lib/support-autorep
 
 const REPLY_FOOTER =
   "If you need anything else about this question, reply in this conversation.\n\n" +
-  "Yours in good health,\nThe Smarty Gym team";
+  "Yours in good health,\nThe SmartyGym team";
 
 /**
  * Instant, credit-free support answering.
@@ -62,7 +62,7 @@ export async function autoRespondToSupportMessage(input: {
       await supabaseAdmin.from("notifications").insert({
         user_id: userId,
         kind: "support",
-        title: escalated ? "Your message is with Haris" : "Smarty Gym answered your message",
+        title: escalated ? "Your message is with Haris" : "SmartyGym answered your message",
         body: body.slice(0, 240),
         dedupe_key: `support-auto-${insertedId}`,
       } as never);

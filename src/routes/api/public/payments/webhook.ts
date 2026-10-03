@@ -67,7 +67,7 @@ async function upsertSubscription(subscription: any, env: StripeEnv, eventCreate
       await notifyAdmins({
         kind: "Payment",
         title: env === "live" ? "New Premium member" : "New Premium member (test payment)",
-        details: `${prof?.display_name ? prof.display_name + " — " : ""}${prof?.email ?? userId} started a Smarty Gym Premium membership (€9.99/month).`,
+        details: `${prof?.display_name ? prof.display_name + " — " : ""}${prof?.email ?? userId} started a SmartyGym Premium membership (€9.99/month).`,
         link: "https://smartygym.com/admin",
         dedupeKey: `new-premium-${subscription.id}`,
       });

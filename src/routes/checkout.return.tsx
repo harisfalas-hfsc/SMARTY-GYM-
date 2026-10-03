@@ -38,7 +38,7 @@ function CheckoutReturn() {
             Your membership is live
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Thanks for joining Smarty Gym. Your two daily workouts and the Workout of the Day are
+            Thanks for joining SmartyGym. Your two daily workouts and the Workout of the Day are
             unlocked.
           </p>
         </>

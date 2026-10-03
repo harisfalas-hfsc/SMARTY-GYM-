@@ -67,7 +67,7 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
       await notifyAdmins({
         kind: "Member",
         title: "Account deleted",
-        details: `${email} deleted their Smarty Gym account.`,
+        details: `${email} deleted their SmartyGym account.`,
         link: "https://smartygym.com/admin",
         dedupeKey: `account-deleted-${context.userId}`,
       });
@@ -99,7 +99,7 @@ export const announceNewSignup = createServerFn({ method: "POST" })
       await notifyAdmins({
         kind: "Member",
         title: "New sign-up",
-        details: `${name ? name + " — " : ""}${u.email ?? context.userId} created a Smarty Gym account (${provider}) on ${new Date(u.created_at).toUTCString()}.`,
+        details: `${name ? name + " — " : ""}${u.email ?? context.userId} created a SmartyGym account (${provider}) on ${new Date(u.created_at).toUTCString()}.`,
         link: "https://smartygym.com/admin",
         dedupeKey: `new-signup-${context.userId}`,
       });

@@ -15,7 +15,7 @@ export function MembershipCheckoutDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="mx-auto max-h-[88vh] w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-3xl p-4 sm:p-6">
         <DialogTitle className="text-base font-extrabold uppercase tracking-[0.14em] text-primary">
-          Smarty Gym membership
+          SmartyGym membership
         </DialogTitle>
         <PaymentTestModeBanner />
         {open && (

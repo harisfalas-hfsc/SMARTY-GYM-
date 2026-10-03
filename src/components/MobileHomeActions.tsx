@@ -329,8 +329,8 @@ export function MobileHomeActions({ showPricing, workoutCount }: { showPricing: 
         {[
           {
             label: "ABOUT",
-            title: "About Smarty Gym",
-            description: "The mission behind Smarty Gym",
+            title: "About SmartyGym",
+            description: "The mission behind SmartyGym",
             to: "/about" as const,
             image: aboutImage,
             icon: Info,

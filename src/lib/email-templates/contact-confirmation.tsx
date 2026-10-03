@@ -21,10 +21,10 @@ interface Props {
 const Email = ({ name, subject, message }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>We received your message — Smarty Gym support</Preview>
+    <Preview>We received your message — SmartyGym support</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>SMARTY GYM</Text>
+        <Text style={brand}>SMARTYGYM</Text>
         <Heading style={heading}>We got your message</Heading>
         <Text style={text}>
           {name ? `Hi ${name},` : 'Hi there,'} thanks for reaching out. Our team replies within
@@ -54,7 +54,7 @@ const Email = ({ name, subject, message }: Props) => (
 
 export const template = {
   component: Email,
-  subject: 'We received your message — Smarty Gym',
+  subject: 'We received your message — SmartyGym',
   displayName: 'Contact confirmation',
   previewData: {
     name: 'Alex',

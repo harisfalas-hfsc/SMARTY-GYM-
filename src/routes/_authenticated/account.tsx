@@ -170,7 +170,7 @@ function Account() {
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       <PageHeader
         className="mb-2"
-        eyebrow="Smarty Gym"
+        eyebrow="SmartyGym"
         title="My account"
         subtitle="Your personal details and preferences."
       />
@@ -209,7 +209,7 @@ function Account() {
             </span>
             <div>
               <p className="font-bold">Subscription</p>
-              <p className="text-sm text-muted-foreground">Smarty Gym · €9.99 / month</p>
+              <p className="text-sm text-muted-foreground">SmartyGym · €9.99 / month</p>
             </div>
           </div>
 
@@ -256,7 +256,7 @@ function Account() {
       <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <p className="font-bold">Need a hand?</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Everything in Smarty Gym is free for members.
+          Everything in SmartyGym is free for members.
         </p>
         <Button asChild variant="secondary" className="mt-4 h-12 rounded-2xl">
           <Link to="/contact">

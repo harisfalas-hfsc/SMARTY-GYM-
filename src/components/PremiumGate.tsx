@@ -14,7 +14,7 @@ import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog"
 export function PremiumGate({
   children,
   title = "Premium access required",
-  description = "Your workouts, logbook and progress are safely kept in your account. Renew your Smarty Gym membership to open them again.",
+  description = "Your workouts, logbook and progress are safely kept in your account. Renew your SmartyGym membership to open them again.",
 }: {
   children: ReactNode;
   title?: string;

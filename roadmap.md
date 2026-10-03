@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Standardize visible website and message wording to one-word SmartyGym while preserving capitalization, links, and intentional SEO wording.
+
 - [x] Use the mobile carousel images for the four matching desktop homepage sections, add Shared Workouts and Smarty Ritual, and keep About mobile-only.
 
 - [x] Replace and visually verify four Smarty Workouts category photos on phone and desktop.

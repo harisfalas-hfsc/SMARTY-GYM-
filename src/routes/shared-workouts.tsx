@@ -248,7 +248,7 @@ function BrowsePage() {
       <PageHeader image={pageHeroImage}
         eyebrow="SMARTYGYM"
         title="Shared workouts"
-        subtitle="Explore workouts shared by Smarty Gym members. Find a session that fits you."
+        subtitle="Explore workouts shared by SmartyGym members. Find a session that fits you."
       />
 
       <div className="mb-6 flex items-center justify-between gap-3">
