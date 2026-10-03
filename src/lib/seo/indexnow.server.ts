@@ -84,20 +84,18 @@ export async function submitToIndexNow(paths: string[]): Promise<IndexNowResult>
       if (data?.state === "pending") continue;
       // Callers supply only URLs whose public content actually changed. A previously
       // submitted URL must be eligible again after a later article/workout update.
-      const { error: writeError } = await db
-        .from("seo_indexnow_queue")
-        .upsert(
-          {
-            url,
-            state: "pending",
-            changed_at: new Date().toISOString(),
-            submitted_at: null,
-            attempts: 0,
-            retry_at: new Date().toISOString(),
-            last_error: null,
-          },
-          { onConflict: "url" },
-        );
+      const { error: writeError } = await db.from("seo_indexnow_queue").upsert(
+        {
+          url,
+          state: "pending",
+          changed_at: new Date().toISOString(),
+          submitted_at: null,
+          attempts: 0,
+          retry_at: new Date().toISOString(),
+          last_error: null,
+        },
+        { onConflict: "url" },
+      );
       if (writeError) throw writeError;
     }
     const { data: due, error } = await db
