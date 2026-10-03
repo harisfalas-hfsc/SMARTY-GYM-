@@ -27,6 +27,7 @@ import { hasParqAck, setParqAck } from "@/lib/parq-ack";
 import { GeneratingDialog } from "@/components/workout/GeneratingDialog";
 import { PendingGenerationCard } from "@/components/workout/PendingGenerationCard";
 import { MembershipRequiredDialog } from "@/components/MembershipRequiredDialog";
+import { VisitorJoinDialog } from "@/components/VisitorJoinDialog";
 import { CoachRecommendationCard } from "@/components/coach/CoachRecommendationCard";
 import { levelToStars, starsToLevel } from "@/lib/workout/spec";
 
@@ -166,6 +167,7 @@ function CoachPage() {
   const [premium, setPremium] = useState<boolean | null>(null);
   const [membershipOpen, setMembershipOpen] = useState(false);
   const [pendingSurprise, setPendingSurprise] = useState<boolean | null>(null);
+  const [visitor, setVisitor] = useState(false);
 
 
   useEffect(() => {
@@ -174,15 +176,26 @@ function CoachPage() {
       setPremium(true);
       return;
     }
-    void getMyAccessState()
-      .then((access) => {
+    void (async () => {
+      const { data: s } = await supabase.auth.getSession();
+      if (!s.session) {
+        // Visitors explore the full page; the final "create" step asks them to join.
+        setVisitor(true);
+        setProfileReady(true);
+        setPremium(false);
+        return;
+      }
+      try {
+        const access = await getMyAccessState();
         setProfileReady(
           access.profileComplete && access.healthAcknowledged && access.readinessComplete,
         );
         setParqFlags(access.readinessFlagged ? access.readinessFlags : []);
         setPremium(access.premium);
-      })
-      .catch(() => setProfileReady(null));
+      } catch {
+        setProfileReady(null);
+      }
+    })();
   }, []);
 
 
@@ -348,7 +361,11 @@ function CoachPage() {
           subtitle="Choose your own exercises from the Exercise Library for every part of your workout."
         />
         {modeToggle}
-        <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+        {visitor ? (
+          <VisitorJoinDialog open={membershipOpen} onOpenChange={setMembershipOpen} title="Your workout is one step away" text="Join SmartyGym or log in to create this workout and save it to your Logbook." />
+        ) : (
+          <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+        )}
         <ManualWorkoutBuilder premium={premium} parqFlags={parqFlags} onLocked={() => setMembershipOpen(true)} />
       </div>
     );
@@ -388,7 +405,11 @@ function CoachPage() {
       ) : null}
 
       <GeneratingDialog open={busy && generationDialogOpen} onLeave={() => setGenerationDialogOpen(false)} />
-      <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+      {visitor ? (
+          <VisitorJoinDialog open={membershipOpen} onOpenChange={setMembershipOpen} title="Your workout is one step away" text="Join SmartyGym or log in to create this workout and save it to your Logbook." />
+        ) : (
+          <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+        )}
 
       <ParqWaiverDialog
         open={parqOpen}

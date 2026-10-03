@@ -26,11 +26,14 @@ export const Route = createFileRoute("/_authenticated")({
   component: AuthLayout,
 });
 
+/** Pages visitors can fully explore; the Premium step inside asks them to join. */
+const EXPLORABLE = ["/create-your-own-workout"];
+
 function AuthLayout() {
   const { user } = Route.useRouteContext();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  if (!user && isSupabaseConfigured()) {
-    const base = pathname.startsWith("/workout/") ? "/workout" : pathname.replace(/\/$/, "");
+  const pathname = useRouterState({ select: (s) => s.location.pathname }).replace(/\/$/, "");
+  if (!user && isSupabaseConfigured() && !EXPLORABLE.includes(pathname)) {
+    const base = pathname.startsWith("/workout/") ? "/workout" : pathname;
     return <VisitorPagePreview pathname={base} />;
   }
   return <Outlet />;
