@@ -10,19 +10,36 @@ import { listSmartyWorkouts, startSmartyWorkout, type SmartyWorkoutCard } from "
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, type SmartyCategory } from "@/lib/smarty-workout-categories";
 import { difficultyLabel } from "@/lib/workout/spec";
+import { getSmartyWorkoutSearchData } from "@/lib/seo/smarty-workout-public.functions";
+import { SITE_URL } from "@/lib/seo/site";
 
 export const Route = createFileRoute("/smarty-workouts/$workoutId")({
-  head: () => ({
-    meta: [
-      { title: "Smarty Workout — SMARTYGYM" },
-      { name: "description", content: "A ready workout by Haris Falas on SmartyGym." },
-      { property: "og:title", content: "Smarty Workout — SMARTYGYM" },
-      { property: "og:description", content: "A ready workout by Haris Falas on SmartyGym." },
-      { property: "og:type", content: "article" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  loader: ({ params }) => getSmartyWorkoutSearchData({ data: { id: params.workoutId } }),
+  head: ({ loaderData, params }) => {
+    const url = `${SITE_URL}/smarty-workouts/${params.workoutId}`;
+    const title = loaderData?.title ?? "Smarty Workout | SmartyGym";
+    const description = loaderData?.description ?? "A ready workout by Haris Falas on SmartyGym.";
+    const image = loaderData?.image;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { name: "robots", content: loaderData ? "index, follow, max-image-preview:large" : "noindex, follow" },
+        { property: "og:site_name", content: "SmartyGym" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: image ? "summary_large_image" : "summary" },
+        ...(image ? [{ property: "og:image", content: image }, { name: "twitter:image", content: image }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      ...(loaderData ? { scripts: [{ type: "application/ld+json", children: JSON.stringify({
+        "@context": "https://schema.org", "@type": "ExercisePlan", name: title,
+        description, url, image, provider: { "@type": "Organization", name: "SmartyGym", url: SITE_URL },
+      }) }] } : {}),
+    };
+  },
   component: SmartyWorkoutPage,
 });
 

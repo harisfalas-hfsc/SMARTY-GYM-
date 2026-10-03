@@ -12,6 +12,7 @@ import { MASTER_PHRASES } from "@/lib/seo/keyword-clusters";
 import { SEO_GRAPH } from "@/lib/seo/entity-graph";
 import { normalizeIndexNowUrls } from "@/lib/seo/indexnow.server";
 import { aiText } from "@/lib/seo/ai-txt";
+import { smartyWorkoutSearchData, type PublicSmartyWorkout } from "@/lib/seo/smarty-workout-public.server";
 
 const ROUTES_DIR = join(process.cwd(), "src/routes");
 
@@ -32,6 +33,20 @@ function routeIds(): string[] {
 }
 
 describe("SEO validation", () => {
+  it("indexes only public Smarty Workout card facts with an absolute cover URL", () => {
+    expect(ROUTE_CLASSIFICATION["/smarty-workouts/$workoutId"]).toBe("indexable");
+    const card: PublicSmartyWorkout = {
+      id: "f434a9ae-56d4-44ed-8b57-b9ca215c0bf3", name: "Mindful Recovery Session",
+      category: "RECOVERY", format: "MIX", focus: null, duration_min: 30,
+      equipment: ["dumbbells"], image_url: "/api/public/workout-cover/example.png", updated_at: "2026-08-26T00:00:00Z",
+    };
+    const seo = smartyWorkoutSearchData(card);
+    expect(seo.title).toContain(card.name);
+    expect(seo.description).toContain("30-minute active recovery");
+    expect(seo.description).toContain("MIX format");
+    expect(seo.image).toBe("https://smartygym.com/api/public/workout-cover/example.png");
+    expect(seo.description).not.toMatch(/activation|finisher|main workout|cool down/i);
+  });
   it("every page route (not raw files/API) is classified", () => {
     const pageIds = routeIds().filter(
       (id) => !id.startsWith("/api/") && !id.startsWith("/lovable/") && !/\.(xml|txt)$/.test(id),
