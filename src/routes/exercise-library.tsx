@@ -109,41 +109,6 @@ export const Route = createFileRoute("/exercise-library")({
           ],
         }),
       },
-      ...(loaderData?.schemaExercises?.length
-        ? [
-            {
-              type: "application/ld+json",
-              children: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "ItemList",
-                "@id": `${URL}#exercises`,
-                name: "SmartyGym exercise library",
-                description:
-                  "Every exercise available in the SmartyGym exercise library, with the equipment required and the muscle targeted.",
-                url: URL,
-                numberOfItems: loaderData.schemaExercises.length,
-                itemListOrder: "https://schema.org/ItemListOrderAscending",
-                itemListElement: loaderData.schemaExercises.map((ex, i) => ({
-                  "@type": "ListItem",
-                  position: i + 1,
-                  item: {
-                    "@type": "HowTo",
-                    name: ex.n,
-                    ...(ex.d ? { description: ex.d } : {}),
-                    ...(ex.e
-                      ? {
-                          tool: [{ "@type": "HowToTool", name: ex.e }],
-                        }
-                      : {}),
-                    ...(ex.t
-                      ? { about: { "@type": "Thing", name: `${ex.t} (target muscle group)` } }
-                      : {}),
-                  },
-                })),
-              }),
-            },
-          ]
-        : []),
     ],
   }),
 

@@ -3,7 +3,7 @@
  *
  * For each article that has never been optimized, or whose text changed since it
  * was, the model produces a search title, meta description, focus key phrase,
- * supporting keywords, an image alt text and 3 FAQ pairs. The values are stored
+ * supporting keywords and image alt text. The values are stored
  * on the article row and rendered as invisible head data by /blog/$slug.
  *
  * Bounded per run, leased so two runs never overlap, and each article is marked
@@ -24,7 +24,6 @@ export interface ArticleSeoPayload {
   focus_keyphrase: string;
   seo_keywords: string[];
   image_alt: string;
-  faq: { question: string; answer: string }[];
 }
 
 const SCHEMA = {
@@ -38,7 +37,6 @@ const SCHEMA = {
       "focus_keyphrase",
       "seo_keywords",
       "image_alt",
-      "faq",
     ],
     properties: {
       seo_title: { type: "string" },
@@ -46,15 +44,6 @@ const SCHEMA = {
       focus_keyphrase: { type: "string" },
       seo_keywords: { type: "array", items: { type: "string" } },
       image_alt: { type: "string" },
-      faq: {
-        type: "array",
-        items: {
-          type: "object",
-          additionalProperties: false,
-          required: ["question", "answer"],
-          properties: { question: { type: "string" }, answer: { type: "string" } },
-        },
-      },
     },
   },
 } as const;
@@ -67,7 +56,6 @@ const INSTRUCTIONS = [
   "focus_keyphrase: 2-5 words, the search phrase this article should win, lowercase.",
   "seo_keywords: 8-12 supporting phrases people actually search, lowercase, no duplicates of each other.",
   "image_alt: one descriptive sentence under 125 characters describing the cover image for a blind reader.",
-  "faq: exactly 3 question/answer pairs answering what a reader would ask next; answers 1-3 sentences, self-contained so an AI engine can quote them.",
 ].join("\n");
 
 export function contentHash(input: string): string {
@@ -185,7 +173,6 @@ export async function optimizeArticles(
             focus_keyphrase: payload.focus_keyphrase.slice(0, 120),
             seo_keywords: (payload.seo_keywords ?? []).slice(0, 14),
             image_alt: payload.image_alt.slice(0, 160),
-            seo_faq: (payload.faq ?? []).slice(0, 4),
             seo_content_hash: articleHash(article),
             seo_optimized_at: new Date().toISOString(),
           })

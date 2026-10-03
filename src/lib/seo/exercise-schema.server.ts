@@ -21,6 +21,7 @@ export async function readExerciseSchemaList(): Promise<ExerciseSchemaItem[]> {
       const { data, error } = await (supabaseAdmin as any)
         .from("exercises")
         .select("name,equipment,target_muscle,body_part,description,instructions")
+        .eq("is_active", true)
         .order("name", { ascending: true })
         .range(page * pageSize, page * pageSize + pageSize - 1);
       if (error) break;

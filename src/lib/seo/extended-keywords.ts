@@ -50,11 +50,6 @@ export const FOUNDER_KEYWORDS = [
 ];
 
 export const SERVICE_KEYWORDS = [
-  "best workout",
-  "best online fitness platform",
-  "best online gym",
-  "best online fitness coach",
-  "best coaching",
   "fitness coach",
   "coach",
   "coaching",
@@ -86,8 +81,6 @@ export const SERVICE_KEYWORDS = [
   "personalized workout plan",
   "custom workout generator",
   "workout generator app",
-  "best online gym",
-  "best workout app",
   "fitness app for adults",
   "beginner home workouts",
   "advanced hiit training",
@@ -169,7 +162,6 @@ export const EXTENDED_PAGE_KEYWORDS: Record<string, string[]> = {
     "best online fitness platforms 2026",
     "physical inactivity crisis",
     "fitness accessibility anywhere anytime",
-    "100% human 0% ai workouts",
     "fitness research",
     "exercise science",
     "structured training",
@@ -236,7 +228,6 @@ export const EXTENDED_PAGE_KEYWORDS: Record<string, string[]> = {
   "/wod": [
     "smarty wod",
     "daily wod",
-    "free workout of the day",
     "wod today",
     "daily workout plan",
     "periodized daily workout",
@@ -342,7 +333,6 @@ export const EXTENDED_PAGE_KEYWORDS: Record<string, string[]> = {
     "smarty shared workouts",
     "community workouts",
     "member workouts",
-    "free shared workouts",
     "top rated workouts",
     "popular workouts",
     "workouts by category",

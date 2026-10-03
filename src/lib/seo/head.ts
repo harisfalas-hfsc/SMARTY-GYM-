@@ -49,10 +49,6 @@ export function seoHead(options: SeoHeadOptions): HeadPayload {
   const url = absoluteUrl(options.path);
   const title = options.title ?? registry?.title ?? SITE_NAME;
   const description = options.description ?? registry?.description ?? "";
-  const keywords = options.keywords ?? [
-    ...(registry?.keyphrase ? [registry.keyphrase] : []),
-    ...(registry?.keywords ?? []),
-  ];
   const name = options.name ?? registry?.name ?? title;
   const image = options.image === null ? null : (options.image ?? OG_IMAGE);
   const ogType = options.ogType ?? "website";
@@ -61,7 +57,6 @@ export function seoHead(options: SeoHeadOptions): HeadPayload {
   const meta: Record<string, string>[] = [
     { title },
     ...(description ? [{ name: "description", content: description }] : []),
-    ...(keywords.length ? [{ name: "keywords", content: keywords.join(", ") }] : []),
     {
       name: "robots",
       content: options.noindex

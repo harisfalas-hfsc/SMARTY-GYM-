@@ -99,7 +99,7 @@ const JSONLD_GRAPH = {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
       name: "SmartyGym",
-      alternateName: ["Smarty Gym", "SmartyGym", "smartygym.com", "SmartGym", "Smart Gym", "Smart-Gym"],
+      alternateName: ["Smarty Gym", "smartygym.com"],
       url: SITE_URL,
       logo: `${SITE_URL}/icon-512.png`,
       image: OG_IMAGE,
@@ -188,15 +188,10 @@ const JSONLD_GRAPH = {
             name: "BSc Sport Science",
           },
         ],
-        sameAs: [
-          `${SITE_URL}/haris-falas`,
-          "https://www.instagram.com/thesmartygym",
-          "https://smartygym.com",
-        ],
+        sameAs: ["https://www.instagram.com/thesmartygym"],
       },
 
       sameAs: [
-        "https://smartygym.com",
         "https://www.instagram.com/thesmartygym",
       ],
       contactPoint: [
@@ -216,14 +211,6 @@ const JSONLD_GRAPH = {
       description: SITE_DESCRIPTION,
       inLanguage: "en",
       publisher: { "@id": `${SITE_URL}/#organization` },
-      potentialAction: {
-        "@type": "SearchAction",
-        target: {
-          "@type": "EntryPoint",
-          urlTemplate: `${SITE_URL}/exercise-library?q={search_term_string}`,
-        },
-        "query-input": "required name=search_term_string",
-      },
     },
     {
       "@type": ["SoftwareApplication", "WebApplication"],
