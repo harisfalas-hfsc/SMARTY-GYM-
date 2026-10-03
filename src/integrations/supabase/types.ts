@@ -2256,6 +2256,7 @@ export type Database = {
           plan: Json
           rating: number | null
           rationale: string | null
+          removed_from_logbook: boolean
           review_warnings: string[]
           scheduled_at: string | null
           serial: number
@@ -2307,6 +2308,7 @@ export type Database = {
           plan?: Json
           rating?: number | null
           rationale?: string | null
+          removed_from_logbook?: boolean
           review_warnings?: string[]
           scheduled_at?: string | null
           serial?: number
@@ -2358,6 +2360,7 @@ export type Database = {
           plan?: Json
           rating?: number | null
           rationale?: string | null
+          removed_from_logbook?: boolean
           review_warnings?: string[]
           scheduled_at?: string | null
           serial?: number
