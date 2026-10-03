@@ -80,7 +80,7 @@ function Home() {
       {/* MOBILE — hero text lives inside a card sized like the other homepage cards */}
       <section className="py-6 lg:hidden">
         <div className="flex flex-col items-center justify-center px-4 text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-primary">
+          <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-primary">
             Science-backed · Expert-designed
           </p>
           <h1 className="mt-2 text-[32px] font-extrabold uppercase leading-[1.02] tracking-tight">
@@ -88,7 +88,7 @@ function Home() {
             <br />
             <span className="text-primary">RE-IMAGINED.</span>
           </h1>
-          <p className="mt-3 text-[11px] font-semibold uppercase leading-[1.9] tracking-[0.16em] text-muted-foreground">
+          <p className="mt-3 text-[13.2px] font-semibold uppercase leading-[1.9] tracking-[0.16em] text-muted-foreground">
             Expert workouts · Exercise library
             <br />
             Blog insights · Smarty tools
