@@ -141,7 +141,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentHelp:
       "One relevant phrase per line. The current list replaces stale phrases on the next run; it is never published verbatim.",
     weekday: 0,
-    defaults: { enabled: false, hour: 23, minute: 0 },
+    defaults: { enabled: true, hour: 23, minute: 0 },
     runnable: true,
   },
   {
