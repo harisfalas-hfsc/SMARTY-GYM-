@@ -22,6 +22,7 @@ import { Toaster } from "../components/ui/sonner";
 import { SisterAppsPopup } from "../components/growth/SisterAppsPopup";
 import { CheckinModalManager } from "@/components/checkins/CheckinModalManager";
 import { BottomNav } from "../components/BottomNav";
+import { UpdatePrompt } from "../components/UpdatePrompt";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
 
 
@@ -434,6 +435,7 @@ function RootComponent() {
           <SisterAppsPopup />
           <CheckinModalManager />
           <BottomNav />
+          <UpdatePrompt />
         </div>
       </ThemeProvider>
     </QueryClientProvider>
