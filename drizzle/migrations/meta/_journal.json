@@ -491,6 +491,13 @@
       "when": 1791040465019,
       "tag": "0069_workouts_removed_from_logbook",
       "breakpoints": true
+    },
+    {
+      "idx": 70,
+      "version": "7",
+      "when": 1791041154295,
+      "tag": "0070_workouts_deleted_at",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,2 @@
+ALTER TABLE public.workouts ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
+CREATE INDEX IF NOT EXISTS workouts_community_source_idx ON public.workouts (community_source_id) WHERE community_source_id IS NOT NULL;
