@@ -23,7 +23,7 @@ export function normalizeIndexNowUrls(paths: string[]): string[] {
         return normalizeIndexNowUrls([absolute.pathname])[0] ?? null;
       }
       if (url.origin !== SITE_URL || url.search || url.hash) return null;
-      if (/^\/(admin|account|auth|checkout|profile|logbook|progress|inbox|messages|notifications|create-your-own-workout|smarty-ritual|smarty-checkins|w\/)/.test(url.pathname)) return null;
+      if (/^\/(admin|account|auth|reset-password|checkout|profile|logbook|progress|inbox|messages|notifications|create-your-own-workout|create-your-workout|coach|smarty-ritual|smarty-checkins|w)(\/|$)/.test(url.pathname)) return null;
       return url.href;
     } catch { return null; }
   }).filter((url): url is string => Boolean(url)))].slice(0, 10000);
@@ -44,7 +44,7 @@ async function postIndexNow(urlList: string[]): Promise<IndexNowResult> {
       }),
     });
     return {
-      submitted: urlList.length,
+       submitted: res.ok ? urlList.length : 0,
       ok: res.ok,
       detail: `IndexNow responded ${res.status} for ${urlList.length} URL(s).`,
     };
@@ -59,7 +59,7 @@ async function postIndexNow(urlList: string[]): Promise<IndexNowResult> {
 
 /** Persist changed URLs, retry failures, and never send the same unchanged URL twice. */
 export async function submitToIndexNow(paths: string[]): Promise<IndexNowResult> {
-  const db = supabaseAdmin as any;
+   const db = supabaseAdmin;
   try {
     for (const url of normalizeIndexNowUrls(paths)) {
       const { data, error } = await db.from("seo_indexnow_queue").select("state").eq("url", url).maybeSingle();

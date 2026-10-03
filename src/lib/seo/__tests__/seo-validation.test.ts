@@ -91,7 +91,7 @@ describe("SEO validation", () => {
   });
 
   it("never submits outside, query-bearing, or private URLs to IndexNow", () => {
-    expect(normalizeIndexNowUrls(["/blog", "https://smartygym.com/blog", "https://evil.example/", "/admin", "/checkout/return", "/blog?token=secret"])).toEqual(["https://smartygym.com/blog"]);
+    expect(normalizeIndexNowUrls(["/blog", "https://smartygym.com/blog", "https://evil.example/", "/admin", "/checkout/return", "/blog?token=secret", "/create-your-workout", "/auth", "/coach", "/w/secret"])).toEqual(["https://smartygym.com/blog"]);
   });
 
   it("states paid and free access without inventing AI authorship or recommendations", () => {

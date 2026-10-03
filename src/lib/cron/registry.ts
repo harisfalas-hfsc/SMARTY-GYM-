@@ -126,7 +126,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "seo-refresh",
     label: "Automatic SEO update",
     description:
-      "Rebuilds the internal SEO index from public pages, training topics, active library exercises, published articles and publicly accessible shared workouts only. Stale terms are removed. A weekly audit reports crawl and indexing risks to the administrator.",
+      "Rebuilds the internal SEO index from public pages, training topics, active library exercises, published articles and publicly accessible shared workouts only. Stale terms are removed. Emails the administrator a status report; Google indexing requires separate Search Console review.",
     timing: "weekly",
     timingNote: "Runs once a week, on Sunday night at the time set below (Cyprus time) — 23:00 by default, so it finishes before Monday. Background only: nothing visible on the site changes.",
     sends: [

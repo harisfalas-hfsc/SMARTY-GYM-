@@ -89,7 +89,11 @@ export async function runSeoRefresh(
     notes.push(`Shared workouts: ${workoutRun.summary}`);
     failures.push(...workoutRun.failures.map((f) => `workout:${f}`));
     const { isFreeAccessMode } = await import("@/lib/free-access.server");
-    if (await isFreeAccessMode()) changedPaths.push(...workoutRun.optimizedIds.map((id) => `/community/workout/${id}`));
+    try {
+      if (await isFreeAccessMode()) changedPaths.push(...workoutRun.optimizedIds.map((id) => `/community/workout/${id}`));
+    } catch (e) {
+      failures.push(`access:${e instanceof Error ? e.message : String(e)}`);
+    }
   }
 
   let submitted = 0;
