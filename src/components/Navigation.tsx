@@ -22,8 +22,6 @@ import {
   Dumbbell,
   CalendarCheck,
   Users,
-  Sun,
-  Moon,
   LogIn, ClipboardCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
