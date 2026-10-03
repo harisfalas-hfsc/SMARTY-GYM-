@@ -2,7 +2,7 @@ import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { Clock, Loader2 } from "lucide-react";
+import { Clock, Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
@@ -86,10 +86,15 @@ function SmartyWorkoutPage() {
 
   if (!authLoading && !user) {
     return (
-      <Notice back={back} card={card} title="Premium access required" text="Smarty Workouts are for Premium members. Log in to open this workout.">
-        <Button asChild>
-          <Link to="/auth" search={{ next: `/smarty-workouts/${workoutId}`, mode: "signin" }}>Log in</Link>
-        </Button>
+      <Notice back={back} card={card} title="Premium access required" text="Smarty Workouts are for Premium members. Log in or join SmartyGym to open this workout.">
+        <div className="flex flex-wrap justify-center gap-2">
+          <Button asChild>
+            <Link to="/auth" search={{ next: `/smarty-workouts/${workoutId}`, mode: "signup" }}>Join SmartyGym</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/auth" search={{ next: `/smarty-workouts/${workoutId}`, mode: "signin" }}>Log in</Link>
+          </Button>
+        </div>
       </Notice>
     );
   }
@@ -142,6 +147,16 @@ function Notice({ back, card, title, text, children }: { back: React.ReactNode; 
               <span>{bodyweight ? "Bodyweight" : card.equipment.join(", ")}</span>
             </div>
           </div>
+        </div>
+      )}
+      {card && (
+        <div className="mt-4 space-y-2" aria-label="Workout sections">
+          {["Activation", "Main Workout", "Finisher", "Cool Down"].map((s) => (
+            <div key={s} className="flex items-center justify-between rounded-2xl border-2 border-border bg-card px-5 py-4">
+              <h3 className="text-sm font-extrabold uppercase tracking-wide text-foreground">{s}</h3>
+              <span className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground"><Lock className="h-4 w-4 text-primary" />Premium</span>
+            </div>
+          ))}
         </div>
       )}
       <div className="mt-4 rounded-3xl border-2 border-blue-400 bg-card p-6 text-center">
