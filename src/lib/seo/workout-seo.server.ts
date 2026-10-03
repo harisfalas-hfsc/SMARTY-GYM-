@@ -70,6 +70,7 @@ function workoutHash(w: WorkoutRow): string {
 export interface WorkoutSeoResult {
   status: "ok" | "skipped" | "paused" | "failed";
   optimized: number;
+  optimizedIds: string[];
   remaining: number;
   failures: string[];
   summary: string;
@@ -80,6 +81,7 @@ export async function optimizeSharedWorkouts(
   options: { limit?: number } = {},
 ): Promise<WorkoutSeoResult> {
   const failures: string[] = [];
+  const optimizedIds: string[] = [];
   const now = new Date();
 
   const { data: state } = await db
@@ -91,6 +93,7 @@ export async function optimizeSharedWorkouts(
     return {
       status: "skipped",
       optimized: 0,
+      optimizedIds,
       remaining: 0,
       failures: [],
       summary: "Another shared-workout optimization run is still in progress.",
@@ -117,6 +120,7 @@ export async function optimizeSharedWorkouts(
       return {
         status: "ok",
         optimized: 0,
+        optimizedIds,
         remaining: 0,
         failures: [],
         summary: "No shared workouts to optimize yet.",
@@ -176,6 +180,7 @@ export async function optimizeSharedWorkouts(
         );
         if (upsertError) throw new Error(upsertError.message);
         optimized += 1;
+        optimizedIds.push(workout.id);
         if (paused) {
           await db
             .from("seo_state")
@@ -194,6 +199,7 @@ export async function optimizeSharedWorkouts(
           return {
             status: "paused",
             optimized,
+            optimizedIds,
             remaining: pending.length - optimized,
             failures,
             summary: `Shared-workout optimization paused: ${message}`,
@@ -207,6 +213,7 @@ export async function optimizeSharedWorkouts(
     return {
       status: failures.length && !optimized ? "failed" : "ok",
       optimized,
+      optimizedIds,
       remaining,
       failures,
       summary: optimized

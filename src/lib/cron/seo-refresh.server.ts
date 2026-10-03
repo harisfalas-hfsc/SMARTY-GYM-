@@ -88,7 +88,8 @@ export async function runSeoRefresh(
   if (workoutRun) {
     notes.push(`Shared workouts: ${workoutRun.summary}`);
     failures.push(...workoutRun.failures.map((f) => `workout:${f}`));
-    // Workout SEO metadata alone does not establish a public/indexable URL.
+    const { isFreeAccessMode } = await import("@/lib/free-access.server");
+    if (await isFreeAccessMode()) changedPaths.push(...workoutRun.optimizedIds.map((id) => `/community/workout/${id}`));
   }
 
   let submitted = 0;
@@ -136,15 +137,17 @@ export async function runSeoRefresh(
     previous.hash === built.hash;
 
   if (unchanged) {
+    const queued = await submitToIndexNow([]);
+    if (!queued.ok) failures.push(`indexnow:${queued.detail}`);
     return {
       changed: false,
-      status: "skipped",
-      summary: `No new keywords, pages, articles or workouts since the last run — nothing to update (${merged.total} keywords indexed).`,
+      status: failures.length ? "failed" : "skipped",
+      summary: failures.length ? `SEO retry failed: ${failures.join("; ")}` : `No new keywords, pages, articles or workouts since the last run — nothing to update (${merged.total} keywords indexed).`,
       total: merged.total,
       added: [],
       failures,
       counts: built.counts,
-      emailed: false,
+      emailed: failures.length ? await emailReport({ changed: false, status: "failed", summary: failures.join("; "), total: merged.total, added: [], failures, counts: built.counts, emailed: false, optimization }, startedAt, options.trigger) : false,
       optimization,
     };
   }
@@ -156,8 +159,8 @@ export async function runSeoRefresh(
     failures.push(`save:${message}`);
   }
 
-  const urlsToSubmit = changedPaths.length ? [...changedPaths, ...(articleRun?.optimized ? ["/blog"] : [])] : [];
-  if (urlsToSubmit.length) {
+  const urlsToSubmit = [...changedPaths, ...(articleRun?.optimized ? ["/blog"] : [])];
+  {
     const ping = await submitToIndexNow(urlsToSubmit);
     submitted = ping.ok ? ping.submitted : 0;
     notes.push(ping.detail);
