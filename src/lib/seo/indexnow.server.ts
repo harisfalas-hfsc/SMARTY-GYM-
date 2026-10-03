@@ -19,7 +19,7 @@ export function normalizeIndexNowUrls(paths: string[]): string[] {
       const url = new URL(path.startsWith("/") ? path : `/${path}`, SITE_URL);
       if (path.startsWith("http")) {
         const absolute = new URL(path);
-        if (absolute.origin !== SITE_URL) return null;
+        if (absolute.origin !== SITE_URL || absolute.search || absolute.hash) return null;
         return normalizeIndexNowUrls([absolute.pathname])[0] ?? null;
       }
       if (url.origin !== SITE_URL || url.search || url.hash) return null;
