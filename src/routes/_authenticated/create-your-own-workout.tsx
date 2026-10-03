@@ -315,22 +315,6 @@ function CoachPage() {
     </div>
   );
 
-  if (mode === "build") {
-    return (
-      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-        <PageHeader
-          className="mb-6"
-          eyebrow="Create Your Own Workout"
-          title={name ? `${name}, what's your workout today?` : "What's your workout today?"}
-          subtitle="Choose your own exercises from the Exercise Library for every part of your workout."
-        />
-        {modeToggle}
-        <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
-        <ManualWorkoutBuilder premium={premium} onLocked={() => setMembershipOpen(true)} />
-      </div>
-    );
-  }
-
   if (profileReady === false) {
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
@@ -353,6 +337,23 @@ function CoachPage() {
       </div>
     );
   }
+
+  if (mode === "build") {
+    return (
+      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
+        <PageHeader
+          className="mb-6"
+          eyebrow="Create Your Own Workout"
+          title={name ? `${name}, what's your workout today?` : "What's your workout today?"}
+          subtitle="Choose your own exercises from the Exercise Library for every part of your workout."
+        />
+        {modeToggle}
+        <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+        <ManualWorkoutBuilder premium={premium} parqFlags={parqFlags} onLocked={() => setMembershipOpen(true)} />
+      </div>
+    );
+  }
+
 
   return (
 

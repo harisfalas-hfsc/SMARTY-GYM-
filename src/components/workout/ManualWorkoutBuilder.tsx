@@ -6,6 +6,8 @@ import { ArrowDown, ArrowUp, Loader2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createManualWorkout } from "@/lib/manual-workout.functions";
+import { ParqWaiverDialog } from "@/components/ParqWaiverDialog";
+import { hasParqAck, setParqAck } from "@/lib/parq-ack";
 import {
   DRAFT_EVENT,
   DRAFT_SECTIONS,
@@ -93,7 +95,16 @@ function SectionCard({
   );
 }
 
-export function ManualWorkoutBuilder({ premium, onLocked }: { premium: boolean | null; onLocked: () => void }) {
+export function ManualWorkoutBuilder({
+  premium,
+  parqFlags = [],
+  onLocked,
+}: {
+  premium: boolean | null;
+  parqFlags?: string[];
+  onLocked: () => void;
+}) {
+  const [parqOpen, setParqOpen] = useState(false);
   const navigate = useNavigate();
   const create = useServerFn(createManualWorkout);
   const [draft, setDraft] = useState<ManualDraft | null>(null);
@@ -109,11 +120,12 @@ export function ManualWorkoutBuilder({ premium, onLocked }: { premium: boolean |
   if (!draft) return null;
   const change = (d: ManualDraft) => saveDraft(d);
 
-  async function submit() {
+  async function submit(waived = false) {
     if (!draft) return;
     if (premium === false) return onLocked();
     if (!draft.name.trim()) return void toast.error("Give your workout a name.");
     if (!draft.sections.main.length) return void toast.error("Add at least one exercise to the Main Workout.");
+    if (!waived && parqFlags.length > 0 && !hasParqAck()) return void setParqOpen(true);
     setBusy(true);
     try {
       const strip = (s: DraftSection) => draft.sections[s].map(({ id, dose }) => ({ id, dose }));
@@ -171,6 +183,17 @@ export function ManualWorkoutBuilder({ premium, onLocked }: { premium: boolean |
       >
         <Trash2 className="mr-2 h-4 w-4" /> Discard workout
       </Button>
+      <ParqWaiverDialog
+        open={parqOpen}
+        flags={parqFlags}
+        confirmLabel="I confirm — create my workout"
+        onConfirm={() => {
+          setParqAck();
+          setParqOpen(false);
+          void submit(true);
+        }}
+        onCancel={() => setParqOpen(false)}
+      />
     </div>
   );
 }
