@@ -44,7 +44,7 @@ async function postIndexNow(urlList: string[]): Promise<IndexNowResult> {
       }),
     });
     return {
-       submitted: res.ok ? urlList.length : 0,
+      submitted: res.ok ? urlList.length : 0,
       ok: res.ok,
       detail: `IndexNow responded ${res.status} for ${urlList.length} URL(s).`,
     };
@@ -59,12 +59,14 @@ async function postIndexNow(urlList: string[]): Promise<IndexNowResult> {
 
 /** Persist changed URLs, retry failures, and never send the same unchanged URL twice. */
 export async function submitToIndexNow(paths: string[]): Promise<IndexNowResult> {
-   const db = supabaseAdmin;
+  const db = supabaseAdmin;
   try {
     for (const url of normalizeIndexNowUrls(paths)) {
       const { data, error } = await db.from("seo_indexnow_queue").select("state").eq("url", url).maybeSingle();
       if (error) throw error;
       if (data?.state === "pending") continue;
+      // Callers supply only URLs whose public content actually changed. A previously
+      // submitted URL must be eligible again after a later article/workout update.
       const { error: writeError } = await db.from("seo_indexnow_queue").upsert({ url, state: "pending", changed_at: new Date().toISOString(), submitted_at: null, attempts: 0, retry_at: new Date().toISOString(), last_error: null }, { onConflict: "url" });
       if (writeError) throw writeError;
     }
