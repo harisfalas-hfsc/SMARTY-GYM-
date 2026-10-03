@@ -46,6 +46,10 @@ describe("SEO validation", () => {
   it("sitemap has unique, public, absolute-safe paths", () => {
     const paths = STATIC_SITEMAP_ENTRIES.map((e) => e.path);
     expect(new Set(paths).size).toBe(paths.length);
+    expect(paths).not.toContain("/why-invest-in-smartygym");
+    expect(paths).not.toContain("/best-online-fitness-platform");
+    expect(ROUTE_CLASSIFICATION["/why-invest-in-smartygym"]).toBe("noindex");
+    expect(ROUTE_CLASSIFICATION["/best-online-fitness-platform"]).toBe("noindex");
     for (const p of paths) {
       expect(p.startsWith("/")).toBe(true);
       expect(PRIVATE_PREFIXES.some((x) => p === x || p.startsWith(`${x}/`))).toBe(false);
