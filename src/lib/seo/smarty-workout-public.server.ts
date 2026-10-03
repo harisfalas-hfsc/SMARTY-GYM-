@@ -27,9 +27,25 @@ export function smartyWorkoutSearchData(workout: PublicSmartyWorkout) {
   const category = workout.category.toLowerCase();
   const equipment = (workout.equipment ?? []).filter((item) => item.toLowerCase() !== "bodyweight");
   const equipmentLabel = equipment.length ? equipment.join(", ") : "bodyweight";
+  // Existing search-intent phrases are used only when the public card facts
+  // actually support them. Never infer exercises or the Premium prescription.
+  const categoryPhrase: Record<string, string> = {
+    STRENGTH: "strength training",
+    "MUSCLE BUILDING": "muscle building workout",
+    "CALORIE BURNING": "calorie burning workout",
+    CARDIO: "cardio workout",
+    METABOLIC: "metabolic conditioning",
+    CHALLENGE: "challenge workout",
+    "MOBILITY & STABILITY": "mobility workout",
+    PILATES: "Pilates workout",
+    RECOVERY: "active recovery",
+  };
+  const intent = categoryPhrase[workout.category.toUpperCase()] ?? `${category} workout`;
+  const format = workout.format?.trim();
+  const focus = workout.focus?.trim();
   const title = `${workout.name} | ${workout.category} Workout | SmartyGym`;
-  const description = `${workout.name}: a ${workout.duration_min}-minute ${category} workout by Haris Falas. ${equipmentLabel} training on SmartyGym. Log in with Premium to follow the workout.`;
-  return { title, description, image: validImage(workout.image_url), imageTitle: `${workout.name} — SmartyGym ${workout.category} workout` };
+  const description = `${workout.name}: a ${workout.duration_min}-minute ${intent} by Haris Falas${format ? ` in ${format} format` : ""}${focus ? `, focused on ${focus}` : ""}. ${equipmentLabel} training on SmartyGym. Log in with Premium to follow the workout.`;
+  return { title, description, image: validImage(workout.image_url), imageTitle: `${workout.name} — SmartyGym ${intent}` };
 }
 
 export async function getPublicSmartyWorkout(id: string): Promise<PublicSmartyWorkout | null> {
