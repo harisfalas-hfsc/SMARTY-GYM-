@@ -64,8 +64,10 @@ function WorkoutPage() {
     if (
       !window.confirm(
         shared
-          ? "Delete this workout from your logbook? It will be removed from your progress and training load, but it stays in Shared Workouts for the members who saved, completed or liked it. This can't be undone."
-          : "Delete this workout for good? It will be removed from your progress and training load. This can't be undone.",
+          ? "Delete this workout from your logbook? It stays in Shared Workouts for the members who saved, completed or liked it, and any training you already did stays in your training load — what you've done can't be undone."
+          : done
+            ? "Delete this workout from your logbook? You already completed it, so your results and training load stay — what you've done can't be undone. Only the workout card leaves your logbook."
+            : "Delete this workout for good? It will be removed from your logbook. This can't be undone.",
       )
     )
       return;
