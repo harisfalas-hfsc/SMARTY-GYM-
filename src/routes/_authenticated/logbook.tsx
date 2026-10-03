@@ -27,7 +27,16 @@ import {
   TrendingUp,
   CalendarRange,
   CalendarCheck,
+  Check,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { PageHeader } from "@/components/PageHeader";
 import { PeriodTrendChart } from "@/components/performance/PeriodTrendChart";
 import {
@@ -122,35 +131,11 @@ const SOURCE_STYLE: Record<string, string> = {
   community: "border-fuchsia-400/60 bg-fuchsia-400/10 text-fuchsia-400",
 };
 
-function FilterChip({
-  active,
-  onClick,
-  colorClass,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  colorClass?: string;
-  children: import("react").ReactNode;
-}) {
-  const base = colorClass ?? "border-primary/60 bg-primary/10 text-primary";
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-        active
-          ? `${base} ring-1 ring-current`
-          : colorClass
-            ? `${colorClass} opacity-60`
-            : "border-border bg-card text-muted-foreground"
-      }`}
-    >
-      {children}
-    </button>
-  );
-}
+const SOURCE_DOT: Record<Source, string> = {
+  smarty: "bg-primary",
+  coach: "bg-amber-400",
+  own: "bg-emerald-400",
+};
 
 function dotClass(r: Row) {
   if (r.status === "completed") return "bg-primary";
@@ -1098,67 +1083,113 @@ function LogbookContent() {
         </div>
       ) : (
         <>
-          <div className="mt-2 space-y-2">
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5 truncate">
-                <ListFilter className="h-3.5 w-3.5 shrink-0" />
-                {menuLabel}
-              </span>
-              <span className="shrink-0">{filtered.length}</span>
-            </div>
-            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
-              <FilterChip active={active.length === 0} onClick={() => setActive([])}>
-                All · {rows.length}
-              </FilterChip>
-              {FILTERS.map((f) => (
-                <FilterChip
-                  key={f.id}
-                  active={active.includes(f.id)}
-                  onClick={() =>
-                    setActive(
-                      active.includes(f.id) ? active.filter((a) => a !== f.id) : [...active, f.id],
-                    )
-                  }
+          <div className="mt-2 flex items-center justify-between gap-2">
+            <DropdownMenu modal>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 gap-1.5 text-xs"
+                  aria-label="Filter workouts"
                 >
-                  {f.label} · {rows.filter((r) => matches(r, f.id)).length}
-                </FilterChip>
-              ))}
-            </div>
-            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
-              {SOURCES.map((s) => (
-                <FilterChip
-                  key={s.id}
-                  active={activeSources.includes(s.id)}
-                  colorClass={SOURCE_STYLE[s.id]}
-                  onClick={() =>
-                    setSources(
-                      activeSources.includes(s.id)
-                        ? activeSources.filter((a) => a !== s.id)
-                        : [...activeSources, s.id],
-                    )
-                  }
+                  <ListFilter className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">{menuLabel}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-64">
+                <DropdownMenuLabel className="text-xs">Show</DropdownMenuLabel>
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    setActive([]);
+                  }}
+                  className="gap-2 text-xs"
                 >
-                  {s.label} · {rows.filter((r) => workoutSource(r) === s.id).length}
-                </FilterChip>
-              ))}
-            </div>
-            {equipmentOptions.length ? (
-              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
-                <FilterChip active={equip === "all"} onClick={() => setEquip("all")}>
-                  Any equipment
-                </FilterChip>
-                {equipmentOptions.map((e) => (
-                  <FilterChip
-                    key={e}
-                    active={equip === e}
-                    onClick={() => setEquip(equip === e ? "all" : e)}
-                  >
-                    <span className="capitalize">{e}</span> ·{" "}
-                    {rows.filter((r) => (r.equipment ?? []).includes(e)).length}
-                  </FilterChip>
-                ))}
-              </div>
-            ) : null}
+                  <Check
+                    className={`h-3.5 w-3.5 ${active.length === 0 ? "opacity-100" : "opacity-0"}`}
+                  />
+                  All · {rows.length}
+                </DropdownMenuItem>
+                {FILTERS.map((f) => {
+                  const on = active.includes(f.id);
+                  return (
+                    <DropdownMenuItem
+                      key={f.id}
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        setActive(on ? active.filter((a) => a !== f.id) : [...active, f.id]);
+                      }}
+                      className="gap-2 text-xs"
+                    >
+                      <Check className={`h-3.5 w-3.5 ${on ? "opacity-100" : "opacity-0"}`} />
+                      {f.label} · {rows.filter((r) => matches(r, f.id)).length}
+                    </DropdownMenuItem>
+                  );
+                })}
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-xs">Origin</DropdownMenuLabel>
+                {SOURCES.map((s) => {
+                  const on = activeSources.includes(s.id);
+                  return (
+                    <DropdownMenuItem
+                      key={s.id}
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        setSources(
+                          on
+                            ? activeSources.filter((a) => a !== s.id)
+                            : [...activeSources, s.id],
+                        );
+                      }}
+                      className="gap-2 text-xs"
+                    >
+                      <Check className={`h-3.5 w-3.5 ${on ? "opacity-100" : "opacity-0"}`} />
+                      <span
+                        className={`inline-block h-2 w-2 rounded-full ${SOURCE_DOT[s.id]}`}
+                      />
+                      {s.label} · {rows.filter((r) => workoutSource(r) === s.id).length}
+                    </DropdownMenuItem>
+                  );
+                })}
+                {equipmentOptions.length ? (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="text-xs">Equipment</DropdownMenuLabel>
+                    <DropdownMenuItem
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        setEquip("all");
+                      }}
+                      className="gap-2 text-xs"
+                    >
+                      <Check
+                        className={`h-3.5 w-3.5 ${equip === "all" ? "opacity-100" : "opacity-0"}`}
+                      />
+                      Any equipment
+                    </DropdownMenuItem>
+                    {equipmentOptions.map((eq) => {
+                      const on = equip === eq;
+                      return (
+                        <DropdownMenuItem
+                          key={eq}
+                          onSelect={(e) => {
+                            e.preventDefault();
+                            setEquip(on ? "all" : eq);
+                          }}
+                          className="gap-2 text-xs"
+                        >
+                          <Check className={`h-3.5 w-3.5 ${on ? "opacity-100" : "opacity-0"}`} />
+                          <span className="capitalize">{eq}</span> ·{" "}
+                          {rows.filter((r) => (r.equipment ?? []).includes(eq)).length}
+                        </DropdownMenuItem>
+                      );
+                    })}
+                  </>
+                ) : null}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <span className="shrink-0 text-xs text-muted-foreground">{filtered.length}</span>
           </div>
 
           {filtered.length === 0 ? (
