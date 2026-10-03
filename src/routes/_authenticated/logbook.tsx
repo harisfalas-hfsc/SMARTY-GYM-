@@ -49,6 +49,7 @@ import {
 } from "@/lib/date-format";
 import {
   LOGBOOK_FILTERS as FILTERS,
+  LOGBOOK_SOURCES as SOURCES,
   anchorDate,
   dayKey,
   equipmentOptions as equipmentOptionsOf,
@@ -56,8 +57,11 @@ import {
   filterRows,
   matchesFilter as matches,
   parseFilters,
+  parseSources,
   sourceLabel,
+  workoutSource,
   type LogbookFilter as Filter,
+  type LogbookSource as Source,
 } from "@/lib/logbook/rows";
 import { equipmentBadges } from "@/lib/format/labels";
 import { belongsInLogbook } from "@/lib/logbook/rows";
