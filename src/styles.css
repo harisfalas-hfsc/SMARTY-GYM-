@@ -167,9 +167,9 @@
   --color-sky-500: oklch(0.685 0.169 237.3);
   --color-cyan-400: oklch(0.789 0.154 211.5);
   --color-cyan-500: oklch(0.715 0.143 215.2);
-  --background: oklch(0.18 0 0);
+  --background: oklch(0.21 0 0);
   --foreground: oklch(0.96 0 0);
-  --card: oklch(0.22 0 0);
+  --card: oklch(0.25 0 0);
   --card-foreground: oklch(0.96 0 0);
   --popover: oklch(0.22 0 0);
   --popover-foreground: oklch(0.96 0 0);
