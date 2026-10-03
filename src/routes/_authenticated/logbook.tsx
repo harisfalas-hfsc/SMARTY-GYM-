@@ -139,7 +139,7 @@ function FilterChip({
   active: boolean;
   onClick: () => void;
   colorClass?: string;
-  children: React.ReactNode;
+  children: import("react").ReactNode;
 }) {
   const base = colorClass ?? "border-primary/60 bg-primary/10 text-primary";
   return (
