@@ -180,7 +180,7 @@ export async function buildKeywordIndex(
     6000,
   );
   const workoutNames = collect(workouts.map((w) => w.name), 6000);
-  const custom = collect(extraKeywords);
+  const custom = collect(extraKeywords.filter((k) => !/\b(best|number one|100% human|0% ai)\b/i.test(k)));
 
   const articles = await fetchAll<{
     title: string;

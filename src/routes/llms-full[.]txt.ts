@@ -20,7 +20,7 @@ export const Route = createFileRoute("/llms-full.txt")({
         const pages = publicPages(Boolean(freeAccessMode));
 
         const lines: string[] = [
-          "# SmartyGym — full site guide for AI assistants",
+           "# SmartyGym — full site guide",
           "",
           `Site: ${SITE_URL}`,
            "SmartyGym offers expert-programmed ready workouts, a shared Workout of the Day, and an exercise library. Smarty Coach builds personalized sessions from the library using programming rules based on Haris Falas's coaching methodology; it may use AI assistance. Build It Yourself is a separate member-selected exercise option.",
@@ -90,10 +90,10 @@ export const Route = createFileRoute("/llms-full.txt")({
         try {
           const { readKeywordIndex } = await import("@/lib/seo/keyword-index.server");
           const index = await readKeywordIndex();
-          if (index) {
+           if (index && index.version >= 2) {
             const g = index.groups;
             lines.push("## Coverage", "");
-            lines.push(`- Exercises in the library: ${index.counts?.exercises ?? 0}`);
+             lines.push(`- Active exercises in the library: ${index.counts?.exercises ?? 0}`);
              // Personal and member-only workout totals do not belong in a public corpus.
             const line = (label: string, values: string[] = [], max = 80) =>
               values.length ? `- ${label}: ${values.slice(0, max).join(", ")}` : null;
