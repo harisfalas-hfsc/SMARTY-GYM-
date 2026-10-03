@@ -65,10 +65,7 @@ export function VisitorPagePreview({ pathname }: { pathname: string }) {
   const info = PAGES[pathname] ?? FALLBACK;
   const router = useRouter();
   // Tapping anywhere outside the card dismisses it, like every other announcement.
-  const dismiss = () => {
-    if (window.history.length > 1) router.history.back();
-    else void router.navigate({ to: "/" });
-  };
+  const dismiss = () => void router.navigate({ to: "/" });
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 px-4 backdrop-blur-sm" onClick={(e) => e.target === e.currentTarget && dismiss()}>
       <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 text-center">
