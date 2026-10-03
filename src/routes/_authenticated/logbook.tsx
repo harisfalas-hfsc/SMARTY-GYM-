@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 
-function FilterHeading({ children }: { children: React.ReactNode }) {
+function FilterHeading({ children }: { children: import("react").ReactNode }) {
   return (
     <p className="mb-1 mt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground first:mt-0">
       {children}
@@ -47,7 +47,7 @@ function FilterRow({
 }: {
   on: boolean;
   onClick: () => void;
-  children: React.ReactNode;
+  children: import("react").ReactNode;
 }) {
   return (
     <button
