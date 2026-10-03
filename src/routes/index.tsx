@@ -88,7 +88,7 @@ function Home() {
             <br />
             <span className="text-primary">RE-IMAGINED.</span>
           </h1>
-          <p className="mt-3 text-[13.2px] font-semibold uppercase leading-[1.9] tracking-[0.16em] text-muted-foreground">
+          <p className="mt-3 text-[13.2px] font-semibold uppercase leading-[1.9] tracking-[0.16em] text-foreground">
             Expert workouts · Exercise library
             <br />
             Blog insights · Smarty tools
