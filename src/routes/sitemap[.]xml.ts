@@ -97,7 +97,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           try {
             const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
             type PublicWorkout = {
-              id: string;
+              id: string | null;
               shared_at: string | null;
               image_url: string | null;
               name: string | null;
@@ -114,7 +114,7 @@ export const Route = createFileRoute("/sitemap.xml")({
               if (!data || data.length < 1000) break;
             }
             sharedWorkouts = rows
-              .filter((w) => /^[0-9a-f-]{36}$/i.test(w.id))
+              .filter((w) => typeof w.id === "string" && /^[0-9a-f-]{36}$/i.test(w.id))
               .map((w) => ({
                 path: `/community/workout/${w.id}`,
                 changefreq: "monthly" as const,
