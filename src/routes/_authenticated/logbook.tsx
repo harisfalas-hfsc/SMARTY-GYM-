@@ -123,6 +123,43 @@ type Row = {
 };
 
 /** Colour of the dot a workout gets in the calendar. */
+const SOURCE_STYLE: Record<string, string> = {
+  smarty: "border-sky-400/60 bg-sky-400/10 text-sky-400",
+  coach: "border-amber-400/60 bg-amber-400/10 text-amber-400",
+  own: "border-emerald-400/60 bg-emerald-400/10 text-emerald-400",
+  community: "border-fuchsia-400/60 bg-fuchsia-400/10 text-fuchsia-400",
+};
+
+function FilterChip({
+  active,
+  onClick,
+  colorClass,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  colorClass?: string;
+  children: React.ReactNode;
+}) {
+  const base = colorClass ?? "border-primary/60 bg-primary/10 text-primary";
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+        active
+          ? `${base} ring-1 ring-current`
+          : colorClass
+            ? `${colorClass} opacity-60`
+            : "border-border bg-card text-muted-foreground"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
 function dotClass(r: Row) {
   if (r.status === "completed") return "bg-primary";
   const tone = scheduleTone(r.scheduled_at, false);
