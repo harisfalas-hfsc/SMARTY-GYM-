@@ -25,8 +25,8 @@ function validImage(url: string | null): string | null {
 
 export function smartyWorkoutSearchData(workout: PublicSmartyWorkout) {
   const category = workout.category.toLowerCase();
-  const equipment = (workout.equipment ?? []).filter((item) => item.toLowerCase() !== "bodyweight");
-  const equipmentLabel = equipment.length ? equipment.join(", ") : "bodyweight";
+  const equipment = (workout.equipment ?? []).filter((item) => !["bodyweight", "other"].includes(item.toLowerCase()));
+  const equipmentLabel = equipment.length ? `Equipment: ${equipment.join(", ")}.` : "Bodyweight training.";
   // Existing search-intent phrases are used only when the public card facts
   // actually support them. Never infer exercises or the Premium prescription.
   const categoryPhrase: Record<string, string> = {
@@ -44,7 +44,7 @@ export function smartyWorkoutSearchData(workout: PublicSmartyWorkout) {
   const format = workout.format?.trim();
   const focus = workout.focus?.trim();
   const title = `${workout.name} | ${workout.category} Workout | SmartyGym`;
-  const description = `${workout.name}: a ${workout.duration_min}-minute ${intent} by Haris Falas${format ? ` in ${format} format` : ""}${focus ? `, focused on ${focus}` : ""}. ${equipmentLabel} training on SmartyGym. Log in with Premium to follow the workout.`;
+  const description = `${workout.name}: a ${workout.duration_min}-minute ${intent} by Haris Falas${format ? ` in ${format} format` : ""}${focus ? `, focused on ${focus}` : ""}. ${equipmentLabel} On SmartyGym. Log in with Premium to follow the workout.`;
   return { title, description, image: validImage(workout.image_url), imageTitle: `${workout.name} — SmartyGym ${intent}` };
 }
 
