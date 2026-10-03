@@ -132,12 +132,22 @@ export function dotClass(row: LogbookRow): string {
   return "bg-muted-foreground/50";
 }
 
-export function filterMenuLabel(filters: LogbookFilter[], equipment: string): string {
+export function filterMenuLabel(
+  filters: LogbookFilter[],
+  equipment: string,
+  sources: LogbookSource[] = [],
+): string {
   const base =
     filters.length === 0
       ? "All workouts"
       : filters.length === 1
         ? (LOGBOOK_FILTERS.find((f) => f.id === filters[0])?.label ?? "All workouts")
         : `${filters.length} filters`;
-  return equipment === "all" ? base : `${base} · ${equipment}`;
+  const withSource =
+    sources.length === 0
+      ? base
+      : sources.length === 1
+        ? (LOGBOOK_SOURCES.find((s) => s.id === sources[0])?.label ?? base)
+        : `${base} · ${sources.length} sources`;
+  return equipment === "all" ? withSource : `${withSource} · ${equipment}`;
 }
