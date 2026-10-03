@@ -1,5 +1,10 @@
 # Roadmap
 
+- [x] Audit and upgrade machine-readable search discovery, route inventory, sitemaps, private crawl rules, factual AI descriptions, internal intent phrases, and changed-URL IndexNow delivery without changing page layouts.
+- [x] Temporarily exclude research/comparison pages with unverified statistics or rankings from indexing while preserving their appearance.
+- [ ] Verify and correct unsupported claims/charts on the existing research/comparison pages before restoring indexing (blocked by source verification and the requirement to preserve visible page appearance).
+- [ ] Confirm Google indexes newly discoverable public pages after deployment and recrawl (blocked by Google processing time).
+
 - [x] Standardize visible website and message wording to one-word SmartyGym while preserving capitalization, links, and intentional SEO wording.
 
 - [x] Use the mobile carousel images for the four matching desktop homepage sections, add Shared Workouts and Smarty Ritual, and keep About mobile-only.
