@@ -3,11 +3,11 @@ import { BookOpen, CalendarCheck, Dumbbell, Share2, Sparkles } from "lucide-reac
 import { useAuth } from "@/hooks/useAuth";
 
 const ITEMS = [
-  { to: "/smarty-workouts", label: "Workouts", Icon: Dumbbell },
-  { to: "/wod", label: "WOD", Icon: CalendarCheck },
-  { to: "/create-your-own-workout", label: "Create", Icon: Sparkles },
-  { to: "/shared-workouts", label: "Shared", Icon: Share2 },
-  { to: "/logbook", label: "Logbook", Icon: BookOpen },
+  { to: "/smarty-workouts", label: "Workouts", Icon: Dumbbell, iconColor: "text-chart-1" },
+  { to: "/wod", label: "WOD", Icon: CalendarCheck, iconColor: "text-chart-2" },
+  { to: "/create-your-own-workout", label: "Create", Icon: Sparkles, iconColor: "text-chart-3" },
+  { to: "/shared-workouts", label: "Shared", Icon: Share2, iconColor: "text-chart-4" },
+  { to: "/logbook", label: "Logbook", Icon: BookOpen, iconColor: "text-chart-5" },
 ] as const;
 
 export function BottomNav() {
