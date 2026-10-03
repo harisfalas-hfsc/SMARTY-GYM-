@@ -23,7 +23,9 @@ export const createManualWorkout = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => schema.parse(d))
   .handler(async ({ data, context }) => {
     const { requireActiveMembership } = await import("@/lib/membership.server");
-    await requireActiveMembership(context);
+    const access = await requireActiveMembership(context);
+    if (!access.healthAcknowledged || !access.readinessComplete || !access.profileComplete)
+      throw new Error("Complete your Training Profile, health acknowledgement and readiness questionnaire (PAR-Q) first.");
     const all = Object.values(data.sections).flat();
     if (!data.sections.main.length) throw new Error("Add at least one exercise to the Main Workout.");
     const ids = [...new Set(all.map((e) => e.id))];
@@ -75,11 +77,13 @@ export const deleteManualWorkout = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { data: row, error } = await context.supabase
       .from("workouts")
-      .select("id,user_id,category")
+      .select("id,user_id,category,created_by,community_source_id")
       .eq("id", data.workoutId)
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!row || row.user_id !== context.userId) throw new Error("Workout not found.");
+    if (row.created_by === "community" || row.community_source_id)
+      throw new Error("Workouts from the community can't be deleted — only their creator can delete them.");
     if (row.category !== MANUAL_CATEGORY) throw new Error("Only workouts you built yourself can be deleted.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const id = data.workoutId;

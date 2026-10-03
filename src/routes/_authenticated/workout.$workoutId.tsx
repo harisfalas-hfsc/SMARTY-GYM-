@@ -302,7 +302,9 @@ function WorkoutPage() {
       </section>
       )}
 
-      {w.category === MANUAL_CATEGORY ? (
+      {w.category === MANUAL_CATEGORY &&
+      w.created_by !== "community" &&
+      !(w as { community_source_id?: string | null }).community_source_id ? (
         <Button
           variant="outline"
           className="mt-6 h-12 w-full rounded-2xl border-destructive font-bold text-destructive"

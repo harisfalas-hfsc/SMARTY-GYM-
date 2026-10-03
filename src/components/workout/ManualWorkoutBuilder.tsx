@@ -6,6 +6,8 @@ import { ArrowDown, ArrowUp, Loader2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createManualWorkout } from "@/lib/manual-workout.functions";
+import { ParqWaiverDialog } from "@/components/ParqWaiverDialog";
+import { hasParqAck, setParqAck } from "@/lib/parq-ack";
 import {
   DRAFT_EVENT,
   DRAFT_SECTIONS,
@@ -181,6 +183,17 @@ export function ManualWorkoutBuilder({
       >
         <Trash2 className="mr-2 h-4 w-4" /> Discard workout
       </Button>
+      <ParqWaiverDialog
+        open={parqOpen}
+        flags={parqFlags}
+        confirmLabel="I confirm — create my workout"
+        onConfirm={() => {
+          setParqAck();
+          setParqOpen(false);
+          void submit(true);
+        }}
+        onCancel={() => setParqOpen(false)}
+      />
     </div>
   );
 }
