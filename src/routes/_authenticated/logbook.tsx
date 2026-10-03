@@ -866,6 +866,7 @@ function Logbook() {
 function LogbookContent() {
   const { filter, view } = Route.useSearch();
   const equip = Route.useSearch().equip ?? "all";
+  const src = Route.useSearch().src ?? "all";
   const navigate = useNavigate({ from: "/logbook" });
   const [rows, setRows] = useState<Row[] | null>(null);
   const [busy, setBusy] = useState(false);
@@ -921,6 +922,7 @@ function LogbookContent() {
   const noSavedCopy = !online && cached.error !== null;
 
   const active = useMemo(() => parseFilters(filter), [filter]);
+  const activeSources = useMemo(() => parseSources(src), [src]);
 
   // Logged sessions power the calendar's day/period training-load totals.
   const fetchSessionLoads = useServerFn(getSessionLoads);
@@ -1010,6 +1012,11 @@ function LogbookContent() {
     void navigate({ search: (p: LogSearch) => ({ ...p, filter: value }) });
   }
 
+  function setSources(next: Source[]) {
+    const value = next.length ? next.join(",") : "all";
+    void navigate({ search: (p: LogSearch) => ({ ...p, src: value }) });
+  }
+
   if (!rows)
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
@@ -1018,9 +1025,9 @@ function LogbookContent() {
     );
 
   // Multiple filters combine as "any of" — pick favourites + scheduled to see both.
-  const filtered = filterRows(rows, { filters: active, equipment: equip });
+  const filtered = filterRows(rows, { filters: active, sources: activeSources, equipment: equip });
   const equipmentOptions = equipmentOptionsOf(rows);
-  const menuLabel = filterMenuLabel(active, equip);
+  const menuLabel = filterMenuLabel(active, equip, activeSources);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
@@ -1099,6 +1106,24 @@ function LogbookContent() {
                     className="h-11"
                   >
                     {f.label} · {rows.filter((r) => matches(r, f.id)).length}
+                  </DropdownMenuCheckboxItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Source</DropdownMenuLabel>
+                {SOURCES.map((s) => (
+                  <DropdownMenuCheckboxItem
+                    key={s.id}
+                    checked={activeSources.includes(s.id)}
+                    onCheckedChange={(checked) =>
+                      setSources(
+                        checked
+                          ? [...activeSources, s.id]
+                          : activeSources.filter((a) => a !== s.id),
+                      )
+                    }
+                    className="h-11"
+                  >
+                    {s.label} · {rows.filter((r) => workoutSource(r) === s.id).length}
                   </DropdownMenuCheckboxItem>
                 ))}
                 {equipmentOptions.length ? (
