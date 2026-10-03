@@ -216,8 +216,8 @@ function WorkoutPage() {
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <h1 className="text-xl font-extrabold uppercase tracking-tight">Workout deleted</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          This workout has been deleted by its creator. The training you already did with it stays in your
-          progress and training load.
+          This workout has been deleted. Any training already done with it stays in your progress and
+          training load.
         </p>
         <Button asChild className="mt-4 h-12 rounded-2xl">
           <Link to="/logbook" search={{ filter: "all" as const, view: "list" as const }}>Open logbook</Link>
