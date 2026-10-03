@@ -63,7 +63,9 @@ function WorkoutPage() {
   async function deleteWorkout() {
     if (
       !window.confirm(
-        "Delete this workout for good? It will also be removed from the community, with its likes, ratings and comments, and from your progress and training load. This can't be undone.",
+        shared
+          ? "Delete this workout from your logbook? It will be removed from your progress and training load, but it stays in Shared Workouts for the members who saved, completed or liked it. This can't be undone."
+          : "Delete this workout for good? It will be removed from your progress and training load. This can't be undone.",
       )
     )
       return;
@@ -283,18 +285,19 @@ function WorkoutPage() {
         </h3>
         <p className="mt-1 text-sm text-muted-foreground">
           {shared
-            ? "This workout is shared. Members can discover it, do it, like it and comment on it — it can never be edited."
-            : "Share this workout with the community so other members can train it exactly as generated."}
+            ? "This workout is shared. Members can discover it, do it, like it and comment on it — it can never be edited or withdrawn."
+            : "Share this workout with the community so other members can train it exactly as generated. Once shared, it stays in Shared Workouts for good."}
         </p>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          <Button
-            className="h-12 rounded-2xl font-bold"
-            variant={shared ? "secondary" : "default"}
-            onClick={toggleShare}
-            disabled={sharing}
-          >
-            {shared ? "Stop sharing" : "Share with community"}
-          </Button>
+          {!shared && (
+            <Button
+              className="h-12 rounded-2xl font-bold"
+              onClick={toggleShare}
+              disabled={sharing}
+            >
+              Share with community
+            </Button>
+          )}
           <Button asChild variant="secondary" className="h-12 rounded-2xl">
             <Link to="/community">Open community</Link>
           </Button>

@@ -938,7 +938,7 @@ function LogbookContent() {
     const { data, error } = await supabase
       .from("workouts")
       .select(
-        "id,name,category,duration_min,difficulty_stars,difficulty_label,mood,status,is_favorite,scheduled_at,completed_at,created_at,is_wod,created_by,equipment,workout_feedback(difficulty_rating,feeling)",
+        "id,name,category,duration_min,difficulty_stars,difficulty_label,mood,status,is_favorite,scheduled_at,completed_at,created_at,is_wod,created_by,equipment,removed_from_logbook,workout_feedback(difficulty_rating,feeling)",
       )
       .order("created_at", { ascending: false })
       .limit(300);

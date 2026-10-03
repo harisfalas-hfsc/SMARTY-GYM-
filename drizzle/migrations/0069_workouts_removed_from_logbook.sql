@@ -1,0 +1,1 @@
+ALTER TABLE public.workouts ADD COLUMN IF NOT EXISTS removed_from_logbook boolean NOT NULL DEFAULT false;

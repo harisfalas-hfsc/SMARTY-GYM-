@@ -15,6 +15,7 @@ export type LogbookRow = {
   scheduled_at: string | null;
   completed_at: string | null;
   created_at: string;
+  removed_from_logbook?: boolean | null;
 };
 
 export type LogbookFilter = "completed" | "planned" | "favorites" | "scheduled";
@@ -108,7 +109,9 @@ export function sourceLabel(row: LogbookRow): string {
  * but it only belongs in the logbook once the member does something with it:
  * completes, favourites, schedules or starts it.
  */
-export function belongsInLogbook(row: Pick<LogbookRow, "created_by" | "status" | "is_favorite" | "scheduled_at">): boolean {
+export function belongsInLogbook(row: Pick<LogbookRow, "created_by" | "status" | "is_favorite" | "scheduled_at" | "removed_from_logbook">): boolean {
+  // Shared workouts the creator deleted stay in the community but leave the logbook.
+  if (row.removed_from_logbook) return false;
   if (!String(row.created_by ?? "").startsWith("smarty:")) return true;
   return (
     row.status === "completed" ||

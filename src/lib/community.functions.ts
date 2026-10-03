@@ -17,6 +17,11 @@ export const shareWorkout = createServerFn({ method: "POST" })
   .inputValidator((input: { workoutId: string; shared: boolean }) => input)
   .handler(async ({ context, data }) => {
     await requirePremium(context as never);
+    // Sharing is permanent: members may have saved, completed or liked the
+    // workout, so a shared workout can never be withdrawn from the community.
+    if (!data.shared) {
+      throw new Error("A shared workout stays in Shared Workouts — it can only be removed from your own logbook.");
+    }
     if (data.shared) {
       const { data: own } = await context.supabase
         .from("workouts")

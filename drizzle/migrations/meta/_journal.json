@@ -484,6 +484,13 @@
       "when": 1791022403082,
       "tag": "0068_remove_obsolete_personal_wod",
       "breakpoints": true
+    },
+    {
+      "idx": 69,
+      "version": "7",
+      "when": 1791040465019,
+      "tag": "0069_workouts_removed_from_logbook",
+      "breakpoints": true
     }
   ]
 }
