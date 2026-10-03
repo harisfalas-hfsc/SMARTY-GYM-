@@ -23,6 +23,7 @@ import { SisterAppsPopup } from "../components/growth/SisterAppsPopup";
 import { CheckinModalManager } from "@/components/checkins/CheckinModalManager";
 import { BottomNav } from "../components/BottomNav";
 import { UpdatePrompt } from "../components/UpdatePrompt";
+import { isRecoverablePageImportError } from "../lib/recoverable-page-error";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
 
 
@@ -264,11 +265,20 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
-  console.error(error);
+  const recoverableImport = isRecoverablePageImportError(error);
+  if (!recoverableImport) console.error(error);
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
+
+  if (recoverableImport) {
+    return (
+      <div className="min-h-screen bg-background">
+        <UpdatePrompt forceVisible />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">

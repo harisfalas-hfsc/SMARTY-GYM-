@@ -98,12 +98,12 @@ const aboutSections: Section[] = [
     accentWord: "ritual",
     green: true,
     description:
-      "Choose a ready Smarty Workout, build one on demand, receive two planned workouts every day, or train what the community shares. Move, reset and recover with a fresh daily ritual.",
+      "Choose a ready Smarty Workout, create your own with Smarty Coach or Build It Yourself from the Exercise Library, follow Workout of the Day, or train what members share. Move, reset and recover with a fresh daily ritual.",
     items: [
       { id: "smarty-workouts", title: "Smarty Workouts", meta: "Ready workouts in nine categories", image: imgWorkouts, to: "/smarty-workouts" },
       { id: "wod", title: "Workout of the Day", meta: "Two planned workouts, every day", image: imgWod, to: "/wod" },
-      { id: "create", title: "Create Your Own Workout", meta: "On demand, whenever you want", image: imgCreate, to: "/create-your-own-workout" },
-      { id: "community", title: "Smarty Community", meta: "Train, like, comment and climb the rankings", image: imgCommunity, to: "/community" },
+      { id: "create", title: "Create Your Own Workout", meta: "Smarty Coach or Build It Yourself", image: imgCreate, to: "/create-your-own-workout" },
+      { id: "community", title: "Smarty Community", meta: "Share, unshare, train and connect", image: imgCommunity, to: "/community" },
       { id: "ritual", title: "Smarty Ritual", meta: "Morning, Midday and Evening phases", image: imgRitual, to: "/smarty-ritual" },
     ],
     cta: { label: "Create Your Own Workout", to: "/create-your-own-workout" },
@@ -170,7 +170,7 @@ const homeSections: Section[] = [
     accentWord: "one complete session",
     green: true,
     description:
-      "Tell Smarty Coach what you want to train, how you feel, how much time you have and what equipment is available. Your workout is built around your Training Profile and your circumstances today.",
+      "Create Your Own Workout gives you two options: answer Smarty Coach about your goal, time and gear, or Build It Yourself with exercises from the Exercise Library for each part. Explore before signing up; membership is needed to save. Train on your schedule, choose your movements and keep your progress.",
     items: [
       { id: "personal", title: "Personalized", meta: "Built around your profile", icon: SlidersHorizontal },
       { id: "science", title: "Science-informed", meta: "Coherent, coach-like programming", icon: FlaskConical },
@@ -186,7 +186,7 @@ const homeSections: Section[] = [
     accentWord: "ready to explore",
     green: false,
     description:
-      "Browse workouts shared by SmartyGym members. Open a session, see how it is structured and, when signed in, train it, like it and join the conversation.",
+      "Discover workouts members created with Smarty Coach or Build It Yourself. Share your own, train, like and comment. Creators can unshare or delete; deletion clears the workout and its social activity for everyone, but completed training stays in each member's progress. Saved shared workouts cannot be re-shared or deleted by the saver.",
     items: [
       { id: "browse", title: "Browse Workouts", meta: "Discover sessions shared by members", icon: BookOpen },
       { id: "train", title: "Train a Shared Session", meta: "Open and follow the complete workout", icon: Dumbbell },

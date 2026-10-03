@@ -15,14 +15,14 @@ export const Route = createFileRoute("/how-it-works")({
         content:
            withExtendedKeywords("/how-it-works", "how smartygym works, pre workout questionnaire, training profile, warm up activation main workout finisher cool down, sets reps tempo rest, guided workout player, session debrief, smarty ritual, daily movement recovery ritual"),
       },
-      { title: "How Smarty Gym works — answer, analyze, train" },
+      { title: "How SmartyGym works — create, share and train" },
       {
         name: "description",
         content:
-          "You answer. Smarty Coach thinks. You train. Four simple steps from your goal to a personalized workout.",
+          "Create your own workout with Smarty Coach or build it yourself from the Exercise Library. Explore how members share and track training.",
       },
-      { property: "og:title", content: "How Smarty Gym works" },
-      { property: "og:description", content: "You answer. Smarty Coach thinks. You train." },
+      { property: "og:title", content: "How SmartyGym works — create, share and train" },
+      { property: "og:description", content: "Create your own workout with Smarty Coach or build it yourself from the Exercise Library. Explore how members share and track training." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://smartygym.com/how-it-works" },
@@ -34,39 +34,6 @@ export const Route = createFileRoute("/how-it-works")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@graph": [
-            {
-              "@type": "HowTo",
-              name: "How to get a personalized workout with SmartyGym",
-              description:
-                "Four steps from your goal to a complete personalized workout built by Smarty Coach.",
-              totalTime: "PT2M",
-              step: [
-                {
-                  "@type": "HowToStep",
-                  position: 1,
-                  name: "You answer",
-                  text: "Set your goal, mood, available time, training location and equipment.",
-                },
-                {
-                  "@type": "HowToStep",
-                  position: 2,
-                  name: "Smarty Coach analyses",
-                  text: "Your training profile and today's answers are merged and matched against the exercise library.",
-                },
-                {
-                  "@type": "HowToStep",
-                  position: 3,
-                  name: "Your workout is built",
-                  text: "A full session with warm-up, activation, main work, finisher and cool-down, including sets, reps, tempo and rest.",
-                },
-                {
-                  "@type": "HowToStep",
-                  position: 4,
-                  name: "You train and log it",
-                  text: "Follow the guided player, then log the session so the next workout adapts to your feedback.",
-                },
-              ],
-            },
             {
               "@type": "BreadcrumbList",
               itemListElement: [
@@ -96,23 +63,23 @@ export const Route = createFileRoute("/how-it-works")({
 const STEPS = [
   {
     n: "01",
-    title: "You answer",
-    desc: "Goal • Mood • Time • Location • Equipment",
+    title: "Choose your way",
+    desc: "Smarty Coach or Build It Yourself",
   },
   {
     n: "02",
-    title: "Smarty Coach analyzes",
-    desc: "Profile • Fitness level • Goals • History",
+    title: "Make it yours",
+    desc: "Answer a few questions or browse the Exercise Library",
   },
   {
     n: "03",
-    title: "Training philosophy",
-    desc: "Sports science • Safety • Health • Performance",
+    title: "Build your session",
+    desc: "Coach builds for you or you pick each exercise",
   },
   {
     n: "04",
-    title: "Your workout",
-    desc: "The right exercises, built into your session.",
+    title: "Train and track",
+    desc: "Save it to your logbook • Train • Share",
   },
 ];
 
@@ -143,7 +110,7 @@ const COMMUNITY_STEPS = [
   {
     n: "01",
     title: "Members share",
-    desc: "Any workout • Exactly as generated • Never edited",
+    desc: "Share your own Smarty Coach or Build It Yourself workout",
   },
   {
     n: "02",
@@ -253,11 +220,12 @@ function HowItWorks() {
            Way 2 — Create any workout
         </p>
         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
-          You answer. Smarty Coach thinks. You train.
+          Create your own workout, your way.
         </h2>
         <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-          For the days you know what you want: your goal, your mood, your time, your equipment.
-          Smarty Coach builds a one-off session around exactly that.
+          Choose Smarty Coach to build a session around your goal, mood, time and equipment, or
+          Build It Yourself by choosing exercises from the Exercise Library for each part of your workout.
+          Explore either option before signing up; membership is needed to save your workout.
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
@@ -273,8 +241,8 @@ function HowItWorks() {
         </div>
 
         <p className="mt-6 text-center text-sm font-semibold leading-snug text-muted-foreground">
-          Then you train, give feedback, and Smarty Coach uses your history to make your next
-          workout <span className="text-primary">even smarter.</span>
+          Train on your schedule, choose the exercises yourself or let Smarty Coach help, keep a
+          record of what you did, and <span className="text-primary">share your own session.</span>
         </p>
 
         <div className="mt-6 flex justify-center">
@@ -394,9 +362,11 @@ function HowItWorks() {
           Train the workouts other members share.
         </h2>
         <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-          Every shared workout opens exactly like a workout in your own logbook — same reader, same
-          player. Do it, mark it completed, not completed or scheduled, like it and leave a short
-          comment. Your comment appears in the community comments card for everyone to read.
+          Members can share their own Smarty Coach or Build It Yourself workouts. Open one with the
+          same player as your logbook, train it, like it or comment. Creators can unshare at any time,
+          removing it from Shared Workouts, or delete it for everyone. Likes, comments and favourites
+          go with a deleted workout; completed training stays in each member's progress. A workout
+          you saved from Shared Workouts is yours to train, not to re-share or delete.
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
@@ -450,8 +420,8 @@ function HowItWorks() {
 
         <p className="mt-6 text-center text-sm font-semibold leading-snug text-muted-foreground">
           Achievements unlock as you train, notifications remind you about scheduled sessions, and{" "}
-          <span className="text-primary">offline mode</span> keeps your workouts, logbook and player
-          working with no signal — everything syncs when you are back online.
+          <span className="text-primary">your training history</span> keeps your completed activity
+          even if the workout is later removed.
         </p>
 
         <div className="mt-6 flex justify-center">

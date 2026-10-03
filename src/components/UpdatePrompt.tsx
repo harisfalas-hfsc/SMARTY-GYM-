@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { RefreshCw, X } from "lucide-react";
+import { isRecoverablePageImportError } from "@/lib/recoverable-page-error";
 
 /**
  * Branded "new version available" prompt.
@@ -9,16 +10,7 @@ import { RefreshCw, X } from "lucide-react";
  * of letting that surface as a crash, we catch the failure and offer a
  * one-tap refresh that heals the session.
  */
-function isStaleChunkError(message: unknown): boolean {
-  if (typeof message !== "string") return false;
-  return (
-    message.includes("Failed to fetch dynamically imported module") ||
-    message.includes("error loading dynamically imported module") ||
-    message.includes("Importing a module script failed")
-  );
-}
-
-export function UpdatePrompt() {
+export function UpdatePrompt({ forceVisible = false }: { forceVisible?: boolean }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -32,13 +24,13 @@ export function UpdatePrompt() {
     };
     const onRejection = (event: PromiseRejectionEvent) => {
       const reason = event.reason;
-      if (isStaleChunkError(reason?.message) || isStaleChunkError(reason)) {
+      if (isRecoverablePageImportError(reason)) {
         event.preventDefault();
         show();
       }
     };
     const onError = (event: ErrorEvent) => {
-      if (isStaleChunkError(event.message)) {
+      if (isRecoverablePageImportError(event.message)) {
         event.preventDefault();
         show();
       }
@@ -54,7 +46,7 @@ export function UpdatePrompt() {
     };
   }, []);
 
-  if (!visible) return null;
+  if (!visible && !forceVisible) return null;
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-20 z-[9990] flex justify-center px-4 sm:bottom-6">
@@ -74,16 +66,19 @@ export function UpdatePrompt() {
                 </span>
               </div>
               <h3 className="text-[15px] font-semibold leading-tight text-foreground">
-                New version available
+                This page didn't finish loading
               </h3>
               <p className="mt-1 text-sm leading-snug text-muted-foreground">
-                We've improved your workout experience. Tap to refresh now.
+                A quick refresh usually gets you back on track.
               </p>
             </div>
             <button
               type="button"
-              aria-label="Dismiss"
-              onClick={() => setVisible(false)}
+              aria-label={forceVisible ? "Go home" : "Dismiss"}
+              onClick={() => {
+                setVisible(false);
+                if (forceVisible) window.location.assign("/");
+              }}
               className="flex-shrink-0 text-muted-foreground transition-colors hover:text-foreground"
             >
               <X className="h-4 w-4" />

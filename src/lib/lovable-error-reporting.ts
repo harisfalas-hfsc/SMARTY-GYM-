@@ -1,3 +1,5 @@
+import { isRecoverablePageImportError } from "./recoverable-page-error";
+
 type LovableErrorOptions = {
   mechanism?: "manual" | "onerror" | "unhandledrejection" | "react_error_boundary";
   handled?: boolean;
@@ -25,6 +27,9 @@ declare global {
 
 export function reportLovableError(error: unknown, context: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
+  // A route file that cannot be downloaded is recoverable with a document refresh.
+  // Don't send a crash email (or duplicate preview crash telemetry) for this case.
+  if (isRecoverablePageImportError(error)) return;
   window.__lovableEvents?.captureException?.(
     error,
     {
