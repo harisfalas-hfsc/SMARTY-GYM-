@@ -477,6 +477,13 @@
       "when": 1791006658079,
       "tag": "0067_seo_indexnow_queue",
       "breakpoints": true
+    },
+    {
+      "idx": 68,
+      "version": "7",
+      "when": 1791022403082,
+      "tag": "0068_remove_obsolete_personal_wod",
+      "breakpoints": true
     }
   ]
 }

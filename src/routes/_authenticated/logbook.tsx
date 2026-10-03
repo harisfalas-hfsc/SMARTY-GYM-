@@ -13,14 +13,6 @@ import { setWorkoutMeta, setWorkoutStatus } from "@/lib/coach.functions";
 import { toast } from "sonner";
 import { MAX_STARS, normalizeStars } from "@/lib/workout/spec";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Loader2,
   Star,
   Clock,
@@ -123,6 +115,43 @@ type Row = {
 };
 
 /** Colour of the dot a workout gets in the calendar. */
+const SOURCE_STYLE: Record<string, string> = {
+  smarty: "border-sky-400/60 bg-sky-400/10 text-sky-400",
+  coach: "border-amber-400/60 bg-amber-400/10 text-amber-400",
+  own: "border-emerald-400/60 bg-emerald-400/10 text-emerald-400",
+  community: "border-fuchsia-400/60 bg-fuchsia-400/10 text-fuchsia-400",
+};
+
+function FilterChip({
+  active,
+  onClick,
+  colorClass,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  colorClass?: string;
+  children: import("react").ReactNode;
+}) {
+  const base = colorClass ?? "border-primary/60 bg-primary/10 text-primary";
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+        active
+          ? `${base} ring-1 ring-current`
+          : colorClass
+            ? `${colorClass} opacity-60`
+            : "border-border bg-card text-muted-foreground"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
 function dotClass(r: Row) {
   if (r.status === "completed") return "bg-primary";
   const tone = scheduleTone(r.scheduled_at, false);
@@ -179,13 +208,7 @@ function WorkoutCard({
         <p className="mt-1">
           <span
             className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold ${
-              workoutSource(r) === "smarty"
-                ? "border-primary/50 bg-primary/10 text-primary"
-                : workoutSource(r) === "own"
-                  ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                  : workoutSource(r) === "community"
-                    ? "border-border bg-muted text-muted-foreground"
-                    : "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+              SOURCE_STYLE[workoutSource(r)]
             }`}
           >
             {sourceLabel(r)}
@@ -1075,82 +1098,67 @@ function LogbookContent() {
         </div>
       ) : (
         <>
-          <div className="mt-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-11 w-full justify-between rounded-2xl">
-                  <span className="inline-flex items-center gap-2 truncate">
-                    <ListFilter className="h-4 w-4 shrink-0" />
-                    {menuLabel}
-                  </span>
-                  <span className="shrink-0 text-muted-foreground">{filtered.length}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-[min(20rem,90vw)]">
-                <DropdownMenuLabel>Show</DropdownMenuLabel>
-                <DropdownMenuCheckboxItem
-                  checked={active.length === 0}
-                  onCheckedChange={() => setActive([])}
-                  className="h-11"
+          <div className="mt-2 space-y-2">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5 truncate">
+                <ListFilter className="h-3.5 w-3.5 shrink-0" />
+                {menuLabel}
+              </span>
+              <span className="shrink-0">{filtered.length}</span>
+            </div>
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+              <FilterChip active={active.length === 0} onClick={() => setActive([])}>
+                All · {rows.length}
+              </FilterChip>
+              {FILTERS.map((f) => (
+                <FilterChip
+                  key={f.id}
+                  active={active.includes(f.id)}
+                  onClick={() =>
+                    setActive(
+                      active.includes(f.id) ? active.filter((a) => a !== f.id) : [...active, f.id],
+                    )
+                  }
                 >
-                  All workouts · {rows.length}
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuSeparator />
-                {FILTERS.map((f) => (
-                  <DropdownMenuCheckboxItem
-                    key={f.id}
-                    checked={active.includes(f.id)}
-                    onCheckedChange={(checked) =>
-                      setActive(checked ? [...active, f.id] : active.filter((a) => a !== f.id))
-                    }
-                    className="h-11"
+                  {f.label} · {rows.filter((r) => matches(r, f.id)).length}
+                </FilterChip>
+              ))}
+            </div>
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+              {SOURCES.map((s) => (
+                <FilterChip
+                  key={s.id}
+                  active={activeSources.includes(s.id)}
+                  colorClass={SOURCE_STYLE[s.id]}
+                  onClick={() =>
+                    setSources(
+                      activeSources.includes(s.id)
+                        ? activeSources.filter((a) => a !== s.id)
+                        : [...activeSources, s.id],
+                    )
+                  }
+                >
+                  {s.label} · {rows.filter((r) => workoutSource(r) === s.id).length}
+                </FilterChip>
+              ))}
+            </div>
+            {equipmentOptions.length ? (
+              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+                <FilterChip active={equip === "all"} onClick={() => setEquip("all")}>
+                  Any equipment
+                </FilterChip>
+                {equipmentOptions.map((e) => (
+                  <FilterChip
+                    key={e}
+                    active={equip === e}
+                    onClick={() => setEquip(equip === e ? "all" : e)}
                   >
-                    {f.label} · {rows.filter((r) => matches(r, f.id)).length}
-                  </DropdownMenuCheckboxItem>
+                    <span className="capitalize">{e}</span> ·{" "}
+                    {rows.filter((r) => (r.equipment ?? []).includes(e)).length}
+                  </FilterChip>
                 ))}
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Source</DropdownMenuLabel>
-                {SOURCES.map((s) => (
-                  <DropdownMenuCheckboxItem
-                    key={s.id}
-                    checked={activeSources.includes(s.id)}
-                    onCheckedChange={(checked) =>
-                      setSources(
-                        checked
-                          ? [...activeSources, s.id]
-                          : activeSources.filter((a) => a !== s.id),
-                      )
-                    }
-                    className="h-11"
-                  >
-                    {s.label} · {rows.filter((r) => workoutSource(r) === s.id).length}
-                  </DropdownMenuCheckboxItem>
-                ))}
-                {equipmentOptions.length ? (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel>Equipment</DropdownMenuLabel>
-                    <DropdownMenuCheckboxItem
-                      checked={equip === "all"}
-                      onCheckedChange={() => setEquip("all")}
-                      className="h-11"
-                    >
-                      Any equipment
-                    </DropdownMenuCheckboxItem>
-                    {equipmentOptions.map((e) => (
-                      <DropdownMenuCheckboxItem
-                        key={e}
-                        checked={equip === e}
-                        onCheckedChange={(checked) => setEquip(checked ? e : "all")}
-                        className="h-11 capitalize"
-                      >
-                        {e} · {rows.filter((r) => (r.equipment ?? []).includes(e)).length}
-                      </DropdownMenuCheckboxItem>
-                    ))}
-                  </>
-                ) : null}
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </div>
+            ) : null}
           </div>
 
           {filtered.length === 0 ? (
