@@ -1171,6 +1171,9 @@ function LogbookContent() {
                   );
                 })}
                 <FilterHeading>Origin</FilterHeading>
+                <FilterRow on={activeSources.length === 0} onClick={() => setSources([])}>
+                  All origins
+                </FilterRow>
                 {SOURCES.map((s) => {
                   const on = activeSources.includes(s.id);
                   return (
@@ -1198,6 +1201,13 @@ function LogbookContent() {
                     <FilterRow on={equip === "all"} onClick={() => setEquip("all")}>
                       Any equipment
                     </FilterRow>
+                    <FilterRow
+                      on={equip === "bodyweight"}
+                      onClick={() => setEquip(equip === "bodyweight" ? "all" : "bodyweight")}
+                    >
+                      Bodyweight ·{" "}
+                      {rows.filter((r) => (r.equipment ?? []).length === 0).length}
+                    </FilterRow>
                     {equipmentOptions.map((eq) => {
                       const on = equip === eq;
                       return (
@@ -1211,9 +1221,23 @@ function LogbookContent() {
                 ) : null}
               </div>
               <div className="border-t border-border px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-                <Button type="button" className="w-full" onClick={() => setFiltersOpen(false)}>
-                  Show {filtered.length} workout{filtered.length === 1 ? "" : "s"}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="shrink-0"
+                    onClick={() => {
+                      setActive([]);
+                      setSources([]);
+                      setEquip("all");
+                    }}
+                  >
+                    Reset
+                  </Button>
+                  <Button type="button" className="w-full" onClick={() => setFiltersOpen(false)}>
+                    Show {filtered.length} workout{filtered.length === 1 ? "" : "s"}
+                  </Button>
+                </div>
               </div>
             </div>
           ) : null}
