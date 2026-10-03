@@ -401,7 +401,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: NATIVE_FIRST_FRAME_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: NO_ZOOM_INIT_SCRIPT }} />
-        <style>{`html,body{margin:0;min-height:100%;background:var(--background)}html.native-shell,html.native-shell body,html.native-first-frame,html.native-first-frame body{background:#000}html.native-first-frame body::before{content:"";position:fixed;inset:0;z-index:2147483000;background-color:#000;background-image:url('/icon-512.png');background-position:center;background-size:104px 104px;background-repeat:no-repeat;pointer-events:none}`}</style>
+        <style>{`html,body{margin:0;min-height:100%;background:var(--background,#000)}html.native-shell,html.native-shell body,html.native-first-frame,html.native-first-frame body{background:#000}html.native-first-frame body::before{content:"";position:fixed;inset:0;z-index:2147483000;background-color:#000;background-image:url('/icon-512.png');background-position:center 42%;background-size:104px 104px;background-repeat:no-repeat;pointer-events:none}html.native-first-frame body::after{content:"";position:fixed;left:50%;top:58%;width:28px;height:28px;margin:-14px 0 0 -14px;z-index:2147483001;border:3px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:smarty-spin .8s linear infinite;pointer-events:none}@keyframes smarty-spin{to{transform:rotate(360deg)}}`}</style>
         <HeadContent />
       </head>
       <body>
