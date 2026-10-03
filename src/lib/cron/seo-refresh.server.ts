@@ -48,11 +48,11 @@ function batchLimit(config: CronJobConfig | undefined, key: string, fallback: nu
 /**
  * Weekly SEO run. Three bounded steps, each safe to repeat:
  *   1. optimize new or changed blog articles (title, description, key phrase,
- *      keywords, image alt text, FAQ) with the AI model;
+  *      keywords and image alt text) with the AI model;
  *   2. optimize newly shared community workouts the same way;
  *   3. rebuild the site keyword index from every public page, training topic,
- *      exercise and generated workout, then tell the search engines what changed.
- * Nothing is ever removed — the stored index is merged and extended.
+  *      active exercise and publicly accessible workout, then notify IndexNow
+  *      only about updated public URLs. Obsolete terms are removed.
  */
 export async function runSeoRefresh(
   db: DB,
@@ -88,14 +88,10 @@ export async function runSeoRefresh(
   if (workoutRun) {
     notes.push(`Shared workouts: ${workoutRun.summary}`);
     failures.push(...workoutRun.failures.map((f) => `workout:${f}`));
+    // Workout SEO metadata alone does not establish a public/indexable URL.
   }
 
   let submitted = 0;
-  if (changedPaths.length) {
-    const ping = await submitToIndexNow([...changedPaths, "/blog", "/sitemap.xml"]);
-    submitted = ping.submitted;
-    notes.push(ping.detail);
-  }
 
   const optimization = {
     articles: articleRun?.optimized ?? 0,
@@ -135,6 +131,7 @@ export async function runSeoRefresh(
     !options.force &&
     !optimizedSomething &&
     previous !== null &&
+    previous.version >= 2 &&
     added.length === 0 &&
     previous.hash === built.hash;
 
@@ -159,6 +156,15 @@ export async function runSeoRefresh(
     failures.push(`save:${message}`);
   }
 
+  const urlsToSubmit = changedPaths.length ? [...changedPaths, ...(articleRun?.optimized ? ["/blog"] : [])] : [];
+  if (urlsToSubmit.length) {
+    const ping = await submitToIndexNow(urlsToSubmit);
+    submitted = ping.ok ? ping.submitted : 0;
+    notes.push(ping.detail);
+    if (!ping.ok) failures.push(`indexnow:${ping.detail}`);
+  }
+  optimization.submittedToSearchEngines = submitted;
+
   const optimizedLine = optimizedSomething
     ? ` Optimized ${optimization.articles} article${optimization.articles === 1 ? "" : "s"} and ${optimization.workouts} shared workout${optimization.workouts === 1 ? "" : "s"}${optimization.submittedToSearchEngines ? `, ${optimization.submittedToSearchEngines} URL(s) submitted to the search engines` : ""}.`
     : "";
@@ -168,7 +174,7 @@ export async function runSeoRefresh(
     status: failures.length ? "failed" : "ok",
     summary: failures.length
       ? `SEO update finished with errors: ${failures.join("; ")}`
-      : `SEO index updated — ${added.length} new keyword${added.length === 1 ? "" : "s"}, ${merged.total} indexed in total (${built.counts.exercises} exercises, ${built.counts.workouts} workouts, ${built.counts.articles} blog articles).${optimizedLine}`,
+       : `SEO index updated — ${added.length} new keyword${added.length === 1 ? "" : "s"}, ${merged.total} indexed in total (${built.counts.exercises} active exercises, ${built.counts.workouts} publicly accessible shared workouts, ${built.counts.articles} blog articles).${optimizedLine}`,
     total: merged.total,
     added,
     failures,

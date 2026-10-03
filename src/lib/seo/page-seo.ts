@@ -61,8 +61,8 @@ const BASE_PAGE_SEO: PageSeo[] = [
       "home workout plan",
       "gym workout plan",
     ],
-    summary:
-      "SmartyGym is an online gym with a personal coach. Members answer a short questionnaire and Smarty Coach builds a complete session — warm-up, activation, main work, finisher, cool-down — from a library of 1,300+ demonstrated exercises, adapted to goal, mood, time, location and equipment.",
+     summary:
+       "SmartyGym is an online fitness platform with expert-programmed ready workouts, an exercise library, and Smarty Coach, which builds personalized sessions from a member's training profile and available equipment.",
     changefreq: "weekly",
     priority: "1.0",
     schemaType: "WebPage",
@@ -114,7 +114,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
     name: "Exercise Library",
     title: "Exercise Library — 1,300+ demonstrated exercises",
     description:
-      "Browse every exercise Smarty Coach can program: animated demonstrations filtered by muscle group, equipment, movement pattern and difficulty.",
+      "Browse the exercise library by muscle group, equipment, movement pattern and difficulty; demonstrations are available for supported movements.",
     keyphrase: "exercise library",
     keywords: [
       "exercise database",
@@ -124,8 +124,8 @@ const BASE_PAGE_SEO: PageSeo[] = [
       "movement pattern",
       "how to perform exercise",
     ],
-    summary:
-      "The Exercise Library holds every movement Smarty Coach may select, each with an animated demonstration, target muscles, equipment, movement pattern and difficulty, filterable and searchable.",
+     summary:
+       "The Exercise Library contains searchable movements with exercise details, demonstrations where available, target muscles, equipment and difficulty.",
     changefreq: "weekly",
     priority: "0.85",
     schemaType: "CollectionPage",
@@ -188,8 +188,8 @@ const BASE_PAGE_SEO: PageSeo[] = [
       "recovery articles",
       "sports science blog",
     ],
-    summary:
-      "The blog publishes evidence-based fitness articles, one new article each week, covering training, programming, recovery, nutrition and habit building.",
+     summary:
+       "The blog publishes fitness articles covering training, programming, recovery, nutrition and habit building.",
     changefreq: "weekly",
     priority: "0.85",
     schemaType: "Blog",
@@ -328,7 +328,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
     name: "Haris Falas",
     title: "Haris Falas — sports scientist, CSCS strength coach",
     description:
-      "Haris Falas, BSc Sport Science and NSCA CSCS, is the sports scientist behind every SmartyGym program: 20+ years coaching strength and conditioning.",
+      "Haris Falas, BSc Sport Science and NSCA CSCS, is the sports scientist behind SmartyGym's training methodology.",
     keyphrase: "haris falas",
     keywords: [
       "sports scientist",
@@ -337,7 +337,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
       "fitness expert",
     ],
     summary:
-      "Haris Falas is the sports scientist behind SmartyGym: BSc Sport Science, NSCA CSCS, EXOS Performance and Rehab Specialist, FMS Specialist, ACE Medical Exercise Specialist, with 20+ years of coaching.",
+      "Haris Falas is the sports scientist behind SmartyGym's methodology. Read his background and approach to strength and conditioning.",
     changefreq: "monthly",
     priority: "0.7",
     schemaType: "ProfilePage",
@@ -433,7 +433,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
   },
 ];
 
-/** Registry with the extended background keywords appended to each page. */
+/** Registry with internal intent phrases, not a meta-keyword dump. */
 export const PAGE_SEO: PageSeo[] = BASE_PAGE_SEO.map((p) => ({
   ...p,
   keywords: mergeKeywords(p.keywords, p.path),

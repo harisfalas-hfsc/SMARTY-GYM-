@@ -36,7 +36,6 @@ interface Article {
   focus_keyphrase?: string | null;
   seo_keywords?: string[] | null;
   image_alt?: string | null;
-  seo_faq?: { question: string; answer: string }[] | null;
 }
 
 async function loadArticle(slug: string): Promise<Article> {
@@ -77,13 +76,11 @@ export const Route = createFileRoute("/blog/$slug")({
     const published = new Date(a.published_at ?? a.created_at).toISOString();
     const modified = new Date(a.updated_at ?? a.created_at).toISOString();
     const image = a.image_url && a.image_url.startsWith("https://") ? a.image_url : null;
-    const faq = (a.seo_faq ?? []).filter((f) => f?.question && f?.answer);
 
     return {
       meta: [
         { title },
         { name: "description", content: description },
-        ...(keywords.length ? [{ name: "keywords", content: keywords.join(", ") }] : []),
         {
           name: "robots",
           content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
@@ -166,19 +163,6 @@ export const Route = createFileRoute("/blog/$slug")({
                   logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
                 },
               },
-              ...(faq.length
-                ? [
-                    {
-                      "@type": "FAQPage",
-                      "@id": `${url}#faq`,
-                      mainEntity: faq.map((f) => ({
-                        "@type": "Question",
-                        name: f.question,
-                        acceptedAnswer: { "@type": "Answer", text: f.answer },
-                      })),
-                    },
-                  ]
-                : []),
               {
                 "@type": "BreadcrumbList",
                 itemListElement: [
@@ -305,7 +289,7 @@ function ArticleDetail() {
               <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg shadow-lg md:h-full md:min-h-0">
                 <img
                   src={displayImageUrl(article.image_url)}
-                  alt={article.title}
+                   alt={article.image_alt || article.title}
                   width={1280}
                   height={720}
                   loading="eager"

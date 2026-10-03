@@ -937,6 +937,36 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_indexnow_queue: {
+        Row: {
+          attempts: number
+          changed_at: string
+          last_error: string | null
+          retry_at: string
+          state: string
+          submitted_at: string | null
+          url: string
+        }
+        Insert: {
+          attempts?: number
+          changed_at?: string
+          last_error?: string | null
+          retry_at?: string
+          state?: string
+          submitted_at?: string | null
+          url: string
+        }
+        Update: {
+          attempts?: number
+          changed_at?: string
+          last_error?: string | null
+          retry_at?: string
+          state?: string
+          submitted_at?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
       seo_state: {
         Row: {
           data: Json

@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { SITE_URL } from "@/lib/seo/site";
 
-const BASE_URL = "https://smartygym.com";
+const BASE_URL = SITE_URL;
 
 function esc(v: string): string {
   return v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
@@ -17,21 +18,26 @@ export const Route = createFileRoute("/image-sitemap.xml")({
         ];
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const { data } = await (supabaseAdmin as any)
-            .from("blog_articles")
-            .select("slug,title,seo_title,image_url,image_alt")
-            .eq("is_published", true)
-            .not("image_url", "is", null)
-            .order("published_at", { ascending: false })
-            .limit(1000);
-          for (const a of (data as any[]) ?? []) {
+            const rows: any[] = [];
+            for (let offset = 0; offset < 49000; offset += 1000) {
+              const { data, error } = await (supabaseAdmin as any)
+                .from("blog_articles").select("slug,title,seo_title,image_url,image_alt")
+                .eq("is_published", true).not("image_url", "is", null)
+                .order("published_at", { ascending: false }).range(offset, offset + 999);
+              if (error) throw error;
+              rows.push(...(data ?? []));
+              if (!data || data.length < 1000) break;
+            }
+            for (const a of rows) {
+             if (!a.slug || !/^[a-z0-9-]+$/.test(a.slug)) continue;
             pages.push({
               path: `/blog/${a.slug}`,
               images: [{ loc: String(a.image_url), title: String(a.seo_title ?? a.title ?? ""), caption: a.image_alt ? String(a.image_alt) : undefined }],
             });
           }
-        } catch {
-          // database unavailable — static entries still served
+         } catch (error) {
+           console.error("[seo/image-sitemap] published covers lookup failed", error);
+            return new Response("Image sitemap source temporarily unavailable", { status: 503, headers: { "Cache-Control": "no-store" } });
         }
         const xml = [
           '<?xml version="1.0" encoding="UTF-8"?>',

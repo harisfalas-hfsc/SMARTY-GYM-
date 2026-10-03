@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { STATIC_SITEMAP_ENTRIES } from "@/lib/seo/route-inventory";
+import { SITE_URL } from "@/lib/seo/site";
 
 
-const BASE_URL = "https://smartygym.com";
+const BASE_URL = SITE_URL;
 
 interface SitemapEntry {
   path: string;
@@ -46,15 +47,17 @@ export const Route = createFileRoute("/sitemap.xml")({
         let articles: SitemapEntry[] = [];
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const { data } = await (supabaseAdmin as any)
-            .from("blog_articles")
-            .select(
-              "slug,title,seo_title,image_alt,image_url,published_at,updated_at,created_at,seo_optimized_at",
-            )
-            .eq("is_published", true)
-            .order("published_at", { ascending: false })
-            .limit(1000);
-          articles = ((data as any[]) ?? []).map((a) => ({
+            const rows: any[] = [];
+            for (let offset = 0; offset < 49000; offset += 1000) {
+              const { data, error } = await (supabaseAdmin as any)
+                .from("blog_articles")
+                .select("slug,title,seo_title,image_alt,image_url,published_at,updated_at,created_at,seo_optimized_at")
+                .eq("is_published", true).order("published_at", { ascending: false }).range(offset, offset + 999);
+              if (error) throw error;
+              rows.push(...(data ?? []));
+              if (!data || data.length < 1000) break;
+            }
+            articles = rows.filter((a) => a.slug && /^[a-z0-9-]+$/.test(a.slug)).map((a) => ({
             path: `/blog/${a.slug}`,
             changefreq: "monthly" as const,
             priority: "0.7",
@@ -73,8 +76,9 @@ export const Route = createFileRoute("/sitemap.xml")({
                 }
               : {}),
           }));
-        } catch {
-          articles = [];
+         } catch (error) {
+           console.error("[seo/sitemap] published article lookup failed", error);
+            return new Response("Sitemap source temporarily unavailable", { status: 503, headers: { "Cache-Control": "no-store" } });
         }
 
         // Shared community workouts are membership-gated while payments are ON,
@@ -83,12 +87,16 @@ export const Route = createFileRoute("/sitemap.xml")({
         if (freeAccessMode) {
           try {
             const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-            const { data } = await (supabaseAdmin as any)
-              .from("community_workouts_public")
-              .select("id,shared_at,image_url,name")
-              .order("shared_at", { ascending: false })
-              .limit(2000);
-            sharedWorkouts = ((data as any[]) ?? []).map((w) => ({
+              const rows: any[] = [];
+              for (let offset = 0; offset < 49000; offset += 1000) {
+                const { data, error } = await (supabaseAdmin as any)
+                  .from("community_workouts_public").select("id,shared_at,image_url,name")
+                  .order("shared_at", { ascending: false }).range(offset, offset + 999);
+                if (error) throw error;
+                rows.push(...(data ?? []));
+                if (!data || data.length < 1000) break;
+              }
+              sharedWorkouts = rows.filter((w) => /^[0-9a-f-]{36}$/i.test(w.id)).map((w) => ({
               path: `/community/workout/${w.id}`,
               changefreq: "monthly" as const,
               priority: "0.5",
@@ -99,8 +107,9 @@ export const Route = createFileRoute("/sitemap.xml")({
                 ? { image: { loc: String(w.image_url), title: String(w.name ?? "") } }
                 : {}),
             }));
-          } catch {
-            sharedWorkouts = [];
+           } catch (error) {
+             console.error("[seo/sitemap] public shared workout lookup failed", error);
+              return new Response("Sitemap source temporarily unavailable", { status: 503, headers: { "Cache-Control": "no-store" } });
           }
         }
 

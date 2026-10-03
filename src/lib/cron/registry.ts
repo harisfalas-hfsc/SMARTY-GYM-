@@ -126,7 +126,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "seo-refresh",
     label: "Automatic SEO update",
     description:
-      "Rebuilds the site-wide keyword index from every public page, every training topic, the whole exercise library and every workout ever generated (name, category, format, focus, muscles, equipment, patterns and tags). Nothing is deleted — the index is merged and extended. When nothing changed since the last run, the job stops without touching anything. Every completed run emails a report to the administrator.",
+      "Rebuilds the internal SEO index from public pages, training topics, active library exercises, published articles and publicly accessible shared workouts only. Stale terms are removed. A weekly audit reports crawl and indexing risks to the administrator.",
     timing: "weekly",
     timingNote: "Runs once a week, on Sunday night at the time set below (Cyprus time) — 23:00 by default, so it finishes before Monday. Background only: nothing visible on the site changes.",
     sends: [
@@ -139,7 +139,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentEditable: true,
     contentLabel: "Extra keywords to always include",
     contentHelp:
-      "One keyword or phrase per line. These are merged into the index on every run and never removed.",
+      "One relevant phrase per line. The current list replaces stale phrases on the next run; it is never published verbatim.",
     weekday: 0,
     defaults: { enabled: false, hour: 23, minute: 0 },
     runnable: true,

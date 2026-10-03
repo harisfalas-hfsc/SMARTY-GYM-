@@ -470,6 +470,13 @@
       "when": 1790938245658,
       "tag": "0066_lock_shared_workout_raw_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 67,
+      "version": "7",
+      "when": 1791006658079,
+      "tag": "0067_seo_indexnow_queue",
+      "breakpoints": true
     }
   ]
 }

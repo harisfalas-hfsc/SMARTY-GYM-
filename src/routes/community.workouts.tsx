@@ -35,6 +35,7 @@ export const Route = createFileRoute("/community/workouts")({
   head: () => ({
     meta: [
       { title: "Shared workouts — Smarty Community" },
+       { name: "robots", content: "noindex, follow" },
       {
         name: "description",
         content:

@@ -20,12 +20,10 @@ export const Route = createFileRoute("/llms-full.txt")({
         const pages = publicPages(Boolean(freeAccessMode));
 
         const lines: string[] = [
-          "# SmartyGym — full site guide for AI assistants",
+           "# SmartyGym — full site guide",
           "",
           `Site: ${SITE_URL}`,
-          `Generated: ${new Date().toISOString().slice(0, 10)}`,
-          "",
-          "SmartyGym is an online gym with a personal coach. Smarty Coach builds a complete, personalized session (warm-up, activation, main work, finisher, cool-down) from a library of 1,300+ demonstrated exercises, adapted to each member's goal, mood, available time, location and equipment, and progressed through a science-based periodization approach. Every program is designed on the sports science of Haris Falas, BSc Sport Science, NSCA CSCS.",
+           "SmartyGym offers expert-programmed ready workouts, a shared Workout of the Day, and an exercise library. Smarty Coach builds personalized sessions from the library using programming rules based on Haris Falas's coaching methodology; it may use AI assistance. Build It Yourself is a separate member-selected exercise option.",
           "",
           freeAccessMode
             ? "Access: every feature is currently available to all registered users at no cost."
@@ -39,7 +37,6 @@ export const Route = createFileRoute("/llms-full.txt")({
           lines.push(`### ${p.name} — ${SITE_URL}${p.path}`);
           lines.push(p.summary);
           lines.push(`Key phrase: ${p.keyphrase}`);
-          if (p.keywords.length) lines.push(`Also covers: ${p.keywords.join(", ")}`);
           lines.push("");
         }
 
@@ -83,7 +80,6 @@ export const Route = createFileRoute("/llms-full.txt")({
                 a.focus_keyphrase ? `Key phrase: ${a.focus_keyphrase}` : null,
               ].filter(Boolean);
               if (meta.length) lines.push(meta.join(" | "));
-              if (a.seo_keywords?.length) lines.push(`Keywords: ${a.seo_keywords.join(", ")}`);
               lines.push("");
             }
           }
@@ -94,11 +90,11 @@ export const Route = createFileRoute("/llms-full.txt")({
         try {
           const { readKeywordIndex } = await import("@/lib/seo/keyword-index.server");
           const index = await readKeywordIndex();
-          if (index) {
+           if (index && index.version >= 2) {
             const g = index.groups;
             lines.push("## Coverage", "");
-            lines.push(`- Exercises in the library: ${index.counts?.exercises ?? 0}`);
-            lines.push(`- Workouts generated to date: ${index.counts?.workouts ?? 0}`);
+             lines.push(`- Active exercises in the library: ${index.counts?.exercises ?? 0}`);
+             // Personal and member-only workout totals do not belong in a public corpus.
             const line = (label: string, values: string[] = [], max = 80) =>
               values.length ? `- ${label}: ${values.slice(0, max).join(", ")}` : null;
             for (const l of [
@@ -115,18 +111,6 @@ export const Route = createFileRoute("/llms-full.txt")({
           }
         } catch {
           // keyword index not built yet
-        }
-
-        try {
-          const { LLMS_LEGACY } = await import("@/lib/seo/llms-legacy");
-          const { isFreeAccessMode } = await import("@/lib/free-access.server");
-          const free = await isFreeAccessMode();
-          lines.push(
-            ...LLMS_LEGACY.split("\n").filter((l) => !free || !/€9\.99|\/pricing/.test(l)),
-            "",
-          );
-        } catch {
-          // legacy brand sections are optional
         }
 
         lines.push(

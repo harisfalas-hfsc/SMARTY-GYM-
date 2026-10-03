@@ -78,7 +78,7 @@ export const getSharedWorkoutSeo = createServerFn({ method: "GET" })
         .join(" · ");
       return {
         found: true,
-        indexable: Boolean(freeAccessMode),
+       indexable: Boolean(freeAccessMode),
         title: s?.seo_title || `${w.name} — Smarty Community workout`,
         description:
           s?.seo_description ||
