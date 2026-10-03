@@ -73,13 +73,14 @@ import { getSessionFeedback, type SessionFeedback } from "@/lib/feedback.functio
 import { getLocalWorkouts } from "@/lib/local-workouts";
 
 type View = "list" | "calendar" | "progress";
-type LogSearch = { filter: string; view: View; equip?: string };
+type LogSearch = { filter: string; view: View; equip?: string; src?: string };
 
 
 export const Route = createFileRoute("/_authenticated/logbook")({
   validateSearch: (search: Record<string, unknown>): LogSearch => ({
     filter: String(search["filter"] ?? "all"),
     equip: String(search["equip"] ?? "all"),
+    src: String(search["src"] ?? "all"),
     view:
       search["view"] === "calendar" || search["view"] === "scheduled"
         ? ("calendar" as const)
@@ -175,7 +176,21 @@ function WorkoutCard({
         </div>
 
         <p className="mt-1 pr-10 font-bold leading-tight">{r.name}</p>
-        <p className="mt-0.5 text-[11px] text-muted-foreground">{sourceLabel(r)}</p>
+        <p className="mt-1">
+          <span
+            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold ${
+              workoutSource(r) === "smarty"
+                ? "border-primary/50 bg-primary/10 text-primary"
+                : workoutSource(r) === "own"
+                  ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                  : workoutSource(r) === "community"
+                    ? "border-border bg-muted text-muted-foreground"
+                    : "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+            }`}
+          >
+            {sourceLabel(r)}
+          </span>
+        </p>
 
         <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
           <span className="inline-flex items-center gap-1 text-muted-foreground">
