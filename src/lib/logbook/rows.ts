@@ -42,16 +42,44 @@ export function matchesFilter(row: LogbookRow, filter: LogbookFilter): boolean {
   return Boolean(row.scheduled_at);
 }
 
-/** Filters combine as "any of"; equipment narrows the result. */
+export type LogbookSource = "smarty" | "coach" | "own";
+
+export const LOGBOOK_SOURCES: { id: LogbookSource; label: string }[] = [
+  { id: "smarty", label: "Smarty Workouts" },
+  { id: "coach", label: "Smarty Coach" },
+  { id: "own", label: "My Own Workouts" },
+];
+
+export const LOGBOOK_SOURCE_IDS = LOGBOOK_SOURCES.map((s) => s.id) as string[];
+
+export function parseSources(value: string | null | undefined): LogbookSource[] {
+  return String(value ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => LOGBOOK_SOURCE_IDS.includes(s)) as LogbookSource[];
+}
+
+/** Where a logbook workout came from. Community copies stay visible under "All". */
+export function workoutSource(row: LogbookRow): LogbookSource | "community" {
+  if (row.is_wod || String(row.created_by ?? "").startsWith("smarty:")) return "smarty";
+  if (row.created_by === "member" || row.created_by === "community") return "community";
+  if (row.category === "MY OWN WORKOUT") return "own";
+  return "coach";
+}
+
+/** Status filters combine as "any of"; source and equipment narrow the result. */
 export function filterRows<T extends LogbookRow>(
   rows: readonly T[],
-  options: { filters: LogbookFilter[]; equipment?: string },
+  options: { filters: LogbookFilter[]; sources?: LogbookSource[]; equipment?: string },
 ): T[] {
   const byStatus = options.filters.length
     ? rows.filter((r) => options.filters.some((f) => matchesFilter(r, f)))
     : [...rows];
+  const bySource = options.sources?.length
+    ? byStatus.filter((r) => options.sources!.includes(workoutSource(r) as LogbookSource))
+    : byStatus;
   const equip = options.equipment ?? "all";
-  return equip === "all" ? byStatus : byStatus.filter((r) => (r.equipment ?? []).includes(equip));
+  return equip === "all" ? bySource : bySource.filter((r) => (r.equipment ?? []).includes(equip));
 }
 
 export function equipmentOptions(rows: readonly LogbookRow[]): string[] {
