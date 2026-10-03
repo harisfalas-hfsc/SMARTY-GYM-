@@ -257,16 +257,20 @@ function SharedWorkoutPage() {
   if (error || (access.checked && !access.premium))
     return (
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
-        <h1 className="text-xl font-extrabold uppercase tracking-tight">Members only</h1>
+        <h1 className="text-xl font-extrabold uppercase tracking-tight">
+          {error && access.premium ? "Workout unavailable" : "Members only"}
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {error && access.premium
             ? error
             : "Shared workouts open with an active SmartyGym membership."}
         </p>
         <div className="mt-4 grid gap-2">
-          <Button asChild className="h-12 rounded-2xl font-bold">
-            <Link to="/auth">{access.signedIn ? "Renew membership" : "See membership"}</Link>
-          </Button>
+          {!(error && access.premium) && (
+            <Button asChild className="h-12 rounded-2xl font-bold">
+              <Link to="/auth">{access.signedIn ? "Renew membership" : "See membership"}</Link>
+            </Button>
+          )}
           <Button asChild variant="secondary" className="h-12 rounded-2xl">
             <Link to="/community">Back to community</Link>
           </Button>

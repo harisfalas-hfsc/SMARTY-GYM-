@@ -12,28 +12,41 @@ async function requirePremium(context: { supabase: unknown; userId: string }) {
   return access;
 }
 
+/** Why a shared workout can no longer be opened: deleted, or unshared by its creator. */
+async function unavailableMessage(admin: { from: (t: string) => any }, workoutId: string): Promise<string> {
+  const { data } = await admin.from("workouts").select("deleted_at,is_shared").eq("id", workoutId).maybeSingle();
+  const r = data as { deleted_at?: string | null; is_shared?: boolean } | null;
+  if (!r || r.deleted_at) return "This workout has been deleted by its creator.";
+  return "This workout has been removed from Shared Workouts by its creator.";
+}
+
 export const shareWorkout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { workoutId: string; shared: boolean }) => input)
   .handler(async ({ context, data }) => {
     await requirePremium(context as never);
-    // Sharing is permanent: members may have saved, completed or liked the
-    // workout, so a shared workout can never be withdrawn from the community.
-    if (!data.shared) {
-      throw new Error("A shared workout stays in Shared Workouts — it can only be removed from your own logbook.");
-    }
+    // The creator owns the workout: they can share it and unshare it at any
+    // time. Unsharing removes it from Shared Workouts.
+    const { data: own } = await context.supabase
+      .from("workouts")
+      .select("user_id,created_by,community_source_id,deleted_at,is_wod")
+      .eq("id", data.workoutId)
+      .maybeSingle();
+    const o = own as {
+      user_id?: string;
+      created_by?: string | null;
+      community_source_id?: string | null;
+      deleted_at?: string | null;
+      is_wod?: boolean | null;
+    } | null;
+    if (!o || o.user_id !== context.userId) throw new Error("Only the creator of a workout can share or unshare it.");
+    if (o.deleted_at) throw new Error("This workout has been deleted.");
     if (data.shared) {
-      const { data: own } = await context.supabase
-        .from("workouts")
-        .select("created_by,community_source_id")
-        .eq("id", data.workoutId)
-        .maybeSingle();
-      const o = own as { created_by?: string | null; community_source_id?: string | null } | null;
-      if (String(o?.created_by ?? "").startsWith("smarty:")) {
+      if (String(o.created_by ?? "").startsWith("smarty:") || o.is_wod) {
         throw new Error("Smarty Workouts are already published for everyone and cannot be shared.");
       }
-      if (o?.community_source_id || o?.created_by === "community") {
-        throw new Error("This workout came from the community and is already shared by its creator.");
+      if (o.community_source_id || o.created_by === "community") {
+        throw new Error("This workout came from Shared Workouts — only its creator can share it.");
       }
     }
     const { error } = await context.supabase
@@ -201,7 +214,7 @@ export const getSharedWorkout = createServerFn({ method: "POST" })
       .eq("community_hidden", false)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    if (!row) throw new Error("This workout is no longer shared with the community.");
+    if (!row) throw new Error(await unavailableMessage(supabaseAdmin as never, data.workoutId));
     const [{ data: reaction }, { data: mine }, { data: rating }, { data: creator }] = await Promise.all([
       supabaseAdmin
         .from("community_reactions")
@@ -214,6 +227,7 @@ export const getSharedWorkout = createServerFn({ method: "POST" })
         .select("id,status")
         .eq("user_id", context.userId)
         .eq("community_source_id", data.workoutId)
+        .is("deleted_at", null)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle(),
@@ -250,6 +264,7 @@ export const startSharedWorkout = createServerFn({ method: "POST" })
       .select("id,status")
       .eq("user_id", context.userId)
       .eq("community_source_id", data.workoutId)
+      .is("deleted_at", null)
       .neq("status", "completed")
       .order("created_at", { ascending: false })
       .limit(1)
@@ -264,7 +279,7 @@ export const startSharedWorkout = createServerFn({ method: "POST" })
       .eq("community_hidden", false)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    if (!source) throw new Error("This workout is no longer shared with the community.");
+    if (!source) throw new Error(await unavailableMessage(supabaseAdmin as never, data.workoutId));
 
     const src = source as Record<string, unknown>;
     const insert: Record<string, unknown> = {

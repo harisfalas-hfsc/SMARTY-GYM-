@@ -2231,6 +2231,7 @@ export type Database = {
           cool_down: string | null
           created_at: string
           created_by: string | null
+          deleted_at: string | null
           description: string | null
           description_html: string | null
           difficulty_label: string | null
@@ -2283,6 +2284,7 @@ export type Database = {
           cool_down?: string | null
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
           description?: string | null
           description_html?: string | null
           difficulty_label?: string | null
@@ -2335,6 +2337,7 @@ export type Database = {
           cool_down?: string | null
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
           description?: string | null
           description_html?: string | null
           difficulty_label?: string | null

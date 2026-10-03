@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { deleteManualWorkout } from "@/lib/manual-workout.functions";
-import { MANUAL_CATEGORY } from "@/lib/manual-workout";
 import { Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -64,10 +63,8 @@ function WorkoutPage() {
     if (
       !window.confirm(
         shared
-          ? "Delete this workout from your logbook? It stays in Shared Workouts for the members who saved, completed or liked it, and any training you already did stays in your training load — what you've done can't be undone."
-          : done
-            ? "Delete this workout from your logbook? You already completed it, so your results and training load stay — what you've done can't be undone. Only the workout card leaves your logbook."
-            : "Delete this workout for good? It will be removed from your logbook. This can't be undone.",
+          ? "Delete this workout for everyone? It will be removed from Shared Workouts and from every member's logbook, together with its likes, ratings, comments and favorites. Training that you or anyone else already did with it stays in everyone's progress and training load — what's done can't be undone."
+          : "Delete this workout? It will be removed from your logbook. Any training you already did with it stays in your progress and training load — what's done can't be undone.",
       )
     )
       return;
@@ -172,7 +169,7 @@ function WorkoutPage() {
       toast.success(
         next
           ? "Shared with the Smarty Community."
-          : "Removed from the Smarty Community.",
+          : "Removed from Shared Workouts.",
       );
     } catch (e) {
       toast.error((e as Error).message);
@@ -214,6 +211,20 @@ function WorkoutPage() {
       </div>
     );
 
+  if ((w as { deleted_at?: string | null }).deleted_at)
+    return (
+      <div className="mx-auto max-w-xl px-4 py-16 text-center">
+        <h1 className="text-xl font-extrabold uppercase tracking-tight">Workout deleted</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This workout has been deleted. Any training already done with it stays in your progress and
+          training load.
+        </p>
+        <Button asChild className="mt-4 h-12 rounded-2xl">
+          <Link to="/logbook" search={{ filter: "all" as const, view: "list" as const }}>Open logbook</Link>
+        </Button>
+      </div>
+    );
+
   if (parqBlocked)
     return (
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
@@ -245,6 +256,12 @@ function WorkoutPage() {
     );
 
 
+
+  const ownCreation =
+    !String(w.created_by ?? "").startsWith("smarty:") &&
+    w.created_by !== "community" &&
+    !(w as { community_source_id?: string | null }).community_source_id &&
+    !(w as { is_wod?: boolean | null }).is_wod;
 
   const hasAnswers = Boolean(
     feedback && (feedback.rpe !== null || feedback.feeling || feedback.enjoyed || feedback.wouldRepeat),
@@ -278,28 +295,25 @@ function WorkoutPage() {
 
 
 
-      {!String(w.created_by ?? "").startsWith("smarty:") &&
-        w.created_by !== "community" &&
-        !(w as { community_source_id?: string | null }).community_source_id && (
+      {ownCreation && (
       <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5">
         <h3 className="flex items-center gap-2 text-lg font-bold">
           <Share2 className="h-4 w-4 text-primary" /> Smarty Community
         </h3>
         <p className="mt-1 text-sm text-muted-foreground">
           {shared
-            ? "This workout is shared. Members can discover it, do it, like it and comment on it — it can never be edited or withdrawn."
-            : "Share this workout with the community so other members can train it exactly as generated. Once shared, it stays in Shared Workouts for good."}
+            ? "This workout is shared. Members can discover it, do it, like it and comment on it. You can unshare it at any time — it will be removed from Shared Workouts."
+            : "Share this workout with the community so other members can train it exactly as it is. You can unshare it at any time."}
         </p>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          {!shared && (
-            <Button
-              className="h-12 rounded-2xl font-bold"
-              onClick={toggleShare}
-              disabled={sharing}
-            >
-              Share with community
-            </Button>
-          )}
+          <Button
+            variant={shared ? "secondary" : "default"}
+            className="h-12 rounded-2xl font-bold"
+            onClick={toggleShare}
+            disabled={sharing}
+          >
+            {shared ? "Unshare" : "Share with community"}
+          </Button>
           <Button asChild variant="secondary" className="h-12 rounded-2xl">
             <Link to="/community">Open community</Link>
           </Button>
@@ -307,9 +321,7 @@ function WorkoutPage() {
       </section>
       )}
 
-      {w.category === MANUAL_CATEGORY &&
-      w.created_by !== "community" &&
-      !(w as { community_source_id?: string | null }).community_source_id ? (
+      {ownCreation ? (
         <Button
           variant="outline"
           className="mt-6 h-12 w-full rounded-2xl border-destructive font-bold text-destructive"

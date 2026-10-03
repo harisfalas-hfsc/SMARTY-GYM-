@@ -66,76 +66,123 @@ export const createManualWorkout = createServerFn({ method: "POST" })
   });
 
 /**
- * Permanently deletes a member-built workout and everything attached to it
- * (sharing, likes, ratings, comments, completions, logged sets, results,
- * feedback, records, notifications) so it no longer counts anywhere.
- * Coach and Smarty workouts can never be deleted here.
+ * The creator deletes their own workout (built from the Exercise Library or by
+ * Smarty Coach). It is deleted for everyone: removed from Shared Workouts and
+ * from every member's logbook, with its likes, ratings, comments, reports and
+ * favorites. Training that already happened can never be undone — any copy
+ * that was completed or logged is kept as a hidden "deleted" record so every
+ * member's progress and training load stay exactly as they were.
+ * Smarty Workouts and workouts saved from Shared Workouts can't be deleted here.
  */
 export const deleteManualWorkout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ workoutId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: row, error } = await context.supabase
+    const { data: found, error } = await context.supabase
       .from("workouts")
-      .select("id,user_id,category,created_by,community_source_id,is_shared,status")
+      .select("id,user_id,created_by,community_source_id,is_wod,deleted_at")
       .eq("id", data.workoutId)
       .maybeSingle();
     if (error) throw new Error(error.message);
+    const row = found as {
+      id: string;
+      user_id: string;
+      created_by: string | null;
+      community_source_id: string | null;
+      is_wod: boolean | null;
+      deleted_at: string | null;
+    } | null;
     if (!row || row.user_id !== context.userId) throw new Error("Workout not found.");
+    if (row.deleted_at) return { ok: true };
+    if (String(row.created_by ?? "").startsWith("smarty:") || row.is_wod)
+      throw new Error("Smarty Workouts can't be deleted.");
     if (row.created_by === "community" || row.community_source_id)
-      throw new Error("Workouts from the community can't be deleted — only their creator can delete them.");
-    if (row.category !== MANUAL_CATEGORY) throw new Error("Only workouts you built yourself can be deleted.");
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const id = data.workoutId;
+      throw new Error("Only the creator of this workout can delete it.");
 
-    // Training that happened can never be undone: a shared workout stays in
-    // Shared Workouts, and any workout the creator already completed keeps its
-    // results, set logs and training load. In both cases "delete" only removes
-    // the workout from the creator's logbook — nothing they did is erased.
-    if (row.is_shared || row.status === "completed") {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const id = row.id;
+    const fail = () => new Error("Could not delete the workout. Please try again.");
+
+    // The original plus every member's copy saved from Shared Workouts.
+    const { data: copyRows, error: copyErr } = await supabaseAdmin
+      .from("workouts")
+      .select("id,user_id,status")
+      .eq("community_source_id", id)
+      .is("deleted_at", null);
+    if (copyErr) throw fail();
+    const { data: selfRow } = await supabaseAdmin.from("workouts").select("id,user_id,status").eq("id", id).single();
+    const targets = [selfRow, ...(copyRows ?? [])] as { id: string; user_id: string; status: string }[];
+    const ids = targets.map((t) => t.id);
+
+    // Social interactions disappear with the workout.
+    for (const t of ["community_comments", "community_ratings", "community_reactions", "notifications"] as const) {
+      const { error: e } = await supabaseAdmin.from(t).delete().in("workout_id", ids);
+      if (e) throw fail();
+    }
+    {
+      const { error: e } = await supabaseAdmin.from("workout_seo").delete().eq("workout_id", id);
+      if (e) throw fail();
+      const { error: e2 } = await supabaseAdmin.from("community_reports").delete().in("target_id", ids);
+      if (e2) throw fail();
+    }
+
+    // Which rows carry training activity (completed or any logged data)?
+    const active = new Set(targets.filter((t) => t.status === "completed").map((t) => t.id));
+    for (const t of ["set_logs", "workout_results", "workout_feedback", "personal_records"] as const) {
+      const { data: hits, error: e } = await supabaseAdmin.from(t).select("workout_id").in("workout_id", ids);
+      if (e) throw fail();
+      for (const h of (hits ?? []) as { workout_id: string }[]) active.add(h.workout_id);
+    }
+    const { data: comps, error: compErr } = await supabaseAdmin
+      .from("community_completions")
+      .select("workout_id,copy_workout_id")
+      .or(`workout_id.eq.${id},copy_workout_id.in.(${ids.join(",")})`);
+    if (compErr) throw fail();
+    for (const c of (comps ?? []) as { workout_id: string; copy_workout_id: string | null }[]) {
+      active.add(c.workout_id);
+      if (c.copy_workout_id) active.add(c.copy_workout_id);
+    }
+
+    const now = new Date().toISOString();
+    const keep = ids.filter((x) => active.has(x));
+    const drop = ids.filter((x) => !active.has(x));
+
+    if (keep.length) {
       const { error: e } = await supabaseAdmin
         .from("workouts")
         .update({
+          deleted_at: now,
           removed_from_logbook: true,
+          is_shared: false,
+          shared_at: null,
           is_favorite: false,
           rating: null,
-          user_note: null,
           scheduled_at: null,
         } as never)
-        .eq("id", id)
-        .eq("user_id", context.userId);
-      if (e) throw new Error("Could not delete the workout. Please try again.");
-      return { ok: true, keptShared: row.is_shared };
+        .in("id", keep);
+      if (e) throw fail();
+    }
+    if (drop.length) {
+      const { error: e1 } = await supabaseAdmin
+        .from("workout_generation_requests")
+        .update({ workout_id: null })
+        .in("workout_id", drop);
+      if (e1) throw fail();
+      // Kept records must not point at a row that is about to disappear.
+      if (drop.includes(id)) {
+        const { error: e2 } = await supabaseAdmin.from("workouts").update({ community_source_id: null }).eq("community_source_id", id);
+        if (e2) throw fail();
+      }
+      const copiesFirst = [...drop.filter((x) => x !== id), ...drop.filter((x) => x === id)];
+      for (const x of copiesFirst) {
+        const { error: e3 } = await supabaseAdmin.from("workouts").delete().eq("id", x);
+        if (e3) throw fail();
+      }
     }
 
-    const byWorkout = [
-      "community_comments",
-      "community_ratings",
-      "community_reactions",
-      "set_logs",
-      "workout_feedback",
-      "workout_results",
-      "personal_records",
-      "notifications",
-      "workout_seo",
-    ] as const;
-    for (const t of byWorkout) {
-      const { error: e } = await supabaseAdmin.from(t).delete().eq("workout_id", id);
-      if (e) throw new Error("Could not delete the workout. Please try again.");
-    }
-    const steps = [
-      supabaseAdmin.from("community_completions").delete().or(`workout_id.eq.${id},copy_workout_id.eq.${id}`),
-      supabaseAdmin.from("community_reports").delete().eq("target_id", id),
-      supabaseAdmin.from("workout_generation_requests").update({ workout_id: null }).eq("workout_id", id),
-      supabaseAdmin.from("workouts").update({ community_source_id: null }).eq("community_source_id", id),
-    ];
-    for (const s of steps) {
-      const { error: e } = await s;
-      if (e) throw new Error("Could not delete the workout. Please try again.");
-    }
-    const { error: delErr } = await supabaseAdmin.from("workouts").delete().eq("id", id).eq("user_id", context.userId);
-    if (delErr) throw new Error("Could not delete the workout. Please try again.");
     const { recomputeProgress } = await import("@/lib/progress.server");
-    await recomputeProgress(supabaseAdmin as never, context.userId).catch(() => undefined);
+    for (const uid of new Set(targets.map((t) => t.user_id))) {
+      await recomputeProgress(supabaseAdmin as never, uid).catch(() => undefined);
+    }
     return { ok: true };
   });
