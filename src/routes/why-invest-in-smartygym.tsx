@@ -47,11 +47,12 @@ import {
 export const Route = createFileRoute("/why-invest-in-smartygym")({
   head: () => ({
     meta: [
-      { title: "Why Invest in SmartyGym | Research-Backed Fitness | SmartyGym" },
+      { title: "Why Invest in SmartyGym | Structured Fitness" },
+      { name: "robots", content: "noindex, follow" },
       {
         name: "description",
         content:
-          "Discover the science behind why structured, expert-designed fitness delivers transformative results. Research from Harvard, WHO, and more on how SmartyGym elevates your performance.",
+          "Explore structured training, exercise science and the benefits of a consistent fitness routine with SmartyGym.",
       },
       {
         name: "keywords",
@@ -60,11 +61,10 @@ export const Route = createFileRoute("/why-invest-in-smartygym")({
           "why invest in SmartyGym, fitness research, structured workout programs, exercise science, fitness results, SmartyGym",
         ),
       },
-      { property: "og:title", content: "Why Invest in SmartyGym | Research-Backed Fitness" },
+      { property: "og:title", content: "Why Invest in SmartyGym | Structured Fitness" },
       {
         property: "og:description",
-        content:
-          "The science behind why expert-designed fitness delivers results that random approaches cannot match.",
+        content: "Explore the role of consistent, structured exercise in fitness and wellbeing.",
       },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://smartygym.com/why-invest-in-smartygym" },
@@ -81,20 +81,31 @@ export const Route = createFileRoute("/why-invest-in-smartygym")({
               "@type": "Article",
               headline: "Why Invest in SmartyGym",
               description:
-                "The science behind why structured, expert-designed fitness delivers transformative results compared to random approaches.",
+                "A look at structured exercise, consistency and fitness in everyday life.",
               url: "https://smartygym.com/why-invest-in-smartygym",
               inLanguage: "en",
               isPartOf: { "@id": "https://smartygym.com/#website" },
               author: { "@id": "https://smartygym.com/haris-falas#person" },
               publisher: { "@id": "https://smartygym.com/#organization" },
-              about: ["fitness research", "exercise science", "structured training", "mental health", "progressive overload"],
-              audience: "individuals seeking evidence-based fitness solutions with proven results",
+              about: [
+                "fitness research",
+                "exercise science",
+                "structured training",
+                "mental health",
+                "progressive overload",
+              ],
+              audience: "people interested in structured fitness training",
             },
             {
               "@type": "BreadcrumbList",
               itemListElement: [
                 { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
-                { "@type": "ListItem", position: 2, name: "About", item: "https://smartygym.com/about" },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "About",
+                  item: "https://smartygym.com/about",
+                },
                 {
                   "@type": "ListItem",
                   position: 3,
@@ -148,10 +159,17 @@ function WhyInvestInSmartyGym() {
     <div className="min-h-screen bg-background">
       <main className="container mx-auto max-w-4xl px-4 py-8 md:max-w-[1200px] md:px-6">
         {/* Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted-foreground sm:text-sm [&>*]:whitespace-nowrap">
-          <Link to="/" className="hover:text-primary">Home</Link>
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-6 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted-foreground sm:text-sm [&>*]:whitespace-nowrap"
+        >
+          <Link to="/" className="hover:text-primary">
+            Home
+          </Link>
           <ChevronRight className="h-3.5 w-3.5 shrink-0" />
-          <Link to="/about" className="hover:text-primary">About SmartyGym</Link>
+          <Link to="/about" className="hover:text-primary">
+            About SmartyGym
+          </Link>
           <ChevronRight className="h-3.5 w-3.5 shrink-0" />
           <span className="text-foreground">Why Invest in SmartyGym</span>
         </nav>
@@ -217,15 +235,21 @@ function WhyInvestInSmartyGym() {
                 <div className="my-6 grid grid-cols-1 gap-4 md:grid-cols-3">
                   <div className="rounded-lg border border-primary/20 bg-primary/10 p-4 text-center">
                     <div className="text-3xl font-bold text-primary">23%</div>
-                    <div className="text-sm text-muted-foreground">Increase in cognitive performance</div>
+                    <div className="text-sm text-muted-foreground">
+                      Increase in cognitive performance
+                    </div>
                   </div>
                   <div className="rounded-lg border border-primary/20 bg-primary/10 p-4 text-center">
                     <div className="text-3xl font-bold text-primary">32%</div>
-                    <div className="text-sm text-muted-foreground">Boost in creative problem-solving</div>
+                    <div className="text-sm text-muted-foreground">
+                      Boost in creative problem-solving
+                    </div>
                   </div>
                   <div className="rounded-lg border border-primary/20 bg-primary/10 p-4 text-center">
                     <div className="text-3xl font-bold text-primary">40%</div>
-                    <div className="text-sm text-muted-foreground">Improvement in stress resilience</div>
+                    <div className="text-sm text-muted-foreground">
+                      Improvement in stress resilience
+                    </div>
                   </div>
                 </div>
               </div>
@@ -255,14 +279,33 @@ function WhyInvestInSmartyGym() {
                   </p>
                   <div className="h-72 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={mentalHealthData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <BarChart
+                        data={mentalHealthData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      >
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="condition" tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
-                        <YAxis tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
+                        <XAxis
+                          dataKey="condition"
+                          tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }}
+                        />
+                        <YAxis
+                          tickFormatter={(v) => `${v}%`}
+                          tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }}
+                        />
                         <Tooltip />
                         <Legend wrapperStyle={{ fontSize: 12 }} />
-                        <Bar dataKey="withExercise" name="With Regular Exercise" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="withoutExercise" name="Without Exercise" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                        <Bar
+                          dataKey="withExercise"
+                          name="With Regular Exercise"
+                          fill="#3b82f6"
+                          radius={[4, 4, 0, 0]}
+                        />
+                        <Bar
+                          dataKey="withoutExercise"
+                          name="Without Exercise"
+                          fill="#ef4444"
+                          radius={[4, 4, 0, 0]}
+                        />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -292,7 +335,8 @@ function WhyInvestInSmartyGym() {
                     <div>
                       <strong className="block">Information Overload</strong>
                       <span className="text-sm text-muted-foreground">
-                        YouTube, Instagram, TikTok—endless conflicting advice with no coherent philosophy
+                        YouTube, Instagram, TikTok—endless conflicting advice with no coherent
+                        philosophy
                       </span>
                     </div>
                   </div>
@@ -333,7 +377,9 @@ function WhyInvestInSmartyGym() {
                 <div className="rounded-full bg-primary/20 p-2">
                   <BarChart3 className="h-6 w-6 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold">The Science of Consistency &amp; Progressive Overload</h2>
+                <h2 className="text-2xl font-bold">
+                  The Science of Consistency &amp; Progressive Overload
+                </h2>
               </div>
               <div className="space-y-4 border-l-2 border-primary/30 pl-4">
                 <p>
@@ -342,20 +388,43 @@ function WhyInvestInSmartyGym() {
                   3-5x greater than random workouts over a 24-week period.
                 </p>
                 <div className="my-6 rounded-lg bg-muted/30 p-4">
-                  <h3 className="mb-4 text-center font-semibold">Fitness Gains: Structured vs. Self-Guided</h3>
+                  <h3 className="mb-4 text-center font-semibold">
+                    Fitness Gains: Structured vs. Self-Guided
+                  </h3>
                   <p className="mb-4 text-center text-xs text-muted-foreground">
                     Performance improvement score over time
                   </p>
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={consistencyResultsData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <LineChart
+                        data={consistencyResultsData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      >
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="week" tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
+                        <XAxis
+                          dataKey="week"
+                          tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }}
+                        />
                         <YAxis tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
                         <Tooltip />
                         <Legend wrapperStyle={{ fontSize: 12 }} />
-                        <Line type="monotone" dataKey="structured" stroke="#3b82f6" strokeWidth={3} dot={{ fill: "#3b82f6", strokeWidth: 2, r: 5 }} name="Structured Training" />
-                        <Line type="monotone" dataKey="unstructured" stroke="#f59e0b" strokeWidth={2} strokeDasharray="5 5" dot={{ fill: "#f59e0b", strokeWidth: 2, r: 4 }} name="Self-Guided" />
+                        <Line
+                          type="monotone"
+                          dataKey="structured"
+                          stroke="#3b82f6"
+                          strokeWidth={3}
+                          dot={{ fill: "#3b82f6", strokeWidth: 2, r: 5 }}
+                          name="Structured Training"
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="unstructured"
+                          stroke="#f59e0b"
+                          strokeWidth={2}
+                          strokeDasharray="5 5"
+                          dot={{ fill: "#f59e0b", strokeWidth: 2, r: 4 }}
+                          name="Self-Guided"
+                        />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -381,16 +450,30 @@ function WhyInvestInSmartyGym() {
                   dramatically higher completion rates than self-guided alternatives.
                 </p>
                 <div className="my-6 rounded-lg bg-muted/30 p-4">
-                  <h3 className="mb-4 text-center font-semibold">12-Week Training Completion Rates</h3>
+                  <h3 className="mb-4 text-center font-semibold">
+                    12-Week Training Completion Rates
+                  </h3>
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
-                        <Pie data={adherenceData} cx="50%" cy="42%" innerRadius={45} outerRadius={70} paddingAngle={5} dataKey="value" label={({ value }) => `${value}%`}>
+                        <Pie
+                          data={adherenceData}
+                          cx="50%"
+                          cy="42%"
+                          innerRadius={45}
+                          outerRadius={70}
+                          paddingAngle={5}
+                          dataKey="value"
+                          label={({ value }) => `${value}%`}
+                        >
                           {adherenceData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.fill} />
                           ))}
                         </Pie>
-                        <Legend verticalAlign="bottom" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+                        <Legend
+                          verticalAlign="bottom"
+                          wrapperStyle={{ fontSize: 12, paddingTop: 8 }}
+                        />
                         <Tooltip />
                       </PieChart>
                     </ResponsiveContainer>
@@ -421,7 +504,8 @@ function WhyInvestInSmartyGym() {
                     <div>
                       <strong className="block text-primary">As an Employee</strong>
                       <span className="text-sm text-muted-foreground">
-                        Higher energy, sharper focus, fewer sick days, better stress management, increased creativity
+                        Higher energy, sharper focus, fewer sick days, better stress management,
+                        increased creativity
                       </span>
                     </div>
                   </div>
@@ -430,7 +514,8 @@ function WhyInvestInSmartyGym() {
                     <div>
                       <strong className="block text-primary">As a Parent</strong>
                       <span className="text-sm text-muted-foreground">
-                        More patience, energy to play with kids, modeling healthy habits, emotional regulation
+                        More patience, energy to play with kids, modeling healthy habits, emotional
+                        regulation
                       </span>
                     </div>
                   </div>
@@ -439,7 +524,8 @@ function WhyInvestInSmartyGym() {
                     <div>
                       <strong className="block text-primary">In Relationships</strong>
                       <span className="text-sm text-muted-foreground">
-                        Better mood, increased confidence, shared fitness activities, improved intimacy
+                        Better mood, increased confidence, shared fitness activities, improved
+                        intimacy
                       </span>
                     </div>
                   </div>
@@ -448,7 +534,8 @@ function WhyInvestInSmartyGym() {
                     <div>
                       <strong className="block text-primary">In Your Hobbies</strong>
                       <span className="text-sm text-muted-foreground">
-                        Better sports performance, outdoor endurance, recreational activities, travel readiness
+                        Better sports performance, outdoor endurance, recreational activities,
+                        travel readiness
                       </span>
                     </div>
                   </div>
@@ -475,9 +562,9 @@ function WhyInvestInSmartyGym() {
                   But not all platforms are equal. Some are built around expensive hardware, some
                   rely on algorithm-generated workouts, and many offer endless content without
                   structure. <span className="font-bold text-primary">SmartyGym</span> was built to
-                  combine the freedom of online training with the structure of real coaching:
-                  every workout is designed by <strong>Haris Falas</strong>, periodized, and
-                  available on any device, with or without equipment.
+                  combine the freedom of online training with the structure of real coaching: every
+                  workout is designed by <strong>Haris Falas</strong>, periodized, and available on
+                  any device, with or without equipment.
                 </p>
                 <p>
                   See how the leading platforms compare — their strengths, their weaknesses, and
@@ -517,7 +604,8 @@ function WhyInvestInSmartyGym() {
                     <div>
                       <strong className="block">Smarty Coach</strong>
                       <span className="text-sm text-muted-foreground">
-                        Expertly designed workouts built around your goal, mood, time, location and equipment
+                        Expertly designed workouts built around your goal, mood, time, location and
+                        equipment
                       </span>
                     </div>
                   </div>
@@ -526,7 +614,8 @@ function WhyInvestInSmartyGym() {
                     <div>
                       <strong className="block">Workout of the Day</strong>
                       <span className="text-sm text-muted-foreground">
-                        A daily periodized plan that develops every fitness quality in the right order
+                        A daily periodized plan that develops every fitness quality in the right
+                        order
                       </span>
                     </div>
                   </div>
@@ -597,16 +686,27 @@ function WhyInvestInSmartyGym() {
                   training can reverse this trend at any stage of life.
                 </p>
                 <div className="my-6 rounded-lg bg-muted/30 p-4">
-                  <h3 className="mb-4 text-center font-semibold">Physical Inactivity Rates by Age Group</h3>
+                  <h3 className="mb-4 text-center font-semibold">
+                    Physical Inactivity Rates by Age Group
+                  </h3>
                   <p className="mb-4 text-center text-xs text-muted-foreground">
                     Percentage not meeting WHO activity guidelines
                   </p>
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={inactivityByAgeData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <BarChart
+                        data={inactivityByAgeData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      >
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="age" tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
-                        <YAxis tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
+                        <XAxis
+                          dataKey="age"
+                          tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }}
+                        />
+                        <YAxis
+                          tickFormatter={(v) => `${v}%`}
+                          tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }}
+                        />
                         <Tooltip />
                         <Bar dataKey="percentage" radius={[4, 4, 0, 0]} name="Inactive %">
                           {inactivityByAgeData.map((_, index) => (
@@ -623,11 +723,15 @@ function WhyInvestInSmartyGym() {
                 <div className="my-6 grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4 text-center">
                     <div className="text-3xl font-bold text-destructive">1.4B</div>
-                    <div className="text-sm text-muted-foreground">Adults globally are insufficiently active</div>
+                    <div className="text-sm text-muted-foreground">
+                      Adults globally are insufficiently active
+                    </div>
                   </div>
                   <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4 text-center">
                     <div className="text-3xl font-bold text-destructive">$54B</div>
-                    <div className="text-sm text-muted-foreground">Annual global healthcare costs from inactivity</div>
+                    <div className="text-sm text-muted-foreground">
+                      Annual global healthcare costs from inactivity
+                    </div>
                   </div>
                 </div>
               </div>
@@ -710,8 +814,14 @@ function WhyInvestInSmartyGym() {
               <li className="flex items-start gap-2">
                 <span className="font-semibold text-foreground">1.</span>
                 <span>
-                  World Health Organization (2022). <em>Global Status Report on Physical Activity 2022.</em>{" "}
-                  <a href="https://www.who.int/publications/i/item/9789240059153" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  World Health Organization (2022).{" "}
+                  <em>Global Status Report on Physical Activity 2022.</em>{" "}
+                  <a
+                    href="https://www.who.int/publications/i/item/9789240059153"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
                     WHO Publications <ExternalLink className="h-3 w-3" />
                   </a>
                 </span>
@@ -719,8 +829,14 @@ function WhyInvestInSmartyGym() {
               <li className="flex items-start gap-2">
                 <span className="font-semibold text-foreground">2.</span>
                 <span>
-                  American College of Sports Medicine (2023). <em>Exercise and Cognitive Function: A Review of Evidence.</em>{" "}
-                  <a href="https://www.acsm.org" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  American College of Sports Medicine (2023).{" "}
+                  <em>Exercise and Cognitive Function: A Review of Evidence.</em>{" "}
+                  <a
+                    href="https://www.acsm.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
                     ACSM <ExternalLink className="h-3 w-3" />
                   </a>
                 </span>
@@ -728,8 +844,14 @@ function WhyInvestInSmartyGym() {
               <li className="flex items-start gap-2">
                 <span className="font-semibold text-foreground">3.</span>
                 <span>
-                  Harvard Medical School (2021). <em>Exercise and the Brain: How Physical Activity Boosts Your Mental Muscles.</em>{" "}
-                  <a href="https://www.health.harvard.edu" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  Harvard Medical School (2021).{" "}
+                  <em>Exercise and the Brain: How Physical Activity Boosts Your Mental Muscles.</em>{" "}
+                  <a
+                    href="https://www.health.harvard.edu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
                     Harvard Health <ExternalLink className="h-3 w-3" />
                   </a>
                 </span>
@@ -737,8 +859,14 @@ function WhyInvestInSmartyGym() {
               <li className="flex items-start gap-2">
                 <span className="font-semibold text-foreground">4.</span>
                 <span>
-                  American Psychological Association (2024). <em>Stress in America Survey: Exercise and Mental Health.</em>{" "}
-                  <a href="https://www.apa.org/news/press/releases/stress" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  American Psychological Association (2024).{" "}
+                  <em>Stress in America Survey: Exercise and Mental Health.</em>{" "}
+                  <a
+                    href="https://www.apa.org/news/press/releases/stress"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
                     APA Research <ExternalLink className="h-3 w-3" />
                   </a>
                 </span>
@@ -746,8 +874,14 @@ function WhyInvestInSmartyGym() {
               <li className="flex items-start gap-2">
                 <span className="font-semibold text-foreground">5.</span>
                 <span>
-                  National Institute of Mental Health (2023). <em>Physical Activity as Treatment for Depression and Anxiety.</em>{" "}
-                  <a href="https://www.nimh.nih.gov" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  National Institute of Mental Health (2023).{" "}
+                  <em>Physical Activity as Treatment for Depression and Anxiety.</em>{" "}
+                  <a
+                    href="https://www.nimh.nih.gov"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
                     NIMH <ExternalLink className="h-3 w-3" />
                   </a>
                 </span>
@@ -755,8 +889,14 @@ function WhyInvestInSmartyGym() {
               <li className="flex items-start gap-2">
                 <span className="font-semibold text-foreground">6.</span>
                 <span>
-                  Journal of Strength and Conditioning Research (2022). <em>Progressive Overload and Long-Term Training Adaptations.</em>{" "}
-                  <a href="https://journals.lww.com/nsca-jscr" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  Journal of Strength and Conditioning Research (2022).{" "}
+                  <em>Progressive Overload and Long-Term Training Adaptations.</em>{" "}
+                  <a
+                    href="https://journals.lww.com/nsca-jscr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
                     JSCR <ExternalLink className="h-3 w-3" />
                   </a>
                 </span>
@@ -764,8 +904,16 @@ function WhyInvestInSmartyGym() {
               <li className="flex items-start gap-2">
                 <span className="font-semibold text-foreground">7.</span>
                 <span>
-                  RAND Corporation (2020). <em>Workplace Wellness Programs: Services Offered, Participation, and Incentives.</em>{" "}
-                  <a href="https://www.rand.org/pubs/research_reports/RR254.html" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  RAND Corporation (2020).{" "}
+                  <em>
+                    Workplace Wellness Programs: Services Offered, Participation, and Incentives.
+                  </em>{" "}
+                  <a
+                    href="https://www.rand.org/pubs/research_reports/RR254.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
                     RAND Research <ExternalLink className="h-3 w-3" />
                   </a>
                 </span>
@@ -773,8 +921,14 @@ function WhyInvestInSmartyGym() {
               <li className="flex items-start gap-2">
                 <span className="font-semibold text-foreground">8.</span>
                 <span>
-                  British Journal of Sports Medicine (2023). <em>Exercise as Medicine: Evidence for Prescribing Exercise.</em>{" "}
-                  <a href="https://bjsm.bmj.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  British Journal of Sports Medicine (2023).{" "}
+                  <em>Exercise as Medicine: Evidence for Prescribing Exercise.</em>{" "}
+                  <a
+                    href="https://bjsm.bmj.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
                     BJSM <ExternalLink className="h-3 w-3" />
                   </a>
                 </span>

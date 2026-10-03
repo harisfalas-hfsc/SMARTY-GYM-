@@ -6,13 +6,7 @@
  */
 import { TRAINING_TOPIC_SLUGS } from "@/lib/seo/training-topics";
 
-export type RouteClass =
-  | "indexable"
-  | "noindex"
-  | "private"
-  | "admin"
-  | "utility"
-  | "redirect";
+export type RouteClass = "indexable" | "noindex" | "private" | "admin" | "utility" | "redirect";
 
 export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
 
@@ -28,8 +22,8 @@ export interface StaticSitemapEntry {
 export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/": "indexable",
   "/about": "indexable",
-  "/why-invest-in-smartygym": "indexable",
-  "/best-online-fitness-platform": "indexable",
+  "/why-invest-in-smartygym": "noindex",
+  "/best-online-fitness-platform": "noindex",
   "/the-smarty-method": "indexable",
   "/haris-falas": "indexable",
   "/founder-note": "indexable",
@@ -100,8 +94,6 @@ export const PRIVATE_PREFIXES = [
 export const STATIC_SITEMAP_ENTRIES: StaticSitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/about", changefreq: "monthly", priority: "0.8" },
-  { path: "/why-invest-in-smartygym", changefreq: "monthly", priority: "0.75" },
-  { path: "/best-online-fitness-platform", changefreq: "monthly", priority: "0.8" },
   { path: "/the-smarty-method", changefreq: "monthly", priority: "0.75" },
   { path: "/haris-falas", changefreq: "monthly", priority: "0.7" },
   { path: "/founder-note", changefreq: "monthly", priority: "0.6" },

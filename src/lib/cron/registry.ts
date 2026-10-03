@@ -47,7 +47,6 @@ export interface CronJobDefinition {
   };
 }
 
-
 export const CRON_JOBS: CronJobDefinition[] = [
   {
     key: "daily-motivation",
@@ -80,9 +79,13 @@ export const CRON_JOBS: CronJobDefinition[] = [
     description:
       "Every night at midnight (Cyprus time) reads the 84-day periodization and picks the shared Workout of the Day from your Smarty Workouts: one bodyweight and one equipment workout matching the day's category, level and strength focus (one Recovery workout on Recovery days). A workout is not repeated until every other matching workout has been used. It also prepares tomorrow in advance, and every hourly check fills any empty slot so the page is never empty. Admin overrides are never replaced.",
     timing: "fixed",
-    timingNote: "Runs once a day at 00:00 Cyprus time (the hourly scheduler fires at :05). Admin overrides and swaps in Admin → Workout of the Day are kept.",
+    timingNote:
+      "Runs once a day at 00:00 Cyprus time (the hourly scheduler fires at :05). Admin overrides and swaps in Admin → Workout of the Day are kept.",
     sends: [
-      { title: "Workout of the Day page", body: "Today's two cards (bodyweight + equipment), or one Recovery card, visible to everyone; opening them needs Premium." },
+      {
+        title: "Workout of the Day page",
+        body: "Today's two cards (bodyweight + equipment), or one Recovery card, visible to everyone; opening them needs Premium.",
+      },
     ],
     timeEditable: true,
     contentEditable: false,
@@ -100,7 +103,10 @@ export const CRON_JOBS: CronJobDefinition[] = [
     sends: [
       { title: "Your workout starts in 30 minutes", body: "CATEGORY — workout name." },
       { title: "Time to train", body: "CATEGORY — workout name." },
-      { title: "Did you train yesterday?", body: "Mark it done, or reschedule it in your Logbook." },
+      {
+        title: "Did you train yesterday?",
+        body: "Mark it done, or reschedule it in your Logbook.",
+      },
     ],
     timeEditable: false,
     contentEditable: false,
@@ -115,8 +121,14 @@ export const CRON_JOBS: CronJobDefinition[] = [
     timingNote:
       "Sent inside each window at the member's local time: 08:05 (morning window 07:00–10:00) and 20:05 (night window 19:00–22:00).",
     sends: [
-      { title: "Your Morning Smarty Check-in is open", body: "Takes 30 seconds. Open until 10:00 — with a Do check-in button." },
-      { title: "Your Night Smarty Check-in is open", body: "Review your day in 30 seconds. Open until 22:00." },
+      {
+        title: "Your Morning Smarty Check-in is open",
+        body: "Takes 30 seconds. Open until 10:00 — with a Do check-in button.",
+      },
+      {
+        title: "Your Night Smarty Check-in is open",
+        body: "Review your day in 30 seconds. Open until 22:00.",
+      },
     ],
     timeEditable: false,
     contentEditable: false,
@@ -126,9 +138,10 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "seo-refresh",
     label: "Automatic SEO update",
     description:
-      "Rebuilds the internal SEO index from public pages, training topics, active library exercises, published articles and publicly accessible shared workouts only. Stale terms are removed. A weekly audit reports crawl and indexing risks to the administrator.",
+      "Rebuilds the internal SEO index from public pages, training topics, active library exercises, published articles and publicly accessible shared workouts only. Stale terms are removed. Emails the administrator a status report; Google indexing requires separate Search Console review.",
     timing: "weekly",
-    timingNote: "Runs once a week, on Sunday night at the time set below (Cyprus time) — 23:00 by default, so it finishes before Monday. Background only: nothing visible on the site changes.",
+    timingNote:
+      "Runs once a week, on Sunday night at the time set below (Cyprus time) — 23:00 by default, so it finishes before Monday. Background only: nothing visible on the site changes.",
     sends: [
       {
         title: "[Admin] SEO update — X new keywords",
@@ -141,7 +154,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentHelp:
       "One relevant phrase per line. The current list replaces stale phrases on the next run; it is never published verbatim.",
     weekday: 0,
-    defaults: { enabled: false, hour: 23, minute: 0 },
+    defaults: { enabled: true, hour: 23, minute: 0 },
     runnable: true,
   },
   {
@@ -219,7 +232,6 @@ export const CRON_JOBS: CronJobDefinition[] = [
     defaults: { enabled: false, hour: 0, minute: 0 },
   },
 ];
-
 
 export const CRON_JOB_BY_KEY: Record<string, CronJobDefinition> = Object.fromEntries(
   CRON_JOBS.map((j) => [j.key, j]),

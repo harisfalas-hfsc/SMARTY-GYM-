@@ -48,11 +48,11 @@ function batchLimit(config: CronJobConfig | undefined, key: string, fallback: nu
 /**
  * Weekly SEO run. Three bounded steps, each safe to repeat:
  *   1. optimize new or changed blog articles (title, description, key phrase,
-  *      keywords and image alt text) with the AI model;
+ *      keywords and image alt text) with the AI model;
  *   2. optimize newly shared community workouts the same way;
  *   3. rebuild the site keyword index from every public page, training topic,
-  *      active exercise and publicly accessible workout, then notify IndexNow
-  *      only about updated public URLs. Obsolete terms are removed.
+ *      active exercise and publicly accessible workout, then notify IndexNow
+ *      only about updated public URLs. Obsolete terms are removed.
  */
 export async function runSeoRefresh(
   db: DB,
@@ -88,7 +88,13 @@ export async function runSeoRefresh(
   if (workoutRun) {
     notes.push(`Shared workouts: ${workoutRun.summary}`);
     failures.push(...workoutRun.failures.map((f) => `workout:${f}`));
-    // Workout SEO metadata alone does not establish a public/indexable URL.
+    const { isFreeAccessMode } = await import("@/lib/free-access.server");
+    try {
+      if (await isFreeAccessMode())
+        changedPaths.push(...workoutRun.optimizedIds.map((id) => `/community/workout/${id}`));
+    } catch (e) {
+      failures.push(`access:${e instanceof Error ? e.message : String(e)}`);
+    }
   }
 
   let submitted = 0;
@@ -136,15 +142,32 @@ export async function runSeoRefresh(
     previous.hash === built.hash;
 
   if (unchanged) {
+    const queued = await submitToIndexNow([]);
+    if (!queued.ok) failures.push(`indexnow:${queued.detail}`);
+    const audit = auditStatus(built.counts, failures);
     return {
       changed: false,
-      status: "skipped",
-      summary: `No new keywords, pages, articles or workouts since the last run — nothing to update (${merged.total} keywords indexed).`,
+      status: failures.length ? "failed" : "skipped",
+      summary: `${audit} ${failures.length ? `SEO retry failed: ${failures.join("; ")}` : `No new keywords, pages, articles or workouts since the last run — nothing to update (${merged.total} keywords indexed).`}`,
       total: merged.total,
       added: [],
       failures,
       counts: built.counts,
-      emailed: false,
+      emailed: await emailReport(
+        {
+          changed: false,
+          status: failures.length ? "failed" : "skipped",
+          summary: `${audit} ${failures.join("; ")}`,
+          total: merged.total,
+          added: [],
+          failures,
+          counts: built.counts,
+          emailed: false,
+          optimization,
+        },
+        startedAt,
+        options.trigger,
+      ),
       optimization,
     };
   }
@@ -156,8 +179,8 @@ export async function runSeoRefresh(
     failures.push(`save:${message}`);
   }
 
-  const urlsToSubmit = changedPaths.length ? [...changedPaths, ...(articleRun?.optimized ? ["/blog"] : [])] : [];
-  if (urlsToSubmit.length) {
+  const urlsToSubmit = [...changedPaths, ...(articleRun?.optimized ? ["/blog"] : [])];
+  {
     const ping = await submitToIndexNow(urlsToSubmit);
     submitted = ping.ok ? ping.submitted : 0;
     notes.push(ping.detail);
@@ -172,9 +195,11 @@ export async function runSeoRefresh(
   const result: SeoRefreshResult = {
     changed: failures.length === 0,
     status: failures.length ? "failed" : "ok",
-    summary: failures.length
-      ? `SEO update finished with errors: ${failures.join("; ")}`
-       : `SEO index updated — ${added.length} new keyword${added.length === 1 ? "" : "s"}, ${merged.total} indexed in total (${built.counts.exercises} active exercises, ${built.counts.workouts} publicly accessible shared workouts, ${built.counts.articles} blog articles).${optimizedLine}`,
+    summary: `${auditStatus(built.counts, failures)} ${
+      failures.length
+        ? `SEO update finished with errors: ${failures.join("; ")}`
+        : `SEO index updated — ${added.length} new keyword${added.length === 1 ? "" : "s"}, ${merged.total} internal phrases in total (${built.counts.exercises} active exercises, ${built.counts.workouts} publicly accessible shared workouts, ${built.counts.articles} blog articles).${optimizedLine}`
+    }`,
     total: merged.total,
     added,
     failures,
@@ -187,6 +212,16 @@ export async function runSeoRefresh(
   return result;
 }
 
+/** Local weekly checks only. Google coverage is checked separately in Search Console. */
+function auditStatus(counts: SeoRefreshResult["counts"], failures: string[]): string {
+  const checks = [
+    `${counts.exercises > 0 ? "PASS" : "WARNING"} active exercise sources: ${counts.exercises}`,
+    `${counts.articles > 0 ? "PASS" : "WARNING"} published article sources: ${counts.articles}`,
+    `${failures.length ? "ERROR" : "PASS"} background refresh and submission: ${failures.length ? failures.length + " failure(s)" : "no reported errors"}`,
+  ];
+  return `Weekly local SEO audit — ${checks.join("; ")}. Google crawl and indexing status not checked by this job.`;
+}
+
 async function emailReport(
   result: SeoRefreshResult,
   startedAt: Date,
@@ -195,30 +230,34 @@ async function emailReport(
   try {
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
     const finishedAt = new Date();
-    await sendTemplateEmail("cron-report", (process.env["CRON_REPORT_RECIPIENT"] || "smartygym@outlook.com"), {
-      templateData: {
-        jobLabel: "Automatic SEO update",
-        status: result.status,
-        trigger,
-        startedAt: startedAt.toISOString(),
-        finishedAt: finishedAt.toISOString(),
-        durationSec: Math.max(1, Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000)),
-        summary: result.summary,
-        added: result.added.slice(0, 120),
-        addedCount: result.added.length,
-        total: result.total,
-        exercises: result.counts.exercises,
-        workouts: result.counts.workouts,
-        articles: result.counts.articles,
-        failures: result.failures,
-        articlesOptimized: result.optimization?.articles ?? 0,
-        articlesQueued: result.optimization?.articlesQueued ?? 0,
-        workoutsOptimized: result.optimization?.workouts ?? 0,
-        workoutsQueued: result.optimization?.workoutsQueued ?? 0,
-        urlsSubmitted: result.optimization?.submittedToSearchEngines ?? 0,
+    await sendTemplateEmail(
+      "cron-report",
+      process.env["CRON_REPORT_RECIPIENT"] || "smartygym@outlook.com",
+      {
+        templateData: {
+          jobLabel: "Automatic SEO update",
+          status: result.status,
+          trigger,
+          startedAt: startedAt.toISOString(),
+          finishedAt: finishedAt.toISOString(),
+          durationSec: Math.max(1, Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000)),
+          summary: result.summary,
+          added: result.added.slice(0, 120),
+          addedCount: result.added.length,
+          total: result.total,
+          exercises: result.counts.exercises,
+          workouts: result.counts.workouts,
+          articles: result.counts.articles,
+          failures: result.failures,
+          articlesOptimized: result.optimization?.articles ?? 0,
+          articlesQueued: result.optimization?.articlesQueued ?? 0,
+          workoutsOptimized: result.optimization?.workouts ?? 0,
+          workoutsQueued: result.optimization?.workoutsQueued ?? 0,
+          urlsSubmitted: result.optimization?.submittedToSearchEngines ?? 0,
+        },
+        idempotencyKey: `seo-report:${startedAt.toISOString().slice(0, 13)}:${trigger}`,
       },
-      idempotencyKey: `seo-report:${startedAt.toISOString().slice(0, 13)}:${trigger}`,
-    });
+    );
     return true;
   } catch (e) {
     console.error("[cron/seo] report email failed", e);
