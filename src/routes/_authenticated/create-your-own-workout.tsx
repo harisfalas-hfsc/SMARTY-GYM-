@@ -166,6 +166,7 @@ function CoachPage() {
   const [premium, setPremium] = useState<boolean | null>(null);
   const [membershipOpen, setMembershipOpen] = useState(false);
   const [pendingSurprise, setPendingSurprise] = useState<boolean | null>(null);
+  const [visitor, setVisitor] = useState(false);
 
 
   useEffect(() => {
@@ -174,15 +175,26 @@ function CoachPage() {
       setPremium(true);
       return;
     }
-    void getMyAccessState()
-      .then((access) => {
+    void (async () => {
+      const { data: s } = await supabase.auth.getSession();
+      if (!s.session) {
+        // Visitors explore the full page; the final "create" step asks them to join.
+        setVisitor(true);
+        setProfileReady(true);
+        setPremium(false);
+        return;
+      }
+      try {
+        const access = await getMyAccessState();
         setProfileReady(
           access.profileComplete && access.healthAcknowledged && access.readinessComplete,
         );
         setParqFlags(access.readinessFlagged ? access.readinessFlags : []);
         setPremium(access.premium);
-      })
-      .catch(() => setProfileReady(null));
+      } catch {
+        setProfileReady(null);
+      }
+    })();
   }, []);
 
 
