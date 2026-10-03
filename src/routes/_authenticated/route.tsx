@@ -27,7 +27,7 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 /** Pages visitors can fully explore; the Premium step inside asks them to join. */
-const EXPLORABLE = ["/create-your-own-workout", "/logbook"];
+const EXPLORABLE = ["/create-your-own-workout"];
 
 function AuthLayout() {
   const { user } = Route.useRouteContext();
