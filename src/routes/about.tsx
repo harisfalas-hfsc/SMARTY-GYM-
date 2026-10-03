@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import pageHeroImage from "@/assets/about-smartygym-card.jpg";
 import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
+import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
 
 
 export const Route = createFileRoute("/about")({
@@ -88,6 +89,7 @@ function AboutPage() {
   const workoutCount = Route.useLoaderData().total;
   return (
     <>
+    <DesktopAboutLanding page="about" workoutCount={workoutCount} />
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:hidden">
       <PageHeader image={pageHeroImage}
         eyebrow="About"
