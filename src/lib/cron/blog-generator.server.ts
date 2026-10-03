@@ -395,7 +395,8 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
   }
   try {
     const { submitToIndexNow } = await import("@/lib/seo/indexnow.server");
-    await submitToIndexNow([`/blog/${slug}`, "/blog", "/sitemap.xml"]);
+    const submission = await submitToIndexNow([`/blog/${slug}`, "/blog"]);
+    if (!submission.ok) failures.push(`indexnow:${submission.detail}`);
   } catch {
     // search-engine ping is best effort
   }

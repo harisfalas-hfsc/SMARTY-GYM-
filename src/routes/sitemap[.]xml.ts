@@ -1,9 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type {} from "@tanstack/react-start";
 import { STATIC_SITEMAP_ENTRIES } from "@/lib/seo/route-inventory";
 import { SITE_URL } from "@/lib/seo/site";
-
-
 const BASE_URL = SITE_URL;
 
 interface SitemapEntry {
@@ -47,9 +44,10 @@ export const Route = createFileRoute("/sitemap.xml")({
         let articles: SitemapEntry[] = [];
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-            const rows: any[] = [];
+            type Article = { slug: string; title: string | null; seo_title: string | null; image_alt: string | null; image_url: string | null; published_at: string | null; updated_at: string | null; created_at: string; seo_optimized_at: string | null };
+            const rows: Article[] = [];
             for (let offset = 0; offset < 49000; offset += 1000) {
-              const { data, error } = await (supabaseAdmin as any)
+              const { data, error } = await supabaseAdmin
                 .from("blog_articles")
                 .select("slug,title,seo_title,image_alt,image_url,published_at,updated_at,created_at,seo_optimized_at")
                 .eq("is_published", true).order("published_at", { ascending: false }).range(offset, offset + 999);
@@ -87,9 +85,10 @@ export const Route = createFileRoute("/sitemap.xml")({
         if (freeAccessMode) {
           try {
             const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-              const rows: any[] = [];
+              type PublicWorkout = { id: string; shared_at: string | null; image_url: string | null; name: string | null };
+              const rows: PublicWorkout[] = [];
               for (let offset = 0; offset < 49000; offset += 1000) {
-                const { data, error } = await (supabaseAdmin as any)
+                const { data, error } = await supabaseAdmin
                   .from("community_workouts_public").select("id,shared_at,image_url,name")
                   .order("shared_at", { ascending: false }).range(offset, offset + 999);
                 if (error) throw error;

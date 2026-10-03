@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type {} from "@tanstack/react-start";
 import { SITE_URL } from "@/lib/seo/site";
 
 const BASE_URL = SITE_URL;
@@ -18,9 +17,10 @@ export const Route = createFileRoute("/image-sitemap.xml")({
         ];
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-            const rows: any[] = [];
+            type ArticleImage = { slug: string; title: string | null; seo_title: string | null; image_url: string | null; image_alt: string | null };
+            const rows: ArticleImage[] = [];
             for (let offset = 0; offset < 49000; offset += 1000) {
-              const { data, error } = await (supabaseAdmin as any)
+              const { data, error } = await supabaseAdmin
                 .from("blog_articles").select("slug,title,seo_title,image_url,image_alt")
                 .eq("is_published", true).not("image_url", "is", null)
                 .order("published_at", { ascending: false }).range(offset, offset + 999);
