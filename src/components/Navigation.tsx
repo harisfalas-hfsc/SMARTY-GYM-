@@ -22,12 +22,9 @@ import {
   Dumbbell,
   CalendarCheck,
   Users,
-  Sun,
-  Moon,
   LogIn, ClipboardCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "@/lib/theme";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { adminCheckAccess } from "@/lib/admin.functions";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -42,7 +39,6 @@ import {
 
 export function Navigation() {
   const { user, displayName, loading } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const router = useRouter();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -169,13 +165,6 @@ export function Navigation() {
                   </>
                 )}
 
-                <DropdownMenuItem onSelect={() => toggleTheme()}>
-                  {theme === "dark" ? (
-                    <><Sun className="h-4 w-4 mr-2" /> Light mode</>
-                  ) : (
-                    <><Moon className="h-4 w-4 mr-2" /> Dark mode</>
-                  )}
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="h-4 w-4 mr-2" /> Sign out
                 </DropdownMenuItem>
@@ -197,14 +186,6 @@ export function Navigation() {
                 <DropdownMenuItem asChild>
                   <Link to="/auth"><LogIn className="h-4 w-4 mr-2" /> Sign in</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => toggleTheme()}>
-                  {theme === "dark" ? (
-                    <><Sun className="h-4 w-4 mr-2" /> Light mode</>
-                  ) : (
-                    <><Moon className="h-4 w-4 mr-2" /> Dark mode</>
-                  )}
-                </DropdownMenuItem>
-
               </DropdownMenuContent>
             </DropdownMenu>
           )}
