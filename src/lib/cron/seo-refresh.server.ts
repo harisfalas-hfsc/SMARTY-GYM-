@@ -48,11 +48,11 @@ function batchLimit(config: CronJobConfig | undefined, key: string, fallback: nu
 /**
  * Weekly SEO run. Three bounded steps, each safe to repeat:
  *   1. optimize new or changed blog articles (title, description, key phrase,
-  *      keywords and image alt text) with the AI model;
+ *      keywords and image alt text) with the AI model;
  *   2. optimize newly shared community workouts the same way;
  *   3. rebuild the site keyword index from every public page, training topic,
-  *      active exercise and publicly accessible workout, then notify IndexNow
-  *      only about updated public URLs. Obsolete terms are removed.
+ *      active exercise and publicly accessible workout, then notify IndexNow
+ *      only about updated public URLs. Obsolete terms are removed.
  */
 export async function runSeoRefresh(
   db: DB,
@@ -90,7 +90,8 @@ export async function runSeoRefresh(
     failures.push(...workoutRun.failures.map((f) => `workout:${f}`));
     const { isFreeAccessMode } = await import("@/lib/free-access.server");
     try {
-      if (await isFreeAccessMode()) changedPaths.push(...workoutRun.optimizedIds.map((id) => `/community/workout/${id}`));
+      if (await isFreeAccessMode())
+        changedPaths.push(...workoutRun.optimizedIds.map((id) => `/community/workout/${id}`));
     } catch (e) {
       failures.push(`access:${e instanceof Error ? e.message : String(e)}`);
     }
@@ -152,7 +153,21 @@ export async function runSeoRefresh(
       added: [],
       failures,
       counts: built.counts,
-      emailed: await emailReport({ changed: false, status: failures.length ? "failed" : "skipped", summary: `${audit} ${failures.join("; ")}`, total: merged.total, added: [], failures, counts: built.counts, emailed: false, optimization }, startedAt, options.trigger),
+      emailed: await emailReport(
+        {
+          changed: false,
+          status: failures.length ? "failed" : "skipped",
+          summary: `${audit} ${failures.join("; ")}`,
+          total: merged.total,
+          added: [],
+          failures,
+          counts: built.counts,
+          emailed: false,
+          optimization,
+        },
+        startedAt,
+        options.trigger,
+      ),
       optimization,
     };
   }
@@ -180,9 +195,11 @@ export async function runSeoRefresh(
   const result: SeoRefreshResult = {
     changed: failures.length === 0,
     status: failures.length ? "failed" : "ok",
-    summary: `${auditStatus(built.counts, failures)} ${failures.length
-      ? `SEO update finished with errors: ${failures.join("; ")}`
-      : `SEO index updated — ${added.length} new keyword${added.length === 1 ? "" : "s"}, ${merged.total} internal phrases in total (${built.counts.exercises} active exercises, ${built.counts.workouts} publicly accessible shared workouts, ${built.counts.articles} blog articles).${optimizedLine}`}`,
+    summary: `${auditStatus(built.counts, failures)} ${
+      failures.length
+        ? `SEO update finished with errors: ${failures.join("; ")}`
+        : `SEO index updated — ${added.length} new keyword${added.length === 1 ? "" : "s"}, ${merged.total} internal phrases in total (${built.counts.exercises} active exercises, ${built.counts.workouts} publicly accessible shared workouts, ${built.counts.articles} blog articles).${optimizedLine}`
+    }`,
     total: merged.total,
     added,
     failures,
@@ -213,30 +230,34 @@ async function emailReport(
   try {
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
     const finishedAt = new Date();
-    await sendTemplateEmail("cron-report", (process.env["CRON_REPORT_RECIPIENT"] || "smartygym@outlook.com"), {
-      templateData: {
-        jobLabel: "Automatic SEO update",
-        status: result.status,
-        trigger,
-        startedAt: startedAt.toISOString(),
-        finishedAt: finishedAt.toISOString(),
-        durationSec: Math.max(1, Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000)),
-        summary: result.summary,
-        added: result.added.slice(0, 120),
-        addedCount: result.added.length,
-        total: result.total,
-        exercises: result.counts.exercises,
-        workouts: result.counts.workouts,
-        articles: result.counts.articles,
-        failures: result.failures,
-        articlesOptimized: result.optimization?.articles ?? 0,
-        articlesQueued: result.optimization?.articlesQueued ?? 0,
-        workoutsOptimized: result.optimization?.workouts ?? 0,
-        workoutsQueued: result.optimization?.workoutsQueued ?? 0,
-        urlsSubmitted: result.optimization?.submittedToSearchEngines ?? 0,
+    await sendTemplateEmail(
+      "cron-report",
+      process.env["CRON_REPORT_RECIPIENT"] || "smartygym@outlook.com",
+      {
+        templateData: {
+          jobLabel: "Automatic SEO update",
+          status: result.status,
+          trigger,
+          startedAt: startedAt.toISOString(),
+          finishedAt: finishedAt.toISOString(),
+          durationSec: Math.max(1, Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000)),
+          summary: result.summary,
+          added: result.added.slice(0, 120),
+          addedCount: result.added.length,
+          total: result.total,
+          exercises: result.counts.exercises,
+          workouts: result.counts.workouts,
+          articles: result.counts.articles,
+          failures: result.failures,
+          articlesOptimized: result.optimization?.articles ?? 0,
+          articlesQueued: result.optimization?.articlesQueued ?? 0,
+          workoutsOptimized: result.optimization?.workouts ?? 0,
+          workoutsQueued: result.optimization?.workoutsQueued ?? 0,
+          urlsSubmitted: result.optimization?.submittedToSearchEngines ?? 0,
+        },
+        idempotencyKey: `seo-report:${startedAt.toISOString().slice(0, 13)}:${trigger}`,
       },
-      idempotencyKey: `seo-report:${startedAt.toISOString().slice(0, 13)}:${trigger}`,
-    });
+    );
     return true;
   } catch (e) {
     console.error("[cron/seo] report email failed", e);

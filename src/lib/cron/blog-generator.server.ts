@@ -111,20 +111,26 @@ function generateSlug(title: string): string {
 }
 
 function estimateReadTime(content: string): string {
-  const words = content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length;
+  const words = content
+    .replace(/<[^>]*>/g, "")
+    .split(/\s+/)
+    .filter(Boolean).length;
   return `${Math.max(3, Math.ceil(words / 200))} min read`;
 }
 
 /** Keeps external links and valid internal links; strips invented ones. */
 export function validateAndFixLinks(content: string): string {
-  return content.replace(/<a\s+([^>]*?)>([\s\S]*?)<\/a>/gi, (full, attrs: string, inner: string) => {
-    const href = /href=["']([^"']*)["']/i.exec(attrs)?.[1];
-    if (!href) return inner;
-    if (/^(https?:|mailto:|tel:)/i.test(href)) return full;
-    if (VALID_PATHS.includes(href)) return full;
-    if (href.startsWith("/blog/")) return full;
-    return inner;
-  });
+  return content.replace(
+    /<a\s+([^>]*?)>([\s\S]*?)<\/a>/gi,
+    (full, attrs: string, inner: string) => {
+      const href = /href=["']([^"']*)["']/i.exec(attrs)?.[1];
+      if (!href) return inner;
+      if (/^(https?:|mailto:|tel:)/i.test(href)) return full;
+      if (VALID_PATHS.includes(href)) return full;
+      if (href.startsWith("/blog/")) return full;
+      return inner;
+    },
+  );
 }
 
 async function fetchWithTimeout(url: string, init: RequestInit, ms: number): Promise<Response> {
@@ -202,7 +208,10 @@ export async function runWeeklyBlogArticle(
     ? (options.config?.content?.lines ?? []).map((l) => String(l).trim()).filter(Boolean)
     : [];
   const pool = [...TOPICS, ...extraTopics];
-  const hints = [...pool].sort(() => Math.random() - 0.5).slice(0, 5).join(", ");
+  const hints = [...pool]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 5)
+    .join(", ");
 
   const briefBlock = hasBrief
     ? `EDITORIAL BRIEF — this is a commissioned article. Follow it exactly; ignore the generic topic inspiration.
@@ -368,7 +377,6 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
     published_at: publishedAt,
   } as never);
 
-
   if (error) {
     failures.push(error.message);
     return {
@@ -504,4 +512,3 @@ async function emailAdmin(args: {
     return false;
   }
 }
-
