@@ -9,6 +9,7 @@ export const Route = createFileRoute("/checkout/return")({
   head: () => ({
     meta: [
       { title: "Membership confirmed — Smarty Gym" },
+       { name: "robots", content: "noindex, nofollow" },
       {
         name: "description",
         content:

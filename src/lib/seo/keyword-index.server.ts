@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { TRAINING_TOPICS } from "@/lib/seo/training-topics";
 import { PAGE_KEYWORDS } from "@/lib/seo/page-keywords";
+import { MASTER_PHRASES } from "@/lib/seo/keyword-clusters";
 
 type DB = SupabaseClient;
 
@@ -127,9 +128,9 @@ export async function buildKeywordIndex(
     ([path]) => !(freeAccessMode && path === "/pricing"),
   );
   const pages = collect(
-    pageKeywordEntries
-      .flatMap(([, values]) => values)
-      .filter((k) => !(freeAccessMode && PAID_KEYWORD.test(k))),
+    [...pageKeywordEntries.flatMap(([, values]) => values), ...MASTER_PHRASES]
+      .filter((k) => !(freeAccessMode && PAID_KEYWORD.test(k)))
+      .filter((k) => !/\b(best|number one|100% human|0% ai)\b/i.test(k)),
   );
   const topics = collect(
     TRAINING_TOPICS.flatMap((t) => [t.h1, t.eyebrow, t.slug, ...t.related.map((r) => r.label)]),
@@ -148,13 +149,15 @@ export async function buildKeywordIndex(
     q.eq("is_active", true),
   );
 
-  const workouts = await fetchAll<{
+  // Never index personal or premium-only workout names, even in an internal
+  // snapshot: the index can be reused by public machine-readable endpoints.
+  const workouts = freeAccessMode ? await fetchAll<{
     name: string;
     category: string | null;
     format: string | null;
     focus: string | null;
     equipment: string[] | null;
-  }>(db, "workouts", "name,category,format,focus,equipment");
+  }>(db, "community_workouts_public", "name,category,format,focus,equipment") : [];
 
   const muscles = collect([
     ...exercises.map((e) => e.target_muscle),
@@ -217,7 +220,7 @@ export async function buildKeywordIndex(
   const hash = await hashOf(keywords.join("|"));
 
   return {
-    version: 1,
+    version: 2,
     generated_at: new Date().toISOString(),
     hash,
     total: keywords.length,
@@ -246,8 +249,8 @@ export async function readKeywordIndex(): Promise<SeoKeywordIndex | null> {
 }
 
 /**
- * Merges the freshly built index into the stored one — keywords are only ever
- * added, never removed.
+ * Replace the snapshot with current public content. Old versions included
+ * private workout names, so never carry stale terms forward.
  */
 export function mergeIndexes(
   previous: SeoKeywordIndex | null,
@@ -256,14 +259,8 @@ export function mergeIndexes(
   if (!previous) return { merged: next, added: next.keywords };
   const known = new Set(previous.keywords ?? []);
   const added = next.keywords.filter((k) => !known.has(k));
-  const keywords = Array.from(new Set([...(previous.keywords ?? []), ...next.keywords])).sort();
-  const groups = { ...next.groups };
-  for (const key of Object.keys(groups) as (keyof SeoKeywordIndex["groups"])[]) {
-    const before = previous.groups?.[key] ?? [];
-    groups[key] = Array.from(new Set([...before, ...groups[key]])).sort();
-  }
   return {
-    merged: { ...next, keywords, groups, total: keywords.length },
+    merged: next,
     added,
   };
 }
