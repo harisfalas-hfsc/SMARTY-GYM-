@@ -88,8 +88,7 @@ export async function runSeoRefresh(
   if (workoutRun) {
     notes.push(`Shared workouts: ${workoutRun.summary}`);
     failures.push(...workoutRun.failures.map((f) => `workout:${f}`));
-    const { isFreeAccessMode } = await import("@/lib/free-access.server");
-    if (await isFreeAccessMode()) changedPaths.push(...workoutRun.workoutIds.map((id) => `/community/workout/${id}`));
+    // Workout SEO metadata alone does not establish a public/indexable URL.
   }
 
   let submitted = 0;
