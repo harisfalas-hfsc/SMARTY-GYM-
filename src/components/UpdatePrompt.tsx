@@ -66,15 +66,15 @@ export function UpdatePrompt({ forceVisible = false }: { forceVisible?: boolean 
                 </span>
               </div>
               <h3 className="text-[15px] font-semibold leading-tight text-foreground">
-                New version available
+                This page didn't finish loading
               </h3>
               <p className="mt-1 text-sm leading-snug text-muted-foreground">
-                We've improved your workout experience. Tap to refresh now.
+                A quick refresh usually gets you back on track.
               </p>
             </div>
             <button
               type="button"
-              aria-label="Dismiss"
+              aria-label={forceVisible ? "Go home" : "Dismiss"}
               onClick={() => {
                 setVisible(false);
                 if (forceVisible) window.location.assign("/");
