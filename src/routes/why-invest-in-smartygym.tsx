@@ -47,11 +47,11 @@ import {
 export const Route = createFileRoute("/why-invest-in-smartygym")({
   head: () => ({
     meta: [
-      { title: "Why Invest in SmartyGym | Research-Backed Fitness | SmartyGym" },
+      { title: "Why Invest in SmartyGym | Structured Fitness" },
       {
         name: "description",
         content:
-          "Discover the science behind why structured, expert-designed fitness delivers transformative results. Research from Harvard, WHO, and more on how SmartyGym elevates your performance.",
+          "Explore structured training, exercise science and the benefits of a consistent fitness routine with SmartyGym.",
       },
       {
         name: "keywords",
@@ -60,11 +60,11 @@ export const Route = createFileRoute("/why-invest-in-smartygym")({
           "why invest in SmartyGym, fitness research, structured workout programs, exercise science, fitness results, SmartyGym",
         ),
       },
-      { property: "og:title", content: "Why Invest in SmartyGym | Research-Backed Fitness" },
+      { property: "og:title", content: "Why Invest in SmartyGym | Structured Fitness" },
       {
         property: "og:description",
         content:
-          "The science behind why expert-designed fitness delivers results that random approaches cannot match.",
+          "Explore the role of consistent, structured exercise in fitness and wellbeing.",
       },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://smartygym.com/why-invest-in-smartygym" },
@@ -81,14 +81,14 @@ export const Route = createFileRoute("/why-invest-in-smartygym")({
               "@type": "Article",
               headline: "Why Invest in SmartyGym",
               description:
-                "The science behind why structured, expert-designed fitness delivers transformative results compared to random approaches.",
+                 "A look at structured exercise, consistency and fitness in everyday life.",
               url: "https://smartygym.com/why-invest-in-smartygym",
               inLanguage: "en",
               isPartOf: { "@id": "https://smartygym.com/#website" },
               author: { "@id": "https://smartygym.com/haris-falas#person" },
               publisher: { "@id": "https://smartygym.com/#organization" },
               about: ["fitness research", "exercise science", "structured training", "mental health", "progressive overload"],
-              audience: "individuals seeking evidence-based fitness solutions with proven results",
+               audience: "people interested in structured fitness training",
             },
             {
               "@type": "BreadcrumbList",

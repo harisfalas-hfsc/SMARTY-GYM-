@@ -102,9 +102,9 @@ const PLATFORMS: Platform[] = [
   },
 ];
 
-const TITLE = "Best Online Fitness Platforms 2026 | Top 10 Compared | SmartyGym";
+const TITLE = "Online Fitness Platforms Compared | SmartyGym";
 const DESC =
-  "The 10 best online fitness platforms of 2026 compared — and why SmartyGym, the online gym designed by Sports Scientist Haris Falas, stands out with human-designed, science-based workouts on any device.";
+  "A comparison of online fitness platforms and their different approaches to guided training, equipment, classes and workout structure.";
 const URL = "https://smartygym.com/best-online-fitness-platform";
 
 export const Route = createFileRoute("/best-online-fitness-platform")({
@@ -116,10 +116,10 @@ export const Route = createFileRoute("/best-online-fitness-platform")({
         name: "keywords",
         content: withExtendedKeywords(
           "/best-online-fitness-platform",
-          "best online fitness platforms 2026, best online gym, best online fitness platform, best online fitness coach, SmartyGym, smartygym.com, Haris Falas, Coach Haris Falas, online personal training, science-based workouts, human-designed workouts",
+          "online fitness platforms comparison, online gym, online fitness coach, SmartyGym, smartygym.com, Haris Falas, online personal training, structured workouts",
         ),
       },
-      { property: "og:title", content: "Best Online Fitness Platforms 2026 | SmartyGym" },
+      { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "article" },
       { property: "og:url", content: URL },
@@ -134,7 +134,7 @@ export const Route = createFileRoute("/best-online-fitness-platform")({
           "@graph": [
             {
               "@type": "Article",
-              headline: "Best Online Fitness Platforms 2026",
+               headline: "Online Fitness Platforms Compared",
               description: DESC,
               url: URL,
               inLanguage: "en",
@@ -144,7 +144,7 @@ export const Route = createFileRoute("/best-online-fitness-platform")({
             },
             {
               "@type": "ItemList",
-              name: "Best Online Fitness Platforms 2026",
+               name: "Online Fitness Platforms Compared",
               itemListOrder: "https://schema.org/ItemListOrderAscending",
               numberOfItems: PLATFORMS.length,
               itemListElement: PLATFORMS.map((p, i) => ({
