@@ -167,18 +167,18 @@
   --color-sky-500: oklch(0.685 0.169 237.3);
   --color-cyan-400: oklch(0.789 0.154 211.5);
   --color-cyan-500: oklch(0.715 0.143 215.2);
-  --background: oklch(0.18 0 0);
+  --background: oklch(0.21 0 0);
   --foreground: oklch(0.96 0 0);
-  --card: oklch(0.22 0 0);
+  --card: oklch(0.25 0 0);
   --card-foreground: oklch(0.96 0 0);
-  --popover: oklch(0.22 0 0);
+  --popover: oklch(0.25 0 0);
   --popover-foreground: oklch(0.96 0 0);
   --primary: oklch(0.745 0.131 220);
   --primary-foreground: oklch(0.19 0.04 260);
   --primary-hover: oklch(0.79 0.13 220);
   --secondary: oklch(0.35 0 0);
   --secondary-foreground: oklch(0.96 0 0);
-  --muted: oklch(0.27 0 0);
+  --muted: oklch(0.29 0 0);
   --muted-foreground: oklch(0.75 0 0);
   --accent: oklch(0.3 0.04 220);
   --accent-foreground: oklch(0.96 0 0);
@@ -209,7 +209,7 @@
 
 @layer base {
   html {
-    background-color: oklch(0 0 0);
+    background-color: var(--color-background);
   }
   html.native-shell {
     background-color: oklch(0 0 0);
