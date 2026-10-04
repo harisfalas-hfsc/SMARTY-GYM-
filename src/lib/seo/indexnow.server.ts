@@ -11,6 +11,8 @@ export interface IndexNowResult {
   submitted: number;
   ok: boolean;
   detail: string;
+  /** Rate-limited (429): URLs stay queued for a later retry; not a failure. */
+  deferred?: boolean;
 }
 
 export function normalizeIndexNowUrls(paths: string[]): string[] {
@@ -56,6 +58,13 @@ async function postIndexNow(urlList: string[]): Promise<IndexNowResult> {
         urlList,
       }),
     });
+    if (res.status === 429)
+      return {
+        submitted: 0,
+        ok: true,
+        deferred: true,
+        detail: `IndexNow is busy (429); ${urlList.length} URL(s) kept in the queue for a later retry.`,
+      };
     return {
       submitted: res.ok ? urlList.length : 0,
       ok: res.ok,
@@ -115,7 +124,7 @@ export async function submitToIndexNow(paths: string[]): Promise<IndexNowResult>
       const { error: updateError } = await db
         .from("seo_indexnow_queue")
         .update(
-          result.ok
+          result.ok && !result.deferred
             ? { state: "sent", submitted_at: new Date().toISOString(), attempts, last_error: null }
             : {
                 attempts,
