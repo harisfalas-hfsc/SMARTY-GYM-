@@ -14,6 +14,7 @@ import {
   Sparkles,
   Medal,
   Lock,
+  ChevronRight,
 } from "lucide-react";
 import { TrainingLoadPanel } from "@/components/performance/TrainingLoadPanel";
 import { RecentLoadTrend } from "@/components/performance/RecentLoadTrend";
@@ -251,6 +252,13 @@ export function ProgressSection() {
         <div className="mt-3">
           <RecentLoadTrend />
         </div>
+        <Link
+          to="/training-load-science"
+          className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 hover:underline dark:text-green-500 dark:hover:text-green-400"
+        >
+          Discover the training load science
+          <ChevronRight className="h-4 w-4" />
+        </Link>
       </section>
 
 
