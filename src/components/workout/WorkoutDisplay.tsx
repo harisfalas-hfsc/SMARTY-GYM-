@@ -31,6 +31,7 @@ import { extractSoftTissue, parseWorkoutSteps } from "@/lib/workout/parse-steps"
 import { uniqueTokenIds } from "@/lib/workout/tokens";
 import { difficultyLabel, MAX_STARS, normalizeStars } from "@/lib/workout/spec";
 import { setWorkoutMeta } from "@/lib/coach.functions";
+import { CreatorLink } from "@/components/community/CreatorLink";
 
 export type WorkoutRow = {
   id: string;
@@ -77,7 +78,9 @@ export function WorkoutDisplay({
   onPlayerClosed,
   previewMode = false,
   children,
+  creator,
 }: {
+  creator?: { id: string; name: string | null } | null;
   workout: WorkoutRow;
   onComplete: () => void;
   onPlayerClosed?: () => void;
@@ -215,6 +218,12 @@ export function WorkoutDisplay({
               {(workout.equipment ?? []).join(", ") || "bodyweight"}
             </span>
           </div>
+          {creator ? (
+            <p className="mt-3 text-sm text-muted-foreground">
+              Created by{" "}
+              <CreatorLink userId={creator.id} name={creator.name} className="font-bold text-primary underline" />
+            </p>
+          ) : (
           <p className="mt-3 text-xs text-muted-foreground">
             {workout.category === "MY OWN WORKOUT"
               ? "Created by me"
@@ -224,6 +233,7 @@ export function WorkoutDisplay({
                   ? "Shared by a SmartyGym member"
                   : "Created by Smarty Coach"}
           </p>
+          )}
 
           {workout.image_url ? (
             <img
@@ -233,19 +243,6 @@ export function WorkoutDisplay({
               alt={`${workout.name} cover`}
               className="mt-5 h-52 w-full rounded-2xl object-cover"
             />
-          ) : null}
-
-          {(workout.coach_rationale ?? []).length ? (
-            <div className="mt-5 rounded-2xl border-2 border-primary/60 bg-primary/5 p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-                Why Smarty Coach built this
-              </p>
-              <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                {(workout.coach_rationale ?? []).map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ul>
-            </div>
           ) : null}
 
           {workout.description_html ? (

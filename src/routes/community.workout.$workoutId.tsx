@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { loadRemote } from "@/lib/remote-data";
 import { useEffect, useState } from "react";
@@ -95,6 +96,17 @@ function SharedWorkoutPage() {
   const [busy, setBusy] = useState(false);
   const [copy, setCopy] = useState<{ id: string; status: string; scheduledAt: string } | null>(null);
   const [parqCleared, setParqCleared] = useState(false);
+  const [creatorName, setCreatorName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!workout?.user_id) return;
+    void supabase
+      .from("community_members_public")
+      .select("display_name")
+      .eq("user_id", workout.user_id)
+      .maybeSingle()
+      .then(({ data }) => setCreatorName((data as { display_name: string | null } | null)?.display_name ?? null));
+  }, [workout?.user_id]);
 
   /** Lazily creates (or reuses) the member's own copy so status can be tracked. */
   async function ensureCopy(): Promise<string> {
@@ -175,7 +187,11 @@ function SharedWorkoutPage() {
     return <ParqBlockedScreen flags={access.readinessFlags} onConfirmed={() => setParqCleared(true)} />;
 
   return (
-    <WorkoutDisplay workout={{ ...workout, is_favorite: false, rating: null }} onComplete={start}>
+    <WorkoutDisplay
+      workout={{ ...workout, is_favorite: false, rating: null }}
+      onComplete={start}
+      creator={{ id: workout.user_id, name: creatorName }}
+    >
       <WorkoutStatusPanel
         workoutId={copy?.id ?? null}
         status={copy?.status === "completed" ? "completed" : copy?.scheduledAt ? "scheduled" : "created"}
