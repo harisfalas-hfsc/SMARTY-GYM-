@@ -32,3 +32,4 @@
 - Public search uses shared route inventory; IndexNow sends changed public URLs only. Unverified research is noindex; workout search exposes card fields, never prescriptions — why: no Premium leaks.
 - deleteManualWorkout is creator-only and covers the original plus all community copies: social data removed, rows with training activity tombstoned (deleted_at), others hard-deleted — why: training can't be undone.
 - Route-module download failures share one classifier for update notice and root error screen; handled failures skip crash-alert reporting, unrelated errors still report — why: refresh fixes missing files without false emails.
+- Mobility & Stability and Recovery Main Workout use only the closed lists in src/lib/workout/mobility-recovery-vocabulary.ts, and Activation/Cool Down only the named lists in prep-vocabulary.ts (no pattern matching) — why: every generated exercise comes from an owner-approved list.
