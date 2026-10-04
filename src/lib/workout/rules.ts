@@ -51,7 +51,7 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   }
   // PILATES Main Workout: ONLY the 50 exercises on the SmartyGym Pilates list
   // (pilates-vocabulary.ts). The list is the whole vocabulary — nothing else is
-  // legal, and every listed exercise is legal (difficulty still applies).
+  // legal, and every listed exercise is legal.
   if (ctx.category === "PILATES") {
     if (!isPilatesMainExercise(e))
       out.push(`"${e.name}" is not on the SmartyGym Pilates exercise list — Pilates main work uses only those 50 exercises.`);
