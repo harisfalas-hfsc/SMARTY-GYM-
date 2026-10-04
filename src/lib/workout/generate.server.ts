@@ -174,9 +174,6 @@ export async function generateWorkoutContent(
   const prepIds = [...activationPool.map((e) => e.id), ...cooldownPool.map((e) => e.id)];
   const seed = `${input.category}${input.minutes}${pool.length}`.length + Date.now() % 100000;
 
-  const { getWorkoutRules } = await import("@/lib/settings.server");
-  const extraRules = (await getWorkoutRules()).extraCoachRules.trim();
-
   const enforceOpts = {
     category: input.category,
     format,
