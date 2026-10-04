@@ -81,10 +81,11 @@ describe("anchorDate", () => {
 describe("sourceLabel", () => {
   it("distinguishes WOD, community copies, own and coach sessions", () => {
     expect(sourceLabel(row({ is_wod: true }))).toBe("Workout of the Day");
-    expect(sourceLabel(row({ created_by: "community" }))).toBe("Shared Workout");
+    expect(sourceLabel({ ...row({ created_by: "community" }), creator_name: "Kostas" })).toBe("From Shared Workouts · by Kostas");
+    expect(sourceLabel(row({ created_by: "community" }))).toBe("From Shared Workouts · by a member");
     expect(sourceLabel(row({ created_by: "smarty:abc" }))).toBe("Smarty Workout");
-    expect(sourceLabel(row({ created_by: null, category: "MY OWN WORKOUT" }))).toBe("Created by you");
-    expect(sourceLabel(row())).toBe("Created by you");
+    expect(sourceLabel(row({ created_by: null, category: "MY OWN WORKOUT" }))).toBe("Created by you · Build It Yourself");
+    expect(sourceLabel(row())).toBe("Created by you · Smarty Coach");
   });
 });
 
