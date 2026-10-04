@@ -193,7 +193,6 @@ function CoachPage() {
   const [parqOpen, setParqOpen] = useState(false);
   const [premium, setPremium] = useState<boolean | null>(null);
   const [membershipOpen, setMembershipOpen] = useState(false);
-  const [pendingSurprise, setPendingSurprise] = useState<boolean | null>(null);
   const [visitor, setVisitor] = useState(false);
 
 
@@ -533,13 +532,10 @@ function CoachPage() {
         onConfirm={() => {
           setParqAck();
           setParqOpen(false);
-          const surprise = pendingSurprise;
-          setPendingSurprise(null);
-          if (surprise !== null) void generate(surprise);
+          void generate();
         }}
         onCancel={() => {
           setParqOpen(false);
-          setPendingSurprise(null);
         }}
       />
 
