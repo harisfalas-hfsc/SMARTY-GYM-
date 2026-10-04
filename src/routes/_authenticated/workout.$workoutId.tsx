@@ -22,8 +22,9 @@ import { PerformancePanel } from "@/components/workout/PerformancePanel";
 import { SessionDebriefDialog } from "@/components/workout/SessionDebriefDialog";
 import { getSessionFeedback, type SessionFeedback } from "@/lib/feedback.functions";
 
-import { ParqWaiverDialog } from "@/components/ParqWaiverDialog";
-import { hasParqAck, setParqAck } from "@/lib/parq-ack";
+import { ParqBlockedScreen } from "@/components/workout/ParqBlockedScreen";
+import { CommunityEngagementPanel } from "@/components/community/CommunityEngagementPanel";
+import { hasParqAck } from "@/lib/parq-ack";
 import { getLocalWorkout, updateLocalWorkout } from "@/lib/local-workouts";
 
 export const Route = createFileRoute("/_authenticated/workout/$workoutId")({
@@ -253,42 +254,21 @@ function WorkoutPage() {
     );
 
   if (parqBlocked)
-    return (
-      <div className="mx-auto max-w-xl px-4 py-16 text-center">
-        <h1 className="text-xl font-extrabold uppercase tracking-tight">Health warning</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Your PAR-Q has a YES answer. Confirm the waiver to open this workout, or update your
-          answers in your Training Profile.
-        </p>
-        <div className="mt-4 grid gap-2">
-          <Button className="h-12 rounded-2xl" onClick={() => setParqOpen(true)}>
-            Read and confirm
-          </Button>
-          <Button asChild variant="secondary" className="h-12 rounded-2xl">
-            <Link to="/profile">Update my PAR-Q answers</Link>
-          </Button>
-        </div>
-        <ParqWaiverDialog
-          open={parqOpen}
-          flags={parqFlags}
-          confirmLabel="I confirm — open my workout"
-          onConfirm={() => {
-            setParqAck();
-            setParqOpen(false);
-            setParqBlocked(false);
-          }}
-          onCancel={() => setParqOpen(false)}
-        />
-      </div>
-    );
-
-
+    return <ParqBlockedScreen flags={parqFlags} onConfirmed={() => setParqBlocked(false)} />;
 
   const ownCreation =
     !String(w.created_by ?? "").startsWith("smarty:") &&
     w.created_by !== "community" &&
     !(w as { community_source_id?: string | null }).community_source_id &&
     !(w as { is_wod?: boolean | null }).is_wod;
+
+  // The shared original this workout belongs to: itself when the owner has
+  // shared it, or the source when this is a member's saved copy.
+  const communitySourceId = ownCreation
+    ? shared
+      ? workoutId
+      : null
+    : ((w as { community_source_id?: string | null }).community_source_id ?? null);
 
   const hasAnswers = Boolean(
     feedback && (feedback.rpe !== null || feedback.feeling || feedback.enjoyed || feedback.wouldRepeat),
@@ -370,6 +350,10 @@ function WorkoutPage() {
           {deleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
           Delete this workout
         </Button>
+      ) : null}
+
+      {communitySourceId ? (
+        <CommunityEngagementPanel sourceId={communitySourceId} isOwner={ownCreation} />
       ) : null}
 
       {!done ? (
