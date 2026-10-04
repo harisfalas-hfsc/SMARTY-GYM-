@@ -49,7 +49,6 @@ function WorkoutPage() {
   const [scheduledAt, setScheduledAt] = useState<string>("");
   
   const [parqFlags, setParqFlags] = useState<string[]>([]);
-  const [parqOpen, setParqOpen] = useState(false);
   const [parqBlocked, setParqBlocked] = useState(false);
   const [shared, setShared] = useState(false);
   const [sharing, setSharing] = useState(false);
@@ -125,7 +124,6 @@ function WorkoutPage() {
       setParqFlags(access.readinessFlags);
       if (!hasParqAck()) {
         setParqBlocked(true);
-        setParqOpen(true);
       }
     }
     setShared(Boolean((row as { is_shared?: boolean } | null)?.is_shared));
