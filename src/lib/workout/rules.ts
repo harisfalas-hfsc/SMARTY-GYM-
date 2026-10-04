@@ -51,12 +51,10 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   }
   // PILATES Main Workout: ONLY the 50 exercises on the SmartyGym Pilates list
   // (pilates-vocabulary.ts). The list is the whole vocabulary — nothing else is
-  // legal, and every listed exercise is legal (difficulty still applies).
+  // legal, and every listed exercise is legal.
   if (ctx.category === "PILATES") {
     if (!isPilatesMainExercise(e))
       out.push(`"${e.name}" is not on the SmartyGym Pilates exercise list — Pilates main work uses only those 50 exercises.`);
-    else if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
-      out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
     return out;
   }
   // CALORIE BURNING / CARDIO / METABOLIC / CHALLENGE: ONLY the 60-exercise
@@ -87,8 +85,9 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     out.push(`"${e.name}" is a plyometric or cardio drill — ${ctx.category} work is controlled loaded or bodyweight strength.`);
   if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && !listedPortable && D.CORE_ISOLATION_RE.test(e.name))
     out.push(`"${e.name}" is isolated core work — ${ctx.category} work is rhythmic or full-body movement.`);
-  if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
-    out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
+  // Difficulty is PRESCRIPTION only (load, reps, sets, rest) — an exercise is
+  // never "too hard" by itself; a goblet squat at 10 kg or 100 kg is the same
+  // legal exercise. The library difficulty label never gates vocabulary.
   // STRENGTH / MUSCLE BUILDING: ONLY the SmartyGym list (strength-vocabulary.ts).
   // Bodyweight workouts use pool A (bodyweight list); equipment / gym workouts
   // use pool B (gym machines + free weights) and never mix pool A moves in.
