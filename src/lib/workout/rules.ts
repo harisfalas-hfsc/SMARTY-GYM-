@@ -8,12 +8,13 @@
 // these two entry points, so no rule can be applied by one and missed by another.
 import * as D from "./doctrine";
 import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-vocabulary";
-import { isPilatesMainExercise } from "./pilates-vocabulary";
+import { isPilatesMainExercise, isTruePilatesMovement } from "./pilates-vocabulary";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
 /** Work words that make a "stretch"-named exercise a dynamic movement (pike-to-cobra push-up, dynamic chest stretch). */
 const MOVING_WORDS_RE = /\b(push-?up|press|jump|squat|lunge|row|curl|walk|crawl|plank|circles?|swings?|world'?s? greatest|dynamic|reach|march)\b/i;
-export const isPassiveStretch = (name: string) => D.PASSIVE_STRETCH_RE.test(name) && !MOVING_WORDS_RE.test(name);
+export const isPassiveStretch = (name: string) =>
+  D.PASSIVE_STRETCH_RE.test(name) && !MOVING_WORDS_RE.test(name) && !isTruePilatesMovement(name);
 
 /** Plyometric / cardio drill vocabulary — conditioning, never Strength or Muscle Building work. */
 const STRENGTH_BAN_RE =

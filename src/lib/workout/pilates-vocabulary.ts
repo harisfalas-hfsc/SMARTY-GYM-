@@ -69,4 +69,8 @@ export function isPilatesMainExercise(e: { id?: string | null; name: string }): 
   return NAMES.has(norm(e.name));
 }
 
+const TRUE_NAMES = new Set(PILATES_MAIN_EXERCISES.filter((e) => e.group === "true").map((e) => norm(e.name)));
+/** Classical Pilates movements (Double Leg Stretch, Spine Stretch Forward …) are dynamic reps work, never a held stretch. */
+export const isTruePilatesMovement = (name: string) => TRUE_NAMES.has(norm(name));
+
 export const PILATES_MAIN_NAMES = PILATES_MAIN_EXERCISES.map((e) => e.name);
