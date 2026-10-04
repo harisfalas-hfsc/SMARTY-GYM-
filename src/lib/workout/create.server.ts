@@ -1,4 +1,3 @@
-import { surprisePlan, surpriseSeed } from "./surprise";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   CATEGORY_FORMATS,
@@ -26,7 +25,6 @@ export type CoachRequest = {
   /** When false, the athlete's library likes/dislikes are ignored for this session. */
   useLibraryPreferences?: boolean;
   level?: string;
-  surprise?: boolean;
   /** Workout of the Day overrides — bypasses goal/level mapping. */
   wod?: {
     category: Category;
