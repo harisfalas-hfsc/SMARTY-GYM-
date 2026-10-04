@@ -94,6 +94,29 @@ export const getExerciseDetails = createServerFn({ method: "POST" })
     };
   });
 
+/**
+ * The member-chosen workout name — required right after Smarty Coach finishes.
+ * Only the name is editable by the member; category, difficulty, equipment and
+ * every other label stay system-set.
+ */
+export const nameWorkout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { workoutId: string; name: string }) => input)
+  .handler(async ({ data, context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
+    const name = String(data.name ?? "").trim().replace(/\s+/g, " ");
+    if (name.length < 2 || name.length > 60) {
+      throw new Error("Give your workout a name between 2 and 60 characters.");
+    }
+    const { error } = await context.supabase
+      .from("workouts")
+      .update({ name } as never)
+      .eq("id", data.workoutId)
+      .eq("user_id", context.userId);
+    if (error) throw new Error(error.message);
+    return { ok: true, name };
+  });
+
 export const setWorkoutMeta = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(
