@@ -16,10 +16,7 @@ export type CommunityWorkoutCard = {
   creator_id: string;
   creator_name: string | null;
   creator_avatar: string | null;
-  creator_score: number;
   creator_streak: number;
-  creator_completed: number;
-  creator_generated: number;
   likes: number;
   dislikes: number;
   comments_count: number;
