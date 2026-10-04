@@ -39,6 +39,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { useAuth } from "@/hooks/useAuth";
 import {
   getExercisePreferences,
+  getAllowedExerciseIds,
   setExercisePreference,
   type ExercisePreferences,
 } from "@/lib/preferences.functions";
@@ -301,6 +302,20 @@ function ExerciseLibraryPage() {
   const { user } = useAuth();
   const [prefs, setPrefs] = useState<ExercisePreferences | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
+  // Rule-allowed exercises are liked by default for everyone.
+  const [allowedIds, setAllowedIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    let active = true;
+    getAllowedExerciseIds()
+      .then((ids) => {
+        if (active) setAllowedIds(new Set(ids));
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!user) {
