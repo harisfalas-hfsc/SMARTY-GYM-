@@ -147,6 +147,7 @@ function CoachPage() {
   const navigate = useNavigate();
   const { mode } = Route.useSearch();
   const run = useServerFn(generateWorkout);
+  const runNaming = useServerFn(nameWorkout);
   const [goal, setGoal] = useState<string>("");
   const [focus, setFocus] = useState<string>("");
   const showFocus = FOCUS_GOALS.includes(goal);
@@ -294,6 +295,27 @@ function CoachPage() {
     }
   }
 
+  /** Mandatory naming step — the workout only opens once it has the member's name. */
+  async function confirmName() {
+    if (!namingWorkoutId || namingBusy) return;
+    const trimmed = workoutName.trim().replace(/\s+/g, " ");
+    if (trimmed.length < 2 || trimmed.length > 60) {
+      toast.error("Give your workout a name between 2 and 60 characters.");
+      return;
+    }
+    setNamingBusy(true);
+    try {
+      await runNaming({ data: { workoutId: namingWorkoutId, name: trimmed } });
+      const id = namingWorkoutId;
+      setNamingWorkoutId(null);
+      navigate({ to: "/workout/$workoutId", params: { workoutId: id } });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not save the name. Try again.");
+    } finally {
+      setNamingBusy(false);
+    }
+  }
+
   function requestGenerate(surprise: boolean) {
     if (!surprise && !canGenerate) {
       toast.error("Please answer all required questions first.");
@@ -410,6 +432,47 @@ function CoachPage() {
       ) : null}
 
       <GeneratingDialog open={busy && generationDialogOpen} onLeave={() => setGenerationDialogOpen(false)} />
+
+      <Dialog open={namingWorkoutId !== null} onOpenChange={() => undefined}>
+        <DialogContent
+          className="rounded-3xl [&>button]:hidden"
+          onInteractOutside={(e) => e.preventDefault()}
+          onEscapeKeyDown={(e) => e.preventDefault()}
+        >
+          <DialogHeader>
+            <DialogTitle className="text-xl font-extrabold">Your workout is ready</DialogTitle>
+            <DialogDescription>
+              One last step — name your workout. This name stays with it in your logbook and
+              anywhere you share it.
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void confirmName();
+            }}
+            className="space-y-4"
+          >
+            <Input
+              autoFocus
+              value={workoutName}
+              onChange={(e) => setWorkoutName(e.target.value)}
+              placeholder="e.g. Morning Power Session"
+              maxLength={60}
+              className="h-12 rounded-2xl"
+            />
+            <Button
+              type="submit"
+              size="lg"
+              className="h-14 w-full rounded-2xl text-base font-extrabold"
+              disabled={namingBusy || workoutName.trim().length < 2}
+            >
+              {namingBusy ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+              Save and open my workout
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
       {visitor ? (
           <VisitorJoinDialog open={membershipOpen} onOpenChange={setMembershipOpen} title="Your workout is one step away" text="Join SmartyGym or log in to create this workout and save it to your Logbook." />
         ) : (
