@@ -10,6 +10,7 @@ import * as D from "./doctrine";
 import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-vocabulary";
 import { isPilatesMainExercise, isTruePilatesMovement } from "./pilates-vocabulary";
 import { isStrengthListExercise } from "./strength-vocabulary";
+import { isConditioningListCategory, isConditioningListExercise } from "./conditioning-vocabulary";
 
 const isLoadCategory = (c: Category) => c === "STRENGTH" || c === "MUSCLE BUILDING";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -58,6 +59,10 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
       out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
     return out;
   }
+  // CALORIE BURNING / CARDIO / METABOLIC / CHALLENGE: ONLY the 60-exercise
+  // SmartyGym conditioning list (conditioning-vocabulary.ts); category rules still apply.
+  if (isConditioningListCategory(ctx.category) && !isConditioningListExercise(e))
+    out.push(`"${e.name}" is not on the SmartyGym conditioning exercise list — ${ctx.category} work uses only those 60 exercises.`);
   const push = (v: string | null) => { if (v) out.push(v); };
   push(D.humanRealismViolation(e));
   push(D.categoryExerciseViolation(e, ctx.category));
