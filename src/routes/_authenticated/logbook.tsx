@@ -944,11 +944,17 @@ function LogbookContent() {
 
   const loadRows = useCallback(async () => {
     if (!isSupabaseConfigured()) return getLocalWorkouts() as Row[];
+    // Only the member's own workouts. Reading "workouts" without this filter would
+    // also return other members' shared workouts, which RLS lets any member read.
+    const { data: { session } } = await supabase.auth.getSession();
+    const uid = session?.user.id;
+    if (!uid) return [];
     const { data, error } = await supabase
       .from("workouts")
       .select(
         "id,name,category,duration_min,difficulty_stars,difficulty_label,mood,status,is_favorite,scheduled_at,completed_at,created_at,is_wod,created_by,equipment,removed_from_logbook,is_shared,community_source_id,workout_feedback(difficulty_rating,feeling)",
       )
+      .eq("user_id", uid)
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) throw new Error(error.message);

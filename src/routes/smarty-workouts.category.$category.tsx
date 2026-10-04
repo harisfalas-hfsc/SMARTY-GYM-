@@ -85,6 +85,7 @@ function CategoryPage() {
       .from("workouts")
       .select("created_by,status,is_favorite")
       .like("created_by", "smarty:%")
+      .eq("user_id", user.id)
       .then(({ data }) => {
         const map: Record<string, { done: boolean; fav: boolean }> = {};
         for (const r of data ?? []) {
