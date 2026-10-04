@@ -30,6 +30,8 @@ const searchSchema = z.object({
   difficulty: fallback(z.number().int(), 0).default(0),
   category: fallback(z.string(), "").default(""),
   q: fallback(z.string(), "").default(""),
+  creator: fallback(z.string(), "").default(""),
+  creatorName: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/shared-workouts")({
@@ -112,19 +114,20 @@ function BrowsePage() {
 
   useEffect(() => {
     setPage(0);
-  }, [search.sort, search.difficulty, search.category, search.q]);
+  }, [search.sort, search.difficulty, search.category, search.q, search.creator]);
 
   useEffect(() => {
     let active = true;
     setLoading(true);
     void (async () => {
-      const cacheKey = ["community:browse", sort, difficulty, search.category || "all", search.q || "all", page].join(":");
+      const cacheKey = ["community:browse", sort, difficulty, search.category || "all", search.q || "all", search.creator || "all", page].join(":");
       const list = await loadRemote(cacheKey, () =>
         fetchCommunityWorkouts({
           sort,
           difficulty: difficulty || null,
           category: search.category || null,
           search: search.q || null,
+          creatorId: search.creator || null,
           limit: PAGE,
           offset: page * PAGE,
         }),
@@ -143,7 +146,7 @@ function BrowsePage() {
     return () => {
       active = false;
     };
-  }, [sort, difficulty, search.category, search.q, page]);
+  }, [sort, difficulty, search.category, search.q, search.creator, page]);
 
   const visible = creatorQuery.trim()
     ? rows.filter((w) =>
@@ -160,7 +163,7 @@ function BrowsePage() {
   }
 
   const filtersActive =
-    sort !== "latest" || difficulty > 0 || Boolean(search.category) || Boolean(search.q) || Boolean(creatorQuery);
+    sort !== "latest" || difficulty > 0 || Boolean(search.category) || Boolean(search.q) || Boolean(creatorQuery) || Boolean(search.creator);
 
   const filterBody = (
     <div className="space-y-3">
@@ -233,7 +236,7 @@ function BrowsePage() {
             className="h-11 rounded-2xl font-bold"
             onClick={() => {
               setCreatorQuery("");
-              update({ sort: "latest", difficulty: 0, category: "", q: "" });
+              update({ sort: "latest", difficulty: 0, category: "", q: "", creator: "", creatorName: "" });
             }}
           >
             Clear filters
@@ -256,6 +259,22 @@ function BrowsePage() {
           ← Smarty Community
         </Link>
       </div>
+
+      {search.creator ? (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-primary bg-card px-4 py-3">
+          <p className="min-w-0 truncate text-sm font-bold">
+            Shared workouts by <span className="text-primary">{search.creatorName || "Smarty member"}</span>
+          </p>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="shrink-0 rounded-2xl font-bold"
+            onClick={() => update({ creator: "", creatorName: "" })}
+          >
+            Show all creators
+          </Button>
+        </div>
+      ) : null}
 
       <div className="rounded-3xl border-2 border-blue-400 bg-card p-5">{filterBody}</div>
 
