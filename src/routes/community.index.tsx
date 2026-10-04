@@ -1,4 +1,5 @@
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
+import { CreatorLink } from "@/components/community/CreatorLink";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { loadRemoteCached } from "@/lib/remote-data";
@@ -564,7 +565,7 @@ function SharedWorkoutsPanel({
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-extrabold">{w.name}</p>
                   <p className="truncate text-[11px] text-muted-foreground">
-                    {w.creator_name || "Smarty member"} · {w.category} · {w.duration_min} min ·{" "}
+                    <CreatorLink userId={w.creator_id} name={w.creator_name} /> · {w.category} · {w.duration_min} min ·{" "}
                     {"★".repeat(normalizeStars(w.difficulty_stars) || 1)}
                   </p>
                   <p className="mt-1 text-[11px] font-semibold text-muted-foreground">
@@ -630,7 +631,7 @@ function MemberRankingPanel({
               </span>
               <MemberAvatar name={m.display_name} avatar={m.avatar_url} size={8} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold">{m.display_name || "Smarty member"}</p>
+                <p className="truncate text-sm font-bold"><CreatorLink userId={m.user_id} name={m.display_name} /></p>
                 <p className="truncate text-[11px] text-muted-foreground">
                   <Flame className="mr-0.5 inline h-3 w-3" />
                   {m.current_streak} day streak · {m.workouts_shared} shared
@@ -702,7 +703,7 @@ function WorkoutRankingPanel({
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-bold">{w.name}</p>
                   <p className="truncate text-[11px] text-muted-foreground">
-                    by {w.creator_name || "Smarty member"} · {w.category} · {w.duration_min} min
+                    by <CreatorLink userId={w.creator_id} name={w.creator_name} /> · {w.category} · {w.duration_min} min
                   </p>
                 </div>
                 <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-black text-primary">
@@ -764,7 +765,7 @@ function TalkPanel({
                 <MemberAvatar name={c.author_name} avatar={c.author_avatar} size={8} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-xs font-bold">
-                    {c.author_name || "Smarty member"}
+                    <CreatorLink userId={c.user_id} name={c.author_name} />
                     <span className="ml-1 font-normal text-muted-foreground">on</span>{" "}
                     <span className="text-primary">{c.workout_name || "a shared workout"}</span>
                   </p>
@@ -796,7 +797,7 @@ function TalkPanel({
               size={10}
             />
             <p className="min-w-0 truncate text-sm font-bold">
-              {selectedComment?.author_name || "Smarty member"}
+              <CreatorLink userId={selectedComment?.user_id} name={selectedComment?.author_name} />
             </p>
           </div>
           <div className="rounded-2xl border border-blue-200 p-3 dark:border-blue-500/40">

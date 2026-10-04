@@ -1,4 +1,5 @@
 import { Star, ThumbsUp, ThumbsDown, MessageCircle, CheckCircle2, Flame, Clock } from "lucide-react";
+import { CreatorLink } from "@/components/community/CreatorLink";
 import { cn } from "@/lib/utils";
 import { MAX_STARS, normalizeStars } from "@/lib/workout/spec";
 import { creatorOrigin, RATING_STARS, type CommunityBadge, type CommunityWorkoutCard as CardData } from "@/lib/community";
@@ -90,7 +91,7 @@ export function CommunityWorkoutCard({
             </span>
           )}
           <div className="min-w-0">
-            <p className="truncate text-sm font-bold">{workout.creator_name || "Smarty member"}</p>
+            <p className="truncate text-sm font-bold"><CreatorLink userId={workout.creator_id} name={workout.creator_name} /></p>
             <p className="truncate text-[11px] text-muted-foreground">
               <Flame className="mr-0.5 inline h-3 w-3" />
               {workout.creator_streak} day streak · {workout.creator_completed.toLocaleString()} completed
