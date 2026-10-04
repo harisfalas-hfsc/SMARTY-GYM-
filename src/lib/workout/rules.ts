@@ -20,8 +20,6 @@ export const isPassiveStretch = (name: string) =>
 const STRENGTH_BAN_RE =
   /\b(jump|jumping|bound|hop|hopping|burpee|plyo|plyometric|skater|sprint|jacks?|butt kicks?|high knees?|mountain climber|run|running|jog|jogging|skip|skipping|shuffle|march|inchworm|bird dog|crawl)\b/i;
 
-/** Pilates is controlled mat work: no dumbbell curls, crawls or pike presses. */
-const PILATES_EXTRA_BAN_RE = /\b(dumbbell|curl|crawl|crab walk|pike|press|roller)\b/i;
 
 export type RuleExercise = D.ExerciseLike & { id?: string; difficulty?: string | null; smarty_tags?: string[] | null };
 
@@ -65,10 +63,8 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   push(D.flowSpecialtyViolation(e, ctx.category, ctx.format));
   if (MOMENTUM_CATEGORIES.includes(ctx.category) && D.STATIC_HOLD_RE.test(e.name))
     out.push(`"${e.name}" is a static hold, which breaks the flow of a ${ctx.category} session.`);
-  if ((ctx.category === "MOBILITY & STABILITY" || ctx.category === "PILATES") && isPassiveStretch(e.name))
+  if (ctx.category === "MOBILITY & STABILITY" && isPassiveStretch(e.name))
     out.push(`"${e.name}" is a passive stretch — it belongs in the Cool Down, not ${ctx.category} main work.`);
-  if (ctx.category === "PILATES" && PILATES_EXTRA_BAN_RE.test(`${e.name} ${e.equipment ?? ""}`))
-    out.push(`"${e.name}" is loaded, crawling or pressing work, which Pilates never uses.`);
   if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && STRENGTH_BAN_RE.test(e.name))
     out.push(`"${e.name}" is a plyometric or cardio drill — ${ctx.category} work is controlled loaded or bodyweight strength.`);
   if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && D.CORE_ISOLATION_RE.test(e.name))
