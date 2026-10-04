@@ -286,6 +286,13 @@ function WorkoutPage() {
       workout={w}
       creator={creator}
       ownerName={displayName}
+      ownerCreationMethod={
+        ownCreation
+          ? w.category === "MY OWN WORKOUT"
+            ? "Build It Yourself"
+            : "Smarty Coach"
+          : null
+      }
       onComplete={complete}
       onPlayerClosed={() => {
         void refreshFeedback();
