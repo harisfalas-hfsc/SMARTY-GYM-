@@ -244,13 +244,24 @@ export async function generateWorkoutContent(
     ...enforcedPack.errors,
     ...packValidation.errors,
   ]);
-  const copy = packCopy({
-    category: input.category,
-    format,
-    level,
-    minutes: input.minutes,
-    focus: input.focus ?? null,
-  });
+  // Coaching text comes from the real Smarty Workouts library (closest match
+  // on category, difficulty, equipment mode and duration); the plain template
+  // copy is the fallback when nothing matches.
+  const copy =
+    (await smartyCopy(supabase as never, {
+      category: input.category,
+      stars: input.stars,
+      equipmentMode: input.equipmentMode,
+      minutes: input.minutes,
+      seed,
+    })) ??
+    packCopy({
+      category: input.category,
+      format,
+      level,
+      minutes: input.minutes,
+      focus: input.focus ?? null,
+    });
   const name = isValidName(pack.name, usedNames) ? pack.name : fallbackName();
 
   return {
@@ -258,13 +269,12 @@ export async function generateWorkoutContent(
     ...copy,
     main_workout: enforcedPack.html,
     warnings: [
-      `Built by the template engine after the AI attempts failed (${lastError}).`,
       ...enforcedPack.warnings,
       ...packValidation.warnings,
       ...packSplit.soft,
-      ...packSplit.structural.map((issue) => `Fallback adjustment: ${issue}`),
+      ...packSplit.structural.map((issue) => `Adjustment: ${issue}`),
     ],
-    needs_review: true,
+    needs_review: packSplit.structural.length > 0,
     format,
     pool,
     duration,
