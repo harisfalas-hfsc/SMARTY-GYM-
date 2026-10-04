@@ -136,6 +136,31 @@ function WorkoutPage() {
   }, [cached.data, cached.loading]);
 
 
+  // Who created the shared original — shown (clickable) at the top of the page.
+  const [creator, setCreator] = useState<{ id: string; name: string | null } | null>(null);
+  const creatorSourceId = w
+    ? ((w as { community_source_id?: string | null }).community_source_id ?? (shared ? workoutId : null))
+    : null;
+  useEffect(() => {
+    if (!creatorSourceId || !isSupabaseConfigured()) {
+      setCreator(null);
+      return;
+    }
+    let active = true;
+    void supabase
+      .from("community_workouts_public")
+      .select("creator_id,creator_name")
+      .eq("id", creatorSourceId)
+      .maybeSingle()
+      .then(({ data }) => {
+        const row = data as { creator_id: string | null; creator_name: string | null } | null;
+        if (active) setCreator(row?.creator_id ? { id: row.creator_id, name: row.creator_name } : null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [creatorSourceId]);
+
   const refreshFeedback = useCallback(async () => {
     if (!isSupabaseConfigured()) return;
     try {
@@ -261,6 +286,7 @@ function WorkoutPage() {
   return (
     <WorkoutDisplay
       workout={w}
+      creator={creator}
       onComplete={complete}
       onPlayerClosed={() => {
         void refreshFeedback();
