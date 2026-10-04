@@ -258,7 +258,10 @@ export function AdminSmartyWorkoutsTab() {
         confirmLabel={bulkConfirm ? "Show all" : "Hide all"}
         busy={bulkBusy}
         tone={bulkConfirm ? "default" : "warning"}
-        onConfirm={() => bulkConfirm !== null && bulkVisibility(bulkConfirm)}
+        onConfirm={() => {
+          if (bulkConfirm === null) return;
+          return bulkVisibility(bulkConfirm);
+        }}
       />
       <AppConfirmDialog
         open={deleteTarget !== null}
@@ -268,7 +271,10 @@ export function AdminSmartyWorkoutsTab() {
         confirmLabel="Delete workout"
         cancelLabel="Keep workout"
         tone="danger"
-        onConfirm={() => deleteTarget && del(deleteTarget)}
+        onConfirm={() => {
+          if (!deleteTarget) return;
+          return del(deleteTarget);
+        }}
       />
       <CreateDialog
         open={creating}

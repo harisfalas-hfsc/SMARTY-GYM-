@@ -126,18 +126,20 @@ export const SisterAppsPopup = () => {
         </Button>
       </div>
 
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setOpen(true)}
         aria-label="Show sister apps"
-        className={`fixed top-1/2 -translate-y-1/2 left-0 z-[59] w-2 h-24 rounded-r-full bg-primary shadow-[0_0_28px_hsl(var(--primary)/0.65)] hover:w-3 hover:bg-primary transition-all duration-300 ${open ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+        className={`fixed left-0 top-1/2 z-[59] h-24 w-2 -translate-y-1/2 rounded-l-none rounded-r-full bg-primary p-0 shadow-primary transition-all duration-300 hover:w-3 hover:bg-primary ${open ? "pointer-events-none opacity-0" : "opacity-100"}`}
       />
       {!open && (
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => setOpen(true)}
           aria-label="Show sister apps"
-          className="fixed top-1/2 -translate-y-1/2 left-0 z-[58] w-6 h-20 opacity-0"
+          className="fixed left-0 top-1/2 z-[58] h-20 w-6 -translate-y-1/2 p-0 opacity-0"
         />
       )}
     </>
