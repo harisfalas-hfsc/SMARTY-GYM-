@@ -14,6 +14,15 @@ import { isConditioningListCategory, isConditioningListExercise } from "./condit
 import { onMobilityRecoveryList } from "./mobility-recovery-vocabulary";
 
 const isLoadCategory = (c: Category) => c === "STRENGTH" || c === "MUSCLE BUILDING";
+
+/**
+ * Categories whose Main Workout / Finisher may use ONLY the owner's required
+ * exercise lists (Strength, Conditioning, Pilates, Mobility & Stability, Recovery).
+ * In these, 100% of work exercises come from the owner's lists — a hard rule —
+ * so the older 70% priority-share preference no longer applies.
+ */
+export const hasRequiredExerciseList = (c: string) =>
+  isLoadCategory(c as Category) || isConditioningListCategory(c as Category) || c === "PILATES" || c === "MOBILITY & STABILITY" || c === "RECOVERY";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
 /** Work words that make a "stretch"-named exercise a dynamic movement (pike-to-cobra push-up, dynamic chest stretch). */

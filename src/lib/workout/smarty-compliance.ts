@@ -6,7 +6,7 @@ import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds, priorityShareViolation } from "./priority";
 import { classify, isRelated, replacementConfidence, variationTier, type Confidence } from "./movement";
 import { prepTokens, prepAllowed, isBodyweightEquipment, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
-import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, type ExerciseRuleContext } from "./rules";
+import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -85,7 +85,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     if (D.activationOverflowViolation(estimateActivationMinutes(html), t)) s.add("Activation too long");
     if (D.cooldownOverflowViolation(estimateCooldownMinutes(html), t)) s.add("Cool Down too long");
   }
-  if (!NO_PRIORITY.has(cat) && rows.length) {
+  if (!NO_PRIORITY.has(cat) && !hasRequiredExerciseList(cat) && rows.length) {
     const legal = library.filter((e) => isLegalExercise(e, { category: cat as never, format: (w.format ?? "REPS & SETS") as never, bodyweightOnly: ctx.bodyweightOnly }));
     if (priorityShareViolation(rows.map((r) => r.id), legal)) s.add("Too few priority exercises");
   }
@@ -375,7 +375,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
   }
 
   // 3d. Preference: priority share — only genuinely equivalent (HIGH) priority swaps, never MEDIUM.
-  if (!NO_PRIORITY.has(cat)) {
+  if (!NO_PRIORITY.has(cat) && !hasRequiredExerciseList(cat)) {
     for (const t of allTokens(html)) {
       if (!issues(html).includes("Too few priority exercises")) break;
       const role = roleOfIndex(html, t.index);
