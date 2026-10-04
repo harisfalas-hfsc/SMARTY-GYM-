@@ -281,7 +281,12 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   //    handed to an athlete who did not ask for it.
   // Master engine §4/§24: difficulty is PRESCRIPTION (load, reps, sets, rest,
   // tempo, density) — never different vocabulary. Every level draws from the
-  // same exercises; no exercise is filtered out as "too advanced".
+  // same fundamental exercises; only a Beginner is kept away from rows the
+  // library itself marks as advanced skill material.
+  if (f.level === "beginner") {
+    const safe = pool.filter((e) => isLegalExercise(e, { category: f.category, format: f.format ?? "REPS & SETS", level: "beginner" }));
+    if (safe.length >= 3) pool = safe;
+  }
 
   // 3b. CARDIO stays aerobic (§4). High-fatigue conditioning vocabulary is
   //     legal but never dominant: the pool keeps a small minority of it so the
@@ -395,6 +400,7 @@ function prepFilter(
     if (!prepEquipmentOk(e, selectedEquipment)) return false;
     if (PREP_BAN_RE.test(text(e)) && !prepAllowed(e.name, "activation")) return false;
     if (HOME_APPARATUS_RE.test(text(e))) return false;
+    if ((e.difficulty ?? "").toLowerCase() === "advanced") return false;
     if (strict && !match.test(e.name)) return false;
     return true;
   });
