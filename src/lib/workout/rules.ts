@@ -9,7 +9,7 @@
 import * as D from "./doctrine";
 import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-vocabulary";
 import { isPilatesMainExercise, isTruePilatesMovement } from "./pilates-vocabulary";
-import { isStrengthListExercise } from "./strength-vocabulary";
+import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
 import { isConditioningListCategory, isConditioningListExercise } from "./conditioning-vocabulary";
 
 const isLoadCategory = (c: Category) => c === "STRENGTH" || c === "MUSCLE BUILDING";
@@ -70,8 +70,12 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   // timed-format flow rule (no barbell setup inside a clock).
   const listedPortable = conditioningListed && !/\bbarbell\b/i.test(`${e.name} ${e.equipment ?? ""}`);
   const push = (v: string | null) => { if (v && !listedPortable) out.push(v); };
-  if (!conditioningListed) push(D.humanRealismViolation(e));
-  push(D.categoryExerciseViolation(e, ctx.category));
+  // STRENGTH / MUSCLE BUILDING: the owner's list is authoritative the same way —
+  // listed movements (pistol squat, plank, mountain climber, bear crawl...) are
+  // never vetoed by generic name heuristics; format/flow rules still apply.
+  const strengthListed = isLoadCategory(ctx.category) && (isStrengthBodyweightListExercise(e) || isStrengthEquipmentListExercise(e));
+  if (!conditioningListed && !strengthListed) push(D.humanRealismViolation(e));
+  if (!strengthListed) push(D.categoryExerciseViolation(e, ctx.category));
   if (ctx.category === "MICRO-WORKOUTS") push(D.microExerciseViolation(e));
   push(D.dynamicExerciseViolation(e, ctx.category, ctx.format));
   push(D.flowSpecialtyViolation(e, ctx.category, ctx.format));
@@ -79,17 +83,26 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     out.push(`"${e.name}" is a static hold, which breaks the flow of a ${ctx.category} session.`);
   if (ctx.category === "MOBILITY & STABILITY" && isPassiveStretch(e.name))
     out.push(`"${e.name}" is a passive stretch — it belongs in the Cool Down, not ${ctx.category} main work.`);
-  if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && STRENGTH_BAN_RE.test(e.name))
+  if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && !strengthListed && STRENGTH_BAN_RE.test(e.name))
     out.push(`"${e.name}" is a plyometric or cardio drill — ${ctx.category} work is controlled loaded or bodyweight strength.`);
   if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && !listedPortable && D.CORE_ISOLATION_RE.test(e.name))
     out.push(`"${e.name}" is isolated core work — ${ctx.category} work is rhythmic or full-body movement.`);
   if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
     out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
-  // STRENGTH / MUSCLE BUILDING with equipment: ONLY the 100-exercise SmartyGym
-  // list (strength-vocabulary.ts). Any loaded exercise must be on it; in a
-  // workout known to use equipment, bodyweight moves are off-list too.
-  if (isLoadCategory(ctx.category) && !isStrengthListExercise(e) && (!isBodyweightEquipment(e.equipment ?? "") || ctx.bodyweightOnly === false))
-    out.push(`"${e.name}" is not on the SmartyGym Strength & Muscle Building exercise list — equipment ${ctx.category} work uses only those 100 exercises.`);
+  // STRENGTH / MUSCLE BUILDING: ONLY the SmartyGym list (strength-vocabulary.ts).
+  // Bodyweight workouts use pool A (bodyweight list); equipment / gym workouts
+  // use pool B (gym machines + free weights) and never mix pool A moves in.
+  if (isLoadCategory(ctx.category)) {
+    const bw = isBodyweightEquipment(e.equipment ?? "");
+    if (bw && ctx.bodyweightOnly === false) {
+      if (!isStrengthEquipmentListExercise(e))
+        out.push(`"${e.name}" is not on the SmartyGym equipment Strength & Muscle Hypertrophy list — an equipment ${ctx.category} workout uses only the gym-machine and free-weight exercises.`);
+    } else if (bw) {
+      if (!isStrengthBodyweightListExercise(e))
+        out.push(`"${e.name}" is not on the SmartyGym bodyweight Strength & Muscle Hypertrophy list — bodyweight ${ctx.category} work uses only those exercises.`);
+    } else if (!isStrengthEquipmentListExercise(e))
+      out.push(`"${e.name}" is not on the SmartyGym equipment Strength & Muscle Hypertrophy list — equipment ${ctx.category} work uses only the gym-machine and free-weight exercises.`);
+  }
   if (ctx.bodyweightOnly && !/body ?weight/i.test(e.equipment ?? ""))
     out.push(`"${e.name}" is not a bodyweight exercise.`);
   return out;
@@ -141,10 +154,11 @@ export function workoutRuleBreaks(
   push(D.stationFlowViolation(main, ctx.format, "Main Workout"));
   push(D.stationFlowViolation(finisher, ctx.format, "Finisher"));
   push(D.finisherFlowViolation(main, finisher, ctx.format));
-  // Equipment Strength / Muscle Building: every work exercise comes from the 100-exercise list.
-  if (isLoadCategory(ctx.category) && work.some((e) => !isBodyweightEquipment(e.equipment ?? ""))) {
-    const off = work.filter((e) => !isStrengthListExercise(e));
-    if (off.length) out.push(`"${off[0]!.name}" is not on the SmartyGym Strength & Muscle Building exercise list — an equipment ${ctx.category} workout uses only those 100 exercises.`);
+  // Strength / Muscle Building: equipment workouts use only pool B, bodyweight workouts only pool A.
+  if (isLoadCategory(ctx.category) && work.length) {
+    const equipped = work.some((e) => !isBodyweightEquipment(e.equipment ?? ""));
+    const off = work.filter((e) => !(equipped ? isStrengthEquipmentListExercise(e) : isStrengthBodyweightListExercise(e)));
+    if (off.length) out.push(`"${off[0]!.name}" is not on the SmartyGym ${equipped ? "equipment" : "bodyweight"} Strength & Muscle Hypertrophy list — this ${ctx.category} workout uses only those exercises.`);
   }
   // Strength / Muscle Building Finisher is complementary accessory work, never a second workout.
   if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && finisher.length && finisher.length >= main.length)
