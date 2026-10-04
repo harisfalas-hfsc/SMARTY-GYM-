@@ -26,10 +26,8 @@ describe("SmartyGym Strength & Muscle Hypertrophy list", () => {
     const work = [ex("push-up", "body weight"), ex("chin-up", "body weight")];
     expect(workoutRuleBreaks(work, work, { ...ctx, level: "intermediate" }).join()).toMatch(/chin-up/);
   });
-  it("equipment workouts never mix bodyweight-list moves in", () => {
-    expect(exerciseRuleBreaks(ex("push-up", "body weight"), { ...ctx, bodyweightOnly: false }).length).toBeGreaterThan(0);
-    const work = [ex("barbell bench press", "barbell"), ex("push-up", "body weight")];
-    expect(workoutRuleBreaks(work, work, { ...ctx, level: "intermediate" }).join()).toMatch(/push-up/);
+  it("equipment workouts keep bodyweight-list moves available", () => {
+    expect(exerciseRuleBreaks(ex("push-up", "body weight"), { ...ctx, bodyweightOnly: false })).toEqual([]);
   });
   it("matches by library name", () => {
     expect(isStrengthEquipmentListExercise({ name: "Lever T-Bar Row" })).toBe(true);

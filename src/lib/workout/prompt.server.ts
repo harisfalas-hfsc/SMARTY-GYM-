@@ -136,7 +136,7 @@ function athleteBlock(a?: AthleteContext): string {
   if (a.primary_goal) lines.push(`Primary goal: ${a.primary_goal}`);
   if (a.secondary_goal) lines.push(`Secondary goal: ${a.secondary_goal}`);
   if (a.preferred_environment) lines.push(`Usual training environment: ${a.preferred_environment}`);
-  if (a.location) lines.push(`Training today at: ${a.location}`);
+  if (a.location && a.location !== "any") lines.push(`Training today at: ${a.location}`);
   if (a.mood) lines.push(`Feeling today: ${a.mood}`);
   if (a.favorite_library?.length)
     lines.push(

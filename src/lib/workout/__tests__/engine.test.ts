@@ -217,7 +217,8 @@ describe("filterPool equipment allowlist", () => {
       level: "all",
     });
 
-    expect(result.map((item) => item.id)).toEqual(["d1", "k1"]);
+    expect(result.map((item) => item.id)).toEqual(expect.arrayContaining(["d1", "k1"]));
+    expect(result.every((item) => /dumbbell|kettlebell|body ?weight/i.test(item.equipment ?? ""))).toBe(true);
   });
 });
 

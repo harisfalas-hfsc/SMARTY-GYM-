@@ -331,6 +331,7 @@ export function resolveLocation(
   selectedEquipment: readonly string[] = [],
 ): string {
   const l = (location ?? "").toLowerCase() || "anywhere";
+  if (l === "any") return l; // no location filter — equipment decides
   if (l !== "anywhere") return l;
   return selectedEquipment.some((id) => GYM_ONLY_EQUIPMENT.has(String(id).toLowerCase()))
     ? "gym"
