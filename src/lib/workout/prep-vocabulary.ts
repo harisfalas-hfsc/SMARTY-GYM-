@@ -9,9 +9,10 @@ export const ACTIVATION_NAMES = [
   "bird dog", "cat-cow", "clamshell", "fire hydrant", "glute bridge", "glute bridge march",
   "low glute bridge on floor", "single leg bridge with outstretched leg", "dead bug", "pelvic tilt",
   "standing pelvic tilt", "scapula push-up", "incline scapula push up", "plank", "bodyweight incline side plank",
-  "kneeling plank tap shoulder", "inchworm", "world greatest stretch", "squat to overhead reach",
-  "squat to overhead reach with twist", "posterior step to overhead reach", "wrist circles", "ankle circles",
-  "dynamic chest stretch (male)", "circles knee stretch", "spine twist", "pelvic tilt into bridge",
+  "kneeling plank tap shoulder", "front plank with twist", "inchworm", "inchworm (variation 2)", "world greatest stretch",
+  "squat to overhead reach", "squat to overhead reach with twist", "posterior step to overhead reach", "wrist circles",
+  "ankle circles", "dynamic chest stretch (male)", "circles knee stretch", "spine twist", "spine twist pilates",
+  "pelvic tilt into bridge", "the hundred",
 ];
 
 export const COOLDOWN_NAMES = [
@@ -39,9 +40,9 @@ export type PrepSection = "activation" | "cooldown";
 export function prepAllowed(name: string, section: PrepSection): boolean {
   const n = norm(name);
   // Activation may also use cool-down mobility/stretches; cool down stays static/mobility.
-  if (section === "cooldown" ? CD.has(n) : ACT.has(n) || CD.has(n)) return true;
-  if (BANNED.test(n)) return false;
-  return section === "cooldown" ? CD_LIKE.test(n) : ACT_LIKE.test(n) || CD_LIKE.test(n);
+  // Closed lists (approved by Haris Falas, 2026-10-04): nothing outside them.
+  if (BANNED.test(n) && n !== "scapula push-up" && n !== "incline scapula push up") return false;
+  return section === "cooldown" ? CD.has(n) : ACT.has(n) || CD.has(n);
 }
 
 /** Activation dose ceiling: 10 reps, 30 sec, one pass — never working sets. */

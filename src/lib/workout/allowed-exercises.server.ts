@@ -8,7 +8,8 @@ import { isLegalExercise, type RuleExercise, type ExerciseRuleContext } from "./
 
 const LEVELS: DifficultyLevel[] = ["beginner", "intermediate", "advanced"];
 
-const WORK_CONTEXTS: ExerciseRuleContext[] = CATEGORIES.flatMap((category) =>
+// Micro Workouts are not offered, so they never contribute liked exercises.
+const WORK_CONTEXTS: ExerciseRuleContext[] = CATEGORIES.filter((c) => c !== "MICRO-WORKOUTS").flatMap((category) =>
   (CATEGORY_FORMATS[category] ?? ([] as Format[])).flatMap((format) =>
     LEVELS.flatMap((level) => [
       { category, format, level, section: "work" as const, bodyweightOnly: true },
