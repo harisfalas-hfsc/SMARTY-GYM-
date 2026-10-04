@@ -96,11 +96,14 @@ export function anchorDate(row: LogbookRow): Date {
   return new Date(row.scheduled_at ?? row.completed_at ?? row.created_at);
 }
 
-export function sourceLabel(row: LogbookRow): string {
+/** Where a logbook workout came from, in plain words. */
+export function sourceLabel(row: LogbookRow & { creator_name?: string | null }): string {
   if (row.is_wod) return "Workout of the Day";
-  if (row.created_by === "member" || row.created_by === "community") return "Shared Workout";
-  if (String(row.created_by ?? "").startsWith("smarty:")) return "Smarty Workout";
-  return "Created by you";
+  const src = workoutSource(row);
+  if (src === "smarty") return "Smarty Workout";
+  if (src === "community") return `From Shared Workouts · by ${row.creator_name?.trim() || "a member"}`;
+  if (src === "own") return "Created by you · Build It Yourself";
+  return "Created by you · Smarty Coach";
 }
 
 /**
