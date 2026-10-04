@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { RefreshCw, X } from "lucide-react";
 import { isRecoverablePageImportError } from "@/lib/recoverable-page-error";
+import { Button } from "@/components/ui/button";
 
 /**
  * Branded "new version available" prompt.
@@ -72,26 +73,28 @@ export function UpdatePrompt({ forceVisible = false }: { forceVisible?: boolean 
                 A quick refresh usually gets you back on track.
               </p>
             </div>
-            <button
+            <Button
               type="button"
+              size="icon"
+              variant="ghost"
               aria-label={forceVisible ? "Go home" : "Dismiss"}
               onClick={() => {
                 setVisible(false);
                 if (forceVisible) window.location.assign("/");
               }}
-              className="flex-shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+              className="h-8 w-8 flex-shrink-0 rounded-full text-muted-foreground"
             >
               <X className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
           <div className="mt-5">
-            <button
+            <Button
               type="button"
               onClick={() => window.location.reload()}
-              className="w-full rounded-xl bg-primary py-3.5 font-bold text-primary-foreground transition-all duration-200 hover:bg-primary/90 active:scale-[0.98]"
+              className="h-12 w-full rounded-2xl font-bold"
             >
               Refresh App
-            </button>
+            </Button>
           </div>
         </div>
         <div className="h-1 w-full bg-gradient-to-r from-primary via-green-500 to-primary" />

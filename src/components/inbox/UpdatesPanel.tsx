@@ -4,16 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { CheckCheck, Loader2, Mail, MailOpen, Trash2, X } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import {
   deleteNotifications,
   listNotifications,
@@ -316,22 +307,18 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
         </ul>
       )}
 
-      <AlertDialog open={confirm !== null} onOpenChange={(o) => !o && setConfirm(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete messages?</AlertDialogTitle>
-            <AlertDialogDescription>
-              {confirm?.length === 1
-                ? "This message will be permanently deleted."
-                : `${confirm?.length ?? 0} messages will be permanently deleted.`}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={doDelete}>Delete</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <AppConfirmDialog
+        open={confirm !== null}
+        onOpenChange={(open) => !open && setConfirm(null)}
+        title="Delete messages?"
+        description={confirm?.length === 1
+          ? "This message will be permanently deleted."
+          : `${confirm?.length ?? 0} messages will be permanently deleted.`}
+        confirmLabel="Delete"
+        cancelLabel="Keep messages"
+        tone="danger"
+        onConfirm={doDelete}
+      />
     </div>
   );
 }

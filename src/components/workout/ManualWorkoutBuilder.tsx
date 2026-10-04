@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createManualWorkout } from "@/lib/manual-workout.functions";
 import { ParqWaiverDialog } from "@/components/ParqWaiverDialog";
+import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import { hasParqAck, setParqAck } from "@/lib/parq-ack";
 import {
   DRAFT_EVENT,
@@ -109,6 +110,7 @@ export function ManualWorkoutBuilder({
   const create = useServerFn(createManualWorkout);
   const [draft, setDraft] = useState<ManualDraft | null>(null);
   const [busy, setBusy] = useState(false);
+  const [discardOpen, setDiscardOpen] = useState(false);
 
   useEffect(() => {
     const sync = () => setDraft(loadDraft());
@@ -174,15 +176,24 @@ export function ManualWorkoutBuilder({
         variant="outline"
         className="h-12 w-full rounded-2xl font-bold text-destructive"
         disabled={busy}
-        onClick={() => {
-          if (window.confirm("Discard this workout and remove all its exercises?")) {
-            clearDraft();
-            toast.success("Workout discarded. You can start a new one.");
-          }
-        }}
+        onClick={() => setDiscardOpen(true)}
       >
         <Trash2 className="mr-2 h-4 w-4" /> Discard workout
       </Button>
+      <AppConfirmDialog
+        open={discardOpen}
+        onOpenChange={setDiscardOpen}
+        title="Discard this workout?"
+        description="The workout name and every exercise you added will be removed."
+        confirmLabel="Discard workout"
+        cancelLabel="Keep building"
+        tone="danger"
+        onConfirm={() => {
+          clearDraft();
+          setDiscardOpen(false);
+          toast.success("Workout discarded. You can start a new one.");
+        }}
+      />
       <ParqWaiverDialog
         open={parqOpen}
         flags={parqFlags}

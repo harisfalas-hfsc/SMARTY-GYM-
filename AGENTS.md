@@ -18,7 +18,7 @@
 - Workout engine: CHALLENGE sessions are enforced as full-body, majority-bodyweight, on-level benchmarks via challengeBalanceViolation (doctrine.ts) as a structural validator error; exercise library carries smarty_tags (9 tags, backfilled from category/body_part/difficulty/equipment) used to prefer challenge vocabulary in filterPool.
 - Workout difficulty is prescription only: filterPool never narrows vocabulary by level (beginner just drops library-"advanced" rows); flowSpecialtyViolation (doctrine.ts) bans balance tools/isolation machines in flow categories and timed formats, enforced in both pool and validator — one engine for WOD and custom.
 - Smarty Check-ins scoring lives in src/lib/checkins/score.ts, computed server-side in checkins.functions.ts and read by coach via loadCheckinSignal — one source for UI, badges and coach.
-- Workout delivery is fail-fast: WOD uses the library engine; manual generation gets one 18s AI attempt, then library fallback.
+- Workout delivery is deterministic: WOD and Smarty Coach use the library engine with no AI attempt.
 - Coach/admin/WOD generation shares generateWorkoutContent; priority lists live only in priority.ts — why: one rule package.
 - All Smarty Workouts are one collection with identical admin controls regardless of origin; imported workouts and media are self-contained in this project — why: no ongoing dependency on another project.
 - Players accept verified numeric/slug exercise IDs; bulk publishing requires the full-library audit. Native startup stays black through launch, window, WebView, and first React frame to prevent white handoffs.
@@ -32,3 +32,4 @@
 - Public search uses shared route inventory; IndexNow sends changed public URLs only. Unverified research is noindex; workout search exposes card fields, never prescriptions — why: no Premium leaks.
 - deleteManualWorkout is creator-only and covers the original plus all community copies: social data removed, rows with training activity tombstoned (deleted_at), others hard-deleted — why: training can't be undone.
 - Route-module download failures share one classifier for update notice and root error screen; handled failures skip crash-alert reporting, unrelated errors still report — why: refresh fixes missing files without false emails.
+- User confirmations and text prompts use shared branded dialogs, never browser-native boxes — why: consistent web/native presentation.
