@@ -1,4 +1,4 @@
-import { Star, ThumbsUp, ThumbsDown, MessageCircle, CheckCircle2, Flame, Clock } from "lucide-react";
+import { Star, ThumbsUp, ThumbsDown, MessageCircle, CheckCircle2, Flame, Clock, Trophy } from "lucide-react";
 import { CreatorLink } from "@/components/community/CreatorLink";
 import { cn } from "@/lib/utils";
 import { MAX_STARS, normalizeStars } from "@/lib/workout/spec";
@@ -44,6 +44,7 @@ export function CommunityWorkoutCard({
     ? formatDateShort(workout.shared_at)
     : "—";
   const initial = (workout.creator_name || "S").slice(0, 1).toUpperCase();
+  const visibleBadges = badges.slice(0, 3);
 
   return (
     <article
@@ -92,24 +93,33 @@ export function CommunityWorkoutCard({
           )}
           <div className="min-w-0">
             <p className="truncate text-sm font-bold"><CreatorLink userId={workout.creator_id} name={workout.creator_name} /></p>
-            <p className="truncate text-[11px] text-muted-foreground">
-              <Flame className="mr-0.5 inline h-3 w-3" />
-              {workout.creator_streak} day streak · {workout.creator_completed.toLocaleString()} completed
-            </p>
+            <div className="flex min-w-0 items-center gap-2 text-[11px] text-muted-foreground">
+              <span className="shrink-0">
+                <Flame className="mr-0.5 inline h-3 w-3" />
+                {workout.creator_streak} day streak
+              </span>
+              <span className="inline-flex min-w-0 items-center gap-1" aria-label={visibleBadges.length ? `${visibleBadges.length} earned badges` : "No badges earned yet"}>
+                {Array.from({ length: 3 }).map((_, index) => {
+                  const badge = visibleBadges[index];
+                  return (
+                    <span
+                      key={badge?.badge_id ?? `empty-badge-${index}`}
+                      title={badge?.badge_name ?? "Badge not earned yet"}
+                      className={cn(
+                        "grid h-4 w-4 shrink-0 place-items-center rounded-full border",
+                        badge
+                          ? "border-primary/60 bg-primary/15 text-primary"
+                          : "border-muted-foreground/25 text-muted-foreground/25",
+                      )}
+                    >
+                      <Trophy className="h-2.5 w-2.5" aria-hidden="true" />
+                    </span>
+                  );
+                })}
+              </span>
+            </div>
           </div>
         </div>
-        {badges.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1">
-            {badges.slice(0, 3).map((b) => (
-              <span
-                key={b.badge_id}
-                className="rounded-full border border-blue-300 px-2 py-0.5 text-[10px] font-semibold text-primary dark:border-blue-500/50"
-              >
-                🏆 {b.badge_name}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
       <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">

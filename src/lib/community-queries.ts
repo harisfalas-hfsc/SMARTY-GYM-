@@ -10,7 +10,7 @@ import {
 } from "@/lib/community";
 
 const CARD_COLUMNS =
-  "id,name,category,format,focus,difficulty_stars,duration_min,equipment,location,image_url,description,shared_at,creator_id,creator_name,creator_avatar,creator_score,creator_streak,creator_completed,creator_generated,likes,dislikes,comments_count,completions,unique_completions,created_by,is_wod,wod_date,rating_avg,rating_count";
+  "id,name,category,format,focus,difficulty_stars,duration_min,equipment,location,image_url,description,shared_at,creator_id,creator_name,creator_avatar,creator_streak,likes,dislikes,comments_count,completions,unique_completions,created_by,is_wod,wod_date,rating_avg,rating_count";
 
 export type WorkoutFilters = {
   sort?: CommunitySort | "oldest";
