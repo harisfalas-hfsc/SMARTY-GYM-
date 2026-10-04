@@ -8,6 +8,7 @@
 // these two entry points, so no rule can be applied by one and missed by another.
 import * as D from "./doctrine";
 import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-vocabulary";
+import { isPilatesMainExercise } from "./pilates-vocabulary";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
 /** Work words that make a "stretch"-named exercise a dynamic movement (pike-to-cobra push-up, dynamic chest stretch). */
@@ -43,6 +44,16 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
       out.push(section === "activation" ? `"${e.name}" is not an activation (mobility/stability) exercise.` : `"${e.name}" is not a cool-down stretch or mobility exercise.`);
     if (e.equipment != null && !isBodyweightEquipment(e.equipment))
       out.push(`"${e.name}" uses ${e.equipment} — ${section === "activation" ? "Activation" : "Cool Down"} never uses equipment.`);
+    return out;
+  }
+  // PILATES Main Workout: ONLY the 50 exercises on the SmartyGym Pilates list
+  // (pilates-vocabulary.ts). The list is the whole vocabulary — nothing else is
+  // legal, and every listed exercise is legal (difficulty still applies).
+  if (ctx.category === "PILATES") {
+    if (!isPilatesMainExercise(e))
+      out.push(`"${e.name}" is not on the SmartyGym Pilates exercise list — Pilates main work uses only those 50 exercises.`);
+    else if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
+      out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
     return out;
   }
   const push = (v: string | null) => { if (v) out.push(v); };
