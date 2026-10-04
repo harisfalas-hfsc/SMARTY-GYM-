@@ -86,7 +86,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     if (D.cooldownOverflowViolation(estimateCooldownMinutes(html), t)) s.add("Cool Down too long");
   }
   if (!NO_PRIORITY.has(cat) && rows.length) {
-    const legal = library.filter((e) => isLegalExercise(e, { category: cat as never, format: (w.format ?? "REPS & SETS") as never }));
+    const legal = library.filter((e) => isLegalExercise(e, { category: cat as never, format: (w.format ?? "REPS & SETS") as never, bodyweightOnly: ctx.bodyweightOnly }));
     if (priorityShareViolation(rows.map((r) => r.id), legal)) s.add("Too few priority exercises");
   }
   return [...s];

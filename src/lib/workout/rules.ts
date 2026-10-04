@@ -9,6 +9,9 @@
 import * as D from "./doctrine";
 import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-vocabulary";
 import { isPilatesMainExercise, isTruePilatesMovement } from "./pilates-vocabulary";
+import { isStrengthListExercise } from "./strength-vocabulary";
+
+const isLoadCategory = (c: Category) => c === "STRENGTH" || c === "MUSCLE BUILDING";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
 /** Work words that make a "stretch"-named exercise a dynamic movement (pike-to-cobra push-up, dynamic chest stretch). */
@@ -71,6 +74,11 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     out.push(`"${e.name}" is isolated core work — ${ctx.category} work is rhythmic or full-body movement.`);
   if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
     out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
+  // STRENGTH / MUSCLE BUILDING with equipment: ONLY the 100-exercise SmartyGym
+  // list (strength-vocabulary.ts). Any loaded exercise must be on it; in a
+  // workout known to use equipment, bodyweight moves are off-list too.
+  if (isLoadCategory(ctx.category) && !isStrengthListExercise(e) && (!isBodyweightEquipment(e.equipment ?? "") || ctx.bodyweightOnly === false))
+    out.push(`"${e.name}" is not on the SmartyGym Strength & Muscle Building exercise list — equipment ${ctx.category} work uses only those 100 exercises.`);
   if (ctx.bodyweightOnly && !/body ?weight/i.test(e.equipment ?? ""))
     out.push(`"${e.name}" is not a bodyweight exercise.`);
   return out;
@@ -122,6 +130,11 @@ export function workoutRuleBreaks(
   push(D.stationFlowViolation(main, ctx.format, "Main Workout"));
   push(D.stationFlowViolation(finisher, ctx.format, "Finisher"));
   push(D.finisherFlowViolation(main, finisher, ctx.format));
+  // Equipment Strength / Muscle Building: every work exercise comes from the 100-exercise list.
+  if (isLoadCategory(ctx.category) && work.some((e) => !isBodyweightEquipment(e.equipment ?? ""))) {
+    const off = work.filter((e) => !isStrengthListExercise(e));
+    if (off.length) out.push(`"${off[0]!.name}" is not on the SmartyGym Strength & Muscle Building exercise list — an equipment ${ctx.category} workout uses only those 100 exercises.`);
+  }
   // Strength / Muscle Building Finisher is complementary accessory work, never a second workout.
   if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && finisher.length && finisher.length >= main.length)
     out.push(`The ${ctx.category} Finisher must be shorter than the Main Workout — it complements it, never repeats it.`);

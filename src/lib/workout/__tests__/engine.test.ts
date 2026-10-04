@@ -209,7 +209,7 @@ describe("filterPool equipment allowlist", () => {
     ex("x1", "ball stretch", { equipment: "stability ball" }),
   ];
 
-  it("allows only bodyweight, dumbbell and kettlebell when those are selected", () => {
+  it("allows only listed dumbbell and kettlebell strength exercises when those are selected", () => {
     const result = filterPool(equipmentPool, {
       category: "STRENGTH",
       equipmentMode: "EQUIPMENT",
@@ -217,7 +217,7 @@ describe("filterPool equipment allowlist", () => {
       level: "all",
     });
 
-    expect(result.map((item) => item.id)).toEqual(["d1", "k1", "b1"]);
+    expect(result.map((item) => item.id)).toEqual(["k1"]);
   });
 });
 

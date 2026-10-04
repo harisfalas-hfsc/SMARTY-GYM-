@@ -505,6 +505,13 @@
       "when": 1791096041296,
       "tag": "0071_pilates_backup_20261004",
       "breakpoints": true
+    },
+    {
+      "idx": 72,
+      "version": "7",
+      "when": 1791097130117,
+      "tag": "0072_strength_list_repair",
+      "breakpoints": true
     }
   ]
 }
