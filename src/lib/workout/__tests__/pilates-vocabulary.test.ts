@@ -23,8 +23,8 @@ describe("SmartyGym Pilates exercise list", () => {
       expect(exerciseRuleBreaks(ex(name), ctx).join(" ")).toMatch(/not on the SmartyGym Pilates exercise list/);
   });
 
-  it("keeps advanced list items out of Beginner sessions", () => {
-    expect(exerciseRuleBreaks(ex("Jackknife", "pilates-jackknife", "body weight", "advanced"), { ...ctx, level: "beginner" })).toHaveLength(1);
+  it("never gates an exercise by its difficulty label — difficulty is prescription only", () => {
+    expect(exerciseRuleBreaks(ex("Jackknife", "pilates-jackknife", "body weight", "advanced"), { ...ctx, level: "beginner" })).toEqual([]);
   });
 
   it("matches by id or name", () => {
