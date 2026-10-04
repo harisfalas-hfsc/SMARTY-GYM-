@@ -143,15 +143,18 @@ type Row = {
   is_wod: boolean | null;
   created_by: string | null;
   equipment: string[] | null;
+  is_shared?: boolean | null;
+  community_source_id?: string | null;
+  creator_name?: string | null;
   workout_feedback: Array<{ difficulty_rating: string | null; feeling: string | null }>;
 };
 
-/** Colour of the dot a workout gets in the calendar. */
+/** Origin tag colours: Smarty Workouts, Smarty Coach, Build It Yourself, from Shared Workouts. */
 const SOURCE_STYLE: Record<string, string> = {
   smarty: "border-sky-400/60 bg-sky-400/10 text-sky-400",
-  coach: "border-amber-400/60 bg-amber-400/10 text-amber-400",
+  coach: "border-violet-400/60 bg-violet-400/10 text-violet-400",
   own: "border-emerald-400/60 bg-emerald-400/10 text-emerald-400",
-  community: "border-fuchsia-400/60 bg-fuchsia-400/10 text-fuchsia-400",
+  community: "border-amber-400/60 bg-amber-400/10 text-amber-400",
 };
 
 const SOURCE_DOT: Record<Source, string> = {
@@ -213,7 +216,7 @@ function WorkoutCard({
         </div>
 
         <p className="mt-1 pr-10 font-bold leading-tight">{r.name}</p>
-        <p className="mt-1">
+        <p className="mt-1 flex flex-wrap gap-1">
           <span
             className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold ${
               SOURCE_STYLE[workoutSource(r)]
@@ -221,6 +224,11 @@ function WorkoutCard({
           >
             {sourceLabel(r)}
           </span>
+          {r.is_shared && (workoutSource(r) === "own" || workoutSource(r) === "coach") ? (
+            <span className="inline-flex items-center rounded-full border border-fuchsia-400/60 bg-fuchsia-400/10 px-2 py-0.5 text-[10px] font-bold text-fuchsia-400">
+              Shared by you
+            </span>
+          ) : null}
         </p>
 
         <div className="mt-2 grid grid-cols-3 items-center gap-2 text-xs">
@@ -938,12 +946,25 @@ function LogbookContent() {
     const { data, error } = await supabase
       .from("workouts")
       .select(
-        "id,name,category,duration_min,difficulty_stars,difficulty_label,mood,status,is_favorite,scheduled_at,completed_at,created_at,is_wod,created_by,equipment,removed_from_logbook,workout_feedback(difficulty_rating,feeling)",
+        "id,name,category,duration_min,difficulty_stars,difficulty_label,mood,status,is_favorite,scheduled_at,completed_at,created_at,is_wod,created_by,equipment,removed_from_logbook,is_shared,community_source_id,workout_feedback(difficulty_rating,feeling)",
       )
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) throw new Error(error.message);
-    return ((data as unknown as Row[]) ?? []).filter(belongsInLogbook);
+    const rows = ((data as unknown as Row[]) ?? []).filter(belongsInLogbook);
+    // Copies saved from Shared Workouts show who shared them.
+    const sourceIds = [...new Set(rows.map((r) => r.community_source_id).filter(Boolean))] as string[];
+    if (sourceIds.length) {
+      const { data: creators } = await supabase
+        .from("community_workouts_public")
+        .select("id,creator_name")
+        .in("id", sourceIds);
+      const names = new Map(
+        ((creators ?? []) as { id: string | null; creator_name: string | null }[]).map((c) => [c.id, c.creator_name]),
+      );
+      for (const r of rows) if (r.community_source_id) r.creator_name = names.get(r.community_source_id) ?? null;
+    }
+    return rows;
   }, []);
 
   const cached = useRemoteData<Row[]>("logbook:list", loadRows, {
