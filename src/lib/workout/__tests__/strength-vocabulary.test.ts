@@ -9,14 +9,15 @@ describe("SmartyGym Strength & Muscle Hypertrophy list", () => {
   it("has 50 bodyweight + 50 machines + 50 free weights", () => {
     expect(STRENGTH_EXERCISES).toHaveLength(150);
     expect(STRENGTH_EXERCISES.filter((e) => e.group === "bodyweight")).toHaveLength(50);
-    expect(STRENGTH_EXERCISES.filter((e) => e.group === "machine")).toHaveLength(50);
-    expect(STRENGTH_EXERCISES.filter((e) => e.group === "free")).toHaveLength(50);
+    expect(STRENGTH_EXERCISES.filter((e) => e.group === "machine")).toHaveLength(73);
+    expect(STRENGTH_EXERCISES.filter((e) => e.group === "free")).toHaveLength(73);
   });
   it("allows listed equipment exercises and blocks others", () => {
     expect(exerciseRuleBreaks(ex("sled 45° leg press", "sled machine"), ctx)).toEqual([]);
     expect(exerciseRuleBreaks(ex("barbell full squat", "barbell"), { ...ctx, category: "MUSCLE BUILDING" })).toEqual([]);
-    expect(exerciseRuleBreaks(ex("smith bench press", "smith machine"), ctx).join()).toMatch(/equipment Strength & Muscle Hypertrophy list/);
-    expect(exerciseRuleBreaks(ex("dumbbell fly", "dumbbell"), ctx).length).toBeGreaterThan(0);
+    expect(exerciseRuleBreaks(ex("smith bench press", "smith machine"), ctx)).toEqual([]);
+    expect(exerciseRuleBreaks(ex("dumbbell fly", "dumbbell"), ctx)).toEqual([]);
+    expect(exerciseRuleBreaks(ex("smith reverse calf raises", "smith machine"), ctx).join()).toMatch(/equipment Strength & Muscle Hypertrophy list/);
   });
   it("bodyweight workouts use only the bodyweight list", () => {
     expect(exerciseRuleBreaks(ex("push-up", "body weight"), { ...ctx, bodyweightOnly: true })).toEqual([]);
