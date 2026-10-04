@@ -43,3 +43,4 @@
 - [x] Add Shared Workouts as “Shared” before Logbook in the phone bottom menu.
 
 - [x] Switch Smarty Coach to 100% deterministic generation (zero AI credits): copy from existing Smarty Workouts, mandatory member-chosen name step, locked labels/tags.
+- [ ] Standardize confirmations, information windows, announcements and temporary messages with one branded SMARTYGYM presentation; remove browser-native prompts.
