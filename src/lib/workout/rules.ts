@@ -61,9 +61,15 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   }
   // CALORIE BURNING / CARDIO / METABOLIC / CHALLENGE: ONLY the 60-exercise
   // SmartyGym conditioning list (conditioning-vocabulary.ts); category rules still apply.
-  if (isConditioningListCategory(ctx.category) && !isConditioningListExercise(e))
+  const conditioningListed = isConditioningListCategory(ctx.category) && isConditioningListExercise(e);
+  if (isConditioningListCategory(ctx.category) && !conditioningListed)
     out.push(`"${e.name}" is not on the SmartyGym conditioning exercise list — ${ctx.category} work uses only those 60 exercises.`);
-  const push = (v: string | null) => { if (v) out.push(v); };
+  // The owner's list is authoritative for the movements it names: generic
+  // name heuristics (core/stretch/skill/rack) never veto a listed dumbbell,
+  // kettlebell or bodyweight movement. Barbell items stay subject to the
+  // timed-format flow rule (no barbell setup inside a clock).
+  const listedPortable = conditioningListed && !/\bbarbell\b/i.test(`${e.name} ${e.equipment ?? ""}`);
+  const push = (v: string | null) => { if (v && !listedPortable) out.push(v); };
   push(D.humanRealismViolation(e));
   push(D.categoryExerciseViolation(e, ctx.category));
   if (ctx.category === "MICRO-WORKOUTS") push(D.microExerciseViolation(e));
