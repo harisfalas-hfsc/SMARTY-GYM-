@@ -49,12 +49,11 @@ function WorkoutPage() {
   const [scheduledAt, setScheduledAt] = useState<string>("");
   
   const [parqFlags, setParqFlags] = useState<string[]>([]);
-  const [parqOpen, setParqOpen] = useState(false);
   const [parqBlocked, setParqBlocked] = useState(false);
   const [shared, setShared] = useState(false);
   const [sharing, setSharing] = useState(false);
   const saveStatus = useServerFn(setWorkoutStatus);
-  const { user } = useAuth();
+  const { user, displayName } = useAuth();
   const online = useOnlineStatus();
   const saveShare = useServerFn(shareWorkout);
   const readFeedback = useServerFn(getSessionFeedback);
@@ -125,7 +124,6 @@ function WorkoutPage() {
       setParqFlags(access.readinessFlags);
       if (!hasParqAck()) {
         setParqBlocked(true);
-        setParqOpen(true);
       }
     }
     setShared(Boolean((row as { is_shared?: boolean } | null)?.is_shared));
@@ -287,6 +285,7 @@ function WorkoutPage() {
     <WorkoutDisplay
       workout={w}
       creator={creator}
+      ownerName={displayName}
       onComplete={complete}
       onPlayerClosed={() => {
         void refreshFeedback();

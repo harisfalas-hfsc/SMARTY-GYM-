@@ -2,7 +2,7 @@ import { Star, ThumbsUp, ThumbsDown, MessageCircle, CheckCircle2, Flame, Clock }
 import { CreatorLink } from "@/components/community/CreatorLink";
 import { cn } from "@/lib/utils";
 import { MAX_STARS, normalizeStars } from "@/lib/workout/spec";
-import { creatorOrigin, RATING_STARS, type CommunityBadge, type CommunityWorkoutCard as CardData } from "@/lib/community";
+import { RATING_STARS, type CommunityBadge, type CommunityWorkoutCard as CardData } from "@/lib/community";
 import { formatDateShort } from "@/lib/date-format";
 
 function Stars({ n }: { n: number }) {
@@ -111,8 +111,6 @@ export function CommunityWorkoutCard({
           </div>
         )}
       </div>
-
-      <p className="mt-3 text-[11px] font-semibold text-muted-foreground">{creatorOrigin(workout)}</p>
 
       <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
         <span className="inline-flex items-center gap-0.5">

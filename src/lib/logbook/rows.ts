@@ -100,8 +100,7 @@ export function sourceLabel(row: LogbookRow): string {
   if (row.is_wod) return "Workout of the Day";
   if (row.created_by === "member" || row.created_by === "community") return "Shared Workout";
   if (String(row.created_by ?? "").startsWith("smarty:")) return "Smarty Workout";
-  if (row.category === "MY OWN WORKOUT") return "Created by me";
-  return "Created by Smarty Coach";
+  return "Created by you";
 }
 
 /**

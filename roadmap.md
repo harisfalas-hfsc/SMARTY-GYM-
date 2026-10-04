@@ -44,3 +44,4 @@
 
 - [x] Switch Smarty Coach to 100% deterministic generation (zero AI credits): copy from existing Smarty Workouts, mandatory member-chosen name step, locked labels/tags.
 - [x] Standardize confirmations, information windows, announcements and temporary messages with one branded SMARTYGYM presentation; remove browser-native prompts.
+- [x] Show PAR-Q warnings only when opening a finished workout to train, and identify member-created workouts only by creator name.
