@@ -1,4 +1,3 @@
-import { isConditioningListCategory } from "./conditioning-vocabulary";
 import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
 import { prepAllowed } from "./prep-vocabulary";
 import { orderedPriority } from "./priority";

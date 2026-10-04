@@ -9,9 +9,7 @@ import {
   Target,
   HeartPulse,
   Clock,
-  MapPin,
   Dumbbell,
-  MessageSquare,
   Flame,
   Heart,
 
@@ -39,7 +37,6 @@ import {
   FOCUS_GOALS,
 
   LEVELS,
-  LOCATIONS,
   LOW_ENERGY_MOODS,
   MOODS,
   TIMES,
@@ -70,7 +67,7 @@ export const Route = createFileRoute("/_authenticated/create-your-own-workout")(
       {
         name: "description",
         content:
-          "Answer your goal, mood, time, location and equipment and get a personalised workout built from a 1,300+ exercise library.",
+          "Answer your goal, mood, time and equipment and get a personalised workout built from a 1,300+ exercise library.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -148,10 +145,8 @@ function CoachPage() {
 
   const [mood, setMood] = useState<string>("");
   const [minutes, setMinutes] = useState<number | null>(null);
-  const [location, setLocation] = useState<string>("");
   const [equipment, setEquipment] = useState<string[]>([]);
   const [otherEquipment, setOtherEquipment] = useState("");
-  const [note, setNote] = useState("");
   const [useLibraryPreferences, setUseLibraryPreferences] = useState<boolean | null>(null);
 
   const [busy, setBusy] = useState(false);
@@ -233,7 +228,6 @@ function CoachPage() {
     goal &&
       mood &&
       minutes &&
-      location &&
       equipment.length > 0 &&
       level &&
       useLibraryPreferences !== null &&
@@ -248,10 +242,8 @@ function CoachPage() {
 
       mood,
       minutes: minutes ?? undefined,
-      location,
       equipment: equipment.length ? equipment : ["bodyweight"],
       equipmentOther: equipment.includes("other") ? otherEquipment.trim() : "",
-      note: note.trim(),
       useLibraryPreferences: useLibraryPreferences ?? false,
 
       level: surprise ? "auto" : (levelOverride ?? level),
@@ -559,21 +551,12 @@ function CoachPage() {
           </Grid>
         </QuestionCard>
 
-        <QuestionCard step={showFocus ? 6 : 5} icon={MapPin} title="Where are you training?">
-          <Grid>
-            {LOCATIONS.map((l) => (
-              <Chip key={l.id} active={location === l.id} onClick={() => setLocation(l.id)}>
-                {l.label}
-              </Chip>
-            ))}
-          </Grid>
-        </QuestionCard>
 
         <QuestionCard
-          step={showFocus ? 7 : 6}
+          step={showFocus ? 6 : 5}
           icon={Dumbbell}
           title="Equipment available"
-          hint="Only what you pick will appear in your workout."
+          hint="Bodyweight exercises can always be included. Pick Bodyweight only if you have no equipment."
         >
           <Grid>
             {EQUIPMENT.map((e) => (
@@ -606,10 +589,10 @@ function CoachPage() {
         </QuestionCard>
 
         <QuestionCard
-          step={showFocus ? 8 : 7}
+          step={showFocus ? 7 : 6}
           icon={Heart}
           title="Use my library preferences?"
-          hint="Your liked exercises get priority, your disliked ones are left out."
+          hint="Yes: your own likes and dislikes are used too. No: only the SmartyGym default exercises are used."
         >
           <Grid>
             <Chip active={useLibraryPreferences === true} onClick={() => {
@@ -634,20 +617,6 @@ function CoachPage() {
           </p>
         </QuestionCard>
 
-        <QuestionCard
-          step={showFocus ? 9 : 8}
-          icon={MessageSquare}
-          title="Anything else?"
-          hint="Optional — the builder reads this too."
-        >
-          <Textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="e.g. shoulder is a bit sore, I'd love something for legs"
-            rows={3}
-            className="rounded-2xl"
-          />
-        </QuestionCard>
 
       </div>
 
@@ -667,7 +636,7 @@ function CoachPage() {
         </Button>
         {!canGenerate && !busy && !wodMode ? (
           <p className="mt-2 text-center text-xs text-muted-foreground">
-            Select goal, mood, difficulty, time, location and equipment to build your workout.
+            Select goal, mood, difficulty, time and equipment to build your workout.
           </p>
         ) : null}
       </div>
