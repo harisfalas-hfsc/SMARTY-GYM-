@@ -22,13 +22,15 @@ export const COOLDOWN_NAMES = [
   "butterfly yoga pose", "all fours squad stretch", "lying (side) quads stretch", "hug knees to chest",
   "bent knee lying twist", "calf stretch with hands against wall", "standing calves calf stretch",
   "neck side stretch", "standing lateral stretch", "spine twist", "spine stretch", "back pec stretch",
-  "side lying floor stretch", "upward facing dog",
+  "side lying floor stretch", "upward facing dog", "sphinx", "spine stretch forward", "spine twist pilates",
+  "calf push stretch with hands against wall", "chair leg extended stretch", "circles knee stretch",
+  "iron cross stretch", "leg up hamstring stretch", "seated calf stretch (male)", "seated wide angle pose sequence",
+  "side push neck stretch", "side wrist pull stretch", "pelvic tilt", "standing pelvic tilt", "pelvic tilt into bridge",
+  "ankle circles", "wrist circles", "dynamic chest stretch (male)", "world greatest stretch",
 ];
 
 const ACT = new Set(ACTIVATION_NAMES);
 const CD = new Set(COOLDOWN_NAMES);
-const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child|forward fold|spinal twist|sphinx|upward facing dog|cars\b|circles?\b|ankle rocks|thread the needle|90\/90/;
-const ACT_LIKE = /bird dog|dead bug|glute bridge|clamshell|fire hydrant|plank|circles?\b|rotation|inchworm|overhead reach|scapula|cars\b|hundred|pelvic curl|roll-up|corkscrew|hip twist/;
 /** Never preparation in either section: load, equipment, conditioning, impact, training work. */
 const BANNED = /lunge|squat(?! to overhead reach)|row\b|press|raise|curl|crawl|walk|kick|jump|burpee|climber|crunch|dip|calf raise|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell|sprint|box|skater|sit-?up|weighted|band\b|trx|suspen|medicine|smith|lever|roller|ball\b|bench/;
 /** Activation and Cool Down never use equipment — bodyweight only. */
