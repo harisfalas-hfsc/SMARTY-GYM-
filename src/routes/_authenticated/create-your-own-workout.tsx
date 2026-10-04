@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import {
   Loader2,
   Sparkles,
-  Wand2,
   Target,
   HeartPulse,
   Clock,
@@ -724,7 +723,7 @@ function CoachPage() {
           size="lg"
           className="h-16 w-full rounded-2xl text-base font-extrabold shadow-lg"
           disabled={busy || wodMode || !canGenerate}
-          onClick={() => requestGenerate(false)}
+          onClick={() => requestGenerate()}
         >
           {busy ? (
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -755,12 +754,12 @@ function CoachPage() {
             <AlertDialogCancel
               onClick={() => {
                 setLevel("auto");
-                void generate(false, "auto");
+                void generate("auto");
               }}
             >
               Scale it to my mood
             </AlertDialogCancel>
-            <AlertDialogAction onClick={() => void generate(false)}>
+            <AlertDialogAction onClick={() => void generate()}>
               Yes, go advanced
             </AlertDialogAction>
           </AlertDialogFooter>
