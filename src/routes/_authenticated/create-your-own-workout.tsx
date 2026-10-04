@@ -304,7 +304,7 @@ function CoachPage() {
     } catch (e) {
       // Never expose the internal cause — the recovery system delivers it.
       toast.error(
-        e instanceof Error && /snag/i.test(e.message)
+        e instanceof Error && /snag|per day|membership|Training Profile|readiness|acknowledgement/i.test(e.message)
           ? e.message
           : "We hit a temporary snag building your workout. Your answers are safe, we are already on it, and it will arrive shortly.",
       );
@@ -466,6 +466,35 @@ function CoachPage() {
               anywhere you share it.
             </DialogDescription>
           </DialogHeader>
+          {namingInfo ? (
+            <div className="space-y-2 rounded-2xl border border-border bg-muted/40 p-3 text-xs">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="font-bold text-foreground">{namingInfo.category.toUpperCase()}</span>
+                <span className="text-muted-foreground">•</span>
+                <span className="font-medium text-wod-format">{namingInfo.format || "General"}</span>
+                <span className="text-muted-foreground">•</span>
+                <span className="font-medium capitalize text-foreground">{starsToLevel(namingInfo.difficulty_stars)}</span>
+                <span className="text-muted-foreground">•</span>
+                <span className="font-medium text-wod-duration">{namingInfo.duration_min} min</span>
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {(() => {
+                  const eq = (namingInfo.equipment ?? []).filter((i: string) => i.toLowerCase() !== "bodyweight");
+                  return eq.length === 0 ? (
+                    <span className="rounded-full bg-wod-bodyweight px-2 py-0.5 font-semibold text-wod-badge-foreground">Bodyweight</span>
+                  ) : (
+                    eq.map((item: string) => (
+                      <span key={item} className="rounded-full bg-wod-equipment px-2 py-0.5 font-semibold capitalize text-wod-badge-foreground">{item}</span>
+                    ))
+                  );
+                })()}
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Loader2 className="h-3 w-3 animate-spin" /> Loading workout details…
+            </div>
+          )}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -553,7 +582,7 @@ function CoachPage() {
           Surprise me
         </Button>
         <p className="mt-2 text-xs text-muted-foreground">
-          A different pick every day, chosen from what suits you.
+          A different pick every time, chosen from what suits you.
         </p>
       </div>
 
