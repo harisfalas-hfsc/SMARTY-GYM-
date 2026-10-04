@@ -33,3 +33,4 @@
 - deleteManualWorkout is creator-only and covers the original plus all community copies: social data removed, rows with training activity tombstoned (deleted_at), others hard-deleted — why: training can't be undone.
 - Route-module download failures share one classifier for update notice and root error screen; handled failures skip crash-alert reporting, unrelated errors still report — why: refresh fixes missing files without false emails.
 - User confirmations and text prompts use shared branded dialogs, never browser-native boxes — why: consistent web/native presentation.
+- Creator badges are read publicly through the definer view community_badges_public (badge name/category/icon only) — why: badges are meant to be seen by everyone on Shared Workouts, while user_badges stays owner-only.
