@@ -87,6 +87,25 @@ export const setExercisePreference = createServerFn({ method: "POST" })
     };
   });
 
+// The rule-allowed exercises are everyone's default likes, so the list is
+// computed once per server instance instead of per member.
+let allowedIdsCache: string[] | null = null;
+
+/**
+ * Every exercise the rule engine allows anywhere — the default "liked" set
+ * shown to all members and the admin. Public: derived from the rules, no user data.
+ */
+export const getAllowedExerciseIds = createServerFn({ method: "GET" }).handler(
+  async (): Promise<string[]> => {
+    if (allowedIdsCache) return allowedIdsCache;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { loadAllExercises } = await import("@/lib/workout/pool.server");
+    const { computeAllowedExerciseIds } = await import("@/lib/workout/allowed-exercises.server");
+    allowedIdsCache = [...computeAllowedExerciseIds(await loadAllExercises(supabaseAdmin))];
+    return allowedIdsCache;
+  },
+);
+
 /** Turns the "use my library likes and dislikes" setting on or off. */
 export const setUseLibraryPreferences = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

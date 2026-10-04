@@ -39,6 +39,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { useAuth } from "@/hooks/useAuth";
 import {
   getExercisePreferences,
+  getAllowedExerciseIds,
   setExercisePreference,
   type ExercisePreferences,
 } from "@/lib/preferences.functions";
@@ -301,6 +302,20 @@ function ExerciseLibraryPage() {
   const { user } = useAuth();
   const [prefs, setPrefs] = useState<ExercisePreferences | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
+  // Rule-allowed exercises are liked by default for everyone.
+  const [allowedIds, setAllowedIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    let active = true;
+    getAllowedExerciseIds()
+      .then((ids) => {
+        if (active) setAllowedIds(new Set(ids));
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -319,7 +334,11 @@ function ExerciseLibraryPage() {
   }, [user]);
 
   const stateFor = (id: string): "like" | "dislike" | "none" =>
-    prefs?.favoriteIds.includes(id) ? "like" : prefs?.dislikedIds.includes(id) ? "dislike" : "none";
+    prefs?.dislikedIds.includes(id)
+      ? "dislike"
+      : prefs?.favoriteIds.includes(id) || allowedIds.has(id)
+        ? "like"
+        : "none";
 
   async function mark(id: string, next: "like" | "dislike") {
     if (!user) {
@@ -330,7 +349,17 @@ function ExerciseLibraryPage() {
       toast.error("Liking and disliking exercises is part of the premium membership.");
       return;
     }
-    const state = stateFor(id) === next ? "none" : next;
+    const current = stateFor(id);
+    // Un-liking a default-liked (rule-allowed) exercise stores a dislike so it
+    // leaves that member's workouts; un-liking an explicitly liked one clears it.
+    const state =
+      next === "like" && current === "like"
+        ? prefs.favoriteIds.includes(id)
+          ? "none"
+          : "dislike"
+        : current === next
+          ? "none"
+          : next;
     setSavingId(id);
     try {
       const updated = await setExercisePreference({ data: { exerciseId: id, state } });
@@ -340,7 +369,7 @@ function ExerciseLibraryPage() {
           ? "Preference cleared."
           : state === "like"
             ? "Added to your liked exercises."
-            : "Added to your disliked exercises.",
+            : "Removed from your liked exercises — it won't be used in your workouts.",
       );
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not save that.");
