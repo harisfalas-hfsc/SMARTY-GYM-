@@ -2,11 +2,11 @@ import { priorityIds } from "./priority";
 import type { PoolExercise } from "./pool.server";
 import { planPrompt, type SessionPlan } from "./programming";
 import { ageDirective } from "./doctrine";
-import { STRENGTH_LIST_NAMES } from "./strength-vocabulary";
+import { STRENGTH_BODYWEIGHT_NAMES, STRENGTH_LIST_NAMES } from "./strength-vocabulary";
 import { CONDITIONING_EXERCISES } from "./conditioning-vocabulary";
 
 const CONDITIONING_LIST_RULE = ` MAIN WORKOUT AND FINISHER EXERCISES: use ONLY the SmartyGym conditioning list — ${CONDITIONING_EXERCISES.join(", ")}. Never any other exercise.`;
-const STRENGTH_LIST_RULE = ` EQUIPMENT WORKOUTS (gym, machines, barbell, dumbbells, kettlebells, cables): Main Workout and Finisher use ONLY the SmartyGym Strength & Muscle Building list — ${STRENGTH_LIST_NAMES.join(", ")}. Never any other exercise (no other machines, no bodyweight moves mixed in, no bands, balls, TRX or pull-up bars) when equipment is used.`;
+const STRENGTH_LIST_RULE = ` EQUIPMENT WORKOUTS (gym, machines, barbell, dumbbells, kettlebells, cables): Main Workout and Finisher use ONLY the SmartyGym equipment Strength & Muscle Hypertrophy list — ${STRENGTH_LIST_NAMES.join(", ")}. Never any other exercise (no other machines, no bodyweight moves mixed in, no bands or balls) when equipment is used. BODYWEIGHT WORKOUTS: Main Workout and Finisher use ONLY the SmartyGym bodyweight Strength & Muscle Hypertrophy list — ${STRENGTH_BODYWEIGHT_NAMES.join(", ")}. Never any other exercise.`;
 import {
   BANNED_NAME_WORDS,
   intensityNote,
@@ -19,7 +19,7 @@ import {
 
 const CATEGORY_COACHING: Record<Category, string> = {
   STRENGTH:
-    "MAXIMAL STRENGTH, not hypertrophy. Heavy compound lifts first (squat, hinge, press, pull), then one or two secondary compounds, minimal isolation. 4-6 sets x 3-6 reps per main lift, load heavy, always leave 2-3 reps in reserve, NEVER train to failure. Tempo: controlled 2-sec lower, brief pause, explosive lift. Rest as prescribed in the session blueprint (never shorter to save time) and write that rest on every line. Fewer exercises, higher quality, full recovery between sets. In a gym, barbells, racks, benches, machines, cables, dumbbells, kettlebells and pull-ups are all normal and expected — there is time to set up and rest. Bodyweight variant: the hardest SAFE and FAMILIAR progression the athlete can do for 3-6 reps (elevated or weighted push-ups, split squats, step-ups, pull-up and inverted-row variations, hip thrusts) — never gymnastic skill work, never long high-rep sets." + STRENGTH_LIST_RULE,
+    "MAXIMAL STRENGTH, not hypertrophy. Heavy compound lifts first (squat, hinge, press, pull), then one or two secondary compounds, minimal isolation. 4-6 sets x 3-6 reps per main lift, load heavy, always leave 2-3 reps in reserve, NEVER train to failure. Tempo: controlled 2-sec lower, brief pause, explosive lift. Rest as prescribed in the session blueprint (never shorter to save time) and write that rest on every line. Fewer exercises, higher quality, full recovery between sets. In a gym, barbells, racks, benches, machines, cables, dumbbells, kettlebells and pull-ups are all normal and expected — there is time to set up and rest. Bodyweight variant: the hardest SAFE and FAMILIAR progression from the bodyweight list the athlete can do for 3-6 reps — never long high-rep sets." + STRENGTH_LIST_RULE,
   "MUSCLE BUILDING":
     "HYPERTROPHY, not maximal strength. One or two compounds to open the session, then clear isolation and single-joint work for the target muscles. 3-4 sets x 8-12 reps on compounds, up to 15 reps on isolation, taken close to failure — 2-3 reps in reserve for beginners, 1-2 for intermediate and advanced, not routine absolute failure. Tempo: 2-3 sec controlled lower, squeeze the target muscle, controlled lift — suit the tempo to the movement and write it on every line. Rest 60-90 sec and write it on every line. Prioritise total working sets, time under tension and a full stretch under load; use different angles for the same muscle. Bodyweight variant: higher reps, slower eccentrics, unilateral and pre-fatigue variations to reach the same effort." + STRENGTH_LIST_RULE,
 
