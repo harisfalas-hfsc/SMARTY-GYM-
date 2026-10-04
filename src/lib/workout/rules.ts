@@ -70,7 +70,7 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   // timed-format flow rule (no barbell setup inside a clock).
   const listedPortable = conditioningListed && !/\bbarbell\b/i.test(`${e.name} ${e.equipment ?? ""}`);
   const push = (v: string | null) => { if (v && !listedPortable) out.push(v); };
-  push(D.humanRealismViolation(e));
+  if (!conditioningListed) push(D.humanRealismViolation(e));
   push(D.categoryExerciseViolation(e, ctx.category));
   if (ctx.category === "MICRO-WORKOUTS") push(D.microExerciseViolation(e));
   push(D.dynamicExerciseViolation(e, ctx.category, ctx.format));
