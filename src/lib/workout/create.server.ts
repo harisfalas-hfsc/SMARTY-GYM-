@@ -317,11 +317,11 @@ export async function createWorkoutForUser(
       .eq("category", category)
       .eq("difficulty_stars", stars)
       .eq("duration_min", minutes)
-      .eq("location", location)
       .eq("needs_review", false)
       .neq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(40);
+    candidates = location === "any" ? candidates.is("location", null) : candidates.eq("location", location);
     candidates = focus ? candidates.eq("focus", focus) : candidates.is("focus", null);
     if (format) candidates = candidates.eq("format", format);
     const { data: pool } = await candidates;
