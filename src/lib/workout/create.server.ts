@@ -207,9 +207,9 @@ export async function createWorkoutForUser(
 
   let surpriseStars: number | null = null;
   if (data.surprise) {
-    // Deterministic per user per day, never a break category, never the same
+    // Fresh pick on every press, never a break category, never the same
     // category as the last 2 workouts, always 2 stars and always 40-50 minutes.
-    const seed = surpriseSeed(userId, new Date().toISOString().slice(0, 10));
+    const seed = surpriseSeed(userId, new Date().toISOString());
     const plan = surprisePlan(
       seed,
       Object.values(GOAL_TO_CATEGORY) as Category[],
