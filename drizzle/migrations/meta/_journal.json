@@ -554,6 +554,13 @@
       "when": 1791107508481,
       "tag": "0078_restore_untouched_pilates_from_backup",
       "breakpoints": true
+    },
+    {
+      "idx": 79,
+      "version": "7",
+      "when": 1791122346605,
+      "tag": "0079_public_creator_badges",
+      "breakpoints": true
     }
   ]
 }
