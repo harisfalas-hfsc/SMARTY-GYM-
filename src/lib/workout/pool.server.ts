@@ -1,5 +1,5 @@
 import { isConditioningListCategory } from "./conditioning-vocabulary";
-import { isStrengthListExercise } from "./strength-vocabulary";
+import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
 import { prepAllowed } from "./prep-vocabulary";
 import { orderedPriority } from "./priority";
 import { priorityIds } from "./priority";
@@ -257,11 +257,12 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
       matchesSelectedEquipment(e, f.selectedEquipment, f.customEquipment ?? []) ||
       (keepBodyweight && isBodyweight(e)),
     );
+    const load = f.category === "STRENGTH" || f.category === "MUSCLE BUILDING";
     if (f.equipmentMode === "BODYWEIGHT")
-      pool = pool.filter((e) => isBodyweight(e) && !HOME_APPARATUS_RE.test(text(e)));
-    // STRENGTH / MUSCLE BUILDING with equipment: only the 100-exercise SmartyGym list.
-    else if (f.category === "STRENGTH" || f.category === "MUSCLE BUILDING")
-      pool = pool.filter((e) => isStrengthListExercise(e));
+      pool = pool.filter((e) => isBodyweight(e) && (load ? isStrengthBodyweightListExercise(e) : !HOME_APPARATUS_RE.test(text(e))));
+    // STRENGTH / MUSCLE BUILDING with equipment: only the SmartyGym gym-machine + free-weight list.
+    else if (load)
+      pool = pool.filter((e) => isStrengthEquipmentListExercise(e));
   }
 
   // 2b. CATEGORY + FORMAT equipment legality (doctrine §10-§13, §24). Selected
