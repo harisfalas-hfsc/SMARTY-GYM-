@@ -80,9 +80,11 @@ export function WorkoutDisplay({
   children,
   creator,
   ownerName,
+  ownerCreationMethod,
 }: {
   creator?: { id: string; name: string | null } | null;
   ownerName?: string | null;
+  ownerCreationMethod?: "Smarty Coach" | "Build It Yourself" | null;
   workout: WorkoutRow;
   onComplete: () => void;
   onPlayerClosed?: () => void;
@@ -227,12 +229,16 @@ export function WorkoutDisplay({
                 <CreatorLink userId={creator.id} name={creator.name} className="text-base font-extrabold text-primary underline" />
               ) : noShare ? (
                 <span className="text-base font-extrabold text-foreground">HARIS FALAS</span>
+              ) : ownerCreationMethod ? (
+                <span className="text-base font-extrabold text-foreground">You</span>
               ) : (
                 <span className="text-base font-extrabold text-foreground">{ownerName?.trim() || "User"}</span>
               )}
             </div>
             {creator ? (
               <p className="mt-1 text-[11px] text-muted-foreground">Tap the creator’s name to see all their shared workouts.</p>
+            ) : ownerCreationMethod ? (
+              <p className="mt-1 text-[11px] text-muted-foreground">Created with {ownerCreationMethod}</p>
             ) : null}
           </div>
 
