@@ -154,7 +154,8 @@ const SOURCE_STYLE: Record<string, string> = {
   smarty: "border-sky-400/60 bg-sky-400/10 text-sky-400",
   coach: "border-violet-400/60 bg-violet-400/10 text-violet-400",
   own: "border-emerald-400/60 bg-emerald-400/10 text-emerald-400",
-  community: "border-amber-400/60 bg-amber-400/10 text-amber-400",
+  // Everything to do with sharing is yellow, so it never reads like the violet Smarty Coach tag.
+  community: "border-yellow-400/60 bg-yellow-400/10 text-yellow-400",
 };
 
 const SOURCE_DOT: Record<Source, string> = {
@@ -225,7 +226,7 @@ function WorkoutCard({
             {sourceLabel(r)}
           </span>
           {r.is_shared && (workoutSource(r) === "own" || workoutSource(r) === "coach") ? (
-            <span className="inline-flex items-center rounded-full border border-fuchsia-400/60 bg-fuchsia-400/10 px-2 py-0.5 text-[10px] font-bold text-fuchsia-400">
+            <span className="inline-flex items-center rounded-full border border-yellow-400/60 bg-yellow-400/10 px-2 py-0.5 text-[10px] font-bold text-yellow-400">
               Shared by you
             </span>
           ) : null}
