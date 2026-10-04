@@ -22,7 +22,7 @@ const FITNESS_TIPS = [
 ];
 
 /**
- * Shown while Smarty Coach builds a workout (questionnaire, Surprise me or the
+ * Shown while Smarty Coach builds a workout (questionnaire or the
  * Workout of the Day). Same behaviour and wording as the sister app: a clear
  * wait message, rotating tips and a "stay on this screen" reminder.
  */

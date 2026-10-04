@@ -1,4 +1,3 @@
-import { surprisePlan, surpriseSeed } from "./surprise";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   CATEGORY_FORMATS,
@@ -26,7 +25,6 @@ export type CoachRequest = {
   /** When false, the athlete's library likes/dislikes are ignored for this session. */
   useLibraryPreferences?: boolean;
   level?: string;
-  surprise?: boolean;
   /** Workout of the Day overrides — bypasses goal/level mapping. */
   wod?: {
     category: Category;
@@ -205,31 +203,11 @@ export async function createWorkoutForUser(
   const dislikedLibrary = dislikedIds.map((id) => libraryNames.get(id)).filter(Boolean) as string[];
 
 
-  let surpriseStars: number | null = null;
-  if (data.surprise) {
-    // Fresh pick on every press, never a break category, never the same
-    // category as the last 2 workouts, always 2 stars and always 40-50 minutes.
-    const seed = surpriseSeed(userId, new Date().toISOString());
-    const plan = surprisePlan(
-      seed,
-      Object.values(GOAL_TO_CATEGORY) as Category[],
-      history.slice(0, 2).map((h) => String(h.category)),
-    );
-    category = plan.category;
-    minutes = plan.minutes;
-    surpriseStars = plan.stars;
-    if (plan.bodyweightOnly) {
-      equipmentIds = ["bodyweight"];
-      equipmentMode = "BODYWEIGHT";
-    }
-  }
-
   const requestedLevel = String(data.level ?? "auto");
   let requestedStars = requestedStarsFor(
     (prof as never) ?? null,
     requestedLevel === "auto" ? undefined : requestedLevel,
   );
-  if (surpriseStars !== null) requestedStars = surpriseStars;
   let focus = (data.focus as StrengthFocus | undefined) ?? null;
 
 
