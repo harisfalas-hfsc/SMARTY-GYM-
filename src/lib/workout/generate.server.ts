@@ -15,7 +15,6 @@ import {
 
   loadAllExercises,
   resolveCustomEquipment,
-  samplePool,
   type PoolExercise,
 } from "./pool.server";
 
@@ -51,8 +50,6 @@ export type GenerateInput = {
   recentIds?: string[];
 
   athlete?: AthleteContext;
-  /** Daily delivery prioritises guaranteed speed over generated prose. */
-  deterministic?: boolean;
 };
 
 export type GeneratedWorkout = {
@@ -133,8 +130,6 @@ export async function generateWorkoutContent(
   }
 
   const duration = durationLabel(input.minutes);
-  const recentIds = input.recentIds ?? [];
-  const promptPool = samplePool(pool, 260, favoriteIds, recentIds);
 
   const plan = buildSessionPlan({
     category: input.category,
