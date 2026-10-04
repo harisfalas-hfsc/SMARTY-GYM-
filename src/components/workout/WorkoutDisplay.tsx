@@ -58,6 +58,13 @@ export type WorkoutRow = {
   status: string;
 };
 
+export function workoutCreationSource(workout: Pick<WorkoutRow, "category" | "created_by"> & { is_wod?: boolean | null }) {
+  if (workout.is_wod) return "Workout of the Day";
+  if (String(workout.created_by ?? "").startsWith("smarty:")) return "Smarty Workout";
+  if (workout.category === "MY OWN WORKOUT") return "Exercise Library";
+  return "Smarty Coach";
+}
+
 function Stars({ n }: { n: number }) {
   const filled = normalizeStars(n);
   return (
@@ -90,6 +97,7 @@ export function WorkoutDisplay({
   const html = workout.main_workout ?? "";
   // Smarty Workouts are already public for everyone — no sharing.
   const noShare = String(workout.created_by ?? "").startsWith("smarty");
+  const creationSource = workoutCreationSource(workout);
   const ids = useMemo(() => uniqueTokenIds(html), [html]);
   const steps = useMemo(() => parseWorkoutSteps(html), [html]);
   const softTissue = useMemo(() => extractSoftTissue(html), [html]);
@@ -218,23 +226,25 @@ export function WorkoutDisplay({
               {(workout.equipment ?? []).join(", ") || "bodyweight"}
             </span>
           </div>
-          {creator ? (
-            <div className="mt-4 flex items-center gap-2 rounded-2xl border-2 border-primary px-4 py-3">
+          <div className="mt-4 rounded-2xl border-2 border-primary px-4 py-3">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Created by</span>
-              <CreatorLink userId={creator.id} name={creator.name} className="text-base font-extrabold text-primary underline" />
-              <span className="ml-auto text-[11px] text-muted-foreground">Tap name to see all their workouts</span>
+              {creator ? (
+                <CreatorLink userId={creator.id} name={creator.name} className="text-base font-extrabold text-primary underline" />
+              ) : noShare ? (
+                <span className="text-base font-extrabold text-foreground">Haris Falas</span>
+              ) : (
+                <span className="text-base font-extrabold text-foreground">Me</span>
+              )}
             </div>
-          ) : (
-          <p className="mt-3 text-xs text-muted-foreground">
-            {workout.category === "MY OWN WORKOUT"
-              ? "Created by me"
-              : noShare
-                ? "Smarty Workout by Haris Falas"
-                : workout.created_by === "community"
-                  ? "Shared by a SmartyGym member"
-                  : "Created by Smarty Coach"}
-          </p>
-          )}
+            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Created with</span>
+              <span className="text-sm font-bold text-foreground">{creationSource}</span>
+            </div>
+            {creator ? (
+              <p className="mt-1 text-[11px] text-muted-foreground">Tap the creator’s name to see all their shared workouts.</p>
+            ) : null}
+          </div>
 
           {workout.image_url ? (
             <img

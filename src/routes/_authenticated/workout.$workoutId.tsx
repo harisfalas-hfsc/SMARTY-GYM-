@@ -139,7 +139,7 @@ function WorkoutPage() {
   // Who created the shared original — shown (clickable) at the top of the page.
   const [creator, setCreator] = useState<{ id: string; name: string | null } | null>(null);
   const creatorSourceId = w
-    ? ((w as { community_source_id?: string | null }).community_source_id ?? (shared ? workoutId : null))
+    ? ((w as { community_source_id?: string | null }).community_source_id ?? null)
     : null;
   useEffect(() => {
     if (!creatorSourceId || !isSupabaseConfigured()) {
