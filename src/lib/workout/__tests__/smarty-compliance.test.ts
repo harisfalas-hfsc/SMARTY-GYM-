@@ -30,8 +30,8 @@ describe("Smarty Workout rule compliance", () => {
     const plan = planMigration(w, lib);
     expect(plan.changes.filter((c) => c.kind === "replace" && c.applied).every((c) => c.confidence === "HIGH")).toBe(true);
   });
-  it("never applies the priority rule to Recovery, Mobility & Stability or Pilates", () => {
-    for (const category of ["RECOVERY", "PILATES"]) {
+  it("never applies the old priority-share rule to categories with the owner's required lists", () => {
+    for (const category of ["RECOVERY", "PILATES", "STRENGTH", "CARDIO", "CHALLENGE", "METABOLIC", "CALORIE BURNING"]) {
       const w = { id: "w", name: "W", category, format: category === "RECOVERY" ? "MIX" : "REPS & SETS", difficulty_stars: 1, main_workout: html(["0009"]) };
       expect(complianceIssues(w, lib)).not.toContain("Too few priority exercises");
     }
