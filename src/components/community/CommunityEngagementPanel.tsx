@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { CreatorLink } from "@/components/community/CreatorLink";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Flag, Send, Star, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
@@ -179,7 +180,7 @@ export function CommunityEngagementPanel({
           <MemberAvatar name={creator?.display_name ?? null} avatar={creator?.avatar_url ?? null} />
           <div className="min-w-0">
             <p className="truncate text-sm font-bold">
-              {isOwner ? "Shared by you" : `Shared by ${creator?.display_name || "Smarty member"}`}
+              {isOwner ? "Shared by you" : <>Shared by <CreatorLink userId={workout.user_id} name={creator?.display_name} /></>}
             </p>
             <p className="truncate text-[11px] text-muted-foreground">{creatorOrigin(workout)}</p>
           </div>
@@ -281,7 +282,7 @@ export function CommunityEngagementPanel({
               <MemberAvatar name={c.author_name} avatar={c.author_avatar} size={8} />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold">
-                  {c.author_name || "Smarty member"}{" "}
+                  <CreatorLink userId={c.user_id} name={c.author_name} />{" "}
                   <span className="text-xs font-normal text-muted-foreground">{formatDate(c.created_at)}</span>
                 </p>
                 <p className="mt-1 whitespace-pre-wrap break-words text-sm">{c.body}</p>

@@ -1,4 +1,5 @@
 import { Flame } from "lucide-react";
+import { CreatorLink } from "@/components/community/CreatorLink";
 import { cn } from "@/lib/utils";
 import type { CommunityBadge, CommunityMember } from "@/lib/community";
 
@@ -48,7 +49,7 @@ export function MemberCard({
         ) : null}
         <MemberAvatar name={member.display_name} avatar={member.avatar_url} />
         <div className="min-w-0">
-          <p className="truncate text-sm font-extrabold">{member.display_name || "Smarty member"}</p>
+          <p className="truncate text-sm font-extrabold"><CreatorLink userId={member.user_id} name={member.display_name} /></p>
           <p className="truncate text-[11px] text-muted-foreground">
             <Flame className="mr-0.5 inline h-3 w-3" />
             {member.current_streak} day streak · {member.score.toLocaleString()} pts
@@ -103,7 +104,7 @@ export function LeaderRow({
       <span className="w-6 shrink-0 text-sm font-black text-primary">#{rank}</span>
       <MemberAvatar name={member.display_name} avatar={member.avatar_url} size={8} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-bold">{member.display_name || "Smarty member"}</p>
+        <p className="truncate text-sm font-bold"><CreatorLink userId={member.user_id} name={member.display_name} /></p>
         {badge ? (
           <p className="truncate text-[11px] text-muted-foreground">🏆 {badge.badge_name}</p>
         ) : null}
