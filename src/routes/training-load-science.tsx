@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Activity,
   BarChart3,
+  CalendarRange,
   ChevronRight,
   Clock3,
   Dumbbell,
@@ -9,6 +10,9 @@ import {
   HeartPulse,
   Scale,
   ShieldCheck,
+  Sparkles,
+  Stethoscope,
+  Target,
 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard } from "@/components/SmartyCard";
@@ -121,15 +125,29 @@ function TrainingLoadSciencePage() {
           subtitle="A personal measure of the work you have actually recorded — designed to help you understand when your recent training is below, near or above your own normal level."
         />
 
-        <section className="mx-auto max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-          <p>
-            The SmartyGym training-load formula was created by Sports Scientist and Strength &amp; Conditioning Coach{" "}
-            <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>.
-            It translates the work you log into a clear training-management signal without pretending that one universal number can describe every person.
-          </p>
-          <p className="mt-4">
-            Your body, training history and normal workload are individual. That is why SmartyGym compares you with your own recent training — never with a generic score table or another member.
-          </p>
+        <section className="mx-auto max-w-3xl">
+          <div className="relative overflow-hidden rounded-2xl border-2 border-primary/50 bg-card p-6 shadow-[0_20px_60px_-30px_var(--primary)] sm:p-8">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
+            <div className="relative flex items-center gap-3">
+              <div className="icon-tone-1 grid h-11 w-11 shrink-0 place-items-center rounded-lg border">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-primary">The formula</p>
+                <h2 className="text-lg font-extrabold uppercase sm:text-xl">Created by Haris Falas</h2>
+              </div>
+            </div>
+            <div className="relative mt-5 space-y-4 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
+              <p>
+                The SmartyGym training-load formula was created by Sports Scientist and Strength &amp; Conditioning Coach{" "}
+                <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>.
+                It translates the work you log into a clear training-management signal without pretending that one universal number can describe every person.
+              </p>
+              <p>
+                Your body, training history and normal workload are individual. That is why SmartyGym compares you with your own recent training — never with a generic score table or another member.
+              </p>
+            </div>
+          </div>
         </section>
 
         <section className="mt-12 sm:mt-16">
@@ -146,32 +164,44 @@ function TrainingLoadSciencePage() {
               </SmartyCard>
             ))}
           </div>
-          <p className="mx-auto mt-5 max-w-3xl text-center text-sm leading-6 text-muted-foreground">
+          <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-border bg-card/60 px-5 py-4 text-center text-sm leading-6 text-muted-foreground">
             Bodyweight repetitions are never converted into invented kilograms. Missing values are left missing, not treated as zero, and unlike measurements are never added together.
-          </p>
+          </div>
         </section>
 
-        <section className="mt-12 border-y border-border py-10 sm:mt-16 sm:py-14">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-primary">The comparison</p>
-              <h2 className="mt-2 text-2xl font-extrabold uppercase sm:text-3xl">Your last seven days versus your own baseline</h2>
-              <p className="mt-4 leading-7 text-muted-foreground">
+        <section className="mt-12 sm:mt-16">
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-primary">The comparison</p>
+            <h2 className="mt-2 text-2xl font-extrabold uppercase sm:text-3xl">Your last seven days versus your own baseline</h2>
+          </div>
+          <div className="mt-6 grid gap-4 lg:grid-cols-2">
+            <div className="rounded-2xl border-2 border-blue-400 bg-card p-6">
+              <div className="icon-tone-2 grid h-11 w-11 place-items-center rounded-lg border">
+                <CalendarRange className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-bold">How the comparison works</h3>
+              <p className="mt-2 leading-7 text-muted-foreground">
                 SmartyGym totals comparable work from your most recent seven days, then compares it with your typical week across the preceding three weeks. A single unusual measurement cannot dominate the result because the middle of the available comparisons is used.
               </p>
             </div>
-            <div className="space-y-4" aria-label="Training load states">
-              {loadStates.map((state) => (
-                <div key={state.title}>
-                  <div className="mb-1 flex items-end justify-between gap-4">
-                    <p className="text-sm font-bold">{state.title}</p>
-                    <p className="text-right text-xs text-muted-foreground">{state.description}</p>
+            <div className="rounded-2xl border-2 border-blue-400 bg-card p-6" aria-label="Training load states">
+              <div className="icon-tone-3 grid h-11 w-11 place-items-center rounded-lg border">
+                <BarChart3 className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-bold">The four load states</h3>
+              <div className="mt-4 space-y-4">
+                {loadStates.map((state) => (
+                  <div key={state.title}>
+                    <div className="mb-1 flex items-end justify-between gap-4">
+                      <p className="text-sm font-bold">{state.title}</p>
+                      <p className="text-right text-xs text-muted-foreground">{state.description}</p>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-muted">
+                      <div className={`h-full rounded-full bg-primary ${state.width}`} />
+                    </div>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-muted">
-                    <div className={`h-full rounded-full bg-primary ${state.width}`} />
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -184,20 +214,36 @@ function TrainingLoadSciencePage() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <SmartyCard tone="blue" eyebrow="Balance" eyebrowIcon={Scale} title="See undertraining and sudden spikes" description="A personal baseline makes it easier to see when recent work has dropped well below normal or risen sharply above it, so training and recovery can be considered together." />
             <SmartyCard tone="blue" eyebrow="Timing" eyebrowIcon={Clock3} title="Understand the recent week" description="Training Load summarizes your current workload. The Last 10 Sessions graph complements it by showing how individual recorded sessions are changing over time." />
-            <SmartyCard tone="blue" eyebrow="Readiness" eyebrowIcon={BarChart3} title="Turn records into useful context" description="Load, recent frequency, consecutive training days and logged effort inform your readiness indication. It supports training management; it does not diagnose health or injury." />
+            <SmartyCard tone="blue" eyebrow="Readiness" eyebrowIcon={Gauge} title="Turn records into useful context" description="Load, recent frequency, consecutive training days and logged effort inform your readiness indication. It supports training management; it does not diagnose health or injury." />
             <SmartyCard tone="blue" eyebrow="Integrity" eyebrowIcon={ShieldCheck} title="No confidence without evidence" description="When there is not enough comparable history, SmartyGym says Limited Data. It does not manufacture a confident result from thin or missing records." />
           </div>
         </section>
 
-        <section className="mx-auto mt-12 max-w-3xl text-center sm:mt-16">
-          <p className="text-xs font-bold uppercase tracking-wider text-primary">How accurate is it?</p>
-          <h2 className="mt-2 text-2xl font-extrabold uppercase sm:text-3xl">As accurate as the training you record</h2>
-          <p className="mt-4 leading-7 text-muted-foreground">
-            The calculation is exact for the information entered: recorded sets, reps, external weight, time, distance, rounds, intervals and effort. Its usefulness grows as you log consistently and build comparable history. If a measure is not recorded, SmartyGym cannot infer it — and deliberately does not try.
-          </p>
-          <p className="mt-4 text-sm leading-6 text-muted-foreground">
-            Training Load and Readiness are coaching indicators, not medical assessments. Pain, illness, injury or unusual symptoms should be considered separately with an appropriate healthcare professional.
-          </p>
+        <section className="mt-12 sm:mt-16">
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-primary">How accurate is it?</p>
+            <h2 className="mt-2 text-2xl font-extrabold uppercase sm:text-3xl">As accurate as the training you record</h2>
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border-2 border-blue-400 bg-card p-6">
+              <div className="icon-tone-4 grid h-11 w-11 place-items-center rounded-lg border">
+                <Target className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-bold">Exact for what you log</h3>
+              <p className="mt-2 leading-7 text-muted-foreground">
+                The calculation is exact for the information entered: recorded sets, reps, external weight, time, distance, rounds, intervals and effort. Its usefulness grows as you log consistently and build comparable history. If a measure is not recorded, SmartyGym cannot infer it — and deliberately does not try.
+              </p>
+            </div>
+            <div className="rounded-2xl border-2 border-blue-400 bg-card p-6">
+              <div className="icon-tone-5 grid h-11 w-11 place-items-center rounded-lg border">
+                <Stethoscope className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-bold">A coaching indicator, not a diagnosis</h3>
+              <p className="mt-2 leading-7 text-muted-foreground">
+                Training Load and Readiness are coaching indicators, not medical assessments. Pain, illness, injury or unusual symptoms should be considered separately with an appropriate healthcare professional.
+              </p>
+            </div>
+          </div>
         </section>
       </div>
     </main>
