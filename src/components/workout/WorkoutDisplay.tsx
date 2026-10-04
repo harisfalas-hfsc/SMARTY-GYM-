@@ -219,10 +219,11 @@ export function WorkoutDisplay({
             </span>
           </div>
           {creator ? (
-            <p className="mt-3 text-sm text-muted-foreground">
-              Created by{" "}
-              <CreatorLink userId={creator.id} name={creator.name} className="font-bold text-primary underline" />
-            </p>
+            <div className="mt-4 flex items-center gap-2 rounded-2xl border-2 border-primary px-4 py-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Created by</span>
+              <CreatorLink userId={creator.id} name={creator.name} className="text-base font-extrabold text-primary underline" />
+              <span className="ml-auto text-[11px] text-muted-foreground">Tap name to see all their workouts</span>
+            </div>
           ) : (
           <p className="mt-3 text-xs text-muted-foreground">
             {workout.category === "MY OWN WORKOUT"
