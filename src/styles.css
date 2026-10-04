@@ -255,6 +255,16 @@
   .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgb(0 0 0 / 0.12); }
 }
 
+@utility app-dialog-icon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid color-mix(in oklab, currentColor 35%, transparent);
+  border-radius: 9999px;
+  background-color: color-mix(in oklab, currentColor 12%, transparent);
+}
+
 /* ---- Workout HTML rendering ---- */
 .workout-html { overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
 .workout-html p.tiptap-paragraph { margin: 0 0 0.5rem; line-height: 1.6; }
