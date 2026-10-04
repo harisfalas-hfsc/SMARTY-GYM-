@@ -266,11 +266,11 @@ function CoachPage() {
       (!showFocus || focus),
   );
 
-  async function generate(surprise = false, levelOverride?: string) {
+  async function generate(levelOverride?: string) {
     if (busy || wodMode) return;
     const request = {
-      goal: surprise ? "custom" : goal,
-      ...(surprise || !showFocus ? {} : { focus }),
+      goal,
+      ...(showFocus ? { focus } : {}),
 
       mood,
       minutes: minutes ?? undefined,
@@ -278,8 +278,7 @@ function CoachPage() {
       equipmentOther: equipment.includes("other") ? otherEquipment.trim() : "",
       useLibraryPreferences: useLibraryPreferences ?? false,
 
-      level: surprise ? "auto" : (levelOverride ?? level),
-      surprise,
+      level: levelOverride ?? level,
     };
     if (!isOnline()) {
       // Building a workout needs Smarty Coach on the server, so we never fake it.
@@ -336,8 +335,8 @@ function CoachPage() {
     }
   }
 
-  function requestGenerate(surprise: boolean) {
-    if (!surprise && !canGenerate) {
+  function requestGenerate() {
+    if (!canGenerate) {
       toast.error("Please answer all required questions first.");
       return;
     }
@@ -346,15 +345,14 @@ function CoachPage() {
       return;
     }
     if (parqFlags.length > 0 && !hasParqAck()) {
-      setPendingSurprise(surprise);
       setParqOpen(true);
       return;
     }
-    if (!surprise && level === "advanced" && LOW_ENERGY_MOODS.includes(mood)) {
+    if (level === "advanced" && LOW_ENERGY_MOODS.includes(mood)) {
       setConfirmHard(true);
       return;
     }
-    void generate(surprise);
+    void generate();
   }
 
 
@@ -565,26 +563,6 @@ function CoachPage() {
           </div>
         </div>
       ) : null}
-
-      <div className={`mb-6 rounded-3xl border-2 border-primary bg-primary/5 p-5 text-center${wodMode ? " pointer-events-none opacity-40" : ""}`}>
-        <p className="text-sm font-semibold">Don't feel like choosing?</p>
-        <Button
-          size="lg"
-          className="mt-3 h-14 w-full rounded-2xl text-base font-extrabold"
-          disabled={busy || wodMode}
-          onClick={() => requestGenerate(true)}
-        >
-          {busy ? (
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-          ) : (
-            <Wand2 className="mr-2 h-5 w-5" />
-          )}
-          Surprise me
-        </Button>
-        <p className="mt-2 text-xs text-muted-foreground">
-          A different pick every time, chosen from what suits you.
-        </p>
-      </div>
 
       <div className={`space-y-4${wodMode ? " pointer-events-none opacity-40" : ""}`}>
         <QuestionCard step={1} icon={Target} title="What's your goal today?">
