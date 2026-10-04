@@ -512,6 +512,13 @@
       "when": 1791097130117,
       "tag": "0072_strength_list_repair",
       "breakpoints": true
+    },
+    {
+      "idx": 73,
+      "version": "7",
+      "when": 1791097877547,
+      "tag": "0073_conditioning_list_repair",
+      "breakpoints": true
     }
   ]
 }

@@ -1,3 +1,4 @@
+import { isConditioningListCategory } from "./conditioning-vocabulary";
 import { isStrengthListExercise } from "./strength-vocabulary";
 import { prepAllowed } from "./prep-vocabulary";
 import { orderedPriority } from "./priority";
@@ -249,8 +250,12 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // PILATES: the 50-exercise SmartyGym Pilates list is all mat/bodyweight work,
   // so it is never removed by the athlete's equipment selection.
   if (!isMicro && f.category !== "PILATES") {
+    // Conditioning-list categories: the list's bodyweight moves stay available
+    // beside the chosen equipment (cardio rhythm, challenge bodyweight majority).
+    const keepBodyweight = isConditioningListCategory(f.category);
     pool = pool.filter((e) =>
-      matchesSelectedEquipment(e, f.selectedEquipment, f.customEquipment ?? []),
+      matchesSelectedEquipment(e, f.selectedEquipment, f.customEquipment ?? []) ||
+      (keepBodyweight && isBodyweight(e)),
     );
     if (f.equipmentMode === "BODYWEIGHT")
       pool = pool.filter((e) => isBodyweight(e) && !HOME_APPARATUS_RE.test(text(e)));

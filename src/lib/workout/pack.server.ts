@@ -286,6 +286,20 @@ export function buildPackWorkout(
         return flowGroup(fillFromLegalPool(picks, src, finisherCount), src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));
       })();
   finisherPicks.forEach((e) => used.add(e.id));
+  // CHALLENGE is majority bodyweight (doctrine): swap surplus equipment picks for unused bodyweight moves.
+  if (input.category === "CHALLENGE") {
+    const all = [...mainPicks, ...finisherPicks];
+    const spare = workPool.filter((e) => isBodyweight(e) && !used.has(e.id));
+    let bw = all.filter(isBodyweight).length;
+    for (const list of [finisherPicks, mainPicks])
+      for (let i = list.length - 1; i >= 0 && bw * 2 <= all.length && spare.length; i--)
+        if (!isBodyweight(list[i]!)) {
+          const r = regionOf(list[i]!);
+          const k = Math.max(0, spare.findIndex((e) => regionOf(e) === r));
+          const [rep] = spare.splice(k, 1);
+          used.add(rep!.id); list[i] = rep!; bw++;
+        }
+  }
 
   const seed = input.seed ?? (mainPicks[0]?.id.length ?? 5) * 31 + input.minutes;
 
