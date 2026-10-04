@@ -624,7 +624,11 @@ function MemberRankingPanel({
           {rows.slice(0, SLOTS).map((m, i) => (
             <li
               key={m.user_id}
-              className="flex items-center gap-3 rounded-2xl border border-blue-200 p-2.5 dark:border-blue-500/40"
+              role="link"
+              tabIndex={0}
+              onClick={() => openCreator(m.user_id, m.display_name)}
+              onKeyDown={(e) => e.key === "Enter" && openCreator(m.user_id, m.display_name)}
+              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-blue-200 p-2.5 transition hover:border-primary dark:border-blue-500/40"
             >
               <span className="w-7 shrink-0 text-center text-sm font-black text-primary">
                 {badgeFor(i)}
@@ -820,5 +824,11 @@ function TalkPanel({
       </DialogContent>
     </Dialog>
     </>
+  );
+}
+
+function openCreator(id: string, name: string | null) {
+  window.location.assign(
+    `/shared-workouts?creator=${encodeURIComponent(id)}&creatorName=${encodeURIComponent(name || "Smarty member")}`,
   );
 }
