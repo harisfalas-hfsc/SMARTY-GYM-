@@ -183,26 +183,6 @@ function CoachPage() {
       alive = false;
     };
   }, [namingWorkoutId]);
-  const [namingInfo, setNamingInfo] = useState<{
-    category: string; format: string | null; difficulty_stars: number;
-    duration_min: number; equipment: string[];
-  } | null>(null);
-  useEffect(() => {
-    setNamingInfo(null);
-    if (!namingWorkoutId || !isSupabaseConfigured()) return;
-    let alive = true;
-    void supabase
-      .from("workouts")
-      .select("category,format,difficulty_stars,duration_min,equipment")
-      .eq("id", namingWorkoutId)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (alive && data) setNamingInfo(data as never);
-      });
-    return () => {
-      alive = false;
-    };
-  }, [namingWorkoutId]);
   const [name, setName] = useState<string>("");
   const [level, setLevel] = useState<string>("");
   const [confirmHard, setConfirmHard] = useState(false);
