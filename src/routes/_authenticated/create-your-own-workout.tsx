@@ -27,8 +27,6 @@ import { generateWorkout, nameWorkout } from "@/lib/coach.functions";
 import { isOnline } from "@/lib/connectivity";
 import { setUseLibraryPreferences as saveUseLibraryPreferences } from "@/lib/preferences.functions";
 import { Link } from "@tanstack/react-router";
-import { ParqWaiverDialog } from "@/components/ParqWaiverDialog";
-import { hasParqAck, setParqAck } from "@/lib/parq-ack";
 import { GeneratingDialog } from "@/components/workout/GeneratingDialog";
 import { PendingGenerationCard } from "@/components/workout/PendingGenerationCard";
 import { MembershipRequiredDialog } from "@/components/MembershipRequiredDialog";
@@ -188,8 +186,6 @@ function CoachPage() {
   const [resuming, setResuming] = useState(false);
   const [wodMode, setWodMode] = useState(false);
   const [profileReady, setProfileReady] = useState<boolean | null>(null);
-  const [parqFlags, setParqFlags] = useState<string[]>([]);
-  const [parqOpen, setParqOpen] = useState(false);
   const [premium, setPremium] = useState<boolean | null>(null);
   const [membershipOpen, setMembershipOpen] = useState(false);
   const [visitor, setVisitor] = useState(false);
@@ -215,7 +211,6 @@ function CoachPage() {
         setProfileReady(
           access.profileComplete && access.healthAcknowledged && access.readinessComplete,
         );
-        setParqFlags(access.readinessFlagged ? access.readinessFlags : []);
         setPremium(access.premium);
       } catch {
         setProfileReady(null);
@@ -342,10 +337,6 @@ function CoachPage() {
       setMembershipOpen(true);
       return;
     }
-    if (parqFlags.length > 0 && !hasParqAck()) {
-      setParqOpen(true);
-      return;
-    }
     if (level === "advanced" && LOW_ENERGY_MOODS.includes(mood)) {
       setConfirmHard(true);
       return;
@@ -409,7 +400,7 @@ function CoachPage() {
         ) : (
           <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
         )}
-        <ManualWorkoutBuilder premium={premium} parqFlags={parqFlags} onLocked={() => setMembershipOpen(true)} />
+        <ManualWorkoutBuilder premium={premium} onLocked={() => setMembershipOpen(true)} />
       </div>
     );
   }
@@ -523,21 +514,6 @@ function CoachPage() {
         ) : (
           <MembershipRequiredDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
         )}
-
-      <ParqWaiverDialog
-        open={parqOpen}
-        flags={parqFlags}
-        confirmLabel="I confirm — build my workout"
-        onConfirm={() => {
-          setParqAck();
-          setParqOpen(false);
-          void generate();
-        }}
-        onCancel={() => {
-          setParqOpen(false);
-        }}
-      />
-
 
 
       {wodMode ? (

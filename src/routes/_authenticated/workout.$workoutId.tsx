@@ -54,7 +54,7 @@ function WorkoutPage() {
   const [shared, setShared] = useState(false);
   const [sharing, setSharing] = useState(false);
   const saveStatus = useServerFn(setWorkoutStatus);
-  const { user } = useAuth();
+  const { user, displayName } = useAuth();
   const online = useOnlineStatus();
   const saveShare = useServerFn(shareWorkout);
   const readFeedback = useServerFn(getSessionFeedback);
@@ -287,6 +287,7 @@ function WorkoutPage() {
     <WorkoutDisplay
       workout={w}
       creator={creator}
+      ownerName={displayName}
       onComplete={complete}
       onPlayerClosed={() => {
         void refreshFeedback();

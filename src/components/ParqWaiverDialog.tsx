@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 /**
  * Waiver / release of liability shown every time a user with a YES answer on the
- * PAR-Q readiness questionnaire creates, opens or subscribes to a workout.
+ * PAR-Q readiness warning shown when a member opens a workout to begin training.
  */
 export function ParqWaiverDialog({
   open,

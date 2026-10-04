@@ -19,7 +19,7 @@ import { fetchComments } from "@/lib/community-queries";
 import { invalidateRemote, loadRemote } from "@/lib/remote-data";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
-import { COMMENT_MAX, RATING_STARS, creatorOrigin, type CommunityComment, type SharedWorkoutFull } from "@/lib/community";
+import { COMMENT_MAX, RATING_STARS, type CommunityComment, type SharedWorkoutFull } from "@/lib/community";
 import { formatDate } from "@/lib/date-format";
 
 /**
@@ -182,7 +182,6 @@ export function CommunityEngagementPanel({
             <p className="truncate text-sm font-bold">
               {isOwner ? "Shared by you" : <>Shared by <CreatorLink userId={workout.user_id} name={creator?.display_name} /></>}
             </p>
-            <p className="truncate text-[11px] text-muted-foreground">{creatorOrigin(workout)}</p>
           </div>
         </div>
 
