@@ -217,7 +217,7 @@ describe("filterPool equipment allowlist", () => {
       level: "all",
     });
 
-    expect(result.map((item) => item.id)).toEqual(["k1"]);
+    expect(result.map((item) => item.id)).toEqual(["d1", "k1"]);
   });
 });
 

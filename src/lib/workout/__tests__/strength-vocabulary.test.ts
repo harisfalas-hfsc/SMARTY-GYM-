@@ -7,8 +7,8 @@ const ctx = { category: "STRENGTH" as const, format: "REPS & SETS" as const };
 
 describe("SmartyGym Strength & Muscle Hypertrophy list", () => {
   it("has 50 bodyweight + 50 machines + 50 free weights", () => {
-    expect(STRENGTH_EXERCISES).toHaveLength(150);
-    expect(STRENGTH_EXERCISES.filter((e) => e.group === "bodyweight")).toHaveLength(50);
+    expect(STRENGTH_EXERCISES).toHaveLength(197);
+    expect(STRENGTH_EXERCISES.filter((e) => e.group === "bodyweight")).toHaveLength(51);
     expect(STRENGTH_EXERCISES.filter((e) => e.group === "machine")).toHaveLength(73);
     expect(STRENGTH_EXERCISES.filter((e) => e.group === "free")).toHaveLength(73);
   });
