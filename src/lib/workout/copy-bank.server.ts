@@ -15,6 +15,7 @@ export type SmartyCopy = {
 
 type CopyRow = {
   id: string;
+  category: string;
   description_html: string | null;
   instructions_html: string | null;
   tips_html: string | null;
@@ -30,7 +31,7 @@ async function loadCopyRows(db: SupabaseClient): Promise<CopyRow[]> {
   if (cache && Date.now() - cache.at < CACHE_MS) return cache.rows;
   const { data } = await db
     .from("smarty_workouts")
-    .select("id,description_html,instructions_html,tips_html,difficulty_stars,duration_min,equipment");
+    .select("id,category,description_html,instructions_html,tips_html,difficulty_stars,duration_min,equipment");
   const rows = ((data as CopyRow[] | null) ?? []).filter(
     (r) => r.description_html && r.instructions_html && r.tips_html,
   );
@@ -57,7 +58,9 @@ export async function smartyCopy(
     seed?: number;
   },
 ): Promise<SmartyCopy | null> {
-  const rows = (await loadCopyRows(db)).filter((r) => r.id && r.description_html);
+  const rows = (await loadCopyRows(db)).filter(
+    (r) => r.id && r.description_html && r.category === input.category,
+  );
   if (!rows.length) return null;
 
   const wantBodyweight = input.equipmentMode === "BODYWEIGHT";
