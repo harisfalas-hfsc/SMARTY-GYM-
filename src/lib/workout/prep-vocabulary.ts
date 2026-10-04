@@ -9,9 +9,10 @@ export const ACTIVATION_NAMES = [
   "bird dog", "cat-cow", "clamshell", "fire hydrant", "glute bridge", "glute bridge march",
   "low glute bridge on floor", "single leg bridge with outstretched leg", "dead bug", "pelvic tilt",
   "standing pelvic tilt", "scapula push-up", "incline scapula push up", "plank", "bodyweight incline side plank",
-  "kneeling plank tap shoulder", "inchworm", "world greatest stretch", "squat to overhead reach",
-  "squat to overhead reach with twist", "posterior step to overhead reach", "wrist circles", "ankle circles",
-  "dynamic chest stretch (male)", "circles knee stretch", "spine twist", "pelvic tilt into bridge",
+  "kneeling plank tap shoulder", "front plank with twist", "inchworm", "inchworm (variation 2)", "world greatest stretch",
+  "squat to overhead reach", "squat to overhead reach with twist", "posterior step to overhead reach", "wrist circles",
+  "ankle circles", "dynamic chest stretch (male)", "circles knee stretch", "spine twist", "spine twist pilates",
+  "pelvic tilt into bridge", "the hundred",
 ];
 
 export const COOLDOWN_NAMES = [
@@ -21,13 +22,15 @@ export const COOLDOWN_NAMES = [
   "butterfly yoga pose", "all fours squad stretch", "lying (side) quads stretch", "hug knees to chest",
   "bent knee lying twist", "calf stretch with hands against wall", "standing calves calf stretch",
   "neck side stretch", "standing lateral stretch", "spine twist", "spine stretch", "back pec stretch",
-  "side lying floor stretch", "upward facing dog",
+  "side lying floor stretch", "upward facing dog", "sphinx", "spine stretch forward", "spine twist pilates",
+  "calf push stretch with hands against wall", "chair leg extended stretch", "circles knee stretch",
+  "iron cross stretch", "leg up hamstring stretch", "seated calf stretch (male)", "seated wide angle pose sequence",
+  "side push neck stretch", "side wrist pull stretch", "pelvic tilt", "standing pelvic tilt", "pelvic tilt into bridge",
+  "ankle circles", "wrist circles", "dynamic chest stretch (male)", "world greatest stretch",
 ];
 
 const ACT = new Set(ACTIVATION_NAMES);
 const CD = new Set(COOLDOWN_NAMES);
-const CD_LIKE = /stretch|\bpose\b|spine twist|lying twist|pelvic tilt|knees? to chest|cat-cow|child|forward fold|spinal twist|sphinx|upward facing dog|cars\b|circles?\b|ankle rocks|thread the needle|90\/90/;
-const ACT_LIKE = /bird dog|dead bug|glute bridge|clamshell|fire hydrant|plank|circles?\b|rotation|inchworm|overhead reach|scapula|cars\b|hundred|pelvic curl|roll-up|corkscrew|hip twist/;
 /** Never preparation in either section: load, equipment, conditioning, impact, training work. */
 const BANNED = /lunge|squat(?! to overhead reach)|row\b|press|raise|curl|crawl|walk|kick|jump|burpee|climber|crunch|dip|calf raise|(?<!scapula )push[- ]?up|extension|abduct|adduct|machine|barbell|dumbbell|cable|kettlebell|sprint|box|skater|sit-?up|weighted|band\b|trx|suspen|medicine|smith|lever|roller|ball\b|bench/;
 /** Activation and Cool Down never use equipment — bodyweight only. */
@@ -39,9 +42,9 @@ export type PrepSection = "activation" | "cooldown";
 export function prepAllowed(name: string, section: PrepSection): boolean {
   const n = norm(name);
   // Activation may also use cool-down mobility/stretches; cool down stays static/mobility.
-  if (section === "cooldown" ? CD.has(n) : ACT.has(n) || CD.has(n)) return true;
-  if (BANNED.test(n)) return false;
-  return section === "cooldown" ? CD_LIKE.test(n) : ACT_LIKE.test(n) || CD_LIKE.test(n);
+  // Closed lists (approved by Haris Falas, 2026-10-04): nothing outside them.
+  if (BANNED.test(n) && n !== "scapula push-up" && n !== "incline scapula push up") return false;
+  return section === "cooldown" ? CD.has(n) : ACT.has(n) || CD.has(n);
 }
 
 /** Activation dose ceiling: 10 reps, 30 sec, one pass — never working sets. */

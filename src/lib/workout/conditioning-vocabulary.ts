@@ -68,6 +68,10 @@ export const CONDITIONING_EXERCISES: ReadonlyArray<string> = [
   "Battling Ropes",
   "Jump Rope",
   "Swing 360",
+  // Added by Haris Falas (2026-10-04): approved library suggestions.
+  "Kettlebell Double Alternating Hang Clean",
+  "Barbell Front Chest Squat",
+  "Dumbbell Lunge with Bicep Curl",
 ];
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();

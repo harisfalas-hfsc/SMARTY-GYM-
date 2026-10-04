@@ -11,6 +11,7 @@ import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-voc
 import { isPilatesMainExercise, isTruePilatesMovement } from "./pilates-vocabulary";
 import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
 import { isConditioningListCategory, isConditioningListExercise } from "./conditioning-vocabulary";
+import { onMobilityRecoveryList } from "./mobility-recovery-vocabulary";
 
 const isLoadCategory = (c: Category) => c === "STRENGTH" || c === "MUSCLE BUILDING";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -59,6 +60,10 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
       out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
     return out;
   }
+  // MOBILITY & STABILITY / RECOVERY: ONLY the SmartyGym closed lists.
+  const mrListed = onMobilityRecoveryList(ctx.category, e);
+  if (mrListed === false)
+    out.push(`"${e.name}" is not on the SmartyGym ${ctx.category} exercise list — ${ctx.category} work uses only those exercises.`);
   // CALORIE BURNING / CARDIO / METABOLIC / CHALLENGE: ONLY the 60-exercise
   // SmartyGym conditioning list (conditioning-vocabulary.ts); category rules still apply.
   const conditioningListed = isConditioningListCategory(ctx.category) && isConditioningListExercise(e);
