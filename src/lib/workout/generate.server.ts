@@ -1,6 +1,4 @@
-import { streamText } from "ai";
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
-import { buildWorkoutPrompt, type AthleteContext } from "./prompt.server";
+import type { AthleteContext } from "./prompt.server";
 import { enforceWorkout, estimateWorkMinutes } from "./enforce.server";
 import { validateWorkout } from "./validate.server";
 import { classifyIssues, classifyIssuesForFallback } from "@/lib/workout-validation";
@@ -32,8 +30,7 @@ import {
   type StrengthFocus,
 } from "./spec";
 
-const MODEL = "google/gemini-3.1-pro-preview";
-const MODEL_TIMEOUT_MS = 18_000;
+// Smarty Coach runs 100% on the deterministic engine — no AI model, no credits.
 
 export type GenerateInput = {
   category: Category;
@@ -98,31 +95,6 @@ export function isValidName(name: string, used: string[]): boolean {
   return true;
 }
 
-function extractJson(text: string): Record<string, unknown> {
-  let raw = text.trim();
-  raw = raw.replace(/^```(?:json)?/i, "").replace(/```$/i, "").trim();
-  const start = raw.indexOf("{");
-  const end = raw.lastIndexOf("}");
-  if (start === -1 || end === -1) throw new Error("Smarty Coach returned an unreadable workout.");
-  return JSON.parse(raw.slice(start, end + 1)) as Record<string, unknown>;
-}
-
-async function askModel(system: string, user: string): Promise<Record<string, unknown>> {
-  const apiKey = process.env["LOVABLE_API_KEY"];
-  if (!apiKey) throw new Error("AI is not configured.");
-  const gateway = createLovableAiGatewayProvider(apiKey);
-  const result = streamText({
-    model: gateway(MODEL),
-    system,
-    messages: [{ role: "user", content: user }],
-    temperature: 0.85,
-    maxRetries: 0,
-    timeout: { totalMs: MODEL_TIMEOUT_MS },
-    // Priority serving tier: same model, same quality, lower latency.
-    providerOptions: { lovable: { service_tier: "priority" } },
-  });
-  return extractJson(await result.text);
-}
 
 export async function generateWorkoutContent(
   supabase: Parameters<typeof loadAllExercises>[0],
