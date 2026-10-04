@@ -1,14 +1,66 @@
-// THE SmartyGym Strength & Muscle Building exercise selection (set by Haris Falas).
-// Any STRENGTH or MUSCLE BUILDING workout that uses equipment draws its Main
-// Workout and Finisher ONLY from these 100 exercises (50 machines + 50 free
-// weights). Bodyweight-only Strength workouts keep the general rules.
+// THE SmartyGym Strength & Muscle Hypertrophy exercise selection (set by Haris Falas).
+// STRENGTH and MUSCLE BUILDING Main Workout + Finisher draw ONLY from this list:
+//   - bodyweight workouts: the 50 "bodyweight" entries (pool A)
+//   - equipment / gym workouts: the 50 gym machines + the 50 free-weight /
+//     equipment entries (pool B); bodyweight entries are not mixed in.
 // Activation and Cool Down keep their own prep vocabulary (prep-vocabulary.ts).
 // Read by rules.ts, so the pool filter, validator, admin publish gate and the
 // stored-workout audit all apply the same list.
 // `library` is the exercise-library name the entry resolves to (null = not in
-// the library yet, so it can never be programmed until it is added).
+// the library, so it can never be programmed until it is added).
 
-export const STRENGTH_EXERCISES: ReadonlyArray<{ name: string; library: string | null; group: "machine" | "free" }> = [
+export type StrengthGroup = "bodyweight" | "machine" | "free";
+export const STRENGTH_EXERCISES: ReadonlyArray<{ name: string; library: string | null; group: StrengthGroup }> = [
+  { name: "Push-Up", library: "push-up", group: "bodyweight" },
+  { name: "Incline Push-Up", library: "incline push-up", group: "bodyweight" },
+  { name: "Decline Push-Up", library: "decline push-up", group: "bodyweight" },
+  { name: "Diamond Push-Up", library: "diamond push-up", group: "bodyweight" },
+  { name: "Pike Push-Up", library: null, group: "bodyweight" },
+  { name: "Bodyweight Squat", library: "quads (bodyweight squat)", group: "bodyweight" },
+  { name: "Bulgarian Split Squat", library: null, group: "bodyweight" },
+  { name: "Reverse Lunge", library: null, group: "bodyweight" },
+  { name: "Forward Lunge", library: "forward lunge", group: "bodyweight" },
+  { name: "Side Lunge", library: null, group: "bodyweight" },
+  { name: "Walking Lunge", library: "walking lunge", group: "bodyweight" },
+  { name: "Single-Leg Squat", library: "one leg squat", group: "bodyweight" },
+  { name: "Pistol Squat", library: "single leg squat (pistol) male", group: "bodyweight" },
+  { name: "Step-Up", library: null, group: "bodyweight" },
+  { name: "Glute Bridge", library: "glute bridge", group: "bodyweight" },
+  { name: "Single-Leg Glute Bridge", library: "single leg bridge with outstretched leg", group: "bodyweight" },
+  { name: "Hip Thrust", library: null, group: "bodyweight" },
+  { name: "Single-Leg Hip Thrust", library: null, group: "bodyweight" },
+  { name: "Nordic Hamstring Curl", library: "inverse leg curl (bench support)", group: "bodyweight" },
+  { name: "Single-Leg Romanian Deadlift", library: null, group: "bodyweight" },
+  { name: "Calf Raise", library: "bodyweight standing calf raise", group: "bodyweight" },
+  { name: "Single-Leg Calf Raise", library: "one leg floor calf raise", group: "bodyweight" },
+  { name: "Plank", library: "plank", group: "bodyweight" },
+  { name: "Side Plank", library: "side bridge v. 2", group: "bodyweight" },
+  { name: "Reverse Plank", library: null, group: "bodyweight" },
+  { name: "Bodyweight Row", library: "inverted row", group: "bodyweight" },
+  { name: "TRX Row", library: "suspended row", group: "bodyweight" },
+  { name: "TRX Push-Up", library: "suspended push-up", group: "bodyweight" },
+  { name: "TRX Squat", library: null, group: "bodyweight" },
+  { name: "TRX Lunge", library: "suspended split squat", group: "bodyweight" },
+  { name: "TRX Single-Leg Squat", library: null, group: "bodyweight" },
+  { name: "TRX Hamstring Curl", library: null, group: "bodyweight" },
+  { name: "TRX Hip Press", library: null, group: "bodyweight" },
+  { name: "TRX Pike", library: null, group: "bodyweight" },
+  { name: "TRX Atomic Push-Up", library: null, group: "bodyweight" },
+  { name: "Mountain Climber", library: "mountain climber", group: "bodyweight" },
+  { name: "Bear Crawl", library: "bear crawl", group: "bodyweight" },
+  { name: "Sit-Up", library: "sit-up v. 2", group: "bodyweight" },
+  { name: "Crunch", library: "crunch floor", group: "bodyweight" },
+  { name: "Reverse Crunch", library: "reverse crunch", group: "bodyweight" },
+  { name: "Bicycle Crunch", library: "bicycle crunch", group: "bodyweight" },
+  { name: "Leg Raise", library: "lying leg raise flat bench", group: "bodyweight" },
+  { name: "Hanging Knee Raise", library: null, group: "bodyweight" },
+  { name: "Hanging Leg Raise", library: "hanging leg raise", group: "bodyweight" },
+  { name: "Dead Bug", library: "dead bug", group: "bodyweight" },
+  { name: "Bird Dog", library: "bird dog", group: "bodyweight" },
+  { name: "Superman", library: null, group: "bodyweight" },
+  { name: "Back Extension", library: "hyperextension", group: "bodyweight" },
+  { name: "Side Crunch", library: "oblique crunches floor", group: "bodyweight" },
+  { name: "Russian Twist", library: "russian twist", group: "bodyweight" },
   { name: "Lever Leg Extension", library: "lever leg extension", group: "machine" },
   { name: "Lever Lying Leg Curl", library: "lever lying leg curl", group: "machine" },
   { name: "Lever Seated Leg Curl", library: "lever seated leg curl", group: "machine" },
@@ -68,37 +120,37 @@ export const STRENGTH_EXERCISES: ReadonlyArray<{ name: string; library: string |
   { name: "Barbell Romanian Deadlift", library: "barbell romanian deadlift", group: "free" },
   { name: "Barbell Deadlift", library: "barbell deadlift", group: "free" },
   { name: "Barbell Front Squat", library: "barbell front squat", group: "free" },
-  { name: "Barbell Back Squat", library: "barbell full squat", group: "free" },
+  { name: "Barbell Full Squat", library: "barbell full squat", group: "free" },
   { name: "Barbell Sumo Deadlift", library: "barbell sumo deadlift", group: "free" },
-  { name: "Barbell Hip Thrust", library: "barbell glute bridge", group: "free" },
   { name: "Barbell Seated Overhead Press", library: "barbell seated overhead press", group: "free" },
-  { name: "Barbell Standing Military Press", library: "barbell standing wide military press", group: "free" },
+  { name: "Barbell Standing Close Grip Military Press", library: "barbell standing close grip military press", group: "free" },
+  { name: "Barbell Standing Wide Military Press", library: "barbell standing wide military press", group: "free" },
   { name: "Barbell Upright Row", library: "barbell upright row", group: "free" },
-  { name: "Barbell Rear Delt Raise", library: "barbell rear delt raise", group: "free" },
+  { name: "Barbell Rear Delt Row", library: "barbell rear delt row", group: "free" },
   { name: "Barbell Shrug", library: "barbell shrug", group: "free" },
   { name: "Barbell Close-Grip Bench Press", library: "barbell close-grip bench press", group: "free" },
   { name: "Barbell Standing Overhead Triceps Extension", library: "barbell standing overhead triceps extension", group: "free" },
   { name: "Barbell Preacher Curl", library: "barbell preacher curl", group: "free" },
   { name: "Dumbbell Bench Press", library: "dumbbell bench press", group: "free" },
   { name: "Dumbbell Incline Bench Press", library: "dumbbell incline bench press", group: "free" },
-  { name: "Dumbbell Fly", library: "dumbbell fly", group: "free" },
   { name: "Dumbbell Bent Over Row", library: "dumbbell bent over row", group: "free" },
-  { name: "Dumbbell Shoulder Press", library: "dumbbell seated shoulder press", group: "free" },
+  { name: "Dumbbell One Arm Bent-Over Row", library: "dumbbell one arm bent-over row", group: "free" },
+  { name: "Dumbbell One Arm Shoulder Press", library: "dumbbell one arm shoulder press", group: "free" },
   { name: "Dumbbell Arnold Press", library: "dumbbell arnold press", group: "free" },
   { name: "Dumbbell Lateral Raise", library: "dumbbell lateral raise", group: "free" },
   { name: "Dumbbell Upright Row", library: "dumbbell upright row", group: "free" },
-  { name: "Dumbbell Rear Lateral Raise", library: "dumbbell rear lateral raise", group: "free" },
+  { name: "Dumbbell Rear Delt Row", library: "dumbbell rear delt row (shoulder)", group: "free" },
   { name: "Dumbbell Biceps Curl", library: "dumbbell biceps curl", group: "free" },
   { name: "Dumbbell Hammer Curl", library: "dumbbell hammer curl", group: "free" },
-  { name: "Dumbbell Preacher Curl", library: "dumbbell preacher curl", group: "free" },
+  { name: "Dumbbell Seated Biceps Curl", library: "dumbbell seated bicep curl", group: "free" },
   { name: "Dumbbell Triceps Extension", library: "dumbbell standing triceps extension", group: "free" },
   { name: "Dumbbell Goblet Squat", library: "dumbbell goblet squat", group: "free" },
-  { name: "Dumbbell Romanian Deadlift", library: "dumbbell romanian deadlift", group: "free" },
-  { name: "Dumbbell Bulgarian Split Squat", library: "dumbbell single leg split squat", group: "free" },
+  { name: "Dumbbell Lunge", library: "dumbbell lunge", group: "free" },
+  { name: "Dumbbell Rear Lunge", library: "dumbbell rear lunge", group: "free" },
+  { name: "Dumbbell Single Leg Split Squat", library: "dumbbell single leg split squat", group: "free" },
   { name: "Dumbbell Single Leg Deadlift", library: "dumbbell single leg deadlift", group: "free" },
-  { name: "Dumbbell Lunges", library: "dumbbell lunge", group: "free" },
-  { name: "Dumbbell Standing Calf Raise", library: "dumbbell standing calf raise", group: "free" },
-  { name: "Dumbbell Shrug", library: "dumbbell shrug", group: "free" },
+  { name: "Dumbbell Squat", library: "dumbbell squat", group: "free" },
+  { name: "Dumbbell Step-Up", library: "dumbbell step-up", group: "free" },
   { name: "Kettlebell Goblet Squat", library: "kettlebell goblet squat", group: "free" },
   { name: "Kettlebell Front Squat", library: "kettlebell front squat", group: "free" },
   { name: "Kettlebell One Arm Row", library: "kettlebell one arm row", group: "free" },
@@ -107,14 +159,23 @@ export const STRENGTH_EXERCISES: ReadonlyArray<{ name: string; library: string |
   { name: "Kettlebell Two Arm Military Press", library: "kettlebell two arm military press", group: "free" },
   { name: "Kettlebell One Arm Push Press", library: "kettlebell one arm push press", group: "free" },
   { name: "Kettlebell Swing", library: "kettlebell swing", group: "free" },
-  { name: "Kettlebell Romanian Deadlift", library: null, group: "free" },
-  { name: "Kettlebell Lunge Pass Through", library: "kettlebell lunge pass through", group: "free" },
+  { name: "Farmer's Carry", library: "farmers walk", group: "free" },
+  { name: "Medicine Ball Overhead Slam", library: "medicine ball overhead slam", group: "free" },
 ];
 
 const norm = (s: string) => s.toLowerCase().replace(/°/g, "").replace(/[^a-z0-9]+/g, " ").trim();
-const NAMES = new Set(STRENGTH_EXERCISES.flatMap((e) => (e.library ? [norm(e.library), norm(e.name)] : [])));
+const setOf = (pred: (g: StrengthGroup) => boolean) =>
+  new Set(STRENGTH_EXERCISES.filter((e) => e.library && pred(e.group)).map((e) => norm(e.library!)));
+const ALL = setOf(() => true);
+const BODYWEIGHT = setOf((g) => g === "bodyweight");
+const EQUIPMENT = setOf((g) => g !== "bodyweight");
 
-/** True only for exercises on the SmartyGym Strength & Muscle Building list. */
-export const isStrengthListExercise = (e: { name: string }) => NAMES.has(norm(e.name));
+/** True for any exercise on the SmartyGym Strength & Muscle Hypertrophy list. */
+export const isStrengthListExercise = (e: { name: string }) => ALL.has(norm(e.name));
+/** Pool A — bodyweight Strength / Muscle Hypertrophy. */
+export const isStrengthBodyweightListExercise = (e: { name: string }) => BODYWEIGHT.has(norm(e.name));
+/** Pool B — equipment + gym-machine Strength / Muscle Hypertrophy. */
+export const isStrengthEquipmentListExercise = (e: { name: string }) => EQUIPMENT.has(norm(e.name));
 
-export const STRENGTH_LIST_NAMES = STRENGTH_EXERCISES.filter((e) => e.library).map((e) => e.name);
+export const STRENGTH_BODYWEIGHT_NAMES = STRENGTH_EXERCISES.filter((e) => e.library && e.group === "bodyweight").map((e) => e.name);
+export const STRENGTH_LIST_NAMES = STRENGTH_EXERCISES.filter((e) => e.library && e.group !== "bodyweight").map((e) => e.name);
