@@ -141,10 +141,12 @@ function Account() {
 
   useEffect(() => {
     (async () => {
+      if (!user?.id) return;
       const c = await loadRemote("account:workout-count", async () => {
         const { count, error } = await supabase
           .from("workouts")
-          .select("id", { count: "exact", head: true });
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id);
         if (error) throw new Error(error.message);
         return count ?? 0;
       }, user?.id).catch(() => 0);
