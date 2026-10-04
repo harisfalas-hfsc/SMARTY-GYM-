@@ -1,11 +1,10 @@
 import type { AthleteContext } from "./prompt.server";
 import { enforceWorkout, estimateWorkMinutes } from "./enforce.server";
 import { validateWorkout } from "./validate.server";
-import { classifyIssues, classifyIssuesForFallback } from "@/lib/workout-validation";
-import { priorityShortfall } from "./priority";
+import { classifyIssuesForFallback } from "@/lib/workout-validation";
 import { buildPackWorkout, packCopy } from "./pack.server";
-import { buildSessionPlan, scoreWorkout } from "./programming";
-import { parseWorkoutSteps } from "./parse-steps";
+import { buildSessionPlan } from "./programming";
+import { smartyCopy } from "./copy-bank.server";
 import { dominantRegion, focusRegion, resolveLocation } from "./doctrine";
 
 import {
