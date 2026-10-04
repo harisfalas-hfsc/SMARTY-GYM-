@@ -237,10 +237,14 @@ export function WorkoutDisplay({
                 <span className="text-base font-extrabold text-foreground">Me</span>
               )}
             </div>
-            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Created with</span>
-              <span className="text-sm font-bold text-foreground">{creationSource}</span>
-            </div>
+            {/* Other members' workouts show only who created them — how they
+                created it (Coach, library, ...) is private to the creator. */}
+            {!creator ? (
+              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Created with</span>
+                <span className="text-sm font-bold text-foreground">{creationSource}</span>
+              </div>
+            ) : null}
             {creator ? (
               <p className="mt-1 text-[11px] text-muted-foreground">Tap the creator’s name to see all their shared workouts.</p>
             ) : null}
