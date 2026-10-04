@@ -353,7 +353,6 @@ export async function createWorkoutForUser(
         recentIds,
         location,
         mood,
-        deterministic: Boolean(data.wod),
         athlete: {
           name: (prof?.["display_name"] as string) ?? null,
           age: (prof?.["age"] as number) ?? null,

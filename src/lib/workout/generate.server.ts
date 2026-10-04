@@ -1,13 +1,10 @@
-import { streamText } from "ai";
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
-import { buildWorkoutPrompt, type AthleteContext } from "./prompt.server";
+import type { AthleteContext } from "./prompt.server";
 import { enforceWorkout, estimateWorkMinutes } from "./enforce.server";
 import { validateWorkout } from "./validate.server";
-import { classifyIssues, classifyIssuesForFallback } from "@/lib/workout-validation";
-import { priorityShortfall } from "./priority";
+import { classifyIssuesForFallback } from "@/lib/workout-validation";
 import { buildPackWorkout, packCopy } from "./pack.server";
-import { buildSessionPlan, scoreWorkout } from "./programming";
-import { parseWorkoutSteps } from "./parse-steps";
+import { buildSessionPlan } from "./programming";
+import { smartyCopy } from "./copy-bank.server";
 import { dominantRegion, focusRegion, resolveLocation } from "./doctrine";
 
 import {
@@ -18,7 +15,6 @@ import {
 
   loadAllExercises,
   resolveCustomEquipment,
-  samplePool,
   type PoolExercise,
 } from "./pool.server";
 
@@ -32,8 +28,7 @@ import {
   type StrengthFocus,
 } from "./spec";
 
-const MODEL = "google/gemini-3.1-pro-preview";
-const MODEL_TIMEOUT_MS = 18_000;
+// Smarty Coach runs 100% on the deterministic engine — no AI model, no credits.
 
 export type GenerateInput = {
   category: Category;
@@ -55,8 +50,6 @@ export type GenerateInput = {
   recentIds?: string[];
 
   athlete?: AthleteContext;
-  /** Daily delivery prioritises guaranteed speed over generated prose. */
-  deterministic?: boolean;
 };
 
 export type GeneratedWorkout = {
@@ -98,31 +91,6 @@ export function isValidName(name: string, used: string[]): boolean {
   return true;
 }
 
-function extractJson(text: string): Record<string, unknown> {
-  let raw = text.trim();
-  raw = raw.replace(/^```(?:json)?/i, "").replace(/```$/i, "").trim();
-  const start = raw.indexOf("{");
-  const end = raw.lastIndexOf("}");
-  if (start === -1 || end === -1) throw new Error("Smarty Coach returned an unreadable workout.");
-  return JSON.parse(raw.slice(start, end + 1)) as Record<string, unknown>;
-}
-
-async function askModel(system: string, user: string): Promise<Record<string, unknown>> {
-  const apiKey = process.env["LOVABLE_API_KEY"];
-  if (!apiKey) throw new Error("AI is not configured.");
-  const gateway = createLovableAiGatewayProvider(apiKey);
-  const result = streamText({
-    model: gateway(MODEL),
-    system,
-    messages: [{ role: "user", content: user }],
-    temperature: 0.85,
-    maxRetries: 0,
-    timeout: { totalMs: MODEL_TIMEOUT_MS },
-    // Priority serving tier: same model, same quality, lower latency.
-    providerOptions: { lovable: { service_tier: "priority" } },
-  });
-  return extractJson(await result.text);
-}
 
 export async function generateWorkoutContent(
   supabase: Parameters<typeof loadAllExercises>[0],
@@ -162,8 +130,6 @@ export async function generateWorkoutContent(
   }
 
   const duration = durationLabel(input.minutes);
-  const recentIds = input.recentIds ?? [];
-  const promptPool = samplePool(pool, 260, favoriteIds, recentIds);
 
   const plan = buildSessionPlan({
     category: input.category,
@@ -201,9 +167,6 @@ export async function generateWorkoutContent(
   });
   const prepIds = [...activationPool.map((e) => e.id), ...cooldownPool.map((e) => e.id)];
   const seed = `${input.category}${input.minutes}${pool.length}`.length + Date.now() % 100000;
-
-  const { getWorkoutRules } = await import("@/lib/settings.server");
-  const extraRules = (await getWorkoutRules()).extraCoachRules.trim();
 
   const enforceOpts = {
     category: input.category,
@@ -254,101 +217,7 @@ export async function generateWorkoutContent(
       c.toUpperCase(),
     );
 
-  const libraryById = new Map(all.map((e) => [e.id, e]));
-  let lastError = "";
-  const modelAttempts = input.deterministic ? 0 : 1;
-  for (let attempt = 0; attempt < modelAttempts; attempt++) {
-    let payload: Record<string, unknown>;
-    try {
-      const { system, user } = buildWorkoutPrompt({
-        category: input.category,
-        format,
-        equipmentMode: input.equipmentMode,
-        selectedEquipment: input.selectedEquipment,
-        ...(customEquipment.length ? { customEquipment } : {}),
-        level,
-        stars: input.stars,
-        duration,
-        focus: input.focus ?? null,
-        ...(input.note ? { note: input.note } : {}),
-        ...(input.athlete ? { athlete: input.athlete } : {}),
-        pool: promptPool,
-        activationPool,
-        cooldownPool,
-        bannedNames: usedNames,
-        plan,
-      });
-
-      payload = await askModel(
-        extraRules ? `${system}\n\nADDITIONAL COACH RULES (highest priority)\n${extraRules}` : system,
-        user,
-      );
-    } catch (err) {
-      lastError = err instanceof Error ? err.message : "model call failed";
-      continue;
-    }
-
-    const html = String(payload["main_workout"] ?? "");
-    const enforced = enforceWorkout(html, pool, enforceOpts);
-
-    // Only structural faults block delivery — drift becomes a caution note.
-    const enforcedSplit = classifyIssues(enforced.errors);
-    if (enforcedSplit.structural.length) {
-      lastError = enforcedSplit.structural.join(" ");
-      continue;
-    }
-
-    // Coach priority rule: the main work and finisher must be built mostly
-    // from the 3 × 50 priority exercises (Mobility & Stability / Pilates exempt).
-    const prioShort = priorityShortfall(enforced.html, pool, input.category);
-    if (prioShort) {
-      lastError = prioShort;
-      continue;
-    }
-
-    // Deterministic validation — the last word on ids, equipment and dosing.
-    const validated = validateWorkout(enforced.html, validateOpts);
-    const validatedSplit = classifyIssues(validated.errors);
-    if (validatedSplit.structural.length) {
-      lastError = validatedSplit.structural.slice(0, 6).join(" ");
-      continue;
-    }
-
-    let name = String(payload["name"] ?? "").trim();
-    const warnings = [
-      ...enforced.warnings,
-      ...validated.warnings,
-      ...enforcedSplit.soft,
-      ...validatedSplit.soft,
-    ];
-    if (!isValidName(name, usedNames)) {
-      name = fallbackName();
-      warnings.push("Workout name was replaced by a compliant fallback.");
-    }
-
-    // Deterministic quality score — the coaching standard, not just legality.
-    const quality = scoreWorkout(parseWorkoutSteps(enforced.html), plan, {
-      library: libraryById,
-      favoriteIds,
-      dislikedIds,
-      recentIds,
-      estimatedMinutes: estimateWorkMinutes(enforced.html),
-    });
-
-    const candidate: GeneratedWorkout & { score: number } = {
-      name,
-      description_html: String(payload["description"] ?? ""),
-      main_workout: enforced.html,
-      instructions_html: String(payload["instructions"] ?? ""),
-      tips_html: String(payload["tips"] ?? ""),
-      warnings: [...warnings, ...(quality.score < 85 ? quality.issues : [])],
-      needs_review: warnings.length > 0 || quality.score < 75,
-      score: quality.score,
-    };
-    return { ...candidate, format, pool, duration };
-  }
-
-  // ---- Reliability fallback: deterministic template engine ---------------------
+  // ---- Deterministic engine: the only generation path -------------------------
   const pack = buildPackWorkout(pool, all, {
     category: input.category,
     format,
@@ -369,13 +238,24 @@ export async function generateWorkoutContent(
     ...enforcedPack.errors,
     ...packValidation.errors,
   ]);
-  const copy = packCopy({
-    category: input.category,
-    format,
-    level,
-    minutes: input.minutes,
-    focus: input.focus ?? null,
-  });
+  // Coaching text comes from the real Smarty Workouts library (closest match
+  // on category, difficulty, equipment mode and duration); the plain template
+  // copy is the fallback when nothing matches.
+  const copy =
+    (await smartyCopy(supabase as never, {
+      category: input.category,
+      stars: input.stars,
+      equipmentMode: input.equipmentMode,
+      minutes: input.minutes,
+      seed,
+    })) ??
+    packCopy({
+      category: input.category,
+      format,
+      level,
+      minutes: input.minutes,
+      focus: input.focus ?? null,
+    });
   const name = isValidName(pack.name, usedNames) ? pack.name : fallbackName();
 
   return {
@@ -383,13 +263,12 @@ export async function generateWorkoutContent(
     ...copy,
     main_workout: enforcedPack.html,
     warnings: [
-      `Built by the template engine after the AI attempts failed (${lastError}).`,
       ...enforcedPack.warnings,
       ...packValidation.warnings,
       ...packSplit.soft,
-      ...packSplit.structural.map((issue) => `Fallback adjustment: ${issue}`),
+      ...packSplit.structural.map((issue) => `Adjustment: ${issue}`),
     ],
-    needs_review: true,
+    needs_review: packSplit.structural.length > 0,
     format,
     pool,
     duration,

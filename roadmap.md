@@ -41,3 +41,5 @@
 - [x] Pre-release audit fixes: server-side membership gate, safe account deletion, Stripe event order, no auto-admin, cron minute, no member cap, PremiumGate retry, CI workflow.
 - [x] In-app Change email / Change password on Account; shared workouts readable only via safe public view
 - [x] Add Shared Workouts as “Shared” before Logbook in the phone bottom menu.
+
+- [x] Switch Smarty Coach to 100% deterministic generation (zero AI credits): copy from existing Smarty Workouts, mandatory member-chosen name step, locked labels/tags.
