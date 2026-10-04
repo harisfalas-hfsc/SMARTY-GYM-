@@ -250,9 +250,10 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // PILATES: the 50-exercise SmartyGym Pilates list is all mat/bodyweight work,
   // so it is never removed by the athlete's equipment selection.
   if (!isMicro && f.category !== "PILATES") {
-    // Conditioning-list categories: the list's bodyweight moves stay available
-    // beside the chosen equipment (cardio rhythm, challenge bodyweight majority).
-    const keepBodyweight = isConditioningListCategory(f.category);
+    // Choosing equipment never takes bodyweight away: bodyweight moves stay
+    // available beside the chosen equipment in every category. Only
+    // "Bodyweight" alone means zero equipment.
+    const keepBodyweight = true;
     pool = pool.filter((e) =>
       matchesSelectedEquipment(e, f.selectedEquipment, f.customEquipment ?? []) ||
       (keepBodyweight && isBodyweight(e)),
@@ -262,7 +263,7 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
       pool = pool.filter((e) => isBodyweight(e) && (load ? isStrengthBodyweightListExercise(e) : !HOME_APPARATUS_RE.test(text(e))));
     // STRENGTH / MUSCLE BUILDING with equipment: only the SmartyGym gym-machine + free-weight list.
     else if (load)
-      pool = pool.filter((e) => isStrengthEquipmentListExercise(e));
+      pool = pool.filter((e) => isStrengthEquipmentListExercise(e) || (isBodyweight(e) && isStrengthBodyweightListExercise(e)));
   }
 
   // 2b. CATEGORY + FORMAT equipment legality (doctrine §10-§13, §24). Selected

@@ -99,10 +99,8 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   // use pool B (gym machines + free weights) and never mix pool A moves in.
   if (isLoadCategory(ctx.category)) {
     const bw = isBodyweightEquipment(e.equipment ?? "");
-    if (bw && ctx.bodyweightOnly === false) {
-      if (!isStrengthEquipmentListExercise(e))
-        out.push(`"${e.name}" is not on the SmartyGym equipment Strength & Muscle Hypertrophy list — an equipment ${ctx.category} workout uses only the gym-machine and free-weight exercises.`);
-    } else if (bw) {
+    // Equipment workouts keep the bodyweight list available beside the equipment list.
+    if (bw) {
       if (!isStrengthBodyweightListExercise(e))
         out.push(`"${e.name}" is not on the SmartyGym bodyweight Strength & Muscle Hypertrophy list — bodyweight ${ctx.category} work uses only those exercises.`);
     } else if (!isStrengthEquipmentListExercise(e))
