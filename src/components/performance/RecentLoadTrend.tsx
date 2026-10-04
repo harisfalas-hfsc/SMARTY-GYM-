@@ -96,11 +96,7 @@ export function RecentLoadTrend() {
         older work leaves the graph as newer sessions arrive.
       </p>
 
-      {!metric ? (
-        <p className="mt-3 text-sm text-muted-foreground">
-          A graph appears as soon as two recorded sessions carry the same measurement.
-        </p>
-      ) : (
+      {metric ? (
         <>
           <div className="mt-3">
             <MetricPicker
@@ -119,7 +115,7 @@ export function RecentLoadTrend() {
             />
           </div>
         </>
-      )}
+      ) : null}
     </div>
   );
 }

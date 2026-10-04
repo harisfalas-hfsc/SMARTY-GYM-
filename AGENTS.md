@@ -20,7 +20,7 @@
 - Smarty Check-ins scoring lives in src/lib/checkins/score.ts, computed server-side in checkins.functions.ts and read by coach via loadCheckinSignal — one source for UI, badges and coach.
 - Coach/admin/WOD generation is deterministic (no AI) via shared generateWorkoutContent; priority lists live only in priority.ts — why: one rule package.
 - All Smarty Workouts are one collection with identical admin controls regardless of origin; imported workouts and media are self-contained in this project — why: no ongoing dependency on another project.
-- Players accept verified numeric/slug exercise IDs; bulk publishing requires the full-library audit. Native startup stays black through launch, window, WebView, and first React frame to prevent white handoffs.
+- Players accept verified numeric/slug IDs; bulk publishing needs a full-library audit. Native startup stays black through the first React frame.
 - Closed exercise lists, all read by rules.ts: Activation/Cool Down named lists (prep-vocabulary.ts), Pilates, Mobility & Stability, Recovery (*-vocabulary.ts) — why: generator, pool, publish gate and audit share one rule.
 - All workout rules (exercise legality per section, workout structure, dose, duration) are decided only in src/lib/workout/rules.ts (built on doctrine.ts + prep-vocabulary.ts); the pool filter, validator and smarty-compliance audit all call it — why: one rule layer, so no check can apply half the rules.
 - Stored-workout repairs go through planMigration in src/lib/workout/smarty-compliance.ts; bannedSwap blocks unsafe substitutes — why: one repair path on the one rule engine, reversible via the pre-migration backup table.
@@ -32,3 +32,4 @@
 - deleteManualWorkout is creator-only and covers the original plus all community copies: social data removed, rows with training activity tombstoned (deleted_at), others hard-deleted — why: training can't be undone.
 - Route-module download failures share one classifier for update notice and root error screen; handled failures skip crash-alert reporting, unrelated errors still report — why: refresh fixes missing files without false emails.
 - User confirmations and text prompts use shared branded dialogs, never browser-native boxes — why: consistent web/native presentation.
+- Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.

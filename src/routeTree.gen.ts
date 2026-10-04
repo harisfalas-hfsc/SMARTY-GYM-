@@ -39,6 +39,7 @@ import { Route as SmartyCheckinsRouteImport } from './routes/smarty-checkins'
 import { Route as SmartyRitualRouteImport } from './routes/smarty-ritual'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TheSmartyMethodRouteImport } from './routes/the-smarty-method'
+import { Route as TrainingLoadScienceRouteImport } from './routes/training-load-science'
 import { Route as WhyInvestInSmartygymRouteImport } from './routes/why-invest-in-smartygym'
 import { Route as WodRouteImport } from './routes/wod'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
@@ -228,6 +229,11 @@ const TermsRoute = TermsRouteImport.update({
 const TheSmartyMethodRoute = TheSmartyMethodRouteImport.update({
   id: '/the-smarty-method',
   path: '/the-smarty-method',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingLoadScienceRoute = TrainingLoadScienceRouteImport.update({
+  id: '/training-load-science',
+  path: '/training-load-science',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WhyInvestInSmartygymRoute = WhyInvestInSmartygymRouteImport.update({
@@ -466,6 +472,7 @@ export interface FileRoutesByFullPath {
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
+  '/training-load-science': typeof TrainingLoadScienceRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -536,6 +543,7 @@ export interface FileRoutesByTo {
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
+  '/training-load-science': typeof TrainingLoadScienceRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -608,6 +616,7 @@ export interface FileRoutesById {
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
+  '/training-load-science': typeof TrainingLoadScienceRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -680,6 +689,7 @@ export interface FileRouteTypes {
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
+    | '/training-load-science'
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/account'
@@ -750,6 +760,7 @@ export interface FileRouteTypes {
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
+    | '/training-load-science'
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/account'
@@ -821,6 +832,7 @@ export interface FileRouteTypes {
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
+    | '/training-load-science'
     | '/why-invest-in-smartygym'
     | '/wod'
     | '/_authenticated/account'
@@ -893,6 +905,7 @@ export interface RootRouteChildren {
   SmartyRitualRoute: typeof SmartyRitualRoute
   TermsRoute: typeof TermsRoute
   TheSmartyMethodRoute: typeof TheSmartyMethodRoute
+  TrainingLoadScienceRoute: typeof TrainingLoadScienceRoute
   WhyInvestInSmartygymRoute: typeof WhyInvestInSmartygymRoute
   WodRoute: typeof WodRoute
   AdminExerciseLibraryRoute: typeof AdminExerciseLibraryRoute
@@ -1135,6 +1148,13 @@ declare module '@tanstack/react-router' {
       path: '/the-smarty-method'
       fullPath: '/the-smarty-method'
       preLoaderRoute: typeof TheSmartyMethodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/training-load-science': {
+      id: '/training-load-science'
+      path: '/training-load-science'
+      fullPath: '/training-load-science'
+      preLoaderRoute: typeof TrainingLoadScienceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/why-invest-in-smartygym': {
@@ -1473,6 +1493,7 @@ const rootRouteChildren: RootRouteChildren = {
   SmartyRitualRoute: SmartyRitualRoute,
   TermsRoute: TermsRoute,
   TheSmartyMethodRoute: TheSmartyMethodRoute,
+  TrainingLoadScienceRoute: TrainingLoadScienceRoute,
   WhyInvestInSmartygymRoute: WhyInvestInSmartygymRoute,
   WodRoute: WodRoute,
   AdminExerciseLibraryRoute: AdminExerciseLibraryRoute,

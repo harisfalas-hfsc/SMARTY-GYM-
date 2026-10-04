@@ -46,3 +46,4 @@
 - [x] Standardize confirmations, information windows, announcements and temporary messages with one branded SMARTYGYM presentation; remove browser-native prompts.
 - [x] Show PAR-Q warnings only when opening a finished workout to train; show creation method only to the owner, while other members see only the creator's name.
 - [x] Keep shared-workout creator cards compact while showing public streaks and earned-badge indicators, including muted empty badge slots, without exposing personal completion totals.
+- [x] Add a public Training Load science page and link it from Logbook Progress without changing the calculation.
