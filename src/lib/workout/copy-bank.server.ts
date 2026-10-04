@@ -27,6 +27,11 @@ type CopyRow = {
 let cache: { at: number; rows: CopyRow[] } | null = null;
 const CACHE_MS = 10 * 60 * 1000;
 
+/** Test hook — drops the cached copy rows. */
+export function __clearCopyCache() {
+  cache = null;
+}
+
 async function loadCopyRows(db: SupabaseClient): Promise<CopyRow[]> {
   if (cache && Date.now() - cache.at < CACHE_MS) return cache.rows;
   const { data } = await db

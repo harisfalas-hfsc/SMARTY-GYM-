@@ -1,5 +1,7 @@
-import { describe, expect, it } from "vitest";
-import { smartyCopy } from "../copy-bank.server";
+import { beforeEach, describe, expect, it } from "vitest";
+import { __clearCopyCache, smartyCopy } from "../copy-bank.server";
+
+beforeEach(() => __clearCopyCache());
 
 type Row = {
   id: string;
