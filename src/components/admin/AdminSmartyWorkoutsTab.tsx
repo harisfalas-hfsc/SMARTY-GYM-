@@ -260,7 +260,7 @@ export function AdminSmartyWorkoutsTab() {
         tone={bulkConfirm ? "default" : "warning"}
         onConfirm={() => {
           if (bulkConfirm === null) return;
-          return bulkVisibility(bulkConfirm);
+          void bulkVisibility(bulkConfirm);
         }}
       />
       <AppConfirmDialog
@@ -273,7 +273,7 @@ export function AdminSmartyWorkoutsTab() {
         tone="danger"
         onConfirm={() => {
           if (!deleteTarget) return;
-          return del(deleteTarget);
+          void del(deleteTarget);
         }}
       />
       <CreateDialog
