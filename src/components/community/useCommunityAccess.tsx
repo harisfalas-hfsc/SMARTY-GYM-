@@ -16,6 +16,7 @@ import {
 export function useCommunityAccess() {
   const { user, loading } = useAuth();
   const [premium, setPremium] = useState(false);
+  const [readinessFlags, setReadinessFlags] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
 
@@ -24,12 +25,15 @@ export function useCommunityAccess() {
     if (loading) return;
     if (!user) {
       setPremium(false);
+      setReadinessFlags([]);
       setChecked(true);
       return;
     }
     void getMyAccessState({})
       .then((a) => {
-        if (active) setPremium(Boolean(a?.premium));
+        if (!active) return;
+        setPremium(Boolean(a?.premium));
+        setReadinessFlags(a?.readinessFlagged ? (a.readinessFlags ?? []) : []);
       })
       .catch(() => {
         if (active) setPremium(false);
@@ -53,7 +57,10 @@ export function useCommunityAccess() {
 
   return {
     signedIn: Boolean(user),
+    userId: user?.id ?? null,
     premium,
+    /** PAR-Q YES answers — the same health warning every workout page shows. */
+    readinessFlags,
     checked: checked && !loading,
     guard,
     gateOpen,
