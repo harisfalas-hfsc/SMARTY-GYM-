@@ -304,7 +304,7 @@ function CoachPage() {
     } catch (e) {
       // Never expose the internal cause — the recovery system delivers it.
       toast.error(
-        e instanceof Error && /snag/i.test(e.message)
+        e instanceof Error && /snag|per day|membership|Training Profile|readiness|acknowledgement/i.test(e.message)
           ? e.message
           : "We hit a temporary snag building your workout. Your answers are safe, we are already on it, and it will arrive shortly.",
       );
@@ -582,7 +582,7 @@ function CoachPage() {
           Surprise me
         </Button>
         <p className="mt-2 text-xs text-muted-foreground">
-          A different pick every day, chosen from what suits you.
+          A different pick every time, chosen from what suits you.
         </p>
       </div>
 
