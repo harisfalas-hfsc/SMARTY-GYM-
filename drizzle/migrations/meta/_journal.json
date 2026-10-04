@@ -547,6 +547,13 @@
       "when": 1791107466074,
       "tag": "0077_mobility_recovery_closed_lists_repair",
       "breakpoints": true
+    },
+    {
+      "idx": 78,
+      "version": "7",
+      "when": 1791107508481,
+      "tag": "0078_restore_untouched_pilates_from_backup",
+      "breakpoints": true
     }
   ]
 }
