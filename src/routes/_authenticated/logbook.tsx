@@ -159,7 +159,7 @@ const SOURCE_STYLE: Record<string, string> = {
 
 const SOURCE_DOT: Record<Source, string> = {
   smarty: "bg-primary",
-  coach: "bg-amber-400",
+  coach: "bg-violet-400",
   own: "bg-emerald-400",
 };
 

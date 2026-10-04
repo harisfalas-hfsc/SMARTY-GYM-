@@ -48,7 +48,7 @@ export type LogbookSource = "smarty" | "coach" | "own";
 export const LOGBOOK_SOURCES: { id: LogbookSource; label: string }[] = [
   { id: "smarty", label: "Smarty Workouts" },
   { id: "coach", label: "Smarty Coach" },
-  { id: "own", label: "My Own Workouts" },
+  { id: "own", label: "Build It Yourself" },
 ];
 
 export const LOGBOOK_SOURCE_IDS = LOGBOOK_SOURCES.map((s) => s.id) as string[];
