@@ -15,8 +15,16 @@ import {
 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { generateWorkout } from "@/lib/coach.functions";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { generateWorkout, nameWorkout } from "@/lib/coach.functions";
 import { isOnline } from "@/lib/connectivity";
 import { setUseLibraryPreferences as saveUseLibraryPreferences } from "@/lib/preferences.functions";
 import { Link } from "@tanstack/react-router";
@@ -151,6 +159,9 @@ function CoachPage() {
 
   const [busy, setBusy] = useState(false);
   const [generationDialogOpen, setGenerationDialogOpen] = useState(false);
+  const [namingWorkoutId, setNamingWorkoutId] = useState<string | null>(null);
+  const [workoutName, setWorkoutName] = useState("");
+  const [namingBusy, setNamingBusy] = useState(false);
   const [name, setName] = useState<string>("");
   const [level, setLevel] = useState<string>("");
   const [confirmHard, setConfirmHard] = useState(false);
@@ -266,7 +277,9 @@ function CoachPage() {
       }
       const res = await run({ data: request });
       if (res.notes?.length) toast.info(res.notes[0]);
-      navigate({ to: "/workout/$workoutId", params: { workoutId: res.id } });
+      // Mandatory step: the member names the workout before seeing it.
+      setWorkoutName("");
+      setNamingWorkoutId(res.id);
     } catch (e) {
       // Never expose the internal cause — the recovery system delivers it.
       toast.error(
