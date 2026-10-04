@@ -526,6 +526,13 @@
       "when": 1791099154010,
       "tag": "0074_strength_lists_repair_part1",
       "breakpoints": true
+    },
+    {
+      "idx": 75,
+      "version": "7",
+      "when": 1791099291341,
+      "tag": "0075_strength_lists_repair_part2",
+      "breakpoints": true
     }
   ]
 }
