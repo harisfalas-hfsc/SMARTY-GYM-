@@ -108,12 +108,34 @@ export const nameWorkout = createServerFn({ method: "POST" })
     if (name.length < 2 || name.length > 60) {
       throw new Error("Give your workout a name between 2 and 60 characters.");
     }
+    // Only the creator of a Smarty Coach or Build It Yourself workout can (re)name it.
+    const { data: row, error: readErr } = await context.supabase
+      .from("workouts")
+      .select("id,user_id,created_by,community_source_id,is_wod,deleted_at")
+      .eq("id", data.workoutId)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    const o = row as {
+      user_id: string; created_by: string | null; community_source_id: string | null;
+      is_wod: boolean | null; deleted_at: string | null;
+    } | null;
+    if (!o || o.user_id !== context.userId || o.deleted_at) throw new Error("Only the creator can rename this workout.");
+    if (String(o.created_by ?? "").startsWith("smarty:") || o.is_wod || o.community_source_id || o.created_by === "community") {
+      throw new Error("Only the creator can rename this workout.");
+    }
     const { error } = await context.supabase
       .from("workouts")
       .update({ name } as never)
       .eq("id", data.workoutId)
       .eq("user_id", context.userId);
     if (error) throw new Error(error.message);
+    // Members who saved it from Shared Workouts see the new name too.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error: copyErr } = await supabaseAdmin
+      .from("workouts")
+      .update({ name } as never)
+      .eq("community_source_id", data.workoutId);
+    if (copyErr) throw new Error(copyErr.message);
     return { ok: true, name };
   });
 
