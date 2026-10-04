@@ -268,7 +268,10 @@ export async function createWorkoutForUser(
   const format =
     requestedFormat && CATEGORY_FORMATS[category].includes(requestedFormat) ? requestedFormat : null;
 
-  const location = String(data.location ?? "anywhere");
+  // Smarty Coach no longer asks where you train: the chosen equipment alone
+  // decides (a home gym or carried kit is as valid as a gym). "any" = no
+  // location filter. WOD keeps its portable "anywhere" default.
+  const location = data.location ? String(data.location) : data.wod ? "anywhere" : "any";
 
   /**
    * Archive reuse: when another athlete already received a workout built from an
@@ -429,7 +432,7 @@ export async function createWorkoutForUser(
       duration_min: minutes,
       duration_label: durationLabel,
       equipment: equipmentIds,
-      location,
+      location: location === "any" ? null : location,
       mood,
       description_html: built.description_html,
       instructions_html: built.instructions_html,
