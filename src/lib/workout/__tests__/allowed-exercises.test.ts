@@ -21,7 +21,7 @@ describe("computeAllowedExerciseIds", () => {
     const allowed = computeAllowedExerciseIds([
       ex("2", "Push-Up"),
       ex("3", "Burpee"),
-      ex("4", "Goblet Squat", "Kettlebell"),
+      ex("4", "Kettlebell Goblet Squat", "Kettlebell"),
     ]);
     expect(allowed.has("2")).toBe(true);
     expect(allowed.has("3")).toBe(true);
