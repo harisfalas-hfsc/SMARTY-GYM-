@@ -540,6 +540,13 @@
       "when": 1791100247938,
       "tag": "0076_strength_lists_repair_part3",
       "breakpoints": true
+    },
+    {
+      "idx": 77,
+      "version": "7",
+      "when": 1791107466074,
+      "tag": "0077_mobility_recovery_closed_lists_repair",
+      "breakpoints": true
     }
   ]
 }
