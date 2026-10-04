@@ -12,9 +12,9 @@ import { Loader2 } from "lucide-react";
 import { WorkoutStatusPanel } from "@/components/workout/WorkoutStatusPanel";
 
 import { useServerFn } from "@tanstack/react-start";
-import { setWorkoutStatus } from "@/lib/coach.functions";
+import { nameWorkout, setWorkoutStatus } from "@/lib/coach.functions";
 import { shareWorkout } from "@/lib/community.functions";
-import { Share2 } from "lucide-react";
+import { Pencil, Share2 } from "lucide-react";
 import { getMyAccessState } from "@/lib/access.functions";
 import { toast } from "sonner";
 import { WorkoutDisplay, type WorkoutRow } from "@/components/workout/WorkoutDisplay";
@@ -76,6 +76,33 @@ function WorkoutPage() {
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not delete the workout.");
       setDeleting(false);
+    }
+  }
+
+  const runRename = useServerFn(nameWorkout);
+  const [renaming, setRenaming] = useState(false);
+  async function renameWorkout() {
+    const next = window.prompt(
+      shared
+        ? "New name for this workout. It changes everywhere — in Shared Workouts and in the logbook of every member who saved it."
+        : "New name for this workout:",
+      w?.name ?? "",
+    );
+    if (next === null) return;
+    const trimmed = next.trim().replace(/\s+/g, " ");
+    if (trimmed.length < 2 || trimmed.length > 60) {
+      toast.error("Give your workout a name between 2 and 60 characters.");
+      return;
+    }
+    setRenaming(true);
+    try {
+      await runRename({ data: { workoutId, name: trimmed } });
+      setW((prev) => (prev ? { ...prev, name: trimmed } : prev));
+      toast.success("Workout renamed.");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not rename the workout.");
+    } finally {
+      setRenaming(false);
     }
   }
 
@@ -324,7 +351,19 @@ function WorkoutPage() {
       {ownCreation ? (
         <Button
           variant="outline"
-          className="mt-6 h-12 w-full rounded-2xl border-destructive font-bold text-destructive"
+          className="mt-6 h-12 w-full rounded-2xl font-bold"
+          disabled={renaming}
+          onClick={() => void renameWorkout()}
+        >
+          {renaming ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Pencil className="mr-2 h-4 w-4" />}
+          Rename this workout
+        </Button>
+      ) : null}
+
+      {ownCreation ? (
+        <Button
+          variant="outline"
+          className="mt-3 h-12 w-full rounded-2xl border-destructive font-bold text-destructive"
           disabled={deleting}
           onClick={() => void deleteWorkout()}
         >
