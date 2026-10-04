@@ -1,4 +1,6 @@
-import { Star, ThumbsUp, ThumbsDown, MessageCircle, CheckCircle2, Flame, Clock, Trophy } from "lucide-react";
+import { Star, ThumbsUp, ThumbsDown, MessageCircle, CheckCircle2, Flame, Clock, Trophy, Sparkles, Crown } from "lucide-react";
+
+const BADGE_ICONS = { flame: Flame, sparkles: Sparkles, crown: Crown, trophy: Trophy } as const;
 import { CreatorLink } from "@/components/community/CreatorLink";
 import { cn } from "@/lib/utils";
 import { MAX_STARS, normalizeStars } from "@/lib/workout/spec";
@@ -101,6 +103,7 @@ export function CommunityWorkoutCard({
               <span className="inline-flex min-w-0 items-center gap-1" aria-label={visibleBadges.length ? `${visibleBadges.length} earned badges` : "No badges earned yet"}>
                 {Array.from({ length: 3 }).map((_, index) => {
                   const badge = visibleBadges[index];
+                  const BadgeIcon = (badge?.icon && BADGE_ICONS[badge.icon as keyof typeof BADGE_ICONS]) || Trophy;
                   return (
                     <span
                       key={badge?.badge_id ?? `empty-badge-${index}`}
@@ -108,14 +111,17 @@ export function CommunityWorkoutCard({
                       className={cn(
                         "grid h-4 w-4 shrink-0 place-items-center rounded-full border",
                         badge
-                          ? "border-primary/60 bg-primary/15 text-primary"
-                          : "border-muted-foreground/25 text-muted-foreground/25",
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-muted-foreground/30 text-muted-foreground/30",
                       )}
                     >
-                      <Trophy className="h-2.5 w-2.5" aria-hidden="true" />
+                      <BadgeIcon className="h-2.5 w-2.5" aria-hidden="true" />
                     </span>
                   );
                 })}
+                <span className="truncate">
+                  {badges.length} {badges.length === 1 ? "badge" : "badges"}
+                </span>
               </span>
             </div>
           </div>
