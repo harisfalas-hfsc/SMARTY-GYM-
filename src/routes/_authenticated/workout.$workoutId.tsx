@@ -26,6 +26,7 @@ import { ParqBlockedScreen } from "@/components/workout/ParqBlockedScreen";
 import { CommunityEngagementPanel } from "@/components/community/CommunityEngagementPanel";
 import { hasParqAck } from "@/lib/parq-ack";
 import { getLocalWorkout, updateLocalWorkout } from "@/lib/local-workouts";
+import { AppConfirmDialog, AppInputDialog } from "@/components/ui/app-dialog";
 
 export const Route = createFileRoute("/_authenticated/workout/$workoutId")({
   head: () => ({
@@ -60,15 +61,9 @@ function WorkoutPage() {
   const removeWorkout = useServerFn(deleteManualWorkout);
   const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [renameOpen, setRenameOpen] = useState(false);
   async function deleteWorkout() {
-    if (
-      !window.confirm(
-        shared
-          ? "Delete this workout for everyone? It will be removed from Shared Workouts and from every member's logbook, together with its likes, ratings, comments and favorites. Training that you or anyone else already did with it stays in everyone's progress and training load — what's done can't be undone."
-          : "Delete this workout? It will be removed from your logbook. Any training you already did with it stays in your progress and training load — what's done can't be undone.",
-      )
-    )
-      return;
     setDeleting(true);
     try {
       await removeWorkout({ data: { workoutId } });
@@ -82,23 +77,12 @@ function WorkoutPage() {
 
   const runRename = useServerFn(nameWorkout);
   const [renaming, setRenaming] = useState(false);
-  async function renameWorkout() {
-    const next = window.prompt(
-      shared
-        ? "New name for this workout. It changes everywhere — in Shared Workouts and in the logbook of every member who saved it."
-        : "New name for this workout:",
-      w?.name ?? "",
-    );
-    if (next === null) return;
-    const trimmed = next.trim().replace(/\s+/g, " ");
-    if (trimmed.length < 2 || trimmed.length > 60) {
-      toast.error("Give your workout a name between 2 and 60 characters.");
-      return;
-    }
+  async function renameWorkout(trimmed: string) {
     setRenaming(true);
     try {
       await runRename({ data: { workoutId, name: trimmed } });
       setW((prev) => (prev ? { ...prev, name: trimmed } : prev));
+      setRenameOpen(false);
       toast.success("Workout renamed.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not rename the workout.");
@@ -333,7 +317,7 @@ function WorkoutPage() {
           variant="outline"
           className="mt-6 h-12 w-full rounded-2xl font-bold"
           disabled={renaming}
-          onClick={() => void renameWorkout()}
+          onClick={() => setRenameOpen(true)}
         >
           {renaming ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Pencil className="mr-2 h-4 w-4" />}
           Rename this workout
@@ -345,12 +329,41 @@ function WorkoutPage() {
           variant="outline"
           className="mt-3 h-12 w-full rounded-2xl border-destructive font-bold text-destructive"
           disabled={deleting}
-          onClick={() => void deleteWorkout()}
+          onClick={() => setDeleteOpen(true)}
         >
           {deleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
           Delete this workout
         </Button>
       ) : null}
+
+      <AppInputDialog
+        open={renameOpen}
+        onOpenChange={setRenameOpen}
+        title="Rename workout"
+        description={shared
+          ? "The new name will update in Shared Workouts and for every member who saved it."
+          : "Choose the name shown throughout your logbook."}
+        initialValue={w.name ?? ""}
+        minLength={2}
+        maxLength={60}
+        confirmLabel="Save new name"
+        busy={renaming}
+        onConfirm={renameWorkout}
+      />
+
+      <AppConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title="Delete this workout?"
+        description={shared
+          ? "It will be removed from Shared Workouts and every member's logbook. Likes, ratings, comments and favorites will be removed. Completed training remains permanently in each member's progress and training load."
+          : "It will be removed from your logbook. Completed training remains permanently in your progress and training load."}
+        confirmLabel="Delete workout"
+        cancelLabel="Keep workout"
+        tone="danger"
+        busy={deleting}
+        onConfirm={deleteWorkout}
+      />
 
       {communitySourceId ? (
         <CommunityEngagementPanel sourceId={communitySourceId} isOwner={ownCreation} />

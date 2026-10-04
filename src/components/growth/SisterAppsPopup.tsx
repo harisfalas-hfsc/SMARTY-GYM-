@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ExternalLink, Sparkles, X } from "lucide-react";
 import logoMove from "@/assets/smartymove-logo.png";
 import logoDiet from "@/assets/smartydiet-logo.png";
+import { Button } from "@/components/ui/button";
 
 const CURRENT_APP: "workout" | "gym" | "move" | "diet" | "logbook" = "workout";
 
@@ -66,7 +67,7 @@ export const SisterAppsPopup = () => {
       {open && (
         <div
           aria-hidden="false"
-          className="fixed inset-0 z-[58] bg-black/20"
+          className="fixed inset-0 z-[58] bg-background/85 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
@@ -76,12 +77,12 @@ export const SisterAppsPopup = () => {
         aria-hidden={!open}
         className={`fixed top-1/2 -translate-y-1/2 left-0 z-[60] flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? "translate-x-0" : "-translate-x-[calc(100%+10px)]"}`}
       >
-        <aside className="w-[260px] pl-4 pr-2 py-4 bg-white rounded-r-2xl shadow-[4px_0_24px_rgba(15,23,42,0.12)]">
+        <aside className="w-[280px] rounded-r-3xl border-y-2 border-r-2 border-primary bg-card py-5 pl-4 pr-3 shadow-soft">
           <div className="mb-4">
             <span className="inline-flex items-center gap-1.5 text-primary text-[11px] font-extrabold uppercase tracking-[0.2em]">
               <Sparkles className="w-3.5 h-3.5 text-primary" /> Smarty Family
             </span>
-            <h2 className="mt-1 text-[15px] font-bold text-slate-900 leading-tight">
+            <h2 className="mt-1 text-[15px] font-bold leading-tight text-foreground">
               Complete your wellness journey
             </h2>
           </div>
@@ -104,8 +105,8 @@ export const SisterAppsPopup = () => {
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-extrabold text-slate-900 leading-tight group-hover:text-primary transition-colors">{app.name}</h3>
-                  <p className="text-[11px] font-medium text-slate-700 leading-snug line-clamp-2 mt-0.5">{app.tagline}</p>
+                  <h3 className="text-sm font-extrabold leading-tight text-foreground transition-colors group-hover:text-primary">{app.name}</h3>
+                  <p className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug text-muted-foreground">{app.tagline}</p>
                 </div>
                 <ExternalLink className="w-3.5 h-3.5 text-primary shrink-0" />
               </a>
@@ -113,14 +114,16 @@ export const SisterAppsPopup = () => {
           </div>
         </aside>
 
-        <button
+        <Button
           type="button"
+          size="icon"
+          variant="secondary"
           onClick={() => setOpen(false)}
           aria-label="Hide panel"
-          className="ml-2 h-14 w-14 rounded-full bg-white text-slate-900 flex items-center justify-center hover:bg-slate-50 hover:text-primary transition-colors shadow-[4px_0_12px_rgba(15,23,42,0.08)] border border-slate-100"
+          className="ml-2 h-12 w-12 rounded-full border border-border shadow-soft"
         >
           <X className="w-7 h-7" />
-        </button>
+        </Button>
       </div>
 
       <button
