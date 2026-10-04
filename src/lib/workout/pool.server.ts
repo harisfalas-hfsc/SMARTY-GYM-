@@ -245,7 +245,9 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
 
 
   // 2. Exact equipment allowlist. Never widen a user's choices to all equipment.
-  if (!isMicro) {
+  // PILATES: the 50-exercise SmartyGym Pilates list is all mat/bodyweight work,
+  // so it is never removed by the athlete's equipment selection.
+  if (!isMicro && f.category !== "PILATES") {
     pool = pool.filter((e) =>
       matchesSelectedEquipment(e, f.selectedEquipment, f.customEquipment ?? []),
     );
