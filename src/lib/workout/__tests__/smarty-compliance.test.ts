@@ -22,7 +22,7 @@ const html = (ids: string[]) =>
 
 describe("Smarty Workout rule compliance", () => {
   it("flags a session without enough priority exercises and fixes it by swapping exercises only", () => {
-    const w = { id: "w", name: "W", category: "STRENGTH", format: "REPS & SETS", difficulty_stars: 2, main_workout: html(["0009", "0015", "0001"]) };
+    const w = { id: "w", name: "W", category: "METABOLIC", format: "REPS & SETS", difficulty_stars: 2, main_workout: html(["0009", "0015", "0001"]) };
     expect(complianceIssues(w, lib)).toContain("Too few priority exercises");
     const r = remediate(w, lib);
     // Priority is a preference: a stretch or dip with no equivalent priority move is kept, never badly swapped.

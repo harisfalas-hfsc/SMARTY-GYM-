@@ -62,7 +62,7 @@ describe("one rule engine", () => {
 
   it("keeps plyometric and cardio drills out of Strength, isolated core out of Challenge", () => {
     expect(isLegalExercise(ex("1", "high knee against wall"), { category: "STRENGTH", format: "REPS & SETS" })).toBe(false);
-    expect(isLegalExercise(ex("2", "dumbbell step-up", "dumbbell"), { category: "STRENGTH", format: "REPS & SETS" })).toBe(true);
+    expect(isLegalExercise(ex("2", "dumbbell goblet squat", "dumbbell"), { category: "STRENGTH", format: "REPS & SETS" })).toBe(true);
     expect(isLegalExercise(ex("3", "russian twist"), { category: "CHALLENGE", format: "AMRAP" })).toBe(false);
   });
 
