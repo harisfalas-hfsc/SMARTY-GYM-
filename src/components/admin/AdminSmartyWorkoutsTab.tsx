@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import { Label } from "@/components/ui/label";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { A4Container } from "@/components/ui/a4-container";
@@ -54,6 +55,8 @@ export function AdminSmartyWorkoutsTab() {
   const [draftId, setDraftId] = useState<string | null>(null);
   const [editing, setEditing] = useState<SmartyWorkout | null>(null);
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
+  const [bulkConfirm, setBulkConfirm] = useState<boolean | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<SmartyWorkout | null>(null);
   const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
   const dup = useServerFn(adminDuplicateSmartyWorkout);
 
@@ -119,12 +122,12 @@ export function AdminSmartyWorkoutsTab() {
   );
 
   async function bulkVisibility(visible: boolean) {
-    if (!window.confirm(`${visible ? "Publish" : "Hide"} all Smarty Workouts?`)) return;
     setBulkBusy(true);
     const result = await setTransferredVisibility({ data: { visible } });
     setBulkBusy(false);
     if ("error" in result) return toast.error(result.error);
     toast.success(`${result.count} Smarty Workouts ${visible ? "published" : "hidden"}.`);
+    setBulkConfirm(null);
     void load();
   }
 
@@ -136,9 +139,9 @@ export function AdminSmartyWorkoutsTab() {
   }
 
   async function del(w: SmartyWorkout) {
-    if (!window.confirm(`Delete "${w.name}"? This cannot be undone.`)) return;
     const r = await remove({ data: { id: w.id } });
     if ("error" in r) return toast.error(r.error);
+    setDeleteTarget(null);
     toast.success("Workout deleted");
     void load();
   }
@@ -151,8 +154,8 @@ export function AdminSmartyWorkoutsTab() {
           <p className="text-xs text-muted-foreground">Ready workouts shown on the Smarty Workouts page. New workouts start hidden.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" disabled={bulkBusy} onClick={() => void bulkVisibility(true)}><Eye className="mr-1 h-4 w-4" />Show all</Button>
-          <Button variant="outline" disabled={bulkBusy} onClick={() => void bulkVisibility(false)}><EyeOff className="mr-1 h-4 w-4" />Hide all</Button>
+          <Button variant="outline" disabled={bulkBusy} onClick={() => setBulkConfirm(true)}><Eye className="mr-1 h-4 w-4" />Show all</Button>
+          <Button variant="outline" disabled={bulkBusy} onClick={() => setBulkConfirm(false)}><EyeOff className="mr-1 h-4 w-4" />Hide all</Button>
           <Button onClick={() => setChoosing(true)}>
             <Plus className="mr-1 h-4 w-4" /> Create New Workout
           </Button>
@@ -208,7 +211,7 @@ export function AdminSmartyWorkoutsTab() {
                   <Button size="sm" variant="outline" onClick={() => void toggle(w)}>
                     {w.is_visible ? <><EyeOff className="mr-1 h-3.5 w-3.5" />Hide</> : <><Eye className="mr-1 h-3.5 w-3.5" />Show</>}
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => void del(w)}><Trash2 className="mr-1 h-3.5 w-3.5" />Delete</Button>
+                  <Button size="sm" variant="outline" onClick={() => setDeleteTarget(w)}><Trash2 className="mr-1 h-3.5 w-3.5" />Delete</Button>
                 </div>
               </div>
             </div>
@@ -245,6 +248,28 @@ export function AdminSmartyWorkoutsTab() {
           </div>
         </DialogContent>
       </Dialog>
+      <AppConfirmDialog
+        open={bulkConfirm !== null}
+        onOpenChange={(open) => !open && setBulkConfirm(null)}
+        title={bulkConfirm ? "Show all Smarty Workouts?" : "Hide all Smarty Workouts?"}
+        description={bulkConfirm
+          ? "Every Smarty Workout will become visible to members."
+          : "Every Smarty Workout will be hidden from members until you show it again."}
+        confirmLabel={bulkConfirm ? "Show all" : "Hide all"}
+        busy={bulkBusy}
+        tone={bulkConfirm ? "default" : "warning"}
+        onConfirm={() => bulkConfirm !== null && bulkVisibility(bulkConfirm)}
+      />
+      <AppConfirmDialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        title="Delete this Smarty Workout?"
+        description={`“${deleteTarget?.name ?? "This workout"}” will be permanently removed. This cannot be undone.`}
+        confirmLabel="Delete workout"
+        cancelLabel="Keep workout"
+        tone="danger"
+        onConfirm={() => deleteTarget && del(deleteTarget)}
+      />
       <CreateDialog
         open={creating}
         onClose={() => setCreating(false)}
@@ -444,6 +469,7 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
   const [saving, setSaving] = useState(false);
   const [imgBusy, setImgBusy] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [replaceStructureOpen, setReplaceStructureOpen] = useState(false);
   const [generateUnique, setGenerateUnique] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const required = fixedFormat(w.category);
@@ -630,7 +656,10 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
                   size="sm"
                   onClick={() => {
                     const current = (w.main_workout ?? "").replace(/<[^>]*>/g, "").trim();
-                    if (current && !window.confirm("Replace current content with the standard 5-section structure? This cannot be undone.")) return;
+                    if (current) {
+                      setReplaceStructureOpen(true);
+                      return;
+                    }
                     setW((prev) => ({ ...prev, main_workout: STANDARD_SECTIONS_TEMPLATE }));
                     toast.success("Structure inserted — fill in exercises in each section, then save.");
                   }}
@@ -649,6 +678,20 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
               </A4Container>
               <p className="text-xs text-muted-foreground">Use the exercise search above the toolbar to add exercises with View buttons</p>
             </div>
+            <AppConfirmDialog
+              open={replaceStructureOpen}
+              onOpenChange={setReplaceStructureOpen}
+              title="Replace the workout content?"
+              description="The current content will be replaced by the standard five-section structure. This cannot be undone."
+              confirmLabel="Replace content"
+              cancelLabel="Keep content"
+              tone="warning"
+              onConfirm={() => {
+                setW((prev) => ({ ...prev, main_workout: STANDARD_SECTIONS_TEMPLATE }));
+                setReplaceStructureOpen(false);
+                toast.success("Structure inserted — fill in exercises in each section, then save.");
+              }}
+            />
 
             {/* 9. Description */}
             <div className="space-y-2">

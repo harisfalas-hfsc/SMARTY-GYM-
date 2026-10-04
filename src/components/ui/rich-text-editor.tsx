@@ -109,6 +109,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const [tableCols, setTableCols] = useState(3);
   const [showImageDialog, setShowImageDialog] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
+  const [showLinkDialog, setShowLinkDialog] = useState(false);
+  const [linkUrl, setLinkUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [showTableStyleDialog, setShowTableStyleDialog] = useState(false);
   const [tableBorderColor, setTableBorderColor] = useState('default');
@@ -302,10 +304,16 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   }
 
   const addLink = () => {
-    const url = window.prompt('Enter URL:');
-    if (url) {
-      editor.chain().focus().setLink({ href: url }).run();
-    }
+    setLinkUrl(editor.getAttributes('link').href ?? '');
+    setShowLinkDialog(true);
+  };
+
+  const insertLink = () => {
+    const url = linkUrl.trim();
+    if (!url) return;
+    editor.chain().focus().setLink({ href: url }).run();
+    setShowLinkDialog(false);
+    setLinkUrl('');
   };
 
   const insertTableWithSize = () => {
@@ -978,6 +986,27 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           style={{ minHeight }}
         />
       </div>
+
+      {/* Table Dialog */}
+      <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add a link</DialogTitle>
+          </DialogHeader>
+          <Input
+            autoFocus
+            value={linkUrl}
+            onChange={(event) => setLinkUrl(event.target.value)}
+            onKeyDown={(event) => { if (event.key === 'Enter') insertLink(); }}
+            placeholder="https://example.com"
+            className="h-12 rounded-2xl"
+          />
+          <DialogFooter>
+            <Button variant="outline" className="h-12 rounded-2xl" onClick={() => setShowLinkDialog(false)}>Cancel</Button>
+            <Button className="h-12 rounded-2xl" disabled={!linkUrl.trim()} onClick={insertLink}>Add link</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Table Dialog */}
       <Dialog open={showTableDialog} onOpenChange={setShowTableDialog}>
