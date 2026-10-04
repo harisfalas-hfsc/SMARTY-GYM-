@@ -282,6 +282,8 @@ export const startSharedWorkout = createServerFn({ method: "POST" })
     if (!source) throw new Error(await unavailableMessage(supabaseAdmin as never, data.workoutId));
 
     const src = source as Record<string, unknown>;
+    // The creator trains their own original — never a copy of themselves.
+    if (src["user_id"] === context.userId) return { ok: true as const, workoutId: data.workoutId };
     const insert: Record<string, unknown> = {
       user_id: context.userId,
       status: "created",
