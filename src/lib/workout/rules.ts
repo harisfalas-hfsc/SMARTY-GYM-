@@ -61,10 +61,16 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   }
   // CALORIE BURNING / CARDIO / METABOLIC / CHALLENGE: ONLY the 60-exercise
   // SmartyGym conditioning list (conditioning-vocabulary.ts); category rules still apply.
-  if (isConditioningListCategory(ctx.category) && !isConditioningListExercise(e))
+  const conditioningListed = isConditioningListCategory(ctx.category) && isConditioningListExercise(e);
+  if (isConditioningListCategory(ctx.category) && !conditioningListed)
     out.push(`"${e.name}" is not on the SmartyGym conditioning exercise list — ${ctx.category} work uses only those 60 exercises.`);
-  const push = (v: string | null) => { if (v) out.push(v); };
-  push(D.humanRealismViolation(e));
+  // The owner's list is authoritative for the movements it names: generic
+  // name heuristics (core/stretch/skill/rack) never veto a listed dumbbell,
+  // kettlebell or bodyweight movement. Barbell items stay subject to the
+  // timed-format flow rule (no barbell setup inside a clock).
+  const listedPortable = conditioningListed && !/\bbarbell\b/i.test(`${e.name} ${e.equipment ?? ""}`);
+  const push = (v: string | null) => { if (v && !listedPortable) out.push(v); };
+  if (!conditioningListed) push(D.humanRealismViolation(e));
   push(D.categoryExerciseViolation(e, ctx.category));
   if (ctx.category === "MICRO-WORKOUTS") push(D.microExerciseViolation(e));
   push(D.dynamicExerciseViolation(e, ctx.category, ctx.format));
@@ -75,7 +81,7 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     out.push(`"${e.name}" is a passive stretch — it belongs in the Cool Down, not ${ctx.category} main work.`);
   if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && STRENGTH_BAN_RE.test(e.name))
     out.push(`"${e.name}" is a plyometric or cardio drill — ${ctx.category} work is controlled loaded or bodyweight strength.`);
-  if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && D.CORE_ISOLATION_RE.test(e.name))
+  if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && !listedPortable && D.CORE_ISOLATION_RE.test(e.name))
     out.push(`"${e.name}" is isolated core work — ${ctx.category} work is rhythmic or full-body movement.`);
   if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
     out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
