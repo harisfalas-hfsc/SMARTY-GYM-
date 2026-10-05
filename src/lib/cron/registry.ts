@@ -14,6 +14,7 @@ export type CronJobKey =
   | "seo-refresh"
   | "health-check"
   | "error-alerts"
+  | "premium-welcome"
   | "generate-weekly-blog-article";
 
 export type CronTiming = "per-member" | "fixed" | "weekly" | "continuous";
@@ -199,6 +200,24 @@ export const CRON_JOBS: CronJobDefinition[] = [
     contentEditable: false,
     settings: ["recipient", "severity", "groupWindow"],
     defaults: { enabled: false, hour: 0, minute: 0 },
+  },
+  {
+    key: "premium-welcome",
+    label: "First Premium welcome",
+    description:
+      "Sends the branded Welcome onboard email and matching inbox guide once, immediately after a member's first successful Premium activation. Renewals and payment retries never send it again.",
+    timing: "continuous",
+    timingNote:
+      "Event-triggered, not time-scheduled. Stripe starts it immediately when the first Premium payment activates the membership; it is listed here so its automation is visible and auditable.",
+    sends: [
+      {
+        title: "Welcome onboard, member name!",
+        body: "One branded email and one inbox guide covering Smarty Workouts, Workout of the Day, Create Your Own Workout, Training Tools, Blog, Smarty Check-ins and Smarty Ritual.",
+      },
+    ],
+    timeEditable: false,
+    contentEditable: false,
+    defaults: { enabled: true, hour: 0, minute: 0 },
   },
   {
     key: "generate-weekly-blog-article",
