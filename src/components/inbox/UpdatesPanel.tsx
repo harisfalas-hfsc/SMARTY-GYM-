@@ -274,6 +274,14 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                         Do check-in
                       </Link>
                     )}
+                    {n.kind === "billing" && (
+                      <Link
+                        to="/account"
+                        className="flex h-10 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
+                      >
+                        Fix my membership
+                      </Link>
+                    )}
                     {n.workout_id && (
                       <Link
                         to="/workout/$workoutId"

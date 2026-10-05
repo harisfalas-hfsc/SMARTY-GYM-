@@ -63,6 +63,24 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         };
       }
 
+      // Never open a second membership while one is still running or retrying a payment.
+      const { data: current } = await context.supabase
+        .from("subscriptions")
+        .select("status,current_period_end")
+        .eq("user_id", context.userId)
+        .eq("environment", data.environment)
+        .in("status", ["active", "trialing", "past_due", "paused"])
+        .limit(1)
+        .maybeSingle();
+      if (current) {
+        return {
+          error:
+            current.status === "past_due" || current.status === "paused"
+              ? "Your membership is waiting for a payment. Use “Update card, invoices & cancel” in My account to pay it — no new membership is needed."
+              : "You already have an active membership.",
+        };
+      }
+
       const stripe = createStripeClient(data.environment);
       const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
       const stripePrice = prices.data[0];
