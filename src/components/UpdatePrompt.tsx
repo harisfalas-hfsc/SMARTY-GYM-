@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { RefreshCw, X } from "lucide-react";
-import { isRecoverablePageImportError } from "@/lib/recoverable-page-error";
+import { isRecoverablePageImportError, markPageImportFailed } from "@/lib/recoverable-page-error";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -21,6 +21,7 @@ export function UpdatePrompt({ forceVisible = false }: { forceVisible?: boolean 
       // Vite fires this when a dynamic import fails; prevent the default
       // throw so the app keeps running behind the prompt.
       event.preventDefault();
+      markPageImportFailed();
       show();
     };
     const onRejection = (event: PromiseRejectionEvent) => {
