@@ -225,7 +225,7 @@ function ArticleDetail() {
 
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-5xl lg:px-8">
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 xl:max-w-[1440px]">
       <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted-foreground">
         <ol className="flex flex-wrap items-center gap-1.5">
           <li>

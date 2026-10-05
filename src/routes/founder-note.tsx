@@ -91,7 +91,7 @@ function NoteCard({
 
 function FounderNotePage() {
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:px-8 lg:py-16">
+    <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
       <div className="text-center">
         <div className="mx-auto mb-6 h-28 w-28 overflow-hidden rounded-full border-4 border-primary sm:h-36 sm:w-36">
           <img
