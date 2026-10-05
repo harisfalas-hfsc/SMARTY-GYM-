@@ -324,12 +324,14 @@ function WhyInvestInSmartyGym() {
                           name="With Regular Exercise"
                           fill="#3b82f6"
                           radius={[4, 4, 0, 0]}
+                          isAnimationActive={false}
                         />
                         <Bar
                           dataKey="withoutExercise"
                           name="Without Exercise"
                           fill="#ef4444"
                           radius={[4, 4, 0, 0]}
+                          isAnimationActive={false}
                         />
                       </BarChart>
                     </ResponsiveContainer>
@@ -440,6 +442,7 @@ function WhyInvestInSmartyGym() {
                           strokeWidth={3}
                           dot={{ fill: "#3b82f6", strokeWidth: 2, r: 5 }}
                           name="Structured Training"
+                          isAnimationActive={false}
                         />
                         <Line
                           type="monotone"
@@ -449,6 +452,7 @@ function WhyInvestInSmartyGym() {
                           strokeDasharray="5 5"
                           dot={{ fill: "#f59e0b", strokeWidth: 2, r: 4 }}
                           name="Self-Guided"
+                          isAnimationActive={false}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -490,6 +494,7 @@ function WhyInvestInSmartyGym() {
                           paddingAngle={5}
                           dataKey="value"
                           label={({ value }) => `${value}%`}
+                          isAnimationActive={false}
                         >
                           {adherenceData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -761,7 +766,7 @@ function WhyInvestInSmartyGym() {
                           tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }}
                         />
                         <Tooltip />
-                        <Bar dataKey="percentage" radius={[4, 4, 0, 0]} name="Inactive %">
+                        <Bar dataKey="percentage" radius={[4, 4, 0, 0]} name="Inactive %" isAnimationActive={false}>
                           {inactivityByAgeData.map((_, index) => (
                             <Cell key={`cell-${index}`} fill={inactivityColors[index]} />
                           ))}
