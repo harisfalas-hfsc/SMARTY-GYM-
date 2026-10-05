@@ -364,7 +364,7 @@ function CoachPage() {
 
   if (profileReady === false) {
     return (
-      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
+      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
         <PageHeader
           className="mb-6"
           eyebrow="Create Your Own Workout"
@@ -387,7 +387,7 @@ function CoachPage() {
 
   if (mode === "build") {
     return (
-      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
+      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
         <PageHeader
           className="mb-6"
           eyebrow="Create Your Own Workout"
@@ -408,7 +408,7 @@ function CoachPage() {
 
   return (
 
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
       <PageHeader
         className="mb-6"
         eyebrow="Create Your Own Workout"
