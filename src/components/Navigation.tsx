@@ -64,7 +64,7 @@ export function Navigation() {
   const canGoBack = pathname !== "/";
 
   const handleBack = () => {
-    if (navCount > 0 || window.history.length > 1) {
+    if (navCount > 0) {
       router.history.back();
       return;
     }
