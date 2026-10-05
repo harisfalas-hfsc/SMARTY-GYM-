@@ -40,3 +40,15 @@ d2("stale lazy route", () => {
     e2(rec(other)).toBe(false);
   });
 });
+
+import { markPageImportFailed } from "./recoverable-page-error";
+d2("after a failed page download", () => {
+  i2("the empty-page error that follows is never treated as a crash", () => {
+    const err = new TypeError("Cannot read properties of undefined (reading 'component')");
+    err.stack = "TypeError\n at https://smartygym.com/assets/index-x.js:1:1";
+    e2(rec(err)).toBe(false);
+    markPageImportFailed();
+    e2(rec(err)).toBe(true);
+    e2(rec(new TypeError("Cannot read properties of undefined (reading 'name')"))).toBe(false);
+  });
+});
