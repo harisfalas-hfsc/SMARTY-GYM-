@@ -15,7 +15,6 @@ import {
   ClipboardList,
   ChevronRight,
   Award,
-  BarChart3,
   Activity,
   Waves,
   Mountain,
@@ -91,10 +90,9 @@ export const Route = createFileRoute("/the-smarty-method")({
               "@type": "BreadcrumbList",
               itemListElement: [
                 { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
-                { "@type": "ListItem", position: 2, name: "About", item: "https://smartygym.com/about" },
                 {
                   "@type": "ListItem",
-                  position: 3,
+                  position: 2,
                   name: "The Smarty Method",
                   item: "https://smartygym.com/the-smarty-method",
                 },
@@ -119,16 +117,6 @@ const progressData = [
   { week: "W6", value: 63 },
   { week: "W7", value: 68 },
   { week: "W8", value: 75 },
-];
-
-const weeklyRhythmData = [
-  { day: "Mon", completed: 1, status: "Workout" },
-  { day: "Tue", completed: 2, status: "Workout" },
-  { day: "Wed", completed: 2, status: "Recovery" },
-  { day: "Thu", completed: 3, status: "Workout" },
-  { day: "Fri", completed: 4, status: "Workout" },
-  { day: "Sat", completed: 5, status: "Workout" },
-  { day: "Sun", completed: 5, status: "Recovery" },
 ];
 
 const cardAccentBorders = [
@@ -376,8 +364,8 @@ function TheSmartyMethod() {
         <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted-foreground sm:text-sm [&>*]:whitespace-nowrap">
           <Link to="/" className="hover:text-primary">Home</Link>
           <ChevronRight className="h-3.5 w-3.5 shrink-0" />
-          <Link to="/about" className="hover:text-primary">About SmartyGym</Link>
-          <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+          <Link to="/about" className="hover:text-primary lg:hidden">About SmartyGym</Link>
+          <ChevronRight className="h-3.5 w-3.5 shrink-0 lg:hidden" />
           <span className="text-foreground">The Smarty Method</span>
         </nav>
 
@@ -542,7 +530,7 @@ function TheSmartyMethod() {
             </Link>
           </div>
 
-          {/* Decorative Charts */}
+          {/* Progress chart */}
           <div className="grid grid-cols-1 gap-6">
             <Card className="border-primary/20">
               <CardContent className="p-5">
@@ -572,43 +560,6 @@ function TheSmartyMethod() {
               </CardContent>
             </Card>
 
-            <Card className="border-primary/20">
-              <CardContent className="p-5">
-                <div className="mb-3 flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-primary" />
-                   <h3 className="text-sm font-semibold">Weekly Training Rhythm</h3>
-                </div>
-                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3">
-                   <div>
-                     <p className="text-2xl font-bold text-green-600 dark:text-green-400">5 workouts</p>
-                     <p className="text-xs text-muted-foreground">completed across this example week</p>
-                   </div>
-                   <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                     <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-green-500" />Training</span>
-                     <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-amber-500" />Recovery</span>
-                   </div>
-                 </div>
-                <div className="h-64 sm:h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                     <AreaChart data={weeklyRhythmData} margin={{ top: 12, right: 16, left: 0, bottom: 0 }}>
-                       <defs>
-                         <linearGradient id="weeklyRhythmGradient" x1="0" y1="0" x2="0" y2="1">
-                           <stop offset="5%" stopColor="var(--color-chart-2)" stopOpacity={0.4} />
-                           <stop offset="95%" stopColor="var(--color-chart-2)" stopOpacity={0} />
-                         </linearGradient>
-                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                      <XAxis dataKey="day" tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
-                       <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} width={24} allowDecimals={false} tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
-                       <Area type="stepAfter" dataKey="completed" name="Workouts completed" stroke="var(--color-chart-2)" fill="url(#weeklyRhythmGradient)" strokeWidth={3} dot={{ fill: "var(--color-chart-2)", r: 4 }} isAnimationActive={false} />
-                     </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-                <p className="mt-2 text-xs text-muted-foreground">
-                   The line rises after each completed workout and stays level on recovery days. Five sessions plus two recovery days show a consistent, sustainable week.
-                </p>
-              </CardContent>
-            </Card>
           </div>
         </section>
 
