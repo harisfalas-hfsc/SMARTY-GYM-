@@ -150,6 +150,18 @@ function normalize(term: string): string[] {
   return [...v];
 }
 
+function preferenceSignature(ids: string[] | null): string {
+  if (!ids) return "all";
+  let hash = 2166136261;
+  for (const id of ids) {
+    for (let index = 0; index < id.length; index++) {
+      hash ^= id.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+  }
+  return `${ids.length}-${hash >>> 0}`;
+}
+
 function PreferenceButtons({
   state,
   busy,
@@ -515,7 +527,7 @@ function ExerciseLibraryPage() {
     };
 
     const rows = await loadRemote(
-      `library:list:${bodyPart}|${equipment}|${target}|${difficulty}|${preferenceFilter}|${nameSearch.trim()}|${preferenceIds?.join(",") ?? "all"}`,
+      `library:list:${bodyPart}|${equipment}|${target}|${difficulty}|${preferenceFilter}|${nameSearch.trim()}|${preferenceSignature(preferenceIds)}`,
       async () => {
         if (preferenceIds?.length === 0) return [] as Exercise[];
         if (!preferenceIds) {
