@@ -301,7 +301,10 @@ function Account() {
                 {portalBusy ? "Opening…" : "Update card, invoices & cancel"}
               </Button>
             ) : null}
-            {membership?.status === "active" || membership?.status === "trialing" ? null : (
+            {membership?.status === "active" ||
+            membership?.status === "trialing" ||
+            membership?.status === "past_due" ||
+            membership?.status === "paused" ? null : (
               <Button className="h-12 rounded-2xl" onClick={() => setCheckoutOpen(true)}>
                 <CreditCard className="mr-2 h-4 w-4" />
                 {membership?.hasBilling ? "Pay & restart membership" : "Subscribe · €9.99 / month"}
