@@ -160,7 +160,7 @@ export function DesktopHomeStory() {
             ))}
           </div>
           <div className="mt-10 flex items-center justify-center gap-8">
-            <Link to="/why-invest-in-smartygym" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline">Why SmartyGym <ChevronRight className="h-4 w-4" /></Link>
+            <Link to="/why-invest-in-smartygym" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline">Why Invest in SmartyGym <ChevronRight className="h-4 w-4" /></Link>
             <Link to="/the-smarty-method" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"><BookOpen className="h-4 w-4" /> Discover The Smarty Method <ChevronRight className="h-4 w-4" /></Link>
           </div>
           <div className="mt-12 border-t border-border pt-8">

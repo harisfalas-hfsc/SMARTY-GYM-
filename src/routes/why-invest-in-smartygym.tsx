@@ -108,12 +108,6 @@ export const Route = createFileRoute("/why-invest-in-smartygym")({
                 {
                   "@type": "ListItem",
                   position: 2,
-                  name: "About",
-                  item: "https://smartygym.com/about",
-                },
-                {
-                  "@type": "ListItem",
-                  position: 3,
                   name: "Why Invest in SmartyGym",
                   item: "https://smartygym.com/why-invest-in-smartygym",
                 },
@@ -188,10 +182,10 @@ function WhyInvestInSmartyGym() {
             Home
           </Link>
           <ChevronRight className="h-3.5 w-3.5 shrink-0" />
-          <Link to="/about" className="hover:text-primary">
+          <Link to="/about" className="hover:text-primary lg:hidden">
             About SmartyGym
           </Link>
-          <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+          <ChevronRight className="h-3.5 w-3.5 shrink-0 lg:hidden" />
           <span className="text-foreground">Why Invest in SmartyGym</span>
         </nav>
 
