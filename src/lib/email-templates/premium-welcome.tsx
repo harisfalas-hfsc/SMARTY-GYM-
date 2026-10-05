@@ -19,6 +19,14 @@ import {
   PREMIUM_WELCOME_SECTIONS,
   premiumWelcomeTitle,
 } from '../premium-welcome-content'
+import blogAsset from '@/assets/email/blog.png.asset.json'
+import checkinsAsset from '@/assets/email/checkins.png.asset.json'
+import createAsset from '@/assets/email/create.png.asset.json'
+import dailyAsset from '@/assets/email/daily.png.asset.json'
+import ritualAsset from '@/assets/email/ritual.png.asset.json'
+import logoAsset from '@/assets/email/smartygym-logo.png.asset.json'
+import toolsAsset from '@/assets/email/tools.png.asset.json'
+import workoutsAsset from '@/assets/email/workouts.png.asset.json'
 import type { TemplateEntry } from './registry'
 
 interface Props {
@@ -35,8 +43,16 @@ const tones: Record<string, { accent: string }> = {
   yellow: { accent: '#a16207' },
 }
 
-const ASSET_URL =
-  'https://ipssjsgujbqfqgoznnby.supabase.co/storage/v1/object/public/exercise-library/email-assets'
+const SITE_URL = 'https://smartygym.com'
+const assets: Record<string, string> = {
+  workouts: `${SITE_URL}${workoutsAsset.url}`,
+  daily: `${SITE_URL}${dailyAsset.url}`,
+  create: `${SITE_URL}${createAsset.url}`,
+  tools: `${SITE_URL}${toolsAsset.url}`,
+  blog: `${SITE_URL}${blogAsset.url}`,
+  checkins: `${SITE_URL}${checkinsAsset.url}`,
+  ritual: `${SITE_URL}${ritualAsset.url}`,
+}
 
 const Email = ({ name }: Props) => (
   <Html lang="en" dir="ltr">
@@ -47,7 +63,7 @@ const Email = ({ name }: Props) => (
         <Section style={header}>
           <Row>
             <Column style={logoCell}>
-              <Img src={`${ASSET_URL}/smartygym-logo.png`} width="64" height="64" alt="SMARTYGYM" style={logo} />
+              <Img src={`${SITE_URL}${logoAsset.url}`} width="64" height="64" alt="SMARTYGYM" style={logo} />
             </Column>
             <Column>
               <Text style={brand}>SMARTYGYM</Text>
@@ -67,7 +83,7 @@ const Email = ({ name }: Props) => (
                 <Row>
                   <Column style={iconCell}>
                     <Img
-                      src={`${ASSET_URL}/${item.icon}.png`}
+                      src={assets[item.icon]}
                       width="44"
                       height="44"
                       alt=""
