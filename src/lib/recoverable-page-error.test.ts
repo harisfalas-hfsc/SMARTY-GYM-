@@ -28,3 +28,15 @@ describe("recoverable page imports", () => {
     vi.unstubAllGlobals();
   });
 });
+import { describe as d2, expect as e2, it as i2 } from "vitest";
+import { isRecoverablePageImportError as rec } from "./recoverable-page-error";
+d2("stale lazy route", () => {
+  i2("treats the router's undefined-module error as an update, only from the lazy loader", () => {
+    const err = new TypeError("Cannot read properties of undefined (reading 'component')");
+    err.stack = "TypeError: ...\n at https://smartygym.com/assets/lazyRouteComponent-R2Oj1pNx.js:1:3751";
+    e2(rec(err)).toBe(true);
+    const other = new TypeError("Cannot read properties of undefined (reading 'component')");
+    other.stack = "TypeError: ...\n at https://smartygym.com/assets/index.js:1:1";
+    e2(rec(other)).toBe(false);
+  });
+});
