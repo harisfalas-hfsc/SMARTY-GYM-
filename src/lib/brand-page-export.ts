@@ -43,15 +43,65 @@ export async function exportBrandPagePdf(kind: ExportKind, root: HTMLElement) {
   ]);
   const content = documents[kind];
   const logo = await imageDataUrl(logoUrl);
-  const originalWidth = root.style.width;
-  const originalMaxWidth = root.style.maxWidth;
-  root.style.width = "1136px";
-  root.style.maxWidth = "none";
-  await new Promise<void>((resolve) =>
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-  );
   const blocks = Array.from(root.querySelectorAll<HTMLElement>("[data-pdf-block]"));
   if (!blocks.length) throw new Error("No printable page content was found.");
+
+  const exportRootMarker = `pdf-root-${Date.now()}`;
+  root.dataset.pdfExportRoot = exportRootMarker;
+  blocks.forEach((block, index) => {
+    block.dataset.pdfExportBlock = String(index);
+  });
+
+  let clonedRootHeight = 0;
+  let blockRanges: Array<{ top: number; height: number }> = [];
+  let pageCanvas: HTMLCanvasElement;
+
+  try {
+    pageCanvas = await html2canvas(root, {
+      backgroundColor: "#ffffff",
+      scale: 1.35,
+      useCORS: true,
+      logging: false,
+      windowWidth: 1200,
+      onclone: (clonedDocument) => {
+        clonedDocument.documentElement.classList.remove("dark");
+        clonedDocument.documentElement.style.colorScheme = "light";
+        clonedDocument.querySelectorAll<HTMLElement>("[data-pdf-exclude]").forEach((node) => {
+          node.style.display = "none";
+        });
+        clonedDocument.querySelectorAll<HTMLElement>("*").forEach((node) => {
+          node.style.animation = "none";
+          node.style.transition = "none";
+        });
+
+        const clonedRoot = clonedDocument.querySelector<HTMLElement>(
+          `[data-pdf-export-root="${exportRootMarker}"]`,
+        );
+        if (!clonedRoot) return;
+        clonedRoot.style.width = "1136px";
+        clonedRoot.style.maxWidth = "none";
+        const rootRect = clonedRoot.getBoundingClientRect();
+        clonedRootHeight = rootRect.height;
+        blockRanges = blocks.map((_, index) => {
+          const block = clonedRoot.querySelector<HTMLElement>(
+            `[data-pdf-export-block="${index}"]`,
+          );
+          const rect = block?.getBoundingClientRect();
+          return {
+            top: rect ? rect.top - rootRect.top : 0,
+            height: rect?.height ?? 0,
+          };
+        });
+      },
+    });
+  } finally {
+    delete root.dataset.pdfExportRoot;
+    blocks.forEach((block) => delete block.dataset.pdfExportBlock);
+  }
+
+  if (!clonedRootHeight || blockRanges.some((range) => range.height <= 0)) {
+    throw new Error("The PDF page sections could not be measured.");
+  }
 
   const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
   const W = 210;
@@ -94,60 +144,73 @@ export async function exportBrandPagePdf(kind: ExportKind, root: HTMLElement) {
   };
 
   decoratePage();
-  try {
-  for (const block of blocks) {
-    const canvas = await html2canvas(block, {
-      backgroundColor: "#ffffff",
-      scale: 1.65,
-      useCORS: true,
-      logging: false,
-      windowWidth: 1200,
-      onclone: (clonedDocument) => {
-        clonedDocument.documentElement.classList.remove("dark");
-        clonedDocument.documentElement.style.colorScheme = "light";
-        clonedDocument.querySelectorAll<HTMLElement>("[data-pdf-exclude]").forEach((node) => {
-          node.style.display = "none";
-        });
-        clonedDocument.querySelectorAll<HTMLElement>("*").forEach((node) => {
-          node.style.animation = "none";
-          node.style.transition = "none";
-        });
-      },
-    });
-    const imageHeight = (canvas.height * printableWidth) / canvas.width;
+  const pixelsPerCssPixel = pageCanvas.height / clonedRootHeight;
+  const pixelsPerMm = pageCanvas.width / printableWidth;
+
+  for (const range of blockRanges) {
+    const blockTop = Math.max(0, Math.round(range.top * pixelsPerCssPixel));
+    const blockBottom = Math.min(
+      pageCanvas.height,
+      Math.round((range.top + range.height) * pixelsPerCssPixel),
+    );
+    const blockHeight = Math.max(1, blockBottom - blockTop);
+    const imageHeight = blockHeight / pixelsPerMm;
     const gap = 5;
     if (y > contentTop && y + imageHeight > contentBottom) newPage();
 
     if (imageHeight <= contentBottom - contentTop) {
-      doc.addImage(canvas.toDataURL("image/jpeg", 0.92), "JPEG", left, y, printableWidth, imageHeight, undefined, "FAST");
+      const blockCanvas = document.createElement("canvas");
+      blockCanvas.width = pageCanvas.width;
+      blockCanvas.height = blockHeight;
+      const context = blockCanvas.getContext("2d");
+      if (!context) throw new Error("The PDF page could not be rendered.");
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, blockCanvas.width, blockCanvas.height);
+      context.drawImage(
+        pageCanvas,
+        0,
+        blockTop,
+        pageCanvas.width,
+        blockHeight,
+        0,
+        0,
+        blockCanvas.width,
+        blockCanvas.height,
+      );
+      doc.addImage(blockCanvas.toDataURL("image/jpeg", 0.9), "JPEG", left, y, printableWidth, imageHeight, undefined, "FAST");
       y += imageHeight + gap;
       continue;
     }
 
-    const pixelsPerMm = canvas.width / printableWidth;
     let sourceY = 0;
-    while (sourceY < canvas.height) {
+    while (sourceY < blockHeight) {
       if (y > contentTop) newPage();
       const availableHeight = contentBottom - y;
-      const sliceHeight = Math.min(canvas.height - sourceY, Math.floor(availableHeight * pixelsPerMm));
+      const sliceHeight = Math.min(blockHeight - sourceY, Math.floor(availableHeight * pixelsPerMm));
       const slice = document.createElement("canvas");
-      slice.width = canvas.width;
+      slice.width = pageCanvas.width;
       slice.height = sliceHeight;
       const context = slice.getContext("2d");
       if (!context) throw new Error("The PDF page could not be rendered.");
       context.fillStyle = "#ffffff";
       context.fillRect(0, 0, slice.width, slice.height);
-      context.drawImage(canvas, 0, sourceY, canvas.width, sliceHeight, 0, 0, canvas.width, sliceHeight);
+      context.drawImage(
+        pageCanvas,
+        0,
+        blockTop + sourceY,
+        pageCanvas.width,
+        sliceHeight,
+        0,
+        0,
+        pageCanvas.width,
+        sliceHeight,
+      );
       const sliceMm = sliceHeight / pixelsPerMm;
-      doc.addImage(slice.toDataURL("image/jpeg", 0.92), "JPEG", left, y, printableWidth, sliceMm, undefined, "FAST");
+      doc.addImage(slice.toDataURL("image/jpeg", 0.9), "JPEG", left, y, printableWidth, sliceMm, undefined, "FAST");
       sourceY += sliceHeight;
       y += sliceMm + gap;
-      if (sourceY < canvas.height) newPage();
+      if (sourceY < blockHeight) newPage();
     }
-  }
-  } finally {
-    root.style.width = originalWidth;
-    root.style.maxWidth = originalMaxWidth;
   }
 
   doc.save(content.filename);
