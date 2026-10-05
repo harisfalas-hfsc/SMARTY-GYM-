@@ -578,18 +578,7 @@ function ExerciseLibraryPage() {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
-      {targetSection ? (
-        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-primary bg-card p-3">
-          <p className="min-w-0 text-sm">
-            Adding to <strong className="text-primary">{targetLabel}</strong>. Tap <strong>Add</strong> on any
-            exercise, tap <strong>Remove</strong> to take it out.
-          </p>
-          <Button size="sm" className="shrink-0 rounded-full font-bold" onClick={backToWorkout}>
-            <ArrowLeft className="mr-1 h-4 w-4" /> Back
-          </Button>
-        </div>
-      ) : null}
+    <div className={`mx-auto w-full max-w-4xl px-4 lg:max-w-7xl lg:px-10 xl:max-w-[1440px] ${targetSection ? "py-4 lg:py-6" : "py-8 sm:py-12 lg:py-16"}`}>
       {!targetSection ? (
         <PageHeader image={pageHeroImage}
           eyebrow="Exercise library"
