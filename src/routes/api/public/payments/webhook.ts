@@ -31,7 +31,8 @@ async function upsertSubscription(subscription: any, env: StripeEnv, eventCreate
     current_period_end: iso(item?.current_period_end ?? subscription.current_period_end),
     cancel_at_period_end: Boolean(subscription.cancel_at_period_end),
     environment: env,
-    last_event_at: iso(eventCreated ?? null),
+    // Stored as unix seconds (bigint column).
+    last_event_at: typeof eventCreated === "number" ? eventCreated : null,
     updated_at: new Date().toISOString(),
   };
 
@@ -43,17 +44,22 @@ async function upsertSubscription(subscription: any, env: StripeEnv, eventCreate
 
   if (existing?.id) {
     // Ignore events older than the newest one already applied (out-of-order delivery).
-    const prev = existing.last_event_at ? new Date(existing.last_event_at).getTime() : 0;
-    const next = row.last_event_at ? new Date(row.last_event_at).getTime() : 0;
+    const prev = Number(existing.last_event_at) || 0;
+    const next = Number(row.last_event_at) || 0;
     if (prev && next && next < prev) return;
-    await supabase.from("subscriptions").update(row).eq("id", existing.id);
+    const { error } = await supabase.from("subscriptions").update(row).eq("id", existing.id);
+    if (error) throw new Error(`Subscription update failed: ${error.message}`);
     return;
   }
   if (!userId) {
     console.error("Stripe subscription without userId metadata:", subscription.id);
     return;
   }
-  await supabase.from("subscriptions").insert({ ...row, user_id: userId });
+  // A member has one Stripe row; replace an older one (e.g. after a cancelled plan).
+  const { error: insertError } = await supabase
+    .from("subscriptions")
+    .upsert({ ...row, user_id: userId }, { onConflict: "user_id,provider" });
+  if (insertError) throw new Error(`Subscription save failed: ${insertError.message}`);
 
   // Tell the owner about every new paying member.
   if (["active", "trialing"].includes(subscription.status)) {
