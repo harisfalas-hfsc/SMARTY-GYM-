@@ -9,6 +9,10 @@ export async function sendFirstPremiumWelcome(input: {
   userId: string
 }): Promise<boolean> {
   const db = input.db as any
+  const { getCronConfig, recordRun } = await import('@/lib/cron/jobs.server')
+  const config = await getCronConfig(db, 'premium-welcome')
+  if (!config.enabled) return false
+
   const { data: subscription, error: subscriptionError } = await db
     .from('subscriptions')
     .select('premium_welcome_sent_at')
@@ -51,5 +55,11 @@ export async function sendFirstPremiumWelcome(input: {
     .eq('provider', 'stripe')
     .is('premium_welcome_sent_at', null)
   if (updateError) throw new Error(updateError.message)
+  await recordRun(db, {
+    jobKey: 'premium-welcome',
+    status: 'ok',
+    changed: true,
+    summary: `First Premium welcome sent to ${name ?? 'member'}.`,
+  })
   return true
 }
