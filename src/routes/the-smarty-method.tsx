@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Card, CardContent } from "@/components/ui/card";
@@ -342,11 +342,13 @@ const audienceSegments = [
 
 function TheSmartyMethod() {
   const [exporting, setExporting] = useState(false);
+  const pdfContentRef = useRef<HTMLDivElement>(null);
 
   const downloadPdf = async () => {
     setExporting(true);
     try {
-      await exportBrandPagePdf("method");
+      if (!pdfContentRef.current) throw new Error("The guide is not ready.");
+      await exportBrandPagePdf("method", pdfContentRef.current);
       toast.success("The Smarty Method PDF is ready.");
     } catch {
       toast.error("The PDF could not be prepared. Please try again.");
@@ -367,8 +369,9 @@ function TheSmartyMethod() {
           <span className="text-foreground">The Smarty Method</span>
         </nav>
 
+        <div ref={pdfContentRef}>
         {/* Hero / Introduction */}
-        <section className="mb-16 text-center">
+        <section data-pdf-block className="mb-16 text-center">
           <h1 className="mb-6 text-3xl font-extrabold uppercase tracking-tight sm:text-4xl md:text-5xl">
             More Than Workouts.{" "}
             <span className="text-primary">A Complete Performance System.</span>
@@ -382,14 +385,14 @@ function TheSmartyMethod() {
             , built on science, real-world coaching experience, and intelligent periodization. Every
             element serves a purpose. Every session has a goal.
           </p>
-          <Button type="button" variant="outline" className="mt-6 gap-2" onClick={downloadPdf} disabled={exporting}>
+          <Button data-pdf-exclude type="button" variant="outline" className="mt-6 gap-2" onClick={downloadPdf} disabled={exporting}>
             <Download className="h-4 w-4" />
             {exporting ? "Preparing PDF" : "Download The Smarty Method PDF"}
           </Button>
         </section>
 
         {/* The Expertise Behind the System */}
-        <section className="mb-16">
+        <section data-pdf-block className="mb-16">
           <Card className="border-primary/40">
             <CardContent className="p-6 sm:p-8">
               <div className="mb-4 flex items-center gap-3">
@@ -423,7 +426,7 @@ function TheSmartyMethod() {
         </section>
 
         {/* WOD: Smart Periodization */}
-        <section className="mb-16">
+        <section data-pdf-block className="mb-16">
           <h2 className="mb-2 text-center text-2xl font-bold sm:text-3xl">
             Workout of the Day: Smart Periodization
           </h2>
@@ -448,7 +451,7 @@ function TheSmartyMethod() {
         </section>
 
         {/* How We Build Our Workouts */}
-        <section className="mb-16">
+        <section data-pdf-block className="mb-16">
           <h2 className="mb-2 text-center text-2xl font-bold sm:text-3xl">How We Build Our Workouts</h2>
           <p className="mx-auto mb-8 max-w-2xl text-center text-muted-foreground">
             Every session follows a deliberate structure. Nothing is left to chance.
@@ -469,7 +472,7 @@ function TheSmartyMethod() {
         </section>
 
         {/* The Smarty Ecosystem */}
-        <section className="mb-16">
+        <section data-pdf-block className="mb-16">
           <h2 className="mb-2 text-center text-2xl font-bold sm:text-3xl">The Smarty Ecosystem</h2>
           <p className="mx-auto mb-8 max-w-2xl text-center text-muted-foreground">
             A complete, interconnected system where every component supports your progress.
@@ -493,7 +496,7 @@ function TheSmartyMethod() {
         </section>
 
         {/* The Logbook and Tracking System */}
-        <section className="mb-16">
+        <section data-pdf-block className="mb-16">
           <h2 className="mb-2 text-center text-2xl font-bold sm:text-3xl">The Logbook &amp; Tracking System</h2>
           <p className="mx-auto mb-8 max-w-2xl text-center text-muted-foreground">
             What gets measured gets managed. Without tracking, you&apos;re guessing. With <SG />,
@@ -576,7 +579,7 @@ function TheSmartyMethod() {
         </section>
 
         {/* Closing Section — The Why */}
-        <section className="mb-8">
+        <section data-pdf-block className="mb-8">
           <Card className="border-primary">
             <CardContent className="p-6 text-center sm:p-10">
               <h2 className="mb-6 text-2xl font-bold sm:text-3xl md:text-4xl">
@@ -640,6 +643,7 @@ function TheSmartyMethod() {
             </CardContent>
           </Card>
         </section>
+        </div>
       </div>
     </main>
   );
