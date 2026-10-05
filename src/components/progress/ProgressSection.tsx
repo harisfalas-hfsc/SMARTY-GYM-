@@ -15,12 +15,14 @@ import {
   Medal,
   Lock,
   ChevronRight,
+  Download,
 } from "lucide-react";
 import { TrainingLoadPanel } from "@/components/performance/TrainingLoadPanel";
 import { RecentLoadTrend } from "@/components/performance/RecentLoadTrend";
 import { CheckinsPanel } from "@/components/checkins/CheckinsPanel";
 
-import { getProgressOverview, type ProgressOverview } from "@/lib/progress.functions";
+import { getProgressExport, getProgressOverview, type ProgressOverview } from "@/lib/progress.functions";
+import { exportProgressPdf } from "@/lib/progress-export";
 import { CATEGORY_LABEL, CATEGORY_UNIT } from "@/lib/progress-config";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/date-format";
@@ -128,10 +130,25 @@ function BadgeUnlockedToast({ names, onClose }: { names: string[]; onClose: () =
 export function ProgressSection() {
   const { user } = useAuth();
   const fetchOverview = useServerFn(getProgressOverview);
+  const fetchExport = useServerFn(getProgressExport);
   const [data, setData] = useState<ProgressOverview | null>(null);
   const [unlocked, setUnlocked] = useState<string[]>([]);
   const { freeAccessMode } = useFreeAccessMode();
   const [detail, setDetail] = useState<"score" | "rank" | "current" | "longest" | "days" | "membership" | "awards" | null>(null);
+  const today = new Date().toISOString().slice(0, 10);
+  const [exportFrom, setExportFrom] = useState(() => `${new Date().getFullYear()}-01-01`);
+  const [exportTo, setExportTo] = useState(today);
+  const [exporting, setExporting] = useState(false);
+
+  const downloadProgress = async () => {
+    setExporting(true);
+    try {
+      const report = await fetchExport({ data: { from: exportFrom, to: exportTo } });
+      await exportProgressPdf(report);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -193,6 +210,28 @@ export function ProgressSection() {
 
   return (
     <div className="space-y-8">
+      <section className="rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-primary">Progress report</p>
+            <h2 className="mt-1 text-lg font-extrabold">Export your complete progress</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Choose the period for one PDF covering workouts, performance, progress, awards and check-ins.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2 sm:min-w-[390px]">
+            <label className="text-xs font-semibold text-muted-foreground">From
+              <input type="date" value={exportFrom} max={exportTo} onChange={(event) => setExportFrom(event.target.value)} className="mt-1 h-10 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground" />
+            </label>
+            <label className="text-xs font-semibold text-muted-foreground">To
+              <input type="date" value={exportTo} min={exportFrom} max={today} onChange={(event) => setExportTo(event.target.value)} className="mt-1 h-10 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground" />
+            </label>
+            <Button className="col-span-2" disabled={exporting || !exportFrom || !exportTo || exportFrom > exportTo} onClick={() => void downloadProgress()}>
+              {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+              {exporting ? "Preparing PDF" : "Download progress PDF"}
+            </Button>
+          </div>
+        </div>
+      </section>
+
       <section className="rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
         <p className="text-xs font-bold uppercase tracking-wider text-primary">Smarty Progress</p>
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
