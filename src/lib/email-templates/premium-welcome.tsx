@@ -35,7 +35,8 @@ const tones: Record<string, { accent: string }> = {
   yellow: { accent: '#a16207' },
 }
 
-const ASSET_URL = 'https://smartygym.com/email-icons'
+const ASSET_URL =
+  'https://ipssjsgujbqfqgoznnby.supabase.co/storage/v1/object/public/exercise-library/email-assets'
 
 const Email = ({ name }: Props) => (
   <Html lang="en" dir="ltr">
