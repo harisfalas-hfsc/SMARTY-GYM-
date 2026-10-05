@@ -14,7 +14,7 @@
 - Member-built (Build It Yourself) workouts are saved by createManualWorkout (src/lib/manual-workout.functions.ts) as normal workouts with category MY OWN WORKOUT, bypassing the generation engine and its doctrine — why: the member chooses their own exercises; Smarty rules apply only to coach/admin workouts.
 
 - Smarty Ritual rotation is computed from app_settings.ritual_anchor_date + position (src/lib/ritual-schedule.ts); no nightly job, so page and admin schedule never drift.
-- Ritual exports are client-generated real DOCX/PDF with embedded art — why: preserve formatting.
+- Ritual and public-page exports are client-generated branded files — why: preserve formatting.
 - Workout engine: CHALLENGE sessions are enforced as full-body, majority-bodyweight, on-level benchmarks via challengeBalanceViolation (doctrine.ts) as a structural validator error; exercise library carries smarty_tags (9 tags, backfilled from category/body_part/difficulty/equipment) used to prefer challenge vocabulary in filterPool.
 - Workout difficulty is prescription only: filterPool never narrows vocabulary by level (beginner just drops library-"advanced" rows); flowSpecialtyViolation (doctrine.ts) bans balance tools/isolation machines in flow categories and timed formats, enforced in both pool and validator — one engine for WOD and custom.
 - Smarty Check-ins scoring lives in src/lib/checkins/score.ts, computed server-side in checkins.functions.ts and read by coach via loadCheckinSignal — one source for UI, badges and coach.
