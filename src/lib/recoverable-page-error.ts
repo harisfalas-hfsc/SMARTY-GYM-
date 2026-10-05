@@ -4,10 +4,15 @@
  * Vite resolves the failed import as empty, so the router's follow-up
  * "reading 'component'" error is the same failure, not a new crash.
  */
-let pageDownloadFailed = false;
+// Stored on window so every copy of this module sees the same flag.
+const FLAG = "__smartyPageDownloadFailed";
 
 export function markPageImportFailed() {
-  pageDownloadFailed = true;
+  if (typeof window !== "undefined") (window as unknown as Record<string, boolean>)[FLAG] = true;
+}
+
+function pageDownloadFailed(): boolean {
+  return typeof window !== "undefined" && Boolean((window as unknown as Record<string, boolean>)[FLAG]);
 }
 
 /** A failed route import needs a fresh document, not an in-place router retry. */
@@ -17,7 +22,7 @@ export function isRecoverablePageImportError(error: unknown): boolean {
     return true;
   const emptyRouteModule = /reading 'component'|evaluating '[^']*\.component'/i.test(message);
   if (!emptyRouteModule) return false;
-  if (pageDownloadFailed) return true;
+  if (pageDownloadFailed()) return true;
   const stack = error instanceof Error ? (error.stack ?? "") : "";
   return /lazyRouteComponent/.test(stack);
 }
