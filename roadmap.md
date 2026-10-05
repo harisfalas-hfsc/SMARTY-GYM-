@@ -47,3 +47,4 @@
 - [x] Show PAR-Q warnings only when opening a finished workout to train; show creation method only to the owner, while other members see only the creator's name.
 - [x] Keep shared-workout creator cards compact while showing public streaks and earned-badge indicators, including muted empty badge slots, without exposing personal completion totals.
 - [x] Add a public Training Load science page and link it from Logbook Progress without changing the calculation.
+- [ ] Update The Smarty Method and Why Invest in SmartyGym for current features, and add visually verified branded portrait PDF downloads.
