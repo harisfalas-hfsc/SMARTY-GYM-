@@ -578,37 +578,27 @@ function ExerciseLibraryPage() {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
-      {targetSection ? (
-        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-primary bg-card p-3">
-          <p className="min-w-0 text-sm">
-            Adding to <strong className="text-primary">{targetLabel}</strong>. Tap <strong>Add</strong> on any
-            exercise, tap <strong>Remove</strong> to take it out.
-          </p>
-          <Button size="sm" className="shrink-0 rounded-full font-bold" onClick={backToWorkout}>
-            <ArrowLeft className="mr-1 h-4 w-4" /> Back
-          </Button>
-        </div>
+    <div className={`mx-auto w-full max-w-4xl px-4 lg:max-w-7xl lg:px-10 xl:max-w-[1440px] ${targetSection ? "py-4 lg:py-6" : "py-8 sm:py-12 lg:py-16"}`}>
+      {!targetSection ? (
+        <PageHeader image={pageHeroImage}
+          eyebrow="Exercise library"
+          title={
+            <>
+              Every <span className="text-primary">movement</span> demonstrated
+            </>
+          }
+          subtitle={
+            <>
+              Browse the exercise database{" "}
+              <span className="font-bold text-primary">Smarty Coach</span> builds your sessions from.
+              Filter by body part, equipment, target muscle or difficulty. Exercises you{" "}
+              <span className="font-semibold text-primary">like</span> are prioritised and the ones
+              you <span className="font-semibold text-primary">dislike</span> are avoided every
+              time a workout is generated for you.
+            </>
+          }
+        />
       ) : null}
-      <PageHeader image={pageHeroImage}
-        eyebrow="Exercise library"
-        title={
-          <>
-            Every <span className="text-primary">movement</span> demonstrated
-          </>
-        }
-        subtitle={
-          <>
-            Browse the exercise database{" "}
-            <span className="font-bold text-primary">Smarty Coach</span> builds your sessions from.
-            Filter by body part, equipment, target muscle or difficulty. Exercises you{" "}
-            <span className="font-semibold text-primary">like</span> are prioritised and the ones
-            you <span className="font-semibold text-primary">dislike</span> are avoided every
-            time a workout is generated for you.
-          </>
-        }
-
-      />
 
       <Card className="mb-6 border-2 border-primary/30">
         <CardContent className="space-y-3 p-4 sm:p-6">
@@ -719,12 +709,14 @@ function ExerciseLibraryPage() {
         </CardContent>
       </Card>
 
-      <div className="mt-6 text-center text-xs text-muted-foreground">
-        Want these exercises built into a session?{" "}
-        <Link to="/create-your-own-workout" className="font-semibold text-primary">
-          Ask Smarty Coach →
-        </Link>
-      </div>
+      {!targetSection ? (
+        <div className="mt-6 text-center text-xs text-muted-foreground">
+          Want these exercises built into a session?{" "}
+          <Link to="/create-your-own-workout" className="font-semibold text-primary">
+            Ask Smarty Coach →
+          </Link>
+        </div>
+      ) : null}
 
       {targetSection ? (
         <div className="fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4 lg:bottom-6">
