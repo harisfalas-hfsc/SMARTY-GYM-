@@ -218,6 +218,13 @@ const ecosystemItems = [
     link: "/create-your-own-workout",
   },
   {
+    icon: Sparkles,
+    title: "Build It Yourself",
+    description:
+      "Choose, organize and name your own exercises from the library, then save the finished workout directly to your Logbook.",
+    link: "/create-your-own-workout",
+  },
+  {
     icon: Wrench,
     title: "Smarty Tools",
     description:
@@ -285,6 +292,12 @@ const logbookFeatures = [
     title: "Session Rating",
     description:
       "Rate each session, leave notes, track energy and mood. Understand patterns that drive your best — and worst — performances.",
+  },
+  {
+    icon: Download,
+    title: "Progress PDF",
+    description:
+      "Choose a date range and export your score, rank, workout analytics, performance, check-ins and awards in one branded report.",
   },
 ];
 

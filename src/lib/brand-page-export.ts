@@ -166,7 +166,7 @@ export async function exportBrandPagePdf(kind: ExportKind) {
   content.sections.forEach((section, index) => {
     const color = palette[index % palette.length] ?? COLORS.blue;
     const bodyLines = doc.splitTextToSize(section[1], 168) as string[];
-    const boxHeight = 27 + bodyLines.length * 4.4 + Math.ceil(section[2].length / 2) * 9;
+    const boxHeight = 32 + bodyLines.length * 4.4 + Math.ceil(section[2].length / 2) * 9;
     need(boxHeight + 8);
     const top = y;
     doc.setDrawColor(...COLORS.line);

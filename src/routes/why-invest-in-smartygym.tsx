@@ -642,6 +642,15 @@ function WhyInvestInSmartyGym() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 rounded-lg bg-muted/50 p-3">
+                    <Sparkles className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                    <div>
+                      <strong className="block">Build It Yourself</strong>
+                      <span className="text-sm text-muted-foreground">
+                        Choose and arrange your own exercises, then save the workout to your Logbook
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 rounded-lg bg-muted/50 p-3">
                     <BookOpen className="mt-1 h-5 w-5 shrink-0 text-primary" />
                     <div>
                       <strong className="block">Exercise Library</strong>
