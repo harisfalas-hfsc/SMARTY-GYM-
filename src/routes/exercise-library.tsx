@@ -590,25 +590,26 @@ function ExerciseLibraryPage() {
           </Button>
         </div>
       ) : null}
-      <PageHeader image={pageHeroImage}
-        eyebrow="Exercise library"
-        title={
-          <>
-            Every <span className="text-primary">movement</span> demonstrated
-          </>
-        }
-        subtitle={
-          <>
-            Browse the exercise database{" "}
-            <span className="font-bold text-primary">Smarty Coach</span> builds your sessions from.
-            Filter by body part, equipment, target muscle or difficulty. Exercises you{" "}
-            <span className="font-semibold text-primary">like</span> are prioritised and the ones
-            you <span className="font-semibold text-primary">dislike</span> are avoided every
-            time a workout is generated for you.
-          </>
-        }
-
-      />
+      {!targetSection ? (
+        <PageHeader image={pageHeroImage}
+          eyebrow="Exercise library"
+          title={
+            <>
+              Every <span className="text-primary">movement</span> demonstrated
+            </>
+          }
+          subtitle={
+            <>
+              Browse the exercise database{" "}
+              <span className="font-bold text-primary">Smarty Coach</span> builds your sessions from.
+              Filter by body part, equipment, target muscle or difficulty. Exercises you{" "}
+              <span className="font-semibold text-primary">like</span> are prioritised and the ones
+              you <span className="font-semibold text-primary">dislike</span> are avoided every
+              time a workout is generated for you.
+            </>
+          }
+        />
+      ) : null}
 
       <Card className="mb-6 border-2 border-primary/30">
         <CardContent className="space-y-3 p-4 sm:p-6">
@@ -719,12 +720,14 @@ function ExerciseLibraryPage() {
         </CardContent>
       </Card>
 
-      <div className="mt-6 text-center text-xs text-muted-foreground">
-        Want these exercises built into a session?{" "}
-        <Link to="/create-your-own-workout" className="font-semibold text-primary">
-          Ask Smarty Coach →
-        </Link>
-      </div>
+      {!targetSection ? (
+        <div className="mt-6 text-center text-xs text-muted-foreground">
+          Want these exercises built into a session?{" "}
+          <Link to="/create-your-own-workout" className="font-semibold text-primary">
+            Ask Smarty Coach →
+          </Link>
+        </div>
+      ) : null}
 
       {targetSection ? (
         <div className="fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4 lg:bottom-6">

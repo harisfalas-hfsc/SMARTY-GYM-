@@ -240,6 +240,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         { to: "/how-it-works", label: "How It Works", Icon: BookOpen },
         ...(isAuthed ? [] : [{ to: "/smarty-workouts", label: "Smarty Workouts", Icon: Dumbbell }]),
         ...(isAuthed ? [] : [{ to: "/wod", label: "Workout of the Day", Icon: CalendarCheck }]),
+        ...(isAuthed ? [] : [{ to: "/create-your-own-workout", label: "Create Your Own Workout", Icon: Sparkles }]),
         ...(isAuthed ? [] : [{ to: "/shared-workouts", label: "Shared Workouts", Icon: Dumbbell }]),
         ...(isAuthed ? [] : [{ to: "/smarty-ritual", label: "Smarty Ritual", Icon: Sparkles }]),
         ...(isAuthed ? [] : [{ to: "/smarty-checkins", label: "Smarty Check-ins", Icon: ClipboardCheck }]),
