@@ -14,6 +14,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { loadRemote } from "@/lib/remote-data";
 import { announceInboxChanged } from "@/lib/inbox-sync";
 import { formatDate } from "@/lib/date-format";
+import { PREMIUM_WELCOME_SECTIONS } from "@/lib/premium-welcome-content";
 
 type Notification = Awaited<ReturnType<typeof listNotifications>>["notifications"][number];
 
@@ -245,7 +246,7 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                     </div>
                     {n.body ? (
                       <p
-                        className={`mt-1 text-xs leading-relaxed text-muted-foreground ${
+                        className={`mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground ${
                           isOpen ? "" : "line-clamp-2"
                         }`}
                       >
@@ -257,6 +258,25 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
 
                 {isOpen && (
                   <div className="mt-3 flex flex-wrap items-center gap-2 pl-12">
+                    {n.kind === "welcome" && (
+                      <div className="mb-2 grid w-full gap-2 sm:grid-cols-2">
+                        {PREMIUM_WELCOME_SECTIONS.map((item) => (
+                          <Link
+                            key={item.title}
+                            to={new URL(item.href).pathname}
+                            className="flex min-h-16 items-start gap-3 rounded-xl border border-border bg-secondary/40 p-3"
+                          >
+                            <span className="text-lg" aria-hidden="true">{item.icon}</span>
+                            <span className="min-w-0">
+                              <span className="block text-xs font-bold text-foreground">{item.title}</span>
+                              <span className="mt-0.5 block text-[11px] leading-relaxed text-muted-foreground">
+                                {item.body}
+                              </span>
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                     {n.kind === "blog" && n.dedupe_key?.startsWith("blog:") && (
                       <Link
                         to="/blog/$slug"

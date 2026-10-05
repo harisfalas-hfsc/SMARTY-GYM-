@@ -568,6 +568,13 @@
       "when": 1791195345870,
       "tag": "0080_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 81,
+      "version": "7",
+      "when": 1791212235972,
+      "tag": "0081_track_first_premium_welcome",
+      "breakpoints": true
     }
   ]
 }
