@@ -1906,6 +1906,7 @@ export type Database = {
           environment: string
           id: string
           last_event_at: number | null
+          premium_welcome_sent_at: string | null
           price_id: string | null
           product_id: string | null
           provider: string
@@ -1923,6 +1924,7 @@ export type Database = {
           environment?: string
           id?: string
           last_event_at?: number | null
+          premium_welcome_sent_at?: string | null
           price_id?: string | null
           product_id?: string | null
           provider: string
@@ -1940,6 +1942,7 @@ export type Database = {
           environment?: string
           id?: string
           last_event_at?: number | null
+          premium_welcome_sent_at?: string | null
           price_id?: string | null
           product_id?: string | null
           provider?: string
