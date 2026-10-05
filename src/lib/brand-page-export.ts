@@ -47,7 +47,9 @@ export async function exportBrandPagePdf(kind: ExportKind, root: HTMLElement) {
   const originalMaxWidth = root.style.maxWidth;
   root.style.width = "1136px";
   root.style.maxWidth = "none";
-  await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  await new Promise<void>((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+  );
   const blocks = Array.from(root.querySelectorAll<HTMLElement>("[data-pdf-block]"));
   if (!blocks.length) throw new Error("No printable page content was found.");
 
