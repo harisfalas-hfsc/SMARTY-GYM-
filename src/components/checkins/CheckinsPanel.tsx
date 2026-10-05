@@ -24,6 +24,7 @@ import { getCheckinState, submitCheckin } from "@/lib/checkins.functions";
 import type { CheckinRow, MorningInput, NightInput } from "@/lib/checkins/score";
 import { MorningCheckinForm, NightCheckinForm } from "./CheckinForms";
 import { formatDate } from "@/lib/date-format";
+import smartyGymLogo from "@/assets/smartygym-icon-transparent.png";
 
 export type CheckinState = Awaited<ReturnType<typeof getCheckinState>>;
 export const CHECKINS_CHANGED = "smarty:checkins-changed";
@@ -111,8 +112,20 @@ function StatusIcon({ state }: { state: "done" | "pending" | "missed" | "upcomin
   return <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />;
 }
 
-async function exportCheckins(kind: "pdf" | "docx", rows: CheckinRow[]) {
-  const head = ["Date", "Sleep", "Quality", "Ready", "Sore", "Mood", "Steps", "Water", "Protein", "Strain", "Score"];
+async function imageDataUrl(src: string) {
+  const response = await fetch(src);
+  if (!response.ok) throw new Error("The SMARTYGYM logo could not be loaded.");
+  const blob = await response.blob();
+  return await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("The SMARTYGYM logo could not be prepared."));
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function exportCheckins(rows: CheckinRow[]) {
+  const head = ["Date", "Sleep", "Quality", "Ready", "Recovery", "Mood", "Steps", "Water", "Protein", "Strain", "Score"];
   const steps = ["", "0-2k", "2-5k", "5-8k", "8-10k", "10k+"];
   const body = rows.map((r) => [
     r.checkin_date,
@@ -128,52 +141,175 @@ async function exportCheckins(kind: "pdf" | "docx", rows: CheckinRow[]) {
     r.daily_smarty_score != null ? String(r.daily_smarty_score) : "–",
   ]);
   const name = `smarty-checkins-${new Date().toISOString().slice(0, 10)}`;
-  if (kind === "pdf") {
-    const { jsPDF } = await import("jspdf");
-    const doc = new jsPDF({ orientation: "landscape" });
-    doc.setFontSize(16);
-    doc.text("SMARTYGYM — Smarty Check-ins", 14, 16);
+  const { jsPDF } = await import("jspdf");
+  const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+  const logo = await imageDataUrl(smartyGymLogo);
+  const W = 297;
+  const H = 210;
+  const navy: [number, number, number] = [17, 24, 39];
+  const cyan: [number, number, number] = [34, 199, 232];
+  const lime: [number, number, number] = [163, 208, 10];
+  const ink: [number, number, number] = [31, 41, 55];
+  const muted: [number, number, number] = [100, 116, 139];
+  const complete = rows.filter((r) => r.status === "complete");
+  const scored = rows.filter((r) => r.daily_smarty_score != null);
+  const avgScore = scored.length
+    ? Math.round(scored.reduce((sum, r) => sum + (r.daily_smarty_score ?? 0), 0) / scored.length)
+    : 0;
+  const completion = rows.length ? Math.round((complete.length / rows.length) * 100) : 0;
+  const latestScore = scored[0]?.daily_smarty_score ?? 0;
+  const latestDate = rows[0]?.checkin_date ?? "No entries";
+
+  const footer = (page: number) => {
+    doc.setDrawColor(203, 213, 225);
+    doc.line(14, 198, 283, 198);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    doc.text("SMARTYGYM  |  Your Gym Re-imagined. Anywhere, Anytime.", 14, 203.5);
+    doc.text(`Private member report  |  Page ${page}`, 283, 203.5, { align: "right" });
+  };
+  const header = (title: string, subtitle: string) => {
+    doc.setFillColor(...navy);
+    doc.rect(0, 0, W, 34, "F");
+    doc.addImage(logo, "PNG", 14, 5, 23, 23);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(19);
+    doc.text(title, 43, 15);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(183, 224, 235);
     doc.setFontSize(9);
-    let y = 28;
-    const col = (i: number) => 14 + i * 25;
-    head.forEach((h, i) => doc.text(h, col(i), y));
-    y += 6;
-    for (const row of body) {
-      if (y > 195) {
-        doc.addPage();
-        y = 16;
-      }
-      row.forEach((c, i) => doc.text(c, col(i), y));
-      y += 6;
-    }
-    doc.save(`${name}.pdf`);
-    return;
-  }
-  const d = await import("docx");
-  const cell = (t: string, bold = false) =>
-    new d.TableCell({ children: [new d.Paragraph({ children: [new d.TextRun({ text: t, bold, size: 18 })] })] });
-  const doc = new d.Document({
-    sections: [
-      {
-        children: [
-          new d.Paragraph({ children: [new d.TextRun({ text: "SMARTYGYM — Smarty Check-ins", bold: true, size: 32 })] }),
-          new d.Table({
-            width: { size: 100, type: d.WidthType.PERCENTAGE },
-            rows: [
-              new d.TableRow({ children: head.map((h) => cell(h, true)) }),
-              ...body.map((r) => new d.TableRow({ children: r.map((c) => cell(c)) })),
-            ],
-          }),
-        ],
-      },
-    ],
+    doc.text(subtitle, 43, 23);
+    doc.setFillColor(...lime);
+    doc.rect(0, 34, W, 2, "F");
+  };
+  const pageBackground = () => {
+    doc.setFillColor(245, 248, 250);
+    doc.rect(0, 36, W, H - 36, "F");
+  };
+
+  header("SMARTY CHECK-INS", "Personal progress report");
+  pageBackground();
+  doc.setTextColor(...ink);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(15);
+  doc.text("Your check-in snapshot", 14, 49);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(...muted);
+  doc.text(`Generated ${new Date().toLocaleDateString()}  |  ${rows.length} recorded days  |  Latest entry ${latestDate}`, 14, 56);
+
+  const kpis = [
+    { label: "AVERAGE SCORE", value: `${avgScore}/100`, description: "Your mean Daily Smarty Score across all fully scored check-ins.", color: cyan },
+    { label: "COMPLETION", value: `${completion}%`, description: "The share of recorded days with both morning and night check-ins.", color: lime },
+    { label: "COMPLETE DAYS", value: String(complete.length), description: "Days where both daily check-ins were completed and combined.", color: [245, 158, 11] as [number, number, number] },
+    { label: "LATEST SCORE", value: `${latestScore}/100`, description: "Your most recent complete Daily Smarty Score in this report.", color: [236, 72, 153] as [number, number, number] },
+  ];
+  kpis.forEach((kpi, index) => {
+    const x = 14 + index * 68;
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(x, 64, 63, 39, 2, 2, "F");
+    doc.setFillColor(...kpi.color);
+    doc.roundedRect(x, 64, 3, 39, 1.5, 1.5, "F");
+    doc.setTextColor(...kpi.color);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.text(kpi.label, x + 8, 73);
+    doc.setTextColor(...ink);
+    doc.setFontSize(20);
+    doc.text(kpi.value, x + 8, 85);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7);
+    doc.setTextColor(...muted);
+    doc.text(doc.splitTextToSize(kpi.description, 49), x + 8, 93);
   });
-  const blob = await d.Packer.toBlob(doc);
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `${name}.docx`;
-  a.click();
-  URL.revokeObjectURL(a.href);
+
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(14, 111, 269, 76, 2, 2, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...ink);
+  doc.text("Daily Smarty Score trend", 21, 122);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.setTextColor(...muted);
+  doc.text("The score combines sleep, readiness, movement, hydration, protein, mood and daily strain. Higher is better.", 21, 128);
+  const trend = [...scored].reverse().slice(-30);
+  const chartX = 23;
+  const chartY = 174;
+  const chartW = 250;
+  const chartH = 35;
+  doc.setDrawColor(226, 232, 240);
+  [0, 25, 50, 75, 100].forEach((tick) => {
+    const y = chartY - (tick / 100) * chartH;
+    doc.line(chartX, y, chartX + chartW, y);
+    doc.setFontSize(6.5);
+    doc.setTextColor(...muted);
+    doc.text(String(tick), chartX - 3, y + 1.5, { align: "right" });
+  });
+  if (trend.length > 1) {
+    doc.setDrawColor(...cyan);
+    doc.setLineWidth(1.2);
+    trend.forEach((row, index) => {
+      if (index === 0) return;
+      const previous = trend[index - 1];
+      if (!previous) return;
+      const x1 = chartX + ((index - 1) / (trend.length - 1)) * chartW;
+      const x2 = chartX + (index / (trend.length - 1)) * chartW;
+      const y1 = chartY - ((previous.daily_smarty_score ?? 0) / 100) * chartH;
+      const y2 = chartY - ((row.daily_smarty_score ?? 0) / 100) * chartH;
+      doc.line(x1, y1, x2, y2);
+    });
+  } else {
+    doc.setFontSize(9);
+    doc.setTextColor(...muted);
+    doc.text("Complete at least two full check-in days to create your trend line.", chartX + chartW / 2, 157, { align: "center" });
+  }
+  footer(1);
+
+  const widths = [28, 20, 19, 19, 22, 19, 22, 20, 20, 19, 21];
+  const drawTableHeader = (y: number) => {
+    doc.setFillColor(34, 199, 232);
+    doc.rect(14, y, 269, 9, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(6.8);
+    doc.setTextColor(...navy);
+    let x = 14;
+    head.forEach((label, index) => {
+      doc.text(label, x + 2, y + 5.8);
+      x += widths[index] ?? 20;
+    });
+  };
+  const rowsPerPage = 20;
+  for (let offset = 0; offset < body.length; offset += rowsPerPage) {
+    doc.addPage("a4", "landscape");
+    const page = 2 + Math.floor(offset / rowsPerPage);
+    header("CHECK-IN HISTORY", "Your recorded daily measures");
+    pageBackground();
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    doc.text("A dash means that measure was not recorded for that day. Recovery is higher when soreness is lower.", 14, 47);
+    drawTableHeader(53);
+    body.slice(offset, offset + rowsPerPage).forEach((row, rowIndex) => {
+      const y = 62 + rowIndex * 6.2;
+      if (rowIndex % 2 === 0) {
+        doc.setFillColor(234, 240, 244);
+        doc.rect(14, y, 269, 6.2, "F");
+      }
+      doc.setFont("helvetica", rowIndex === 0 && offset === 0 ? "bold" : "normal");
+      doc.setFontSize(7);
+      doc.setTextColor(...ink);
+      let x = 14;
+      row.forEach((value, index) => {
+        doc.text(value, x + 2, y + 4.2);
+        x += widths[index] ?? 20;
+      });
+    });
+    footer(page);
+  }
+  doc.save(`${name}.pdf`);
 }
 
 /** Smarty Check-ins inside Logbook → Progress. */
@@ -343,11 +479,8 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="font-bold">History</p>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" disabled={!state.checkins.length} onClick={() => void exportCheckins("pdf", state.checkins)}>
+            <Button size="sm" variant="outline" disabled={!state.checkins.length} onClick={() => void exportCheckins(state.checkins)}>
               <Download className="mr-1 h-4 w-4" /> PDF
-            </Button>
-            <Button size="sm" variant="outline" disabled={!state.checkins.length} onClick={() => void exportCheckins("docx", state.checkins)}>
-              <Download className="mr-1 h-4 w-4" /> Word
             </Button>
           </div>
         </div>
