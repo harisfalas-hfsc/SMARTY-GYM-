@@ -43,6 +43,11 @@ export async function exportBrandPagePdf(kind: ExportKind, root: HTMLElement) {
   ]);
   const content = documents[kind];
   const logo = await imageDataUrl(logoUrl);
+  const originalWidth = root.style.width;
+  const originalMaxWidth = root.style.maxWidth;
+  root.style.width = "1136px";
+  root.style.maxWidth = "none";
+  await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   const blocks = Array.from(root.querySelectorAll<HTMLElement>("[data-pdf-block]"));
   if (!blocks.length) throw new Error("No printable page content was found.");
 
@@ -87,6 +92,7 @@ export async function exportBrandPagePdf(kind: ExportKind, root: HTMLElement) {
   };
 
   decoratePage();
+  try {
   for (const block of blocks) {
     const canvas = await html2canvas(block, {
       backgroundColor: "#ffffff",
@@ -136,6 +142,10 @@ export async function exportBrandPagePdf(kind: ExportKind, root: HTMLElement) {
       y += sliceMm + gap;
       if (sourceY < canvas.height) newPage();
     }
+  }
+  } finally {
+    root.style.width = originalWidth;
+    root.style.maxWidth = originalMaxWidth;
   }
 
   doc.save(content.filename);

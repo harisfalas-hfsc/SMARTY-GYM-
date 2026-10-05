@@ -525,7 +525,7 @@ function TheSmartyMethod() {
           </div>
 
           {/* Decorative Charts */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6">
             <Card className="border-primary/20">
               <CardContent className="p-5">
                 <div className="mb-3 flex items-center gap-2">
