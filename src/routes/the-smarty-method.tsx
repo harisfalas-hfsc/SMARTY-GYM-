@@ -15,6 +15,7 @@ import {
   ClipboardList,
   ChevronRight,
   Award,
+  BarChart3,
   Activity,
   Waves,
   Mountain,
