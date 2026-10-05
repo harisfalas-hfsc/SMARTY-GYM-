@@ -38,10 +38,11 @@ async function upsertSubscription(subscription: any, env: StripeEnv, eventCreate
 
   const { data: existing } = await supabase
     .from("subscriptions")
-    .select("id,last_event_at")
+    .select("id,user_id,last_event_at")
     .eq("provider_subscription_id", subscription.id)
     .maybeSingle();
 
+  let savedUserId = userId as string | undefined;
   if (existing?.id) {
     // Ignore events older than the newest one already applied (out-of-order delivery).
     const prev = Number(existing.last_event_at) || 0;
@@ -49,31 +50,37 @@ async function upsertSubscription(subscription: any, env: StripeEnv, eventCreate
     if (prev && next && next < prev) return;
     const { error } = await supabase.from("subscriptions").update(row).eq("id", existing.id);
     if (error) throw new Error(`Subscription update failed: ${error.message}`);
-    return;
+    savedUserId = existing.user_id;
+  } else {
+    if (!userId) {
+      console.error("Stripe subscription without userId metadata:", subscription.id);
+      return;
+    }
+    // A member has one Stripe row; replace an older one (e.g. after a cancelled plan).
+    const { error: insertError } = await supabase
+      .from("subscriptions")
+      .upsert({ ...row, user_id: userId }, { onConflict: "user_id,provider" });
+    if (insertError) throw new Error(`Subscription save failed: ${insertError.message}`);
   }
-  if (!userId) {
-    console.error("Stripe subscription without userId metadata:", subscription.id);
-    return;
-  }
-  // A member has one Stripe row; replace an older one (e.g. after a cancelled plan).
-  const { error: insertError } = await supabase
-    .from("subscriptions")
-    .upsert({ ...row, user_id: userId }, { onConflict: "user_id,provider" });
-  if (insertError) throw new Error(`Subscription save failed: ${insertError.message}`);
 
-  // Tell the owner about every new paying member.
-  if (["active", "trialing"].includes(subscription.status)) {
+  if (["active", "trialing"].includes(subscription.status) && savedUserId) {
+    const { sendFirstPremiumWelcome } = await import("@/lib/premium-welcome.server");
+    await sendFirstPremiumWelcome({ db: supabase, userId: savedUserId });
+  }
+
+  // Tell the owner about every newly created paying membership.
+  if (!existing?.id && ["active", "trialing"].includes(subscription.status) && savedUserId) {
     try {
       const { data: prof } = await supabase
         .from("profiles")
         .select("email,display_name")
-        .eq("id", userId)
+        .eq("id", savedUserId)
         .maybeSingle();
       const { notifyAdmins } = await import("@/lib/admin-alert.server");
       await notifyAdmins({
         kind: "Payment",
         title: env === "live" ? "New Premium member" : "New Premium member (test payment)",
-        details: `${prof?.display_name ? prof.display_name + " — " : ""}${prof?.email ?? userId} started a SmartyGym Premium membership (€9.99/month).`,
+        details: `${prof?.display_name ? prof.display_name + " — " : ""}${prof?.email ?? savedUserId} started a SmartyGym Premium membership (€9.99/month).`,
         link: "https://smartygym.com/admin",
         dedupeKey: `new-premium-${subscription.id}`,
       });
