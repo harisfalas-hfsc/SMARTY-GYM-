@@ -61,7 +61,15 @@ export function Navigation() {
     };
   }, [menuOpen]);
 
-  const canGoBack = navCount > 0 && pathname !== "/";
+  const canGoBack = pathname !== "/";
+
+  const handleBack = () => {
+    if (navCount > 0 || window.history.length > 1) {
+      router.history.back();
+      return;
+    }
+    void navigate({ to: "/" });
+  };
 
   async function handleSignOut() {
     await signOutAndClearDevice(user?.id, user?.email);
@@ -107,7 +115,7 @@ export function Navigation() {
           {canGoBack && (
             <button
               type="button"
-              onClick={() => router.history.back()}
+              onClick={handleBack}
               aria-label="Go back"
               className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-primary text-primary hover:bg-primary/10"
             >

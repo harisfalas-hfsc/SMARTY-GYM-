@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Button } from "@/components/ui/button";
@@ -160,11 +160,13 @@ const inactivityByAgeData = [
 
 function WhyInvestInSmartyGym() {
   const [exporting, setExporting] = useState(false);
+  const pdfContentRef = useRef<HTMLDivElement>(null);
 
   const downloadPdf = async () => {
     setExporting(true);
     try {
-      await exportBrandPagePdf("investment");
+      if (!pdfContentRef.current) throw new Error("The guide is not ready.");
+      await exportBrandPagePdf("investment", pdfContentRef.current);
       toast.success("Your SmartyGym PDF is ready.");
     } catch {
       toast.error("The PDF could not be prepared. Please try again.");
@@ -192,8 +194,9 @@ function WhyInvestInSmartyGym() {
           <span className="text-foreground">Why Invest in SmartyGym</span>
         </nav>
 
+        <div ref={pdfContentRef}>
         {/* Header */}
-        <div className="mb-8 text-center">
+        <div data-pdf-block className="mb-8 text-center">
           <div className="mb-2 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3">
             <TrendingUp className="h-8 w-8 text-primary" />
             <h1 className="text-3xl font-bold sm:text-4xl">
@@ -203,14 +206,14 @@ function WhyInvestInSmartyGym() {
           <p className="mx-auto max-w-2xl text-muted-foreground">
             The science behind structured fitness and lasting transformation
           </p>
-          <Button type="button" variant="outline" className="mt-5 gap-2" onClick={downloadPdf} disabled={exporting}>
+          <Button data-pdf-exclude type="button" variant="outline" className="mt-5 gap-2" onClick={downloadPdf} disabled={exporting}>
             <Download className="h-4 w-4" />
             {exporting ? "Preparing PDF" : "Download this guide as PDF"}
           </Button>
         </div>
 
         {/* Description Card */}
-        <Card className="mb-8 border-2 border-primary/30">
+        <Card data-pdf-block className="mb-8 border-2 border-primary/30">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2">
               <Heart className="h-5 w-5 text-primary" />
@@ -233,7 +236,7 @@ function WhyInvestInSmartyGym() {
         <Card className="border-2 border-primary/50 bg-gradient-to-br from-primary/5 to-background">
           <CardContent className="space-y-10 p-6 sm:p-8">
             {/* Section 1: Foundation of Human Performance */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <Brain className="h-6 w-6 text-primary" />
@@ -278,7 +281,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* Section 2: Exercise & Mental Health Chart */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <Smile className="h-6 w-6 text-primary" />
@@ -339,7 +342,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* Section 3: The Modern Fitness Challenge */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <Zap className="h-6 w-6 text-primary" />
@@ -394,7 +397,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* Section 4: Consistency Science */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <BarChart3 className="h-6 w-6 text-primary" />
@@ -458,7 +461,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* Section 5: Adherence Rates */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <CheckCircle2 className="h-6 w-6 text-primary" />
@@ -508,7 +511,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* Section 6: Impact on Life Roles */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <Users className="h-6 w-6 text-primary" />
@@ -566,7 +569,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* The Online Fitness Platform Revolution */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <Smartphone className="h-6 w-6 text-primary" />
@@ -603,7 +606,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* Section 7: The SmartyGym Ecosystem */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <Award className="h-6 w-6 text-primary" />
@@ -721,7 +724,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* Section 8: Physical Inactivity Crisis */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-destructive/20 p-2">
                   <Activity className="h-6 w-6 text-destructive" />
@@ -788,7 +791,7 @@ function WhyInvestInSmartyGym() {
             </section>
 
             {/* Section 9: Accessibility */}
-            <section>
+            <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-full bg-primary/20 p-2">
                   <Smartphone className="h-6 w-6 text-primary" />
@@ -825,7 +828,7 @@ function WhyInvestInSmartyGym() {
         </Card>
 
         {/* CTA Section */}
-        <Card className="mt-8 border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-background">
+        <Card data-pdf-block className="mt-8 border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-background">
           <CardContent className="p-6 text-center">
             <Dumbbell className="mx-auto mb-4 h-12 w-12 text-primary" />
             <h2 className="mb-2 text-2xl font-bold">Ready to Transform Your Performance?</h2>
@@ -852,7 +855,7 @@ function WhyInvestInSmartyGym() {
         </Card>
 
         {/* References Section */}
-        <Card className="mt-8 border border-muted">
+        <Card data-pdf-block className="mt-8 border border-muted">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-primary" />
@@ -986,6 +989,7 @@ function WhyInvestInSmartyGym() {
             </ol>
           </CardContent>
         </Card>
+        </div>
       </main>
     </div>
   );
