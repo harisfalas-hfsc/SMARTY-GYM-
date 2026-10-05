@@ -372,11 +372,11 @@ function TheSmartyMethod() {
         <div ref={pdfContentRef}>
         {/* Hero / Introduction */}
         <section data-pdf-block className="mb-16 text-center">
-          <h1 className="mb-6 text-3xl font-extrabold uppercase tracking-tight sm:text-4xl md:text-5xl">
+          <h1 className="mb-4 text-3xl font-bold sm:text-4xl">
             More Than Workouts.{" "}
             <span className="text-primary">A Complete Performance System.</span>
           </h1>
-          <p className="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          <p className="mx-auto max-w-3xl leading-relaxed text-muted-foreground">
             <SG /> is not a collection of random workouts. It is a structured ecosystem designed by
             Strength and Conditioning Coach{" "}
             <Link to="/haris-falas" className="font-semibold text-primary hover:underline">
@@ -477,7 +477,7 @@ function TheSmartyMethod() {
           <p className="mx-auto mb-8 max-w-2xl text-center text-muted-foreground">
             A complete, interconnected system where every component supports your progress.
           </p>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6">
             {ecosystemItems.map((item) => (
               <Link to={item.link} key={item.title} className="group">
                 <Card className="h-full border-primary/20 transition-all hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10">
@@ -525,14 +525,14 @@ function TheSmartyMethod() {
           </div>
 
           {/* Decorative Charts */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6">
             <Card className="border-primary/20">
               <CardContent className="p-5">
                 <div className="mb-3 flex items-center gap-2">
                   <LineChartIcon className="h-4 w-4 text-primary" />
                   <h3 className="text-sm font-semibold">Strength Progress</h3>
                 </div>
-                <div className="h-32">
+                <div className="h-64 sm:h-72">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={progressData}>
                       <defs>
@@ -544,7 +544,7 @@ function TheSmartyMethod() {
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
                       <XAxis dataKey="week" tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
                       <YAxis hide />
-                      <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="url(#progressGradient)" strokeWidth={2} />
+                      <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="url(#progressGradient)" strokeWidth={3} isAnimationActive={false} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -560,13 +560,13 @@ function TheSmartyMethod() {
                   <BarChart3 className="h-4 w-4 text-primary" />
                   <h3 className="text-sm font-semibold">Weekly Consistency</h3>
                 </div>
-                <div className="h-32">
+                <div className="h-64 sm:h-72">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={workoutFrequencyData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
                       <XAxis dataKey="day" tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
                       <YAxis hide />
-                      <Bar dataKey="sessions" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="sessions" fill="#22c55e" radius={[4, 4, 0, 0]} isAnimationActive={false} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
