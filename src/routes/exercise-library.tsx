@@ -132,6 +132,7 @@ type Exercise = {
 };
 
 const ALL = "all";
+type PreferenceFilter = "all" | "liked" | "disliked";
 
 function normalize(term: string): string[] {
   const n = term.toLowerCase().trim();
@@ -291,6 +292,7 @@ function ExerciseLibraryPage() {
   const [equipment, setEquipment] = useState(ALL);
   const [target, setTarget] = useState(ALL);
   const [difficulty, setDifficulty] = useState(ALL);
+  const [preferenceFilter, setPreferenceFilter] = useState<PreferenceFilter>("liked");
   const [selected, setSelected] = useState<Exercise | null>(null);
   const [options, setOptions] = useState<{
     bodyParts: string[];
@@ -304,14 +306,21 @@ function ExerciseLibraryPage() {
   const [savingId, setSavingId] = useState<string | null>(null);
   // Rule-allowed exercises are liked by default for everyone.
   const [allowedIds, setAllowedIds] = useState<Set<string>>(new Set());
+  const [allowedReady, setAllowedReady] = useState(false);
+  const [preferencesReady, setPreferencesReady] = useState(false);
 
   useEffect(() => {
     let active = true;
     getAllowedExerciseIds()
       .then((ids) => {
-        if (active) setAllowedIds(new Set(ids));
+        if (active) {
+          setAllowedIds(new Set(ids));
+          setAllowedReady(true);
+        }
       })
-      .catch(() => undefined);
+      .catch(() => {
+        if (active) setAllowedReady(true);
+      });
     return () => {
       active = false;
     };
@@ -320,14 +329,21 @@ function ExerciseLibraryPage() {
   useEffect(() => {
     if (!user) {
       setPrefs(null);
+      setPreferencesReady(true);
       return;
     }
     let active = true;
+    setPreferencesReady(false);
     getExercisePreferences()
       .then((p) => {
-        if (active) setPrefs(p);
+        if (active) {
+          setPrefs(p);
+          setPreferencesReady(true);
+        }
       })
-      .catch(() => undefined);
+      .catch(() => {
+        if (active) setPreferencesReady(true);
+      });
     return () => {
       active = false;
     };
@@ -462,41 +478,63 @@ function ExerciseLibraryPage() {
   }, []);
 
   const fetchExercises = useCallback(async () => {
+    if (!allowedReady || !preferencesReady) return;
     setLoading(true);
-    let query = supabase
-      .from("exercises")
-      .select(
-        "id,name,body_part,equipment,target_muscle,secondary_muscles,instructions,difficulty,category,description,gif_path",
-      );
+    const likedIds = new Set([...allowedIds, ...(prefs?.favoriteIds ?? [])]);
+    for (const id of prefs?.dislikedIds ?? []) likedIds.delete(id);
+    const preferenceIds =
+      preferenceFilter === "liked"
+        ? [...likedIds]
+        : preferenceFilter === "disliked"
+          ? (prefs?.dislikedIds ?? [])
+          : null;
 
-    if (bodyPart !== ALL) query = query.eq("body_part", bodyPart);
-    if (equipment !== ALL) query = query.eq("equipment", equipment);
-    if (target !== ALL) query = query.eq("target_muscle", target);
-    if (difficulty !== ALL) query = query.eq("difficulty", difficulty);
-
-    if (nameSearch.trim()) {
-      const conditions = normalize(nameSearch)
-        .flatMap((t) => [
-          `name.ilike.%${t}%`,
-          `target_muscle.ilike.%${t}%`,
-          `body_part.ilike.%${t}%`,
-          `equipment.ilike.%${t}%`,
-        ])
-        .join(",");
-      if (conditions) query = query.or(conditions);
-    }
+    const buildQuery = (ids?: string[]) => {
+      let query = supabase
+        .from("exercises")
+        .select(
+          "id,name,body_part,equipment,target_muscle,secondary_muscles,instructions,difficulty,category,description,gif_path",
+        );
+      if (bodyPart !== ALL) query = query.eq("body_part", bodyPart);
+      if (equipment !== ALL) query = query.eq("equipment", equipment);
+      if (target !== ALL) query = query.eq("target_muscle", target);
+      if (difficulty !== ALL) query = query.eq("difficulty", difficulty);
+      if (ids) query = query.in("id", ids);
+      if (nameSearch.trim()) {
+        const conditions = normalize(nameSearch)
+          .flatMap((t) => [
+            `name.ilike.%${t}%`,
+            `target_muscle.ilike.%${t}%`,
+            `body_part.ilike.%${t}%`,
+            `equipment.ilike.%${t}%`,
+          ])
+          .join(",");
+        if (conditions) query = query.or(conditions);
+      }
+      return query;
+    };
 
     const rows = await loadRemote(
-      `library:list:${bodyPart}|${equipment}|${target}|${difficulty}|${nameSearch.trim()}`,
+      `library:list:${bodyPart}|${equipment}|${target}|${difficulty}|${preferenceFilter}|${nameSearch.trim()}|${preferenceIds?.join(",") ?? "all"}`,
       async () => {
-        const { data, error } = await query.order("name").limit(60);
-        if (error) throw new Error(error.message);
-        return (data as Exercise[]) ?? [];
+        if (preferenceIds?.length === 0) return [] as Exercise[];
+        if (!preferenceIds) {
+          const { data, error } = await buildQuery().order("name").limit(60);
+          if (error) throw new Error(error.message);
+          return (data as Exercise[]) ?? [];
+        }
+        const batches: Exercise[][] = [];
+        for (let index = 0; index < preferenceIds.length; index += 150) {
+          const { data, error } = await buildQuery(preferenceIds.slice(index, index + 150)).order("name");
+          if (error) throw new Error(error.message);
+          batches.push((data as Exercise[]) ?? []);
+        }
+        return batches.flat().sort((a, b) => a.name.localeCompare(b.name)).slice(0, 60);
       },
     ).catch(() => [] as Exercise[]);
     setExercises(rows);
     setLoading(false);
-  }, [bodyPart, equipment, target, difficulty, nameSearch]);
+  }, [allowedIds, allowedReady, bodyPart, difficulty, equipment, nameSearch, preferenceFilter, preferencesReady, prefs, target]);
 
   useEffect(() => {
     if (debounce.current) clearTimeout(debounce.current);
@@ -512,10 +550,12 @@ function ExerciseLibraryPage() {
     setEquipment(ALL);
     setTarget(ALL);
     setDifficulty(ALL);
+    setPreferenceFilter("liked");
   };
 
   const hasFilters =
     nameSearch.trim() !== "" ||
+    preferenceFilter !== "liked" ||
     [bodyPart, equipment, target, difficulty].some((v) => v !== ALL);
 
   const filters: { label: string; value: string; set: (v: string) => void; items: string[] }[] = [
@@ -577,10 +617,10 @@ function ExerciseLibraryPage() {
 
           </div>
 
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 lg:grid-cols-5">
             {filters.map((f) => (
               <Select key={f.label} value={f.value} onValueChange={f.set}>
-                <SelectTrigger aria-label={f.label}>
+                <SelectTrigger aria-label={f.label} className="h-9 min-w-0 px-2 text-xs xl:px-3 xl:text-sm">
                   <SelectValue placeholder={f.label} />
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
@@ -593,6 +633,16 @@ function ExerciseLibraryPage() {
                 </SelectContent>
               </Select>
             ))}
+            <Select value={preferenceFilter} onValueChange={(value) => setPreferenceFilter(value as PreferenceFilter)}>
+              <SelectTrigger aria-label="Exercise preference" className="h-9 min-w-0 px-2 text-xs xl:px-3 xl:text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="liked">Liked only</SelectItem>
+                <SelectItem value="disliked">Disliked only</SelectItem>
+                <SelectItem value="all">All preferences</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex items-center justify-between gap-3">
