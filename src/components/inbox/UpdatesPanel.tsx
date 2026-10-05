@@ -2,7 +2,21 @@ import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { CheckCheck, Loader2, Mail, MailOpen, Trash2, X } from "lucide-react";
+import {
+  BookOpen,
+  CalendarDays,
+  CheckCheck,
+  CirclePlus,
+  ClipboardCheck,
+  Dumbbell,
+  Loader2,
+  Mail,
+  MailOpen,
+  Sunrise,
+  Timer,
+  Trash2,
+  X,
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import {
@@ -17,6 +31,16 @@ import { formatDate } from "@/lib/date-format";
 import { PREMIUM_WELCOME_SECTIONS } from "@/lib/premium-welcome-content";
 
 type Notification = Awaited<ReturnType<typeof listNotifications>>["notifications"][number];
+
+const welcomeIcons = {
+  workouts: Dumbbell,
+  daily: CalendarDays,
+  create: CirclePlus,
+  tools: Timer,
+  blog: BookOpen,
+  checkins: ClipboardCheck,
+  ritual: Sunrise,
+} as const;
 
 function when(iso: string) {
   const d = new Date(iso);
@@ -260,21 +284,26 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                   <div className="mt-3 flex flex-wrap items-center gap-2 pl-12">
                     {n.kind === "welcome" && (
                       <div className="mb-2 grid w-full gap-2 sm:grid-cols-2">
-                        {PREMIUM_WELCOME_SECTIONS.map((item) => (
-                          <Link
-                            key={item.title}
-                            to={new URL(item.href).pathname}
-                            className="flex min-h-16 items-start gap-3 rounded-xl border border-border bg-secondary/40 p-3"
-                          >
-                            <span className="text-lg" aria-hidden="true">{item.icon}</span>
-                            <span className="min-w-0">
-                              <span className="block text-xs font-bold text-foreground">{item.title}</span>
-                              <span className="mt-0.5 block text-[11px] leading-relaxed text-muted-foreground">
-                                {item.body}
+                        {PREMIUM_WELCOME_SECTIONS.map((item, index) => {
+                          const WelcomeIcon = welcomeIcons[item.icon];
+                          return (
+                            <Link
+                              key={item.title}
+                              to={new URL(item.href).pathname}
+                              className="flex min-h-16 items-start gap-3 rounded-xl border border-border bg-background p-3"
+                            >
+                              <span className={`icon-tone-${index} grid h-9 w-9 shrink-0 place-items-center rounded-lg border`} aria-hidden="true">
+                                <WelcomeIcon className="h-5 w-5" />
                               </span>
-                            </span>
-                          </Link>
-                        ))}
+                              <span className="min-w-0">
+                                <span className="block text-xs font-bold text-foreground">{item.title}</span>
+                                <span className="mt-0.5 block text-[11px] leading-relaxed text-muted-foreground">
+                                  {item.body}
+                                </span>
+                              </span>
+                            </Link>
+                          );
+                        })}
                       </div>
                     )}
                     {n.kind === "blog" && n.dedupe_key?.startsWith("blog:") && (

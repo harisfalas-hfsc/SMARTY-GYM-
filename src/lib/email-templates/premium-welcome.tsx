@@ -8,6 +8,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Preview,
   Row,
   Section,
@@ -24,15 +25,17 @@ interface Props {
   name?: string
 }
 
-const tones: Record<string, { accent: string; tint: string }> = {
-  blue: { accent: '#2563eb', tint: '#eff6ff' },
-  green: { accent: '#15803d', tint: '#f0fdf4' },
-  violet: { accent: '#7c3aed', tint: '#f5f3ff' },
-  orange: { accent: '#c2410c', tint: '#fff7ed' },
-  rose: { accent: '#be123c', tint: '#fff1f2' },
-  cyan: { accent: '#0e7490', tint: '#ecfeff' },
-  yellow: { accent: '#a16207', tint: '#fefce8' },
+const tones: Record<string, { accent: string }> = {
+  blue: { accent: '#2563eb' },
+  green: { accent: '#15803d' },
+  violet: { accent: '#7c3aed' },
+  orange: { accent: '#c2410c' },
+  rose: { accent: '#be123c' },
+  cyan: { accent: '#0e7490' },
+  yellow: { accent: '#a16207' },
 }
+
+const ASSET_URL = 'https://smartygym.com/email-icons'
 
 const Email = ({ name }: Props) => (
   <Html lang="en" dir="ltr">
@@ -41,8 +44,15 @@ const Email = ({ name }: Props) => (
     <Body style={main}>
       <Container style={container}>
         <Section style={header}>
-          <Text style={brand}>SMARTYGYM</Text>
-          <Text style={eyebrow}>YOUR GYM RE-IMAGINED. ANYWHERE, ANYTIME.</Text>
+          <Row>
+            <Column style={logoCell}>
+              <Img src={`${ASSET_URL}/smartygym-logo.png`} width="64" height="64" alt="SMARTYGYM" style={logo} />
+            </Column>
+            <Column>
+              <Text style={brand}>SMARTYGYM</Text>
+              <Text style={eyebrow}>YOUR GYM RE-IMAGINED. ANYWHERE, ANYTIME.</Text>
+            </Column>
+          </Row>
           <Heading style={heading}>{premiumWelcomeTitle(name)}</Heading>
           <Text style={lead}>{PREMIUM_WELCOME_INTRO}</Text>
         </Section>
@@ -52,10 +62,16 @@ const Email = ({ name }: Props) => (
           {PREMIUM_WELCOME_SECTIONS.map((item) => {
             const tone = tones[item.tone] ?? tones.blue
             return (
-              <Section key={item.title} style={{ ...card, borderLeft: `4px solid ${tone.accent}` }}>
+              <Section key={item.title} style={card}>
                 <Row>
-                  <Column style={{ ...iconCell, backgroundColor: tone.tint }}>
-                    <Text style={icon}>{item.icon}</Text>
+                  <Column style={iconCell}>
+                    <Img
+                      src={`${ASSET_URL}/${item.icon}.png`}
+                      width="44"
+                      height="44"
+                      alt=""
+                      style={icon}
+                    />
                   </Column>
                   <Column style={copyCell}>
                     <Heading as="h2" style={{ ...cardTitle, color: tone.accent }}>
@@ -99,17 +115,19 @@ export const template = {
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif', margin: 0 }
-const container = { maxWidth: '620px', margin: '0 auto', padding: '24px 18px 32px' }
-const header = { borderTop: '6px solid #2563eb', padding: '26px 24px 24px', backgroundColor: '#f8fafc' }
-const brand = { margin: 0, color: '#2563eb', fontSize: '22px', lineHeight: '28px', fontWeight: 800 as const }
-const eyebrow = { margin: '6px 0 24px', color: '#64748b', fontSize: '10px', lineHeight: '16px', letterSpacing: '1.2px' }
+const container = { maxWidth: '620px', margin: '0 auto', padding: '24px 22px 32px' }
+const header = { borderTop: '5px solid #2563eb', padding: '22px 4px 24px' }
+const logoCell = { width: '78px', verticalAlign: 'middle' as const }
+const logo = { display: 'block', border: 0 }
+const brand = { margin: 0, color: '#2563eb', fontSize: '23px', lineHeight: '28px', fontWeight: 800 as const }
+const eyebrow = { margin: '4px 0 0', color: '#64748b', fontSize: '10px', lineHeight: '16px', letterSpacing: '1.2px' }
 const heading = { margin: '0 0 12px', color: '#0f172a', fontSize: '30px', lineHeight: '36px' }
 const lead = { margin: 0, color: '#334155', fontSize: '16px', lineHeight: '25px' }
 const guide = { padding: '22px 0 4px' }
 const guideTitle = { margin: '0 0 12px', color: '#0f172a', fontSize: '18px', lineHeight: '24px', fontWeight: 700 as const }
-const card = { margin: '0 0 12px', padding: '16px', border: '1px solid #e2e8f0', borderRadius: '8px' }
-const iconCell = { width: '48px', height: '48px', borderRadius: '8px', textAlign: 'center' as const, verticalAlign: 'top' as const }
-const icon = { margin: '12px 0 0', fontSize: '12px', lineHeight: '22px', fontWeight: 800 as const }
+const card = { margin: '0 0 12px', padding: '16px', border: '1px solid #dbe3ed', borderRadius: '8px', backgroundColor: '#ffffff' }
+const iconCell = { width: '50px', verticalAlign: 'top' as const }
+const icon = { display: 'block', margin: '2px 0 0', border: 0 }
 const copyCell = { paddingLeft: '14px', verticalAlign: 'top' as const }
 const cardTitle = { margin: '0 0 4px', fontSize: '17px', lineHeight: '22px' }
 const cardText = { margin: '0 0 6px', color: '#475569', fontSize: '14px', lineHeight: '21px' }
