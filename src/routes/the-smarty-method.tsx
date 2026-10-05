@@ -41,6 +41,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { exportBrandPagePdf } from "@/lib/brand-page-export";
+import { iconTone } from "@/lib/icon-tone";
 
 export const Route = createFileRoute("/the-smarty-method")({
   head: () => ({
@@ -120,14 +121,25 @@ const progressData = [
   { week: "W8", value: 75 },
 ];
 
-const workoutFrequencyData = [
-  { day: "Mon", sessions: 1 },
-  { day: "Tue", sessions: 1 },
-  { day: "Wed", sessions: 0 },
-  { day: "Thu", sessions: 1 },
-  { day: "Fri", sessions: 1 },
-  { day: "Sat", sessions: 1 },
-  { day: "Sun", sessions: 0 },
+const weeklyRhythmData = [
+  { day: "Mon", completed: 1, status: "Workout" },
+  { day: "Tue", completed: 2, status: "Workout" },
+  { day: "Wed", completed: 2, status: "Recovery" },
+  { day: "Thu", completed: 3, status: "Workout" },
+  { day: "Fri", completed: 4, status: "Workout" },
+  { day: "Sat", completed: 5, status: "Workout" },
+  { day: "Sun", completed: 5, status: "Recovery" },
+];
+
+const cardAccentBorders = [
+  "border-blue-500/45",
+  "border-green-500/45",
+  "border-amber-500/45",
+  "border-purple-500/45",
+  "border-rose-500/45",
+  "border-cyan-500/45",
+  "border-orange-500/45",
+  "border-pink-500/45",
 ];
 
 const wodPeriodizationCards = [
@@ -385,7 +397,7 @@ function TheSmartyMethod() {
             , built on science, real-world coaching experience, and intelligent periodization. Every
             element serves a purpose. Every session has a goal.
           </p>
-          <Button data-pdf-exclude type="button" variant="outline" className="mt-6 gap-2" onClick={downloadPdf} disabled={exporting}>
+          <Button data-pdf-exclude type="button" className="mt-6 gap-2 shadow-primary" onClick={downloadPdf} disabled={exporting}>
             <Download className="h-4 w-4" />
             {exporting ? "Preparing PDF" : "Download The Smarty Method PDF"}
           </Button>
@@ -436,11 +448,13 @@ function TheSmartyMethod() {
             parameter, and every aspect of human performance is covered — week after week.
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {wodPeriodizationCards.map((item) => (
-              <Card key={item.title} className="border-primary/30 transition-colors hover:border-primary">
+            {wodPeriodizationCards.map((item, index) => (
+              <Card key={item.title} className={`${cardAccentBorders[index % cardAccentBorders.length]} transition-colors`}>
                 <CardContent className="p-5">
                   <div className="mb-3 flex items-center gap-3">
-                    <item.icon className="h-5 w-5 flex-shrink-0 text-primary" />
+                    <div className={`${iconTone(index)} grid h-9 w-9 shrink-0 place-items-center rounded-lg border`}>
+                      <item.icon className="h-5 w-5" />
+                    </div>
                     <h3 className="text-lg font-semibold">{item.title}</h3>
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
@@ -457,10 +471,10 @@ function TheSmartyMethod() {
             Every session follows a deliberate structure. Nothing is left to chance.
           </p>
           <div className="space-y-4">
-            {workoutStructure.map((item) => (
-              <Card key={item.step} className="border-primary/20 transition-colors hover:border-primary/50">
+            {workoutStructure.map((item, index) => (
+              <Card key={item.step} className={`${cardAccentBorders[(index + 2) % cardAccentBorders.length]} transition-colors`}>
                 <CardContent className="flex items-start gap-4 p-5">
-                  <span className="w-10 flex-shrink-0 text-2xl font-bold text-primary/40">{item.step}</span>
+                  <span className={`${iconTone(index + 2)} grid h-10 w-10 flex-shrink-0 place-items-center rounded-lg border text-sm font-bold`}>{item.step}</span>
                   <div>
                     <h3 className="mb-1 text-lg font-semibold">{item.title}</h3>
                     <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
@@ -478,12 +492,14 @@ function TheSmartyMethod() {
             A complete, interconnected system where every component supports your progress.
           </p>
           <div className="grid grid-cols-1 gap-6">
-            {ecosystemItems.map((item) => (
+            {ecosystemItems.map((item, index) => (
               <Link to={item.link} key={item.title} className="group">
-                <Card className="h-full border-primary/20 transition-all hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/10">
+                <Card className={`h-full ${cardAccentBorders[index % cardAccentBorders.length]} transition-all group-hover:shadow-lg`}>
                   <CardContent className="p-5">
                     <div className="mb-3 flex items-center gap-3">
-                      <item.icon className="h-5 w-5 flex-shrink-0 text-primary" />
+                      <div className={`${iconTone(index)} grid h-9 w-9 shrink-0 place-items-center rounded-lg border`}>
+                        <item.icon className="h-5 w-5" />
+                      </div>
                       <h3 className="text-lg font-semibold">{item.title}</h3>
                       <ChevronRight className="ml-auto h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
                     </div>
@@ -505,11 +521,13 @@ function TheSmartyMethod() {
           </p>
 
           <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {logbookFeatures.map((item) => (
-              <Card key={item.title} className="border-primary/30 transition-colors hover:border-primary">
+            {logbookFeatures.map((item, index) => (
+              <Card key={item.title} className={`${cardAccentBorders[(index + 4) % cardAccentBorders.length]} transition-colors`}>
                 <CardContent className="p-5">
                   <div className="mb-3 flex items-center gap-3">
-                    <item.icon className="h-5 w-5 flex-shrink-0 text-primary" />
+                    <div className={`${iconTone(index + 4)} grid h-9 w-9 shrink-0 place-items-center rounded-lg border`}>
+                      <item.icon className="h-5 w-5" />
+                    </div>
                     <h3 className="text-lg font-semibold">{item.title}</h3>
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
@@ -558,20 +576,36 @@ function TheSmartyMethod() {
               <CardContent className="p-5">
                 <div className="mb-3 flex items-center gap-2">
                   <BarChart3 className="h-4 w-4 text-primary" />
-                  <h3 className="text-sm font-semibold">Weekly Consistency</h3>
+                   <h3 className="text-sm font-semibold">Weekly Training Rhythm</h3>
                 </div>
+                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3">
+                   <div>
+                     <p className="text-2xl font-bold text-green-600 dark:text-green-400">5 workouts</p>
+                     <p className="text-xs text-muted-foreground">completed across this example week</p>
+                   </div>
+                   <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                     <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-green-500" />Training</span>
+                     <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-amber-500" />Recovery</span>
+                   </div>
+                 </div>
                 <div className="h-64 sm:h-72">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={workoutFrequencyData}>
+                     <AreaChart data={weeklyRhythmData} margin={{ top: 12, right: 16, left: 0, bottom: 0 }}>
+                       <defs>
+                         <linearGradient id="weeklyRhythmGradient" x1="0" y1="0" x2="0" y2="1">
+                           <stop offset="5%" stopColor="var(--color-chart-2)" stopOpacity={0.4} />
+                           <stop offset="95%" stopColor="var(--color-chart-2)" stopOpacity={0} />
+                         </linearGradient>
+                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
                       <XAxis dataKey="day" tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
-                      <YAxis hide />
-                      <Bar dataKey="sessions" fill="#22c55e" radius={[4, 4, 0, 0]} isAnimationActive={false} />
-                    </BarChart>
+                       <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} width={24} allowDecimals={false} tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
+                       <Area type="stepAfter" dataKey="completed" name="Workouts completed" stroke="var(--color-chart-2)" fill="url(#weeklyRhythmGradient)" strokeWidth={3} dot={{ fill: "var(--color-chart-2)", r: 4 }} isAnimationActive={false} />
+                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Accountability creates consistency. Consistency creates results.
+                   The line rises after each completed workout and stays level on recovery days. Five sessions plus two recovery days show a consistent, sustainable week.
                 </p>
               </CardContent>
             </Card>
@@ -620,12 +654,14 @@ function TheSmartyMethod() {
                 Who is <SG /> For?
               </h3>
               <div className="mx-auto mb-8 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {audienceSegments.map((seg) => (
+                {audienceSegments.map((seg, index) => (
                   <div
                     key={seg.title}
-                    className="flex items-start gap-3 rounded-lg border border-primary/20 bg-background/50 p-4 text-left"
+                    className={`flex items-start gap-3 rounded-lg border bg-background/50 p-4 text-left ${cardAccentBorders[(index + 1) % cardAccentBorders.length]}`}
                   >
-                    <seg.icon className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
+                    <div className={`${iconTone(index + 1)} grid h-9 w-9 shrink-0 place-items-center rounded-lg border`}>
+                      <seg.icon className="h-5 w-5" />
+                    </div>
                     <div>
                       <p className="mb-1 text-sm font-semibold">{seg.title}</p>
                       <p className="text-xs leading-relaxed text-muted-foreground">{seg.description}</p>

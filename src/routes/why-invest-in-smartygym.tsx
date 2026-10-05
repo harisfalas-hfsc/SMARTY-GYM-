@@ -47,6 +47,7 @@ import {
   Tooltip,
 } from "recharts";
 import { exportBrandPagePdf } from "@/lib/brand-page-export";
+import { iconTone } from "@/lib/icon-tone";
 
 export const Route = createFileRoute("/why-invest-in-smartygym")({
   head: () => ({
@@ -206,7 +207,7 @@ function WhyInvestInSmartyGym() {
           <p className="mx-auto max-w-2xl text-muted-foreground">
             The science behind structured fitness and lasting transformation
           </p>
-          <Button data-pdf-exclude type="button" variant="outline" className="mt-5 gap-2" onClick={downloadPdf} disabled={exporting}>
+          <Button data-pdf-exclude type="button" className="mt-5 gap-2 shadow-primary" onClick={downloadPdf} disabled={exporting}>
             <Download className="h-4 w-4" />
             {exporting ? "Preparing PDF" : "Download this guide as PDF"}
           </Button>
@@ -238,8 +239,8 @@ function WhyInvestInSmartyGym() {
             {/* Section 1: Foundation of Human Performance */}
             <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-full bg-primary/20 p-2">
-                  <Brain className="h-6 w-6 text-primary" />
+                  <div className={`${iconTone(0)} rounded-full border p-2`}>
+                    <Brain className="h-6 w-6" />
                 </div>
                 <h2 className="text-2xl font-bold">The Foundation of Human Performance</h2>
               </div>
@@ -283,8 +284,8 @@ function WhyInvestInSmartyGym() {
             {/* Section 2: Exercise & Mental Health Chart */}
             <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-full bg-primary/20 p-2">
-                  <Smile className="h-6 w-6 text-primary" />
+                  <div className={`${iconTone(1)} rounded-full border p-2`}>
+                    <Smile className="h-6 w-6" />
                 </div>
                 <h2 className="text-2xl font-bold">Exercise &amp; Mental Health</h2>
               </div>
@@ -346,8 +347,8 @@ function WhyInvestInSmartyGym() {
             {/* Section 3: The Modern Fitness Challenge */}
             <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-full bg-primary/20 p-2">
-                  <Zap className="h-6 w-6 text-primary" />
+                  <div className={`${iconTone(2)} rounded-full border p-2`}>
+                    <Zap className="h-6 w-6" />
                 </div>
                 <h2 className="text-2xl font-bold">The Modern Fitness Challenge</h2>
               </div>
@@ -401,8 +402,8 @@ function WhyInvestInSmartyGym() {
             {/* Section 4: Consistency Science */}
             <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-full bg-primary/20 p-2">
-                  <BarChart3 className="h-6 w-6 text-primary" />
+                  <div className={`${iconTone(3)} rounded-full border p-2`}>
+                    <BarChart3 className="h-6 w-6" />
                 </div>
                 <h2 className="text-2xl font-bold">
                   The Science of Consistency &amp; Progressive Overload
@@ -467,8 +468,8 @@ function WhyInvestInSmartyGym() {
             {/* Section 5: Adherence Rates */}
             <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-full bg-primary/20 p-2">
-                  <CheckCircle2 className="h-6 w-6 text-primary" />
+                  <div className={`${iconTone(4)} rounded-full border p-2`}>
+                    <CheckCircle2 className="h-6 w-6" />
                 </div>
                 <h2 className="text-2xl font-bold">Why Expert-Designed Training Wins</h2>
               </div>
@@ -518,8 +519,8 @@ function WhyInvestInSmartyGym() {
             {/* Section 6: Impact on Life Roles */}
             <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-full bg-primary/20 p-2">
-                  <Users className="h-6 w-6 text-primary" />
+                  <div className={`${iconTone(5)} rounded-full border p-2`}>
+                    <Users className="h-6 w-6" />
                 </div>
                 <h2 className="text-2xl font-bold">Performance Across Life Roles</h2>
               </div>
@@ -576,8 +577,8 @@ function WhyInvestInSmartyGym() {
             {/* The Online Fitness Platform Revolution */}
             <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-full bg-primary/20 p-2">
-                  <Smartphone className="h-6 w-6 text-primary" />
+                  <div className={`${iconTone(6)} rounded-full border p-2`}>
+                    <Smartphone className="h-6 w-6" />
                 </div>
                 <h2 className="text-2xl font-bold">The Online Fitness Platform Revolution</h2>
               </div>
@@ -613,8 +614,8 @@ function WhyInvestInSmartyGym() {
             {/* Section 7: The SmartyGym Ecosystem */}
             <section data-pdf-block>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-full bg-primary/20 p-2">
-                  <Award className="h-6 w-6 text-primary" />
+                  <div className={`${iconTone(7)} rounded-full border p-2`}>
+                    <Award className="h-6 w-6" />
                 </div>
                 <h2 className="text-2xl font-bold">
                   The <span className="text-primary">SmartyGym</span> Ecosystem
