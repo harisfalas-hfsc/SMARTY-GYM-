@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Body,
   Button,
@@ -13,37 +13,37 @@ import {
   Row,
   Section,
   Text,
-} from '@react-email/components'
+} from "@react-email/components";
 import {
   PREMIUM_WELCOME_INTRO,
   PREMIUM_WELCOME_SECTIONS,
   premiumWelcomeTitle,
-} from '../premium-welcome-content'
-import blogAsset from '@/assets/email/blog.png.asset.json'
-import checkinsAsset from '@/assets/email/checkins.png.asset.json'
-import createAsset from '@/assets/email/create.png.asset.json'
-import dailyAsset from '@/assets/email/daily.png.asset.json'
-import ritualAsset from '@/assets/email/ritual.png.asset.json'
-import logoAsset from '@/assets/email/smartygym-logo.png.asset.json'
-import toolsAsset from '@/assets/email/tools.png.asset.json'
-import workoutsAsset from '@/assets/email/workouts.png.asset.json'
-import type { TemplateEntry } from './registry'
+} from "../premium-welcome-content";
+import blogAsset from "@/assets/email/blog.png.asset.json";
+import checkinsAsset from "@/assets/email/checkins.png.asset.json";
+import createAsset from "@/assets/email/create.png.asset.json";
+import dailyAsset from "@/assets/email/daily.png.asset.json";
+import ritualAsset from "@/assets/email/ritual.png.asset.json";
+import logoAsset from "@/assets/email/smartygym-logo.png.asset.json";
+import toolsAsset from "@/assets/email/tools.png.asset.json";
+import workoutsAsset from "@/assets/email/workouts.png.asset.json";
+import type { TemplateEntry } from "./registry";
 
 interface Props {
-  name?: string
+  name?: string;
 }
 
 const tones: Record<string, { accent: string }> = {
-  blue: { accent: '#2563eb' },
-  green: { accent: '#15803d' },
-  violet: { accent: '#7c3aed' },
-  orange: { accent: '#c2410c' },
-  rose: { accent: '#be123c' },
-  cyan: { accent: '#0e7490' },
-  yellow: { accent: '#a16207' },
-}
+  blue: { accent: "#2563eb" },
+  green: { accent: "#15803d" },
+  violet: { accent: "#7c3aed" },
+  orange: { accent: "#c2410c" },
+  rose: { accent: "#be123c" },
+  cyan: { accent: "#0e7490" },
+  yellow: { accent: "#a16207" },
+};
 
-const SITE_URL = 'https://smartygym.com'
+const SITE_URL = "https://smartygym.com";
 const assets: Record<string, string> = {
   workouts: `${SITE_URL}${workoutsAsset.url}`,
   daily: `${SITE_URL}${dailyAsset.url}`,
@@ -52,7 +52,7 @@ const assets: Record<string, string> = {
   blog: `${SITE_URL}${blogAsset.url}`,
   checkins: `${SITE_URL}${checkinsAsset.url}`,
   ritual: `${SITE_URL}${ritualAsset.url}`,
-}
+};
 
 const Email = ({ name }: Props) => (
   <Html lang="en" dir="ltr">
@@ -63,7 +63,13 @@ const Email = ({ name }: Props) => (
         <Section style={header}>
           <Row>
             <Column style={logoCell}>
-              <Img src={`${SITE_URL}${logoAsset.url}`} width="64" height="64" alt="SMARTYGYM" style={logo} />
+              <Img
+                src={`${SITE_URL}${logoAsset.url}`}
+                width="64"
+                height="64"
+                alt="SMARTYGYM"
+                style={logo}
+              />
             </Column>
             <Column>
               <Text style={brand}>SMARTYGYM</Text>
@@ -77,18 +83,12 @@ const Email = ({ name }: Props) => (
         <Section style={guide}>
           <Text style={guideTitle}>Your membership, at a glance</Text>
           {PREMIUM_WELCOME_SECTIONS.map((item) => {
-            const tone = tones[item.tone] ?? tones.blue
+            const tone = tones[item.tone] ?? tones.blue;
             return (
               <Section key={item.title} style={card}>
                 <Row>
                   <Column style={iconCell}>
-                    <Img
-                      src={assets[item.icon]}
-                      width="44"
-                      height="44"
-                      alt=""
-                      style={icon}
-                    />
+                    <Img src={assets[item.icon]} width="44" height="44" alt="" style={icon} />
                   </Column>
                   <Column style={copyCell}>
                     <Heading as="h2" style={{ ...cardTitle, color: tone.accent }}>
@@ -101,14 +101,17 @@ const Email = ({ name }: Props) => (
                   </Column>
                 </Row>
               </Section>
-            )
+            );
           })}
         </Section>
 
         <Section style={closingBox}>
-          <Heading as="h2" style={closingTitle}>Make SMARTYGYM yours</Heading>
+          <Heading as="h2" style={closingTitle}>
+            Make SMARTYGYM yours
+          </Heading>
           <Text style={closingText}>
-            Start wherever feels right today. Your workouts, saved progress and member tools are ready when you are.
+            Start wherever feels right today. Your workouts, saved progress and member tools are
+            ready when you are.
           </Text>
           <Button href="https://smartygym.com/smarty-workouts" style={primaryButton}>
             Start exploring
@@ -122,40 +125,90 @@ const Email = ({ name }: Props) => (
       </Container>
     </Body>
   </Html>
-)
+);
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) => premiumWelcomeTitle(data['name'] as string | undefined),
-  displayName: 'Premium member welcome',
-  previewData: { name: 'Haris' },
-} satisfies TemplateEntry
+  subject: (data: Record<string, any>) => premiumWelcomeTitle(data["name"] as string | undefined),
+  displayName: "Premium member welcome",
+  previewData: { name: "Haris" },
+} satisfies TemplateEntry;
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif', margin: 0 }
-const container = { maxWidth: '620px', margin: '0 auto', padding: '24px 22px 32px' }
-const header = { borderTop: '5px solid #2563eb', padding: '22px 4px 24px' }
-const logoCell = { width: '78px', verticalAlign: 'middle' as const }
-const logo = { display: 'block', border: 0 }
-const brand = { margin: 0, color: '#2563eb', fontSize: '23px', lineHeight: '28px', fontWeight: 800 as const }
-const eyebrow = { margin: '4px 0 0', color: '#64748b', fontSize: '10px', lineHeight: '16px', letterSpacing: '1.2px' }
-const heading = { margin: '0 0 12px', color: '#0f172a', fontSize: '30px', lineHeight: '36px' }
-const lead = { margin: 0, color: '#334155', fontSize: '16px', lineHeight: '25px' }
-const guide = { padding: '22px 0 4px' }
-const guideTitle = { margin: '0 0 12px', color: '#0f172a', fontSize: '18px', lineHeight: '24px', fontWeight: 700 as const }
-const card = { margin: '0 0 12px', padding: '16px', border: '1px solid #dbe3ed', borderRadius: '8px', backgroundColor: '#ffffff' }
-const iconCell = { width: '50px', verticalAlign: 'top' as const }
-const icon = { display: 'block', margin: '2px 0 0', border: 0 }
-const copyCell = { paddingLeft: '14px', verticalAlign: 'top' as const }
-const cardTitle = { margin: '0 0 4px', fontSize: '17px', lineHeight: '22px' }
-const cardText = { margin: '0 0 6px', color: '#475569', fontSize: '14px', lineHeight: '21px' }
-const textLink = { padding: 0, backgroundColor: 'transparent', fontSize: '13px', fontWeight: 700 as const, textDecoration: 'none' }
-const closingBox = { marginTop: '12px', padding: '22px', border: '1px solid #bfdbfe', borderRadius: '8px', textAlign: 'center' as const }
-const closingTitle = { margin: '0 0 8px', color: '#0f172a', fontSize: '20px', lineHeight: '26px' }
-const closingText = { margin: '0 0 16px', color: '#475569', fontSize: '14px', lineHeight: '22px' }
-const primaryButton = { backgroundColor: '#2563eb', color: '#ffffff', borderRadius: '8px', padding: '12px 20px', fontSize: '14px', fontWeight: 700 as const, textDecoration: 'none' }
-const hr = { borderColor: '#e2e8f0', margin: '28px 0 18px' }
-const signature = { margin: '0 0 3px', color: '#475569', fontSize: '14px', lineHeight: '20px' }
-const signatureStrong = { margin: 0, color: '#0f172a', fontSize: '14px', lineHeight: '20px', fontWeight: 800 as const }
-const footer = { margin: '2px 0 0', color: '#64748b', fontSize: '12px', lineHeight: '18px' }
+const main = { backgroundColor: "#ffffff", fontFamily: "Arial, Helvetica, sans-serif", margin: 0 };
+const container = { maxWidth: "620px", margin: "0 auto", padding: "24px 22px 32px" };
+const header = { borderTop: "5px solid #2563eb", padding: "22px 4px 24px" };
+const logoCell = { width: "78px", verticalAlign: "middle" as const };
+const logo = { display: "block", border: 0 };
+const brand = {
+  margin: 0,
+  color: "#2563eb",
+  fontSize: "23px",
+  lineHeight: "28px",
+  fontWeight: 800 as const,
+};
+const eyebrow = {
+  margin: "4px 0 0",
+  color: "#64748b",
+  fontSize: "10px",
+  lineHeight: "16px",
+  letterSpacing: "1.2px",
+};
+const heading = { margin: "0 0 12px", color: "#0f172a", fontSize: "30px", lineHeight: "36px" };
+const lead = { margin: 0, color: "#334155", fontSize: "16px", lineHeight: "25px" };
+const guide = { padding: "22px 0 4px" };
+const guideTitle = {
+  margin: "0 0 12px",
+  color: "#0f172a",
+  fontSize: "18px",
+  lineHeight: "24px",
+  fontWeight: 700 as const,
+};
+const card = {
+  margin: "0 0 12px",
+  padding: "16px",
+  border: "1px solid #dbe3ed",
+  borderRadius: "8px",
+  backgroundColor: "#ffffff",
+};
+const iconCell = { width: "50px", verticalAlign: "top" as const };
+const icon = { display: "block", margin: "2px 0 0", border: 0 };
+const copyCell = { paddingLeft: "14px", verticalAlign: "top" as const };
+const cardTitle = { margin: "0 0 4px", fontSize: "17px", lineHeight: "22px" };
+const cardText = { margin: "0 0 6px", color: "#475569", fontSize: "14px", lineHeight: "21px" };
+const textLink = {
+  padding: 0,
+  backgroundColor: "transparent",
+  fontSize: "13px",
+  fontWeight: 700 as const,
+  textDecoration: "none",
+};
+const closingBox = {
+  marginTop: "12px",
+  padding: "22px",
+  border: "1px solid #bfdbfe",
+  borderRadius: "8px",
+  textAlign: "center" as const,
+};
+const closingTitle = { margin: "0 0 8px", color: "#0f172a", fontSize: "20px", lineHeight: "26px" };
+const closingText = { margin: "0 0 16px", color: "#475569", fontSize: "14px", lineHeight: "22px" };
+const primaryButton = {
+  backgroundColor: "#2563eb",
+  color: "#ffffff",
+  borderRadius: "8px",
+  padding: "12px 20px",
+  fontSize: "14px",
+  fontWeight: 700 as const,
+  textDecoration: "none",
+};
+const hr = { borderColor: "#e2e8f0", margin: "28px 0 18px" };
+const signature = { margin: "0 0 3px", color: "#475569", fontSize: "14px", lineHeight: "20px" };
+const signatureStrong = {
+  margin: 0,
+  color: "#0f172a",
+  fontSize: "14px",
+  lineHeight: "20px",
+  fontWeight: 800 as const,
+};
+const footer = { margin: "2px 0 0", color: "#64748b", fontSize: "12px", lineHeight: "18px" };
 
-export default Email
+export default Email;
