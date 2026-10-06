@@ -18,13 +18,13 @@ export const Route = createFileRoute("/wod")({
         content:
           withExtendedKeywords("/wod", "workout of the day, wod, daily workout, bodyweight workout of the day, equipment workout of the day, periodized training, recovery day workout"),
       },
-      { title: "Workout of the Day — Smarty Gym" },
+      { title: "Workout of the Day: Daily Home & Gym WOD | SmartyGym" },
       {
         name: "description",
         content:
           "Two fresh, expertly designed workouts every training day — one with equipment, one without — following a science-based periodization approach by Coach Haris Falas.",
       },
-      { property: "og:title", content: "Workout of the Day — Smarty Gym" },
+      { property: "og:title", content: "Workout of the Day: Daily Home & Gym WOD | SmartyGym" },
       {
         property: "og:description",
         content: "Today's two expert-designed workouts — one with equipment, one without.",
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/wod")({
             {
               "@type": "WebPage",
               url: "https://smartygym.com/wod",
-              name: "Workout of the Day — Smarty Gym",
+              name: "Workout of the Day: Daily Home & Gym WOD | SmartyGym",
               description:
                 "Two fresh, expertly designed workouts every training day — one with equipment, one without — following a science-based periodization approach by Coach Haris Falas.",
               inLanguage: "en",

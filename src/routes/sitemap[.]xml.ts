@@ -22,7 +22,27 @@ function escapeXml(value: string): string {
     .replace(/'/g, "&apos;");
 }
 
-const ENTRIES: (SitemapEntry & { paidOnly?: boolean })[] = STATIC_SITEMAP_ENTRIES;
+const SMARTY_CATEGORY_SLUGS = [
+  "strength",
+  "muscle-building",
+  "calorie-burning",
+  "cardio",
+  "metabolic",
+  "challenge",
+  "mobility-stability",
+  "pilates",
+  "recovery",
+];
+
+const ENTRIES: (SitemapEntry & { paidOnly?: boolean })[] = [
+  ...STATIC_SITEMAP_ENTRIES,
+  // Fitness category hubs: the pages people land on for "<category> workouts" searches.
+  ...SMARTY_CATEGORY_SLUGS.map((slug) => ({
+    path: `/smarty-workouts/category/${slug}`,
+    changefreq: "weekly" as const,
+    priority: "0.85",
+  })),
+];
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -144,7 +164,7 @@ export const Route = createFileRoute("/sitemap.xml")({
               path: `/smarty-workouts/${workout.id}`,
               lastmod: workout.updated_at.slice(0, 10),
               changefreq: "monthly" as const,
-              priority: "0.6",
+              priority: "0.7",
               ...(seo.image ? { image: { loc: seo.image, title: seo.imageTitle, caption: seo.description } } : {}),
             };
           });

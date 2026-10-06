@@ -43,7 +43,8 @@ export function smartyWorkoutSearchData(workout: PublicSmartyWorkout) {
   const intent = categoryPhrase[workout.category.toUpperCase()] ?? `${category} workout`;
   const format = workout.format?.trim();
   const focus = workout.focus?.trim();
-  const title = `${workout.name} | ${workout.category} Workout | SmartyGym`;
+  const categoryTitle = workout.category.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  const title = `${workout.name} — ${workout.duration_min}-Min ${categoryTitle} Workout | SmartyGym`;
   const description = `${workout.name}: a ${workout.duration_min}-minute ${intent} by Haris Falas${format ? ` in ${format} format` : ""}${focus ? `, focused on ${focus}` : ""}. ${equipmentLabel} On SmartyGym. Log in with Premium to follow the workout.`;
   return { title, description, image: validImage(workout.image_url), imageTitle: `${workout.name} — SmartyGym ${intent}` };
 }

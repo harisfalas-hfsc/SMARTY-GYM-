@@ -16,13 +16,13 @@ export const Route = createFileRoute("/smarty-workouts/")({
   head: () => ({
     meta: [
       { name: "keywords", content: withExtendedKeywords("/smarty-workouts", "ready workouts, smarty workouts") },
-      { title: "Smarty Workouts — Ready Workouts by Haris Falas | SMARTYGYM" },
+      { title: "Ready-Made Home & Gym Workouts by Category | SmartyGym" },
       {
         name: "description",
         content:
           "Ready-made workouts by Coach Haris Falas in nine categories: Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability, Pilates and Recovery.",
       },
-      { property: "og:title", content: "Smarty Workouts — Ready Workouts | SMARTYGYM" },
+      { property: "og:title", content: "Ready-Made Home & Gym Workouts by Category | SmartyGym" },
       { property: "og:description", content: "Ready workouts by Haris Falas in nine training categories." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/smarty-workouts" },
