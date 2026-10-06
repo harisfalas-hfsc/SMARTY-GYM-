@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { BarChart3, RefreshCw, Info } from "lucide-react";
+import { BarChart3, RefreshCw, Info, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,6 +8,7 @@ import {
   type InsightRow,
   type InsightsReport,
 } from "@/lib/insights.functions";
+import { adminGetTraffic, type TrafficReport } from "@/lib/traffic.functions";
 
 type Grain = "daily" | "monthly" | "quarterly";
 
