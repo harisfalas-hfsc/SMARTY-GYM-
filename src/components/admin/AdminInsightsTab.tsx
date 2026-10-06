@@ -43,27 +43,34 @@ function Table({ title, rows, label }: { title: string; rows: InsightRow[]; labe
       {rows.length === 0 ? (
         <p className="text-sm text-muted-foreground">No data in this range.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <div>
+          <table className="w-full table-fixed text-xs sm:text-sm">
+            <colgroup>
+              <col />
+              <col className="w-11 sm:w-16" />
+              <col className="w-11 sm:w-16" />
+              <col className="w-12 sm:w-16" />
+              <col className="w-9 sm:w-14" />
+            </colgroup>
             <thead className="text-left text-xs text-muted-foreground">
               <tr>
                 <th className="py-1 pr-2">{label}</th>
-                <th className="py-1 text-right">Clicks</th>
-                <th className="py-1 text-right">Impr.</th>
-                <th className="py-1 text-right">CTR</th>
-                <th className="py-1 text-right">Pos.</th>
+                <th className="py-1 pl-1 text-right">Clicks</th>
+                <th className="py-1 pl-1 text-right">Impr.</th>
+                <th className="py-1 pl-1 text-right">CTR</th>
+                <th className="py-1 pl-1 text-right">Pos.</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r) => (
                 <tr key={r.key} className="border-t">
-                  <td className="max-w-[260px] truncate py-1 pr-2" title={r.key}>
+                  <td className="truncate py-1 pr-2" title={r.key}>
                     {r.key.replace("https://smartygym.com", "") || "/"}
                   </td>
-                  <td className="py-1 text-right font-semibold">{n(r.clicks)}</td>
-                  <td className="py-1 text-right">{n(r.impressions)}</td>
-                  <td className="py-1 text-right">{pct(r.ctr)}</td>
-                  <td className="py-1 text-right">{r.position.toFixed(1)}</td>
+                  <td className="py-1 pl-1 text-right font-semibold tabular-nums">{n(r.clicks)}</td>
+                  <td className="py-1 pl-1 text-right tabular-nums">{n(r.impressions)}</td>
+                  <td className="py-1 pl-1 text-right tabular-nums">{pct(r.ctr)}</td>
+                  <td className="py-1 pl-1 text-right tabular-nums">{r.position.toFixed(1)}</td>
                 </tr>
               ))}
             </tbody>
@@ -156,14 +163,18 @@ function TrafficSources({ from, to }: { from: string; to: string }) {
           {report.topPages.length > 0 && (
             <div className="overflow-x-auto">
               <p className="mb-1 mt-2 text-sm font-bold">Most visited pages</p>
-              <table className="w-full text-sm">
+              <table className="w-full table-fixed text-xs sm:text-sm">
+                <colgroup>
+                  <col />
+                  <col className="w-14" />
+                </colgroup>
                 <tbody>
                   {report.topPages.map((p) => (
                     <tr key={p.path} className="border-t">
-                      <td className="max-w-[260px] truncate py-1 pr-2" title={p.path}>
+                      <td className="truncate py-1 pr-2" title={p.path}>
                         {p.path}
                       </td>
-                      <td className="py-1 text-right font-semibold">{n(p.visits)}</td>
+                      <td className="py-1 text-right font-semibold tabular-nums">{n(p.visits)}</td>
                     </tr>
                   ))}
                 </tbody>
