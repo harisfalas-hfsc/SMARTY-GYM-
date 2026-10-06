@@ -36,3 +36,4 @@
 - User confirmations and text prompts use shared branded dialogs, never browser-native boxes — why: consistent web/native presentation.
 - Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
+- App panels reuse footer store links/icons — why: consistent destinations.

@@ -20,6 +20,7 @@ import { Navigation } from "../components/Navigation";
 import { SiteFooter } from "../components/SiteFooter";
 import { Toaster } from "../components/ui/sonner";
 import { SisterAppsPopup } from "../components/growth/SisterAppsPopup";
+import { MobileAppPopup } from "../components/growth/MobileAppPopup";
 import { CheckinModalManager } from "@/components/checkins/CheckinModalManager";
 import { BottomNav } from "../components/BottomNav";
 import { UpdatePrompt } from "../components/UpdatePrompt";
@@ -444,6 +445,7 @@ function RootComponent() {
           <SiteFooter />
           <Toaster />
           <SisterAppsPopup />
+          <MobileAppPopup />
           <CheckinModalManager />
           <BottomNav />
           <UpdatePrompt />
