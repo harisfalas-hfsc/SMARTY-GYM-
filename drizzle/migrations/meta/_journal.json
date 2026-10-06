@@ -575,6 +575,13 @@
       "when": 1791212235972,
       "tag": "0081_track_first_premium_welcome",
       "breakpoints": true
+    },
+    {
+      "idx": 82,
+      "version": "7",
+      "when": 1791279574464,
+      "tag": "0082_create_site_visits",
+      "breakpoints": true
     }
   ]
 }

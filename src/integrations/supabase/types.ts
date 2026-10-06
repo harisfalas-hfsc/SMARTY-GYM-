@@ -1243,6 +1243,42 @@ export type Database = {
           },
         ]
       }
+      site_visits: {
+        Row: {
+          created_at: string
+          id: string
+          path: string
+          referrer_host: string | null
+          session_id: string
+          source: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          path: string
+          referrer_host?: string | null
+          session_id: string
+          source: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          path?: string
+          referrer_host?: string | null
+          session_id?: string
+          source?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       smarty_checkins: {
         Row: {
           checkin_date: string
