@@ -95,8 +95,9 @@ export function AdminPaymentsTab() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <Button
+              className="h-auto min-h-10 whitespace-normal py-2"
               variant={enabled ? "outline" : "default"}
               disabled={busy || !enabled}
               onClick={() => void toggle(false)}
@@ -104,6 +105,7 @@ export function AdminPaymentsTab() {
               Require paid membership
             </Button>
             <Button
+              className="h-auto min-h-10 whitespace-normal py-2"
               variant={enabled ? "default" : "outline"}
               disabled={busy || enabled}
               onClick={() => void toggle(true)}
@@ -113,9 +115,12 @@ export function AdminPaymentsTab() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-sm">
-          Current state:
-          <Badge variant={enabled ? "destructive" : "secondary"}>
+        <div className="flex flex-col items-start gap-2 text-sm sm:flex-row sm:items-center">
+          <span className="shrink-0">Current state:</span>
+          <Badge
+            className="max-w-full whitespace-normal text-left leading-snug"
+            variant={enabled ? "destructive" : "secondary"}
+          >
             {enabled ? "FREE — NO MEMBERSHIP REQUIRED" : "PAID — ACTIVE MEMBERSHIP REQUIRED"}
           </Badge>
         </div>

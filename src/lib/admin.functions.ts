@@ -776,8 +776,11 @@ export const adminGetSectionBadges = createServerFn({ method: "POST" })
           ),
         ]);
 
+      // Free mode is a settings switch with nothing new to review, so it never shows a count.
+      // New memberships are already counted on Revenue and Subscribers.
+      void payments;
       return {
-        badges: { reports, messages, payments, revenue, customers, subscribers, workouts, awards },
+        badges: { reports, messages, revenue, customers, subscribers, workouts, awards },
       };
     } catch {
       return { badges: {} };
