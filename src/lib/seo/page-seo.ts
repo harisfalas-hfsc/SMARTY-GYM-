@@ -47,7 +47,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
   {
     path: "/",
     name: "Home",
-    title: "SmartyGym — Your Gym Re-imagined. Anywhere, Anytime.",
+    title: "Online Gym & Personalized Workout Plans | SmartyGym",
     description:
       "An online gym with a personal coach: get personalized workouts built around your goals, your equipment and your schedule, programmed on sports science.",
     keyphrase: "online gym with a personal coach",
@@ -91,7 +91,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
   {
     path: "/wod",
     name: "Workout of the Day",
-    title: "Workout of the Day — SmartyGym",
+    title: "Workout of the Day: Daily Home & Gym WOD | SmartyGym",
     description:
       "Two fresh, expertly designed workouts every training day — one with equipment, one without — following a science-based periodization approach by Coach Haris Falas.",
     keyphrase: "workout of the day",

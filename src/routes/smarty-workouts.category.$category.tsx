@@ -23,7 +23,7 @@ export const Route = createFileRoute("/smarty-workouts/category/$category")({
   },
   head: ({ loaderData, params }) => {
     const label = loaderData ? categoryLabel(loaderData.category) : "Smarty Workouts";
-    const title = `${label} Workouts — Smarty Workouts | SMARTYGYM`;
+    const title = `${label} Workouts at Home or Gym | SmartyGym`;
     const description = loaderData
       ? `${CATEGORY_DETAILS[loaderData.category].description} Ready ${label.toLowerCase()} workouts by Haris Falas.`
       : "Ready workouts by Haris Falas.";

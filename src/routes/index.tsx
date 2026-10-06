@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
           withExtendedKeywords("/", "online gym with a personal coach, personalized workout generator, online gym, personal coach app, workout of the day, smarty coach, training plan generator, home workout plan, gym workout plan, exercise library, Freeletics alternative, Peloton alternative, Haris Falas"),
       },
       {
-        title: "Your gym reimagined.",
+        title: "Online Gym & Personalized Workout Plans | SmartyGym",
       },
       {
         name: "description",
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Your gym reimagined.",
+        content: "Online Gym & Personalized Workout Plans | SmartyGym",
       },
       {
         property: "og:description",
@@ -56,7 +56,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebPage",
           "@id": "https://smartygym.com/#webpage",
           url: "https://smartygym.com/",
-          name: "Your gym reimagined.",
+          name: "Online Gym & Personalized Workout Plans | SmartyGym",
           description:
             "An online gym with a personal coach: create your workout in seconds and train around your goals, your equipment and your schedule.",
           inLanguage: "en",
