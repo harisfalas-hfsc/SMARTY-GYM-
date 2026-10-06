@@ -9,7 +9,6 @@ import {
   type RevenueGranularity,
   type RevenueReport,
 } from "@/lib/revenue.functions";
-import { getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
 import { formatDate } from "@/lib/date-format";
 
 const GRANULARITIES: { key: RevenueGranularity; label: string }[] = [
