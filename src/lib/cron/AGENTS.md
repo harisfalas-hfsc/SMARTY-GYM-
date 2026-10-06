@@ -1,0 +1,1 @@
+- The single scheduler (/api/public/hooks/daily-run) ticks every 5 minutes; per-member jobs act only on the first tick of each hour and every job is listed in src/lib/cron/registry.ts — why: exact admin-set minutes without duplicate member messages.

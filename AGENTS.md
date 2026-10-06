@@ -36,4 +36,3 @@
 - User confirmations and text prompts use shared branded dialogs, never browser-native boxes — why: consistent web/native presentation.
 - Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
-- The single scheduler (/api/public/hooks/daily-run) ticks every 5 minutes; per-member jobs act only on the first tick of each hour and every job is listed in src/lib/cron/registry.ts — why: exact admin-set minutes without duplicate member messages.
