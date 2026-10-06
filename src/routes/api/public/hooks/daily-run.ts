@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 /**
- * Hourly scheduler (pg_cron → every hour at :05).
+ * Scheduler (pg_cron → every 5 minutes). Member-facing per-hour jobs only act
+ * on the first tick of each hour; fixed/weekly jobs fire at their exact minute.
  * Runs every automated job in `src/lib/cron/registry.ts`:
  *  - the daily motivational message, at each athlete's chosen local hour
  *  - the shared Workout of the Day selection, at 00:00 Cyprus time
@@ -47,7 +48,7 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
 
         const db = supabaseAdmin as never as import("@supabase/supabase-js").SupabaseClient;
 
-        const { getCronConfigs, isDueNow, markJobRan, motivationPool, recordRun } = await import(
+        const { getCronConfigs, isDueNow, markJobRan, motivationPool, recordRun, recordDailyHeartbeat } = await import(
           "@/lib/cron/jobs.server"
         );
         const jobs = await getCronConfigs(db);
@@ -59,7 +60,10 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
         let motivations = 0;
         let profiles: DailyProfile[] = [];
 
-        if (motivationOn) {
+        // Per-member hourly jobs keep their original once-an-hour rhythm.
+        const firstTickOfHour = new Date().getUTCMinutes() < 5;
+
+        if (motivationOn && firstTickOfHour) {
           const { data, error } = await db
             .from("profiles")
             .select(DAILY_PROFILE_COLUMNS)
@@ -91,11 +95,29 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
 
         // Automatic recovery: rebuild any workout (incl. Workout of the Day) that failed.
         let recovered = 0;
-        try {
-          const { retryPendingGenerations } = await import("@/lib/workout-generation.server");
-          recovered = (await retryPendingGenerations(10)).recovered;
-        } catch (e) {
-          failures.push(`recovery:${e instanceof Error ? e.message : "error"}`);
+        if (jobs["workout-recovery"]?.enabled ?? true) {
+          try {
+            const { retryPendingGenerations, sweepAbandonedGenerations } = await import(
+              "@/lib/workout-generation.server"
+            );
+            recovered = (await retryPendingGenerations(10)).recovered;
+            const swept = (await sweepAbandonedGenerations(25)) as Record<string, unknown>;
+            const sweptCount = Object.values(swept).find((v) => typeof v === "number") as number | undefined;
+            if (recovered || sweptCount) {
+              await recordRun(db, {
+                jobKey: "workout-recovery",
+                status: "ok",
+                changed: true,
+                summary: `${recovered} workout(s) recovered, ${sweptCount ?? 0} abandoned creation(s) cleaned up.`,
+              });
+            } else {
+              await recordDailyHeartbeat(db, "workout-recovery", "Checked: nothing needed recovery today so far.");
+            }
+          } catch (e) {
+            const message = e instanceof Error ? e.message : "error";
+            failures.push(`recovery:${message}`);
+            await recordRun(db, { jobKey: "workout-recovery", status: "failed", summary: `Recovery failed: ${message}` });
+          }
         }
 
         let scheduleReminders = 0;
@@ -104,12 +126,14 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
             const { runScheduleReminders } = await import("@/lib/schedule-notify.server");
             scheduleReminders = await runScheduleReminders(db);
           } catch (e) {
-            failures.push(`schedule:${e instanceof Error ? e.message : "error"}`);
+            const message = e instanceof Error ? e.message : "error";
+            failures.push(`schedule:${message}`);
+            await recordRun(db, { jobKey: "schedule-reminders", status: "failed", summary: `Scheduled workout reminders failed: ${message}` });
           }
         }
 
         let checkinReminders = 0;
-        if (jobs["checkin-reminders"]?.enabled) {
+        if (jobs["checkin-reminders"]?.enabled && firstTickOfHour) {
           try {
             const { runCheckinReminders } = await import("@/lib/checkin-reminders.server");
             checkinReminders = await runCheckinReminders(db);
@@ -277,6 +301,11 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
         }
         if (scheduleReminders) {
           await recordRun(db, { jobKey: "schedule-reminders", status: "ok", changed: true, summary: `${scheduleReminders} scheduled workout reminder(s) sent.` });
+        } else if (scheduleOn && !failures.some((f) => f.startsWith("schedule:"))) {
+          await recordDailyHeartbeat(db, "schedule-reminders", "Checked: no scheduled workout reminders due so far today.");
+        }
+        if (jobs["checkin-reminders"]?.enabled && firstTickOfHour && !checkinReminders && !failures.some((f) => f.startsWith("checkin:"))) {
+          await recordDailyHeartbeat(db, "checkin-reminders", "Checked: no check-in reminders due so far today.");
         }
 
         return Response.json({

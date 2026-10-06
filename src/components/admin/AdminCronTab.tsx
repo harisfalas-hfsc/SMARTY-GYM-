@@ -30,7 +30,9 @@ import {
 } from "@/components/ui/dialog";
 import {
   adminGetCronJobs,
+  adminClearResolvedErrors,
   adminListErrors,
+  adminResolveAllErrors,
   adminResolveError,
   adminRunCronJob,
   adminSaveCronJob,
@@ -39,6 +41,7 @@ import {
 import type { CronJobDefinition } from "@/lib/cron/registry";
 import type { CronJobConfig, CronRunRow } from "@/lib/cron/jobs.server";
 import { HEALTH_CHECKS, DEFAULT_HEALTH_RECIPIENT } from "@/lib/cron/health-checks";
+import { AppConfirmDialog } from "@/components/ui/app-dialog";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -54,6 +57,11 @@ export function AdminCronTab() {
   const runJob = useServerFn(adminRunCronJob);
   const listErrors = useServerFn(adminListErrors);
   const resolveError = useServerFn(adminResolveError);
+  const resolveAllErrors = useServerFn(adminResolveAllErrors);
+  const clearResolvedErrors = useServerFn(adminClearResolvedErrors);
+  const [clearOpen, setClearOpen] = useState(false);
+  const [problemsBusy, setProblemsBusy] = useState(false);
+  const [expandedRuns, setExpandedRuns] = useState<Record<string, boolean>>({});
 
   const [definitions, setDefinitions] = useState<CronJobDefinition[] | null>(null);
   const [configs, setConfigs] = useState<Record<string, CronJobConfig>>({});
@@ -267,6 +275,57 @@ export function AdminCronTab() {
         <div className="flex items-center gap-2 text-sm font-bold">
           <AlertTriangle className="h-4 w-4 text-primary" /> Latest problems
         </div>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={problemsBusy}
+            onClick={async () => {
+              setProblemsBusy(true);
+              await loadProblems();
+              setProblemsBusy(false);
+            }}
+          >
+            Refresh
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={problemsBusy || !problems.some((p) => !p.resolved_at)}
+            onClick={async () => {
+              setProblemsBusy(true);
+              await resolveAllErrors({ data: {} } as never);
+              await loadProblems();
+              setProblemsBusy(false);
+            }}
+          >
+            Mark all handled
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={problemsBusy || !problems.some((p) => p.resolved_at)}
+            onClick={() => setClearOpen(true)}
+          >
+            Clear handled problems
+          </Button>
+        </div>
+        <AppConfirmDialog
+          open={clearOpen}
+          onOpenChange={setClearOpen}
+          title="Clear handled problems?"
+          description="Every problem marked as handled will be removed from this list. Unhandled problems stay."
+          confirmLabel="Clear"
+          tone="danger"
+          busy={problemsBusy}
+          onConfirm={async () => {
+            setProblemsBusy(true);
+            await clearResolvedErrors({ data: {} } as never);
+            await loadProblems();
+            setProblemsBusy(false);
+            setClearOpen(false);
+          }}
+        />
         {problems.length === 0 ? (
           <p className="text-sm text-muted-foreground">
             No problems recorded. Every problem here was also emailed to you.
@@ -306,7 +365,8 @@ export function AdminCronTab() {
         const enabled = config?.enabled ?? def.defaults.enabled;
         const hour = config?.hour ?? def.defaults.hour;
         const minute = config?.minute ?? def.defaults.minute;
-        const jobRuns = runs.filter((r) => r.job_key === def.key).slice(0, 10);
+        const allJobRuns = runs.filter((r) => r.job_key === def.key);
+        const jobRuns = allJobRuns.slice(0, expandedRuns[def.key] ? 30 : 10);
 
         return (
           <div key={def.key} className="space-y-4 rounded-2xl border-2 border-blue-400 bg-card p-4">
@@ -602,6 +662,17 @@ export function AdminCronTab() {
                     </li>
                   ))}
                 </ul>
+              )}
+              {allJobRuns.length > 10 ? (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="mt-1"
+                  onClick={() => setExpandedRuns((prev) => ({ ...prev, [def.key]: !prev[def.key] }))}
+                >
+                  {expandedRuns[def.key] ? "Show less" : "Show more"}
+                </Button>
+              ) : null
               )}
             </div>
           </div>

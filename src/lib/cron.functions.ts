@@ -32,7 +32,7 @@ export const adminGetCronJobs = createServerFn({ method: "POST" })
       const { readKeywordIndex } = await import("@/lib/seo/keyword-index.server");
       const [configs, runs, index] = await Promise.all([
         getCronConfigs(db),
-        listRuns(db, 200),
+        listRuns(db, 600),
         readKeywordIndex(),
       ]);
       return {
@@ -233,6 +233,40 @@ export const adminResolveError = createServerFn({ method: "POST" })
       return { ok: true };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed to update" };
+    }
+  });
+
+export const adminResolveAllErrors = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ ok: true } | { error: string }> => {
+    try {
+      await assertAdmin(context as any);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { error } = await supabaseAdmin
+        .from("error_events")
+        .update({ resolved_at: new Date().toISOString() } as never)
+        .is("resolved_at", null);
+      if (error) return { error: error.message };
+      return { ok: true };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Failed to update" };
+    }
+  });
+
+export const adminClearResolvedErrors = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ ok: true } | { error: string }> => {
+    try {
+      await assertAdmin(context as any);
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { error } = await supabaseAdmin
+        .from("error_events")
+        .delete()
+        .not("resolved_at", "is", null);
+      if (error) return { error: error.message };
+      return { ok: true };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Failed to clear" };
     }
   });
 

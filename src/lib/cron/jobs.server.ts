@@ -191,3 +191,22 @@ export function motivationPool(config: CronJobConfig | undefined): string[] | un
   const lines = raw.map((l) => String(l).trim()).filter(Boolean);
   return lines.length ? lines : undefined;
 }
+
+
+/** Writes at most one "still alive" line per job per day, so quiet jobs never look dead. */
+export async function recordDailyHeartbeat(db: DB, jobKey: string, summary: string): Promise<void> {
+  try {
+    const since = new Date();
+    since.setUTCHours(0, 0, 0, 0);
+    const { data } = await db
+      .from("cron_runs")
+      .select("id")
+      .eq("job_key", jobKey)
+      .gte("ran_at", since.toISOString())
+      .limit(1);
+    if ((data ?? []).length) return;
+    await recordRun(db, { jobKey, status: "ok", changed: false, summary });
+  } catch {
+    // history is diagnostic only
+  }
+}

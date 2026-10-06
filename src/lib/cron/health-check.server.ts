@@ -270,11 +270,18 @@ export async function runHealthCheck(
       .select("job_key,status,ran_at")
       .gte("ran_at", new Date(Date.now() - 24 * 3600 * 1000).toISOString())
       .limit(200);
-    const rows = (runs as { job_key: string; status: string }[] | null) ?? [];
+    const rows = (runs as { job_key: string; status: string; ran_at: string }[] | null) ?? [];
+    // Only each job's most recent run counts: a failure that has since been
+    // followed by a successful run is already fixed.
+    const latest = new Map<string, { job_key: string; status: string; ran_at: string }>();
+    for (const r of rows) {
+      const prev = latest.get(r.job_key);
+      if (!prev || prev.ran_at < r.ran_at) latest.set(r.job_key, r);
+    }
     // A health-check run is marked "failed" whenever any check below fails, so
     // counting it here would make yesterday's report fail today's report for
     // ever. Every other check in this email already covers what it reports.
-    const failed = rows.filter((r) => r.status === "failed" && r.job_key !== "health-check");
+    const failed = [...latest.values()].filter((r) => r.status === "failed" && r.job_key !== "health-check");
     const parts = [`${rows.length} job run(s) in the last 24h`];
     if (off.length) parts.push(`switched off: ${off.join(", ")}`);
     if (failed.length) {
