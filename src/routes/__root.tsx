@@ -444,7 +444,8 @@ function RootComponent() {
           <SiteFooter />
           <Toaster />
           <SisterAppsPopup />
-...
+          <CheckinModalManager />
+          <BottomNav />
           <UpdatePrompt />
           <TrafficTracker />
         </div>
