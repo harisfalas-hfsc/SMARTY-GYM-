@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import { StoreBadges } from "./StoreBadges";
 
 // Circle stays on the brand color (border + pale brand tint); only the icon
 // keeps each platform's real brand color, in both light and dark view.
@@ -31,6 +32,8 @@ export function SiteFooter() {
               <Youtube className="h-5 w-5" />
             </a>
           </div>
+
+          <StoreBadges />
 
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs sm:text-sm text-muted-foreground">
             <Link to="/privacy" className="hover:text-primary transition-colors">Privacy</Link>
