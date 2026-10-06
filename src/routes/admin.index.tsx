@@ -21,6 +21,7 @@ import {
   TrendingUp,
   Sparkles,
   HeartPulse,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
@@ -43,6 +44,7 @@ import { AdminAwardsTab } from "@/components/admin/AdminAwardsTab";
 import { AdminReportsTab } from "@/components/admin/AdminReportsTab";
 import { AdminPaymentsTab } from "@/components/admin/AdminPaymentsTab";
 import { AdminRevenueTab } from "@/components/admin/AdminRevenueTab";
+import { AdminInsightsTab } from "@/components/admin/AdminInsightsTab";
 
 import { AdminRitualsTab } from "@/components/admin/AdminRitualsTab";
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
@@ -75,6 +77,7 @@ type SectionKey =
   | "reports"
   | "payments"
   | "revenue"
+  | "insights"
   | "cron"
   | "health"
   | "generation";
@@ -97,6 +100,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     label: "Revenue",
     description: "Subscribers, monthly income and failed payments",
     Icon: TrendingUp,
+  },
+  {
+    key: "insights",
+    label: "Insights",
+    description: "Google Search clicks, searches, pages and countries",
+    Icon: BarChart3,
   },
   {
     key: "workouts",
@@ -268,6 +277,7 @@ function AdminPage() {
           {section === "reports" && <AdminReportsTab />}
           {section === "payments" && <AdminPaymentsTab />}
           {section === "revenue" && <AdminRevenueTab />}
+          {section === "insights" && <AdminInsightsTab />}
           {section === "cron" && <AdminCronTab />}
           {section === "health" && <AdminHealthTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
