@@ -36,6 +36,7 @@ export function MobileAppPopup() {
     if (!open) return;
     const dismissOutside = (event: MouseEvent) => {
       const target = event.target;
+      if (target instanceof Element && target.closest("[data-announcement-control]")) return;
       if (target instanceof Node && panelRef.current && !panelRef.current.contains(target)) setOpen(false);
     };
     window.addEventListener("mousedown", dismissOutside);
@@ -47,7 +48,7 @@ export function MobileAppPopup() {
   return (
     <>
       {open && <div aria-hidden="true" className="fixed inset-0 z-[58] bg-background/85 backdrop-blur-sm" onClick={() => setOpen(false)} />}
-      <div ref={panelRef} aria-hidden={!open} inert={!open} className={`fixed top-[calc(50%+3rem)] -translate-y-1/2 right-0 z-[60] flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${open ? "translate-x-0" : "translate-x-[calc(100%+10px)]"}`}>
+      <div ref={panelRef} data-announcement-control aria-hidden={!open} inert={!open} className={`fixed top-[calc(50%+3rem)] -translate-y-1/2 right-0 z-[60] flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${open ? "translate-x-0" : "translate-x-[calc(100%+10px)]"}`}>
         <Button type="button" size="icon" variant="secondary" onClick={() => setOpen(false)} aria-label="Hide app download panel" className="mr-2 h-12 w-12 rounded-full border border-border shadow-soft"><X className="w-7 h-7" /></Button>
         <aside aria-label="Download our mobile application" className="w-[280px] rounded-l-3xl border-y-2 border-l-2 border-primary bg-card py-5 pr-4 pl-3 shadow-soft">
           <div className="mb-4">
@@ -65,8 +66,8 @@ export function MobileAppPopup() {
           </div>
         </aside>
       </div>
-      <Button type="button" variant="ghost" onClick={() => setOpen(true)} aria-label="Show app downloads" className={`fixed right-0 top-[calc(50%+3rem)] z-[59] h-24 w-2 -translate-y-1/2 rounded-r-none rounded-l-full bg-primary p-0 shadow-primary transition-all duration-300 hover:w-3 hover:bg-primary ${open ? "pointer-events-none opacity-0" : "opacity-100"}`} />
-      {!open && <Button type="button" variant="ghost" onClick={() => setOpen(true)} aria-label="Show app downloads" className="fixed right-0 top-[calc(50%+3rem)] z-[58] h-20 w-6 -translate-y-1/2 p-0 opacity-0" />}
+      <Button type="button" variant="ghost" onClick={() => setOpen(true)} aria-label="Show app downloads" data-announcement-control className={`fixed right-0 top-[calc(50%+3rem)] z-[59] h-24 w-2 -translate-y-1/2 rounded-r-none rounded-l-full bg-primary p-0 shadow-primary transition-all duration-300 hover:w-3 hover:bg-primary ${open ? "pointer-events-none opacity-0" : "opacity-100"}`} />
+      {!open && <Button type="button" variant="ghost" onClick={() => setOpen(true)} aria-label="Show app downloads" data-announcement-control className="fixed right-0 top-[calc(50%+3rem)] z-[58] h-20 w-6 -translate-y-1/2 p-0 opacity-0" />}
     </>
   );
 }

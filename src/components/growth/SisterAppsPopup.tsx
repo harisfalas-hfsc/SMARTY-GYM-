@@ -49,6 +49,7 @@ export const SisterAppsPopup = () => {
   useEffect(() => {
     if (!open) return;
     const handleClick = (e: MouseEvent) => {
+      if (e.target instanceof Element && e.target.closest("[data-announcement-control]")) return;
       const target = e.target as Node;
       if (panelRef.current && !panelRef.current.contains(target)) {
         setOpen(false);
@@ -74,6 +75,7 @@ export const SisterAppsPopup = () => {
 
       <div
         ref={panelRef}
+        data-announcement-control
         aria-hidden={!open}
         className={`fixed top-1/2 -translate-y-1/2 left-0 z-[60] flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? "translate-x-0" : "-translate-x-[calc(100%+10px)]"}`}
       >
@@ -130,7 +132,7 @@ export const SisterAppsPopup = () => {
         type="button"
         variant="ghost"
         onClick={() => setOpen(true)}
-        aria-label="Show sister apps"
+        aria-label="Show sister apps" data-announcement-control
         className={`fixed left-0 top-1/2 z-[59] h-24 w-2 -translate-y-1/2 rounded-l-none rounded-r-full bg-primary p-0 shadow-primary transition-all duration-300 hover:w-3 hover:bg-primary ${open ? "pointer-events-none opacity-0" : "opacity-100"}`}
       />
       {!open && (
@@ -138,7 +140,7 @@ export const SisterAppsPopup = () => {
           type="button"
           variant="ghost"
           onClick={() => setOpen(true)}
-          aria-label="Show sister apps"
+          aria-label="Show sister apps" data-announcement-control
           className="fixed left-0 top-1/2 z-[58] h-20 w-6 -translate-y-1/2 p-0 opacity-0"
         />
       )}
