@@ -101,14 +101,13 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
               "@/lib/workout-generation.server"
             );
             recovered = (await retryPendingGenerations(10)).recovered;
-            const swept = (await sweepAbandonedGenerations(25)) as Record<string, unknown>;
-            const sweptCount = Object.values(swept).find((v) => typeof v === "number") as number | undefined;
+            const sweptCount = (await sweepAbandonedGenerations(25)).alerted;
             if (recovered || sweptCount) {
               await recordRun(db, {
                 jobKey: "workout-recovery",
                 status: "ok",
                 changed: true,
-                summary: `${recovered} workout(s) recovered, ${sweptCount ?? 0} abandoned creation(s) cleaned up.`,
+                summary: `${recovered} workout(s) recovered, ${sweptCount ?? 0} abandoned creation(s) reported to you.`,
               });
             } else {
               await recordDailyHeartbeat(db, "workout-recovery", "Checked: nothing needed recovery today so far.");

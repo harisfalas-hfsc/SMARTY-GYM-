@@ -250,7 +250,7 @@ export function AdminCronTab() {
           <CalendarClock className="h-4 w-4 text-primary" /> How the scheduler works
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          One scheduler runs every hour. Each job below decides whether it is due. Member-facing
+          One scheduler runs every 5 minutes. Each job below decides whether it is due. Member-facing
           jobs follow each member's own local time, so only their on/off switch can be changed here.
           Fixed jobs run once a day at the time you set.
         </p>
@@ -672,8 +672,7 @@ export function AdminCronTab() {
                 >
                   {expandedRuns[def.key] ? "Show less" : "Show more"}
                 </Button>
-              ) : null
-              )}
+              ) : null}
             </div>
           </div>
         );

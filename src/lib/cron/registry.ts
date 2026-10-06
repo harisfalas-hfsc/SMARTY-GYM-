@@ -101,7 +101,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
       "Reminds members about workouts they scheduled in the Logbook: 30 minutes before, at the scheduled time, and a follow-up the next day when the session was never completed.",
     timing: "continuous",
     timingNote:
-      "Checked every hour, because each member schedules at a different time. Every reminder is deduplicated, so nobody is reminded twice.",
+      "Checked every 5 minutes, because each member schedules at a different time. Every reminder is deduplicated, so nobody is reminded twice.",
     sends: [
       { title: "Your workout starts in 30 minutes", body: "CATEGORY — workout name." },
       { title: "Time to train", body: "CATEGORY — workout name." },
@@ -255,9 +255,9 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "workout-recovery",
     label: "Workout creation recovery",
     description:
-      "Finishes any workout (including the Workout of the Day) whose creation failed halfway, and cleans up creations a member started but never finished. Nothing is ever deleted from a member's history.",
+      "Finishes any workout (including the Workout of the Day) whose creation failed halfway, and alerts you once about any creation that has stayed unfinished for 20 hours. Nothing is ever deleted from a member's history.",
     timing: "continuous",
-    timingNote: "Checks every 5 minutes. A history line is written whenever something was recovered or cleaned up, plus one daily check-in line.",
+    timingNote: "Checks every 5 minutes. A history line is written whenever something was recovered or reported, plus one daily check-in line.",
     sends: [
       {
         title: "Nothing sent to members",
