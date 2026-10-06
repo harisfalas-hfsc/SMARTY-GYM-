@@ -114,23 +114,20 @@ export function isDueNow(config: CronJobConfig, now = new Date()): boolean {
   return config.last_run_on !== localDateISO(now, tz);
 }
 
-
 export async function markJobRan(db: DB, key: string, config: CronJobConfig, now = new Date()) {
-  await db
-    .from("cron_jobs")
-    .upsert(
-      {
-        key,
-        enabled: config.enabled,
-        hour: config.hour,
-        minute: config.minute,
-        timezone: config.timezone,
-        content: config.content,
-        last_run_on: localDateISO(now, config.timezone || SITE_TIMEZONE),
-        updated_at: new Date().toISOString(),
-      } as never,
-      { onConflict: "key" },
-    );
+  await db.from("cron_jobs").upsert(
+    {
+      key,
+      enabled: config.enabled,
+      hour: config.hour,
+      minute: config.minute,
+      timezone: config.timezone,
+      content: config.content,
+      last_run_on: localDateISO(now, config.timezone || SITE_TIMEZONE),
+      updated_at: new Date().toISOString(),
+    } as never,
+    { onConflict: "key" },
+  );
 }
 
 export interface CronRunRow {
@@ -140,7 +137,17 @@ export interface CronRunRow {
   status: string;
   changed: boolean;
   summary: string | null;
-  details: { added?: string[]; failures?: string[]; items?: { number: number; key: string; label: string; status: "pass" | "warn" | "fail"; detail: string }[] };
+  details: {
+    added?: string[];
+    failures?: string[];
+    items?: {
+      number: number;
+      key: string;
+      label: string;
+      status: "pass" | "warn" | "fail";
+      detail: string;
+    }[];
+  };
   trigger: string;
 }
 
@@ -151,7 +158,17 @@ export async function recordRun(
     status: "ok" | "skipped" | "failed";
     changed?: boolean;
     summary: string;
-    details?: { added?: string[]; failures?: string[]; items?: { number: number; key: string; label: string; status: "pass" | "warn" | "fail"; detail: string }[] };
+    details?: {
+      added?: string[];
+      failures?: string[];
+      items?: {
+        number: number;
+        key: string;
+        label: string;
+        status: "pass" | "warn" | "fail";
+        detail: string;
+      }[];
+    };
     trigger?: "schedule" | "manual";
   },
 ): Promise<void> {
@@ -191,7 +208,6 @@ export function motivationPool(config: CronJobConfig | undefined): string[] | un
   const lines = raw.map((l) => String(l).trim()).filter(Boolean);
   return lines.length ? lines : undefined;
 }
-
 
 /** Writes at most one "still alive" line per job per day, so quiet jobs never look dead. */
 export async function recordDailyHeartbeat(db: DB, jobKey: string, summary: string): Promise<void> {

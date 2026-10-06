@@ -158,7 +158,11 @@ export async function runHealthCheck(
     if (error || !signed?.signedUrl)
       return ["fail", `Could not create a media link: ${error?.message ?? "no URL returned"}`];
     const res = await fetch(signed.signedUrl, { method: "GET" });
-    if (!res.ok) return ["fail", `Media file did not load (HTTP ${res.status}) — player images would be blank.`];
+    if (!res.ok)
+      return [
+        "fail",
+        `Media file did not load (HTTP ${res.status}) — player images would be blank.`,
+      ];
     const size = Number(res.headers.get("content-length") ?? 0);
     return ["pass", `Media link works (HTTP 200${size ? `, ${Math.round(size / 1024)} KB` : ""}).`];
   });
@@ -204,15 +208,19 @@ export async function runHealthCheck(
       }
     }
 
-
     if (missing.length > 0 || broken.length > 0) {
       const parts = [
-        missing.length ? `${missing.length} article(s) with no cover: ${missing.slice(0, 3).join(", ")}` : "",
+        missing.length
+          ? `${missing.length} article(s) with no cover: ${missing.slice(0, 3).join(", ")}`
+          : "",
         broken.length ? `broken cover(s): ${broken.slice(0, 3).join(", ")}` : "",
       ].filter(Boolean);
       return ["fail", `Blog covers need attention — ${parts.join("; ")}.`];
     }
-    return ["pass", `All ${rows.length} published articles have a cover (${sample.length} verified tonight).`];
+    return [
+      "pass",
+      `All ${rows.length} published articles have a cover (${sample.length} verified tonight).`,
+    ];
   });
 
   await run("ai", async () => {
@@ -229,7 +237,10 @@ export async function runHealthCheck(
     });
     if (res.ok) return ["pass", "Workout generation is available (AI answered normally)."];
     if (res.status === 402)
-      return ["fail", "OUT OF AI CREDITS — members cannot generate workouts until credits are topped up."];
+      return [
+        "fail",
+        "OUT OF AI CREDITS — members cannot generate workouts until credits are topped up.",
+      ];
     if (res.status === 403)
       return ["fail", "AI is blocked for this workspace (limit reached or AI disabled)."];
     if (res.status === 429) return ["warn", "AI is rate limited right now (temporary)."];
@@ -281,7 +292,9 @@ export async function runHealthCheck(
     // A health-check run is marked "failed" whenever any check below fails, so
     // counting it here would make yesterday's report fail today's report for
     // ever. Every other check in this email already covers what it reports.
-    const failed = [...latest.values()].filter((r) => r.status === "failed" && r.job_key !== "health-check");
+    const failed = [...latest.values()].filter(
+      (r) => r.status === "failed" && r.job_key !== "health-check",
+    );
     const parts = [`${rows.length} job run(s) in the last 24h`];
     if (off.length) parts.push(`switched off: ${off.join(", ")}`);
     if (failed.length) {
@@ -289,7 +302,6 @@ export async function runHealthCheck(
       return ["fail", parts.join(" · ")];
     }
     return [off.length ? "warn" : "pass", parts.join(" · ")];
-
   });
 
   await run("pages", async () => {
@@ -401,7 +413,9 @@ export async function runHealthCheck(
     const members = new Set(failures.map((f) => f.user_id).filter(Boolean)).size;
     const parts = [`${made ?? 0} workout(s) generated in 24h`];
     if (failures.length || reqFailed)
-      parts.push(`${Math.max(failures.length, reqFailed ?? 0)} failure(s) affecting ${members} member(s)${failures[0] ? ` — latest: ${failures[0].reason}` : ""}`);
+      parts.push(
+        `${Math.max(failures.length, reqFailed ?? 0)} failure(s) affecting ${members} member(s)${failures[0] ? ` — latest: ${failures[0].reason}` : ""}`,
+      );
     if (stuck) parts.push(`${stuck} request(s) stuck for over 1 hour`);
     if (stuck || reqFailed || failures.length) return ["fail", parts.join(" · ")];
     return ["pass", `${parts[0]} · no failures, nothing stuck.`];
@@ -424,7 +438,9 @@ export async function runHealthCheck(
       .from("error_events")
       .select("*", { count: "exact", head: true })
       .gte("created_at", from)
-      .or("source.ilike.%pay%,source.ilike.%stripe%,source.ilike.%checkout%,source.ilike.%subscri%");
+      .or(
+        "source.ilike.%pay%,source.ilike.%stripe%,source.ilike.%checkout%,source.ilike.%subscri%",
+      );
     const detail = `Free mode: ${free ? "ON (premium access is free)" : "OFF (active paid membership required)"} · ${active} active subscription(s) · ${bad} past-due/unpaid · ${payErr ?? 0} payment error(s) in 24h.`;
     if (payErr) return ["fail", detail];
     if (bad) return ["warn", detail];
@@ -445,11 +461,36 @@ export async function runHealthCheck(
 
   await run("features", async () => {
     const bad: string[] = [];
-    const q: [string, () => PromiseLike<{ error: { message: string } | null; count?: number | null }>][] = [
-      ["Community", () => db.from("workouts").select("id", { count: "exact", head: true }).eq("is_shared", true).eq("community_hidden", false)],
-      ["Community comments", () => db.from("community_comments").select("id", { count: "exact", head: true })],
-      ["Blog", () => db.from("blog_articles").select("id", { count: "exact", head: true }).eq("is_published", true)],
-      ["Exercise Library", () => db.from("exercises").select("id", { count: "exact", head: true }).eq("is_active", true)],
+    const q: [
+      string,
+      () => PromiseLike<{ error: { message: string } | null; count?: number | null }>,
+    ][] = [
+      [
+        "Community",
+        () =>
+          db
+            .from("workouts")
+            .select("id", { count: "exact", head: true })
+            .eq("is_shared", true)
+            .eq("community_hidden", false),
+      ],
+      [
+        "Community comments",
+        () => db.from("community_comments").select("id", { count: "exact", head: true }),
+      ],
+      [
+        "Blog",
+        () =>
+          db
+            .from("blog_articles")
+            .select("id", { count: "exact", head: true })
+            .eq("is_published", true),
+      ],
+      [
+        "Exercise Library",
+        () =>
+          db.from("exercises").select("id", { count: "exact", head: true }).eq("is_active", true),
+      ],
     ];
     const counts: string[] = [];
     for (const [name, fn] of q) {
@@ -457,7 +498,13 @@ export async function runHealthCheck(
       if (r.error) bad.push(`${name} (${r.error.message})`);
       else counts.push(`${name} ${r.count ?? 0}`);
     }
-    for (const p of ["/shared-workouts", "/smarty-ritual", "/smarty-checkins", "/blog", "/create-your-own-workout"]) {
+    for (const p of [
+      "/shared-workouts",
+      "/smarty-ritual",
+      "/smarty-checkins",
+      "/blog",
+      "/create-your-own-workout",
+    ]) {
       try {
         const res = await fetch(`${SITE_BASE_URL}${p}`, { method: "GET" });
         if (!res.ok) bad.push(`${p} → HTTP ${res.status}`);
@@ -492,9 +539,16 @@ export async function runHealthCheck(
     const total = count ?? 0;
     if (total === 0) return ["pass", "No errors recorded in the last 24 hours."];
     const bySource = new Map<string, number>();
-    for (const r of rows as { source?: string | null }[]) bySource.set(r.source ?? "other", (bySource.get(r.source ?? "other") ?? 0) + 1);
-    const top = rows.slice(0, 5).map((r) => `${r.message}${r.route ? ` (${r.route})` : ""}`).join(" | ");
-    return [total > 20 ? "fail" : "warn", `${total} error(s) in 24h (${[...bySource].map(([k, v]) => `${k}: ${v}`).join(", ")}). Most frequent: ${top}`];
+    for (const r of rows as { source?: string | null }[])
+      bySource.set(r.source ?? "other", (bySource.get(r.source ?? "other") ?? 0) + 1);
+    const top = rows
+      .slice(0, 5)
+      .map((r) => `${r.message}${r.route ? ` (${r.route})` : ""}`)
+      .join(" | ");
+    return [
+      total > 20 ? "fail" : "warn",
+      `${total} error(s) in 24h (${[...bySource].map(([k, v]) => `${k}: ${v}`).join(", ")}). Most frequent: ${top}`,
+    ];
   });
 
   await run("activity", async () => {

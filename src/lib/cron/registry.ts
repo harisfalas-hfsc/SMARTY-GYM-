@@ -257,7 +257,8 @@ export const CRON_JOBS: CronJobDefinition[] = [
     description:
       "Finishes any workout (including the Workout of the Day) whose creation failed halfway, and alerts you once about any creation that has stayed unfinished for 20 hours. Nothing is ever deleted from a member's history.",
     timing: "continuous",
-    timingNote: "Checks every 5 minutes. A history line is written whenever something was recovered or reported, plus one daily check-in line.",
+    timingNote:
+      "Checks every 5 minutes. A history line is written whenever something was recovered or reported, plus one daily check-in line.",
     sends: [
       {
         title: "Nothing sent to members",

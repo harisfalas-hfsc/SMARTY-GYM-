@@ -250,9 +250,9 @@ export function AdminCronTab() {
           <CalendarClock className="h-4 w-4 text-primary" /> How the scheduler works
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          One scheduler runs every 5 minutes. Each job below decides whether it is due. Member-facing
-          jobs follow each member's own local time, so only their on/off switch can be changed here.
-          Fixed jobs run once a day at the time you set.
+          One scheduler runs every 5 minutes. Each job below decides whether it is due.
+          Member-facing jobs follow each member's own local time, so only their on/off switch can be
+          changed here. Fixed jobs run once a day at the time you set.
         </p>
         {index ? (
           <p className="mt-2 text-sm">
@@ -387,7 +387,6 @@ export function AdminCronTab() {
                   className="h-8 w-14 data-[state=unchecked]:bg-muted [&>span]:h-6 [&>span]:w-6 [&>span]:bg-primary [&>span]:data-[state=checked]:translate-x-6"
                 />
               </div>
-
             </div>
 
             <div className="rounded-xl border border-border/60 bg-muted/30 p-3 text-sm">
@@ -456,126 +455,130 @@ export function AdminCronTab() {
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 space-y-3">
-            <div className="rounded-xl border border-border/60 bg-muted/30 p-3 text-sm">
-              <div className="flex items-center gap-2 font-semibold">
-                <Mail className="h-4 w-4 text-primary" /> Exactly what is sent
-              </div>
-              <ul className="mt-2 space-y-2">
-                {def.sends.map((s, i) => (
-                  <li key={i} className="border-l-2 border-primary pl-3">
-                    <p className="font-semibold">{s.title}</p>
-                    <p className="text-muted-foreground">{s.body}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {def.settings?.length ? (
-              <div className="space-y-3 rounded-xl border border-border/60 bg-muted/30 p-3 text-sm">
-                <div className="font-semibold">Settings</div>
-
-                {def.settings.includes("recipient") ? (
-                  <div className="space-y-1">
-                    <Label htmlFor={`${def.key}-to`}>Send to</Label>
-                    <Input
-                      id={`${def.key}-to`}
-                      type="email"
-                      value={config?.content?.recipient ?? ""}
-                      placeholder={DEFAULT_HEALTH_RECIPIENT}
-                      onChange={(e) => setContent(def.key, { recipient: e.target.value })}
-                    />
+                <div className="rounded-xl border border-border/60 bg-muted/30 p-3 text-sm">
+                  <div className="flex items-center gap-2 font-semibold">
+                    <Mail className="h-4 w-4 text-primary" /> Exactly what is sent
                   </div>
-                ) : null}
+                  <ul className="mt-2 space-y-2">
+                    {def.sends.map((s, i) => (
+                      <li key={i} className="border-l-2 border-primary pl-3">
+                        <p className="font-semibold">{s.title}</p>
+                        <p className="text-muted-foreground">{s.body}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-                {def.settings.includes("severity") ? (
-                  <div className="space-y-1">
-                    <Label htmlFor={`${def.key}-sev`}>Email me about</Label>
-                    <select
-                      id={`${def.key}-sev`}
-                      className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-                      value={config?.content?.minSeverity ?? "error"}
-                      onChange={(e) => setContent(def.key, { minSeverity: e.target.value })}
+                {def.settings?.length ? (
+                  <div className="space-y-3 rounded-xl border border-border/60 bg-muted/30 p-3 text-sm">
+                    <div className="font-semibold">Settings</div>
+
+                    {def.settings.includes("recipient") ? (
+                      <div className="space-y-1">
+                        <Label htmlFor={`${def.key}-to`}>Send to</Label>
+                        <Input
+                          id={`${def.key}-to`}
+                          type="email"
+                          value={config?.content?.recipient ?? ""}
+                          placeholder={DEFAULT_HEALTH_RECIPIENT}
+                          onChange={(e) => setContent(def.key, { recipient: e.target.value })}
+                        />
+                      </div>
+                    ) : null}
+
+                    {def.settings.includes("severity") ? (
+                      <div className="space-y-1">
+                        <Label htmlFor={`${def.key}-sev`}>Email me about</Label>
+                        <select
+                          id={`${def.key}-sev`}
+                          className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                          value={config?.content?.minSeverity ?? "error"}
+                          onChange={(e) => setContent(def.key, { minSeverity: e.target.value })}
+                        >
+                          <option value="error">Real failures only (recommended)</option>
+                          <option value="all">Everything, including warnings</option>
+                        </select>
+                      </div>
+                    ) : null}
+
+                    {def.settings.includes("groupWindow") ? (
+                      <div className="space-y-1">
+                        <Label htmlFor={`${def.key}-gw`}>
+                          Group repeats of the same problem for (minutes)
+                        </Label>
+                        <Input
+                          id={`${def.key}-gw`}
+                          type="number"
+                          min={1}
+                          max={1440}
+                          className="w-28"
+                          value={config?.content?.groupWindowMin ?? 60}
+                          onChange={(e) =>
+                            setContent(def.key, { groupWindowMin: Number(e.target.value) })
+                          }
+                        />
+                      </div>
+                    ) : null}
+
+                    {def.settings.includes("checks") ? (
+                      <div className="space-y-2">
+                        <Label>Checks included in the report</Label>
+                        <div className="grid gap-2 sm:grid-cols-2">
+                          {HEALTH_CHECKS.map((c) => {
+                            const selected = config?.content?.checks;
+                            const on = !selected?.length || selected.includes(c.key);
+                            return (
+                              <label key={c.key} className="flex items-center gap-2 text-sm">
+                                <Switch
+                                  checked={on}
+                                  onCheckedChange={(v) => {
+                                    const base = selected?.length
+                                      ? selected
+                                      : HEALTH_CHECKS.map((x) => x.key);
+                                    const next = v
+                                      ? Array.from(new Set([...base, c.key]))
+                                      : base.filter((k) => k !== c.key);
+                                    setContent(def.key, { checks: next });
+                                  }}
+                                  aria-label={c.label}
+                                />
+                                <span>{c.label}</span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    <Button
+                      size="sm"
+                      disabled={busy === def.key}
+                      onClick={() => void patch(def.key, { content: config?.content ?? {} })}
                     >
-                      <option value="error">Real failures only (recommended)</option>
-                      <option value="all">Everything, including warnings</option>
-                    </select>
+                      <Save className="mr-2 h-4 w-4" /> Save settings
+                    </Button>
                   </div>
                 ) : null}
 
-                {def.settings.includes("groupWindow") ? (
-                  <div className="space-y-1">
-                    <Label htmlFor={`${def.key}-gw`}>
-                      Group repeats of the same problem for (minutes)
-                    </Label>
-                    <Input
-                      id={`${def.key}-gw`}
-                      type="number"
-                      min={1}
-                      max={1440}
-                      className="w-28"
-                      value={config?.content?.groupWindowMin ?? 60}
-                      onChange={(e) =>
-                        setContent(def.key, { groupWindowMin: Number(e.target.value) })
-                      }
-                    />
-                  </div>
-                ) : null}
-
-                {def.settings.includes("checks") ? (
+                {def.contentEditable ? (
                   <div className="space-y-2">
-                    <Label>Checks included in the report</Label>
-                    <div className="grid gap-2 sm:grid-cols-2">
-                      {HEALTH_CHECKS.map((c) => {
-                        const selected = config?.content?.checks;
-                        const on = !selected?.length || selected.includes(c.key);
-                        return (
-                          <label key={c.key} className="flex items-center gap-2 text-sm">
-                            <Switch
-                              checked={on}
-                              onCheckedChange={(v) => {
-                                const base = selected?.length
-                                  ? selected
-                                  : HEALTH_CHECKS.map((x) => x.key);
-                                const next = v
-                                  ? Array.from(new Set([...base, c.key]))
-                                  : base.filter((k) => k !== c.key);
-                                setContent(def.key, { checks: next });
-                              }}
-                              aria-label={c.label}
-                            />
-                            <span>{c.label}</span>
-                          </label>
-                        );
-                      })}
-                    </div>
+                    <Label htmlFor={`${def.key}-c`}>{def.contentLabel}</Label>
+                    <Textarea
+                      id={`${def.key}-c`}
+                      rows={5}
+                      value={drafts[def.key] ?? ""}
+                      onChange={(e) => setDrafts((p) => ({ ...p, [def.key]: e.target.value }))}
+                    />
+                    <p className="text-xs text-muted-foreground">{def.contentHelp}</p>
+                    <Button
+                      size="sm"
+                      disabled={busy === def.key}
+                      onClick={() => void saveContent(def)}
+                    >
+                      <Save className="mr-2 h-4 w-4" /> Save content
+                    </Button>
                   </div>
                 ) : null}
-
-                <Button
-                  size="sm"
-                  disabled={busy === def.key}
-                  onClick={() => void patch(def.key, { content: config?.content ?? {} })}
-                >
-                  <Save className="mr-2 h-4 w-4" /> Save settings
-                </Button>
-              </div>
-            ) : null}
-
-            {def.contentEditable ? (
-              <div className="space-y-2">
-                <Label htmlFor={`${def.key}-c`}>{def.contentLabel}</Label>
-                <Textarea
-                  id={`${def.key}-c`}
-                  rows={5}
-                  value={drafts[def.key] ?? ""}
-                  onChange={(e) => setDrafts((p) => ({ ...p, [def.key]: e.target.value }))}
-                />
-                <p className="text-xs text-muted-foreground">{def.contentHelp}</p>
-                <Button size="sm" disabled={busy === def.key} onClick={() => void saveContent(def)}>
-                  <Save className="mr-2 h-4 w-4" /> Save content
-                </Button>
-              </div>
-            ) : null}
               </CollapsibleContent>
             </Collapsible>
 
@@ -644,7 +647,10 @@ export function AdminCronTab() {
             <div className="text-sm">
               <p className="font-semibold">Latest activity</p>
               {jobRuns.length === 0 ? (
-                <p className="text-muted-foreground">No activity has been logged for this job yet. Existing workouts do not count as scheduler history.</p>
+                <p className="text-muted-foreground">
+                  No activity has been logged for this job yet. Existing workouts do not count as
+                  scheduler history.
+                </p>
               ) : (
                 <ul className="mt-2 max-h-40 space-y-2 overflow-y-auto pr-2">
                   {jobRuns.map((r) => (
@@ -668,7 +674,9 @@ export function AdminCronTab() {
                   size="sm"
                   variant="ghost"
                   className="mt-1"
-                  onClick={() => setExpandedRuns((prev) => ({ ...prev, [def.key]: !prev[def.key] }))}
+                  onClick={() =>
+                    setExpandedRuns((prev) => ({ ...prev, [def.key]: !prev[def.key] }))
+                  }
                 >
                   {expandedRuns[def.key] ? "Show less" : "Show more"}
                 </Button>
