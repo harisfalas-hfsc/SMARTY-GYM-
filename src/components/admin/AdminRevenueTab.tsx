@@ -9,7 +9,6 @@ import {
   type RevenueGranularity,
   type RevenueReport,
 } from "@/lib/revenue.functions";
-import { getStripeEnvironment, paymentsConfigured } from "@/lib/stripe";
 import { formatDate } from "@/lib/date-format";
 
 const GRANULARITIES: { key: RevenueGranularity; label: string }[] = [
@@ -43,14 +42,11 @@ export function AdminRevenueTab() {
     async (next?: { from?: string; to?: string; granularity?: RevenueGranularity }) => {
       setLoading(true);
       setError(null);
-      if (!paymentsConfigured()) {
-        setError("Payments are not configured for this build yet.");
-        setLoading(false);
-        return;
-      }
+      // Admin revenue always reports real (live) payments, even inside the
+      // preview, which otherwise runs on test payments.
       const r = await getRevenue({
         data: {
-          environment: getStripeEnvironment(),
+          environment: "live",
           granularity: next?.granularity ?? granularity,
           from: new Date(`${next?.from ?? from}T00:00:00Z`).toISOString(),
           to: new Date(`${next?.to ?? to}T23:59:59Z`).toISOString(),
