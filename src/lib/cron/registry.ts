@@ -1,7 +1,7 @@
 /**
  * Every automated (cron) job in SmartyGym, described in one place.
  *
- * The hourly scheduler (`/api/public/hooks/daily-run`, pg_cron, every hour at :05)
+ * The hourly scheduler (`/api/public/hooks/daily-run`, pg_cron, every 5 minutes)
  * is the only trigger. Each job below decides whether it is due, and the Admin
  * panel edits the switch / time / content stored in the `cron_jobs` table.
  */
@@ -15,7 +15,8 @@ export type CronJobKey =
   | "health-check"
   | "error-alerts"
   | "premium-welcome"
-  | "generate-weekly-blog-article";
+  | "generate-weekly-blog-article"
+  | "workout-recovery";
 
 export type CronTiming = "per-member" | "fixed" | "weekly" | "continuous";
 
@@ -100,7 +101,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
       "Reminds members about workouts they scheduled in the Logbook: 30 minutes before, at the scheduled time, and a follow-up the next day when the session was never completed.",
     timing: "continuous",
     timingNote:
-      "Checked every hour, because each member schedules at a different time. Every reminder is deduplicated, so nobody is reminded twice.",
+      "Checked every 5 minutes, because each member schedules at a different time. Every reminder is deduplicated, so nobody is reminded twice.",
     sends: [
       { title: "Your workout starts in 30 minutes", body: "CATEGORY — workout name." },
       { title: "Time to train", body: "CATEGORY — workout name." },
@@ -249,6 +250,24 @@ export const CRON_JOBS: CronJobDefinition[] = [
     runnable: true,
     weekday: 0,
     defaults: { enabled: false, hour: 0, minute: 0 },
+  },
+  {
+    key: "workout-recovery",
+    label: "Workout creation recovery",
+    description:
+      "Finishes any workout (including the Workout of the Day) whose creation failed halfway, and alerts you once about any creation that has stayed unfinished for 20 hours. Nothing is ever deleted from a member's history.",
+    timing: "continuous",
+    timingNote:
+      "Checks every 5 minutes. A history line is written whenever something was recovered or reported, plus one daily check-in line.",
+    sends: [
+      {
+        title: "Nothing sent to members",
+        body: "The rebuilt workout simply appears where the member expects it.",
+      },
+    ],
+    timeEditable: false,
+    contentEditable: false,
+    defaults: { enabled: true, hour: 0, minute: 0 },
   },
 ];
 

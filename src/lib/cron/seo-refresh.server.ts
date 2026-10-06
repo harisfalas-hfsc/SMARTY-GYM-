@@ -102,7 +102,13 @@ export async function runSeoRefresh(
 
   let submitted = 0;
   const health = await runSeoHealth(db).catch((e): SeoHealthItem[] => [
-    { number: 1, key: "health", label: "SEO health checks", status: "fail", detail: e instanceof Error ? e.message : String(e) },
+    {
+      number: 1,
+      key: "health",
+      label: "SEO health checks",
+      status: "fail",
+      detail: e instanceof Error ? e.message : String(e),
+    },
   ]);
 
   const optimization = {

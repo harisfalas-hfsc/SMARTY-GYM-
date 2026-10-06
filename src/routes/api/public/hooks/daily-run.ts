@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 /**
- * Hourly scheduler (pg_cron → every hour at :05).
+ * Scheduler (pg_cron → every 5 minutes). Member-facing per-hour jobs only act
+ * on the first tick of each hour; fixed/weekly jobs fire at their exact minute.
  * Runs every automated job in `src/lib/cron/registry.ts`:
  *  - the daily motivational message, at each athlete's chosen local hour
  *  - the shared Workout of the Day selection, at 00:00 Cyprus time
@@ -40,16 +41,19 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
         }
 
         const { localHour, localDateISO } = await import("@/lib/wod-cycle");
-        const { DAILY_PROFILE_COLUMNS, runMotivationForUser } = await import(
-          "@/lib/daily.server"
-        );
+        const { DAILY_PROFILE_COLUMNS, runMotivationForUser } = await import("@/lib/daily.server");
         type DailyProfile = import("@/lib/daily.server").DailyProfile;
 
         const db = supabaseAdmin as never as import("@supabase/supabase-js").SupabaseClient;
 
-        const { getCronConfigs, isDueNow, markJobRan, motivationPool, recordRun } = await import(
-          "@/lib/cron/jobs.server"
-        );
+        const {
+          getCronConfigs,
+          isDueNow,
+          markJobRan,
+          motivationPool,
+          recordRun,
+          recordDailyHeartbeat,
+        } = await import("@/lib/cron/jobs.server");
         const jobs = await getCronConfigs(db);
         const motivationOn = jobs["daily-motivation"]?.enabled ?? false;
         const scheduleOn = jobs["schedule-reminders"]?.enabled ?? false;
@@ -59,7 +63,10 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
         let motivations = 0;
         let profiles: DailyProfile[] = [];
 
-        if (motivationOn) {
+        // Per-member hourly jobs keep their original once-an-hour rhythm.
+        const firstTickOfHour = new Date().getUTCMinutes() < 5;
+
+        if (motivationOn && firstTickOfHour) {
           const { data, error } = await db
             .from("profiles")
             .select(DAILY_PROFILE_COLUMNS)
@@ -86,16 +93,39 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           } catch (e) {
             failures.push(`motivation:${prof.id}:${e instanceof Error ? e.message : "error"}`);
           }
-
         }
 
         // Automatic recovery: rebuild any workout (incl. Workout of the Day) that failed.
         let recovered = 0;
-        try {
-          const { retryPendingGenerations } = await import("@/lib/workout-generation.server");
-          recovered = (await retryPendingGenerations(10)).recovered;
-        } catch (e) {
-          failures.push(`recovery:${e instanceof Error ? e.message : "error"}`);
+        if (jobs["workout-recovery"]?.enabled ?? true) {
+          try {
+            const { retryPendingGenerations, sweepAbandonedGenerations } =
+              await import("@/lib/workout-generation.server");
+            recovered = (await retryPendingGenerations(10)).recovered;
+            const sweptCount = (await sweepAbandonedGenerations(25)).alerted;
+            if (recovered || sweptCount) {
+              await recordRun(db, {
+                jobKey: "workout-recovery",
+                status: "ok",
+                changed: true,
+                summary: `${recovered} workout(s) recovered, ${sweptCount ?? 0} abandoned creation(s) reported to you.`,
+              });
+            } else {
+              await recordDailyHeartbeat(
+                db,
+                "workout-recovery",
+                "Checked: nothing needed recovery today so far.",
+              );
+            }
+          } catch (e) {
+            const message = e instanceof Error ? e.message : "error";
+            failures.push(`recovery:${message}`);
+            await recordRun(db, {
+              jobKey: "workout-recovery",
+              status: "failed",
+              summary: `Recovery failed: ${message}`,
+            });
+          }
         }
 
         let scheduleReminders = 0;
@@ -104,21 +134,36 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
             const { runScheduleReminders } = await import("@/lib/schedule-notify.server");
             scheduleReminders = await runScheduleReminders(db);
           } catch (e) {
-            failures.push(`schedule:${e instanceof Error ? e.message : "error"}`);
+            const message = e instanceof Error ? e.message : "error";
+            failures.push(`schedule:${message}`);
+            await recordRun(db, {
+              jobKey: "schedule-reminders",
+              status: "failed",
+              summary: `Scheduled workout reminders failed: ${message}`,
+            });
           }
         }
 
         let checkinReminders = 0;
-        if (jobs["checkin-reminders"]?.enabled) {
+        if (jobs["checkin-reminders"]?.enabled && firstTickOfHour) {
           try {
             const { runCheckinReminders } = await import("@/lib/checkin-reminders.server");
             checkinReminders = await runCheckinReminders(db);
             if (checkinReminders)
-              await recordRun(db, { jobKey: "checkin-reminders", status: "ok", changed: true, summary: `${checkinReminders} check-in reminder(s) sent.` });
+              await recordRun(db, {
+                jobKey: "checkin-reminders",
+                status: "ok",
+                changed: true,
+                summary: `${checkinReminders} check-in reminder(s) sent.`,
+              });
           } catch (e) {
             const message = e instanceof Error ? e.message : "error";
             failures.push(`checkin:${message}`);
-            await recordRun(db, { jobKey: "checkin-reminders", status: "failed", summary: `Check-in reminders failed: ${message}` });
+            await recordRun(db, {
+              jobKey: "checkin-reminders",
+              status: "failed",
+              summary: `Check-in reminders failed: ${message}`,
+            });
           }
         }
 
@@ -133,18 +178,38 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
             const dates = due ? [today, addDays(today, 1)] : [today];
             const results = [];
             for (const d of dates) results.push(await selectWodForDate(db, d));
-            const filled = results.flatMap((r) => r.filled.map((f) => `${r.date} ${f.slot}: ${f.name}`));
-            const missing = results.flatMap((r) => r.missing.map((m) => `${r.date} ${r.category} ${m}: no matching workout`));
-            wod = { status: (missing.length ? "failed" : "ok") as "failed" | "ok", summary: `${filled.length} slot(s) filled${missing.length ? `, ${missing.length} without a matching workout` : ""}.` };
-            if (due || filled.length || missing.length) {
-              await recordRun(db, { jobKey: "wod-selection", status: wod.status as "failed" | "ok", changed: filled.length > 0, summary: wod.summary, details: { added: filled, failures: missing }, trigger: "schedule" });
+            const filled = results.flatMap((r) =>
+              r.filled.map((f) => `${r.date} ${f.slot}: ${f.name}`),
+            );
+            const missing = results.flatMap((r) =>
+              r.missing.map((m) => `${r.date} ${r.category} ${m}: no matching workout`),
+            );
+            wod = {
+              status: (missing.length ? "failed" : "ok") as "failed" | "ok",
+              summary: `${filled.length} slot(s) filled${missing.length ? `, ${missing.length} without a matching workout` : ""}.`,
+            };
+            if (due || filled.length || (missing.length && firstTickOfHour)) {
+              await recordRun(db, {
+                jobKey: "wod-selection",
+                status: wod.status as "failed" | "ok",
+                changed: filled.length > 0,
+                summary: wod.summary,
+                details: { added: filled, failures: missing },
+                trigger: "schedule",
+              });
             }
-            if (missing.length) failures.push(...missing.map((m) => `wod:${m}`));
+            if (missing.length && (due || firstTickOfHour))
+              failures.push(...missing.map((m) => `wod:${m}`));
             if (due) await markJobRan(db, "wod-selection", wodConfig);
           } catch (e) {
             const message = e instanceof Error ? e.message : "error";
             failures.push(`wod:${message}`);
-            await recordRun(db, { jobKey: "wod-selection", status: "failed", summary: `Workout of the Day selection crashed: ${message}`, trigger: "schedule" });
+            await recordRun(db, {
+              jobKey: "wod-selection",
+              status: "failed",
+              summary: `Workout of the Day selection crashed: ${message}`,
+              trigger: "schedule",
+            });
           }
         }
 
@@ -161,7 +226,11 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
               status: result.status,
               changed: result.changed,
               summary: result.summary,
-              details: { added: result.added.slice(0, 200), failures: result.failures, items: result.health },
+              details: {
+                added: result.added.slice(0, 200),
+                failures: result.failures,
+                items: result.health,
+              },
               trigger: "schedule",
             });
             if (result.status !== "failed") await markJobRan(db, "seo-refresh", seoConfig);
@@ -209,8 +278,6 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
             });
           }
         }
-
-
 
         // Nightly system health check — fixed time, once a day, always emailed.
         let health: { status: string; summary: string } | null = null;
@@ -276,7 +343,30 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           });
         }
         if (scheduleReminders) {
-          await recordRun(db, { jobKey: "schedule-reminders", status: "ok", changed: true, summary: `${scheduleReminders} scheduled workout reminder(s) sent.` });
+          await recordRun(db, {
+            jobKey: "schedule-reminders",
+            status: "ok",
+            changed: true,
+            summary: `${scheduleReminders} scheduled workout reminder(s) sent.`,
+          });
+        } else if (scheduleOn && !failures.some((f) => f.startsWith("schedule:"))) {
+          await recordDailyHeartbeat(
+            db,
+            "schedule-reminders",
+            "Checked: no scheduled workout reminders due so far today.",
+          );
+        }
+        if (
+          jobs["checkin-reminders"]?.enabled &&
+          firstTickOfHour &&
+          !checkinReminders &&
+          !failures.some((f) => f.startsWith("checkin:"))
+        ) {
+          await recordDailyHeartbeat(
+            db,
+            "checkin-reminders",
+            "Checked: no check-in reminders due so far today.",
+          );
         }
 
         return Response.json({
@@ -291,7 +381,6 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           blog,
           failures,
         });
-
       },
     },
   },
