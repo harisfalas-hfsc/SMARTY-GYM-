@@ -28,6 +28,7 @@ import resultsDriven from "@/assets/home-values/value-results-driven.webp";
 import exerciseLibrary from "@/assets/explore-exercise-library.jpg";
 import community from "@/assets/community-card.jpg";
 import checkins from "@/assets/explore-checkins.jpg";
+import ritual from "@/assets/explore-ritual.png";
 
 const partnerValues = [
   {
@@ -83,6 +84,7 @@ const destinations = [
   { title: "Exercise Library", text: "Explore the complete movement library with demonstrations and clear exercise information.", image: exerciseLibrary, to: "/exercise-library" },
   { title: "Smarty Community", text: "Connect around training, activity, shared workouts and the community rankings.", image: community, to: "/community" },
   { title: "Smarty Check-ins", text: "Record morning readiness and evening recovery so your training reflects how you actually feel.", image: checkins, to: "/smarty-checkins" },
+  { title: "Smarty Ritual", text: "Three short daily moments — morning, midday and evening — that keep you moving and recovering between workouts.", image: ritual, to: "/smarty-ritual" },
 ] as const;
 
 function Heading({ ghost, eyebrow, children }: { ghost: string; eyebrow: string; children: ReactNode }) {
@@ -125,7 +127,7 @@ export function DesktopHomeStory() {
       <section className="border-t border-border bg-background py-16">
         <div className="mx-auto max-w-7xl px-8">
           <Heading ghost="EXPLORE" eyebrow="More in SmartyGym">Everything In One Place</Heading>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-4 gap-5">
             {destinations.map((destination) => (
               <Link key={destination.title} to={destination.to} className="group overflow-hidden rounded-lg border border-border bg-card">
                 <div className="aspect-[16/9] overflow-hidden">
