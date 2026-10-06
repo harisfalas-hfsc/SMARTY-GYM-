@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { BarChart3, RefreshCw, Info } from "lucide-react";
+import { BarChart3, RefreshCw, Info, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,6 +8,7 @@ import {
   type InsightRow,
   type InsightsReport,
 } from "@/lib/insights.functions";
+import { adminGetTraffic, type TrafficReport } from "@/lib/traffic.functions";
 
 type Grain = "daily" | "monthly" | "quarterly";
 
@@ -73,6 +74,108 @@ function Table({ title, rows, label }: { title: string; rows: InsightRow[]; labe
   );
 }
 
+function TrafficSources({ from, to }: { from: string; to: string }) {
+  const getTraffic = useServerFn(adminGetTraffic);
+  const [report, setReport] = useState<TrafficReport | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    const r = await getTraffic({ data: { from, to } });
+    if ("error" in r) setError(r.error);
+    else setReport(r.report);
+    setLoading(false);
+  }, [getTraffic, from, to]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const peak = Math.max(1, ...(report?.bySource.map((s) => s.visits) ?? []));
+
+  return (
+    <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
+          <Globe className="h-5 w-5" />
+        </span>
+        <div className="mr-auto">
+          <p className="font-bold">Traffic Sources</p>
+          <p className="text-xs text-muted-foreground">
+            Real visits recorded by smartygym.com itself — every source, not just Google.
+          </p>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}>
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+        </Button>
+      </div>
+      <p className="flex gap-1 text-xs text-muted-foreground">
+        <Info className="h-3.5 w-3.5 shrink-0" />
+        Counting started when this feature went live, so early ranges may show few visits. Tip:
+        add ?utm_source=instagram (or tiktok, facebook…) to links you post so every click is
+        attributed even when the app hides the referrer.
+      </p>
+      {error && (
+        <p className="rounded-xl border border-destructive p-3 text-sm text-destructive">{error}</p>
+      )}
+      {report && (
+        <>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {[
+              ["Visits", n(report.totalVisits)],
+              ["Unique visitors", n(report.uniqueVisitors)],
+            ].map(([k, v]) => (
+              <div key={k} className="rounded-2xl border bg-card p-4">
+                <p className="text-xs text-muted-foreground">{k}</p>
+                <p className="text-2xl font-bold">{v}</p>
+              </div>
+            ))}
+          </div>
+          {report.bySource.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No visits recorded in this range yet.</p>
+          ) : (
+            <div className="space-y-1">
+              {report.bySource.map((s) => (
+                <div key={s.source} className="flex items-center gap-2 text-xs">
+                  <span className="w-28 shrink-0">{s.label}</span>
+                  <div className="h-4 flex-1 rounded bg-muted">
+                    <div
+                      className="h-4 rounded bg-primary"
+                      style={{ width: `${(s.visits / peak) * 100}%` }}
+                    />
+                  </div>
+                  <span className="w-32 shrink-0 text-right">
+                    <b>{n(s.visits)}</b> visits · {n(s.visitors)} visitors
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+          {report.topPages.length > 0 && (
+            <div className="overflow-x-auto">
+              <p className="mb-1 mt-2 text-sm font-bold">Most visited pages</p>
+              <table className="w-full text-sm">
+                <tbody>
+                  {report.topPages.map((p) => (
+                    <tr key={p.path} className="border-t">
+                      <td className="max-w-[260px] truncate py-1 pr-2" title={p.path}>
+                        {p.path}
+                      </td>
+                      <td className="py-1 text-right font-semibold">{n(p.visits)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      )}
+    </section>
+  );
+}
+
 export function AdminInsightsTab() {
   const getInsights = useServerFn(adminGetInsights);
   const [from, setFrom] = useState(daysAgo(28));
@@ -114,6 +217,7 @@ export function AdminInsightsTab() {
 
   return (
     <div className="space-y-4">
+      <TrafficSources from={from} to={to} />
       <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">

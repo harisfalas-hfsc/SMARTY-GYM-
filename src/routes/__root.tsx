@@ -23,6 +23,7 @@ import { SisterAppsPopup } from "../components/growth/SisterAppsPopup";
 import { CheckinModalManager } from "@/components/checkins/CheckinModalManager";
 import { BottomNav } from "../components/BottomNav";
 import { UpdatePrompt } from "../components/UpdatePrompt";
+import { TrafficTracker } from "../components/TrafficTracker";
 import { isRecoverablePageImportError } from "../lib/recoverable-page-error";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
 
@@ -443,9 +444,9 @@ function RootComponent() {
           <SiteFooter />
           <Toaster />
           <SisterAppsPopup />
-          <CheckinModalManager />
-          <BottomNav />
+...
           <UpdatePrompt />
+          <TrafficTracker />
         </div>
       </ThemeProvider>
     </QueryClientProvider>
