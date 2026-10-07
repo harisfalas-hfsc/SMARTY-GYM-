@@ -1,12 +1,7 @@
-import { Download } from "lucide-react";
 
 export const IOS_URL = "https://apps.apple.com/cy/app/smarty-gym/id6776675309?l=el";
 export const ANDROID_URL = "https://play.google.com/store/apps/details?id=com.smartygym.webview";
 
-// Badges carry the stores' own brand colours on a transparent background — no
-// filled chip — so they sit flat against the footer in light and dark view.
-const badgeClass =
-  "flex items-center gap-3 rounded-xl border border-border px-4 py-2.5 transition-colors hover:border-primary/70";
 
 export function AppleMark({ className }: { className?: string }) {
   return (
@@ -27,47 +22,29 @@ export function GooglePlayMark({ className }: { className?: string }) {
   );
 }
 
+// Store marks only — no card, no labels — sitting flat against the footer.
 export function StoreBadges() {
   return (
-    <div className="hidden md:flex flex-col items-center gap-3 pt-1">
-      <p className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-        <Download className="h-4 w-4 text-primary" />
-        Download our application for better experience.
-      </p>
+    <div className="hidden md:flex items-center gap-4 pt-1">
+      <a
+        href={IOS_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Download SmartyGym on the App Store"
+        className="transition-opacity hover:opacity-70"
+      >
+        <AppleMark className="h-6 w-6 text-foreground" />
+      </a>
 
-      <div className="flex items-center gap-3">
-        <a
-          href={IOS_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Download SmartyGym on the App Store"
-          className={badgeClass}
-        >
-          <AppleMark className="h-7 w-7 shrink-0 text-foreground" />
-          <span className="flex flex-col text-left leading-none">
-            <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-              Download on the
-            </span>
-            <span className="mt-1 text-lg font-semibold text-foreground">App Store</span>
-          </span>
-        </a>
-
-        <a
-          href={ANDROID_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Get SmartyGym on Google Play"
-          className={badgeClass}
-        >
-          <GooglePlayMark className="h-7 w-7 shrink-0" />
-          <span className="flex flex-col text-left leading-none">
-            <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-              Get it on
-            </span>
-            <span className="mt-1 text-lg font-semibold text-foreground">Google Play</span>
-          </span>
-        </a>
-      </div>
+      <a
+        href={ANDROID_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Get SmartyGym on Google Play"
+        className="transition-opacity hover:opacity-70"
+      >
+        <GooglePlayMark className="h-6 w-6" />
+      </a>
     </div>
   );
 }
