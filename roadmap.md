@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Match new-workout and shared-workout email announcements to the old SMARTY GYM email design and structure; preserve paired app notices and verify both templates.
+- [x] Match both workout announcement emails to the old design and structure; retain app notices, controls and history. Desktop/phone email previews inspected; 260 tests pass. Live all-account delivery not triggered.
 
 - [ ] Identify original latest-three Smarty Workouts and add Featured Workouts beside Recovery on desktop and below categories on mobile; verify layout, links and access.
 
