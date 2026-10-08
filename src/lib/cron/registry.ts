@@ -16,7 +16,9 @@ export type CronJobKey =
   | "error-alerts"
   | "premium-welcome"
   | "generate-weekly-blog-article"
-  | "workout-recovery";
+  | "workout-recovery"
+  | "new-workout-announcement"
+  | "shared-workout-announcement";
 
 export type CronTiming = "per-member" | "fixed" | "weekly" | "continuous";
 
@@ -264,6 +266,41 @@ export const CRON_JOBS: CronJobDefinition[] = [
         title: "Nothing sent to members",
         body: "The rebuilt workout simply appears where the member expects it.",
       },
+    ],
+    timeEditable: false,
+    contentEditable: false,
+    defaults: { enabled: true, hour: 0, minute: 0 },
+  },
+  {
+    key: "new-workout-announcement",
+    label: "New workout announcement",
+    description:
+      "Every time you publish a new Smarty Workout created in the Admin panel, every account (Premium and free) gets one inbox message “New workout available” with an Open workout button. Five new workouts means five messages. The same workout is never announced twice, and the transferred library is never announced.",
+    timing: "continuous",
+    timingNote:
+      "Event-triggered, not time-scheduled: sent the moment the workout first becomes visible. A history line is written for each announcement.",
+    sends: [
+      {
+        title: "New workout available",
+        body: "“Workout name is now live in Smarty Workouts” — with an Open workout button.",
+      },
+    ],
+    timeEditable: false,
+    contentEditable: false,
+    defaults: { enabled: true, hour: 0, minute: 0 },
+  },
+  {
+    key: "shared-workout-announcement",
+    label: "Shared workout announcement",
+    description:
+      "Every time a member shares a workout, every other account (Premium and free) gets one inbox message with the sharer's first name, in one of seven rotating wordings. The person who shared it gets nothing, and sharing the same workout again never repeats it.",
+    timing: "continuous",
+    timingNote:
+      "Event-triggered, not time-scheduled: sent the moment the workout is shared. A history line is written for each announcement.",
+    sends: [
+      { title: "Haris just shared a workout. Feeling in the mood to do it?", body: "With an Open workout button." },
+      { title: "Haris just shared a workout — let's check it out!", body: "One of seven variations, changing from share to share." },
+      { title: "Haris just shared a workout. Let's crush it!", body: "Never sent to the person who shared it." },
     ],
     timeEditable: false,
     contentEditable: false,

@@ -58,6 +58,11 @@ export const shareWorkout = createServerFn({ method: "POST" })
       .eq("id", data.workoutId)
       .eq("user_id", context.userId);
     if (error) throw new Error(error.message);
+    if (data.shared) {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { announceSharedWorkout } = await import("@/lib/broadcast-notify.server");
+      await announceSharedWorkout(supabaseAdmin as never, data.workoutId, context.userId);
+    }
     return { ok: true as const, shared: data.shared };
   });
 

@@ -315,6 +315,24 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                         Read article
                       </Link>
                     )}
+                    {n.kind === "new_workout" && n.dedupe_key?.startsWith("new-workout:") && (
+                      <Link
+                        to="/smarty-workouts/$workoutId"
+                        params={{ workoutId: n.dedupe_key.slice("new-workout:".length) }}
+                        className="flex h-10 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
+                      >
+                        Open workout
+                      </Link>
+                    )}
+                    {n.kind === "shared_workout" && n.dedupe_key?.startsWith("shared-workout:") && (
+                      <Link
+                        to="/community/workout/$workoutId"
+                        params={{ workoutId: n.dedupe_key.slice("shared-workout:".length) }}
+                        className="flex h-10 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
+                      >
+                        Open workout
+                      </Link>
+                    )}
                     {n.kind === "checkin" && (
                       <Link
                         to="/smarty-checkins"
