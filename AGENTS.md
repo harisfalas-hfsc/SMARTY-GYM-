@@ -37,6 +37,6 @@
 - Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
 - App panels reuse footer store links/icons and exclude announcement controls from outside dismissal — why: consistent links, independent closing.
-- Mass broadcast emails (new-workout and shared-workout announcements) send through the Resend connector gateway (verified sender smartygym.com) with delivery tracked in broadcast_email_sends; all other email uses the Lovable managed email service — why: managed email only allows per-action transactional sends, mass mailing needs the marketing-grade path.
+- Mass workout emails use the Resend gateway and broadcast_email_sends deduplication; other email uses Lovable managed sending — why: broadcasts need the marketing-grade path.
 
-- Workout announcements share one renderer adapted from the old new-content email; triggers supply escaped text and current links — why: matching layouts without obsolete routes or runtime code.
+- Workout announcements share browser-safe content builders across email, inbox and tests, with the old email renderer — why: identical wording and destinations.
