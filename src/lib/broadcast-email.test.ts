@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { broadcastEmailHtml, type BroadcastEmail } from "./broadcast-email.server";
+import { newWorkoutAnnouncement, sharedWorkoutAnnouncement, announcementInboxContent } from "./broadcast-content";
 
 const email: BroadcastEmail = {
   dedupeKey: "new-workout:sample",
@@ -13,6 +14,27 @@ const email: BroadcastEmail = {
 };
 
 describe("workout announcement email", () => {
+  it("matches new workout app content to email content", () => {
+    const announcement = newWorkoutAnnouncement("sample", "Power & Pace");
+    const inbox = announcementInboxContent(announcement);
+    expect(inbox.title).toBe(announcement.heading);
+    expect(inbox.body).toBe([announcement.body, announcement.workoutName, announcement.supportingText].join("\n\n"));
+    expect(inbox.dedupeKey).toBe(announcement.dedupeKey);
+    expect(announcement.buttonLabel).toBe("View Workout");
+  });
+
+  it("matches shared creator and workout details without exposing creation method", () => {
+    const announcement = sharedWorkoutAnnouncement("sample", "Full Body Momentum", "Andreas Nicolaou", "creator-id");
+    const inbox = announcementInboxContent(announcement);
+    expect(inbox.title).toBe(announcement.heading);
+    expect(inbox.body).toContain(announcement.body);
+    expect(inbox.body).toContain("Full Body Momentum");
+    expect(inbox.body).toContain("Created by Andreas Nicolaou.");
+    expect(announcement.exclude).toBe("creator-id");
+    expect(announcement.buttonHref).toBe("https://smartygym.com/community/workout/sample");
+    expect(inbox.body).not.toMatch(/Coach|Build It Yourself/);
+  });
+
   it("preserves old header, content, workout name, CTA and footer in fluid tables", () => {
     const html = broadcastEmailHtml(email);
     expect(html).toContain("max-width:600px");

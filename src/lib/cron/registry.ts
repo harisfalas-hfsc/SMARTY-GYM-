@@ -275,14 +275,14 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "new-workout-announcement",
     label: "New workout announcement",
     description:
-      "Every time you publish a new Smarty Workout created in the Admin panel, every account (Premium and free) gets one “New workout available” message with an Open workout button — in their inbox and by email. Five new workouts means five messages. The same workout is never announced twice, and the transferred library is never announced.",
+      "Every time you publish a new Smarty Workout created in the Admin panel, every account (Premium and free) gets a matching app notification and email with the workout name and a View Workout button. Five new workouts means five paired announcements. The same workout is never announced twice, and previously imported workouts are never announced.",
     timing: "continuous",
     timingNote:
       "Event-triggered, not time-scheduled: sent the moment the workout first becomes visible. A history line is written for each announcement.",
     sends: [
       {
-        title: "New workout available",
-        body: "“Workout name is now live in Smarty Workouts” — with an Open workout button.",
+        title: "New Workout Added!",
+        body: "A new workout has been added to the SMARTYGYM library! • Workout name • Designed by Sports Scientist HARIS FALAS to help you achieve your fitness goals. • View Workout — identical content in app and email.",
       },
     ],
     timeEditable: false,
@@ -293,14 +293,12 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "shared-workout-announcement",
     label: "Shared workout announcement",
     description:
-      "Every time a member shares a workout, every other account (Premium and free) gets one message with the sharer's first name, in one of seven rotating wordings — in their inbox and by email. The person who shared it gets nothing, and sharing the same workout again never repeats it.",
+      "Every time a member shares a workout, every other account (Premium and free) gets a matching app notification and email with the workout name, creator and a View Workout button. One of seven wordings uses the sharer's first name. The person who shared it gets nothing, and sharing the same workout again never repeats it.",
     timing: "continuous",
     timingNote:
       "Event-triggered, not time-scheduled: sent the moment the workout is shared. A history line is written for each announcement.",
     sends: [
-      { title: "Haris just shared a workout. Feeling in the mood to do it?", body: "With an Open workout button." },
-      { title: "Haris just shared a workout — let's check it out!", body: "One of seven variations, changing from share to share." },
-      { title: "Haris just shared a workout. Let's crush it!", body: "Never sent to the person who shared it." },
+      { title: "New Shared Workout!", body: "Haris just shared a workout. Feeling in the mood to do it? • Workout name • Created by HARIS FALAS. • View Workout — identical content in app and email; never sent to the sharer." },
     ],
     timeEditable: false,
     contentEditable: false,

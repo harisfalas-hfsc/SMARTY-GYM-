@@ -3,24 +3,8 @@ import { getCronConfig, recordRun } from "@/lib/cron/jobs.server";
 
 type DB = SupabaseClient;
 const BATCH = 500;
-const SITE_URL = "https://smartygym.com";
-
-export const SHARED_WORKOUT_LINES = [
-  "{name} just shared a workout. Feeling in the mood to do it?",
-  "{name} just shared a workout — let's check it out!",
-  "{name} just shared a workout. Let's crush it!",
-  "New from {name}: a freshly shared workout is waiting for you.",
-  "{name} just shared a workout. Up for the challenge?",
-  "{name} just dropped a new shared workout — ready to give it a go?",
-  "{name} just shared a workout. Your next session might be right here.",
-];
-
-/** Picks one line per workout, so the wording changes from share to share. */
-export function sharedWorkoutLine(name: string, workoutId: string): string {
-  let h = 0;
-  for (const c of workoutId) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return (SHARED_WORKOUT_LINES[h % SHARED_WORKOUT_LINES.length] ?? "{name} just shared a workout.").replace("{name}", name);
-}
+import { newWorkoutAnnouncement, sharedWorkoutAnnouncement, announcementInboxContent } from "@/lib/broadcast-content";
+export { SHARED_WORKOUT_LINES, sharedWorkoutLine } from "@/lib/broadcast-content";
 
 /** One inbox message per account (except `exclude`); dedupe_key makes repeats impossible. */
 async function notifyAll(
@@ -66,27 +50,13 @@ export async function announceNewSmartyWorkouts(db: DB, workoutIds: string[]): P
       .filter((r) => r.is_visible && !r.legacy_id);
     for (const w of rows) {
       try {
-        const dedupeKey = `new-workout:${w.id}`;
-        const n = await notifyAll(db, {
-          kind: "new_workout",
-          title: "New workout available",
-          body: `${w.name} is now live in Smarty Workouts — tap “Open workout” to see it.`,
-          dedupeKey,
-        });
+        const announcement = newWorkoutAnnouncement(w.id, w.name);
+        const n = await notifyAll(db, { kind: "new_workout", ...announcementInboxContent(announcement) });
         let emails = 0;
         let emailError: string | null = null;
         try {
           const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
-          emails = await sendBroadcastEmail(db, {
-            dedupeKey,
-            subject: `🏋️ New Workout: ${w.name}`,
-            heading: "New Workout Added!",
-            body: "A new workout has been added to the SMARTYGYM library!",
-            workoutName: w.name,
-            supportingText: "Designed by Sports Scientist HARIS FALAS to help you achieve your fitness goals.",
-            buttonLabel: "View Workout",
-            buttonHref: `${SITE_URL}/smarty-workouts/${w.id}`,
-          });
+          emails = await sendBroadcastEmail(db, announcement);
         } catch (e) {
           emailError = e instanceof Error ? e.message : "email error";
         }
@@ -122,31 +92,16 @@ export async function announceSharedWorkout(db: DB, workoutId: string, sharerId:
     const { data: p } = await db.from("profiles").select("display_name").eq("id", sharerId).maybeSingle();
     const full = String((p as { display_name?: string } | null)?.display_name ?? "").trim();
     const first = full.split(/\s+/)[0] || "A member";
-    const line = sharedWorkoutLine(first, workoutId);
     const { data: workout } = await db.from("workouts").select("name").eq("id", workoutId).maybeSingle();
     const workoutName = (workout as { name?: string } | null)?.name;
     try {
-      const dedupeKey = `shared-workout:${workoutId}`;
-      const n = await notifyAll(
-        db,
-        { kind: "shared_workout", title: line, body: "Tap “Open workout” to see it in Shared Workouts.", dedupeKey },
-        sharerId,
-      );
+      const announcement = sharedWorkoutAnnouncement(workoutId, workoutName, full, sharerId);
+      const n = await notifyAll(db, { kind: "shared_workout", ...announcementInboxContent(announcement) }, sharerId);
       let emails = 0;
       let emailError: string | null = null;
       try {
         const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
-        emails = await sendBroadcastEmail(db, {
-          dedupeKey,
-          subject: line,
-          heading: "New Shared Workout!",
-          body: line,
-          workoutName,
-          supportingText: `Created by ${full || first}.`,
-          buttonHref: `${SITE_URL}/community/workout/${workoutId}`,
-          buttonLabel: "View Workout",
-          exclude: sharerId,
-        });
+        emails = await sendBroadcastEmail(db, announcement);
       } catch (e) {
         emailError = e instanceof Error ? e.message : "email error";
       }
