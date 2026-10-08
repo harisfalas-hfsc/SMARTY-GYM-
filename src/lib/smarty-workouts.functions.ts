@@ -53,8 +53,15 @@ const CARD_COLS = "id,name,category,format,focus,difficulty_stars,duration_min,e
 
 async function publicClient() {
   const { createClient } = await import("@supabase/supabase-js");
-  return createClient(process.env["SUPABASE_URL"]!, process.env["SUPABASE_PUBLISHABLE_KEY"]!, {
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+  return createClient(process.env["SUPABASE_URL"]!, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+    global: { fetch: (input, init) => {
+      const headers = new Headers(init?.headers);
+      if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization");
+      headers.set("apikey", key);
+      return fetch(input, { ...init, headers });
+    } },
   });
 }
 

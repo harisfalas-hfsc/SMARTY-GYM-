@@ -39,6 +39,10 @@ export const Route = createFileRoute("/smarty-workouts/")({
 
 function SmartyWorkoutsPage() {
   const { counts, featured } = Route.useLoaderData();
+  const fallbackFor = (category: string) => {
+    const known = SMARTY_WORKOUT_CATEGORIES.find((item) => item === category);
+    return known ? CATEGORY_DETAILS[known].image : pageHeroImage;
+  };
   const [api, setApi] = useState<CarouselApi>();
   const [active, setActive] = useState(0);
 
@@ -137,7 +141,7 @@ function SmartyWorkoutsPage() {
         <section aria-label="Featured Workouts" className="mt-8 lg:hidden">
           <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-primary"><Star className="h-5 w-5" />Featured Workouts</h2>
           <div className="grid gap-4 sm:grid-cols-3">
-            {featured.map((workout) => <WorkoutCard key={workout.id} workout={workout} kind={kindForWorkout(workout)} fallback={CATEGORY_DETAILS[workout.category]?.image ?? pageHeroImage} eager={false} />)}
+            {featured.map((workout) => <WorkoutCard key={workout.id} workout={workout} kind={kindForWorkout(workout)} fallback={fallbackFor(workout.category)} eager={false} />)}
           </div>
         </section>
       )}
@@ -174,7 +178,7 @@ function SmartyWorkoutsPage() {
             <div className="grid min-h-0 flex-1 grid-cols-3 gap-3 lg:max-xl:grid-cols-1">
               {featured.map((workout) => (
                 <div key={workout.id} className="min-w-0 [&>div]:h-full [&_h3]:min-h-0 [&_h3]:text-base [&_h3]:leading-tight [&_p]:hidden lg:max-xl:[&>div]:flex-row lg:max-xl:[&>div>div:first-child]:w-24 lg:max-xl:[&>div>div:first-child]:shrink-0 lg:max-xl:[&>div>div:last-child]:p-2 lg:max-xl:[&_button]:hidden lg:max-xl:[&_span]:text-[10px]">
-                  <WorkoutCard workout={workout} kind={kindForWorkout(workout)} fallback={CATEGORY_DETAILS[workout.category]?.image ?? pageHeroImage} eager={false} />
+                  <WorkoutCard workout={workout} kind={kindForWorkout(workout)} fallback={fallbackFor(workout.category)} eager={false} />
                 </div>
               ))}
             </div>
