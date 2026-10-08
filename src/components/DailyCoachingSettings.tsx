@@ -145,6 +145,34 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
           </Select>
         </div>
 
+        <div className="h-px bg-border" />
+
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p id="new-workout-email-label" className="text-sm font-semibold">New Smarty Workout emails</p>
+            <p className="text-xs text-muted-foreground">When a new workout is added to Smarty Workouts.</p>
+          </div>
+          <Switch
+            className="shrink-0"
+            aria-labelledby="new-workout-email-label"
+            checked={settings.email_new_workouts}
+            onCheckedChange={(v) => patch({ email_new_workouts: v })}
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p id="shared-workout-email-label" className="text-sm font-semibold">Shared Workout emails</p>
+            <p className="text-xs text-muted-foreground">When another member shares a workout.</p>
+          </div>
+          <Switch
+            className="shrink-0"
+            aria-labelledby="shared-workout-email-label"
+            checked={settings.email_shared_workouts}
+            onCheckedChange={(v) => patch({ email_shared_workouts: v })}
+          />
+        </div>
+
       </div>
 
       <Button className="mt-5 h-12 w-full rounded-2xl" disabled={saving} onClick={() => void commit()}>

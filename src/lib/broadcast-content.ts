@@ -65,3 +65,12 @@ export function announcementInboxContent(announcement: WorkoutAnnouncement) {
     dedupeKey: announcement.dedupeKey,
   };
 }
+
+export function wantsAnnouncementEmail(
+  preferences: { email_new_workouts?: boolean; email_shared_workouts?: boolean },
+  dedupeKey: string,
+): boolean {
+  if (dedupeKey.startsWith("new-workout:")) return preferences.email_new_workouts !== false;
+  if (dedupeKey.startsWith("shared-workout:")) return preferences.email_shared_workouts !== false;
+  return true;
+}

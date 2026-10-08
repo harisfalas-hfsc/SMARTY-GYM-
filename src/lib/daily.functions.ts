@@ -11,6 +11,8 @@ import {
 export type DailySettings = {
   timezone: string;
   notify_motivation: boolean;
+  email_new_workouts: boolean;
+  email_shared_workouts: boolean;
   motivation_hour: number;
   wod_mode: boolean;
   auto_workout_enabled: boolean;
@@ -21,6 +23,8 @@ export type DailySettings = {
 const DEFAULTS: DailySettings = {
   timezone: "Europe/Athens",
   notify_motivation: true,
+  email_new_workouts: true,
+  email_shared_workouts: true,
   motivation_hour: 7,
   wod_mode: false,
   auto_workout_enabled: false,
@@ -71,7 +75,7 @@ export const getDailyHub = createServerFn({ method: "GET" })
       supabase
         .from("profiles")
         .select(
-          "timezone,notify_motivation,motivation_hour,wod_mode,auto_workout_enabled,auto_workout_hour,wod_level,wod_renews_at",
+          "timezone,notify_motivation,motivation_hour,wod_mode,auto_workout_enabled,auto_workout_hour,wod_level,wod_renews_at,email_new_workouts,email_shared_workouts",
         )
         .eq("id", userId)
         .maybeSingle(),
@@ -154,6 +158,10 @@ export const saveDailySettings = createServerFn({ method: "POST" })
     if (typeof data.timezone === "string") patch["timezone"] = data.timezone.slice(0, 64);
     if (typeof data.notify_motivation === "boolean")
       patch["notify_motivation"] = data.notify_motivation;
+    if (typeof data.email_new_workouts === "boolean")
+      patch["email_new_workouts"] = data.email_new_workouts;
+    if (typeof data.email_shared_workouts === "boolean")
+      patch["email_shared_workouts"] = data.email_shared_workouts;
     if (data.motivation_hour !== undefined) patch["motivation_hour"] = clampHour(data.motivation_hour);
     // WOD membership can only change through setWodSubscription, where eligibility is enforced.
     if (typeof data.auto_workout_enabled === "boolean")
