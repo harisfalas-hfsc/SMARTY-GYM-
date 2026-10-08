@@ -169,7 +169,13 @@ export function workoutRuleBreaks(
   // Strength / Muscle Building: equipment workouts use only pool B, bodyweight workouts only pool A.
   if (isLoadCategory(ctx.category) && work.length) {
     const equipped = work.some((e) => !isBodyweightEquipment(e.equipment ?? ""));
-    const off = work.filter((e) => !(equipped ? isStrengthEquipmentListExercise(e) : isStrengthBodyweightListExercise(e)));
+    // Equipment workouts keep the bodyweight list available beside the equipment
+    // list (same rule as exerciseRuleBreaks and the generator pool).
+    const off = work.filter((e) =>
+      equipped
+        ? !(isStrengthEquipmentListExercise(e) || (isBodyweightEquipment(e.equipment ?? "") && isStrengthBodyweightListExercise(e)))
+        : !isStrengthBodyweightListExercise(e),
+    );
     if (off.length) out.push(`"${off[0]!.name}" is not on the SmartyGym ${equipped ? "equipment" : "bodyweight"} Strength & Muscle Hypertrophy list — this ${ctx.category} workout uses only those exercises.`);
   }
   // Strength / Muscle Building Finisher is complementary accessory work, never a second workout.

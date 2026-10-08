@@ -508,9 +508,9 @@ export const adminListWorkouts = createServerFn({ method: "POST" })
         if (data.source === "request") q = q.eq("is_wod", false);
         if (data.stars) q = q.eq("difficulty_stars", data.stars);
         if (data.equipment && data.equipment !== "all") q = q.contains("equipment", [data.equipment]);
-        if (data.duration === "short") q = q.lte("duration_min", 15);
-        if (data.duration === "medium") q = q.gte("duration_min", 16).lte("duration_min", 35);
-        if (data.duration === "long") q = q.gt("duration_min", 35);
+        // Same duration buckets as the public Smarty Workouts filter.
+        const range = /^(\d+)-(\d+)$/.exec(data.duration ?? "");
+        if (range) q = q.gte("duration_min", Number(range[1])).lte("duration_min", Number(range[2]));
         if (data.from) q = q.gte("created_at", new Date(data.from).toISOString());
         if (data.to) {
           const end = new Date(data.to);

@@ -29,7 +29,7 @@ import {
   type SmartyWorkout,
 } from "@/lib/smarty-workouts.functions";
 import { CATEGORY_FORMATS, FOCUS_CATEGORIES, STRENGTH_FOCUS, type Category } from "@/lib/workout/spec";
-import { EQUIPMENT, LOCATIONS, TIMES } from "@/lib/coach-options";
+import { EQUIPMENT, TIMES } from "@/lib/coach-options";
 import { categoryLabel, smartyToWorkoutRow } from "@/lib/smarty-workout-row";
 import { SMARTY_DRAFT_EVENT, takeSmartyDraft } from "@/lib/admin-smarty-draft";
 
@@ -48,6 +48,10 @@ export function AdminSmartyWorkoutsTab() {
   const [cat, setCat] = useState("all");
   const [vis, setVis] = useState("all");
   const [query, setQuery] = useState("");
+  const [eqF, setEqF] = useState("all");
+  const [durF, setDurF] = useState("all");
+  const [diffF, setDiffF] = useState("all");
+  const [fmtF, setFmtF] = useState("all");
   const [bulkBusy, setBulkBusy] = useState(false);
   const [creating, setCreating] = useState(false);
   const [choosing, setChoosing] = useState(false);
@@ -114,12 +118,23 @@ export function AdminSmartyWorkoutsTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load]);
 
-  const shown = rows.filter(
-    (w) =>
-      (cat === "all" || w.category === cat) &&
-      (vis === "all" || (vis === "visible" ? w.is_visible : !w.is_visible)) &&
-      w.name.toLowerCase().includes(query.trim().toLowerCase()),
-  );
+  const fmtOptions = [...new Set(rows.filter((w) => cat === "all" || w.category === cat).map((w) => w.format).filter((v): v is string => Boolean(v)))];
+  const shown = rows.filter((w) => {
+    if (cat !== "all" && w.category !== cat) return false;
+    if (vis !== "all" && (vis === "visible" ? !w.is_visible : w.is_visible)) return false;
+    const q = query.trim().toLowerCase();
+    if (q && !`${w.name} ${w.format ?? ""} ${w.equipment.join(" ")}`.toLowerCase().includes(q)) return false;
+    const bw = w.equipment.length === 0 || w.equipment.every((i) => i.toLowerCase() === "bodyweight");
+    if (eqF === "bodyweight" && !bw) return false;
+    if (eqF === "equipment" && bw) return false;
+    if (durF !== "all") {
+      const [min, max] = durF.split("-").map(Number);
+      if (w.duration_min < min! || w.duration_min > max!) return false;
+    }
+    if (diffF !== "all" && String(w.difficulty_stars) !== diffF) return false;
+    if (fmtF !== "all" && (w.format ?? "").toLowerCase() !== fmtF) return false;
+    return true;
+  });
 
   async function bulkVisibility(visible: boolean) {
     setBulkBusy(true);
@@ -162,7 +177,7 @@ export function AdminSmartyWorkoutsTab() {
         </div>
       </div>
 
-      <div className="grid gap-2 sm:max-w-2xl sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-7">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search workouts" className="pl-9" />
@@ -184,6 +199,22 @@ export function AdminSmartyWorkoutsTab() {
             <SelectItem value="hidden">Hidden</SelectItem>
           </SelectContent>
         </Select>
+        <Select value={eqF} onValueChange={setEqF}>
+          <SelectTrigger aria-label="Equipment"><SelectValue /></SelectTrigger>
+          <SelectContent><SelectItem value="all">All equipment</SelectItem><SelectItem value="bodyweight">Bodyweight</SelectItem><SelectItem value="equipment">Equipment</SelectItem></SelectContent>
+        </Select>
+        <Select value={durF} onValueChange={setDurF}>
+          <SelectTrigger aria-label="Duration"><SelectValue /></SelectTrigger>
+          <SelectContent><SelectItem value="all">All durations</SelectItem><SelectItem value="5-20">Up to 20 min</SelectItem><SelectItem value="21-30">21–30 min</SelectItem><SelectItem value="31-45">31–45 min</SelectItem><SelectItem value="46-180">46+ min</SelectItem></SelectContent>
+        </Select>
+        <Select value={diffF} onValueChange={setDiffF}>
+          <SelectTrigger aria-label="Difficulty"><SelectValue /></SelectTrigger>
+          <SelectContent><SelectItem value="all">All levels</SelectItem><SelectItem value="1">Beginner</SelectItem><SelectItem value="2">Intermediate</SelectItem><SelectItem value="3">Advanced</SelectItem></SelectContent>
+        </Select>
+        <Select value={fmtF} onValueChange={setFmtF}>
+          <SelectTrigger aria-label="Format"><SelectValue /></SelectTrigger>
+          <SelectContent><SelectItem value="all">All formats</SelectItem>{fmtOptions.map((f) => <SelectItem key={f} value={f.toLowerCase()}>{f}</SelectItem>)}</SelectContent>
+        </Select>
       </div>
 
       {loading ? (
@@ -202,6 +233,8 @@ export function AdminSmartyWorkoutsTab() {
                 <div className="mt-1 flex flex-wrap gap-1">
                   <Badge variant="secondary">{categoryLabel(w.category)}</Badge>
                   <Badge variant="outline">{w.duration_min} min</Badge>
+                  <Badge variant="outline">{["Beginner", "Intermediate", "Advanced"][w.difficulty_stars - 1] ?? `${w.difficulty_stars}★`}</Badge>
+                  {w.format && <Badge variant="outline">{w.format}</Badge>}
                   <Badge variant={w.is_visible ? "default" : "outline"}>{w.is_visible ? "Visible" : "Hidden"}</Badge>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-1">
@@ -326,7 +359,6 @@ function CreateDialog({ open, onClose, onCreated }: { open: boolean; onClose: ()
   const [focus, setFocus] = useState<string>("none");
   const [stars, setStars] = useState(2);
   const [minutes, setMinutes] = useState(30);
-  const [location, setLocation] = useState<string>("gym");
   const [equipment, setEquipment] = useState<string[]>(["bodyweight"]);
   const [note, setNote] = useState("");
   const [withImage, setWithImage] = useState(true);
@@ -345,7 +377,7 @@ function CreateDialog({ open, onClose, onCreated }: { open: boolean; onClose: ()
         stars,
         minutes,
         equipment,
-        location,
+        location: null,
         ...(note.trim() ? { note: note.trim() } : {}),
         withImage,
       },
@@ -404,12 +436,6 @@ function CreateDialog({ open, onClose, onCreated }: { open: boolean; onClose: ()
               </Select>
             </Field>
           </div>
-          <Field label="Location">
-            <Select value={location} onValueChange={setLocation}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>{LOCATIONS.map((l) => <SelectItem key={l.id} value={l.id}>{l.label}</SelectItem>)}</SelectContent>
-            </Select>
-          </Field>
           <Field label="Equipment">
             <div className="flex flex-wrap gap-1.5">
               {EQUIPMENT.filter((e) => e.id !== "other").map((e) => {
