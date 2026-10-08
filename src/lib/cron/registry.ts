@@ -275,7 +275,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "new-workout-announcement",
     label: "New workout announcement",
     description:
-      "Every time you publish a new Smarty Workout created in the Admin panel, every account (Premium and free) gets a matching app notification and email with the workout name and a View Workout button. Five new workouts means five paired announcements. The same workout is never announced twice, and previously imported workouts are never announced.",
+      "Every time you publish a new Smarty Workout created in the Admin panel, every account (Premium and free) gets an app notification with the workout name and a View Workout button. A matching email is sent unless the member switched off new-workout emails in My Account. The same workout is never announced twice, and previously imported workouts are never announced.",
     timing: "continuous",
     timingNote:
       "Event-triggered, not time-scheduled: sent the moment the workout first becomes visible. A history line is written for each announcement.",
@@ -293,7 +293,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "shared-workout-announcement",
     label: "Shared workout announcement",
     description:
-      "Every time a member shares a workout, every other account (Premium and free) gets a matching app notification and email with the workout name, creator and a View Workout button. One of seven wordings uses the sharer's first name. The person who shared it gets nothing, and sharing the same workout again never repeats it.",
+      "Every time a member shares a workout, every other account (Premium and free) gets an app notification with the workout name, creator and a View Workout button. A matching email is sent unless the member switched off shared-workout emails in My Account. One of seven wordings uses the sharer's first name. The sharer gets nothing, and sharing the same workout again never repeats it.",
     timing: "continuous",
     timingNote:
       "Event-triggered, not time-scheduled: sent the moment the workout is shared. A history line is written for each announcement.",

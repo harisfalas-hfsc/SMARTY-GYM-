@@ -61,7 +61,7 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
     if (!settings || saving) return;
     setSaving(true);
     try {
-      await save({ data: settings });
+      await save(settings);
       toast.success("Daily coaching saved.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not save.");
