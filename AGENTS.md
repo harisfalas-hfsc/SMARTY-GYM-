@@ -39,4 +39,4 @@
 - App panels reuse footer store links/icons and exclude announcement controls from outside dismissal — why: consistent links, independent closing.
 - Mass workout emails use the Resend gateway and broadcast_email_sends deduplication; other email uses Lovable managed sending — why: broadcasts need the marketing-grade path.
 
-- Workout announcements share browser-safe content builders across email, inbox and tests, with the old email renderer — why: identical wording and destinations.
+- Workout announcements share content builders and email preference filtering; inbox delivery ignores email opt-outs — why: matching content with independent channels.
