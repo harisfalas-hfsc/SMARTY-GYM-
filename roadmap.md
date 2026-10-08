@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Match workout announcement content across email, app inbox and Admin previews; send two realistic owner-only test emails and inspect desktop/phone.
+
 - [x] Match both workout announcement emails to the old design and structure; retain app notices, controls and history. Desktop/phone email previews inspected; 260 tests pass. Live all-account delivery not triggered.
 
 - [ ] Identify original latest-three Smarty Workouts and add Featured Workouts beside Recovery on desktop and below categories on mobile; verify layout, links and access.
