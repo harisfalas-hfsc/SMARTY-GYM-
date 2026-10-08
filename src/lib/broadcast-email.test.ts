@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { broadcastEmailHtml, type BroadcastEmail } from "./broadcast-email.server";
-import { newWorkoutAnnouncement, sharedWorkoutAnnouncement, announcementInboxContent } from "./broadcast-content";
+import { newWorkoutAnnouncement, sharedWorkoutAnnouncement, announcementInboxContent, wantsAnnouncementEmail } from "./broadcast-content";
 
 const email: BroadcastEmail = {
   dedupeKey: "new-workout:sample",
@@ -14,6 +14,16 @@ const email: BroadcastEmail = {
 };
 
 describe("workout announcement email", () => {
+  it("honors independent email opt-outs without changing mandatory inbox content", () => {
+    const preferences = { email_new_workouts: false, email_shared_workouts: true };
+    expect(wantsAnnouncementEmail(preferences, "new-workout:sample")).toBe(false);
+    expect(wantsAnnouncementEmail(preferences, "shared-workout:sample")).toBe(true);
+    expect(wantsAnnouncementEmail({ email_new_workouts: true, email_shared_workouts: false }, "new-workout:sample")).toBe(true);
+    expect(wantsAnnouncementEmail({ email_shared_workouts: false }, "shared-workout:sample")).toBe(false);
+    expect(wantsAnnouncementEmail({}, "new-workout:sample")).toBe(true);
+    expect(announcementInboxContent(newWorkoutAnnouncement("sample", "Solid Lift")).body).toContain("Solid Lift");
+  });
+
   it("matches new workout app content to email content", () => {
     const announcement = newWorkoutAnnouncement("sample", "Power & Pace");
     const inbox = announcementInboxContent(announcement);

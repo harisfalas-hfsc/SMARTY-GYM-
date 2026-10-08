@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { WorkoutAnnouncement } from "./broadcast-content";
+import { wantsAnnouncementEmail } from "./broadcast-content";
 
 type DB = SupabaseClient;
 
@@ -65,7 +66,7 @@ export async function sendBroadcastEmail(db: DB, input: BroadcastEmail): Promise
 
   const { data: profiles, error: profilesError } = await db
     .from("profiles")
-    .select("id,email")
+    .select("id,email,email_new_workouts,email_shared_workouts")
     .limit(20000);
   if (profilesError) throw new Error(profilesError.message);
 
@@ -77,8 +78,8 @@ export async function sendBroadcastEmail(db: DB, input: BroadcastEmail): Promise
   if (doneError) throw new Error(doneError.message);
   const already = new Set(((done as { user_id: string }[] | null) ?? []).map((r) => r.user_id));
 
-  const recipients = ((profiles as { id: string; email: string | null }[] | null) ?? [])
-    .filter((p) => p.email && p.id !== input.exclude && !already.has(p.id));
+  const recipients = ((profiles as { id: string; email: string | null; email_new_workouts: boolean; email_shared_workouts: boolean }[] | null) ?? [])
+    .filter((p) => p.email && p.id !== input.exclude && !already.has(p.id) && wantsAnnouncementEmail(p, input.dedupeKey));
 
   if (!recipients.length) return 0;
 

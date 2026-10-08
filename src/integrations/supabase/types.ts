@@ -888,6 +888,8 @@ export type Database = {
           disliked_exercises: string[]
           display_name: string | null
           email: string | null
+          email_new_workouts: boolean
+          email_shared_workouts: boolean
           experience: string | null
           favorite_exercise_ids: string[]
           favorite_exercises: string[]
@@ -931,6 +933,8 @@ export type Database = {
           disliked_exercises?: string[]
           display_name?: string | null
           email?: string | null
+          email_new_workouts?: boolean
+          email_shared_workouts?: boolean
           experience?: string | null
           favorite_exercise_ids?: string[]
           favorite_exercises?: string[]
@@ -974,6 +978,8 @@ export type Database = {
           disliked_exercises?: string[]
           display_name?: string | null
           email?: string | null
+          email_new_workouts?: boolean
+          email_shared_workouts?: boolean
           experience?: string | null
           favorite_exercise_ids?: string[]
           favorite_exercises?: string[]

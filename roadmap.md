@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Add two Account email preferences in Daily Coaching; sending filters honor independent opt-outs, mandatory app notices unchanged. Signed-in save/reload verified for both combinations at 1280/384px; original owner preferences restored; 263 tests pass.
+
 - [x] Match workout announcement content across email, app inbox and Admin previews; two realistic owner-only test emails accepted by Resend. Signed-in Admin cards and email layouts checked at 1280/384px; 262 tests pass. No fictional workouts or all-account broadcasts created.
 
 - [x] Match both workout announcement emails to the old design and structure; retain app notices, controls and history. Desktop/phone email previews inspected; 260 tests pass. Live all-account delivery not triggered.
