@@ -275,7 +275,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "new-workout-announcement",
     label: "New workout announcement",
     description:
-      "Every time you publish a new Smarty Workout created in the Admin panel, every account (Premium and free) gets one inbox message “New workout available” with an Open workout button. Five new workouts means five messages. The same workout is never announced twice, and the transferred library is never announced.",
+      "Every time you publish a new Smarty Workout created in the Admin panel, every account (Premium and free) gets one “New workout available” message with an Open workout button — in their inbox and by email. Five new workouts means five messages. The same workout is never announced twice, and the transferred library is never announced.",
     timing: "continuous",
     timingNote:
       "Event-triggered, not time-scheduled: sent the moment the workout first becomes visible. A history line is written for each announcement.",
@@ -293,7 +293,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "shared-workout-announcement",
     label: "Shared workout announcement",
     description:
-      "Every time a member shares a workout, every other account (Premium and free) gets one inbox message with the sharer's first name, in one of seven rotating wordings. The person who shared it gets nothing, and sharing the same workout again never repeats it.",
+      "Every time a member shares a workout, every other account (Premium and free) gets one message with the sharer's first name, in one of seven rotating wordings — in their inbox and by email. The person who shared it gets nothing, and sharing the same workout again never repeats it.",
     timing: "continuous",
     timingNote:
       "Event-triggered, not time-scheduled: sent the moment the workout is shared. A history line is written for each announcement.",
