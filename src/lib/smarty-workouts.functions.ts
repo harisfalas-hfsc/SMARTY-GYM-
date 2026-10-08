@@ -388,6 +388,10 @@ export const adminUpdateSmartyWorkout = createServerFn({ method: "POST" })
         .update({ ...data.patch, updated_at: new Date().toISOString() })
         .eq("id", data.id);
       if (error) return { error: error.message };
+      if (data.patch.is_visible === true) {
+        const { announceNewSmartyWorkouts } = await import("@/lib/broadcast-notify.server");
+        await announceNewSmartyWorkouts(supabaseAdmin as never, [data.id]);
+      }
       return { ok: true };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed" };
@@ -770,6 +774,8 @@ export const adminPublishCheckedWorkouts = createServerFn({ method: "POST" })
         const { error } = await supabaseAdmin.from("smarty_workouts").update({ is_visible: true }).in("id", ok.slice(i, i + 100));
         if (error) return { error: error.message };
       }
+      const { announceNewSmartyWorkouts } = await import("@/lib/broadcast-notify.server");
+      await announceNewSmartyWorkouts(supabaseAdmin as never, ok);
       return { count: ok.length, held: hidden.length - ok.length };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed" };

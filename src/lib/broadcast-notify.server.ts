@@ -29,7 +29,11 @@ async function notifyAll(
 ): Promise<number> {
   const { data, error } = await db.from("profiles").select("id").limit(20000);
   if (error) throw new Error(error.message);
-  const ids = ((data as { id: string }[] | null) ?? []).map((r) => r.id).filter((id) => id !== exclude);
+  const { data: done } = await db.from("notifications").select("user_id").eq("dedupe_key", row.dedupeKey).limit(20000);
+  const already = new Set(((done as { user_id: string }[] | null) ?? []).map((r) => r.user_id));
+  const ids = ((data as { id: string }[] | null) ?? [])
+    .map((r) => r.id)
+    .filter((id) => id !== exclude && !already.has(id));
   let sent = 0;
   for (let i = 0; i < ids.length; i += BATCH) {
     const rows = ids.slice(i, i + BATCH).map((user_id) => ({
@@ -39,12 +43,9 @@ async function notifyAll(
       body: row.body,
       dedupe_key: row.dedupeKey,
     }));
-    const { data: ins, error: e } = await db
-      .from("notifications")
-      .upsert(rows as never, { onConflict: "user_id,dedupe_key", ignoreDuplicates: true })
-      .select("id");
+    const { error: e } = await db.from("notifications").insert(rows as never);
     if (e) throw new Error(e.message);
-    sent += (ins ?? []).length;
+    sent += rows.length;
   }
   return sent;
 }
