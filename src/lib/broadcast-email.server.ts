@@ -9,7 +9,6 @@ type DB = SupabaseClient;
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
 const FROM = "SMARTYGYM <no-reply@smartygym.com>";
 const SITE_URL = "https://smartygym.com";
-const LOGO_URL = `${SITE_URL}/__l5e/assets-v1/4df8117f-d0e1-40cc-92b8-69804d967d79/smartygym-logo.png`;
 const BATCH = 100;
 
 export interface BroadcastEmail {
@@ -17,6 +16,8 @@ export interface BroadcastEmail {
   subject: string;
   heading: string;
   body: string;
+  workoutName?: string;
+  supportingText?: string;
   buttonHref: string;
   buttonLabel?: string;
   /** Account that created/shared the workout — it already knows. */
@@ -32,34 +33,31 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
-/** Branded HTML in the same clean white style as the approved welcome email. */
+/** Shared old-project new-content layout, adapted to fluid mobile tables. */
 export function broadcastEmailHtml(email: BroadcastEmail): string {
-  const heading = escapeHtml(email.heading);
-  const body = escapeHtml(email.body);
-  const label = escapeHtml(email.buttonLabel ?? "Open workout");
-  const href = escapeHtml(email.buttonHref);
+  const paragraph = (text: string, emphasis = false) => `<p style="font-size:${emphasis ? 18 : 16}px;line-height:1.6;color:${emphasis ? "#29B6D2" : "#333333"};font-weight:${emphasis ? "bold" : "normal"};margin:0 0 15px;overflow-wrap:anywhere;">${escapeHtml(text)}</p>`;
   return `<!DOCTYPE html>
-<html lang="en" dir="ltr"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /></head>
-<body style="margin:0;background-color:#ffffff;font-family:Arial,Helvetica,sans-serif;">
-<div style="max-width:620px;margin:0 auto;padding:24px 22px 32px;">
-  <div style="border-top:5px solid #2563eb;padding:22px 4px 24px;">
-    <table role="presentation" style="width:100%;border-collapse:collapse;">
-      <tr>
-        <td style="width:78px;vertical-align:middle;"><img src="${LOGO_URL}" width="64" height="64" alt="SMARTYGYM" style="display:block;border:0;" /></td>
-        <td style="vertical-align:middle;">
-          <div style="font-size:16px;font-weight:bold;letter-spacing:0.08em;color:#0f172a;">SMARTYGYM</div>
-          <div style="font-size:10px;letter-spacing:0.14em;color:#64748b;margin-top:2px;">YOUR GYM RE-IMAGINED. ANYWHERE, ANYTIME.</div>
-        </td>
-      </tr>
-    </table>
-    <h1 style="font-size:24px;line-height:1.25;color:#0f172a;margin:22px 0 10px;">${heading}</h1>
-    <p style="font-size:14px;line-height:1.6;color:#334155;margin:0;">${body}</p>
-    <a href="${href}" style="display:inline-block;margin-top:20px;background-color:#2563eb;color:#ffffff;font-size:14px;font-weight:bold;padding:12px 24px;border-radius:999px;text-decoration:none;">${label}</a>
-  </div>
-  <hr style="border:0;border-top:1px solid #e2e8f0;margin:24px 0 16px;" />
-  <p style="font-size:12px;color:#94a3b8;margin:0;">You are receiving this because you have a SMARTYGYM account.</p>
-  <p style="font-size:12px;color:#94a3b8;margin:6px 0 0;">HARIS FALAS &mdash; Your Gym Re-imagined. Anywhere, Anytime.</p>
-</div>
+<html lang="en" dir="ltr"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><meta name="x-apple-disable-message-reformatting" /><title>${escapeHtml(email.subject)}</title></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f5f5f5;-webkit-text-size-adjust:100%;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#f5f5f5;"><tr><td style="padding:24px 12px;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width:600px;margin:0 auto;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+<tr><td style="background-color:#1a1a1a;background-image:linear-gradient(135deg,#1a1a1a,#2d2d2d);padding:30px 20px;text-align:center;">
+<h1 style="color:#29B6D2;margin:0;font-size:28px;font-weight:bold;">SMARTYGYM</h1>
+<p style="color:#999999;margin:8px 0 0;font-size:14px;line-height:1.6;">Your Gym Re-imagined. Anywhere, Anytime.</p>
+</td></tr>
+<tr><td style="padding:32px 24px;">
+<h2 style="color:#1a1a1a;margin:0 0 20px;font-size:24px;line-height:1.3;overflow-wrap:anywhere;">${escapeHtml(email.heading)}</h2>
+${paragraph(email.body)}
+${email.workoutName ? paragraph(email.workoutName, true) : ""}
+${email.supportingText ? paragraph(email.supportingText) : ""}
+<div style="text-align:center;margin-top:30px;">
+<a href="${escapeHtml(email.buttonHref)}" style="display:inline-block;background-color:#29B6D2;background-image:linear-gradient(135deg,#29B6D2,#5CD3E8);color:#ffffff;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;line-height:1.4;">${escapeHtml(email.buttonLabel ?? "View Workout")}</a>
+</div></td></tr>
+<tr><td style="background-color:#f8f8f8;padding:20px 24px;text-align:center;border-top:1px solid #eeeeee;">
+<p style="color:#888888;margin:0;font-size:12px;line-height:1.6;">You're receiving this email because you have a SMARTYGYM account.</p>
+<p style="font-size:13px;color:#666666;line-height:1.6;margin:16px 0 12px;">SMARTYGYM &ndash; Your Expert Fitness Partner<br />Designed by HARIS FALAS, Sports Scientist (CSCS Certified)</p>
+<a href="${SITE_URL}/privacy" style="font-size:12px;color:#999999;text-decoration:underline;">Privacy Policy</a>
+</td></tr></table></td></tr></table>
 </body></html>`;
 }
 
