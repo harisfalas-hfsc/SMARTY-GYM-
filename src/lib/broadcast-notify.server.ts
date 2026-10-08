@@ -3,6 +3,7 @@ import { getCronConfig, recordRun } from "@/lib/cron/jobs.server";
 
 type DB = SupabaseClient;
 const BATCH = 500;
+const SITE_URL = "https://smartygym.com";
 
 export const SHARED_WORKOUT_LINES = [
   "{name} just shared a workout. Feeling in the mood to do it?",
