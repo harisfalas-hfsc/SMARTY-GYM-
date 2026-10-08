@@ -1,0 +1,2 @@
+-- Existing visible-only RLS remains unchanged. Grant card metadata, never Premium prescriptions.
+GRANT SELECT (id, name, category, format, focus, difficulty_stars, duration_min, equipment, location, image_url, description_html, created_at, legacy_id, is_visible, sort_order) ON public.smarty_workouts TO anon;

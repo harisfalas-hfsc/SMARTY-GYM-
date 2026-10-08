@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { newestSmartyWorkouts } from "@/lib/smarty-workout-original-dates";
 
 /** The nine ready-workout categories, in page order. */
 export const SMARTY_WORKOUT_CATEGORIES = [
@@ -52,8 +53,15 @@ const CARD_COLS = "id,name,category,format,focus,difficulty_stars,duration_min,e
 
 async function publicClient() {
   const { createClient } = await import("@supabase/supabase-js");
-  return createClient(process.env["SUPABASE_URL"]!, process.env["SUPABASE_PUBLISHABLE_KEY"]!, {
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+  return createClient(process.env["SUPABASE_URL"]!, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+    global: { fetch: (input, init) => {
+      const headers = new Headers(init?.headers);
+      if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization");
+      headers.set("apikey", key);
+      return fetch(input, { ...init, headers });
+    } },
   });
 }
 
@@ -108,6 +116,18 @@ export const getSmartyWorkoutCounts = createServerFn({ method: "GET" }).handler(
     } catch {
       return { total: 0, byCategory };
     }
+  },
+);
+
+/** Public card metadata only; preserve original order, not import timestamps. */
+export const getFeaturedSmartyWorkouts = createServerFn({ method: "GET" }).handler(
+  async (): Promise<SmartyWorkoutCard[]> => {
+    const db = await publicClient();
+    const { data, error } = await db.from("smarty_workouts")
+      .select(`${CARD_COLS},legacy_id`).eq("is_visible", true);
+    if (error) throw new Error("Featured workouts could not be loaded");
+    return newestSmartyWorkouts((data ?? []) as (SmartyWorkoutCard & { legacy_id?: string | null })[])
+      .map(({ legacy_id: _legacyId, ...card }) => card);
   },
 );
 
