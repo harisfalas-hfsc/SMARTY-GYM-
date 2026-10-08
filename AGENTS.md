@@ -17,8 +17,8 @@
 
 - Smarty Ritual rotation is computed from app_settings.ritual_anchor_date + position (src/lib/ritual-schedule.ts); no nightly job, so page and admin schedule never drift.
 - Public PDFs are client-generated and include every visible block — why: exact page parity.
-- Workout engine: CHALLENGE sessions are enforced as full-body, majority-bodyweight, on-level benchmarks via challengeBalanceViolation (doctrine.ts) as a structural validator error; exercise library carries smarty_tags (9 tags, backfilled from category/body_part/difficulty/equipment) used to prefer challenge vocabulary in filterPool.
-- Workout difficulty is prescription only: filterPool never narrows vocabulary by level (beginner just drops library-"advanced" rows); flowSpecialtyViolation (doctrine.ts) bans balance tools/isolation machines in flow categories and timed formats, enforced in both pool and validator — one engine for WOD and custom.
+- CHALLENGE uses challengeBalanceViolation for full-body, majority-bodyweight, on-level benchmarks; filterPool prefers smarty_tags — why: consistent challenge structure.
+- Difficulty is prescription-only; beginners exclude advanced rows. flowSpecialtyViolation bans balance tools/isolation machines in flow/timed formats in pool and validator — why: one WOD/custom engine.
 - Smarty Check-ins scoring lives in src/lib/checkins/score.ts, computed server-side in checkins.functions.ts and read by coach via loadCheckinSignal — one source for UI, badges and coach.
 - Coach/admin/WOD generation is deterministic (no AI) via shared generateWorkoutContent; priority lists live only in priority.ts — why: one rule package.
 - Smarty Workouts share admin controls and local media; featured uses shared cards and locally preserved original dates — why: one collection, accurate newest order, no old-project dependency.
@@ -38,3 +38,5 @@
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
 - App panels reuse footer store links/icons and exclude announcement controls from outside dismissal — why: consistent links, independent closing.
 - Mass broadcast emails (new-workout and shared-workout announcements) send through the Resend connector gateway (verified sender smartygym.com) with delivery tracked in broadcast_email_sends; all other email uses the Lovable managed email service — why: managed email only allows per-action transactional sends, mass mailing needs the marketing-grade path.
+
+- Workout announcements share one renderer adapted from the old new-content email; triggers supply escaped text and current links — why: matching layouts without obsolete routes or runtime code.

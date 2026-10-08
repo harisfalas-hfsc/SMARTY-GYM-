@@ -19,7 +19,7 @@ export const SHARED_WORKOUT_LINES = [
 export function sharedWorkoutLine(name: string, workoutId: string): string {
   let h = 0;
   for (const c of workoutId) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return SHARED_WORKOUT_LINES[h % SHARED_WORKOUT_LINES.length]!.replace("{name}", name);
+  return (SHARED_WORKOUT_LINES[h % SHARED_WORKOUT_LINES.length] ?? "{name} just shared a workout.").replace("{name}", name);
 }
 
 /** One inbox message per account (except `exclude`); dedupe_key makes repeats impossible. */
@@ -79,9 +79,12 @@ export async function announceNewSmartyWorkouts(db: DB, workoutIds: string[]): P
           const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
           emails = await sendBroadcastEmail(db, {
             dedupeKey,
-            subject: "New workout available",
-            heading: "New workout available",
-            body: `${w.name} is now live in Smarty Workouts.`,
+            subject: `🏋️ New Workout: ${w.name}`,
+            heading: "New Workout Added!",
+            body: "A new workout has been added to the SMARTYGYM library!",
+            workoutName: w.name,
+            supportingText: "Designed by Sports Scientist HARIS FALAS to help you achieve your fitness goals.",
+            buttonLabel: "View Workout",
             buttonHref: `${SITE_URL}/smarty-workouts/${w.id}`,
           });
         } catch (e) {
@@ -120,6 +123,8 @@ export async function announceSharedWorkout(db: DB, workoutId: string, sharerId:
     const full = String((p as { display_name?: string } | null)?.display_name ?? "").trim();
     const first = full.split(/\s+/)[0] || "A member";
     const line = sharedWorkoutLine(first, workoutId);
+    const { data: workout } = await db.from("workouts").select("name").eq("id", workoutId).maybeSingle();
+    const workoutName = (workout as { name?: string } | null)?.name;
     try {
       const dedupeKey = `shared-workout:${workoutId}`;
       const n = await notifyAll(
@@ -134,10 +139,13 @@ export async function announceSharedWorkout(db: DB, workoutId: string, sharerId:
         emails = await sendBroadcastEmail(db, {
           dedupeKey,
           subject: line,
-          heading: line,
-          body: "A member just shared a workout in Shared Workouts.",
+          heading: "New Shared Workout!",
+          body: line,
+          workoutName,
+          supportingText: `Created by ${full || first}.`,
           buttonHref: `${SITE_URL}/community/workout/${workoutId}`,
-          buttonLabel: "Open workout",
+          buttonLabel: "View Workout",
+          exclude: sharerId,
         });
       } catch (e) {
         emailError = e instanceof Error ? e.message : "email error";
