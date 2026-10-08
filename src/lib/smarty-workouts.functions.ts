@@ -125,7 +125,7 @@ export const getFeaturedSmartyWorkouts = createServerFn({ method: "GET" }).handl
     const db = await publicClient();
     const { data, error } = await db.from("smarty_workouts")
       .select(`${CARD_COLS},legacy_id`).eq("is_visible", true);
-    if (error) throw new Error(`Featured workouts could not be loaded: ${error.message}`);
+    if (error) throw new Error("Featured workouts could not be loaded");
     return newestSmartyWorkouts((data ?? []) as (SmartyWorkoutCard & { legacy_id?: string | null })[])
       .map(({ legacy_id: _legacyId, ...card }) => card);
   },

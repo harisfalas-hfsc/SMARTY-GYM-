@@ -2,6 +2,12 @@ import { describe, expect, it } from "vitest";
 import { newestSmartyWorkouts } from "../../smarty-workout-original-dates";
 
 describe("featured workout ordering", () => {
+  it("excludes daily-only imports with no original eligible date", () => {
+    expect(newestSmartyWorkouts([
+      { id: "daily", legacy_id: "WOD-MS-E-1789887008731", created_at: "2026-09-30" },
+      { id: "pace", legacy_id: "C-054", created_at: "2026-09-30" },
+    ]).map((row) => row.id)).toEqual(["pace"]);
+  });
   it("uses original dates rather than import order and includes newer local creations", () => {
     const rows = [
       { id: "mixed", legacy_id: "ME-058", created_at: "2026-09-30T12:00:00Z" },

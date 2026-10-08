@@ -542,5 +542,8 @@ export const SMARTY_WORKOUT_ORIGINAL_DATES: Record<string, string> = {
 
 export function newestSmartyWorkouts<T extends { id: string; created_at: string; legacy_id?: string | null }>(rows: T[], count = 3): T[] {
   const date = (row: T) => (row.legacy_id ? SMARTY_WORKOUT_ORIGINAL_DATES[row.legacy_id] : undefined) ?? row.created_at;
-  return [...rows].sort((a, b) => date(b).localeCompare(date(a)) || a.id.localeCompare(b.id)).slice(0, count);
+  // The original site's eligible list excluded generated daily WODs. Unmapped
+  // legacy rows must not jump ahead using their later migration timestamps.
+  return rows.filter((row) => !row.legacy_id || row.legacy_id in SMARTY_WORKOUT_ORIGINAL_DATES)
+    .sort((a, b) => date(b).localeCompare(date(a)) || a.id.localeCompare(b.id)).slice(0, count);
 }
