@@ -215,9 +215,10 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
             value={duration}
             onChange={setDuration}
             options={[
-              { value: "short", label: "Up to 15 min" },
-              { value: "medium", label: "16-35 min" },
-              { value: "long", label: "Over 35 min" },
+              { value: "5-20", label: "Up to 20 min" },
+              { value: "21-30", label: "21–30 min" },
+              { value: "31-45", label: "31–45 min" },
+              { value: "46-180", label: "46+ min" },
             ]}
           />
           <FilterSelect

@@ -48,6 +48,10 @@ export function AdminSmartyWorkoutsTab() {
   const [cat, setCat] = useState("all");
   const [vis, setVis] = useState("all");
   const [query, setQuery] = useState("");
+  const [eqF, setEqF] = useState("all");
+  const [durF, setDurF] = useState("all");
+  const [diffF, setDiffF] = useState("all");
+  const [fmtF, setFmtF] = useState("all");
   const [bulkBusy, setBulkBusy] = useState(false);
   const [creating, setCreating] = useState(false);
   const [choosing, setChoosing] = useState(false);
@@ -114,12 +118,23 @@ export function AdminSmartyWorkoutsTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load]);
 
-  const shown = rows.filter(
-    (w) =>
-      (cat === "all" || w.category === cat) &&
-      (vis === "all" || (vis === "visible" ? w.is_visible : !w.is_visible)) &&
-      w.name.toLowerCase().includes(query.trim().toLowerCase()),
-  );
+  const fmtOptions = [...new Set(rows.filter((w) => cat === "all" || w.category === cat).map((w) => w.format).filter((v): v is string => Boolean(v)))];
+  const shown = rows.filter((w) => {
+    if (cat !== "all" && w.category !== cat) return false;
+    if (vis !== "all" && (vis === "visible" ? !w.is_visible : w.is_visible)) return false;
+    const q = query.trim().toLowerCase();
+    if (q && !`${w.name} ${w.format ?? ""} ${w.equipment.join(" ")}`.toLowerCase().includes(q)) return false;
+    const bw = w.equipment.length === 0 || w.equipment.every((i) => i.toLowerCase() === "bodyweight");
+    if (eqF === "bodyweight" && !bw) return false;
+    if (eqF === "equipment" && bw) return false;
+    if (durF !== "all") {
+      const [min, max] = durF.split("-").map(Number);
+      if (w.duration_min < min! || w.duration_min > max!) return false;
+    }
+    if (diffF !== "all" && String(w.difficulty_stars) !== diffF) return false;
+    if (fmtF !== "all" && (w.format ?? "").toLowerCase() !== fmtF) return false;
+    return true;
+  });
 
   async function bulkVisibility(visible: boolean) {
     setBulkBusy(true);
