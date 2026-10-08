@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Match workout announcement content across email, app inbox and Admin previews; send two realistic owner-only test emails and inspect desktop/phone.
+- [x] Match workout announcement content across email, app inbox and Admin previews; two realistic owner-only test emails accepted by Resend. Signed-in Admin cards and email layouts checked at 1280/384px; 262 tests pass. No fictional workouts or all-account broadcasts created.
 
 - [x] Match both workout announcement emails to the old design and structure; retain app notices, controls and history. Desktop/phone email previews inspected; 260 tests pass. Live all-account delivery not triggered.
 
