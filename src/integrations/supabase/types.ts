@@ -311,6 +311,24 @@ export type Database = {
         }
         Relationships: []
       }
+      broadcast_email_sends: {
+        Row: {
+          dedupe_key: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          dedupe_key: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          dedupe_key?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       community_comments: {
         Row: {
           body: string
