@@ -589,6 +589,13 @@
       "when": 1791431330407,
       "tag": "0083_public_smarty_workout_card_column_access",
       "breakpoints": true
+    },
+    {
+      "idx": 84,
+      "version": "7",
+      "when": 1791435449103,
+      "tag": "0084_broadcast_email_sends",
+      "breakpoints": true
     }
   ]
 }
