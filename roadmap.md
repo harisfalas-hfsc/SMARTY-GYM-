@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Match new-workout and shared-workout email announcements to the old SMARTY GYM email design and structure; preserve paired app notices and verify both templates.
+
 - [ ] Identify original latest-three Smarty Workouts and add Featured Workouts beside Recovery on desktop and below categories on mobile; verify layout, links and access.
 
 - [x] Index the 530 visible Smarty Workout covers and public preview pages with factual, workout-specific search metadata while keeping exercise content Premium-only.
