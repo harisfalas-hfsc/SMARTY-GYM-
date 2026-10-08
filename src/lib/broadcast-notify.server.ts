@@ -65,18 +65,36 @@ export async function announceNewSmartyWorkouts(db: DB, workoutIds: string[]): P
       .filter((r) => r.is_visible && !r.legacy_id);
     for (const w of rows) {
       try {
+        const dedupeKey = `new-workout:${w.id}`;
         const n = await notifyAll(db, {
           kind: "new_workout",
           title: "New workout available",
           body: `${w.name} is now live in Smarty Workouts — tap “Open workout” to see it.`,
-          dedupeKey: `new-workout:${w.id}`,
+          dedupeKey,
         });
-        if (n) {
+        let emails = 0;
+        let emailError: string | null = null;
+        try {
+          const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
+          emails = await sendBroadcastEmail(db, {
+            dedupeKey,
+            subject: "New workout available",
+            heading: "New workout available",
+            body: `${w.name} is now live in Smarty Workouts.`,
+            buttonHref: `${SITE_URL}/smarty-workouts/${w.id}`,
+          });
+        } catch (e) {
+          emailError = e instanceof Error ? e.message : "email error";
+        }
+        if (n || emails || emailError) {
+          const summary = emailError
+            ? `“${w.name}” announced to ${n} account(s); emails failed: ${emailError}`
+            : `“${w.name}” announced to ${n} account(s) (${emails} email${emails === 1 ? "" : "s"}).`;
           await recordRun(db, {
             jobKey: "new-workout-announcement",
-            status: "ok",
-            changed: true,
-            summary: `“${w.name}” announced to ${n} account(s).`,
+            status: emailError ? "failed" : "ok",
+            changed: Boolean(n || emails),
+            summary,
           });
         }
       } catch (e) {
