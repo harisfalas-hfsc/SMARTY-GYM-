@@ -1,18 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
-import { getSmartyWorkoutCounts, SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
+import { getSmartyWorkoutCounts, getFeaturedSmartyWorkouts, SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
+import { WorkoutCard, kindForWorkout } from "@/components/wod/WodMobileCards";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, categorySlug } from "@/lib/smarty-workout-categories";
 import pageHeroImage from "@/assets/smarty-workouts-card.jpg";
 
 export const Route = createFileRoute("/smarty-workouts/")({
-  loader: () => getSmartyWorkoutCounts(),
+  loader: async () => {
+    const [counts, featured] = await Promise.all([getSmartyWorkoutCounts(), getFeaturedSmartyWorkouts()]);
+    return { counts, featured };
+  },
   head: () => ({
     meta: [
       { name: "keywords", content: withExtendedKeywords("/smarty-workouts", "ready workouts, smarty workouts") },
@@ -34,7 +38,7 @@ export const Route = createFileRoute("/smarty-workouts/")({
 });
 
 function SmartyWorkoutsPage() {
-  const counts = Route.useLoaderData();
+  const { counts, featured } = Route.useLoaderData();
   const [api, setApi] = useState<CarouselApi>();
   const [active, setActive] = useState(0);
 
@@ -129,6 +133,15 @@ function SmartyWorkoutsPage() {
       </div>
 
       {/* Desktop: category cards, each opens its own page */}
+      {featured.length > 0 && (
+        <section aria-label="Featured Workouts" className="mt-8 lg:hidden">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-primary"><Star className="h-5 w-5" />Featured Workouts</h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {featured.map((workout) => <WorkoutCard key={workout.id} workout={workout} kind={kindForWorkout(workout)} fallback={CATEGORY_DETAILS[workout.category]?.image ?? pageHeroImage} eager={false} />)}
+          </div>
+        </section>
+      )}
+
       <div className="hidden grid-cols-2 gap-6 lg:grid xl:grid-cols-4">
         {SMARTY_WORKOUT_CATEGORIES.map((category) => {
           const detail = CATEGORY_DETAILS[category];
@@ -155,6 +168,18 @@ function SmartyWorkoutsPage() {
             </Link>
           );
         })}
+        {featured.length > 0 && (
+          <section aria-label="Featured Workouts" className="flex min-w-0 flex-col overflow-hidden rounded-lg border-2 border-border bg-card p-4 xl:col-span-3">
+            <h2 className="mb-3 flex shrink-0 items-center gap-2 text-lg font-bold text-primary"><Star className="h-5 w-5" />Featured Workouts</h2>
+            <div className="grid min-h-0 flex-1 grid-cols-3 gap-3 lg:max-xl:grid-cols-1">
+              {featured.map((workout) => (
+                <div key={workout.id} className="min-w-0 [&>div]:h-full [&_h3]:min-h-0 [&_h3]:text-base [&_h3]:leading-tight [&_p]:hidden lg:max-xl:[&>div]:flex-row lg:max-xl:[&>div>div:first-child]:w-24 lg:max-xl:[&>div>div:first-child]:shrink-0 lg:max-xl:[&>div>div:last-child]:p-2 lg:max-xl:[&_button]:hidden lg:max-xl:[&_span]:text-[10px]">
+                  <WorkoutCard workout={workout} kind={kindForWorkout(workout)} fallback={CATEGORY_DETAILS[workout.category]?.image ?? pageHeroImage} eager={false} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
