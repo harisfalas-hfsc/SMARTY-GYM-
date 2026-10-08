@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { WorkoutAnnouncement } from "./broadcast-content";
 
 type DB = SupabaseClient;
 
@@ -11,18 +12,7 @@ const FROM = "SMARTYGYM <no-reply@smartygym.com>";
 const SITE_URL = "https://smartygym.com";
 const BATCH = 100;
 
-export interface BroadcastEmail {
-  dedupeKey: string;
-  subject: string;
-  heading: string;
-  body: string;
-  workoutName?: string;
-  supportingText?: string;
-  buttonHref: string;
-  buttonLabel?: string;
-  /** Account that created/shared the workout — it already knows. */
-  exclude?: string;
-}
+export type BroadcastEmail = WorkoutAnnouncement;
 
 function escapeHtml(value: string): string {
   return value
