@@ -120,17 +120,36 @@ export async function announceSharedWorkout(db: DB, workoutId: string, sharerId:
     const first = full.split(/\s+/)[0] || "A member";
     const line = sharedWorkoutLine(first, workoutId);
     try {
+      const dedupeKey = `shared-workout:${workoutId}`;
       const n = await notifyAll(
         db,
-        { kind: "shared_workout", title: line, body: "Tap “Open workout” to see it in Shared Workouts.", dedupeKey: `shared-workout:${workoutId}` },
+        { kind: "shared_workout", title: line, body: "Tap “Open workout” to see it in Shared Workouts.", dedupeKey },
         sharerId,
       );
-      if (n) {
+      let emails = 0;
+      let emailError: string | null = null;
+      try {
+        const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
+        emails = await sendBroadcastEmail(db, {
+          dedupeKey,
+          subject: line,
+          heading: line,
+          body: "A member just shared a workout in Shared Workouts.",
+          buttonHref: `${SITE_URL}/community/workout/${workoutId}`,
+          buttonLabel: "Open workout",
+        });
+      } catch (e) {
+        emailError = e instanceof Error ? e.message : "email error";
+      }
+      if (n || emails || emailError) {
+        const summary = emailError
+          ? `${first}'s shared workout announced to ${n} account(s); emails failed: ${emailError}`
+          : `${first}'s shared workout announced to ${n} account(s) (${emails} email${emails === 1 ? "" : "s"}).`;
         await recordRun(db, {
           jobKey: "shared-workout-announcement",
-          status: "ok",
-          changed: true,
-          summary: `${first}'s shared workout announced to ${n} account(s).`,
+          status: emailError ? "failed" : "ok",
+          changed: Boolean(n || emails),
+          summary,
         });
       }
     } catch (e) {
