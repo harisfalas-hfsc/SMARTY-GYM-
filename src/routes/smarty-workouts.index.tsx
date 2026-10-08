@@ -11,6 +11,8 @@ import { WorkoutCard, kindForWorkout } from "@/components/wod/WodMobileCards";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, categorySlug } from "@/lib/smarty-workout-categories";
 import pageHeroImage from "@/assets/smarty-workouts-card.jpg";
+import { difficultyLabel } from "@/lib/workout/spec";
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
 
 export const Route = createFileRoute("/smarty-workouts/")({
   loader: async () => {
@@ -140,8 +142,24 @@ function SmartyWorkoutsPage() {
       {featured.length > 0 && (
         <section aria-label="Featured Workouts" className="mt-8 lg:hidden">
           <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-primary"><Star className="h-5 w-5" />Featured Workouts</h2>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {featured.map((workout) => <WorkoutCard key={workout.id} workout={workout} kind={kindForWorkout(workout)} fallback={fallbackFor(workout.category)} eager={false} />)}
+          <div className="flex flex-col gap-3">
+            {featured.map((workout) => (
+              <Link
+                key={workout.id}
+                to="/smarty-workouts/$workoutId"
+                params={{ workoutId: workout.id }}
+                className="grid min-h-24 grid-cols-[7rem_minmax(0,1fr)] overflow-hidden rounded-xl border-2 border-wod-border/60 bg-card text-left transition-colors hover:border-wod-border"
+              >
+                <div className="relative min-h-24 bg-muted">
+                  <img src={coverVariant(workout.image_url, 320) ?? fallbackFor(workout.category)} onError={fallbackTo(workout.image_url ?? fallbackFor(workout.category))} alt={workout.name} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+                </div>
+                <div className="flex min-w-0 flex-col justify-center p-3">
+                  <span className="text-[10px] font-semibold uppercase text-primary">{categoryLabel(workout.category)}</span>
+                  <h3 className="mt-0.5 line-clamp-2 text-sm font-bold leading-tight text-foreground">{workout.name}</h3>
+                  <p className="mt-1 text-[11px] text-muted-foreground">{workout.duration_min} min · {difficultyLabel(workout.difficulty_stars)}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       )}
