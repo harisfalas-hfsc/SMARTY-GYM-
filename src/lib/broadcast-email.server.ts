@@ -19,6 +19,8 @@ export interface BroadcastEmail {
   body: string;
   buttonHref: string;
   buttonLabel?: string;
+  /** Account that created/shared the workout — it already knows. */
+  exclude?: string;
 }
 
 function escapeHtml(value: string): string {
