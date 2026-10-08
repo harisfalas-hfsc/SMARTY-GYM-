@@ -151,7 +151,7 @@ function SmartyWorkoutsPage() {
                 className="grid min-h-24 grid-cols-[7rem_minmax(0,1fr)] overflow-hidden rounded-xl border-2 border-wod-border/60 bg-card text-left transition-colors hover:border-wod-border"
               >
                 <div className="relative min-h-24 bg-muted">
-                  <img src={coverVariant(workout.image_url, 320) ?? fallbackFor(workout.category)} onError={fallbackTo(workout.image_url ?? fallbackFor(workout.category))} alt={workout.name} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+                  <img src={coverVariant(workout.image_url, 640) ?? fallbackFor(workout.category)} onError={fallbackTo(workout.image_url ?? fallbackFor(workout.category))} alt={workout.name} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
                 </div>
                 <div className="flex min-w-0 flex-col justify-center p-3">
                   <span className="text-[10px] font-semibold uppercase text-primary">{categoryLabel(workout.category)}</span>
