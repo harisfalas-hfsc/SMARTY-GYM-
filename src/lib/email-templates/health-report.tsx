@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
@@ -93,6 +94,7 @@ const Email = ({
         <Text style={footer}>
           Change the time, the recipient or which checks run in the Admin panel → Cron jobs.
         </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

@@ -1,6 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { WorkoutAnnouncement } from "./broadcast-content";
 import { wantsAnnouncementEmail } from "./broadcast-content";
+import { EMAIL_BRAND_FOOTER } from "./email-brand";
+export { EMAIL_BRAND_FOOTER } from "./email-brand";
 
 type DB = SupabaseClient;
 
@@ -13,8 +15,6 @@ const FROM = "SMARTYGYM <no-reply@smartygym.com>";
 const SITE_URL = "https://smartygym.com";
 const BATCH = 100;
 
-/** Shared brand line for every SMARTYGYM email footer. */
-export const EMAIL_BRAND_FOOTER = `<p style="font-size:13px;color:#666666;line-height:1.6;margin:16px 0 12px;">SMARTYGYM &ndash; Your Gym Re-imagined. Anywhere, Anytime.<br /><a href="${SITE_URL}" style="color:#29B6D2;text-decoration:none;font-weight:bold;">smartygym.com</a></p>`;
 
 export type BroadcastEmail = WorkoutAnnouncement;
 
@@ -57,9 +57,7 @@ ${email.supportingText ? paragraph(email.supportingText) : ""}
 <a href="${escapeHtml(email.buttonHref)}" style="display:inline-block;background-color:#29B6D2;background-image:linear-gradient(135deg,#29B6D2,#5CD3E8);color:#ffffff;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;line-height:1.4;">${escapeHtml(email.buttonLabel ?? "View Workout")}</a>
 </div></td></tr>
 <tr><td style="background-color:#f8f8f8;padding:20px 24px;text-align:center;border-top:1px solid #eeeeee;">
-<p style="color:#888888;margin:0;font-size:12px;line-height:1.6;">You're receiving this email because you have a SMARTYGYM account.</p>
 ${EMAIL_BRAND_FOOTER}
-<a href="${SITE_URL}/privacy" style="font-size:12px;color:#999999;text-decoration:underline;">Privacy Policy</a>
 </td></tr></table></td></tr></table>
 </body></html>`;
 }

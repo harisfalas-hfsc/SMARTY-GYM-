@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import {
   Body,
@@ -33,12 +34,9 @@ const Email = ({ name, subject, message }: Props) => (
         <Hr style={hr} />
         <Text style={footer}>
           You can continue the conversation in the app under Messages.
-          <br />
-          <br />
-          Yours in good health,
-          <br />
-          Haris Falas, BSc Sports Science, EXOS Specialist, CSCS
+
         </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

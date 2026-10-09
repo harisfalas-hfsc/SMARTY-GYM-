@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import {
   Body,
@@ -36,6 +37,7 @@ const Email = ({ name, email, subject, message }: Props) => (
         <Text style={quote}>{message || '(empty)'}</Text>
         <Hr style={hr} />
         <Text style={footer}>Reply from Admin → Messages, or hit reply to answer by email.</Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

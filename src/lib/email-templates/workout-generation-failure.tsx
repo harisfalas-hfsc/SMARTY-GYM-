@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
@@ -59,6 +60,7 @@ const Email = ({
           The member has been told we are on it. Retries run automatically every few minutes; open the
           Admin panel → Generation failures to see the live state.
         </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

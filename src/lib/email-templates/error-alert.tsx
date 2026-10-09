@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
@@ -85,6 +86,7 @@ const Email = ({
           The same problem will not email again for {groupWindowMin} minutes — repeats are counted
           instead. Full list and settings: Admin panel → Cron jobs.
         </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

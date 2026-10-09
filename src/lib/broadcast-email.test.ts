@@ -58,7 +58,10 @@ describe("workout announcement email", () => {
     expect(html).toContain("#29B6D2");
     expect(html.indexOf("SMARTYGYM</h1>")).toBeLessThan(html.indexOf("New Workout Added!</h2>"));
     expect(html.indexOf("Solid Lift</p>")).toBeLessThan(html.indexOf(">View Workout</a>"));
-    expect(html).toContain('href="https://smartygym.com/privacy"');
+    expect(html).toContain('data-email-brand-footer="true"');
+    expect(html).toContain('href="https://smartygym.com"');
+    expect(html).toContain("Your Gym Reimagined</p>");
+    expect(html).toContain("Anytime, Anywhere.</p>");
     expect(html).not.toContain("/userdashboard");
   });
 
