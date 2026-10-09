@@ -35,14 +35,14 @@ type NavTarget =
   | { to: "/exercise-library" }
   | { to: "/tools" };
 
-function OptionRow({ icon, title, subtitle, onClick }: { icon: React.ReactNode; title: string; subtitle: string; onClick: () => void }) {
+function OptionRow({ icon, title, subtitle, tint, onClick }: { icon: React.ReactNode; title: string; subtitle: string; tint: string; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className="flex w-full items-center gap-3 rounded-md border border-border p-3 text-left transition-colors hover:border-primary hover:bg-primary/5"
     >
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">{icon}</span>
+      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-md ${tint}`}>{icon}</span>
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-bold">{title}</span>
         <span className="block text-xs text-muted-foreground">{subtitle}</span>
