@@ -224,7 +224,7 @@ export function selectPurpose(i: CoachEngineInput, gate: Gate): PurposePlan {
     if (i.totalCompleted === 0) {
       return {
         ...base, purpose: "intro", cap: "light",
-        categories: i.goalCategory ? [i.goalCategory] : ["STRENGTH", "CARDIO", "MOBILITY & STABILITY"],
+        categories: [...new Set([...(i.goalCategory ? [i.goalCategory === "MUSCLE BUILDING" ? "STRENGTH" : i.goalCategory] : []), "STRENGTH", "CARDIO", "MOBILITY & STABILITY"])],
         codes: ["history.none"], why: ["No completed workouts yet, so an introductory 1-star session is suggested — no assumptions about your ability."],
       };
     }
