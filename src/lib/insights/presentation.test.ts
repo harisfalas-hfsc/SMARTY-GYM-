@@ -12,7 +12,7 @@ describe('Insights channel parity',()=>{
   const html=await insightsEmailHtml(report,'Haris',{activity:'https://example.test/activity.png',load:'https://example.test/load.png'});
   expect(html.match(/<img /g)).toHaveLength(2);
   expect(html).toContain(LOAD_TEXT[report.load.state]);
-  expect(html).toContain('28 Sep: 2');expect(html).toContain('5 Oct: 0');
+  expect(html).toContain('28 Sept: 2');expect(html).toContain('5 Oct: 0');
   for(const t of report.tips){expect(html).toContain(t.title);expect(html).toContain(t.body);}
   expect(html).toContain('What you didn');expect(html).toContain('#insights');expect(html).not.toContain('width:22px;height:');
  });
