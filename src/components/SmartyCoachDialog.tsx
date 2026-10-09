@@ -97,8 +97,8 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl gap-4 p-4 sm:p-6">
-        <DialogHeader className="items-center text-center">
-          <img src={coachIcon} alt="" className="h-16 w-16 object-contain" />
+        <DialogHeader className="flex flex-col items-center text-center">
+          <img src={coachIcon} alt="" className="mx-auto h-16 w-16 object-contain" />
           <DialogTitle className="text-center">Smarty Coach</DialogTitle>
           <DialogDescription className="text-center">
             {snapshot ? `Hello, ${snapshot.firstName}. Welcome back.` : "Your training history, connected to what comes next."}
