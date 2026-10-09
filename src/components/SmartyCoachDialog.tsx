@@ -128,7 +128,7 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
           </div>
         ) : snapshot ? (
           view === "home" ? (
-            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1">
+            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1 pb-2">
               {/* Card 1: What to do next — opens the detailed recommendation view */}
               <button
                 type="button"
@@ -170,7 +170,7 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               <p className="text-center text-xs text-muted-foreground">This is a suggestion based only on information you logged. It does not change your plan automatically.</p>
             </div>
           ) : (
-            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1">
+            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1 pb-2">
               <Button variant="ghost" size="sm" className="-ml-2" onClick={() => setView("home")}><ArrowLeft /> Back</Button>
 
               <section className="rounded-md border-2 border-primary bg-primary/5 p-4">
