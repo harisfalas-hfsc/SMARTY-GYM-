@@ -603,6 +603,13 @@
       "when": 1791436576675,
       "tag": "0085_workout_announcement_email_preferences",
       "breakpoints": true
+    },
+    {
+      "idx": 86,
+      "version": "7",
+      "when": 1791525561246,
+      "tag": "0086_weekly_insights_email_preference",
+      "breakpoints": true
     }
   ]
 }

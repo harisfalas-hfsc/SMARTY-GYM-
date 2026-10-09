@@ -279,6 +279,30 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           }
         }
 
+        // Weekly Insights — Monday at the fixed time (Cyprus). Bounded per run;
+        // the job is only marked done once every eligible account is covered.
+        const insightsConfig = jobs["weekly-insights"];
+        if (insightsConfig && isDueNow(insightsConfig)) {
+          try {
+            const { runWeeklyInsights } = await import("@/lib/insights/insights.server");
+            const r = await runWeeklyInsights(db);
+            if (r.inbox || r.emails || r.failures.length || !r.remaining)
+              await recordRun(db, {
+                jobKey: "weekly-insights",
+                status: r.failures.length ? "failed" : "ok",
+                changed: Boolean(r.inbox || r.emails),
+                summary: `Weekly Insights sent to ${r.inbox} account(s), ${r.emails} email(s)${r.remaining ? `; ${r.remaining} still to send` : ""}${r.failures.length ? `; problems: ${r.failures.slice(0, 3).join(" | ")}` : ""}.`,
+                details: { failures: r.failures },
+                trigger: "schedule",
+              });
+            if (!r.remaining) await markJobRan(db, "weekly-insights", insightsConfig);
+          } catch (e) {
+            const message = e instanceof Error ? e.message : "error";
+            failures.push(`insights:${message}`);
+            await recordRun(db, { jobKey: "weekly-insights", status: "failed", summary: `Weekly Insights crashed: ${message}`, trigger: "schedule" });
+          }
+        }
+
         // Nightly system health check — fixed time, once a day, always emailed.
         let health: { status: string; summary: string } | null = null;
         const healthConfig = jobs["health-check"];

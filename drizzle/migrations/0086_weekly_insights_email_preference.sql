@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS email_weekly_insights boolean NOT NULL DEFAULT true;

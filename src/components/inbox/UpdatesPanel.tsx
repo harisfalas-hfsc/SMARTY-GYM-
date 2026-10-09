@@ -333,6 +333,15 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                         View Workout
                       </Link>
                     )}
+                    {n.kind === "weekly_insights" && (
+                      <Link
+                        to="/logbook"
+                        search={{ filter: "all", view: "progress" as const }}
+                        className="flex h-10 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
+                      >
+                        Open my Insights
+                      </Link>
+                    )}
                     {n.kind === "checkin" && (
                       <Link
                         to="/smarty-checkins"

@@ -18,7 +18,8 @@ export type CronJobKey =
   | "generate-weekly-blog-article"
   | "workout-recovery"
   | "new-workout-announcement"
-  | "shared-workout-announcement";
+  | "shared-workout-announcement"
+  | "weekly-insights";
 
 export type CronTiming = "per-member" | "fixed" | "weekly" | "continuous";
 
@@ -303,6 +304,21 @@ export const CRON_JOBS: CronJobDefinition[] = [
     timeEditable: false,
     contentEditable: false,
     defaults: { enabled: true, hour: 0, minute: 0 },
+  },
+  {
+    key: "weekly-insights",
+    label: "Weekly Insights report",
+    description:
+      "Every Monday morning, every account with at least one completed workout (Premium, expired or free) gets its personal weekly Smarty Insights: workouts, active days, training time, streak, score, Training Load, check-ins, what is coming up and Smarty Coach suggestions with links. Delivered to the app inbox and by email, unless the member switched off Weekly Insights emails in My Account. Never sent twice for the same week.",
+    timing: "weekly",
+    timingNote: "Runs once a week, on Monday at the time set below (Cyprus time). Large member lists finish over the next few scheduler ticks.",
+    sends: [
+      { title: "Your weekly Insights are ready", body: "Inbox summary of the week plus the first Smarty Coach tip, and a full colourful email report with an Open my Insights button. Full details in Logbook → Progress → Insights." },
+    ],
+    timeEditable: true,
+    contentEditable: false,
+    weekday: 1,
+    defaults: { enabled: true, hour: 6, minute: 0 },
   },
 ];
 
