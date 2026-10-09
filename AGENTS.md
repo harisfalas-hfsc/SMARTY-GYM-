@@ -11,12 +11,12 @@
 
 <!-- LOVABLE:END -->
 
-- Shared Workouts uses the existing public community-workout view and access guard — why: consistent listings without duplicated rules or Community changes.
+- Shared Workouts reuses the public community-workout view and guard — why: consistent listings without duplicated rules or Community changes.
 - The workout creator's canonical route is `/create-your-own-workout`; `/create-your-workout` and `/coach` are redirects only — why: old bookmarks keep working.
 - Build It Yourself uses createManualWorkout (src/lib/manual-workout.functions.ts), saving normal MY OWN WORKOUT rows without generation/doctrine — why: members choose exercises; Smarty rules govern coach/admin workouts only.
 
 - Smarty Ritual rotation is computed from app_settings.ritual_anchor_date + position (src/lib/ritual-schedule.ts); no nightly job, so page and admin schedule never drift.
-- Public PDFs are client-generated and include every visible block — why: exact page parity.
+- Public PDFs are client-generated with every visible block — why: page parity.
 - CHALLENGE uses challengeBalanceViolation for full-body, majority-bodyweight, on-level benchmarks; filterPool prefers smarty_tags — why: consistent challenge structure.
 - Difficulty is prescription-only; beginners exclude advanced rows. flowSpecialtyViolation bans balance tools/isolation machines in flow/timed formats in pool and validator — why: one WOD/custom engine.
 - Smarty Check-ins scoring lives in src/lib/checkins/score.ts, computed server-side in checkins.functions.ts and read by coach via loadCheckinSignal — one source for UI, badges and coach.
