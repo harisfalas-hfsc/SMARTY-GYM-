@@ -48,6 +48,7 @@ import {
 } from "recharts";
 import { exportBrandPagePdf } from "@/lib/brand-page-export";
 import { iconTone } from "@/lib/icon-tone";
+import { REPORT_LINE_WIDTH, REPORT_DOT_RADIUS } from "@/lib/report-chart";
 
 export const Route = createFileRoute("/why-invest-in-smartygym")({
   head: () => ({
@@ -299,7 +300,7 @@ function WhyInvestInSmartyGym() {
                   </p>
                   <div className="h-72 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
+                      <LineChart
                         data={mentalHealthData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                       >
@@ -314,21 +315,25 @@ function WhyInvestInSmartyGym() {
                         />
                         <Tooltip />
                         <Legend wrapperStyle={{ fontSize: 12 }} />
-                        <Bar
+                        <Line
+                          type="linear"
                           dataKey="withExercise"
                           name="With Regular Exercise"
-                          fill="#3b82f6"
-                          radius={[4, 4, 0, 0]}
+                          stroke="var(--chart-1)"
+                          strokeWidth={REPORT_LINE_WIDTH}
+                          dot={{ r: REPORT_DOT_RADIUS }}
                           isAnimationActive={false}
                         />
-                        <Bar
+                        <Line
+                          type="linear"
                           dataKey="withoutExercise"
                           name="Without Exercise"
-                          fill="#ef4444"
-                          radius={[4, 4, 0, 0]}
+                          stroke="var(--chart-4)"
+                          strokeWidth={REPORT_LINE_WIDTH}
+                          dot={{ r: REPORT_DOT_RADIUS }}
                           isAnimationActive={false}
                         />
-                      </BarChart>
+                      </LineChart>
                     </ResponsiveContainer>
                   </div>
                   <p className="mt-2 text-center text-xs text-muted-foreground">
@@ -431,21 +436,21 @@ function WhyInvestInSmartyGym() {
                         <Tooltip />
                         <Legend wrapperStyle={{ fontSize: 12 }} />
                         <Line
-                          type="monotone"
+                          type="linear"
                           dataKey="structured"
-                          stroke="#3b82f6"
-                          strokeWidth={3}
-                          dot={{ fill: "#3b82f6", strokeWidth: 2, r: 5 }}
+                          stroke="var(--chart-1)"
+                          strokeWidth={REPORT_LINE_WIDTH}
+                          dot={{ r: REPORT_DOT_RADIUS }}
                           name="Structured Training"
                           isAnimationActive={false}
                         />
                         <Line
-                          type="monotone"
+                          type="linear"
                           dataKey="unstructured"
-                          stroke="#f59e0b"
-                          strokeWidth={2}
+                          stroke="var(--chart-3)"
+                          strokeWidth={REPORT_LINE_WIDTH}
                           strokeDasharray="5 5"
-                          dot={{ fill: "#f59e0b", strokeWidth: 2, r: 4 }}
+                          dot={{ r: REPORT_DOT_RADIUS }}
                           name="Self-Guided"
                           isAnimationActive={false}
                         />
@@ -479,28 +484,13 @@ function WhyInvestInSmartyGym() {
                   </h3>
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={adherenceData}
-                          cx="50%"
-                          cy="42%"
-                          innerRadius={45}
-                          outerRadius={70}
-                          paddingAngle={5}
-                          dataKey="value"
-                          label={({ value }) => `${value}%`}
-                          isAnimationActive={false}
-                        >
-                          {adherenceData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.fill} />
-                          ))}
-                        </Pie>
-                        <Legend
-                          verticalAlign="bottom"
-                          wrapperStyle={{ fontSize: 12, paddingTop: 8 }}
-                        />
+                      <LineChart data={adherenceData} margin={{ top: 20, right: 20, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                        <XAxis dataKey="name" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
+                        <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
+                        <Line type="linear" dataKey="value" name="Completion rate" stroke="var(--chart-2)" strokeWidth={REPORT_LINE_WIDTH} dot={{ r: REPORT_DOT_RADIUS }} isAnimationActive={false} />
                         <Tooltip />
-                      </PieChart>
+                      </LineChart>
                     </ResponsiveContainer>
                   </div>
                   <p className="mt-2 text-center text-xs text-muted-foreground">
@@ -747,7 +737,7 @@ function WhyInvestInSmartyGym() {
                   </p>
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
+                      <LineChart
                         data={inactivityByAgeData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                       >
@@ -761,12 +751,8 @@ function WhyInvestInSmartyGym() {
                           tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }}
                         />
                         <Tooltip />
-                        <Bar dataKey="percentage" radius={[4, 4, 0, 0]} name="Inactive %" isAnimationActive={false}>
-                          {inactivityByAgeData.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={inactivityColors[index]} />
-                          ))}
-                        </Bar>
-                      </BarChart>
+                        <Line type="linear" dataKey="percentage" name="Inactive %" stroke="var(--chart-3)" strokeWidth={REPORT_LINE_WIDTH} dot={{ r: REPORT_DOT_RADIUS }} isAnimationActive={false} />
+                      </LineChart>
                     </ResponsiveContainer>
                   </div>
                   <p className="mt-2 text-center text-xs text-muted-foreground">
