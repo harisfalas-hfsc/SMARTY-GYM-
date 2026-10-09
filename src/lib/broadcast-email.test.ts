@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { broadcastEmailHtml, type BroadcastEmail } from "./broadcast-email.server";
-import { newWorkoutAnnouncement, sharedWorkoutAnnouncement, announcementInboxContent, wantsAnnouncementEmail } from "./broadcast-content";
+import {
+  newWorkoutAnnouncement,
+  sharedWorkoutAnnouncement,
+  announcementInboxContent,
+  wantsAnnouncementEmail,
+  adminBroadcastAnnouncement,
+} from "./broadcast-content";
 
 const email: BroadcastEmail = {
   dedupeKey: "new-workout:sample",
