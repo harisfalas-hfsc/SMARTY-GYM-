@@ -13,7 +13,7 @@ describe('Insights channel parity',()=>{
   expect(html.match(/<img /g)).toHaveLength(2);
   expect(html).toContain(LOAD_TEXT[report.load.state]);
   expect(html).toContain('28 Sept: 2');expect(html).toContain('5 Oct: 0');
-  for(const t of report.tips){expect(html).toContain(t.title);expect(html).toContain(t.body);}
+  for(const t of report.tips){expect(html).toContain(t.title);expect(html).toContain(t.body.replaceAll("'", "&#39;"));}
   expect(html).toContain('What you didn');expect(html).toContain('#insights');expect(html).not.toContain('width:22px;height:');
  });
  it('creates a small valid PNG using the same thin-line chart data',()=>{

@@ -249,7 +249,8 @@ export async function runWeeklyInsights(
   for (const p of slice) {
     try {
       const saved = (inboxRows as {user_id:string;dedupe_key:string;body:string|null}[] | null)?.find(r => r.user_id === p.id && r.dedupe_key === inboxKey(p.week));
-      const i = decodeInsightMessage(saved?.body ?? null).report ?? await loadWeeklyInsights(db, p.id, "previous", now);
+      const i = (decodeInsightMessage(saved?.body ?? null).report ?? await loadWeeklyInsights(db, p.id, "previous", now)) as WeeklyInsights & { emailCharts?: { activity: string; load: string } };
+      if (p.email && p.email_weekly_insights !== false && !i.emailCharts) i.emailCharts = await prepareEmailCharts(db, i);
       const first = String(p.display_name ?? "").trim().split(/\s+/)[0] || "there";
       if (!inboxDone.has(`${p.id}|${inboxKey(p.week)}`)) {
         const content = insightsInboxContent(i, first);
@@ -263,7 +264,7 @@ export async function runWeeklyInsights(
           .from("broadcast_email_sends")
           .upsert({ user_id: p.id, dedupe_key: ek, state: "sending" } as never, { onConflict: "user_id,dedupe_key", ignoreDuplicates: true });
         if (markErr) throw new Error(markErr.message);
-        await send({ to: p.email, subject: insightsSubject(i), html: await insightsEmailHtml(i, first, await prepareEmailCharts(db, i)), idempotencyKey: `${ek}:${p.id}` });
+        await send({ to: p.email, subject: insightsSubject(i), html: await insightsEmailHtml(i, first, i.emailCharts), idempotencyKey: `${ek}:${p.id}` });
         const { error: doneErr } = await db.from("broadcast_email_sends").update({ state: "sent", sent_at: new Date().toISOString() } as never).eq("user_id", p.id).eq("dedupe_key", ek);
         if (doneErr) throw new Error(doneErr.message);
         emails++;
