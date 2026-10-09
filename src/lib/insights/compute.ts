@@ -119,7 +119,7 @@ export function computeWeeklyInsights(input: InsightsInput): WeeklyInsights {
     .filter((m) => within(m.date, weekStart, weekEnd) && m.date < today)
     .sort((a, b) => a.date.localeCompare(b.date));
 
-  const upcomingFrom = today > weekEnd ? today : addDays(weekEnd, 0) < today ? today : today;
+  const upcomingFrom = today;
   const upcoming = live
     .filter((w) => w.status !== "completed" && w.scheduled_at)
     .map((w) => ({ name: w.name, date: toLocalDate(w.scheduled_at as string) }))
