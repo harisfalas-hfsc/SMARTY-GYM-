@@ -97,15 +97,18 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl gap-3 p-4 sm:p-6">
-        <DialogHeader className="space-y-1 text-center sm:items-center sm:pr-0 sm:text-center">
-          <div className="flex items-center justify-center gap-2">
-            <img src={coachIcon} alt="" className="h-8 w-8 shrink-0 object-contain" />
-            <DialogTitle>Smarty Coach</DialogTitle>
+        <DialogHeader className="text-center sm:items-center sm:pr-0 sm:text-center">
+          <div className="mx-auto inline-flex flex-col items-center gap-1">
+            <div className="flex items-center gap-2">
+              <img src={coachIcon} alt="" className="h-8 w-8 shrink-0 object-contain" />
+              <DialogTitle>Smarty Coach</DialogTitle>
+            </div>
+            <DialogDescription>
+              {snapshot ? `Hello, ${snapshot.firstName}. Welcome back.` : "Your training history, connected to what comes next."}
+            </DialogDescription>
           </div>
-          <DialogDescription>
-            {snapshot ? `Hello, ${snapshot.firstName}. Welcome back.` : "Your training history, connected to what comes next."}
-          </DialogDescription>
         </DialogHeader>
+
 
 
 
