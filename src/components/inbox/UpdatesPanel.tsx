@@ -337,13 +337,17 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                       </Link>
                     )}
                     {n.kind === "weekly_insights" && (
+                      <>
+                      {decodeInsightMessage(n.body).report && <div className="w-full min-w-0"><InsightsSection report={decodeInsightMessage(n.body).report ?? undefined} /></div>}
                       <Link
                         to="/logbook"
-                        search={{ filter: "all", view: "progress" as const }}
+                        search={{ filter: "all", view: "list" as const }}
+                        hash="insights"
                         className="flex h-10 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
                       >
                         Open my Insights
                       </Link>
+                      </>
                     )}
                     {n.kind === "checkin" && (
                       <Link
