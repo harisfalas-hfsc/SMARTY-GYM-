@@ -16,7 +16,7 @@ export type PeriodSession = {
 type MetricKey = "strength" | "conditioning" | "rpe" | "sessions" | "minutes";
 
 const METRICS: { key: MetricKey; label: string; unit: string; color: string }[] = [
-  { key: "strength", label: "Strength volume", unit: " kg", color: "#38bdf8" },
+  { key: "strength", label: "Strength volume", unit: " kg", color: "var(--chart-1)" },
   { key: "conditioning", label: "Conditioning work", unit: " sec", color: "#34d399" },
   { key: "rpe", label: "Average RPE", unit: " / 10", color: "#f59e0b" },
   { key: "sessions", label: "Sessions logged", unit: "", color: "#f472b6" },

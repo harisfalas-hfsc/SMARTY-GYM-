@@ -32,15 +32,10 @@ import {
   Download,
 } from "lucide-react";
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   LineChart,
   Line,
-  PieChart,
-  Pie,
-  Cell,
   CartesianGrid,
   Legend,
   ResponsiveContainer,

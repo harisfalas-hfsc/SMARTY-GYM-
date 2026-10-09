@@ -31,8 +31,6 @@ import {
   Download,
 } from "lucide-react";
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   ResponsiveContainer,
