@@ -28,6 +28,7 @@ import coachIcon from "@/assets/smarty-coach.png";
 
 type NavTarget =
   | { to: "/wod" }
+  | { to: "/auth" }
   | { to: "/smarty-workouts" }
   | { to: "/create-your-own-workout" }
   | { to: "/shared-workouts" }
