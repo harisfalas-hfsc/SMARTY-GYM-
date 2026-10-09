@@ -75,4 +75,21 @@ describe("workout announcement email", () => {
     expect(html).toContain("&lt;img");
     expect(html).toContain("Creator &lt;script&gt;");
   });
+
+  it("builds a deduped admin broadcast email with its own title, body and CTA", () => {
+    const broadcast = adminBroadcastAnnouncement("Gym news", "We are adding new features this week.", "2026-10-09T12:00:00Z");
+    expect(broadcast.dedupeKey).toBe("admin-broadcast:2026-10-09T12:00:00Z");
+    expect(broadcast.subject).toBe("Gym news");
+    expect(broadcast.heading).toBe("Gym news");
+    expect(broadcast.body).toBe("We are adding new features this week.");
+    expect(broadcast.buttonHref).toBe("https://smartygym.com");
+    expect(broadcast.buttonLabel).toBe("Open SMARTYGYM");
+    // Unknown dedupe prefix: every account is eligible regardless of the
+    // new-workout / shared-workout email toggles.
+    expect(wantsAnnouncementEmail({ email_new_workouts: false, email_shared_workouts: false }, broadcast.dedupeKey)).toBe(true);
+    const html = broadcastEmailHtml(broadcast);
+    expect(html).toContain("Gym news");
+    expect(html).toContain("We are adding new features this week.");
+    expect(html).toContain("Open SMARTYGYM");
+  });
 });
