@@ -137,7 +137,7 @@ export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
                 {w === "current" ? "This week so far" : "Last week"}
               </button>
             ))}
-          </div>
+          </div>}
           <Button type="button" size="sm" className="gap-2" onClick={() => void download()} disabled={!data || exporting}>
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? "Preparing PDF" : "Download PDF"}
