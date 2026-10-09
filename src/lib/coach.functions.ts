@@ -227,7 +227,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         .eq("category", targetCategory === "MUSCLE BUILDING" ? "STRENGTH" : targetCategory)
         .order("created_at", { ascending: false })
         .limit(300);
-      console.log("COACHDBG", JSON.stringify((pool ?? []).slice(0,2)), JSON.stringify(profile?.preferred_equipment), poolErr?.message);
+      console.log("COACHDBG2", (pool ?? []).length, done.size, [...owned].join(","));
       const rows = (pool ?? []) as Array<{ id: string; name: string; category: string; difficulty_stars: number; duration_min: number; equipment: string[] }>;
       const fits = rows.filter(
         (w) => !done.has(w.name) && (w.equipment ?? []).every((e) => owned.has(e.toLowerCase())),
@@ -236,7 +236,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         fits.find((w) => w.difficulty_stars === pickStars) ??
         fits.sort((a, b) => Math.abs(a.difficulty_stars - pickStars) - Math.abs(b.difficulty_stars - pickStars))[0] ??
         null;
-      if (chosen) {
+      console.log("COACHDBG3", chosen?.name); if (chosen) {
         smartyPick = {
           id: chosen.id,
           name: chosen.name,
