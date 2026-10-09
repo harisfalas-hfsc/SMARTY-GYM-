@@ -58,3 +58,4 @@
 - [x] Update The Smarty Method and Why Invest in SmartyGym for current features, and add visually verified branded portrait PDF downloads.
 - [x] Make both public-page PDFs complete, including all charts and references, and standardize Back navigation on every non-home page.
 - [x] Welcome every first-time Premium member once by email and in their inbox, with a branded guide to SMARTYGYM features.
+- [x] Smarty Insights: Logbook Progress section, Monday 06:00 inbox + email report, PDF, account email switch

@@ -40,3 +40,4 @@
 - Mass workout emails use the Resend gateway and broadcast_email_sends deduplication; other email uses Lovable managed sending — why: broadcasts need the marketing-grade path.
 
 - Workout announcements share content builders and email preference filtering; inbox delivery ignores email opt-outs — why: matching content with independent channels.
+- Weekly Insights are computed only by computeWeeklyInsights (src/lib/insights/compute.ts) and shared by the Logbook section, inbox, Monday email and PDF — why: all four always match.
