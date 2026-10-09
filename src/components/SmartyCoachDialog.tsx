@@ -166,8 +166,6 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
                   <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." tint="bg-lime-500/10 text-lime-500" onClick={() => go("/tools")} />
                 </div>
               </section>
-
-              <p className="text-center text-xs text-muted-foreground">This is a suggestion based only on information you logged. It does not change your plan automatically.</p>
             </div>
           ) : (
             <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1 pb-2">
