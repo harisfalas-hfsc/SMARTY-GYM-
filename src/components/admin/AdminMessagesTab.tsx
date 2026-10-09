@@ -32,6 +32,7 @@ export function AdminMessagesTab() {
   const [busy, setBusy] = useState(false);
 
   const [audience, setAudience] = useState<"all" | "subscribers">("all");
+  const [channel, setChannel] = useState<"inbox" | "email" | "both">("both");
   const [bTitle, setBTitle] = useState("");
   const [bBody, setBBody] = useState("");
   const [showBroadcast, setShowBroadcast] = useState(false);
