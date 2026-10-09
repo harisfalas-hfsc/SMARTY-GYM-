@@ -40,3 +40,16 @@ export async function loadCheckinSignal(
     yesterdayScore: n(y?.daily_smarty_score),
   };
 }
+
+/** Completed morning check-ins from the N days before `today` (newest first). Missing days are skipped, never zero. */
+export async function loadPriorCheckins(db: SupabaseClient, userId: string, today: string, days: number): Promise<CheckinSignal[]> {
+  const dates: string[] = [];
+  let d = today;
+  for (let i = 0; i < days; i++) { d = yesterdayOf(d); dates.push(d); }
+  const { data } = await db.from("smarty_checkins").select("*").eq("user_id", userId).in("checkin_date", dates);
+  const rows = ((data ?? []) as unknown as CheckinRow[]).filter((r) => r.morning_completed);
+  const n = (v: unknown) => (v === null || v === undefined ? null : Number(v));
+  return rows
+    .sort((a, b) => (a.checkin_date < b.checkin_date ? 1 : -1))
+    .map((r) => ({ sleepHours: n(r.sleep_hours), sleepQuality: n(r.sleep_quality), readiness: n(r.readiness_score), soreness: n(r.soreness_rating), mood: n(r.mood_rating), yesterdayStrain: null, yesterdayScore: null }));
+}

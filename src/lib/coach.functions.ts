@@ -250,7 +250,8 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       ? { id: decision.workout.id, name: decision.workout.name, category: decision.workout.category, stars: decision.workout.stars, minutes: decision.workout.minutes, why: decision.explanation.join(" ") }
       : null;
 
-    return decideCoachSnapshot({
+    const { applyCoachDecision } = await import("@/lib/coach-snapshot");
+    return applyCoachDecision(decideCoachSnapshot({
       firstName,
       readiness: overview.readiness,
       recommendation,
@@ -271,7 +272,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         : null,
       comparison,
       personalRecord: recordText,
-    });
+    }), decision);
   });
 
 /** The only failure wording an athlete ever sees. */
