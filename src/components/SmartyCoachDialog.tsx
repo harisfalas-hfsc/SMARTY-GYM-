@@ -35,14 +35,14 @@ type NavTarget =
   | { to: "/exercise-library" }
   | { to: "/tools" };
 
-function OptionRow({ icon, title, subtitle, onClick }: { icon: React.ReactNode; title: string; subtitle: string; onClick: () => void }) {
+function OptionRow({ icon, title, subtitle, tint, onClick }: { icon: React.ReactNode; title: string; subtitle: string; tint: string; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className="flex w-full items-center gap-3 rounded-md border border-border p-3 text-left transition-colors hover:border-primary hover:bg-primary/5"
     >
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">{icon}</span>
+      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-md ${tint}`}>{icon}</span>
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-bold">{title}</span>
         <span className="block text-xs text-muted-foreground">{subtitle}</span>
@@ -128,7 +128,7 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
           </div>
         ) : snapshot ? (
           view === "home" ? (
-            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1">
+            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1 pb-2">
               {/* Card 1: What to do next — opens the detailed recommendation view */}
               <button
                 type="button"
@@ -150,10 +150,10 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               <section className="rounded-md border border-border p-4">
                 <div className="flex items-center gap-2 font-bold"><Dumbbell className="text-primary" /> Train your way</div>
                 <div className="mt-3 space-y-2">
-                  <OptionRow icon={<CalendarDays />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." onClick={() => go("/wod")} />
-                  <OptionRow icon={<Dumbbell />} title="Smarty Workouts" subtitle="The full library, built by Haris." onClick={() => go("/smarty-workouts")} />
-                  <OptionRow icon={<PencilLine />} title="Create Your Own Workout" subtitle="Build it yourself or let the Coach build it." onClick={() => go("/create-your-own-workout")} />
-                  <OptionRow icon={<Users />} title="Shared Workouts" subtitle="See what other members are training." onClick={() => go("/shared-workouts")} />
+                  <OptionRow icon={<CalendarDays />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." tint="bg-sky-500/10 text-sky-500" onClick={() => go("/wod")} />
+                  <OptionRow icon={<Dumbbell />} title="Smarty Workouts" subtitle="The full library, built by Haris." tint="bg-violet-500/10 text-violet-500" onClick={() => go("/smarty-workouts")} />
+                  <OptionRow icon={<PencilLine />} title="Create Your Own Workout" subtitle="Build it yourself or let the Coach build it." tint="bg-amber-500/10 text-amber-500" onClick={() => go("/create-your-own-workout")} />
+                  <OptionRow icon={<Users />} title="Shared Workouts" subtitle="See what other members are training." tint="bg-emerald-500/10 text-emerald-500" onClick={() => go("/shared-workouts")} />
                 </div>
               </section>
 
@@ -161,16 +161,16 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               <section className="rounded-md border border-border p-4">
                 <div className="flex items-center gap-2 font-bold"><BookOpen className="text-primary" /> Learn and explore</div>
                 <div className="mt-3 space-y-2">
-                  <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." onClick={() => go("/blog")} />
-                  <OptionRow icon={<Library />} title="Exercise Library" subtitle="Every exercise, with video and form tips." onClick={() => go("/exercise-library")} />
-                  <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." onClick={() => go("/tools")} />
+                  <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." tint="bg-rose-500/10 text-rose-500" onClick={() => go("/blog")} />
+                  <OptionRow icon={<Library />} title="Exercise Library" subtitle="Every exercise, with video and form tips." tint="bg-cyan-500/10 text-cyan-500" onClick={() => go("/exercise-library")} />
+                  <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." tint="bg-lime-500/10 text-lime-500" onClick={() => go("/tools")} />
                 </div>
               </section>
 
               <p className="text-center text-xs text-muted-foreground">This is a suggestion based only on information you logged. It does not change your plan automatically.</p>
             </div>
           ) : (
-            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1">
+            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1 pb-2">
               <Button variant="ghost" size="sm" className="-ml-2" onClick={() => setView("home")}><ArrowLeft /> Back</Button>
 
               <section className="rounded-md border-2 border-primary bg-primary/5 p-4">
