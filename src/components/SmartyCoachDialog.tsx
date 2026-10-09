@@ -150,10 +150,10 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               <section className="rounded-md border border-border p-4">
                 <div className="flex items-center gap-2 font-bold"><Dumbbell className="text-primary" /> Train your way</div>
                 <div className="mt-3 space-y-2">
-                  <OptionRow icon={<CalendarDays />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." onClick={() => go("/wod")} />
-                  <OptionRow icon={<Dumbbell />} title="Smarty Workouts" subtitle="The full library, built by Haris." onClick={() => go("/smarty-workouts")} />
-                  <OptionRow icon={<PencilLine />} title="Create Your Own Workout" subtitle="Build it yourself or let the Coach build it." onClick={() => go("/create-your-own-workout")} />
-                  <OptionRow icon={<Users />} title="Shared Workouts" subtitle="See what other members are training." onClick={() => go("/shared-workouts")} />
+                  <OptionRow icon={<CalendarDays />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." tint="bg-sky-500/10 text-sky-500" onClick={() => go("/wod")} />
+                  <OptionRow icon={<Dumbbell />} title="Smarty Workouts" subtitle="The full library, built by Haris." tint="bg-violet-500/10 text-violet-500" onClick={() => go("/smarty-workouts")} />
+                  <OptionRow icon={<PencilLine />} title="Create Your Own Workout" subtitle="Build it yourself or let the Coach build it." tint="bg-amber-500/10 text-amber-500" onClick={() => go("/create-your-own-workout")} />
+                  <OptionRow icon={<Users />} title="Shared Workouts" subtitle="See what other members are training." tint="bg-emerald-500/10 text-emerald-500" onClick={() => go("/shared-workouts")} />
                 </div>
               </section>
 
