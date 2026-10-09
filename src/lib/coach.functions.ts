@@ -227,7 +227,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         .eq("category", targetCategory === "MUSCLE BUILDING" ? "STRENGTH" : targetCategory)
         .order("created_at", { ascending: false })
         .limit(300);
-      console.log("COACHDBG", targetCategory, pickStars, (pool ?? []).length, poolErr?.message);
+      console.log("COACHDBG", JSON.stringify((pool ?? []).slice(0,2)), JSON.stringify(profile?.preferred_equipment), poolErr?.message);
       const rows = (pool ?? []) as Array<{ id: string; name: string; category: string; difficulty_stars: number; duration_min: number; equipment: string[] }>;
       const fits = rows.filter(
         (w) => !done.has(w.name) && (w.equipment ?? []).every((e) => owned.has(e.toLowerCase())),
