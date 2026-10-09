@@ -12,9 +12,16 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
     const { getAccessStateForUser } = await import("@/lib/eligibility.server");
     const access = await getAccessStateForUser(context.supabase as never, context.userId);
     if (!access.premium) {
+      const { data: lockedProfile } = await context.supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("id", context.userId)
+        .maybeSingle();
+      const lockedName =
+        String(lockedProfile?.display_name ?? "there").trim().split(/\s+/)[0] || "there";
       return {
         access: "locked",
-        firstName: "there",
+        firstName: lockedName,
         headline: "Your coach is ready when you return",
         recommendation: "Renew your membership to reconnect Smarty Coach with your saved training history.",
         lastSession: null,
