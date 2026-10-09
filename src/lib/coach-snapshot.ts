@@ -1,3 +1,4 @@
+import type { CoachDecision, CustomPlan } from "@/lib/coach/recommend";
 import type { CoachRecommendation } from "@/lib/coach-rules/types";
 import type { ReadinessState } from "@/lib/performance/types";
 
@@ -7,6 +8,7 @@ export type CoachSnapshotAction =
   | { label: string; to: "/create-your-own-workout" }
   | { label: string; to: "/smarty-workouts/$workoutId"; params: { workoutId: string } }
   | { label: string; to: "/account" }
+  | { label: string; to: "/smarty-ritual" }
   | { label: string; to: "/pricing" };
 
 /** One visible Smarty Workout chosen by fixed rules, with the reason it was chosen. */
@@ -41,6 +43,9 @@ export type CoachSnapshot = {
   smartyPick: CoachSmartyPick | null;
   insights: CoachInsightsSummary | null;
   action: CoachSnapshotAction;
+  /** Build-your-own suggestion, only when no Smarty Workout fits. */
+  custom?: CustomPlan | null;
+  confidence?: "none" | "limited" | "good";
 };
 
 export type CoachSnapshotDecisionInput = {
@@ -157,4 +162,40 @@ export function decideCoachSnapshot(input: CoachSnapshotDecisionInput): CoachSna
     reasons: reasons.length ? reasons.slice(0, 3) : ["Your first recommendation uses your Training Profile."],
     action: pickAction ?? { label: "Create your first workout", to: "/create-your-own-workout" },
   };
+}
+
+/** Overlay the decision engine's verdict; engine priorities always win. */
+export function applyCoachDecision(snap: CoachSnapshot, d: CoachDecision): CoachSnapshot {
+  const out: CoachSnapshot = { ...snap, reasons: d.explanation.length ? d.explanation : snap.reasons, custom: d.custom, confidence: d.confidence };
+  if (d.confidence === "limited" && !out.reasons.some((r) => r.startsWith("Based on limited data")))
+    out.reasons = [...out.reasons, "Based on limited data."].slice(0, 4);
+  if (d.purpose === "recovery") {
+    out.headline = "Recovery comes first today";
+    out.nextStep = "Keep it easy today and reassess before adding intensity.";
+  }
+  switch (d.action.kind) {
+    case "planned":
+      out.headline = d.purpose === "recovery" ? out.headline : "Your planned session fits today";
+      out.recommendation = `${d.planned?.name ?? "Your planned session"} is on your schedule and fits today.`;
+      out.action = { label: "Open my Logbook", to: "/logbook", search: { view: "list", filter: "all" } };
+      break;
+    case "smarty_workout":
+      if (d.workout) {
+        if (d.purpose !== "recovery" && snap.headline === "Your next session is already planned") out.headline = "A lighter option fits better today";
+        out.action = { label: `Open ${d.workout.name}`, to: "/smarty-workouts/$workoutId", params: { workoutId: d.workout.id } };
+      }
+      break;
+    case "custom":
+      out.smartyPick = null;
+      out.recommendation = "No Smarty Workout matches today, so build this short session yourself.";
+      out.action = { label: "Build it in Create Your Own Workout", to: "/create-your-own-workout" };
+      break;
+    case "rest":
+      out.smartyPick = null;
+      out.headline = "Rest is the smart choice today";
+      out.recommendation = "No session fits today's limits. Rest, hydrate and try today's Smarty Ritual.";
+      out.action = { label: "Open Smarty Ritual", to: "/smarty-ritual" };
+      break;
+  }
+  return out;
 }

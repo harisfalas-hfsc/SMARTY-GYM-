@@ -166,10 +166,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       insights = null;
     }
 
-    // Smarty Workout pick — fixed rules, no randomness.
-    const restart = daysSinceLast !== null && daysSinceLast >= 14;
-    const recovery =
-      overview.readiness.state === "Recovery Recommended" || overview.readiness.state === "Caution";
+    // Deterministic decision engine (src/lib/coach/recommend.ts).
     const goalText = String(profile?.primary_goal ?? "").toLowerCase();
     const goalCategory = goalText.includes("muscle")
       ? "MUSCLE BUILDING"
@@ -180,74 +177,81 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
           : goalText.includes("healthy") || goalText.includes("active")
             ? "CARDIO"
             : null;
-    const lastCategory = lastWorkout?.category ?? null;
-    let targetCategory: string | null;
-    let why: string;
-    const label = (c: string) => c.toLowerCase().replace(/(^|\s|&\s)\w/g, (m) => m.toUpperCase());
-    if (recovery) {
-      targetCategory = "RECOVERY";
-      why = "Recovery was chosen because your readiness says to ease off today.";
-    } else if (goalCategory && (lastCategory !== goalCategory || restart)) {
-      targetCategory = goalCategory;
-      why = `${label(goalCategory)} was chosen because it matches your goal${lastCategory ? ` and your last session was ${label(lastCategory)}` : ""}.`;
-    } else if (lastCategory) {
-      const complement: Record<string, string> = {
-        STRENGTH: "MOBILITY & STABILITY",
-        "MUSCLE BUILDING": "CARDIO",
-        "CALORIE BURNING": "STRENGTH",
-        CARDIO: "STRENGTH",
-        METABOLIC: "MOBILITY & STABILITY",
-        CHALLENGE: "RECOVERY",
-        "MOBILITY & STABILITY": "STRENGTH",
-        PILATES: "CARDIO",
-        RECOVERY: "STRENGTH",
-      };
-      targetCategory = complement[lastCategory] ?? null;
-      why = targetCategory
-        ? `${label(targetCategory)} was chosen to balance your last session (${label(lastCategory)}).`
-        : "";
-    } else {
-      targetCategory = goalCategory;
-      why = goalCategory ? `${label(goalCategory)} was chosen because it matches your goal.` : "";
-    }
-    const pickStars = recovery || restart ? Math.max(1, selectedStars - 1) : selectedStars;
-    if (why && pickStars !== selectedStars) {
-      why += ` One level easier (${pickStars} star${pickStars === 1 ? "" : "s"}) ${restart ? `after ${daysSinceLast} days away` : "while you recover"}.`;
-    }
-    let smartyPick: CoachSnapshot["smartyPick"] = null;
-    if (targetCategory) {
-      const owned = new Set((profile?.preferred_equipment ?? ["bodyweight"]).map((e: string) => e.toLowerCase()));
-      owned.add("bodyweight");
-      const done = new Set(completed.map((c) => c.name));
-      const { data: pool } = await db
-        .from("smarty_workouts")
-        .select("id,name,category,difficulty_stars,duration_min,equipment,created_at")
-        .eq("is_visible", true)
-        // Smarty Workouts file Muscle Building under Strength.
-        .eq("category", targetCategory === "MUSCLE BUILDING" ? "STRENGTH" : targetCategory)
-        .order("created_at", { ascending: false })
-        .limit(300);
-      const rows = (pool ?? []) as Array<{ id: string; name: string; category: string; difficulty_stars: number; duration_min: number; equipment: string[] }>;
-      const fits = rows.filter(
-        (w) => !done.has(w.name) && (w.equipment ?? []).every((e) => owned.has(e.toLowerCase())),
-      );
-      const chosen =
-        fits.find((w) => w.difficulty_stars === pickStars) ??
-        fits.sort((a, b) => Math.abs(a.difficulty_stars - pickStars) - Math.abs(b.difficulty_stars - pickStars))[0] ??
-        null;
-      if (chosen) {
-        smartyPick = {
-          id: chosen.id,
-          name: chosen.name,
-          category: chosen.category,
-          stars: chosen.difficulty_stars,
-          minutes: chosen.duration_min,
-          why: `${why} It uses only equipment from your Training Profile and you haven't done it before.`,
-        };
-      }
-    }
+    const { recommendNext } = await import("@/lib/coach/recommend");
+    const { localClock } = await import("@/lib/checkins/score");
+    const { loadPriorCheckins } = await import("@/lib/checkins.server");
+    const { MOBILITY_STABILITY_EXERCISES, RECOVERY_EXERCISES } = await import("@/lib/workout/mobility-recovery-vocabulary");
+    const { STRENGTH_BODYWEIGHT_NAMES } = await import("@/lib/workout/strength-vocabulary");
+    const { CONDITIONING_EXERCISES } = await import("@/lib/workout/conditioning-vocabulary");
+    const today = localClock(new Date(), timezone).date;
+    const since = new Date(Date.now() - 15 * 86_400_000).toISOString();
 
-    return decideCoachSnapshot({
+    const [{ data: recentRows }, { data: pool }, { data: plannedRow }, priorCheckins] = await Promise.all([
+      db.from("workouts").select("id,name,category,focus,difficulty_stars,completed_at,created_by")
+        .eq("user_id", context.userId).eq("status", "completed").is("deleted_at", null)
+        .gte("completed_at", since).order("completed_at", { ascending: false }).limit(60),
+      db.from("smarty_workouts").select("id,name,category,focus,difficulty_stars,duration_min,equipment")
+        .eq("is_visible", true).limit(1000),
+      db.from("workouts").select("id,name,category,focus,difficulty_stars,scheduled_at")
+        .eq("user_id", context.userId).eq("status", "scheduled").is("deleted_at", null)
+        .gte("scheduled_at", `${today}T00:00:00Z`).lt("scheduled_at", `${today}T23:59:59Z`)
+        .order("scheduled_at", { ascending: true }).limit(1).maybeSingle(),
+      loadPriorCheckins(db as never, context.userId, today, 3).catch(() => []),
+    ]);
+    const recentList = (recentRows ?? []) as Array<{ id: string; name: string; category: string; focus: string | null; difficulty_stars: number; completed_at: string; created_by: string | null }>;
+    const { data: rpeRows } = recentList.length
+      ? await db.from("workout_results").select("workout_id,rpe,performed_at").in("workout_id", recentList.map((r) => r.id))
+      : { data: [] };
+    const rpeBy = new Map<string, number>();
+    for (const r of (rpeRows ?? []) as Array<{ workout_id: string; rpe: number | null }>) if (r.rpe !== null) rpeBy.set(r.workout_id, r.rpe);
+
+    const fallbackNames = [
+      ...RECOVERY_EXERCISES.map((n) => ({ n, kind: "recovery" as const })),
+      ...MOBILITY_STABILITY_EXERCISES.map((n) => ({ n, kind: "mobility" as const })),
+      ...STRENGTH_BODYWEIGHT_NAMES.map((n) => ({ n, kind: "strength" as const })),
+      ...CONDITIONING_EXERCISES.map((n) => ({ n, kind: "conditioning" as const })),
+    ];
+    const { data: exRows } = await db.from("exercises").select("id,name").eq("is_active", true)
+      .in("name", [...new Set(fallbackNames.map((f) => f.n))]);
+    const exByName = new Map(((exRows ?? []) as Array<{ id: string; name: string }>).map((e) => [e.name.toLowerCase(), e]));
+    const fallbackExercises = fallbackNames.flatMap((f) => {
+      const ex = exByName.get(f.n.toLowerCase());
+      return ex ? [{ id: ex.id, name: ex.name, kind: f.kind }] : [];
+    });
+
+    const levelText = level.includes("adv") ? "advanced" : level.includes("inter") ? "intermediate" : level ? "beginner" : null;
+    const smartyIdOf = (c: string | null) => (c && c.startsWith("smarty:") ? c.slice(7) : null);
+    const decision = recommendNext({
+      today,
+      readiness: overview.readiness,
+      overallLoad: overview.load.overall,
+      consecutiveDays: overview.consecutiveDays,
+      checkin,
+      priorCheckins,
+      recent: recentList.map((r) => ({
+        id: r.id, smartyId: smartyIdOf(r.created_by), name: r.name, category: r.category, focus: r.focus,
+        stars: r.difficulty_stars, rpe: rpeBy.get(r.id) ?? null, day: localClock(new Date(r.completed_at), timezone).date,
+      })),
+      totalCompleted: completed.length,
+      everDone: { ids: [], names: completed.map((c) => c.name) },
+      level: levelText as never,
+      goalCategory,
+      equipment: (profile?.preferred_equipment ?? []).filter(Boolean),
+      typicalMinutes: null,
+      planned: plannedRow
+        ? { id: plannedRow.id, name: plannedRow.name, category: plannedRow.category, focus: plannedRow.focus, stars: plannedRow.difficulty_stars, date: fmtDate(plannedRow.scheduled_at) }
+        : null,
+      library: ((pool ?? []) as Array<{ id: string; name: string; category: string; focus: string | null; difficulty_stars: number; duration_min: number; equipment: string[] }>).map((w) => ({
+        id: w.id, name: w.name, category: w.category, focus: w.focus, stars: w.difficulty_stars, minutes: w.duration_min, equipment: w.equipment ?? [],
+      })),
+      fallbackExercises,
+    });
+    const smartyPick: CoachSnapshot["smartyPick"] = decision.workout
+      ? { id: decision.workout.id, name: decision.workout.name, category: decision.workout.category, stars: decision.workout.stars, minutes: decision.workout.minutes, why: decision.explanation.join(" ") }
+      : null;
+
+    const { applyCoachDecision } = await import("@/lib/coach-snapshot");
+    return applyCoachDecision(decideCoachSnapshot({
       firstName,
       readiness: overview.readiness,
       recommendation,
@@ -268,7 +272,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         : null,
       comparison,
       personalRecord: recordText,
-    });
+    }), decision);
   });
 
 /** The only failure wording an athlete ever sees. */

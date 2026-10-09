@@ -111,6 +111,16 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               </section>
             ) : null}
 
+            {snapshot.custom ? (
+              <section className="rounded-md border border-border p-4">
+                <div className="flex items-center gap-2 font-bold"><Dumbbell className="text-primary" /> Build this session yourself</div>
+                <p className="mt-1 text-xs text-muted-foreground">{snapshot.custom.dose} · {snapshot.custom.rest} · {snapshot.custom.effort}</p>
+                <ul className="mt-2 space-y-1 text-sm">
+                  {snapshot.custom.exercises.map((e) => <li key={e.id} className="flex gap-2"><span className="text-primary">•</span>{e.name}</li>)}
+                </ul>
+              </section>
+            ) : null}
+
             {snapshot.insights ? (
               <section className="rounded-md border border-border p-4">
                 <div className="flex items-center justify-between gap-2">
