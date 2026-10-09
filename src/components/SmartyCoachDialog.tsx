@@ -99,7 +99,7 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { op
 
   return (
     <Dialog open={open && ready} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl gap-3 p-4 sm:p-6">
+      <DialogContent className="max-w-lg gap-3 p-4 sm:p-5">
         <DialogHeader className="text-center sm:items-center sm:pr-0 sm:text-center">
           <div className="mx-auto inline-flex flex-col items-center gap-1">
             <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { op
           </div>
         ) : snapshot ? (
           view === "home" ? (
-            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1 pb-2">
+            <div className="max-h-[calc(100dvh-12rem)] space-y-3 overflow-y-auto pr-1 pb-2">
               {/* Card 1: What to do next — opens the detailed recommendation view */}
               <button
                 type="button"
@@ -178,7 +178,7 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { op
               </section>
             </div>
           ) : (
-            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1 pb-2">
+            <div className="max-h-[calc(100dvh-12rem)] space-y-3 overflow-y-auto pr-1 pb-2">
               <Button variant="ghost" size="sm" className="-ml-2" onClick={() => setView("home")}><ArrowLeft /> Back</Button>
 
               <section className="rounded-md border-2 border-primary bg-primary/5 p-4">
