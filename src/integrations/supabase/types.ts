@@ -315,16 +315,19 @@ export type Database = {
         Row: {
           dedupe_key: string
           sent_at: string
+          state: string
           user_id: string
         }
         Insert: {
           dedupe_key: string
           sent_at?: string
+          state?: string
           user_id: string
         }
         Update: {
           dedupe_key?: string
           sent_at?: string
+          state?: string
           user_id?: string
         }
         Relationships: []

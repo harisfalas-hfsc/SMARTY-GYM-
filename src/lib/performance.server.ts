@@ -21,9 +21,9 @@ type Client = {
   from: (table: string) => any;
 };
 
-const SET_COLUMNS =
+export const SET_COLUMNS =
   "id,workout_id,attempt,step_index,exercise_id,exercise_name,section,set_number,reps,weight_kg,seconds,planned_reps,planned_weight_kg,planned_seconds,rpe,metric,rounds,interval_index,distance_m,partial,completed_at";
-const RESULT_COLUMNS =
+export const RESULT_COLUMNS =
   "workout_id,attempt,prescription_hash,performed_at,format,category,metric,duration_seconds,rounds,extra_reps,intervals_done,intervals_total,finished,rpe,analysis_note,strength_load,conditioning_load,data_points,created_at";
 
 function daysAgoISO(days: number) {
