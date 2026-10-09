@@ -1,6 +1,6 @@
 import logoUrl from "@/assets/smartygym-icon-transparent.png";
 import { titleCase, type WeeklyInsights } from "./compute";
-import { PDF_LINE_WIDTH, reportChartGeometry, type ReportChartPoint } from "@/lib/report-chart";
+import { PDF_LINE_WIDTH, reportChartGeometry, reportChartRgb, type ReportChartPoint } from "@/lib/report-chart";
 
 type RGB = [number, number, number];
 const C = {
@@ -39,6 +39,8 @@ async function imageDataUrl(src: string) {
 
 /** Dedicated A4 report drawn from the shared WeeklyInsights object (same on every device). */
 export async function exportInsightsPdf(i: WeeklyInsights, name?: string) {
+  const activityColor = reportChartRgb("--chart-1");
+  const loadColor = reportChartRgb("--chart-5");
   const { jsPDF } = await import("jspdf");
   const logo = await imageDataUrl(logoUrl);
   const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
@@ -125,7 +127,7 @@ export async function exportInsightsPdf(i: WeeklyInsights, name?: string) {
   if (k.score === null) para("Progress Score and streaks show '-' because no saved progress exists yet.", 8, C.muted);
 
   heading("Your week", C.green);
-  lineChart(i.days.map((d) => ({ label: d.label, value: d.count })), C.blue);
+  lineChart(i.days.map((d) => ({ label: d.label, value: d.count })), activityColor);
 
   heading("What you did", C.green);
   if (i.categories.length) i.categories.forEach((c) => para(`- ${titleCase(c.category)}: ${c.count}`, 9.5, C.ink, 2));
@@ -138,7 +140,7 @@ export async function exportInsightsPdf(i: WeeklyInsights, name?: string) {
 
   heading("Training Load", C.violet);
   para(`${i.load.state}: ${LOAD_TEXT[i.load.state] ?? ""}`);
-  lineChart(i.load.recent.map((r) => ({ label: fmt(r.weekStart), value: r.sessions })), C.violet);
+  lineChart(i.load.recent.map((r) => ({ label: fmt(r.weekStart), value: r.sessions })), loadColor);
   para("Logged sessions per week (last point = this report).", 7.5, C.muted);
 
   heading("Check-ins", C.blue);
