@@ -410,7 +410,11 @@ export const adminBroadcast = createServerFn({ method: "POST" })
       if (channel !== "inbox") {
         const { adminBroadcastAnnouncement } = await import("@/lib/broadcast-content");
         const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
-        emails = await sendBroadcastEmail(db, adminBroadcastAnnouncement(title, body, stamp), userIds);
+        emails = await sendBroadcastEmail(
+          supabaseAdmin as never,
+          adminBroadcastAnnouncement(title, body, stamp),
+          userIds,
+        );
       }
       return { ok: true as const, sent, emails };
     } catch (e) {
