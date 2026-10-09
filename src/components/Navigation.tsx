@@ -87,7 +87,7 @@ export function Navigation() {
       }
       setCoachOpen(true);
     };
-    let timer = window.setTimeout(tryOpen, 5_000);
+    let timer = window.setTimeout(tryOpen, 7_000);
     return () => window.clearTimeout(timer);
   }, [loading, user?.id]);
 
