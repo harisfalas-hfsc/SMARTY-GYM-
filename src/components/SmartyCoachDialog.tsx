@@ -28,6 +28,7 @@ import coachIcon from "@/assets/smarty-coach.png";
 
 type NavTarget =
   | { to: "/wod" }
+  | { to: "/auth" }
   | { to: "/smarty-workouts" }
   | { to: "/create-your-own-workout" }
   | { to: "/shared-workouts" }
@@ -52,7 +53,7 @@ function OptionRow({ icon, title, subtitle, tint, onClick }: { icon: React.React
   );
 }
 
-export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { open: boolean; onOpenChange: (open: boolean) => void; prefetch?: boolean }) {
+export function SmartyCoachDialog({ open, onOpenChange, prefetch = false, visitor = false }: { open: boolean; onOpenChange: (open: boolean) => void; prefetch?: boolean; visitor?: boolean }) {
   const load = useServerFn(getCoachSnapshot);
   const navigate = useNavigate();
   const [snapshot, setSnapshot] = useState<CoachSnapshot | null>(null);
@@ -70,12 +71,12 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { op
   };
 
   useEffect(() => {
-    if ((open || prefetch) && !snapshot && !loading && !failed) fetchSnapshot();
+    if (!visitor && (open || prefetch) && !snapshot && !loading && !failed) fetchSnapshot();
     if (!open) setView("home");
   }, [open, prefetch, snapshot, loading, failed]);
 
   // Only show the pop-up once the personal recommendation is ready, never a loading placeholder.
-  const ready = !loading && (!!snapshot || failed);
+  const ready = visitor || (!loading && (!!snapshot || failed));
 
   const go = (target: NavTarget["to"]) => {
     onOpenChange(false);
@@ -97,9 +98,34 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { op
     void navigate({ to: action.to });
   };
 
+  const exploreCards = (
+    <div className="space-y-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:space-y-0">
+              {/* Card 2: Training options */}
+              <section className="rounded-md border border-border p-4">
+                <div className="flex items-center gap-2 font-bold"><Dumbbell className="text-primary" /> Train your way</div>
+                <div className="mt-3 space-y-2">
+                  <OptionRow icon={<CalendarDays />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." tint="bg-sky-500/10 text-sky-500" onClick={() => go("/wod")} />
+                  <OptionRow icon={<Dumbbell />} title="Smarty Workouts" subtitle="The full library, built by Haris." tint="bg-violet-500/10 text-violet-500" onClick={() => go("/smarty-workouts")} />
+                  <OptionRow icon={<PencilLine />} title="Create Your Own Workout" subtitle="Build it yourself or let the Coach build it." tint="bg-amber-500/10 text-amber-500" onClick={() => go("/create-your-own-workout")} />
+                  <OptionRow icon={<Users />} title="Shared Workouts" subtitle="See what other members are training." tint="bg-emerald-500/10 text-emerald-500" onClick={() => go("/shared-workouts")} />
+                </div>
+              </section>
+
+              {/* Card 3: Learn and explore */}
+              <section className="rounded-md border border-border p-4">
+                <div className="flex items-center gap-2 font-bold"><BookOpen className="text-primary" /> Learn and explore</div>
+                <div className="mt-3 space-y-2">
+                  <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." tint="bg-rose-500/10 text-rose-500" onClick={() => go("/blog")} />
+                  <OptionRow icon={<Library />} title="Exercise Library" subtitle="Every exercise, with video and form tips." tint="bg-cyan-500/10 text-cyan-500" onClick={() => go("/exercise-library")} />
+                  <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." tint="bg-lime-500/10 text-lime-500" onClick={() => go("/tools")} />
+                </div>
+              </section>
+    </div>
+  );
+
   return (
     <Dialog open={open && ready} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg gap-3 p-4 sm:p-5">
+      <DialogContent className="max-w-lg gap-3 p-4 sm:max-w-3xl sm:p-6">
         <DialogHeader className="text-center sm:items-center sm:pr-0 sm:text-center">
           <div className="mx-auto inline-flex flex-col items-center gap-1">
             <div className="flex items-center gap-2">
@@ -107,7 +133,12 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { op
               <DialogTitle>Smarty Coach</DialogTitle>
             </div>
             <DialogDescription className="leading-snug">
-              {snapshot ? (
+              {visitor ? (
+                <>
+                  <span className="block">Hello there!</span>
+                  <span className="block">Welcome to SMARTYGYM.</span>
+                </>
+              ) : snapshot ? (
                 <>
                   <span className="block">{`Hello, ${snapshot.firstName}!`}</span>
                   <span className="block">Welcome back.</span>
@@ -125,7 +156,26 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { op
 
 
 
-        {loading ? (
+        {visitor ? (
+          <div className="max-h-[calc(100dvh-12rem)] space-y-3 overflow-y-auto pr-1 pb-2">
+            <button
+              type="button"
+              onClick={() => go("/auth")}
+              className="w-full rounded-md border-2 border-primary bg-primary/5 p-4 text-left transition-colors hover:bg-primary/10"
+            >
+              <div className="flex items-start gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary/10 text-primary"><Sparkles /></span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs font-bold uppercase text-primary">What to do next</span>
+                  <span className="mt-1 block text-lg font-extrabold leading-tight">Get your personal recommendation</span>
+                  <span className="mt-1 block text-sm leading-relaxed text-foreground">Sign in and Smarty Coach will suggest your next session from your own training.</span>
+                  <span className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-primary">Sign in or join <ChevronRight className="h-4 w-4" /></span>
+                </span>
+              </div>
+            </button>
+            {exploreCards}
+          </div>
+        ) : loading ? (
           <div className="space-y-3" aria-label="Loading coaching recommendation">
             <div className="h-24 animate-pulse rounded-md bg-secondary" />
             <div className="h-32 animate-pulse rounded-md bg-secondary" />
@@ -156,26 +206,7 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { op
                 </div>
               </button>
 
-              {/* Card 2: Training options */}
-              <section className="rounded-md border border-border p-4">
-                <div className="flex items-center gap-2 font-bold"><Dumbbell className="text-primary" /> Train your way</div>
-                <div className="mt-3 space-y-2">
-                  <OptionRow icon={<CalendarDays />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." tint="bg-sky-500/10 text-sky-500" onClick={() => go("/wod")} />
-                  <OptionRow icon={<Dumbbell />} title="Smarty Workouts" subtitle="The full library, built by Haris." tint="bg-violet-500/10 text-violet-500" onClick={() => go("/smarty-workouts")} />
-                  <OptionRow icon={<PencilLine />} title="Create Your Own Workout" subtitle="Build it yourself or let the Coach build it." tint="bg-amber-500/10 text-amber-500" onClick={() => go("/create-your-own-workout")} />
-                  <OptionRow icon={<Users />} title="Shared Workouts" subtitle="See what other members are training." tint="bg-emerald-500/10 text-emerald-500" onClick={() => go("/shared-workouts")} />
-                </div>
-              </section>
-
-              {/* Card 3: Learn and explore */}
-              <section className="rounded-md border border-border p-4">
-                <div className="flex items-center gap-2 font-bold"><BookOpen className="text-primary" /> Learn and explore</div>
-                <div className="mt-3 space-y-2">
-                  <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." tint="bg-rose-500/10 text-rose-500" onClick={() => go("/blog")} />
-                  <OptionRow icon={<Library />} title="Exercise Library" subtitle="Every exercise, with video and form tips." tint="bg-cyan-500/10 text-cyan-500" onClick={() => go("/exercise-library")} />
-                  <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." tint="bg-lime-500/10 text-lime-500" onClick={() => go("/tools")} />
-                </div>
-              </section>
+              {exploreCards}
             </div>
           ) : (
             <div className="max-h-[calc(100dvh-12rem)] space-y-3 overflow-y-auto pr-1 pb-2">

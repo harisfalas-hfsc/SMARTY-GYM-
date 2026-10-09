@@ -65,12 +65,15 @@ export function Navigation() {
   }, [menuOpen]);
 
   useEffect(() => {
-    if (loading || !user) return;
-    const key = `smarty:coach-arrival:${user.id}`;
-    try {
-      if (sessionStorage.getItem(key)) return;
-    } catch {
-      return;
+    if (loading) return;
+    // Members: once per browser session. Visitors: every visit (each page load).
+    const key = user ? `smarty:coach-arrival:${user.id}` : null;
+    if (key) {
+      try {
+        if (sessionStorage.getItem(key)) return;
+      } catch {
+        return;
+      }
     }
     let attempts = 0;
     const tryOpen = () => {
@@ -80,10 +83,12 @@ export function Navigation() {
         timer = window.setTimeout(tryOpen, 1_000);
         return;
       }
-      try {
-        sessionStorage.setItem(key, "1");
-      } catch {
-        return;
+      if (key) {
+        try {
+          sessionStorage.setItem(key, "1");
+        } catch {
+          return;
+        }
       }
       setCoachOpen(true);
     };
@@ -171,7 +176,7 @@ export function Navigation() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          {!loading && user ? (
+          {!loading ? (
             <button
               type="button"
               onClick={() => setCoachOpen(true)}
@@ -242,7 +247,7 @@ export function Navigation() {
       </div>
 
       {menuOpen && <NavDrawer onClose={() => setMenuOpen(false)} isAuthed={!!user} isAdmin={isAdmin} />}
-      <SmartyCoachDialog key={user?.id ?? "visitor"} open={coachOpen} onOpenChange={setCoachOpen} prefetch={!!user} />
+      <SmartyCoachDialog key={user?.id ?? "visitor"} open={coachOpen} onOpenChange={setCoachOpen} prefetch={!!user} visitor={!user} />
     </header>
   );
 }
