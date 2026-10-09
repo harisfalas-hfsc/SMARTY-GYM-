@@ -103,8 +103,11 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               <img src={coachIcon} alt="" className="h-8 w-8 shrink-0 object-contain" />
               <DialogTitle>Smarty Coach</DialogTitle>
             </div>
-            <DialogDescription>
-              {snapshot ? `Hello, ${snapshot.firstName}. Welcome back.` : "Your training history, connected to what comes next."}
+            <DialogDescription className="leading-snug">
+              <span className="block">
+                {snapshot ? `Hello, ${snapshot.firstName}!` : "Your training history, connected to what comes next."}
+              </span>
+              {snapshot ? <span className="block">Welcome back.</span> : null}
             </DialogDescription>
           </div>
         </DialogHeader>
