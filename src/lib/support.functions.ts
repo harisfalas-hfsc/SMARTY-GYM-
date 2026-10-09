@@ -354,13 +354,21 @@ export const adminSetThreads = createServerFn({ method: "POST" })
 /** Broadcast an announcement to every member or only to active subscribers. */
 export const adminBroadcast = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { audience: "all" | "subscribers"; title: string; body: string }) => input)
+  .inputValidator(
+    (input: {
+      audience: "all" | "subscribers";
+      channel?: "inbox" | "email" | "both";
+      title: string;
+      body: string;
+    }) => input,
+  )
   .handler(async ({ data, context }) => {
     try {
       await assertAdmin(context as any);
       const title = clean(data.title, 160);
       const body = clean(data.body, 4000);
       if (!title || !body) return { ok: false as const, error: "Title and message are required." };
+      const channel = data.channel ?? "both";
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
       let userIds: string[] = [];
@@ -381,20 +389,34 @@ export const adminBroadcast = createServerFn({ method: "POST" })
         const { data: profiles } = await supabaseAdmin.from("profiles").select("id").limit(20000);
         userIds = ((profiles as any[]) ?? []).map((p) => p.id as string);
       }
-      if (!userIds.length) return { ok: true as const, sent: 0 };
+      if (!userIds.length) return { ok: true as const, sent: 0, emails: 0 };
 
       const stamp = new Date().toISOString();
-      const rows = userIds.map((id) => ({
-        user_id: id,
-        kind: "announcement",
-        title,
-        body,
-        dedupe_key: `broadcast-${stamp}-${id}`,
-      }));
-      for (let i = 0; i < rows.length; i += 500) {
-        await supabaseAdmin.from("notifications").insert(rows.slice(i, i + 500) as never);
+      let sent = 0;
+      if (channel !== "email") {
+        const rows = userIds.map((id) => ({
+          user_id: id,
+          kind: "announcement",
+          title,
+          body,
+          dedupe_key: `broadcast-${stamp}-${id}`,
+        }));
+        for (let i = 0; i < rows.length; i += 500) {
+          await supabaseAdmin.from("notifications").insert(rows.slice(i, i + 500) as never);
+        }
+        sent = rows.length;
       }
-      return { ok: true as const, sent: rows.length };
+      let emails = 0;
+      if (channel !== "inbox") {
+        const { adminBroadcastAnnouncement } = await import("@/lib/broadcast-content");
+        const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
+        emails = await sendBroadcastEmail(
+          supabaseAdmin as never,
+          adminBroadcastAnnouncement(title, body, stamp),
+          userIds,
+        );
+      }
+      return { ok: true as const, sent, emails };
     } catch (e) {
       return { ok: false as const, error: e instanceof Error ? e.message : "Failed" };
     }

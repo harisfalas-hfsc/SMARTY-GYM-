@@ -32,6 +32,7 @@ export function AdminMessagesTab() {
   const [busy, setBusy] = useState(false);
 
   const [audience, setAudience] = useState<"all" | "subscribers">("all");
+  const [channel, setChannel] = useState<"inbox" | "email" | "both">("both");
   const [bTitle, setBTitle] = useState("");
   const [bBody, setBBody] = useState("");
   const [showBroadcast, setShowBroadcast] = useState(false);
@@ -91,7 +92,7 @@ export function AdminMessagesTab() {
   async function sendBroadcast() {
     if (!bTitle.trim() || !bBody.trim()) return;
     setBusy(true);
-    const res = await broadcast({ data: { audience, title: bTitle, body: bBody } }).catch(() => ({
+    const res = await broadcast({ data: { audience, channel, title: bTitle, body: bBody } }).catch(() => ({
       ok: false as const,
       error: "Failed",
     }));
@@ -100,7 +101,14 @@ export function AdminMessagesTab() {
     setBTitle("");
     setBBody("");
     setShowBroadcast(false);
-    toast.success(`Announcement sent to ${"sent" in res ? res.sent : 0} member(s)`);
+    const emails = "emails" in res ? res.emails : 0;
+    if (channel === "email") {
+      toast.success(`Announcement emailed to ${emails} member(s)`);
+    } else if (emails) {
+      toast.success(`Sent to ${"sent" in res ? res.sent : 0} member(s) (${emails} email${emails === 1 ? "" : "s"})`);
+    } else {
+      toast.success(`Announcement sent to ${"sent" in res ? res.sent : 0} member(s)`);
+    }
   }
 
   return (
@@ -145,6 +153,22 @@ export function AdminMessagesTab() {
               </button>
             ))}
           </div>
+          <div className="grid grid-cols-3 gap-2">
+            {(["inbox", "email", "both"] as const).map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setChannel(c)}
+                className={`h-10 rounded-2xl text-sm font-bold ${
+                  channel === c
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground"
+                }`}
+              >
+                {c === "inbox" ? "In-app only" : c === "email" ? "Email only" : "In-app + Email"}
+              </button>
+            ))}
+          </div>
           <Input
             placeholder="Announcement title"
             value={bTitle}
@@ -168,7 +192,8 @@ export function AdminMessagesTab() {
             Send to {audience === "all" ? "all users" : "subscribers"}
           </Button>
           <p className="text-xs text-muted-foreground">
-            Announcements land in every recipient's notifications inbox.
+            In-app announcements land in every recipient's notifications inbox. Emails are delivered
+            to the account email address in the branded SMARTYGYM template.
           </p>
         </div>
       )}

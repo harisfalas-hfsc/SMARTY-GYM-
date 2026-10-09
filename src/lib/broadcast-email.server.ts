@@ -56,13 +56,21 @@ ${email.supportingText ? paragraph(email.supportingText) : ""}
  * Sends the broadcast email to every account with an email address, except
  * `input.exclude` and anyone who already received it (tracked in
  * broadcast_email_sends so partial failures retry without duplicates).
+ * `onlyUserIds` optionally restricts recipients to that audience.
  * Returns the number of emails actually sent.
  */
-export async function sendBroadcastEmail(db: DB, input: BroadcastEmail): Promise<number> {
+export async function sendBroadcastEmail(
+  db: DB,
+  input: BroadcastEmail,
+  onlyUserIds?: string[],
+): Promise<number> {
   const apiKey = process.env.LOVABLE_API_KEY;
   const resendKey = process.env.RESEND_API_KEY;
   if (!apiKey) throw new Error("LOVABLE_API_KEY is not configured");
   if (!resendKey) throw new Error("RESEND_API_KEY is not configured");
+
+  const allowed = onlyUserIds ? new Set(onlyUserIds) : null;
+  if (allowed && allowed.size === 0) return 0;
 
   const { data: profiles, error: profilesError } = await db
     .from("profiles")
@@ -79,7 +87,7 @@ export async function sendBroadcastEmail(db: DB, input: BroadcastEmail): Promise
   const already = new Set(((done as { user_id: string }[] | null) ?? []).map((r) => r.user_id));
 
   const recipients = ((profiles as { id: string; email: string | null; email_new_workouts: boolean; email_shared_workouts: boolean }[] | null) ?? [])
-    .filter((p) => p.email && p.id !== input.exclude && !already.has(p.id) && wantsAnnouncementEmail(p, input.dedupeKey));
+    .filter((p) => p.email && p.id !== input.exclude && !already.has(p.id) && wantsAnnouncementEmail(p, input.dedupeKey) && (!allowed || allowed.has(p.id)));
 
   if (!recipients.length) return 0;
 

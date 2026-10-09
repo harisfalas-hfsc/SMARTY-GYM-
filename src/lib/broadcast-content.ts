@@ -58,6 +58,19 @@ export function sharedWorkoutAnnouncement(id: string, name: string | undefined, 
   };
 }
 
+/** Manual admin broadcast: same branded email layout, any title/body. */
+export function adminBroadcastAnnouncement(title: string, body: string, stamp: string): WorkoutAnnouncement {
+  return {
+    dedupeKey: `admin-broadcast:${stamp}`,
+    subject: title,
+    heading: title,
+    body,
+    buttonHref: SITE_URL,
+    buttonLabel: "Open SMARTYGYM",
+  };
+}
+
+
 export function announcementInboxContent(announcement: WorkoutAnnouncement) {
   return {
     title: announcement.heading,
