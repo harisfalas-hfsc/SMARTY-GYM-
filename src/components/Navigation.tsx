@@ -28,6 +28,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { adminCheckAccess } from "@/lib/admin.functions";
 import { NotificationBell } from "@/components/NotificationBell";
+import { SmartyCoachDialog } from "@/components/SmartyCoachDialog";
+import coachIcon from "@/assets/smarty-coach.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +46,7 @@ export function Navigation() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [navCount, setNavCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [coachOpen, setCoachOpen] = useState(false);
 
   useEffect(() => {
     const unsub = router.subscribe("onResolved", () => {
@@ -60,6 +63,23 @@ export function Navigation() {
       document.body.style.overflow = prev;
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    if (loading || !user) return;
+    const key = `smarty:coach-arrival:${user.id}`;
+    try {
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, "1");
+    } catch {
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      const anotherDialog = document.querySelector('[role="dialog"]');
+      if (anotherDialog) return;
+      setCoachOpen(true);
+    }, 5_000);
+    return () => window.clearTimeout(timer);
+  }, [loading, user?.id]);
 
   const canGoBack = pathname !== "/";
 
@@ -141,6 +161,17 @@ export function Navigation() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
+          {!loading && user ? (
+            <button
+              type="button"
+              onClick={() => setCoachOpen(true)}
+              aria-label="Smarty Coach"
+              title="Smarty Coach"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-background transition-colors hover:bg-primary/10"
+            >
+              <img src={coachIcon} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
+            </button>
+          ) : null}
           {!loading && user ? <NotificationBell /> : null}
           {loading ? null : user ? (
             <DropdownMenu>
@@ -201,6 +232,7 @@ export function Navigation() {
       </div>
 
       {menuOpen && <NavDrawer onClose={() => setMenuOpen(false)} isAuthed={!!user} isAdmin={isAdmin} />}
+      <SmartyCoachDialog open={coachOpen} onOpenChange={setCoachOpen} />
     </header>
   );
 }
