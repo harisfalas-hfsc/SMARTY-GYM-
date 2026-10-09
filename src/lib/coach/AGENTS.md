@@ -1,0 +1,1 @@
+- recommend.ts is pure (no I/O); getCoachSnapshot loads data and applyCoachDecision overlays its verdict — why: engine priorities stay testable and always win.
