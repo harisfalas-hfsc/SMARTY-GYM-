@@ -186,6 +186,12 @@ function AdminPage() {
   const [section, setSection] = useState<SectionKey | null>(null);
   const [workoutTab, setWorkoutTab] = useState("smarty");
   useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [section]);
+  useEffect(() => {
     const onDraft = () => setWorkoutTab("smarty");
     window.addEventListener(SMARTY_DRAFT_EVENT, onDraft);
     return () => window.removeEventListener(SMARTY_DRAFT_EVENT, onDraft);
