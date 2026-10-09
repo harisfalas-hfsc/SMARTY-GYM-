@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Match Insights and training graphs to lightweight lines in the website and PDF reports; verify real downloads and desktop/mobile rendering without changing calculations.
+- [x] Match Insights and training graphs to lightweight lines in website/PDF reports; real account graphs and downloads inspected at desktop/mobile, all PDF pages rendered, 281 tests pass; calculations unchanged.
 
 - [x] Add two Account email preferences in Daily Coaching; sending filters honor independent opt-outs, mandatory app notices unchanged. Signed-in save/reload verified for both combinations at 1280/384px; original owner preferences restored; 263 tests pass.
 
