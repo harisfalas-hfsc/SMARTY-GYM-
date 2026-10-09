@@ -40,7 +40,7 @@ describe("Smarty Coach snapshot priorities", () => {
 
   it("does not fabricate comparisons for a new member", () => {
     const result = decideCoachSnapshot({ ...base, loggedSessions: 0, totalCompleted: 0, lastSession: null, comparison: "" });
-    expect(result.comparison).toMatch(/first completed session/);
+    expect(result.comparison).toMatch(/first workout/);
     expect(result.lastSession).toBeNull();
   });
 });
