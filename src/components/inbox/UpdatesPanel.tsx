@@ -272,13 +272,26 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                       </span>
                     </div>
                     {n.body ? (
-                      <p
-                        className={`mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground ${
-                          isOpen ? "" : "line-clamp-2"
-                        }`}
-                      >
-                        {n.kind === "weekly_insights" ? decodeInsightMessage(n.body).summary : n.body}
-                      </p>
+                      isOpen && n.kind !== "weekly_insights" ? (
+                        <div className="mt-1 space-y-3 text-xs leading-relaxed text-muted-foreground">
+                          {n.body
+                            .replace(/\r\n?/g, "\n")
+                            .split(/\n\s*\n/)
+                            .map((block) => block.trim())
+                            .filter(Boolean)
+                            .map((block, i) => (
+                              <p key={i} className="whitespace-pre-line">{block}</p>
+                            ))}
+                        </div>
+                      ) : (
+                        <p
+                          className={`mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground ${
+                            isOpen ? "" : "line-clamp-2"
+                          }`}
+                        >
+                          {n.kind === "weekly_insights" ? decodeInsightMessage(n.body).summary : n.body}
+                        </p>
+                      )
                     ) : null}
                   </button>
                 </div>
