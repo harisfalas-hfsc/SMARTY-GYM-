@@ -147,7 +147,7 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               </button>
 
               {/* Card 2: Training options */}
-              <section className="rounded-md border-2 border-primary bg-primary/5 p-4">
+              <section className="rounded-md border border-border p-4">
                 <div className="flex items-center gap-2 font-bold"><Dumbbell className="text-primary" /> Train your way</div>
                 <div className="mt-3 space-y-2">
                   <OptionRow icon={<CalendarDays />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." tint="bg-sky-500/10 text-sky-500" onClick={() => go("/wod")} />
@@ -158,7 +158,7 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               </section>
 
               {/* Card 3: Learn and explore */}
-              <section className="rounded-md border-2 border-primary bg-primary/5 p-4">
+              <section className="rounded-md border border-border p-4">
                 <div className="flex items-center gap-2 font-bold"><BookOpen className="text-primary" /> Learn and explore</div>
                 <div className="mt-3 space-y-2">
                   <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." tint="bg-rose-500/10 text-rose-500" onClick={() => go("/blog")} />
