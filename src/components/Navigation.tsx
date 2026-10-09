@@ -242,7 +242,7 @@ export function Navigation() {
       </div>
 
       {menuOpen && <NavDrawer onClose={() => setMenuOpen(false)} isAuthed={!!user} isAdmin={isAdmin} />}
-      <SmartyCoachDialog open={coachOpen} onOpenChange={setCoachOpen} />
+      <SmartyCoachDialog open={coachOpen} onOpenChange={setCoachOpen} prefetch={!!user} />
     </header>
   );
 }
