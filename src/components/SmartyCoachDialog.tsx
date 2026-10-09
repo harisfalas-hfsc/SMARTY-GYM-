@@ -96,14 +96,17 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl gap-4 p-4 sm:p-6">
-        <DialogHeader className="flex flex-col items-center text-center sm:items-center sm:pr-0 sm:text-center">
-          <img src={coachIcon} alt="" className="mx-auto h-16 w-16 object-contain" />
-          <DialogTitle className="text-center">Smarty Coach</DialogTitle>
-          <DialogDescription className="text-center">
-            {snapshot ? `Hello, ${snapshot.firstName}. Welcome back.` : "Your training history, connected to what comes next."}
-          </DialogDescription>
+      <DialogContent className="max-w-xl gap-3 p-4 sm:p-6">
+        <DialogHeader className="flex-row items-center gap-3 space-y-0 text-left sm:flex-row sm:items-center sm:pr-9 sm:text-left">
+          <img src={coachIcon} alt="" className="h-10 w-10 shrink-0 object-contain" />
+          <div className="min-w-0">
+            <DialogTitle>Smarty Coach</DialogTitle>
+            <DialogDescription className="mt-0.5">
+              {snapshot ? `Hello, ${snapshot.firstName}. Welcome back.` : "Your training history, connected to what comes next."}
+            </DialogDescription>
+          </div>
         </DialogHeader>
+
 
         {loading ? (
           <div className="space-y-3" aria-label="Loading coaching recommendation">
@@ -118,7 +121,7 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
           </div>
         ) : snapshot ? (
           view === "home" ? (
-            <div className="max-h-[60vh] space-y-3 overflow-y-auto pr-1">
+            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1">
               {/* Card 1: What to do next — opens the detailed recommendation view */}
               <button
                 type="button"
@@ -160,7 +163,7 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               <p className="text-center text-xs text-muted-foreground">This is a suggestion based only on information you logged. It does not change your plan automatically.</p>
             </div>
           ) : (
-            <div className="max-h-[60vh] space-y-3 overflow-y-auto pr-1">
+            <div className="max-h-[calc(100dvh-9rem)] space-y-3 overflow-y-auto pr-1">
               <Button variant="ghost" size="sm" className="-ml-2" onClick={() => setView("home")}><ArrowLeft /> Back</Button>
 
               <section className="rounded-md border-2 border-primary bg-primary/5 p-4">
