@@ -266,19 +266,32 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                     className="min-w-0 flex-1 text-left"
                   >
                     <div className="flex items-center gap-2">
-                      <p className="min-w-0 flex-1 truncate text-sm font-bold">{n.title}</p>
+                      <p className={`min-w-0 flex-1 text-sm font-bold ${isOpen ? "" : "truncate"}`}>{n.title}</p>
                       <span className="shrink-0 text-[10px] text-muted-foreground">
                         {when(n.created_at)}
                       </span>
                     </div>
                     {n.body ? (
-                      <p
-                        className={`mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground ${
-                          isOpen ? "" : "line-clamp-2"
-                        }`}
-                      >
-                        {n.kind === "weekly_insights" ? decodeInsightMessage(n.body).summary : n.body}
-                      </p>
+                      isOpen && n.kind !== "weekly_insights" ? (
+                        <div className="mt-1 space-y-3 text-xs leading-relaxed text-muted-foreground">
+                          {n.body
+                            .replace(/\r\n?/g, "\n")
+                            .split(/\n\s*\n/)
+                            .map((block) => block.trim())
+                            .filter(Boolean)
+                            .map((block, i) => (
+                              <p key={i} className="whitespace-pre-line">{block}</p>
+                            ))}
+                        </div>
+                      ) : (
+                        <p
+                          className={`mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground ${
+                            isOpen ? "" : "line-clamp-2"
+                          }`}
+                        >
+                          {n.kind === "weekly_insights" ? decodeInsightMessage(n.body).summary : n.body}
+                        </p>
+                      )
                     ) : null}
                   </button>
                 </div>

@@ -13,6 +13,9 @@ const FROM = "SMARTYGYM <no-reply@smartygym.com>";
 const SITE_URL = "https://smartygym.com";
 const BATCH = 100;
 
+/** Shared brand line for every SMARTYGYM email footer. */
+export const EMAIL_BRAND_FOOTER = `<p style="font-size:13px;color:#666666;line-height:1.6;margin:16px 0 12px;">SMARTYGYM &ndash; Your Gym Re-imagined. Anywhere, Anytime.<br /><a href="${SITE_URL}" style="color:#29B6D2;text-decoration:none;font-weight:bold;">smartygym.com</a></p>`;
+
 export type BroadcastEmail = WorkoutAnnouncement;
 
 export function escapeHtml(value: string): string {
@@ -26,7 +29,16 @@ export function escapeHtml(value: string): string {
 
 /** Shared old-project new-content layout, adapted to fluid mobile tables. */
 export function broadcastEmailHtml(email: BroadcastEmail): string {
-  const paragraph = (text: string, emphasis = false) => `<p style="font-size:${emphasis ? 18 : 16}px;line-height:1.6;color:${emphasis ? "#29B6D2" : "#333333"};font-weight:${emphasis ? "bold" : "normal"};margin:0 0 15px;overflow-wrap:anywhere;">${escapeHtml(text)}</p>`;
+  // Keep the author's own layout: blank lines become separate paragraphs and
+  // single line breaks stay as line breaks.
+  const paragraph = (text: string, emphasis = false) =>
+    text
+      .replace(/\r\n?/g, "\n")
+      .split(/\n\s*\n/)
+      .map((block) => block.trim())
+      .filter(Boolean)
+      .map((block) => `<p style="font-size:${emphasis ? 18 : 16}px;line-height:1.6;color:${emphasis ? "#29B6D2" : "#333333"};font-weight:${emphasis ? "bold" : "normal"};margin:0 0 15px;overflow-wrap:anywhere;">${escapeHtml(block).replace(/\n/g, "<br />")}</p>`)
+      .join("\n");
   return `<!DOCTYPE html>
 <html lang="en" dir="ltr"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><meta name="x-apple-disable-message-reformatting" /><title>${escapeHtml(email.subject)}</title></head>
 <body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f5f5f5;-webkit-text-size-adjust:100%;">
@@ -46,7 +58,7 @@ ${email.supportingText ? paragraph(email.supportingText) : ""}
 </div></td></tr>
 <tr><td style="background-color:#f8f8f8;padding:20px 24px;text-align:center;border-top:1px solid #eeeeee;">
 <p style="color:#888888;margin:0;font-size:12px;line-height:1.6;">You're receiving this email because you have a SMARTYGYM account.</p>
-<p style="font-size:13px;color:#666666;line-height:1.6;margin:16px 0 12px;">SMARTYGYM &ndash; Your Expert Fitness Partner<br />Designed by HARIS FALAS, Sports Scientist (CSCS Certified)</p>
+${EMAIL_BRAND_FOOTER}
 <a href="${SITE_URL}/privacy" style="font-size:12px;color:#999999;text-decoration:underline;">Privacy Policy</a>
 </td></tr></table></td></tr></table>
 </body></html>`;
