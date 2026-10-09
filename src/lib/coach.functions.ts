@@ -23,6 +23,8 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         nextStep: "Restart your membership to continue from where you left off.",
         reasons: ["Protected training history remains locked until membership access is active."],
         equipment: [],
+        smartyPick: null,
+        insights: null,
         action: { label: "View membership", to: "/account" },
       };
     }
@@ -133,12 +135,128 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       ? `${record.label}: ${Number(record.value).toLocaleString("en-GB")} ${record.metric}`.trim()
       : null;
     const firstName = String(profile?.display_name ?? "there").trim().split(/\s+/)[0] || "there";
+
+    // Whole history (not only the 28-day Training Load window): a returning
+    // member is never told this is their first workout.
+    const { data: completedRows } = await db
+      .from("workouts")
+      .select("name,category")
+      .eq("user_id", context.userId)
+      .eq("status", "completed")
+      .is("deleted_at", null)
+      .limit(2000);
+    const completed = (completedRows ?? []) as Array<{ name: string; category: string }>;
+    const daysSinceLast = lastWorkout?.completed_at
+      ? Math.floor((Date.now() - new Date(lastWorkout.completed_at).getTime()) / 86_400_000)
+      : null;
+
+    // Insights: the same weekly report the member sees in the Logbook.
+    let insights: CoachSnapshot["insights"] = null;
+    try {
+      const { loadWeeklyInsights, weekLabel } = await import("@/lib/insights/insights.server");
+      const week = await loadWeeklyInsights(db as never, context.userId, "current");
+      const tip = week.tips[0] ?? null;
+      insights = {
+        week: weekLabel(week),
+        headline: `${week.headline.emoji} ${week.headline.text}`,
+        workouts: week.kpis.completed ?? 0,
+        tip: tip ? { title: tip.title, body: tip.body } : null,
+      };
+    } catch {
+      insights = null;
+    }
+
+    // Smarty Workout pick — fixed rules, no randomness.
+    const restart = daysSinceLast !== null && daysSinceLast >= 14;
+    const recovery =
+      overview.readiness.state === "Recovery Recommended" || overview.readiness.state === "Caution";
+    const goalText = String(profile?.primary_goal ?? "").toLowerCase();
+    const goalCategory = goalText.includes("muscle")
+      ? "MUSCLE BUILDING"
+      : goalText.includes("fat") || goalText.includes("lose")
+        ? "CALORIE BURNING"
+        : goalText.includes("strength")
+          ? "STRENGTH"
+          : goalText.includes("healthy") || goalText.includes("active")
+            ? "CARDIO"
+            : null;
+    const lastCategory = lastWorkout?.category ?? null;
+    let targetCategory: string | null;
+    let why: string;
+    const label = (c: string) => c.toLowerCase().replace(/(^|\s|&\s)\w/g, (m) => m.toUpperCase());
+    if (recovery) {
+      targetCategory = "RECOVERY";
+      why = "Recovery was chosen because your readiness says to ease off today.";
+    } else if (goalCategory && (lastCategory !== goalCategory || restart)) {
+      targetCategory = goalCategory;
+      why = `${label(goalCategory)} was chosen because it matches your goal${lastCategory ? ` and your last session was ${label(lastCategory)}` : ""}.`;
+    } else if (lastCategory) {
+      const complement: Record<string, string> = {
+        STRENGTH: "MOBILITY & STABILITY",
+        "MUSCLE BUILDING": "CARDIO",
+        "CALORIE BURNING": "STRENGTH",
+        CARDIO: "STRENGTH",
+        METABOLIC: "MOBILITY & STABILITY",
+        CHALLENGE: "RECOVERY",
+        "MOBILITY & STABILITY": "STRENGTH",
+        PILATES: "CARDIO",
+        RECOVERY: "STRENGTH",
+      };
+      targetCategory = complement[lastCategory] ?? null;
+      why = targetCategory
+        ? `${label(targetCategory)} was chosen to balance your last session (${label(lastCategory)}).`
+        : "";
+    } else {
+      targetCategory = goalCategory;
+      why = goalCategory ? `${label(goalCategory)} was chosen because it matches your goal.` : "";
+    }
+    const pickStars = recovery || restart ? Math.max(1, selectedStars - 1) : selectedStars;
+    if (why && pickStars !== selectedStars) {
+      why += ` One level easier (${pickStars} star${pickStars === 1 ? "" : "s"}) ${restart ? `after ${daysSinceLast} days away` : "while you recover"}.`;
+    }
+    let smartyPick: CoachSnapshot["smartyPick"] = null;
+    if (targetCategory) {
+      const owned = new Set((profile?.preferred_equipment ?? ["bodyweight"]).map((e: string) => e.toLowerCase()));
+      owned.add("bodyweight");
+      const done = new Set(completed.map((c) => c.name));
+      const { data: pool } = await db
+        .from("smarty_workouts")
+        .select("id,name,category,difficulty_stars,duration_min,equipment,created_at")
+        .eq("is_visible", true)
+        // Smarty Workouts file Muscle Building under Strength.
+        .eq("category", targetCategory === "MUSCLE BUILDING" ? "STRENGTH" : targetCategory)
+        .order("created_at", { ascending: false })
+        .limit(300);
+      const rows = (pool ?? []) as Array<{ id: string; name: string; category: string; difficulty_stars: number; duration_min: number; equipment: string[] }>;
+      const fits = rows.filter(
+        (w) => !done.has(w.name) && (w.equipment ?? []).every((e) => owned.has(e.toLowerCase())),
+      );
+      const chosen =
+        fits.find((w) => w.difficulty_stars === pickStars) ??
+        fits.sort((a, b) => Math.abs(a.difficulty_stars - pickStars) - Math.abs(b.difficulty_stars - pickStars))[0] ??
+        null;
+      if (chosen) {
+        smartyPick = {
+          id: chosen.id,
+          name: chosen.name,
+          category: chosen.category,
+          stars: chosen.difficulty_stars,
+          minutes: chosen.duration_min,
+          why: `${why} It uses only equipment from your Training Profile and you haven't done it before.`,
+        };
+      }
+    }
+
     return decideCoachSnapshot({
       firstName,
       readiness: overview.readiness,
       recommendation,
       hasCheckin: Boolean(checkin),
       loggedSessions: overview.loggedSessions,
+      totalCompleted: completed.length,
+      daysSinceLast,
+      smartyPick,
+      insights,
       primaryGoal: profile?.primary_goal ?? null,
       fitnessLevel: profile?.fitness_level ?? profile?.experience ?? null,
       equipment: (profile?.preferred_equipment ?? []).filter(Boolean),

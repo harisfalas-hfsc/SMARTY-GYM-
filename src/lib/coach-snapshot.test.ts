@@ -9,6 +9,10 @@ const base: CoachSnapshotDecisionInput = {
   loggedSessions: 2,
   primaryGoal: "strength",
   fitnessLevel: "intermediate",
+  totalCompleted: 2,
+  daysSinceLast: 2,
+  smartyPick: null,
+  insights: null,
   equipment: ["Dumbbell"],
   upcoming: null,
   lastSession: { name: "Solid Lift", date: "8 Oct", facts: ["RPE 7/10"] },
@@ -35,8 +39,19 @@ describe("Smarty Coach snapshot priorities", () => {
   });
 
   it("does not fabricate comparisons for a new member", () => {
-    const result = decideCoachSnapshot({ ...base, loggedSessions: 0, lastSession: null, comparison: "" });
-    expect(result.comparison).toMatch(/first completed session/);
+    const result = decideCoachSnapshot({ ...base, loggedSessions: 0, totalCompleted: 0, lastSession: null, comparison: "" });
+    expect(result.comparison).toMatch(/first workout/);
     expect(result.lastSession).toBeNull();
+  });
+});
+describe("returning members", () => {
+  it("never calls a returning member's next workout their first", () => {
+    const r = decideCoachSnapshot({ ...base, loggedSessions: 0, totalCompleted: 1, daysSinceLast: 35 });
+    expect(r.headline).toBe("Welcome back");
+    expect(r.action.label).not.toMatch(/first/i);
+  });
+  it("opens the recommended Smarty Workout", () => {
+    const r = decideCoachSnapshot({ ...base, smartyPick: { id: "x", name: "Lift", category: "STRENGTH", stars: 2, minutes: 30, why: "Because." } });
+    expect(r.action.to).toBe("/smarty-workouts/$workoutId");
   });
 });

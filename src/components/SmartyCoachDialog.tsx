@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
-import { Activity, ArrowRight, CalendarClock, Dumbbell, Medal, RefreshCw, Sparkles, Target } from "lucide-react";
+import { Activity, BarChart3, ArrowRight, CalendarClock, Dumbbell, Medal, RefreshCw, Sparkles, Target } from "lucide-react";
 import { getCoachSnapshot } from "@/lib/coach.functions";
 import type { CoachSnapshot } from "@/lib/coach-snapshot";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -33,7 +33,11 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
     const action = snapshot.action;
     onOpenChange(false);
     if (action.to === "/logbook") {
-      void navigate({ to: action.to, search: action.search ?? { view: "list", filter: "all" } });
+      void navigate({ to: action.to, search: action.search ?? { view: "list", filter: "all" }, hash: action.hash });
+      return;
+    }
+    if (action.to === "/smarty-workouts/$workoutId") {
+      void navigate({ to: action.to, params: action.params });
       return;
     }
     void navigate({ to: action.to });
@@ -98,6 +102,26 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{snapshot.nextStep}</p>
               </section>
             </div>
+
+            {snapshot.smartyPick ? (
+              <section className="rounded-md border border-border p-4">
+                <div className="flex items-center gap-2 font-bold"><Dumbbell className="text-primary" /> Recommended Smarty Workout</div>
+                <p className="mt-2 font-semibold">{snapshot.smartyPick.name}</p>
+                <p className="text-xs text-muted-foreground">{snapshot.smartyPick.category} · {snapshot.smartyPick.minutes} min · {snapshot.smartyPick.stars} star{snapshot.smartyPick.stars === 1 ? "" : "s"}</p>
+              </section>
+            ) : null}
+
+            {snapshot.insights ? (
+              <section className="rounded-md border border-border p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 font-bold"><BarChart3 className="text-primary" /> Your Insights</div>
+                  <span className="text-xs text-muted-foreground">{snapshot.insights.week}</span>
+                </div>
+                <p className="mt-2 text-sm">{snapshot.insights.headline}</p>
+                {snapshot.insights.tip ? <p className="mt-1 text-sm text-muted-foreground"><span className="font-semibold text-foreground">{snapshot.insights.tip.title}.</span> {snapshot.insights.tip.body}</p> : null}
+                <button type="button" className="mt-2 text-sm font-semibold text-primary hover:underline" onClick={() => { onOpenChange(false); void navigate({ to: "/logbook", search: { view: "list", filter: "all" } as never, hash: "insights" }); }}>Open full Insights</button>
+              </section>
+            ) : null}
 
             <section className="rounded-md border border-border bg-secondary/40 p-4">
               <div className="flex items-center gap-2 font-bold"><CalendarClock className="text-primary" /> Why this fits</div>
