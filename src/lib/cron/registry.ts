@@ -310,14 +310,13 @@ export const CRON_JOBS: CronJobDefinition[] = [
     label: "Weekly Insights report",
     description:
       "Every Monday morning, every account with at least one completed workout (Premium, expired or free) gets its personal weekly Smarty Insights: workouts, active days, training time, streak, score, Training Load, check-ins, what is coming up and Smarty Coach suggestions with links. Delivered to the app inbox and by email, unless the member switched off Weekly Insights emails in My Account. Never sent twice for the same week.",
-    timing: "weekly",
-    timingNote: "Runs once a week, on Monday at the time set below (Cyprus time). Large member lists finish over the next few scheduler ticks.",
+    timing: "per-member",
+    timingNote: "Every Monday from 06:00 in each member's own timezone. Anything not yet delivered (for example after an email failure) is retried every hour until Sunday, never twice.",
     sends: [
       { title: "Your weekly Insights are ready", body: "Inbox summary of the week plus the first Smarty Coach tip, and a full colourful email report with an Open my Insights button. Full details in Logbook → Progress → Insights." },
     ],
-    timeEditable: true,
+    timeEditable: false,
     contentEditable: false,
-    weekday: 1,
     defaults: { enabled: true, hour: 6, minute: 0 },
   },
 ];
