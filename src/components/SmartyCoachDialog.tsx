@@ -13,6 +13,7 @@ import {
   Dumbbell,
   Library,
   Medal,
+  MessageCircle,
   PencilLine,
   RefreshCw,
   Sparkles,
@@ -34,7 +35,8 @@ type NavTarget =
   | { to: "/shared-workouts" }
   | { to: "/blog" }
   | { to: "/exercise-library" }
-  | { to: "/tools" };
+  | { to: "/tools" }
+  | { to: "/community" };
 
 function OptionRow({ icon, title, subtitle, tint, onClick }: { icon: React.ReactNode; title: string; subtitle: string; tint: string; onClick: () => void }) {
   return (
@@ -118,6 +120,7 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false, visito
                   <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." tint="bg-rose-500/10 text-rose-500" onClick={() => go("/blog")} />
                   <OptionRow icon={<Library />} title="Exercise Library" subtitle="Every exercise, with video and form tips." tint="bg-cyan-500/10 text-cyan-500" onClick={() => go("/exercise-library")} />
                   <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." tint="bg-lime-500/10 text-lime-500" onClick={() => go("/tools")} />
+                  <OptionRow icon={<MessageCircle />} title="Smarty Community" subtitle="Member workouts, rankings and comments." tint="bg-blue-500/10 text-blue-500" onClick={() => go("/community")} />
                 </div>
               </section>
     </div>
