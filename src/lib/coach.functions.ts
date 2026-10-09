@@ -223,7 +223,8 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         .from("smarty_workouts")
         .select("id,name,category,difficulty_stars,duration_min,equipment,created_at")
         .eq("is_visible", true)
-        .eq("category", targetCategory)
+        // Smarty Workouts file Muscle Building under Strength.
+        .eq("category", targetCategory === "MUSCLE BUILDING" ? "STRENGTH" : targetCategory)
         .order("created_at", { ascending: false })
         .limit(300);
       const rows = (pool ?? []) as Array<{ id: string; name: string; category: string; difficulty_stars: number; duration_min: number; equipment: string[] }>;
