@@ -104,10 +104,17 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               <DialogTitle>Smarty Coach</DialogTitle>
             </div>
             <DialogDescription className="leading-snug">
-              <span className="block">
-                {snapshot ? `Hello, ${snapshot.firstName}!` : "Your training history, connected to what comes next."}
-              </span>
-              {snapshot ? <span className="block">Welcome back.</span> : null}
+              {snapshot ? (
+                <>
+                  <span className="block">{`Hello, ${snapshot.firstName}!`}</span>
+                  <span className="block">Welcome back.</span>
+                </>
+              ) : (
+                <span className="block" aria-hidden="true">
+                  <span className="mx-auto my-1 block h-3.5 w-24 animate-pulse rounded bg-secondary" />
+                  <span className="mx-auto my-1 block h-3.5 w-20 animate-pulse rounded bg-secondary" />
+                </span>
+              )}
             </DialogDescription>
           </div>
         </DialogHeader>
