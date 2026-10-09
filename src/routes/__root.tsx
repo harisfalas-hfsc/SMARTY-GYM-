@@ -313,6 +313,9 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+// Sister-app announcement is paused; flip this to true to bring it back.
+const SHOW_SISTER_APPS_POPUP = false;
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   // Invisible SEO preservation: addresses published by the previous
   // smartygym.com static site (the old ".html" pages) are answered with a
@@ -444,7 +447,7 @@ function RootComponent() {
           </main>
           <SiteFooter />
           <Toaster />
-          <SisterAppsPopup />
+          {SHOW_SISTER_APPS_POPUP && <SisterAppsPopup />}
           <MobileAppPopup />
           <CheckinModalManager />
           <BottomNav />
