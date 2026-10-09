@@ -161,9 +161,9 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
               <section className="rounded-md border border-border p-4">
                 <div className="flex items-center gap-2 font-bold"><BookOpen className="text-primary" /> Learn and explore</div>
                 <div className="mt-3 space-y-2">
-                  <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." onClick={() => go("/blog")} />
-                  <OptionRow icon={<Library />} title="Exercise Library" subtitle="Every exercise, with video and form tips." onClick={() => go("/exercise-library")} />
-                  <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." onClick={() => go("/tools")} />
+                  <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." tint="bg-orange-500/10 text-orange-500" onClick={() => go("/blog")} />
+                  <OptionRow icon={<Library />} title="Exercise Library" subtitle="Every exercise, with video and form tips." tint="bg-cyan-500/10 text-cyan-500" onClick={() => go("/exercise-library")} />
+                  <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." tint="bg-teal-500/10 text-teal-500" onClick={() => go("/tools")} />
                 </div>
               </section>
 
