@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Match full Insights across app/inbox/email/PDF, including thin-line load graphs; verify desktop/mobile.
+- [x] Match full Insights across app/inbox/email/PDF, including thin-line load graphs; real account app/PDF and owner-only inbox/PDF checked at desktop/phone; email rendered and inspected; 285 tests passed. Live weekly delivery not triggered.
 
 - [x] Match Insights and training graphs to lightweight lines in website/PDF reports; real account graphs and downloads inspected at desktop/mobile, all PDF pages rendered, 281 tests pass; calculations unchanged.
 
