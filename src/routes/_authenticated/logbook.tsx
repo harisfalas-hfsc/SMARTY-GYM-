@@ -91,6 +91,7 @@ import { equipmentBadges } from "@/lib/format/labels";
 import { belongsInLogbook } from "@/lib/logbook/rows";
 import { getSessionLoads } from "@/lib/performance.functions";
 import { ProgressSection } from "@/components/progress/ProgressSection";
+import { InsightsCard } from "@/components/progress/InsightsSection";
 import { SessionDebriefDialog } from "@/components/workout/SessionDebriefDialog";
 import { PendingGenerationCard } from "@/components/workout/PendingGenerationCard";
 import { getSessionFeedback, type SessionFeedback } from "@/lib/feedback.functions";
@@ -115,13 +116,17 @@ export const Route = createFileRoute("/_authenticated/logbook")({
   }),
   head: () => ({
     meta: [
-      { title: "Logbook | Your training history" },
+      { title: "Logbook | SMARTYGYM Training History" },
       {
         name: "description",
         content:
           "Your complete training record, bringing workouts, performance, progress, records and planning together.",
       },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: "Logbook | SMARTYGYM Training History" },
+      { property: "og:description", content: "Your SMARTYGYM workouts, calendar, progress and weekly Insights in one place." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Logbook,
@@ -1127,6 +1132,8 @@ function LogbookContent() {
           </Button>
         ))}
       </div>
+
+      <InsightsCard />
 
       {view === "progress" ? (
         <div className="mt-4">

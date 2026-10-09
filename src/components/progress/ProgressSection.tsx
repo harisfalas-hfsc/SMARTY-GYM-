@@ -20,7 +20,6 @@ import {
 import { TrainingLoadPanel } from "@/components/performance/TrainingLoadPanel";
 import { RecentLoadTrend } from "@/components/performance/RecentLoadTrend";
 import { CheckinsPanel } from "@/components/checkins/CheckinsPanel";
-import { InsightsSection } from "@/components/progress/InsightsSection";
 
 import { getProgressExport, getProgressOverview, type ProgressOverview } from "@/lib/progress.functions";
 import { exportProgressPdf } from "@/lib/progress-export";
@@ -385,8 +384,6 @@ export function ProgressSection() {
       <Button asChild>
         <Link to="/create-your-own-workout">Train now</Link>
       </Button>
-
-      <InsightsSection />
 
       {unlocked.length > 0 && <BadgeUnlockedToast names={unlocked} onClose={() => setUnlocked([])} />}
 
