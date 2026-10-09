@@ -219,7 +219,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       const owned = new Set((profile?.preferred_equipment ?? ["bodyweight"]).map((e: string) => e.toLowerCase()));
       owned.add("bodyweight");
       const done = new Set(completed.map((c) => c.name));
-      const { data: pool } = await db
+      const { data: pool, error: poolErr } = await db
         .from("smarty_workouts")
         .select("id,name,category,difficulty_stars,duration_min,equipment,created_at")
         .eq("is_visible", true)
@@ -227,6 +227,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         .eq("category", targetCategory === "MUSCLE BUILDING" ? "STRENGTH" : targetCategory)
         .order("created_at", { ascending: false })
         .limit(300);
+      console.log("COACHDBG", targetCategory, pickStars, (pool ?? []).length, poolErr?.message);
       const rows = (pool ?? []) as Array<{ id: string; name: string; category: string; difficulty_stars: number; duration_min: number; equipment: string[] }>;
       const fits = rows.filter(
         (w) => !done.has(w.name) && (w.equipment ?? []).every((e) => owned.has(e.toLowerCase())),
