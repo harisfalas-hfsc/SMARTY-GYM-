@@ -128,6 +128,7 @@ export function InsightsSection() {
             </div>
           </section>
 
+          <div className="space-y-4">
           <div data-pdf-block className="grid gap-4 lg:grid-cols-2">
             <Card title="What you did" icon={ListChecks} tone="text-emerald-500">
               <div className="flex h-28 items-end justify-between gap-1.5">
@@ -163,6 +164,8 @@ export function InsightsSection() {
               <Link to="/logbook" search={{ filter: "all", view: "calendar" as const }} className="mt-3 inline-block text-sm font-bold text-primary">Open Calendar →</Link>
             </Card>
 
+          </div>
+          <div data-pdf-block className="grid gap-4 lg:grid-cols-2">
             <Card title="Training Load" icon={Gauge} tone="text-violet-500">
               <div className="flex h-24 items-end gap-2">
                 {data.load.recent.map((r, idx) => (
@@ -192,6 +195,7 @@ export function InsightsSection() {
               )}
               <Link to="/smarty-checkins" className="mt-3 inline-block text-sm font-bold text-primary">Smarty Check-ins →</Link>
             </Card>
+          </div>
           </div>
 
           <Card title="Smarty Coach suggestions" icon={Brain} block>
