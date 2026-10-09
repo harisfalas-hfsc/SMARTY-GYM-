@@ -40,3 +40,4 @@
 - Mass emails use Resend with broadcast_email_sends dedupe; others use managed sending — why: reliable bulk delivery.
 - Insights uses inbox snapshots/shared geometry/private PNGs across channels; email-only opt-outs — why: parity/privacy.
 - Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs with unchanged access protection.
+- Smarty Coach decisions (recovery gate, rotation, calendar, library ranking, build-your-own fallback) come only from the pure engine src/lib/coach/recommend.ts; getCoachSnapshot loads data and applyCoachDecision overlays the verdict — why: one deterministic, testable rule order with zero AI.
