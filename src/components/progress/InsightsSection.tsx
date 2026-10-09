@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Download, Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, ClipboardCheck } from "lucide-react";
+import { Download, Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, ClipboardCheck, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getMyInsights } from "@/lib/weekly-insights.functions";
 import { titleCase, type WeeklyInsights } from "@/lib/insights/compute";
 
@@ -41,7 +42,39 @@ function Card({ title, icon: Icon, children, tone = "text-primary" }: { title: s
   );
 }
 
-/** Logbook → Progress → Insights: the same weekly report members receive on Monday. */
+/** Persistent Logbook disclosure, independent of the selected view. */
+export function InsightsCard() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const openLinkedReport = () => {
+      if (window.location.hash === "#insights") setOpen(true);
+    };
+    openLinkedReport();
+    window.addEventListener("hashchange", openLinkedReport);
+    return () => window.removeEventListener("hashchange", openLinkedReport);
+  }, []);
+
+  return (
+    <Collapsible id="insights" open={open} onOpenChange={setOpen} className="mt-4">
+      <CollapsibleTrigger asChild>
+        <Button variant="outline" className="h-auto min-h-16 w-full justify-start gap-3 whitespace-normal rounded-2xl border-2 border-primary bg-card p-4 text-left text-foreground">
+          <Brain className="h-5 w-5 shrink-0 text-primary" />
+          <span className="min-w-0 flex-1">
+            <span className="block text-base font-black">Insights</span>
+            <span className="block text-xs font-normal text-muted-foreground">Your weekly snapshot and Smarty Coach suggestions</span>
+          </span>
+          <ChevronDown className={cn("h-5 w-5 shrink-0 text-primary transition-transform motion-reduce:transition-none", open && "rotate-180")} />
+        </Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="pt-4">
+        <InsightsSection />
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
+/** The same weekly report members receive on Monday. */
 export function InsightsSection() {
   const fetchInsights = useServerFn(getMyInsights);
   const [week, setWeek] = useState<"current" | "previous">("previous");
@@ -90,7 +123,7 @@ export function InsightsSection() {
     : [];
 
   return (
-    <div id="insights" className="space-y-4">
+    <div className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
           <h2 className="text-xl font-black">Insights</h2>

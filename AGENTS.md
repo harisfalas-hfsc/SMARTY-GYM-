@@ -37,5 +37,6 @@
 - Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
 - App panels reuse footer store links/icons and exclude announcement controls from outside dismissal — why: consistent links, independent closing.
-- Mass emails (announcements, weekly Insights) use the Resend gateway with broadcast_email_sends dedupe; other email uses Lovable managed sending — why: bulk needs the marketing-grade path.
-- Announcements and Insights each share one content source across inbox, email (and PDF); email opt-outs never block inbox — why: matching content, independent channels.
+- Mass emails use Resend with broadcast_email_sends dedupe; others use managed sending — why: reliable bulk delivery.
+- Announcements/Insights share content across inbox, email and PDF; opt-outs affect only email — why: channel parity.
+- Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs with unchanged access protection.
