@@ -21,9 +21,9 @@ function Delta({ now, prev }: { now: number; prev: number }) {
   );
 }
 
-function Card({ title, icon: Icon, children, tone = "text-primary" }: { title: string; icon: typeof Brain; children: React.ReactNode; tone?: string }) {
+function Card({ title, icon: Icon, children, tone = "text-primary", block = false }: { title: string; icon: typeof Brain; children: React.ReactNode; tone?: string; block?: boolean }) {
   return (
-    <section data-pdf-block className="rounded-2xl border border-border bg-card p-4 sm:p-5">
+    <section data-pdf-block={block ? "" : undefined} className="rounded-2xl border border-border bg-card p-4 sm:p-5">
       <h3 className="mb-3 flex items-center gap-2 text-base font-black">
         <Icon className={cn("h-5 w-5", tone)} /> {title}
       </h3>
@@ -128,7 +128,7 @@ export function InsightsSection() {
             </div>
           </section>
 
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div data-pdf-block className="grid gap-4 lg:grid-cols-2">
             <Card title="What you did" icon={ListChecks} tone="text-emerald-500">
               <div className="flex h-28 items-end justify-between gap-1.5">
                 {data.days.map((d) => (
@@ -194,7 +194,7 @@ export function InsightsSection() {
             </Card>
           </div>
 
-          <Card title="Smarty Coach suggestions" icon={Brain}>
+          <Card title="Smarty Coach suggestions" icon={Brain} block>
             <div className="grid gap-3 md:grid-cols-2">
               {data.tips.map((t) => (
                 <div key={t.id} className="rounded-xl border border-border border-l-4 border-l-primary p-3">
