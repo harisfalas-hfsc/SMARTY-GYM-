@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 /** The signed-in member's own Insights (current week, or last full week). */
 export const getMyInsights = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { week?: "current" | "previous" }) => ({ week: d?.week === "previous" ? ("previous" as const) : ("current" as const) }))
+  .inputValidator((d: { week?: "current" | "previous" }) => ({ week: d?.week === "current" ? ("current" as const) : ("previous" as const) }))
   .handler(async ({ data, context }) => {
     const { requireActiveMembership } = await import("@/lib/membership.server");
     await requireActiveMembership(context);
