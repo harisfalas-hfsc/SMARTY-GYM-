@@ -173,6 +173,19 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
           />
         </div>
 
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p id="weekly-insights-email-label" className="text-sm font-semibold">Weekly Insights emails</p>
+            <p className="text-xs text-muted-foreground">Your progress report every Monday morning.</p>
+          </div>
+          <Switch
+            className="shrink-0"
+            aria-labelledby="weekly-insights-email-label"
+            checked={settings.email_weekly_insights}
+            onCheckedChange={(v) => patch({ email_weekly_insights: v })}
+          />
+        </div>
+
       </div>
 
       <Button className="mt-5 h-12 w-full rounded-2xl" disabled={saving} onClick={() => void commit()}>
