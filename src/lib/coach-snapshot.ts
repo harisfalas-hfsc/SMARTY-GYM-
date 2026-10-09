@@ -3,10 +3,29 @@ import type { ReadinessState } from "@/lib/performance/types";
 
 export type CoachSnapshotAction =
   | { label: string; to: "/smarty-checkins" }
-  | { label: string; to: "/logbook"; search?: { view: "list" | "progress"; filter: "all" } }
+  | { label: string; to: "/logbook"; search?: { view: "list" | "progress"; filter: "all" }; hash?: string }
   | { label: string; to: "/create-your-own-workout" }
+  | { label: string; to: "/smarty-workouts/$workoutId"; params: { workoutId: string } }
   | { label: string; to: "/account" }
   | { label: string; to: "/pricing" };
+
+/** One visible Smarty Workout chosen by fixed rules, with the reason it was chosen. */
+export type CoachSmartyPick = {
+  id: string;
+  name: string;
+  category: string;
+  stars: number;
+  minutes: number;
+  why: string;
+};
+
+/** The member's own weekly Insights, summarised inside the Coach. */
+export type CoachInsightsSummary = {
+  week: string;
+  headline: string;
+  workouts: number;
+  tip: { title: string; body: string } | null;
+};
 
 export type CoachSnapshot = {
   access: "ready" | "locked";
@@ -19,6 +38,8 @@ export type CoachSnapshot = {
   nextStep: string;
   reasons: string[];
   equipment: string[];
+  smartyPick: CoachSmartyPick | null;
+  insights: CoachInsightsSummary | null;
   action: CoachSnapshotAction;
 };
 
@@ -27,7 +48,11 @@ export type CoachSnapshotDecisionInput = {
   readiness: { state: ReadinessState; reason: string };
   recommendation: CoachRecommendation;
   hasCheckin: boolean;
+  /** Sessions with logged data in the last 28 days (Training Load window). */
   loggedSessions: number;
+  /** Every completed workout ever, so returning members are never told it's their first. */
+  totalCompleted: number;
+  daysSinceLast: number | null;
   primaryGoal: string | null;
   fitnessLevel: string | null;
   equipment: string[];
@@ -35,85 +60,101 @@ export type CoachSnapshotDecisionInput = {
   lastSession: CoachSnapshot["lastSession"];
   comparison: string;
   personalRecord: string | null;
+  smartyPick: CoachSmartyPick | null;
+  insights: CoachInsightsSummary | null;
 };
 
 function readable(value: string | null) {
   return value ? value.replaceAll("_", " ").toLowerCase() : null;
 }
 
-/** Pure priority layer: recovery > scheduled session > progression/performance > profile start. */
+/** Days without training after which the Coach treats the next session as a restart. */
+export const RESTART_AFTER_DAYS = 14;
+
+/** Pure priority layer: recovery > scheduled session > restart > progression/performance > first workout. */
 export function decideCoachSnapshot(input: CoachSnapshotDecisionInput): CoachSnapshot {
   const recovery =
     input.readiness.state === "Recovery Recommended" || input.readiness.state === "Caution";
   const reasons: string[] = [];
   if (recovery) reasons.push(input.readiness.reason);
-  else if (input.recommendation.reason) reasons.push(input.recommendation.reason);
+  else if (input.loggedSessions > 0 && input.recommendation.reason) reasons.push(input.recommendation.reason);
+  if (input.smartyPick) reasons.push(input.smartyPick.why);
   const goal = readable(input.primaryGoal);
-  const level = readable(input.fitnessLevel);
-  if (goal) reasons.push(`Your Training Profile goal is ${goal}.`);
-  if (input.equipment.length) reasons.push(`Available equipment: ${input.equipment.join(", ")}.`);
+  if (goal) reasons.push(`Your Training Profile goal is "${goal}".`);
+
+  const pickAction: CoachSnapshotAction | null = input.smartyPick
+    ? { label: `Open ${input.smartyPick.name}`, to: "/smarty-workouts/$workoutId", params: { workoutId: input.smartyPick.id } }
+    : null;
+  const base = {
+    access: "ready" as const,
+    firstName: input.firstName,
+    lastSession: input.lastSession,
+    comparison: input.comparison,
+    personalRecord: input.personalRecord,
+    equipment: input.equipment,
+    smartyPick: input.smartyPick,
+    insights: input.insights,
+  };
 
   if (recovery) {
     return {
-      access: "ready",
-      firstName: input.firstName,
+      ...base,
       headline: "Recovery comes first today",
       recommendation: input.recommendation.message,
-      lastSession: input.lastSession,
-      comparison: input.comparison,
-      personalRecord: input.personalRecord,
-      nextStep: "Use an easy Mobility & Stability or Recovery session, and reassess before adding intensity.",
+      nextStep: "Choose an easy Recovery or Mobility & Stability session and reassess before adding intensity.",
       reasons: reasons.slice(0, 3),
-      equipment: input.equipment,
-      action: { label: input.hasCheckin ? "Open my Logbook" : "Complete today's check-in", to: input.hasCheckin ? "/logbook" : "/smarty-checkins", ...(input.hasCheckin ? { search: { view: "list", filter: "all" } } : {}) } as CoachSnapshotAction,
+      action: !input.hasCheckin
+        ? { label: "Complete today's check-in", to: "/smarty-checkins" }
+        : pickAction ?? { label: "Open my Logbook", to: "/logbook", search: { view: "list", filter: "all" } },
     };
   }
 
   if (input.upcoming) {
     return {
-      access: "ready",
-      firstName: input.firstName,
+      ...base,
       headline: "Your next session is already planned",
       recommendation: `${input.upcoming.name} is next on your schedule.`,
-      lastSession: input.lastSession,
-      comparison: input.comparison,
-      personalRecord: input.personalRecord,
       nextStep: input.recommendation.message,
       reasons: [`Scheduled for ${input.upcoming.date}.`, ...reasons].slice(0, 3),
-      equipment: input.equipment,
       action: { label: "Open my Logbook", to: "/logbook", search: { view: "list", filter: "all" } },
     };
   }
 
-  if (input.loggedSessions > 0) {
+  if (input.totalCompleted > 0) {
+    const restart = input.daysSinceLast !== null && input.daysSinceLast >= RESTART_AFTER_DAYS;
+    const fallback: CoachSnapshotAction = { label: "Create a workout", to: "/create-your-own-workout" };
+    if (restart) {
+      return {
+        ...base,
+        headline: "Welcome back",
+        recommendation: `Your last completed workout was ${input.daysSinceLast} days ago. Restart with a manageable session rather than jumping straight back to your previous level.`,
+        nextStep: "Keep the first session back controlled, log your sets or result, and build up from there.",
+        reasons: reasons.slice(0, 3),
+        action: pickAction ?? fallback,
+      };
+    }
     return {
-      access: "ready",
-      firstName: input.firstName,
+      ...base,
       headline: input.recommendation.id.startsWith("progression")
         ? "You are ready to progress"
         : "Build on your last session",
       recommendation: input.recommendation.message,
-      lastSession: input.lastSession,
-      comparison: input.comparison,
-      personalRecord: input.personalRecord,
-      nextStep: "Use this evidence when choosing your next session; the recommendation is guidance, not an automatic change.",
+      nextStep: "Use this as guidance when choosing your next session — nothing changes automatically.",
       reasons: reasons.slice(0, 3),
-      equipment: input.equipment,
-      action: { label: "Choose my next workout", to: "/create-your-own-workout" },
+      action: pickAction ?? fallback,
     };
   }
 
+  const level = readable(input.fitnessLevel);
   return {
-    access: "ready",
-    firstName: input.firstName,
-    headline: `Welcome${level ? `, ${level} athlete` : ""}`,
-    recommendation: "Start with a session that matches your Training Profile and available equipment.",
+    ...base,
+    headline: "Let's start your training history",
+    recommendation: `You haven't completed a workout yet. Start with a session at your ${level ?? "chosen"} level that uses your available equipment.`,
     lastSession: null,
-    comparison: "Log your first completed session to unlock automatic comparisons with previous attempts.",
+    comparison: "Complete and log your first workout to unlock automatic comparisons with previous attempts.",
     personalRecord: null,
-    nextStep: "Choose a manageable first workout and log the sets or result you complete.",
+    nextStep: "Complete the workout and log your sets or result, so your Coach can compare next time.",
     reasons: reasons.length ? reasons.slice(0, 3) : ["Your first recommendation uses your Training Profile."],
-    equipment: input.equipment,
-    action: { label: "Choose my first workout", to: "/create-your-own-workout" },
+    action: pickAction ?? { label: "Create your first workout", to: "/create-your-own-workout" },
   };
 }
