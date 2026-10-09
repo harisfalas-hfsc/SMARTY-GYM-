@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from "react";
 import {
   Body,
@@ -119,9 +120,7 @@ const Email = ({ name }: Props) => (
         </Section>
 
         <Hr style={hr} />
-        <Text style={signature}>Welcome to SMARTYGYM,</Text>
-        <Text style={signatureStrong}>HARIS FALAS</Text>
-        <Text style={footer}>BSc Sports Science · EXOS Specialist · CSCS</Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>
@@ -201,14 +200,5 @@ const primaryButton = {
   textDecoration: "none",
 };
 const hr = { borderColor: "#e2e8f0", margin: "28px 0 18px" };
-const signature = { margin: "0 0 3px", color: "#475569", fontSize: "14px", lineHeight: "20px" };
-const signatureStrong = {
-  margin: 0,
-  color: "#0f172a",
-  fontSize: "14px",
-  lineHeight: "20px",
-  fontWeight: 800 as const,
-};
-const footer = { margin: "2px 0 0", color: "#64748b", fontSize: "12px", lineHeight: "18px" };
 
 export default Email;

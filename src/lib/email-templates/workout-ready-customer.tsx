@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import { Body, Button, Container, Head, Heading, Hr, Html, Preview, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
@@ -27,8 +28,7 @@ const Email = ({ name, workoutName, workoutUrl }: Props) => (
           </Button>
         ) : null}
         <Hr style={hr} />
-        <Text style={footer}>Haris Falas — BSc Sports Science, EXOS Specialist, CSCS</Text>
-        <Text style={footer}>SmartyGym</Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>
@@ -61,6 +61,5 @@ const button = {
   margin: '12px 0',
 }
 const hr = { borderColor: '#e5e7eb', margin: '20px 0' }
-const footer = { fontSize: '13px', lineHeight: '20px', color: '#6b7280', margin: '0' }
 
 export default Email

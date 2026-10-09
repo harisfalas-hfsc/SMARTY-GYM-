@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import {
   Body,
@@ -110,6 +111,7 @@ const Email = ({
         <Text style={footer}>
           Manage schedules, switches and content in the Admin panel → Cron jobs.
         </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import * as React from 'react'
 
 import {
@@ -27,6 +28,7 @@ export const ReauthenticationEmail = ({ token }: ReauthenticationEmailProps) => 
           This code will expire shortly. If you didn't request this, you can
           safely ignore this email.
         </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

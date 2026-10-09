@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
@@ -23,8 +24,7 @@ const Email = ({ name }: Props) => (
           We will email you the moment it is ready, and it will appear in your logbook automatically.
         </Text>
         <Hr style={hr} />
-        <Text style={footer}>Haris Falas — BSc Sports Science, EXOS Specialist, CSCS</Text>
-        <Text style={footer}>SmartyGym</Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>
@@ -43,6 +43,5 @@ const brand = { fontSize: '12px', letterSpacing: '2px', color: '#2563eb', fontWe
 const heading = { fontSize: '22px', color: '#0b1220', margin: '8px 0 12px' }
 const text = { fontSize: '15px', lineHeight: '24px', color: '#1f2937' }
 const hr = { borderColor: '#e5e7eb', margin: '20px 0' }
-const footer = { fontSize: '13px', lineHeight: '20px', color: '#6b7280', margin: '0' }
 
 export default Email

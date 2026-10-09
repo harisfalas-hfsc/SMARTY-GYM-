@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
@@ -35,6 +36,7 @@ const Email = ({ userName, userEmail, userId, sessionId, stage, workoutName, wor
         <Text style={text}>{String(attempts ?? 1)}</Text>
         <Hr style={hr} />
         <Text style={footer}>The member has been emailed and the workout is in their account.</Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

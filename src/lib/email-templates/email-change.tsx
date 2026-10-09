@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import * as React from 'react'
 
 import {
@@ -57,6 +58,7 @@ export const EmailChangeEmail = ({
           If you didn't request this change, please secure your account
           immediately.
         </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import {
   Body,
@@ -42,11 +43,7 @@ const Email = ({ name, subject, message }: Props) => (
           ) : null}
         </Section>
         <Hr style={hr} />
-        <Text style={footer}>
-          Yours in good health,
-          <br />
-          Haris Falas, BSc Sports Science, EXOS Specialist, CSCS
-        </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>
@@ -78,6 +75,5 @@ const quote = {
   whiteSpace: 'pre-wrap' as const,
 }
 const hr = { borderColor: '#e5e7eb', margin: '20px 0' }
-const footer = { fontSize: '13px', lineHeight: '20px', color: '#6b7280' }
 
 export default Email

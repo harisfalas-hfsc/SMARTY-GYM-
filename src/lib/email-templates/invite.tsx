@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import * as React from 'react'
 
 import {
@@ -44,6 +45,7 @@ export const InviteEmail = ({
           If you weren't expecting this invitation, you can safely ignore this
           email.
         </Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

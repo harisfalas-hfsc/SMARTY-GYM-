@@ -1,3 +1,4 @@
+import { EmailBrandFooter } from "./brand-footer";
 import React from 'react'
 import {
   Body,
@@ -38,6 +39,7 @@ const Email = ({ alertType, title, details, link }: Props) => (
         ) : null}
         <Hr style={hr} />
         <Text style={footer}>Sign in and open the Admin panel to review and action this item.</Text>
+        <EmailBrandFooter />
       </Container>
     </Body>
   </Html>

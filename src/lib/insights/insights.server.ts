@@ -12,6 +12,7 @@ import { computeWeeklyInsights, mondayOf, addDays, titleCase, type WeeklyInsight
 
 import { LOAD_TEXT, encodeInsightMessage, decodeInsightMessage } from "./presentation";
 import { storeEmailChart } from "./email-chart.server";
+import { EMAIL_BRAND_FOOTER } from "../email-brand";
 
 type DB = SupabaseClient;
 const SITE_URL = "https://smartygym.com";
@@ -164,8 +165,7 @@ ${section("🧠 Smarty Coach suggestions", tips)}
 </td></tr>
 <tr><td style="background:#f8f8f8;padding:20px 24px;text-align:center;border-top:1px solid #eee;">
 <p style="color:#888;margin:0;font-size:12px;line-height:1.6;">You're receiving this weekly report because you train with SMARTYGYM. You can switch these emails off in My Account.</p>
-<p style="font-size:13px;color:#666;line-height:1.6;margin:16px 0 12px;">SMARTYGYM &ndash; Your Gym Re-imagined. Anywhere, Anytime.<br /><a href="${SITE_URL}" style="color:#29B6D2;text-decoration:none;font-weight:bold;">smartygym.com</a></p>
-<a href="${SITE_URL}/privacy" style="font-size:12px;color:#999;text-decoration:underline;">Privacy Policy</a></td></tr>
+${EMAIL_BRAND_FOOTER}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 
