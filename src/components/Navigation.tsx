@@ -69,15 +69,25 @@ export function Navigation() {
     const key = `smarty:coach-arrival:${user.id}`;
     try {
       if (sessionStorage.getItem(key)) return;
-      sessionStorage.setItem(key, "1");
     } catch {
       return;
     }
-    const timer = window.setTimeout(() => {
+    let attempts = 0;
+    const tryOpen = () => {
       const anotherDialog = document.querySelector('[role="dialog"]');
-      if (anotherDialog) return;
+      if (anotherDialog && attempts < 12) {
+        attempts += 1;
+        timer = window.setTimeout(tryOpen, 1_000);
+        return;
+      }
+      try {
+        sessionStorage.setItem(key, "1");
+      } catch {
+        return;
+      }
       setCoachOpen(true);
-    }, 5_000);
+    };
+    let timer = window.setTimeout(tryOpen, 5_000);
     return () => window.clearTimeout(timer);
   }, [loading, user?.id]);
 
