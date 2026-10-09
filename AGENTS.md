@@ -38,5 +38,5 @@
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
 - App panels reuse footer store links/icons and exclude announcement controls from outside dismissal — why: consistent links, independent closing.
 - Mass emails use Resend with broadcast_email_sends dedupe; others use managed sending — why: reliable bulk delivery.
-- Insights uses inbox snapshots and shared geometry/private PNGs in app/email/PDF; email-only opt-outs — why: parity/privacy.
+- Insights uses inbox snapshots/shared geometry/private PNGs across channels; email-only opt-outs — why: parity/privacy.
 - Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs with unchanged access protection.
