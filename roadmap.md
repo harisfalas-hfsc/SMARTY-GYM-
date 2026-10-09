@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Match Insights and training graphs to lightweight lines in the website and PDF reports; verify real downloads and desktop/mobile rendering without changing calculations.
+
 - [x] Add two Account email preferences in Daily Coaching; sending filters honor independent opt-outs, mandatory app notices unchanged. Signed-in save/reload verified for both combinations at 1280/384px; original owner preferences restored; 263 tests pass.
 
 - [x] Match workout announcement content across email, app inbox and Admin previews; two realistic owner-only test emails accepted by Resend. Signed-in Admin cards and email layouts checked at 1280/384px; 262 tests pass. No fictional workouts or all-account broadcasts created.

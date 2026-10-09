@@ -14,6 +14,7 @@ import {
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 import { formatDate } from "@/lib/date-format";
 import { directionFor } from "@/lib/performance/compare";
+import { REPORT_LINE_WIDTH, REPORT_DOT_RADIUS } from "@/lib/report-chart";
 
 export type AttemptPoint = {
   attempt: number;
@@ -124,11 +125,13 @@ export function AttemptTrendChart({ points }: { points: AttemptPoint[] }) {
               formatter={(value: number | string) => [`${value} ${metric.unit}`.trim(), metric.label]}
             />
             <Line
-              type="monotone"
+              type="linear"
               dataKey="value"
               stroke={stroke}
-              strokeWidth={3}
-              dot={{ r: 4, fill: stroke }}
+              strokeWidth={REPORT_LINE_WIDTH}
+              dot={{ r: REPORT_DOT_RADIUS, fill: stroke }}
+              activeDot={{ r: 3 }}
+              isAnimationActive={false}
               connectNulls
             />
           </LineChart>
