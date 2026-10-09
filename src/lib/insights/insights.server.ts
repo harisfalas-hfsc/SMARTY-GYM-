@@ -10,6 +10,9 @@ import {
 import type { SetLogRow, WorkoutResultRow } from "@/lib/performance/types";
 import { computeWeeklyInsights, mondayOf, addDays, titleCase, type WeeklyInsights, type InsightsLoad } from "./compute";
 
+import { LOAD_TEXT, encodeInsightMessage, decodeInsightMessage } from "./presentation";
+import { storeEmailChart } from "./email-chart.server";
+
 type DB = SupabaseClient;
 const SITE_URL = "https://smartygym.com";
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
@@ -95,15 +98,6 @@ export function weekLabel(i: WeeklyInsights) {
   return `${fmtDay(i.weekStart)} – ${fmtDay(i.weekEnd)}`;
 }
 
-export const LOAD_TEXT: Record<string, string> = {
-  None: "No logged training this week.",
-  "Limited Data": "Not enough logged data yet to judge your load.",
-  Low: "Low compared with your own recent weeks.",
-  Moderate: "Moderate — in line with your own recent weeks.",
-  High: "High compared with your own recent weeks.",
-  "Very High": "Very high compared with your own recent weeks.",
-};
-
 export const show = (v: number | null, suffix = "") => (v === null ? "—" : `${v}${suffix}`);
 
 /** Short inbox message; the full report lives in Logbook → Progress → Insights. */
@@ -111,7 +105,7 @@ export function insightsInboxContent(i: WeeklyInsights, firstName: string) {
   const tip = i.tips[0];
   return {
     title: `${i.headline.emoji} Your weekly Insights are ready`,
-    body: `Hi ${firstName}, ${i.kpis.completed} workout${i.kpis.completed === 1 ? "" : "s"} on ${i.kpis.activeDays} day${i.kpis.activeDays === 1 ? "" : "s"} (${weekLabel(i)}). ${i.headline.text}.${tip ? ` Smarty Coach: ${tip.title}.` : ""} Open Logbook → Progress → Insights for your full report.`,
+    body: encodeInsightMessage(`Hi ${firstName}, ${i.kpis.completed} workout${i.kpis.completed === 1 ? "" : "s"} on ${i.kpis.activeDays} day${i.kpis.activeDays === 1 ? "" : "s"} (${weekLabel(i)}). ${i.headline.text}.${tip ? ` Smarty Coach: ${tip.title}.` : ""} Open Insights in Logbook for your full report.`, i),
   };
 }
 
@@ -119,20 +113,17 @@ export function insightsSubject(i: WeeklyInsights) {
   return `${i.headline.emoji} Your SMARTYGYM weekly Insights (${weekLabel(i)})`;
 }
 
-export async function insightsEmailHtml(i: WeeklyInsights, firstName: string): Promise<string> {
+export async function insightsEmailHtml(i: WeeklyInsights, firstName: string, charts?: { activity: string; load: string }): Promise<string> {
   const { escapeHtml: e } = await import("@/lib/broadcast-email.server");
   const abs = (href: string) => (href.startsWith("http") ? href : `${SITE_URL}${href}`);
   const tile = (emoji: string, value: string, label: string, color: string) =>
     `<td width="50%" style="padding:6px;"><div style="background:${color}14;border:1px solid ${color}40;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;">${emoji}</div><div style="font-size:22px;font-weight:bold;color:#1a1a1a;">${e(value)}</div><div style="font-size:12px;color:#666;">${e(label)}</div></div></td>`;
   const delta = (now: number, prev: number) => (now > prev ? `↑ ${now - prev}` : now < prev ? `↓ ${prev - now}` : "=");
   const k = i.kpis;
-  const maxDay = Math.max(1, ...i.days.map((d) => d.count));
-  const bars = i.days
-    .map((d) => {
-      const h = d.count ? Math.round((d.count / maxDay) * 60) + 6 : 4;
-      return `<td align="center" valign="bottom" style="padding:0 3px;"><div style="height:70px;display:table-cell;vertical-align:bottom;"><div style="width:22px;height:${h}px;background:${d.count ? "#29B6D2" : "#e5e7eb"};border-radius:4px;"></div></div><div style="font-size:11px;color:#666;margin-top:4px;">${d.label}</div></td>`;
-    })
-    .join("");
+  const chart = (src: string | undefined, points: { label: string; value: number }[], label: string) => {
+    const summary = points.map((p) => `${p.label}: ${p.value}`).join(" · ");
+    return `${src ? `<img src="${e(src)}" alt="${e(label + ": " + summary)}" width="500" style="display:block;width:100%;max-width:500px;height:auto;margin:8px auto;" />` : ""}<p style="font-size:11px;color:#666;line-height:1.6;">${e(summary)}</p>`;
+  };
   const section = (title: string, inner: string) => `<h3 style="font-size:17px;color:#1a1a1a;margin:26px 0 10px;">${title}</h3>${inner}`;
   const list = (items: string[]) =>
     items.length ? `<ul style="margin:0;padding-left:20px;color:#333;font-size:14px;line-height:1.7;">${items.map((x) => `<li>${x}</li>`).join("")}</ul>` : "";
@@ -158,18 +149,18 @@ export async function insightsEmailHtml(i: WeeklyInsights, firstName: string): P
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:16px;"><tr>
 ${tile("🏋️", String(k.completed), `Workouts (${delta(k.completed, k.prevCompleted)} vs last week)`, "#29B6D2")}
 ${tile("📅", String(k.activeDays), "Active days", "#22c55e")}</tr><tr>
-${tile("⏱️", `${k.plannedMinutes} min`, "Planned training time", "#f59e0b")}
+${tile("⏱️", `${k.plannedMinutes} min`, `Planned training time (${delta(k.plannedMinutes, k.prevPlannedMinutes)} vs last week)`, "#f59e0b")}
 ${tile("🔥", show(k.currentStreak), `Day streak (best ${show(k.longestStreak)})`, "#ef4444")}</tr><tr>
 ${tile("⭐", show(k.score), "Smarty Progress Score", "#8b5cf6")}
 ${tile("✅", show(k.totalCompleted), "Workouts completed in total", "#0ea5e9")}</tr></table>
-${section("📊 Your week", `<table role="presentation" cellspacing="0" cellpadding="0" align="center"><tr>${bars}</tr></table>`)}
+${section("📊 Your week", chart(charts?.activity, i.days.map(d => ({ label: d.label, value: d.count })), "Completed workouts"))}
 ${section("💪 What you did", i.categories.length ? list(i.categories.map((c) => `${e(titleCase(c.category))}: <strong>${c.count}</strong>`)) : para("No completed workouts this week."))}
-${i.notCompleted.length || i.untrained.length ? section("⏳ What you didn't do", list([...i.notCompleted.map((m) => `Scheduled, not completed: ${e(m.name)} (${fmtDay(m.date)})`), ...i.untrained.map((c) => `No ${e(titleCase(c))} in the last 14 days`)])) : ""}
-${section("⚡ Training Load", para(`<strong>${e(i.load.state)}</strong> — ${e(LOAD_TEXT[i.load.state] ?? "")} Logged sessions this week: ${i.load.recent[4]?.sessions ?? 0}.`))}
+${section("⏳ What you didn't do", i.notCompleted.length || i.untrained.length ? list([...i.notCompleted.map((m) => `Scheduled, not completed: ${e(m.name)} (${fmtDay(m.date)})`), ...i.untrained.map((c) => `No ${e(titleCase(c))} in the last 14 days`)]) : para("Nothing outstanding this week."))}
+${section("⚡ Training Load", chart(charts?.load, i.load.recent.map(r => ({ label: fmtDay(r.weekStart), value: r.sessions })), "Logged sessions per week") + para(`<strong>${e(i.load.state)}</strong> — ${e(LOAD_TEXT[i.load.state] ?? "")}`) + para("Logged sessions per week (last point = this report)."))}
 ${section("📝 Check-ins", para(i.checkins.days ? `${i.checkins.days} check-in day${i.checkins.days === 1 ? "" : "s"}${i.checkins.avgScore !== null ? ` · average Smarty Score <strong>${i.checkins.avgScore}</strong>` : ""}` : "No check-ins this week."))}
 ${section("🗓️ Coming up", i.upcoming.length ? list(i.upcoming.map((u) => `${fmtDay(u.date)}: ${e(u.name)}`)) : para("Nothing scheduled yet."))}
 ${section("🧠 Smarty Coach suggestions", tips)}
-<div style="text-align:center;margin-top:28px;"><a href="${SITE_URL}/logbook?view=progress" style="display:inline-block;background-color:#29B6D2;background-image:linear-gradient(135deg,#29B6D2,#5CD3E8);color:#ffffff;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;">Open my Insights</a></div>
+<div style="text-align:center;margin-top:28px;"><a href="${SITE_URL}/logbook?view=list#insights" style="display:inline-block;background-color:#29B6D2;background-image:linear-gradient(135deg,#29B6D2,#5CD3E8);color:#ffffff;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;">Open my Insights</a></div>
 </td></tr>
 <tr><td style="background:#f8f8f8;padding:20px 24px;text-align:center;border-top:1px solid #eee;">
 <p style="color:#888;margin:0;font-size:12px;line-height:1.6;">You're receiving this weekly report because you train with SMARTYGYM. You can switch these emails off in My Account.</p>
@@ -202,7 +193,8 @@ export async function sendInsightsPreview(db: DB, userId: string, to: string) {
   const { data: p } = await db.from("profiles").select("display_name").eq("id", userId).maybeSingle();
   const first = String((p as { display_name?: string } | null)?.display_name ?? "").trim().split(/\s+/)[0] || "there";
   const i = await loadWeeklyInsights(db, userId, "previous");
-  await resendSend({ to, subject: insightsSubject(i), html: await insightsEmailHtml(i, first), idempotencyKey: `insights-preview:${userId}:${Date.now()}` });
+  const charts = await prepareEmailCharts(db, i);
+  await resendSend({ to, subject: insightsSubject(i), html: await insightsEmailHtml(i, first, charts), idempotencyKey: `insights-preview:${userId}:${Date.now()}` });
   return i;
 }
 
@@ -239,7 +231,7 @@ export async function runWeeklyInsights(
   if (!due.length) return { inbox: 0, emails: 0, remaining: 0, failures: [] };
 
   const weeks = [...new Set(due.map((p) => p.week))];
-  const { data: inboxRows } = await db.from("notifications").select("user_id,dedupe_key").in("dedupe_key", weeks.map(inboxKey)).limit(50000);
+  const { data: inboxRows } = await db.from("notifications").select("user_id,dedupe_key,body").in("dedupe_key", weeks.map(inboxKey)).limit(50000);
   const { data: emailRows } = await db.from("broadcast_email_sends").select("user_id,dedupe_key,state").in("dedupe_key", weeks.map(emailKey)).limit(50000);
   const inboxDone = new Set(((inboxRows as { user_id: string; dedupe_key: string }[] | null) ?? []).map((r) => `${r.user_id}|${r.dedupe_key}`));
   const emailSent = new Set(((emailRows as { user_id: string; dedupe_key: string; state: string }[] | null) ?? []).filter((r) => r.state === "sent").map((r) => `${r.user_id}|${r.dedupe_key}`));
@@ -256,7 +248,8 @@ export async function runWeeklyInsights(
   const failures: string[] = [];
   for (const p of slice) {
     try {
-      const i = await loadWeeklyInsights(db, p.id, "previous", now);
+      const saved = (inboxRows as {user_id:string;dedupe_key:string;body:string|null}[] | null)?.find(r => r.user_id === p.id && r.dedupe_key === inboxKey(p.week));
+      const i = decodeInsightMessage(saved?.body ?? null).report ?? await loadWeeklyInsights(db, p.id, "previous", now);
       const first = String(p.display_name ?? "").trim().split(/\s+/)[0] || "there";
       if (!inboxDone.has(`${p.id}|${inboxKey(p.week)}`)) {
         const content = insightsInboxContent(i, first);
@@ -270,7 +263,7 @@ export async function runWeeklyInsights(
           .from("broadcast_email_sends")
           .upsert({ user_id: p.id, dedupe_key: ek, state: "sending" } as never, { onConflict: "user_id,dedupe_key", ignoreDuplicates: true });
         if (markErr) throw new Error(markErr.message);
-        await send({ to: p.email, subject: insightsSubject(i), html: await insightsEmailHtml(i, first), idempotencyKey: `${ek}:${p.id}` });
+        await send({ to: p.email, subject: insightsSubject(i), html: await insightsEmailHtml(i, first, await prepareEmailCharts(db, i)), idempotencyKey: `${ek}:${p.id}` });
         const { error: doneErr } = await db.from("broadcast_email_sends").update({ state: "sent", sent_at: new Date().toISOString() } as never).eq("user_id", p.id).eq("dedupe_key", ek);
         if (doneErr) throw new Error(doneErr.message);
         emails++;
@@ -280,4 +273,12 @@ export async function runWeeklyInsights(
     }
   }
   return { inbox, emails, remaining: pending.length - slice.length + failures.length, failures };
+}
+
+async function prepareEmailCharts(db: DB, i: WeeklyInsights) {
+  const [activity, load] = await Promise.all([
+    storeEmailChart(db, i.days.map(d => ({ label: d.label, value: d.count })), [58,185,214]),
+    storeEmailChart(db, i.load.recent.map(r => ({ label: fmtDay(r.weekStart), value: r.sessions })), [117,76,194]),
+  ]);
+  return { activity, load };
 }

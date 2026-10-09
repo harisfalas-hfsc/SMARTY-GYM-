@@ -30,6 +30,9 @@ import { announceInboxChanged } from "@/lib/inbox-sync";
 import { formatDate } from "@/lib/date-format";
 import { PREMIUM_WELCOME_SECTIONS } from "@/lib/premium-welcome-content";
 
+import { decodeInsightMessage } from "@/lib/insights/presentation";
+import { InsightsSection } from "@/components/progress/InsightsSection";
+
 type Notification = Awaited<ReturnType<typeof listNotifications>>["notifications"][number];
 
 const welcomeIcons = {
@@ -274,14 +277,14 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                           isOpen ? "" : "line-clamp-2"
                         }`}
                       >
-                        {n.body}
+                        {n.kind === "weekly_insights" ? decodeInsightMessage(n.body).summary : n.body}
                       </p>
                     ) : null}
                   </button>
                 </div>
 
                 {isOpen && (
-                  <div className="mt-3 flex flex-wrap items-center gap-2 pl-12">
+                  <div className="mt-3 flex flex-wrap items-center gap-2 sm:pl-12">
                     {n.kind === "welcome" && (
                       <div className="mb-2 grid w-full gap-2 sm:grid-cols-2">
                         {PREMIUM_WELCOME_SECTIONS.map((item, index) => {

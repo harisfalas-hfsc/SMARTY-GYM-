@@ -10,14 +10,7 @@ import { titleCase, type WeeklyInsights } from "@/lib/insights/compute";
 import { MetricLineChart } from "@/components/performance/MetricLineChart";
 import { reportChartGeometry } from "@/lib/report-chart";
 
-const LOAD_TEXT: Record<string, string> = {
-  None: "No logged training this week.",
-  "Limited Data": "Not enough logged data yet to judge your load.",
-  Low: "Low compared with your own recent weeks.",
-  Moderate: "Moderate, in line with your own recent weeks.",
-  High: "High compared with your own recent weeks.",
-  "Very High": "Very high compared with your own recent weeks.",
-};
+import { LOAD_TEXT } from "@/lib/insights/presentation";
 import { cn } from "@/lib/utils";
 
 const fmt = (iso: string) =>
@@ -77,14 +70,15 @@ export function InsightsCard() {
 }
 
 /** The same weekly report members receive on Monday. */
-export function InsightsSection() {
+export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
   const fetchInsights = useServerFn(getMyInsights);
   const [week, setWeek] = useState<"current" | "previous">("previous");
-  const [data, setData] = useState<WeeklyInsights | null>(null);
+  const [data, setData] = useState<WeeklyInsights | null>(report ?? null);
   const [error, setError] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
+    if (report) { setData(report); return; }
     let active = true;
     setData(null);
     setError(null);
@@ -94,7 +88,7 @@ export function InsightsSection() {
     return () => {
       active = false;
     };
-  }, [fetchInsights, week]);
+  }, [fetchInsights, week, report]);
 
   const download = async () => {
     if (!data) return;
@@ -132,7 +126,7 @@ export function InsightsSection() {
           <p className="text-sm text-muted-foreground">Your weekly snapshot and suggestions from Smarty Coach.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <div className="flex rounded-xl border border-border p-1">
+          {!report && <div className="flex rounded-xl border border-border p-1">
             {(["previous", "current"] as const).map((w) => (
               <button
                 key={w}
@@ -183,7 +177,7 @@ export function InsightsSection() {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-3 text-sm text-muted-foreground">No completed workouts in this week yet.</p>
+                <p className="mt-3 text-sm text-muted-foreground">No completed workouts this week.</p>
               )}
               <Link to="/logbook" search={{ filter: "completed", view: "list" as const }} className="mt-3 inline-block text-sm font-bold text-primary">View my workouts →</Link>
             </Card>
@@ -195,7 +189,7 @@ export function InsightsSection() {
                   {data.untrained.map((c) => <li key={c}>🕳️ No {titleCase(c)} in the last 14 days</li>)}
                 </ul>
               ) : (
-                <p className="text-sm text-muted-foreground">🎉 Nothing missed — great consistency.</p>
+                <p className="text-sm text-muted-foreground">Nothing outstanding this week.</p>
               )}
               <Link to="/logbook" search={{ filter: "all", view: "calendar" as const }} className="mt-3 inline-block text-sm font-bold text-primary">Open Calendar →</Link>
             </Card>
@@ -205,7 +199,7 @@ export function InsightsSection() {
             <Card title="Training Load" icon={Gauge} tone="text-violet-500">
               <MetricLineChart data={loadPoints} color="var(--chart-5)" label="Logged sessions" unit="" compact maxValue={reportChartGeometry(loadPoints).max} />
               <p className="mt-2 text-sm"><strong>{data.load.state}</strong> — {LOAD_TEXT[data.load.state]}</p>
-              <p className="text-xs text-muted-foreground">Logged sessions per week.</p>
+              <p className="text-xs text-muted-foreground">Logged sessions per week (last point = this report).</p>
               <Link to="/training-load-science" className="mt-2 inline-block text-sm font-bold text-primary">How Training Load works →</Link>
             </Card>
 
