@@ -66,7 +66,7 @@ export function useCheckinSubmit(onDone?: () => void) {
 }
 
 const METRICS = [
-  { key: "daily_smarty_score", label: "Daily Smarty Score", color: "#3b82f6", unit: "/100" },
+  { key: "daily_smarty_score", label: "Daily Smarty Score", color: "var(--chart-1)", unit: "/100" },
   { key: "sleep_score", label: "Sleep", color: "#8b5cf6", unit: "/10" },
   { key: "readiness_score_norm", label: "Readiness", color: "#22c55e", unit: "/10" },
   { key: "soreness_score", label: "Recovery (low soreness)", color: "#14b8a6", unit: "/10" },

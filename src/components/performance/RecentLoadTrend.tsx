@@ -28,7 +28,7 @@ const METRICS: {
   unit: string;
   color: string;
 }[] = [
-  { key: "strength", label: "Strength load", pick: (s) => s.strengthLoad, unit: "", color: "#38bdf8" },
+  { key: "strength", label: "Strength load", pick: (s) => s.strengthLoad, unit: "", color: "var(--chart-1)" },
   { key: "conditioning", label: "Conditioning load", pick: (s) => s.conditioningLoad, unit: "", color: "#34d399" },
   { key: "rpe", label: "RPE", pick: (s) => s.rpe, unit: "/10", color: "#f59e0b" },
   {

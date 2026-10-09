@@ -1,1 +1,2 @@
 - Weekly Insights are computed only by computeWeeklyInsights (compute.ts), shared by Logbook section, inbox, Monday email and PDF — why: all four always match.
+- Web/PDF charts use report-chart.ts geometry and stroke constants — why: matching lightweight presentation without changing report calculations.

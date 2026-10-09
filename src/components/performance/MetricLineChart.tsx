@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { REPORT_LINE_WIDTH, REPORT_DOT_RADIUS } from "@/lib/report-chart";
 
 export type ChartPoint = { label: string; value: number | null };
 
@@ -56,14 +57,18 @@ export function MetricLineChart({
   color,
   label,
   unit,
+  compact = false,
+  maxValue,
 }: {
   data: ChartPoint[];
   color: string;
   label: string;
   unit: string;
+  compact?: boolean;
+  maxValue?: number;
 }) {
   return (
-    <div className="h-48 w-full">
+    <div className={compact ? "h-36 w-full" : "h-48 w-full"} role="img" aria-label={`${label} trend`}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.6} />
@@ -75,6 +80,8 @@ export function MetricLineChart({
             minTickGap={16}
           />
           <YAxis
+            domain={maxValue === undefined ? undefined : [0, maxValue]}
+            allowDecimals={maxValue === undefined}
             tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
             stroke="var(--border)"
             width={40}
@@ -95,14 +102,14 @@ export function MetricLineChart({
             cursor={{ stroke: "var(--border)" }}
           />
           <Line
-            type="monotone"
+            type="linear"
             dataKey="value"
             stroke={color}
-            strokeWidth={2}
+            strokeWidth={REPORT_LINE_WIDTH}
             connectNulls
             isAnimationActive={false}
-            dot={{ r: 3, fill: color, stroke: color }}
-            activeDot={{ r: 5 }}
+            dot={{ r: REPORT_DOT_RADIUS, fill: color, stroke: color }}
+            activeDot={{ r: 3 }}
           />
         </LineChart>
       </ResponsiveContainer>

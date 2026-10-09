@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getMyInsights } from "@/lib/weekly-insights.functions";
 import { titleCase, type WeeklyInsights } from "@/lib/insights/compute";
+import { MetricLineChart } from "@/components/performance/MetricLineChart";
+import { reportChartGeometry } from "@/lib/report-chart";
 
 const LOAD_TEXT: Record<string, string> = {
   None: "No logged training this week.",
@@ -108,8 +110,8 @@ export function InsightsSection() {
   };
 
   const k = data?.kpis;
-  const maxDay = Math.max(1, ...(data?.days.map((d) => d.count) ?? [1]));
-  const maxLoad = Math.max(1, ...(data?.load.recent.map((r) => r.sessions) ?? [1]));
+  const dayPoints = data?.days.map((d) => ({ label: d.label, value: d.count })) ?? [];
+  const loadPoints = data?.load.recent.map((r) => ({ label: fmt(r.weekStart), value: r.sessions })) ?? [];
   const dash = (v: number | null) => (v === null ? "—" : v);
   const tiles = k
     ? [
@@ -173,15 +175,7 @@ export function InsightsSection() {
           <div className="space-y-4">
           <div className="grid gap-4 lg:grid-cols-2">
             <Card title="What you did" icon={ListChecks} tone="text-emerald-500">
-              <div className="flex h-28 items-end justify-between gap-1.5">
-                {data.days.map((d) => (
-                  <div key={d.date} className="flex flex-1 flex-col items-center gap-1">
-                    <span className="text-[10px] font-bold">{d.count || ""}</span>
-                    <div className={cn("w-full max-w-8 rounded-md", d.count ? "bg-primary" : "bg-muted")} style={{ height: d.count ? `${(d.count / maxDay) * 70 + 10}px` : "6px" }} />
-                    <span className="text-[11px] text-muted-foreground">{d.label}</span>
-                  </div>
-                ))}
-              </div>
+              <MetricLineChart data={dayPoints} color="var(--chart-1)" label="Completed workouts" unit="" compact maxValue={reportChartGeometry(dayPoints).max} />
               {data.categories.length ? (
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {data.categories.map((c) => (
@@ -209,17 +203,9 @@ export function InsightsSection() {
           </div>
           <div className="grid gap-4 lg:grid-cols-2">
             <Card title="Training Load" icon={Gauge} tone="text-violet-500">
-              <div className="flex h-24 items-end gap-2">
-                {data.load.recent.map((r, idx) => (
-                  <div key={r.weekStart} className="flex flex-1 flex-col items-center gap-1">
-                    <span className="text-[10px] font-bold">{r.sessions || ""}</span>
-                    <div className={cn("w-full max-w-10 rounded-md", idx === 4 ? "bg-violet-500" : "bg-violet-500/35")} style={{ height: `${Math.max(4, (r.sessions / maxLoad) * 64)}px` }} />
-                    <span className="text-[10px] text-muted-foreground">{fmt(r.weekStart)}</span>
-                  </div>
-                ))}
-              </div>
+              <MetricLineChart data={loadPoints} color="var(--chart-5)" label="Logged sessions" unit="" compact maxValue={reportChartGeometry(loadPoints).max} />
               <p className="mt-2 text-sm"><strong>{data.load.state}</strong> — {LOAD_TEXT[data.load.state]}</p>
-              <p className="text-xs text-muted-foreground">Bars: logged sessions per week.</p>
+              <p className="text-xs text-muted-foreground">Logged sessions per week.</p>
               <Link to="/training-load-science" className="mt-2 inline-block text-sm font-bold text-primary">How Training Load works →</Link>
             </Card>
 

@@ -31,17 +31,16 @@ import {
   Download,
 } from "lucide-react";
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   ResponsiveContainer,
-  Area,
-  AreaChart,
+  Line,
+  LineChart,
   CartesianGrid,
 } from "recharts";
 import { exportBrandPagePdf } from "@/lib/brand-page-export";
 import { iconTone } from "@/lib/icon-tone";
+import { REPORT_LINE_WIDTH, REPORT_DOT_RADIUS } from "@/lib/report-chart";
 
 export const Route = createFileRoute("/the-smarty-method")({
   head: () => ({
@@ -541,18 +540,12 @@ function TheSmartyMethod() {
                 </div>
                 <div className="h-64 sm:h-72">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={progressData}>
-                      <defs>
-                        <linearGradient id="progressGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
+                    <LineChart data={progressData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
                       <XAxis dataKey="week" tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} axisLine={false} tickLine={false} />
                       <YAxis hide />
-                      <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="url(#progressGradient)" strokeWidth={3} isAnimationActive={false} />
-                    </AreaChart>
+                      <Line type="linear" dataKey="value" stroke="var(--chart-1)" strokeWidth={REPORT_LINE_WIDTH} dot={{ r: REPORT_DOT_RADIUS }} activeDot={{ r: 3 }} isAnimationActive={false} />
+                    </LineChart>
                   </ResponsiveContainer>
                 </div>
                 <p className="mt-2 text-xs text-muted-foreground">

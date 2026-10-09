@@ -1,5 +1,6 @@
 import type { ProgressExportData } from "@/lib/progress.functions";
 import logoUrl from "@/assets/smartygym-icon-transparent.png";
+import { PDF_LINE_WIDTH, reportChartRgb } from "@/lib/report-chart";
 
 type RGB = [number, number, number];
 const COLORS = {
@@ -34,6 +35,7 @@ const average = (values: Array<number | null>) => {
 };
 
 export async function exportProgressPdf(data: ProgressExportData) {
+  const primaryChartColor = reportChartRgb("--chart-1");
   const { jsPDF } = await import("jspdf");
   const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
   const logo = await imageDataUrl(logoUrl);
@@ -44,6 +46,7 @@ export async function exportProgressPdf(data: ProgressExportData) {
 
   const footer = () => {
     doc.setDrawColor(...COLORS.line);
+    doc.setLineWidth(0.15);
     doc.line(14, H - 15, W - 14, H - 15);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
@@ -134,13 +137,15 @@ export async function exportProgressPdf(data: ProgressExportData) {
     [0, 0.5, 1].forEach((ratio) => doc.line(x, top + height * ratio, x + width, top + height * ratio));
     if (points.length > 1) {
       doc.setDrawColor(...color);
-      doc.setLineWidth(1);
+      doc.setLineWidth(PDF_LINE_WIDTH);
       points.forEach((point, index) => {
         if (!index) return;
         const previous = points[index - 1];
         if (!previous) return;
         doc.line(x + ((index - 1) / (points.length - 1)) * width, top + height - (previous.value / max) * height, x + (index / (points.length - 1)) * width, top + height - (point.value / max) * height);
       });
+      doc.setFillColor(...color);
+      points.forEach((point, index) => doc.circle(x + (index / (points.length - 1)) * width, top + height - (point.value / max) * height, 0.5, "F"));
       const first = points[0];
       const last = points[points.length - 1];
       if (first && last) {
@@ -230,7 +235,7 @@ export async function exportProgressPdf(data: ProgressExportData) {
     { label: "Average RPE", value: avgRpe == null ? "Not logged" : `${avgRpe}/10`, note: "Average session effort you reported.", color: COLORS.red },
     { label: "Duration", value: minutes ? `${minutes} min` : "Not logged", note: "Total recorded session duration.", color: COLORS.green },
   ]);
-  chart("Strength load trend", data.sessions.filter((s) => s.strengthLoad != null).map((s) => ({ label: s.performedAt.slice(5, 10), value: s.strengthLoad ?? 0 })), COLORS.blue);
+   chart("Strength load trend", data.sessions.filter((s) => s.strengthLoad != null).map((s) => ({ label: s.performedAt.slice(5, 10), value: s.strengthLoad ?? 0 })), primaryChartColor);
 
   section("Smarty Check-ins", "Wellbeing analytics from completed morning and night entries in the selected period.", COLORS.pink);
   cards([
@@ -239,7 +244,7 @@ export async function exportProgressPdf(data: ProgressExportData) {
     { label: "Completion", value: data.checkins.length ? `${Math.round((completeCheckins.length / data.checkins.length) * 100)}%` : "0%", note: "Complete days among recorded entries.", color: COLORS.blue },
     { label: "Check-in streak", value: `${data.stats.checkin_longest_streak ?? 0}d`, note: "Longest all-time complete-day streak.", color: COLORS.amber },
   ]);
-  chart("Daily Smarty Score trend", checkinScores.map((c) => ({ label: String(c["checkin_date"]).slice(5), value: Number(c["daily_smarty_score"]) })), COLORS.pink, 100);
+  chart("Daily Smarty Score trend", checkinScores.map((c) => ({ label: String(c["checkin_date"]).slice(5), value: Number(c["daily_smarty_score"]) })), primaryChartColor, 100);
 
   section("Awards", "Badges earned across workouts, streaks, generated workouts, check-ins and membership.", COLORS.violet);
   cards([
