@@ -21,6 +21,7 @@ import {
   Users,
   Wrench,
 } from "lucide-react";
+import { iconTone } from "@/lib/icon-tone";
 import { getCoachSnapshot } from "@/lib/coach.functions";
 import type { CoachSnapshot } from "@/lib/coach-snapshot";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -106,10 +107,10 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false, visito
               <section className="rounded-md border border-border p-4">
                 <div className="flex items-center gap-2 font-bold"><Dumbbell className="text-primary" /> Train your way</div>
                 <div className="mt-3 space-y-2">
-                  <OptionRow icon={<CalendarDays />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." tint="bg-sky-500/10 text-sky-500" onClick={() => go("/wod")} />
-                  <OptionRow icon={<Dumbbell />} title="Smarty Workouts" subtitle="The full library, built by Haris." tint="bg-violet-500/10 text-violet-500" onClick={() => go("/smarty-workouts")} />
-                  <OptionRow icon={<PencilLine />} title="Create Your Own Workout" subtitle="Build it yourself or let the Coach build it." tint="bg-amber-500/10 text-amber-500" onClick={() => go("/create-your-own-workout")} />
-                  <OptionRow icon={<Users />} title="Shared Workouts" subtitle="See what other members are training." tint="bg-emerald-500/10 text-emerald-500" onClick={() => go("/shared-workouts")} />
+                  <OptionRow icon={<CalendarCheck />} title="Workout of the Day" subtitle="Today's shared workout, fresh every day." tint={iconTone("Workout of the Day")} onClick={() => go("/wod")} />
+                  <OptionRow icon={<Dumbbell />} title="Smarty Workouts" subtitle="The full library, built by Haris." tint={iconTone("Smarty Workouts")} onClick={() => go("/smarty-workouts")} />
+                  <OptionRow icon={<Sparkles />} title="Create Your Own Workout" subtitle="Build it yourself or let the Coach build it." tint={iconTone("Create Your Own Workout")} onClick={() => go("/create-your-own-workout")} />
+                  <OptionRow icon={<Dumbbell />} title="Shared Workouts" subtitle="See what other members are training." tint={iconTone("Shared Workouts")} onClick={() => go("/shared-workouts")} />
                 </div>
               </section>
 
@@ -117,10 +118,10 @@ export function SmartyCoachDialog({ open, onOpenChange, prefetch = false, visito
               <section className="rounded-md border border-border p-4">
                 <div className="flex items-center gap-2 font-bold"><BookOpen className="text-primary" /> Learn and explore</div>
                 <div className="mt-3 space-y-2">
-                  <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." tint="bg-rose-500/10 text-rose-500" onClick={() => go("/blog")} />
-                  <OptionRow icon={<Library />} title="Exercise Library" subtitle="Every exercise, with video and form tips." tint="bg-cyan-500/10 text-cyan-500" onClick={() => go("/exercise-library")} />
-                  <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." tint="bg-lime-500/10 text-lime-500" onClick={() => go("/tools")} />
-                  <OptionRow icon={<MessageCircle />} title="Smarty Community" subtitle="Member workouts, rankings and comments." tint="bg-blue-500/10 text-blue-500" onClick={() => go("/community")} />
+                  <OptionRow icon={<BookOpen />} title="Blog" subtitle="Training articles and guides." tint={iconTone("Smarty Blog")} onClick={() => go("/blog")} />
+                  <OptionRow icon={<Dumbbell />} title="Exercise Library" subtitle="Every exercise, with video and form tips." tint={iconTone("Exercise Library")} onClick={() => go("/exercise-library")} />
+                  <OptionRow icon={<Wrench />} title="Smarty Tools" subtitle="Timers, trackers and calculators." tint={iconTone("Smarty Tools")} onClick={() => go("/tools")} />
+                  <OptionRow icon={<Users />} title="Smarty Community" subtitle="Member workouts, rankings and comments." tint={iconTone("Smarty Community")} onClick={() => go("/community")} />
                 </div>
               </section>
     </div>
