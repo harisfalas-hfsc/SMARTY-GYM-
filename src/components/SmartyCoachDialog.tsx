@@ -52,7 +52,7 @@ function OptionRow({ icon, title, subtitle, tint, onClick }: { icon: React.React
   );
 }
 
-export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+export function SmartyCoachDialog({ open, onOpenChange, prefetch = false }: { open: boolean; onOpenChange: (open: boolean) => void; prefetch?: boolean }) {
   const load = useServerFn(getCoachSnapshot);
   const navigate = useNavigate();
   const [snapshot, setSnapshot] = useState<CoachSnapshot | null>(null);
@@ -70,9 +70,12 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
   };
 
   useEffect(() => {
-    if (open && !snapshot && !loading && !failed) fetchSnapshot();
+    if ((open || prefetch) && !snapshot && !loading && !failed) fetchSnapshot();
     if (!open) setView("home");
-  }, [open, snapshot, loading, failed]);
+  }, [open, prefetch, snapshot, loading, failed]);
+
+  // Only show the pop-up once the personal recommendation is ready, never a loading placeholder.
+  const ready = !loading && (!!snapshot || failed);
 
   const go = (target: NavTarget["to"]) => {
     onOpenChange(false);
@@ -95,7 +98,7 @@ export function SmartyCoachDialog({ open, onOpenChange }: { open: boolean; onOpe
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open && ready} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl gap-3 p-4 sm:p-6">
         <DialogHeader className="text-center sm:items-center sm:pr-0 sm:text-center">
           <div className="mx-auto inline-flex flex-col items-center gap-1">
