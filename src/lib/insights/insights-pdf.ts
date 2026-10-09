@@ -14,14 +14,7 @@ const C = {
   violet: [129, 90, 213] as RGB,
   soft: [241, 245, 249] as RGB,
 };
-const LOAD_TEXT: Record<string, string> = {
-  None: "No logged training this week.",
-  "Limited Data": "Not enough logged data yet to judge your load.",
-  Low: "Low compared with your own recent weeks.",
-  Moderate: "Moderate, in line with your own recent weeks.",
-  High: "High compared with your own recent weeks.",
-  "Very High": "Very high compared with your own recent weeks.",
-};
+import { LOAD_TEXT } from "./presentation";
 const show = (v: number | null) => (v === null ? "-" : String(v));
 const fmt = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 // jsPDF's built-in font has no emoji/arrow glyphs; keep PDF text plain.

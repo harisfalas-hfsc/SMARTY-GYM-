@@ -39,7 +39,7 @@ function fakeDb(tables: Record<string, Row[]>) {
     };
     return q;
   };
-  return { from } as never;
+  return { from, storage: { from: () => ({ upload: async () => ({ error: null }), createSignedUrl: async () => ({ data: { signedUrl: "https://example.test/chart.png" }, error: null }) }) } } as never;
 }
 
 const MONDAY_0700_NICOSIA = new Date("2026-10-12T04:00:00Z");

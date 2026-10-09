@@ -9,6 +9,16 @@ export const getMyInsights = createServerFn({ method: "POST" })
     const { requireActiveMembership } = await import("@/lib/membership.server");
     await requireActiveMembership(context);
     const { loadWeeklyInsights } = await import("@/lib/insights/insights.server");
+    if (data.week === "previous") {
+      const { data: rows } = await context.supabase.from("notifications").select("body,dedupe_key").eq("user_id", context.userId).eq("kind", "weekly_insights").order("created_at", { ascending: false }).limit(1);
+      const { decodeInsightMessage } = await import("@/lib/insights/presentation");
+      const { reportWeekStart } = await import("@/lib/insights/insights.server");
+      const { data: profile } = await context.supabase.from("profiles").select("timezone").eq("id", context.userId).maybeSingle();
+      const week = reportWeekStart(new Date(), profile?.timezone || "Europe/Athens", "previous");
+      const row = rows?.[0];
+      const saved = decodeInsightMessage(row?.body ?? null).report;
+      if (saved && saved.weekStart === week) return saved;
+    }
     return loadWeeklyInsights(context.supabase as never, context.userId, data.week);
   });
 
