@@ -1,5 +1,6 @@
 import logoUrl from "@/assets/smartygym-icon-transparent.png";
 import { titleCase, type WeeklyInsights } from "./compute";
+import { PDF_LINE_WIDTH, reportChartGeometry, type ReportChartPoint } from "@/lib/report-chart";
 
 type RGB = [number, number, number];
 const C = {
@@ -78,6 +79,26 @@ export async function exportInsightsPdf(i: WeeklyInsights, name?: string) {
     }
     y += 1.5;
   };
+  const lineChart = (data: ReportChartPoint[], color: RGB) => {
+    ensure(40);
+    const x = L + 8, width = CW - 12, height = 26, top = y + 2;
+    const { points, max } = reportChartGeometry(data);
+    doc.setDrawColor(...C.line).setLineWidth(0.15);
+    [0, 0.5, 1].forEach((ratio) => {
+      doc.line(x, top + ratio * height, x + width, top + ratio * height);
+      doc.setFontSize(7).setTextColor(...C.muted).text(String(Math.round(max * (1 - ratio) * 10) / 10), x - 2, top + ratio * height + 1, { align: "right" });
+    });
+    points.forEach((point, index) => {
+      if (point.y === null) return;
+      const px = x + point.x * width, py = top + point.y * height;
+      const previous = points[index - 1];
+      doc.setDrawColor(...color).setLineWidth(PDF_LINE_WIDTH);
+      if (previous && previous.y !== null) doc.line(x + previous.x * width, top + previous.y * height, px, py);
+      doc.setFillColor(...color).circle(px, py, 0.5, "F");
+      doc.setFont("helvetica", "normal").setFontSize(7).setTextColor(...C.muted).text(point.label, px, top + height + 5, { align: "center" });
+    });
+    y += 39;
+  };
 
   decorate();
   doc.setFont("helvetica", "bold").setFontSize(18).setTextColor(...C.ink).text(plain(i.headline.text), L, y + 6);
@@ -104,18 +125,7 @@ export async function exportInsightsPdf(i: WeeklyInsights, name?: string) {
   if (k.score === null) para("Progress Score and streaks show '-' because no saved progress exists yet.", 8, C.muted);
 
   heading("Your week", C.green);
-  ensure(42);
-  const maxDay = Math.max(1, ...i.days.map((d) => d.count));
-  const bw = CW / 7;
-  i.days.forEach((d, n) => {
-    const h = d.count ? (d.count / maxDay) * 26 + 2 : 1;
-    const x = L + n * bw + bw * 0.25;
-    doc.setFillColor(...(d.count ? C.blue : C.line)).roundedRect(x, y + 30 - h, bw * 0.5, h, 1, 1, "F");
-    doc.setFont("helvetica", "bold").setFontSize(8).setTextColor(...C.ink);
-    if (d.count) doc.text(String(d.count), x + bw * 0.25, y + 28 - h, { align: "center" });
-    doc.setFont("helvetica", "normal").setFontSize(7.5).setTextColor(...C.muted).text(d.label, x + bw * 0.25, y + 35, { align: "center" });
-  });
-  y += 40;
+  lineChart(i.days.map((d) => ({ label: d.label, value: d.count })), C.blue);
 
   heading("What you did", C.green);
   if (i.categories.length) i.categories.forEach((c) => para(`- ${titleCase(c.category)}: ${c.count}`, 9.5, C.ink, 2));
@@ -128,17 +138,8 @@ export async function exportInsightsPdf(i: WeeklyInsights, name?: string) {
 
   heading("Training Load", C.violet);
   para(`${i.load.state}: ${LOAD_TEXT[i.load.state] ?? ""}`);
-  ensure(36);
-  const maxS = Math.max(1, ...i.load.recent.map((r) => r.sessions));
-  const lw = CW / 5;
-  i.load.recent.forEach((r, n) => {
-    const h = r.sessions ? (r.sessions / maxS) * 20 + 2 : 1;
-    const x = L + n * lw + lw * 0.3;
-    doc.setFillColor(...(n === 4 ? C.violet : ([200, 186, 236] as RGB))).roundedRect(x, y + 24 - h, lw * 0.4, h, 1, 1, "F");
-    doc.setFontSize(7.5).setTextColor(...C.muted).text(`${fmt(r.weekStart)} (${r.sessions})`, x + lw * 0.2, y + 29, { align: "center" });
-  });
-  y += 33;
-  para("Bars: logged sessions per week (last bar = this report).", 7.5, C.muted);
+  lineChart(i.load.recent.map((r) => ({ label: fmt(r.weekStart), value: r.sessions })), C.violet);
+  para("Logged sessions per week (last point = this report).", 7.5, C.muted);
 
   heading("Check-ins", C.blue);
   para(i.checkins.days ? `${i.checkins.days} check-in day(s)${i.checkins.avgScore !== null ? `, average Smarty Score ${i.checkins.avgScore}` : ""}.` : "No check-ins this week.");

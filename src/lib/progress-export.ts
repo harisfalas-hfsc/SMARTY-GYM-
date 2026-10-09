@@ -1,5 +1,6 @@
 import type { ProgressExportData } from "@/lib/progress.functions";
 import logoUrl from "@/assets/smartygym-icon-transparent.png";
+import { PDF_LINE_WIDTH } from "@/lib/report-chart";
 
 type RGB = [number, number, number];
 const COLORS = {
@@ -44,6 +45,7 @@ export async function exportProgressPdf(data: ProgressExportData) {
 
   const footer = () => {
     doc.setDrawColor(...COLORS.line);
+    doc.setLineWidth(0.15);
     doc.line(14, H - 15, W - 14, H - 15);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
@@ -134,13 +136,15 @@ export async function exportProgressPdf(data: ProgressExportData) {
     [0, 0.5, 1].forEach((ratio) => doc.line(x, top + height * ratio, x + width, top + height * ratio));
     if (points.length > 1) {
       doc.setDrawColor(...color);
-      doc.setLineWidth(1);
+      doc.setLineWidth(PDF_LINE_WIDTH);
       points.forEach((point, index) => {
         if (!index) return;
         const previous = points[index - 1];
         if (!previous) return;
         doc.line(x + ((index - 1) / (points.length - 1)) * width, top + height - (previous.value / max) * height, x + (index / (points.length - 1)) * width, top + height - (point.value / max) * height);
       });
+      doc.setFillColor(...color);
+      points.forEach((point, index) => doc.circle(x + (index / (points.length - 1)) * width, top + height - (point.value / max) * height, 0.5, "F"));
       const first = points[0];
       const last = points[points.length - 1];
       if (first && last) {
