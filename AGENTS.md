@@ -37,7 +37,5 @@
 - Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
 - App panels reuse footer store links/icons and exclude announcement controls from outside dismissal — why: consistent links, independent closing.
-- Mass workout emails use the Resend gateway and broadcast_email_sends deduplication; other email uses Lovable managed sending — why: broadcasts need the marketing-grade path.
-
-- Workout announcements share content builders and email preference filtering; inbox delivery ignores email opt-outs — why: matching content with independent channels.
-- Weekly Insights are computed only by computeWeeklyInsights (src/lib/insights/compute.ts) and shared by the Logbook section, inbox, Monday email and PDF — why: all four always match.
+- Mass emails (announcements, weekly Insights) use the Resend gateway with broadcast_email_sends dedupe; other email uses Lovable managed sending — why: bulk needs the marketing-grade path.
+- Announcements and Insights each share one content source across inbox, email (and PDF); email opt-outs never block inbox — why: matching content, independent channels.

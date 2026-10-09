@@ -1,0 +1,1 @@
+- Weekly Insights are computed only by computeWeeklyInsights (compute.ts), shared by Logbook section, inbox, Monday email and PDF — why: all four always match.
