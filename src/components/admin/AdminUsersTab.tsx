@@ -187,7 +187,15 @@ export function AdminUsersTab() {
                     <Badge variant="destructive">Payment failed</Badge>
                   )}
                   {u.wod_subscribed && <Badge variant="outline">WOD</Badge>}
-                  {!u.profile_complete && <Badge variant="outline">No profile</Badge>}
+                  {u.profile_complete ? (
+                    <Badge variant="outline" className="gap-1 border-emerald-500/50 text-emerald-600 dark:text-emerald-400">
+                      <UserCheck className="h-3 w-3" /> Profile complete
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="gap-1 text-muted-foreground">
+                      <UserX className="h-3 w-3" /> No profile
+                    </Badge>
+                  )}
                 </div>
               </div>
 
