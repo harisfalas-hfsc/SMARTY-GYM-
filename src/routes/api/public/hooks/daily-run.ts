@@ -279,23 +279,22 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           }
         }
 
-        // Weekly Insights — Monday at the fixed time (Cyprus). Bounded per run;
-        // the job is only marked done once every eligible account is covered.
+        // Weekly Insights — each member's own Monday at the configured local hour.
+        // Per-member job: acts on the first tick of each hour; retries finish leftovers.
         const insightsConfig = jobs["weekly-insights"];
-        if (insightsConfig && isDueNow(insightsConfig)) {
+        if (insightsConfig?.enabled && firstTickOfHour) {
           try {
             const { runWeeklyInsights } = await import("@/lib/insights/insights.server");
-            const r = await runWeeklyInsights(db);
-            if (r.inbox || r.emails || r.failures.length || !r.remaining)
+            const r = await runWeeklyInsights(db, { hour: insightsConfig.hour ?? 6 });
+            if (r.inbox || r.emails || r.failures.length)
               await recordRun(db, {
                 jobKey: "weekly-insights",
                 status: r.failures.length ? "failed" : "ok",
                 changed: Boolean(r.inbox || r.emails),
-                summary: `Weekly Insights sent to ${r.inbox} account(s), ${r.emails} email(s)${r.remaining ? `; ${r.remaining} still to send` : ""}${r.failures.length ? `; problems: ${r.failures.slice(0, 3).join(" | ")}` : ""}.`,
+                summary: `Weekly Insights: ${r.inbox} inbox report(s), ${r.emails} email(s)${r.remaining ? `; ${r.remaining} still to send (retried next hour)` : ""}${r.failures.length ? `; problems: ${r.failures.slice(0, 3).join(" | ")}` : ""}.`,
                 details: { failures: r.failures },
                 trigger: "schedule",
               });
-            if (!r.remaining) await markJobRan(db, "weekly-insights", insightsConfig);
           } catch (e) {
             const message = e instanceof Error ? e.message : "error";
             failures.push(`insights:${message}`);

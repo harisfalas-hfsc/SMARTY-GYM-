@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Download, Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, ClipboardCheck } from "lucide-react";
@@ -6,6 +6,15 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getMyInsights } from "@/lib/weekly-insights.functions";
 import { titleCase, type WeeklyInsights } from "@/lib/insights/compute";
+
+const LOAD_TEXT: Record<string, string> = {
+  None: "No logged training this week.",
+  "Limited Data": "Not enough logged data yet to judge your load.",
+  Low: "Low compared with your own recent weeks.",
+  Moderate: "Moderate, in line with your own recent weeks.",
+  High: "High compared with your own recent weeks.",
+  "Very High": "Very high compared with your own recent weeks.",
+};
 import { cn } from "@/lib/utils";
 
 const fmt = (iso: string) =>
@@ -21,9 +30,9 @@ function Delta({ now, prev }: { now: number; prev: number }) {
   );
 }
 
-function Card({ title, icon: Icon, children, tone = "text-primary", block = false }: { title: string; icon: typeof Brain; children: React.ReactNode; tone?: string; block?: boolean }) {
+function Card({ title, icon: Icon, children, tone = "text-primary" }: { title: string; icon: typeof Brain; children: React.ReactNode; tone?: string }) {
   return (
-    <section data-pdf-block={block ? "" : undefined} className="rounded-2xl border border-border bg-card p-4 sm:p-5">
+    <section className="rounded-2xl border border-border bg-card p-4 sm:p-5">
       <h3 className="mb-3 flex items-center gap-2 text-base font-black">
         <Icon className={cn("h-5 w-5", tone)} /> {title}
       </h3>
@@ -35,11 +44,10 @@ function Card({ title, icon: Icon, children, tone = "text-primary", block = fals
 /** Logbook → Progress → Insights: the same weekly report members receive on Monday. */
 export function InsightsSection() {
   const fetchInsights = useServerFn(getMyInsights);
-  const [week, setWeek] = useState<"current" | "previous">("current");
+  const [week, setWeek] = useState<"current" | "previous">("previous");
   const [data, setData] = useState<WeeklyInsights | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -54,11 +62,11 @@ export function InsightsSection() {
   }, [fetchInsights, week]);
 
   const download = async () => {
-    if (!ref.current) return;
+    if (!data) return;
     setExporting(true);
     try {
-      const { exportBrandPagePdf } = await import("@/lib/brand-page-export");
-      await exportBrandPagePdf("insights", ref.current);
+      const { exportInsightsPdf } = await import("@/lib/insights/insights-pdf");
+      await exportInsightsPdf(data);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "The PDF could not be created.");
     } finally {
@@ -68,15 +76,16 @@ export function InsightsSection() {
 
   const k = data?.kpis;
   const maxDay = Math.max(1, ...(data?.days.map((d) => d.count) ?? [1]));
-  const maxLoad = Math.max(1, ...(data?.load.recent.map((r) => r.load) ?? [1]));
+  const maxLoad = Math.max(1, ...(data?.load.recent.map((r) => r.sessions) ?? [1]));
+  const dash = (v: number | null) => (v === null ? "—" : v);
   const tiles = k
     ? [
         { emoji: "🏋️", value: k.completed, label: "Workouts", extra: <Delta now={k.completed} prev={k.prevCompleted} />, tone: "border-sky-400/50 bg-sky-400/10" },
         { emoji: "📅", value: k.activeDays, label: "Active days", tone: "border-emerald-400/50 bg-emerald-400/10" },
-        { emoji: "⏱️", value: `${k.minutes} min`, label: "Training time", extra: <Delta now={k.minutes} prev={k.prevMinutes} />, tone: "border-amber-400/50 bg-amber-400/10" },
-        { emoji: "🔥", value: k.currentStreak, label: `Day streak · best ${k.longestStreak}`, tone: "border-rose-400/50 bg-rose-400/10" },
-        { emoji: "⭐", value: k.score, label: "Progress Score", tone: "border-violet-400/50 bg-violet-400/10" },
-        { emoji: "✅", value: k.totalCompleted, label: "Completed in total", tone: "border-cyan-400/50 bg-cyan-400/10" },
+        { emoji: "⏱️", value: `${k.plannedMinutes} min`, label: "Planned training time", extra: <Delta now={k.plannedMinutes} prev={k.prevPlannedMinutes} />, tone: "border-amber-400/50 bg-amber-400/10" },
+        { emoji: "🔥", value: dash(k.currentStreak), label: `Day streak · best ${dash(k.longestStreak)}`, tone: "border-rose-400/50 bg-rose-400/10" },
+        { emoji: "⭐", value: dash(k.score), label: "Progress Score", tone: "border-violet-400/50 bg-violet-400/10" },
+        { emoji: "✅", value: dash(k.totalCompleted), label: "Completed in total", tone: "border-cyan-400/50 bg-cyan-400/10" },
       ]
     : [];
 
@@ -89,14 +98,14 @@ export function InsightsSection() {
         </div>
         <div className="flex flex-wrap gap-2">
           <div className="flex rounded-xl border border-border p-1">
-            {(["current", "previous"] as const).map((w) => (
+            {(["previous", "current"] as const).map((w) => (
               <button
                 key={w}
                 type="button"
                 onClick={() => setWeek(w)}
                 className={cn("rounded-lg px-3 py-1.5 text-xs font-bold", week === w ? "bg-primary text-primary-foreground" : "text-muted-foreground")}
               >
-                {w === "current" ? "This week" : "Last week"}
+                {w === "current" ? "This week so far" : "Last week"}
               </button>
             ))}
           </div>
@@ -112,8 +121,8 @@ export function InsightsSection() {
       ) : !data ? (
         <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
       ) : (
-        <div ref={ref} className="space-y-4">
-          <section data-pdf-block className="rounded-2xl border border-primary/40 bg-primary/5 p-4 sm:p-5">
+        <div className="space-y-4">
+          <section className="rounded-2xl border border-primary/40 bg-primary/5 p-4 sm:p-5">
             <p className="text-xs font-bold uppercase tracking-wider text-primary">Week {fmt(data.weekStart)} – {fmt(data.weekEnd)}</p>
             <p className="mt-1 text-2xl font-black">{data.headline.emoji} {data.headline.text}</p>
             <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -129,7 +138,7 @@ export function InsightsSection() {
           </section>
 
           <div className="space-y-4">
-          <div data-pdf-block className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2">
             <Card title="What you did" icon={ListChecks} tone="text-emerald-500">
               <div className="flex h-28 items-end justify-between gap-1.5">
                 {data.days.map((d) => (
@@ -153,9 +162,9 @@ export function InsightsSection() {
             </Card>
 
             <Card title="What you didn't do" icon={CircleSlash} tone="text-amber-500">
-              {data.missed.length || data.untrained.length ? (
+              {data.notCompleted.length || data.untrained.length ? (
                 <ul className="space-y-1.5 text-sm">
-                  {data.missed.map((m) => <li key={m.name + m.date}>⏳ Missed: <strong>{m.name}</strong> ({fmt(m.date)})</li>)}
+                  {data.notCompleted.map((m) => <li key={m.name + m.date}>⏳ Scheduled, not completed: <strong>{m.name}</strong> ({fmt(m.date)})</li>)}
                   {data.untrained.map((c) => <li key={c}>🕳️ No {titleCase(c)} in the last 14 days</li>)}
                 </ul>
               ) : (
@@ -165,22 +174,19 @@ export function InsightsSection() {
             </Card>
 
           </div>
-          <div data-pdf-block className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2">
             <Card title="Training Load" icon={Gauge} tone="text-violet-500">
               <div className="flex h-24 items-end gap-2">
                 {data.load.recent.map((r, idx) => (
                   <div key={r.weekStart} className="flex flex-1 flex-col items-center gap-1">
-                    <span className="text-[10px] font-bold">{r.load || ""}</span>
-                    <div className={cn("w-full max-w-10 rounded-md", idx === 4 ? "bg-violet-500" : "bg-violet-500/35")} style={{ height: `${Math.max(4, (r.load / maxLoad) * 64)}px` }} />
+                    <span className="text-[10px] font-bold">{r.sessions || ""}</span>
+                    <div className={cn("w-full max-w-10 rounded-md", idx === 4 ? "bg-violet-500" : "bg-violet-500/35")} style={{ height: `${Math.max(4, (r.sessions / maxLoad) * 64)}px` }} />
                     <span className="text-[10px] text-muted-foreground">{fmt(r.weekStart)}</span>
                   </div>
                 ))}
               </div>
-              <p className="mt-2 text-sm">
-                {data.load.trend === "none"
-                  ? "No measured training load yet."
-                  : `This week ${data.load.week} · 4-week average ${data.load.average} · ${data.load.trend === "up" ? "📈 rising" : data.load.trend === "down" ? "📉 lighter" : "➡️ steady"}`}
-              </p>
+              <p className="mt-2 text-sm"><strong>{data.load.state}</strong> — {LOAD_TEXT[data.load.state]}</p>
+              <p className="text-xs text-muted-foreground">Bars: logged sessions per week.</p>
               <Link to="/training-load-science" className="mt-2 inline-block text-sm font-bold text-primary">How Training Load works →</Link>
             </Card>
 
@@ -198,7 +204,7 @@ export function InsightsSection() {
           </div>
           </div>
 
-          <Card title="Smarty Coach suggestions" icon={Brain} block>
+          <Card title="Smarty Coach suggestions" icon={Brain}>
             <div className="grid gap-3 md:grid-cols-2">
               {data.tips.map((t) => (
                 <div key={t.id} className="rounded-xl border border-border border-l-4 border-l-primary p-3">
@@ -209,7 +215,7 @@ export function InsightsSection() {
               ))}
             </div>
           </Card>
-          <p data-pdf-exclude className="flex items-center gap-1.5 text-xs text-muted-foreground"><ClipboardCheck className="h-3.5 w-3.5" /> This report is also sent to your inbox and email every Monday morning.</p>
+          <p className="flex items-center gap-1.5 text-xs text-muted-foreground"><ClipboardCheck className="h-3.5 w-3.5" /> This report is also sent to your inbox and email every Monday morning.</p>
         </div>
       )}
     </div>

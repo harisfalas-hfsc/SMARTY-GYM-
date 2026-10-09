@@ -1,0 +1,1 @@
+ALTER TABLE public.broadcast_email_sends ADD COLUMN IF NOT EXISTS state text NOT NULL DEFAULT 'sent';

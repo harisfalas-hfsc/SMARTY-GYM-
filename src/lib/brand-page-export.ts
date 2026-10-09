@@ -1,7 +1,7 @@
 import logoUrl from "@/assets/smartygym-icon-transparent.png";
 
 type RGB = [number, number, number];
-type ExportKind = "method" | "investment" | "insights";
+type ExportKind = "method" | "investment";
 
 const COLORS = {
   ink: [25, 31, 42] as RGB,
@@ -20,11 +20,6 @@ const documents = {
     title: "WHY INVEST IN SMARTYGYM",
     subtitle: "The complete guide, research, charts and references",
     filename: "smartygym-why-invest.pdf",
-  },
-  insights: {
-    title: "SMARTY INSIGHTS",
-    subtitle: "Your weekly progress report from Smarty Coach",
-    filename: "smartygym-insights.pdf",
   },
 } as const;
 
