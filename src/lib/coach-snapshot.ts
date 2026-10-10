@@ -36,7 +36,8 @@ export type CoachSnapshot = {
   readinessDisplay: {
     label: string;
     score: number | null;
-    basis: "check-in" | "training-history" | "limited";
+    /** Plain-language drivers of the live score. */
+    reason: string;
   };
   goals: { primary: string | null; secondary: string | null };
   todayFocus: {
@@ -67,7 +68,7 @@ export type CoachSnapshot = {
 export type CoachSnapshotDecisionInput = {
   firstName: string;
   greeting: string;
-  readiness: { state: ReadinessState; reason: string };
+  readiness: { state: ReadinessState; reason: string; score?: number };
   readinessScore: number | null;
   recommendation: CoachRecommendation;
   hasCheckin: boolean;
@@ -109,8 +110,6 @@ export function decideCoachSnapshot(input: CoachSnapshotDecisionInput): CoachSna
   const pickAction: CoachSnapshotAction | null = input.smartyPick
     ? { label: `Open ${input.smartyPick.name}`, to: "/smarty-workouts/$workoutId", params: { workoutId: input.smartyPick.id } }
     : null;
-  const readinessBasis: CoachSnapshot["readinessDisplay"]["basis"] =
-    input.readinessScore !== null ? "check-in" : input.loggedSessions > 0 ? "training-history" : "limited";
   const base = {
     access: "ready" as const,
     firstName: input.firstName,
@@ -118,7 +117,7 @@ export function decideCoachSnapshot(input: CoachSnapshotDecisionInput): CoachSna
     readinessDisplay: {
       label: input.readiness.state,
       score: input.readinessScore,
-      basis: readinessBasis,
+      reason: input.readiness.reason,
     },
     goals: { primary: readable(input.primaryGoal), secondary: readable(input.secondaryGoal) },
     todayFocus: {

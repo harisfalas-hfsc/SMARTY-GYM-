@@ -170,7 +170,7 @@ export function SmartyCoachDialog({
                 <div className="flex items-center gap-2 font-bold"><Gauge className="text-chart-2" /> Readiness</div>
                 <p className="mt-2 text-lg font-extrabold">{snapshot.readinessDisplay.label}{snapshot.readinessDisplay.score !== null ? ` · ${snapshot.readinessDisplay.score}/10` : ""}</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {snapshot.readinessDisplay.basis === "check-in" ? "From today’s Smarty Check-in and recent training." : snapshot.readinessDisplay.basis === "training-history" ? "From your recent Training Load and logged sessions." : "More logged training or a Check-in will make this more specific."}
+                  {snapshot.readinessDisplay.reason}
                 </p>
               </section>
 
