@@ -109,6 +109,8 @@ export function decideCoachSnapshot(input: CoachSnapshotDecisionInput): CoachSna
   const pickAction: CoachSnapshotAction | null = input.smartyPick
     ? { label: `Open ${input.smartyPick.name}`, to: "/smarty-workouts/$workoutId", params: { workoutId: input.smartyPick.id } }
     : null;
+  const readinessBasis: CoachSnapshot["readinessDisplay"]["basis"] =
+    input.readinessScore !== null ? "check-in" : input.loggedSessions > 0 ? "training-history" : "limited";
   const base = {
     access: "ready" as const,
     firstName: input.firstName,
@@ -116,7 +118,7 @@ export function decideCoachSnapshot(input: CoachSnapshotDecisionInput): CoachSna
     readinessDisplay: {
       label: input.readiness.state,
       score: input.readinessScore,
-      basis: input.readinessScore !== null ? "check-in" : input.loggedSessions > 0 ? "training-history" : "limited",
+      basis: readinessBasis,
     },
     goals: { primary: readable(input.primaryGoal), secondary: readable(input.secondaryGoal) },
     todayFocus: {

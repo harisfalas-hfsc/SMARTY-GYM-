@@ -80,7 +80,9 @@ export function SmartyCoachDialog({
   useEffect(() => {
     if (open) document.documentElement.dataset.smartyCoach = "open";
     else delete document.documentElement.dataset.smartyCoach;
-    return () => delete document.documentElement.dataset.smartyCoach;
+    return () => {
+      delete document.documentElement.dataset.smartyCoach;
+    };
   }, [open]);
 
   const changeOpen = (next: boolean) => {
