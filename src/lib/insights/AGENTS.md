@@ -1,2 +1,2 @@
-- Weekly Insights are computed only by computeWeeklyInsights (compute.ts), shared by Logbook section, inbox, Monday email and PDF — why: all four always match.
+- Weekly Insights, including readiness evidence, are computed only by computeWeeklyInsights (compute.ts), shared by Logbook section, inbox, Monday email and PDF — why: all four always match.
 - App/PDF/email charts use report-chart.ts geometry and stroke constants; emails use private signed PNGs — why: lightweight parity and email compatibility without exposing training data publicly.

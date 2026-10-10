@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Download, Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, ClipboardCheck, ChevronDown } from "lucide-react";
+import { Download, Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, ClipboardCheck, ChevronDown, HeartPulse } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -216,6 +216,26 @@ export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
             </Card>
           </div>
           </div>
+
+          <Card title="Readiness" icon={HeartPulse} tone="text-rose-500">
+            {data.readiness?.average !== null && data.readiness?.average !== undefined ? (
+              <>
+                <p className="text-2xl font-black">{data.readiness.average}/10 <span className="text-sm font-medium text-muted-foreground">weekly average</span></p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  From {data.readiness.checkinDays} morning Check-in day{data.readiness.checkinDays === 1 ? "" : "s"}
+                  {data.readiness.latest !== null && data.readiness.latestDate ? ` · latest ${data.readiness.latest}/10 on ${fmt(data.readiness.latestDate)}` : ""}.
+                </p>
+                <p className="mt-2 text-sm">Training Load: <strong>{data.readiness.loadState}</strong></p>
+              </>
+            ) : (
+              <>
+                <p className="font-bold">More Check-in data needed</p>
+                <p className="mt-1 text-sm text-muted-foreground">Complete morning Check-ins to add your own readiness rating to Coach’s weekly evidence.</p>
+                <p className="mt-2 text-sm">Training Load: <strong>{data.readiness?.loadState ?? data.load.state}</strong></p>
+              </>
+            )}
+            <Link to="/smarty-checkins" className="mt-3 inline-block text-sm font-bold text-primary">Open Smarty Check-ins →</Link>
+          </Card>
 
           <Card title="Smarty Coach suggestions" icon={Brain}>
             <div className="grid gap-3 md:grid-cols-2">

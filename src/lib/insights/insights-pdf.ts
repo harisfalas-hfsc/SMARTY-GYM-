@@ -143,6 +143,14 @@ export async function exportInsightsPdf(i: WeeklyInsights, name?: string) {
   if (i.upcoming.length) i.upcoming.forEach((u) => para(`- ${fmt(u.date)}: ${u.name}`, 9.5, C.ink, 2));
   else para("Nothing scheduled in the next 7 days.", 9.5, C.muted);
 
+  heading("Readiness", C.pink);
+  if (i.readiness?.average !== null && i.readiness?.average !== undefined) {
+    para(`${i.readiness.average}/10 weekly average from ${i.readiness.checkinDays} morning Check-in day(s).${i.readiness.latest !== null && i.readiness.latestDate ? ` Latest: ${i.readiness.latest}/10 on ${fmt(i.readiness.latestDate)}.` : ""}`);
+  } else {
+    para("Not enough morning Check-in data for a weekly readiness average.", 9.5, C.muted);
+  }
+  para(`Training Load: ${i.readiness?.loadState ?? i.load.state}.`, 8, C.muted);
+
   heading("Smarty Coach suggestions", C.blue);
   for (const t of i.tips) {
     doc.setFont("helvetica", "normal").setFontSize(9);
