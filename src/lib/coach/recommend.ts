@@ -371,6 +371,10 @@ export function recommendNext(i: CoachEngineInput): CoachDecision {
     why.push(`${label(secondaryGoal)} is your secondary goal and helped rank suitable options.`);
     codes.push("goal.secondary");
   }
+  if (i.limitations.length) {
+    why.push(`Your ${i.limitations.length === 1 ? "recorded limitation remains" : "recorded limitations remain"} a safety boundary for today's choice.`);
+    codes.push("profile.limitations");
+  }
 
   const hasLoad = i.overallLoad !== "None" && i.overallLoad !== "Limited Data";
   const confidence: CoachDecision["confidence"] =

@@ -22,6 +22,18 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       return {
         access: "locked",
         firstName: lockedName,
+        greeting: `Hello, ${lockedName}.`,
+        readinessDisplay: { label: "Membership paused", score: null, basis: "limited" },
+        goals: { primary: null, secondary: null },
+        todayFocus: {
+          purpose: "Membership",
+          category: null,
+          bodyFocus: null,
+          intensity: "Paused",
+          workoutName: null,
+          duration: null,
+          stars: null,
+        },
         headline: "Your coach is ready when you return",
         recommendation: "Renew your membership to reconnect Smarty Coach with your saved training history.",
         lastSession: null,
