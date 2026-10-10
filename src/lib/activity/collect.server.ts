@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { buildReport, fmtDateTime, rangeBounds, type ActivityEvent, type ActivityReport, type ActivityUser } from "./report";
+import { buildReport, fmtDateTime, rangeBounds, workoutCreationKind, type ActivityEvent, type ActivityReport, type ActivityUser } from "./report";
 
 type Row = Record<string, any>;
 const inRange = (v: string | null | undefined, from: string, to: string) => !!v && v >= from && v < to;
@@ -25,7 +25,7 @@ export async function collectUserActivity(db: SupabaseClient, fromDate: string, 
     rows(
       db
         .from("workouts")
-        .select("id,user_id,name,category,created_at,completed_at,shared_at,scheduled_at,favorited_at,updated_at,community_source_id,is_wod")
+        .select("id,user_id,name,category,created_at,completed_at,shared_at,scheduled_at,favorited_at,updated_at,community_source_id,is_wod,created_by")
         .or([span("created_at"), span("completed_at"), span("shared_at"), span("favorited_at"), span("updated_at")].join(","))
         .limit(10000),
       "workouts",
@@ -60,13 +60,16 @@ export async function collectUserActivity(db: SupabaseClient, fromDate: string, 
   }
   for (const w of workouts) {
     const label = `“${w.name}”${w.category ? ` (${w.category})` : ""}`;
-    if (inRange(w.created_at, from, to))
-      push(w.user_id, w.created_at, w.community_source_id ? "copied" : "created", w.community_source_id ? `Added shared workout ${label} to the Logbook` : w.is_wod ? `Opened Workout of the Day ${label}` : `Created workout ${label}`);
-    if (inRange(w.completed_at, from, to)) push(w.user_id, w.completed_at, "completed", `Completed ${label}`);
-    if (inRange(w.shared_at, from, to)) push(w.user_id, w.shared_at, "shared", `Shared ${label} with the community`);
-    if (inRange(w.favorited_at, from, to)) push(w.user_id, w.favorited_at, "favorited", `Favorited ${label}`);
+    if (inRange(w.created_at, from, to)) {
+      const kind = workoutCreationKind({ createdBy: w.created_by, communitySourceId: w.community_source_id, isWod: Boolean(w.is_wod) });
+      const detail = kind === "copied" ? `${label} to the Logbook` : kind === "opened" ? `${w.is_wod ? "Workout of the Day" : "Smarty Workout"} ${label}` : label;
+      push(w.user_id, w.created_at, kind, detail);
+    }
+    if (inRange(w.completed_at, from, to)) push(w.user_id, w.completed_at, "completed", label);
+    if (inRange(w.shared_at, from, to)) push(w.user_id, w.shared_at, "shared", `${label} with the community`);
+    if (inRange(w.favorited_at, from, to)) push(w.user_id, w.favorited_at, "favorited", label);
     if (w.scheduled_at && inRange(w.updated_at, from, to) && !inRange(w.completed_at, from, to))
-      push(w.user_id, w.updated_at, "scheduled", `Scheduled ${label} for ${fmtDateTime(w.scheduled_at)}`);
+      push(w.user_id, w.updated_at, "scheduled", `${label} for ${fmtDateTime(w.scheduled_at)}`);
   }
   for (const r of reactions) push(r.user_id, r.updated_at, r.value > 0 ? "liked" : "disliked", `${r.value > 0 ? "Liked" : "Disliked"} ${wn(r.workout_id)}`);
   for (const r of ratings) push(r.user_id, r.updated_at, "rated", `Rated ${wn(r.workout_id)} ${r.value}/5`);

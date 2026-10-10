@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildReport, localMidnightUtc, rangeBounds, reportCsv, sampleReport } from "./report";
+import { buildReport, localMidnightUtc, rangeBounds, reportCsv, sampleReport, workoutCreationKind } from "./report";
 describe("user activity report", () => {
   it("uses Cyprus midnight across DST", () => {
     expect(localMidnightUtc("2026-07-01").toISOString()).toBe("2026-06-30T21:00:00.000Z");
@@ -18,5 +18,14 @@ describe("user activity report", () => {
     const s = sampleReport();
     expect(s.users).toHaveLength(10);
     for (const u of s.users) expect(u.events.length).toBeGreaterThanOrEqual(5);
+  });
+  it("does not report opened library workouts or WODs as created", () => {
+    expect(workoutCreationKind({ createdBy: "smarty:library-id", communitySourceId: null, isWod: false })).toBe("opened");
+    expect(workoutCreationKind({ createdBy: null, communitySourceId: null, isWod: true })).toBe("opened");
+  });
+  it("keeps genuine creation and shared-copy actions separate", () => {
+    expect(workoutCreationKind({ createdBy: "smarty_coach", communitySourceId: null, isWod: false })).toBe("created");
+    expect(workoutCreationKind({ createdBy: "member", communitySourceId: null, isWod: false })).toBe("created");
+    expect(workoutCreationKind({ createdBy: "community", communitySourceId: "source-id", isWod: false })).toBe("copied");
   });
 });
