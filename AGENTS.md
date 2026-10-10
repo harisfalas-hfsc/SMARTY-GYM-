@@ -20,7 +20,7 @@
 - CHALLENGE uses challengeBalanceViolation for full-body, majority-bodyweight, on-level benchmarks; filterPool prefers smarty_tags — why: consistent challenge structure.
 - Difficulty is prescription-only; beginners exclude advanced rows. flowSpecialtyViolation bans balance tools/isolation machines in flow/timed formats in pool and validator — why: one WOD/custom engine.
 - Smarty Check-ins scoring lives in src/lib/checkins/score.ts, computed server-side in checkins.functions.ts and read by coach via loadCheckinSignal — one source for UI, badges and coach.
-- Coach/admin/WOD generation and header advice are deterministic; header Coach is read-only, decided only by src/lib/coach/recommend.ts — why: one tested rule order.
+- Coach/admin/WOD are deterministic; header Coach is read-only, account-keyed and decided only by coach/recommend.ts — why: one rule order, no cross-account state.
 - Smarty Workouts share admin controls and local media; featured uses shared cards and locally preserved original dates — why: one collection, accurate newest order, no old-project dependency.
 - Players accept verified numeric/slug IDs; bulk publishing needs a full-library audit. Native startup stays black through the first React frame.
 - Closed exercise lists, all read by rules.ts: Activation/Cool Down named lists (prep-vocabulary.ts), Pilates, Mobility & Stability, Recovery (*-vocabulary.ts) — why: generator, pool, publish gate and audit share one rule.
