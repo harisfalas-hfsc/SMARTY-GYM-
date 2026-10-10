@@ -23,8 +23,6 @@ export interface InsightWorkoutRow {
 export interface InsightCheckinRow {
   checkin_date: string;
   daily_smarty_score: number | null;
-  /** Member's morning self-rating. Missing is kept as missing, never treated as zero. */
-  readiness_score: number | null;
 }
 export interface InsightProgressRow { score: number; current_streak: number; longest_streak: number; workouts_completed: number }
 
