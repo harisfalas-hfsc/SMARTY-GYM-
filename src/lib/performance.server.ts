@@ -14,7 +14,7 @@ import {
   summarizeConditioning,
   summarizeStrength,
 } from "@/lib/performance/load";
-import { readiness } from "@/lib/performance/readiness";
+import { liveReadiness, type ReadinessSession } from "@/lib/performance/readiness";
 import type { SetLogRow, WorkoutResultRow } from "@/lib/performance/types";
 
 type Client = {
@@ -228,13 +228,7 @@ export async function loadPerformanceOverview(supabase: Client, userId: string) 
   ].filter((v): v is number => v !== null);
 
   const sessionsLast7 = new Set(weekSets.map((s) => s.workout_id)).size + weekResults.length;
-  const readinessResult = readiness({
-    overallLoad: overall,
-    sessionsLast7,
-    consecutiveDays: consecutiveDays(days),
-    averageRpe: rpeValues.length ? rpeValues.reduce((a, b) => a + b, 0) / rpeValues.length : null,
-    loggedSessions: loggedWorkoutIds.size,
-  });
+  const readinessResult = await loadLiveReadiness(supabase, userId);
 
   const histories = buildExerciseHistories(sets);
   const shortfalls = countShortfalls(sets);
@@ -274,6 +268,86 @@ export async function loadPerformanceOverview(supabase: Client, userId: string) 
   };
 }
 
+
+/**
+ * Readiness at this moment: completed workouts of the last 72 hours (with
+ * their logged effort), today's morning Check-in and the training streak.
+ * One source for Training Load, Insights and Smarty Coach.
+ */
+export async function loadLiveReadiness(supabase: Client, userId: string, now = new Date()) {
+  const since = new Date(now.getTime() - 8 * 86_400_000).toISOString();
+  const { localClock } = await import("@/lib/checkins/score");
+  const [{ data: workoutRows }, { data: profile }] = await Promise.all([
+    supabase
+      .from("workouts")
+      .select("id,name,category,difficulty_stars,duration_min,completed_at")
+      .eq("user_id", userId)
+      .eq("status", "completed")
+      .is("deleted_at", null)
+      .gte("completed_at", since)
+      .order("completed_at", { ascending: false })
+      .limit(60),
+    supabase.from("profiles").select("timezone").eq("id", userId).maybeSingle(),
+  ]);
+  const workouts = (workoutRows ?? []) as Array<{
+    id: string; name: string; category: string | null; difficulty_stars: number | null;
+    duration_min: number | null; completed_at: string | null;
+  }>;
+  const tz = (profile as { timezone?: string | null } | null)?.timezone || "Europe/Nicosia";
+  const today = localClock(now, tz).date;
+  const ids = workouts.map((w) => w.id);
+  const [{ data: resultRows }, { data: feedbackRows }, { data: checkinRow }] = await Promise.all([
+    ids.length
+      ? supabase.from("workout_results").select("workout_id,attempt,rpe").in("workout_id", ids).order("attempt", { ascending: false })
+      : Promise.resolve({ data: [] }),
+    ids.length
+      ? supabase.from("workout_feedback").select("workout_id,attempt,rpe").in("workout_id", ids).order("attempt", { ascending: false })
+      : Promise.resolve({ data: [] }),
+    supabase
+      .from("smarty_checkins")
+      .select("morning_completed,sleep_hours,sleep_quality,readiness_score,soreness_rating")
+      .eq("user_id", userId)
+      .eq("checkin_date", today)
+      .maybeSingle(),
+  ]);
+  const rpeBy = new Map<string, number>();
+  for (const r of [...((feedbackRows ?? []) as Array<{ workout_id: string; rpe: number | null }>), ...((resultRows ?? []) as Array<{ workout_id: string; rpe: number | null }>)]) {
+    if (r.rpe !== null && r.rpe !== undefined && !rpeBy.has(r.workout_id)) rpeBy.set(r.workout_id, Number(r.rpe));
+  }
+  const sessions: ReadinessSession[] = workouts
+    .filter((w) => w.completed_at)
+    .map((w) => ({
+      name: w.name,
+      completedAt: w.completed_at as string,
+      durationMin: w.duration_min,
+      rpe: rpeBy.get(w.id) ?? null,
+      difficultyStars: w.difficulty_stars,
+      category: w.category,
+    }));
+  const days = new Set(sessions.map((s) => localClock(new Date(s.completedAt), tz).date));
+  let streak = 0;
+  let cursor = days.has(today) ? today : yesterdayOfIso(today);
+  while (days.has(cursor)) { streak += 1; cursor = yesterdayOfIso(cursor); }
+  const c = checkinRow as null | {
+    morning_completed: boolean; sleep_hours: number | null; sleep_quality: number | null;
+    readiness_score: number | null; soreness_rating: number | null;
+  };
+  const n = (v: unknown) => (v === null || v === undefined ? null : Number(v));
+  return liveReadiness({
+    now,
+    sessions,
+    consecutiveDays: streak,
+    checkin: c?.morning_completed
+      ? { sleepHours: n(c.sleep_hours), sleepQuality: n(c.sleep_quality), readiness: n(c.readiness_score), soreness: n(c.soreness_rating) }
+      : null,
+  });
+}
+
+function yesterdayOfIso(iso: string) {
+  const d = new Date(`${iso}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
+}
 
 function sum(a: number | null, b: number | null) {
   if (a === null && b === null) return null;
