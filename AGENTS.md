@@ -40,3 +40,4 @@
 - Mass emails use Resend dedupe; others use managed sending. All signatures share email-brand and EmailBrandFooter — why: reliable delivery, consistent branding.
 - Insights shares one report across app, inbox and email; no Insights PDF — why: parity/privacy.
 - Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs.
+- Live readiness is computed only by liveReadiness (src/lib/performance/readiness.ts) via loadLiveReadiness in performance.server.ts, used by Training Load, Insights and Coach — why: one moment-in-time score everywhere.
