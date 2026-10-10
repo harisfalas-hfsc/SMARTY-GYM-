@@ -160,7 +160,7 @@ ${section("⏳ What you didn't do", i.notCompleted.length || i.untrained.length 
 ${section("⚡ Training Load", chart(charts?.load, i.load.recent.map(r => ({ label: fmtDay(r.weekStart), value: r.sessions })), "Logged sessions per week") + para(`<strong>${e(i.load.state)}</strong> — ${e(LOAD_TEXT[i.load.state] ?? "")}`) + para("Logged sessions per week (last point = this report)."))}
 ${section("📝 Check-ins", para(i.checkins.days ? `${i.checkins.days} check-in day${i.checkins.days === 1 ? "" : "s"}${i.checkins.avgScore !== null ? ` · average Smarty Score <strong>${i.checkins.avgScore}</strong>` : ""}` : "No check-ins this week."))}
 ${section("🗓️ Coming up", i.upcoming.length ? list(i.upcoming.map((u) => `${fmtDay(u.date)}: ${e(u.name)}`)) : para("Nothing scheduled yet."))}
-${section("🧠 Smarty Coach suggestions", tips)}
+${section("🧠 Smarty Coach suggestions", (tips || "") + para("For today's workout pick, open Smarty Coach in the app — it uses your readiness right now."))}
 <div style="text-align:center;margin-top:28px;"><a href="${SITE_URL}/logbook?view=list#insights" style="display:inline-block;background-color:#29B6D2;background-image:linear-gradient(135deg,#29B6D2,#5CD3E8);color:#ffffff;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;">Open my Insights</a></div>
 </td></tr>
 <tr><td style="background:#f8f8f8;padding:20px 24px;text-align:center;border-top:1px solid #eee;">

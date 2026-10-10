@@ -50,7 +50,8 @@ function CoachTodayTip() {
   }, [fetchSnapshot]);
   if (!snap || snap.access !== "ready") return null;
   const name = snap.todayFocus.workoutName;
-  const href = snap.action.params?.workoutId ? `/smarty-workouts/${snap.action.params.workoutId}` : snap.action.to;
+  const params = "params" in snap.action ? (snap.action.params as { workoutId?: string } | undefined) : undefined;
+  const href = params?.workoutId ? `/smarty-workouts/${params.workoutId}` : snap.action.to;
   return (
     <div className="rounded-xl border-2 border-primary p-3 md:col-span-2">
       <p className="font-bold">🎯 Today: {name ?? snap.headline}</p>
