@@ -19,7 +19,8 @@ export type CronJobKey =
   | "workout-recovery"
   | "new-workout-announcement"
   | "shared-workout-announcement"
-  | "weekly-insights";
+  | "weekly-insights"
+  | "user-activity-report";
 
 export type CronTiming = "per-member" | "fixed" | "weekly" | "continuous";
 
@@ -318,6 +319,23 @@ export const CRON_JOBS: CronJobDefinition[] = [
     timeEditable: false,
     contentEditable: false,
     defaults: { enabled: true, hour: 6, minute: 0 },
+  },
+  {
+    key: "user-activity-report",
+    label: "Daily user activity report",
+    description:
+      "Emails you one report of everything members did the previous day (Cyprus time), grouped by member: account created, subscribed, membership ending, workouts created, added, scheduled, completed, shared and favorited, likes, ratings, comments, check-ins, badges, feedback and messages — each with its date and time. The same report, for any dates, is in Admin → User activity with PDF and CSV download.",
+    timing: "fixed",
+    timingNote:
+      "Runs once a day at the exact time set below (Cyprus time) — 00:30 by default — and always covers the whole previous day. Changing the time takes effect the same day; it is never sent twice for the same day.",
+    sends: [
+      { title: "User activity 2026-10-09 — 10 members, 62 activities", body: "One card per member with their details and a timed list of everything they did." },
+    ],
+    timeEditable: true,
+    contentEditable: false,
+    settings: ["recipient"],
+    runnable: true,
+    defaults: { enabled: true, hour: 0, minute: 30 },
   },
 ];
 

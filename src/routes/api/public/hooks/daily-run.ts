@@ -302,6 +302,21 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
           }
         }
 
+        // Daily user activity report — exact admin-set Cyprus time, previous day, once per day.
+        const activityConfig = jobs["user-activity-report"];
+        if (activityConfig && isDueNow(activityConfig)) {
+          try {
+            const { runUserActivityReport } = await import("@/lib/activity/run.server");
+            const r = await runUserActivityReport(db, { config: activityConfig, trigger: "schedule" });
+            await recordRun(db, { jobKey: "user-activity-report", status: r.status, changed: true, summary: r.summary, trigger: "schedule" });
+            await markJobRan(db, "user-activity-report", activityConfig);
+          } catch (e) {
+            const message = e instanceof Error ? e.message : "error";
+            failures.push(`activity:${message}`);
+            await recordRun(db, { jobKey: "user-activity-report", status: "failed", summary: `User activity report failed: ${message} (retried on the next 5-minute check)`, trigger: "schedule" });
+          }
+        }
+
         // Nightly system health check — fixed time, once a day, always emailed.
         let health: { status: string; summary: string } | null = null;
         const healthConfig = jobs["health-check"];

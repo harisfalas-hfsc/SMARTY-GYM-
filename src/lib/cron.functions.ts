@@ -144,6 +144,14 @@ export const adminRunCronJob = createServerFn({ method: "POST" })
           return { status: result.status, summary: result.summary };
         }
 
+        if (data.key === "user-activity-report") {
+          const config = await getCronConfig(db, "user-activity-report");
+          const { runUserActivityReport } = await import("@/lib/activity/run.server");
+          const r = await runUserActivityReport(db, { config, trigger: "manual" });
+          await recordRun(db, { jobKey: "user-activity-report", status: r.status, changed: true, summary: r.summary, trigger: "manual" });
+          return { status: r.status, summary: r.summary, emailed: true };
+        }
+
         if (data.key === "wod-selection") {
           const { selectWodForDate, addDays } = await import("@/lib/wod/select.server");
           const { localDateISO } = await import("@/lib/wod-cycle");
