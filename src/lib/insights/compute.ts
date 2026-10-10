@@ -77,14 +77,6 @@ export interface WeeklyInsights {
   /** days = check-ins this week; avgScore null = no scored check-ins. */
   checkins: { days: number; avgScore: number | null };
   upcoming: { name: string; date: string }[];
-  /** Weekly evidence behind Coach suggestions; this is not a medical assessment. */
-  readiness: {
-    average: number | null;
-    latest: number | null;
-    latestDate: string | null;
-    checkinDays: number;
-    loadState: LoadState;
-  };
   tips: InsightTip[];
 }
 
@@ -231,21 +223,6 @@ export function computeWeeklyInsights(input: InsightsInput): WeeklyInsights {
     days: weekCheckins.length,
     avgScore: scored.length ? Math.round(scored.reduce((a, b) => a + b, 0) / scored.length) : null,
   };
-  const readinessRows = weekCheckins
-    .filter((c): c is InsightCheckinRow & { readiness_score: number } => typeof c.readiness_score === "number")
-    .sort((a, b) => a.checkin_date.localeCompare(b.checkin_date));
-  const readinessAverage = readinessRows.length
-    ? Math.round((readinessRows.reduce((sum, row) => sum + row.readiness_score, 0) / readinessRows.length) * 10) / 10
-    : null;
-  const latestReadiness = readinessRows.at(-1) ?? null;
-  const readiness = {
-    average: readinessAverage,
-    latest: latestReadiness?.readiness_score ?? null,
-    latestDate: latestReadiness?.checkin_date ?? null,
-    checkinDays: readinessRows.length,
-    loadState: input.load.state,
-  };
-
   const p = input.progress;
   const kpis = {
     completed: thisWeek.length,
@@ -311,7 +288,6 @@ export function computeWeeklyInsights(input: InsightsInput): WeeklyInsights {
     load: input.load,
     checkins,
     upcoming,
-    readiness,
     tips,
   };
 }
