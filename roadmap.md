@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Correct User Activity reporting so opening, creating, copying, completing, scheduling, favoriting and sharing workouts always use distinct factual labels.
+
 - [x] Upgrade Smarty Coach into an immediate, account-safe daily briefing focused on readiness, last session, today’s target, both Training Profile goals and the evidence behind the recommendation.
 
 - [x] Add the old-style header Smarty Coach button and five-second personal recommendation window connected to profile, check-ins, history, comparisons and records; desktop/mobile active-member flow and access rules verified.

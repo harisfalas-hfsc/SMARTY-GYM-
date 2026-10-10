@@ -8,6 +8,7 @@ export type ActivityKind =
   | "subscribed"
   | "membership-end"
   | "created"
+  | "opened"
   | "copied"
   | "completed"
   | "scheduled"
@@ -53,11 +54,12 @@ export const KIND_LABEL: Record<ActivityKind, string> = {
   subscribed: "Subscribed",
   "membership-end": "Membership ends",
   created: "Created workout",
+  opened: "Opened workout",
   copied: "Added shared workout",
-  completed: "Completed",
-  scheduled: "Scheduled",
-  shared: "Shared",
-  favorited: "Favorited",
+  completed: "Completed workout",
+  scheduled: "Scheduled workout",
+  shared: "Shared workout",
+  favorited: "Favorited workout",
   liked: "Liked",
   disliked: "Disliked",
   rated: "Rated",
@@ -67,6 +69,19 @@ export const KIND_LABEL: Record<ActivityKind, string> = {
   feedback: "Feedback",
   message: "Message",
 };
+
+export type WorkoutCreationSource = {
+  createdBy: string | null;
+  communitySourceId: string | null;
+  isWod: boolean;
+};
+
+/** Classifies what the member actually did when a personal workout row appeared. */
+export function workoutCreationKind(workout: WorkoutCreationSource): "created" | "opened" | "copied" {
+  if (workout.communitySourceId) return "copied";
+  if (workout.isWod || String(workout.createdBy ?? "").startsWith("smarty:")) return "opened";
+  return "created";
+}
 
 function tzOffsetMs(date: Date, tz: string): number {
   const p = Object.fromEntries(
@@ -158,6 +173,7 @@ export function sampleReport(): ActivityReport {
     ["profile", "Completed the training profile"],
     ["subscribed", "Subscribed to Premium (€9.99/month)"],
     ["created", "Created workout “Solid Lift Session” (Strength)"],
+    ["opened", "Opened Smarty Workout “Iron Builder” (Strength)"],
     ["scheduled", "Scheduled “Metabolic Advanced Session” for 18:00"],
     ["completed", "Completed “Solid Pace Session” (Cardio)"],
     ["favorited", "Favorited “Metabolic Advanced Session”"],
