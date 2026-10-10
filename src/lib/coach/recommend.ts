@@ -356,6 +356,21 @@ export function recommendNext(i: CoachEngineInput): CoachDecision {
   const plan = selectPurpose(i, gate);
   const codes = [...gate.codes, ...plan.codes];
   const why = [...gate.why, ...plan.why];
+  const primaryGoal = i.primaryGoalCategory === "MUSCLE BUILDING" ? "STRENGTH" : i.primaryGoalCategory;
+  const secondaryGoal = i.secondaryGoalCategory === "MUSCLE BUILDING" ? "STRENGTH" : i.secondaryGoalCategory;
+  if (primaryGoal) {
+    const selectedCategory = plan.categories[0] ?? null;
+    why.push(
+      selectedCategory === primaryGoal
+        ? `${label(primaryGoal)} is your primary Training Profile goal, so today's direction continues that focus.`
+        : `${label(primaryGoal)} is your primary goal; today's ${label(plan.purpose)} direction supports your next safe step toward it.`,
+    );
+    codes.push("goal.primary");
+  }
+  if (secondaryGoal && plan.categories.includes(secondaryGoal)) {
+    why.push(`${label(secondaryGoal)} is your secondary goal and helped rank suitable options.`);
+    codes.push("goal.secondary");
+  }
 
   const hasLoad = i.overallLoad !== "None" && i.overallLoad !== "Limited Data";
   const confidence: CoachDecision["confidence"] =

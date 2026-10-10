@@ -75,25 +75,14 @@ export function Navigation() {
         return;
       }
     }
-    let attempts = 0;
-    const tryOpen = () => {
-      const anotherDialog = document.querySelector('[role="dialog"]');
-      if (anotherDialog && attempts < 12) {
-        attempts += 1;
-        timer = window.setTimeout(tryOpen, 1_000);
+    if (key) {
+      try {
+        sessionStorage.setItem(key, "1");
+      } catch {
         return;
       }
-      if (key) {
-        try {
-          sessionStorage.setItem(key, "1");
-        } catch {
-          return;
-        }
-      }
-      setCoachOpen(true);
-    };
-    let timer = window.setTimeout(tryOpen, 7_000);
-    return () => window.clearTimeout(timer);
+    }
+    setCoachOpen(true);
   }, [loading, user?.id]);
 
   const canGoBack = pathname !== "/";
@@ -247,7 +236,7 @@ export function Navigation() {
       </div>
 
       {menuOpen && <NavDrawer onClose={() => setMenuOpen(false)} isAuthed={!!user} isAdmin={isAdmin} />}
-      <SmartyCoachDialog key={user?.id ?? "visitor"} open={coachOpen} onOpenChange={setCoachOpen} prefetch={!!user} visitor={!user} />
+      <SmartyCoachDialog key={user?.id ?? "visitor"} accountKey={user?.id ?? null} open={coachOpen} onOpenChange={setCoachOpen} visitor={!user} />
     </header>
   );
 }
