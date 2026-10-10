@@ -222,10 +222,6 @@ export async function loadPerformanceOverview(supabase: Client, userId: string) 
   });
 
   const days = new Set(sets.map((s) => s.completed_at.slice(0, 10)));
-  const rpeValues = [
-    ...sets.map((s) => s.rpe),
-    ...results.map((r) => r.rpe),
-  ].filter((v): v is number => v !== null);
 
   const sessionsLast7 = new Set(weekSets.map((s) => s.workout_id)).size + weekResults.length;
   const readinessResult = await loadLiveReadiness(supabase, userId);
