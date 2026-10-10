@@ -1,0 +1,5 @@
+- CHALLENGE uses challengeBalanceViolation for full-body, majority-bodyweight, on-level benchmarks; filterPool prefers smarty_tags — why: consistent challenge structure.
+- Difficulty is prescription-only; beginners exclude advanced rows. flowSpecialtyViolation bans balance tools/isolation machines in flow/timed formats in pool and validator — why: one WOD/custom engine.
+- Closed exercise lists, all read by rules.ts: Activation/Cool Down named lists (prep-vocabulary.ts), Pilates, Mobility & Stability, Recovery (*-vocabulary.ts) — why: generator, pool, publish gate and audit share one rule.
+- All workout rules (exercise legality per section, workout structure, dose, duration) are decided only in src/lib/workout/rules.ts (built on doctrine.ts + prep-vocabulary.ts); the pool filter, validator and smarty-compliance audit all call it — why: one rule layer, so no check can apply half the rules.
+- Stored-workout repairs go through planMigration in src/lib/workout/smarty-compliance.ts; bannedSwap blocks unsafe substitutes — why: one repair path on the one rule engine, reversible via the pre-migration backup table.

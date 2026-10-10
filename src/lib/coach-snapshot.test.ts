@@ -59,7 +59,7 @@ describe("returning members", () => {
   });
   it("exposes the real readiness score and both goals", () => {
     const r = decideCoachSnapshot(base);
-    expect(r.readinessDisplay).toEqual({ label: "Ready", score: 8, basis: "check-in" });
+    expect(r.readinessDisplay).toEqual({ label: "Ready", score: 8, reason: "Your recent load is manageable." });
     expect(r.goals).toEqual({ primary: "strength", secondary: "mobility" });
   });
 });

@@ -1,0 +1,2 @@
+- Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.
+- Live readiness is computed only by liveReadiness (src/lib/performance/readiness.ts) via loadLiveReadiness in performance.server.ts, used by Training Load, Insights and Coach — why: one moment-in-time score everywhere.

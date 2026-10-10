@@ -5,6 +5,7 @@ import { Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, Clipboard
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getMyInsights } from "@/lib/weekly-insights.functions";
+import { getLiveReadiness } from "@/lib/performance.functions";
 import { titleCase, type WeeklyInsights } from "@/lib/insights/compute";
 import { MetricLineChart } from "@/components/performance/MetricLineChart";
 import { reportChartGeometry } from "@/lib/report-chart";
@@ -33,6 +34,51 @@ function Card({ title, icon: Icon, children, tone = "text-primary" }: { title: s
       </h3>
       {children}
     </section>
+  );
+}
+
+type LiveReadiness = Awaited<ReturnType<typeof getLiveReadiness>>;
+
+/** Readiness right now — refreshed while visible, never a weekly average. */
+function LiveReadinessCard() {
+  const fetchReadiness = useServerFn(getLiveReadiness);
+  const [value, setValue] = useState<LiveReadiness | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const load = () => {
+      if (document.visibilityState === "hidden") return;
+      fetchReadiness({ data: {} })
+        .then((r) => { if (active) { setValue(r as LiveReadiness); setFailed(false); } })
+        .catch(() => { if (active) setFailed(true); });
+    };
+    load();
+    const timer = window.setInterval(load, 60_000);
+    document.addEventListener("visibilitychange", load);
+    window.addEventListener("focus", load);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", load);
+      window.removeEventListener("focus", load);
+    };
+  }, [fetchReadiness]);
+
+  return (
+    <Card title="Readiness right now" icon={HeartPulse} tone="text-rose-500">
+      {value ? (
+        <>
+          <p className="text-2xl font-black">{value.score}/10 <span className="text-sm font-medium text-muted-foreground">{value.state}</span></p>
+          <p className="mt-1 text-sm text-muted-foreground">{value.reason}</p>
+        </>
+      ) : failed ? (
+        <p className="text-sm text-muted-foreground">Readiness could not load. Please try again in a moment.</p>
+      ) : (
+        <Loader2 className="h-4 w-4 animate-spin text-primary" />
+      )}
+      <Link to="/smarty-checkins" className="mt-3 inline-block text-sm font-bold text-primary">Open Smarty Check-ins →</Link>
+    </Card>
   );
 }
 
@@ -198,25 +244,7 @@ export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
           </div>
           </div>
 
-          <Card title="Readiness" icon={HeartPulse} tone="text-rose-500">
-            {data.readiness?.average !== null && data.readiness?.average !== undefined ? (
-              <>
-                <p className="text-2xl font-black">{data.readiness.average}/10 <span className="text-sm font-medium text-muted-foreground">weekly average</span></p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  From {data.readiness.checkinDays} morning Check-in day{data.readiness.checkinDays === 1 ? "" : "s"}
-                  {data.readiness.latest !== null && data.readiness.latestDate ? ` · latest ${data.readiness.latest}/10 on ${fmt(data.readiness.latestDate)}` : ""}.
-                </p>
-                <p className="mt-2 text-sm">Training Load: <strong>{data.readiness.loadState}</strong></p>
-              </>
-            ) : (
-              <>
-                <p className="font-bold">More Check-in data needed</p>
-                <p className="mt-1 text-sm text-muted-foreground">Complete morning Check-ins to add your own readiness rating to Coach’s weekly evidence.</p>
-                <p className="mt-2 text-sm">Training Load: <strong>{data.readiness?.loadState ?? data.load.state}</strong></p>
-              </>
-            )}
-            <Link to="/smarty-checkins" className="mt-3 inline-block text-sm font-bold text-primary">Open Smarty Check-ins →</Link>
-          </Card>
+          {report ? null : <LiveReadinessCard />}
 
           <Card title="Smarty Coach suggestions" icon={Brain}>
             <div className="grid gap-3 md:grid-cols-2">

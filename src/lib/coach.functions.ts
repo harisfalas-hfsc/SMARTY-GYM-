@@ -23,7 +23,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         access: "locked",
         firstName: lockedName,
         greeting: `Hello, ${lockedName}.`,
-        readinessDisplay: { label: "Membership paused", score: null, basis: "limited" },
+        readinessDisplay: { label: "Membership paused", score: null, reason: "" },
         goals: { primary: null, secondary: null },
         todayFocus: {
           purpose: "Membership",
@@ -294,7 +294,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       firstName,
       greeting,
       readiness: overview.readiness,
-      readinessScore: checkin?.readiness ?? null,
+      readinessScore: overview.readiness.score,
       recommendation,
       hasCheckin: Boolean(checkin),
       loggedSessions: overview.loggedSessions,
