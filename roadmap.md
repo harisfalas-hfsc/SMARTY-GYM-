@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Correct User Activity reporting so opening, creating, copying, completing, scheduling, favoriting and sharing workouts always use distinct factual labels.
+- [x] Correct User Activity reporting so opening, creating, copying, completing, scheduling, favoriting and sharing workouts always use distinct factual labels.
 
 - [x] Upgrade Smarty Coach into an immediate, account-safe daily briefing focused on readiness, last session, today’s target, both Training Profile goals and the evidence behind the recommendation.
 
