@@ -77,7 +77,7 @@ export async function loadWeeklyInsights(db: DB, userId: string, mode: "current"
       .limit(5000),
     db.from("set_logs").select(SET_COLS).eq("user_id", userId).gte("completed_at", since).limit(5000),
     db.from("workout_results").select(RESULT_COLS).eq("user_id", userId).gte("created_at", since).limit(1000),
-    db.from("smarty_checkins").select("checkin_date,daily_smarty_score").eq("user_id", userId).gte("checkin_date", addDays(weekStart, -7)).limit(100),
+    db.from("smarty_checkins").select("checkin_date,daily_smarty_score,readiness_score").eq("user_id", userId).gte("checkin_date", addDays(weekStart, -7)).limit(100),
     db.from("user_progress").select("score,current_streak,longest_streak,workouts_completed").eq("user_id", userId).maybeSingle(),
   ]);
   const toLocalDate = (iso: string) => localDateISO(new Date(iso), tz);
@@ -104,9 +104,12 @@ export const show = (v: number | null, suffix = "") => (v === null ? "—" : `${
 /** Short inbox message; the full report lives in Logbook → Progress → Insights. */
 export function insightsInboxContent(i: WeeklyInsights, firstName: string) {
   const tip = i.tips[0];
+  const readiness = i.readiness?.average !== null && i.readiness?.average !== undefined
+    ? ` Weekly readiness averaged ${i.readiness.average}/10.`
+    : " Readiness needs more Check-in data.";
   return {
     title: `${i.headline.emoji} Your weekly Insights are ready`,
-    body: encodeInsightMessage(`Hi ${firstName}, ${i.kpis.completed} workout${i.kpis.completed === 1 ? "" : "s"} on ${i.kpis.activeDays} day${i.kpis.activeDays === 1 ? "" : "s"} (${weekLabel(i)}). ${i.headline.text}.${tip ? ` Smarty Coach: ${tip.title}.` : ""} Open Insights in Logbook for your full report.`, i),
+    body: encodeInsightMessage(`Hi ${firstName}, ${i.kpis.completed} workout${i.kpis.completed === 1 ? "" : "s"} on ${i.kpis.activeDays} day${i.kpis.activeDays === 1 ? "" : "s"} (${weekLabel(i)}). ${i.headline.text}.${readiness}${tip ? ` Smarty Coach: ${tip.title}.` : ""} Open Insights in Logbook for your full report.`, i),
   };
 }
 
@@ -135,6 +138,10 @@ export async function insightsEmailHtml(i: WeeklyInsights, firstName: string, ch
         `<div style="border:1px solid #e5e7eb;border-left:4px solid #29B6D2;border-radius:8px;padding:12px 14px;margin:0 0 10px;"><div style="font-weight:bold;color:#1a1a1a;font-size:15px;">${t.emoji} ${e(t.title)}</div><div style="color:#444;font-size:14px;line-height:1.5;margin:4px 0 8px;">${e(t.body)}</div><a href="${e(abs(t.href))}" style="color:#29B6D2;font-weight:bold;font-size:14px;text-decoration:none;">${e(t.label)} →</a></div>`,
     )
     .join("");
+  const readiness = i.readiness;
+  const readinessText = readiness?.average !== null && readiness?.average !== undefined
+    ? `<strong>${e(String(readiness.average))}/10 weekly average</strong> from ${readiness.checkinDays} morning Check-in day${readiness.checkinDays === 1 ? "" : "s"}.${readiness.latest !== null && readiness.latestDate ? ` Latest: <strong>${readiness.latest}/10</strong> on ${fmtDay(readiness.latestDate)}.` : ""} Training Load: <strong>${e(readiness.loadState)}</strong>.`
+    : `Not enough morning Check-in data for a weekly readiness average. Training Load: <strong>${e(readiness?.loadState ?? i.load.state)}</strong>.`;
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>Your weekly Insights</title></head>
 <body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f5f5f5;">
@@ -160,6 +167,7 @@ ${section("⏳ What you didn't do", i.notCompleted.length || i.untrained.length 
 ${section("⚡ Training Load", chart(charts?.load, i.load.recent.map(r => ({ label: fmtDay(r.weekStart), value: r.sessions })), "Logged sessions per week") + para(`<strong>${e(i.load.state)}</strong> — ${e(LOAD_TEXT[i.load.state] ?? "")}`) + para("Logged sessions per week (last point = this report)."))}
 ${section("📝 Check-ins", para(i.checkins.days ? `${i.checkins.days} check-in day${i.checkins.days === 1 ? "" : "s"}${i.checkins.avgScore !== null ? ` · average Smarty Score <strong>${i.checkins.avgScore}</strong>` : ""}` : "No check-ins this week."))}
 ${section("🗓️ Coming up", i.upcoming.length ? list(i.upcoming.map((u) => `${fmtDay(u.date)}: ${e(u.name)}`)) : para("Nothing scheduled yet."))}
+${section("❤️ Readiness", para(readinessText))}
 ${section("🧠 Smarty Coach suggestions", tips)}
 <div style="text-align:center;margin-top:28px;"><a href="${SITE_URL}/logbook?view=list#insights" style="display:inline-block;background-color:#29B6D2;background-image:linear-gradient(135deg,#29B6D2,#5CD3E8);color:#ffffff;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;">Open my Insights</a></div>
 </td></tr>

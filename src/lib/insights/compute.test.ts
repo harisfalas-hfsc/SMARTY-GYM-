@@ -34,6 +34,19 @@ describe("weekly insights — numbers", () => {
     const i = computeWeeklyInsights({ ...base, workouts: [], load: { state: "High", recent: [] } });
     expect(i.load.state).toBe("High");
   });
+  it("keeps readiness factual, averages only recorded morning scores, and retains the latest value", () => {
+    const i = computeWeeklyInsights({
+      ...base,
+      workouts: [],
+      checkins: [
+        { checkin_date: "2026-10-05", daily_smarty_score: 60, readiness_score: 4 },
+        { checkin_date: "2026-10-06", daily_smarty_score: 70, readiness_score: null },
+        { checkin_date: "2026-10-09", daily_smarty_score: 80, readiness_score: 9 },
+      ],
+      load: { state: "Moderate", recent: [] },
+    });
+    expect(i.readiness).toEqual({ average: 6.5, latest: 9, latestDate: "2026-10-09", checkinDays: 2, loadState: "Moderate" });
+  });
   it("is deterministic", () => {
     const workouts = [w({ completed_at: "2026-10-06T08:00:00Z" })];
     expect(computeWeeklyInsights({ ...base, workouts })).toEqual(computeWeeklyInsights({ ...base, workouts }));
