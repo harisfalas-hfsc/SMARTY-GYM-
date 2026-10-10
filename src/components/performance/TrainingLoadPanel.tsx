@@ -28,9 +28,8 @@ function LoadRow({
 }
 
 /**
- * Training-management view of the last 7 days. Readiness here is a training
- * indicator, not a medical or diagnostic statement, and defaults to limited
- * data whenever the evidence is thin.
+ * Training-management view of the last 7 days. Readiness is live (right now),
+ * a training indicator, not a medical or diagnostic statement.
  */
 export function TrainingLoadPanel() {
   const fetchOverview = useServerFn(getPerformanceOverview);
@@ -64,7 +63,7 @@ export function TrainingLoadPanel() {
   }
   if (!data) return null;
 
-  const readinessState = showExample ? "Ready" : data.readiness.state;
+  const readinessState = showExample ? "9/10 · Ready" : `${data.readiness.score}/10 · ${data.readiness.state}`;
   const readinessReason = showExample
     ? "Example view showing how the panel looks after enough comparable workouts have been recorded."
     : data.readiness.reason;
@@ -84,7 +83,7 @@ export function TrainingLoadPanel() {
           <p className="mt-2 text-xs font-semibold text-primary">Example only. Your personal data has not changed.</p>
         ) : null}
         <p className="mt-2 text-[11px] text-muted-foreground">
-          A training-management indicator based only on what you logged. It is not a health or
+          Your readiness right now, from your recent workouts and today's Check-in. It is not a health or
           medical assessment.
         </p>
       </div>
