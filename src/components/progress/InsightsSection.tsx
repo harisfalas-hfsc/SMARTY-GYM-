@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Download, Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, ClipboardCheck, ChevronDown, HeartPulse } from "lucide-react";
-import { toast } from "sonner";
+import { Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, ClipboardCheck, ChevronDown, HeartPulse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getMyInsights } from "@/lib/weekly-insights.functions";
@@ -75,7 +74,6 @@ export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
   const [week, setWeek] = useState<"current" | "previous">("previous");
   const [data, setData] = useState<WeeklyInsights | null>(report ?? null);
   const [error, setError] = useState<string | null>(null);
-  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     if (report) { setData(report); return; }
@@ -89,19 +87,6 @@ export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
       active = false;
     };
   }, [fetchInsights, week, report]);
-
-  const download = async () => {
-    if (!data) return;
-    setExporting(true);
-    try {
-      const { exportInsightsPdf } = await import("@/lib/insights/insights-pdf");
-      await exportInsightsPdf(data);
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "The PDF could not be created.");
-    } finally {
-      setExporting(false);
-    }
-  };
 
   const k = data?.kpis;
   const dayPoints = data?.days.map((d) => ({ label: d.label, value: d.count })) ?? [];
@@ -138,10 +123,6 @@ export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
               </button>
             ))}
           </div>}
-          <Button type="button" size="sm" className="gap-2" onClick={() => void download()} disabled={!data || exporting}>
-            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-            {exporting ? "Preparing PDF" : "Download PDF"}
-          </Button>
         </div>
       </div>
 

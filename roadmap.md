@@ -1,6 +1,6 @@
 # Roadmap
 
-- [x] Add factual weekly readiness evidence below Check-ins/Coming Up and before Smarty Coach suggestions across Insights, inbox, email and PDF.
+- [x] Add factual weekly readiness evidence below Check-ins/Coming Up and before Smarty Coach suggestions across Insights, inbox and Monday email; remove the Insights PDF download.
 
 - [x] Correct User Activity reporting so opening, creating, copying, completing, scheduling, favoriting and sharing workouts always use distinct factual labels.
 
@@ -8,9 +8,9 @@
 
 - [x] Add the old-style header Smarty Coach button and five-second personal recommendation window connected to profile, check-ins, history, comparisons and records; desktop/mobile active-member flow and access rules verified.
 
-- [x] Match full Insights across app/inbox/email/PDF, including thin-line load graphs; real account app/PDF and owner-only inbox/PDF checked at desktop/phone; email rendered and inspected; 285 tests passed. Live weekly delivery not triggered.
+- [x] Match full Insights across app/inbox/email, including thin-line load graphs; owner-only app/inbox checked at desktop/phone and email rendered and inspected.
 
-- [x] Match Insights and training graphs to lightweight lines in website/PDF reports; real account graphs and downloads inspected at desktop/mobile, all PDF pages rendered, 281 tests pass; calculations unchanged.
+- [x] Match Insights and training graphs to lightweight lines in the website and email; calculations unchanged.
 
 - [x] Add two Account email preferences in Daily Coaching; sending filters honor independent opt-outs, mandatory app notices unchanged. Signed-in save/reload verified for both combinations at 1280/384px; original owner preferences restored; 263 tests pass.
 
@@ -70,6 +70,6 @@
 - [x] Update The Smarty Method and Why Invest in SmartyGym for current features, and add visually verified branded portrait PDF downloads.
 - [x] Make both public-page PDFs complete, including all charts and references, and standardize Back navigation on every non-home page.
 - [x] Welcome every first-time Premium member once by email and in their inbox, with a branded guide to SMARTYGYM features.
-- [x] Smarty Insights: Logbook Progress section, Monday 06:00 inbox + email report, PDF, account email switch
-- [x] Insights compliance fixes (dedupe/retry, dedicated PDF, tip priorities, real Training Load, acceptance tests); reports stay in each member's own timezone, sent at their local Monday 06:00
+- [x] Smarty Insights: persistent Logbook section, Monday 06:00 inbox + email report, account email switch, no PDF download
+- [x] Insights compliance fixes (dedupe/retry, tip priorities, real Training Load, acceptance tests); reports stay in each member's own timezone, sent at their local Monday 06:00
 - Daily user activity report (00:30 Cyprus) + Admin User activity section — done
