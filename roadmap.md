@@ -66,3 +66,4 @@
 - [x] Welcome every first-time Premium member once by email and in their inbox, with a branded guide to SMARTYGYM features.
 - [x] Smarty Insights: Logbook Progress section, Monday 06:00 inbox + email report, PDF, account email switch
 - [x] Insights compliance fixes (dedupe/retry, dedicated PDF, tip priorities, real Training Load, acceptance tests); reports stay in each member's own timezone, sent at their local Monday 06:00
+- Daily user activity report (00:30 Cyprus) + Admin User activity section — done
