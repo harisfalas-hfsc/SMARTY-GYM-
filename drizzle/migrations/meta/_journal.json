@@ -617,6 +617,13 @@
       "when": 1791526710300,
       "tag": "0087_broadcast_email_sends_state",
       "breakpoints": true
+    },
+    {
+      "idx": 88,
+      "version": "7",
+      "when": 1791631187500,
+      "tag": "0088_workout_favorited_at",
+      "breakpoints": true
     }
   ]
 }
