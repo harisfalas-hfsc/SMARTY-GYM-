@@ -82,7 +82,8 @@ export function Navigation() {
         return;
       }
     }
-    setCoachOpen(true);
+    const timer = window.setTimeout(() => setCoachOpen(true), 0);
+    return () => window.clearTimeout(timer);
   }, [loading, user?.id]);
 
   const canGoBack = pathname !== "/";

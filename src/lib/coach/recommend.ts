@@ -363,7 +363,7 @@ export function recommendNext(i: CoachEngineInput): CoachDecision {
     why.push(
       selectedCategory === primaryGoal
         ? `${label(primaryGoal)} is your primary Training Profile goal, so today's direction continues that focus.`
-        : `${label(primaryGoal)} is your primary goal; today's ${label(plan.purpose)} direction supports your next safe step toward it.`,
+        : `${label(primaryGoal)} is your primary goal; today's ${plan.purpose === "goal" ? "training" : label(plan.purpose)} direction supports your next safe step toward it.`,
     );
     codes.push("goal.primary");
   }
