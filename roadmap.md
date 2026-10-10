@@ -1,6 +1,6 @@
 # Roadmap
 
-- [x] Add factual weekly readiness evidence below Check-ins/Coming Up and before Smarty Coach suggestions across Insights, inbox, email and PDF.
+- [x] Add factual weekly readiness evidence below Check-ins/Coming Up and before Smarty Coach suggestions across Insights, inbox and Monday email; remove the Insights PDF download.
 
 - [x] Correct User Activity reporting so opening, creating, copying, completing, scheduling, favoriting and sharing workouts always use distinct factual labels.
 

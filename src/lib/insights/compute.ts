@@ -1,6 +1,6 @@
 /**
  * Smarty Insights — one deterministic weekly summary shared by the Logbook
- * section, the inbox message, the weekly email and the PDF. Pure: no I/O.
+ * section, the inbox message and the weekly email. Pure: no I/O.
  * Weeks are Monday–Sunday in the member's own timezone.
  */
 import type { LoadState } from "@/lib/performance/types";
