@@ -22,6 +22,18 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       return {
         access: "locked",
         firstName: lockedName,
+        greeting: `Hello, ${lockedName}.`,
+        readinessDisplay: { label: "Membership paused", score: null, basis: "limited" },
+        goals: { primary: null, secondary: null },
+        todayFocus: {
+          purpose: "Membership",
+          category: null,
+          bodyFocus: null,
+          intensity: "Paused",
+          workoutName: null,
+          duration: null,
+          stars: null,
+        },
         headline: "Your coach is ready when you return",
         recommendation: "Renew your membership to reconnect Smarty Coach with your saved training history.",
         lastSession: null,
@@ -42,7 +54,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       await Promise.all([
         db
           .from("profiles")
-          .select("display_name,fitness_level,experience,primary_goal,preferred_equipment,timezone")
+          .select("display_name,fitness_level,experience,primary_goal,secondary_goal,preferred_equipment,typical_duration_min,limitations,timezone")
           .eq("id", context.userId)
           .maybeSingle(),
         db
@@ -142,6 +154,12 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       ? `${record.label}: ${Number(record.value).toLocaleString("en-GB")} ${record.metric}`.trim()
       : null;
     const firstName = String(profile?.display_name ?? "there").trim().split(/\s+/)[0] || "there";
+    const localHour = new Intl.DateTimeFormat("en-GB", { hour: "numeric", hourCycle: "h23", timeZone: timezone })
+      .formatToParts(new Date())
+      .find((part) => part.type === "hour")?.value;
+    const hour = Number(localHour ?? "12");
+    const salutation = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    const greeting = `${salutation}, ${firstName}.`;
 
     // Whole history (not only the 28-day Training Load window): a returning
     // member is never told this is their first workout.
@@ -174,8 +192,9 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
     }
 
     // Deterministic decision engine (src/lib/coach/recommend.ts).
-    const goalText = String(profile?.primary_goal ?? "").toLowerCase();
-    const goalCategory = goalText.includes("muscle")
+    const goalCategoryOf = (value: unknown) => {
+      const goalText = String(value ?? "").toLowerCase();
+      return goalText.includes("muscle")
       ? "MUSCLE BUILDING"
       : goalText.includes("fat") || goalText.includes("lose")
         ? "CALORIE BURNING"
@@ -184,6 +203,9 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
           : goalText.includes("healthy") || goalText.includes("active")
             ? "CARDIO"
             : null;
+    };
+    const primaryGoalCategory = goalCategoryOf(profile?.primary_goal);
+    const secondaryGoalCategory = goalCategoryOf(profile?.secondary_goal);
     const { recommendNext } = await import("@/lib/coach/recommend");
     const { localClock } = await import("@/lib/checkins/score");
     const { loadPriorCheckins } = await import("@/lib/checkins.server");
@@ -211,6 +233,13 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       : { data: [] };
     const rpeBy = new Map<string, number>();
     for (const r of (rpeRows ?? []) as Array<{ workout_id: string; rpe: number | null }>) if (r.rpe !== null) rpeBy.set(r.workout_id, r.rpe);
+    const { data: feedbackRows } = recentList.length
+      ? await db.from("workout_feedback").select("workout_id,feeling,attempt,created_at").in("workout_id", recentList.map((r) => r.id)).order("created_at", { ascending: false })
+      : { data: [] };
+    const feelingBy = new Map<string, string>();
+    for (const row of (feedbackRows ?? []) as Array<{ workout_id: string; feeling: string | null }>) {
+      if (row.feeling && !feelingBy.has(row.workout_id)) feelingBy.set(row.workout_id, row.feeling);
+    }
 
     const fallbackNames = [
       ...RECOVERY_EXERCISES.map((n) => ({ n, kind: "recovery" as const })),
@@ -238,13 +267,16 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       recent: recentList.map((r) => ({
         id: r.id, smartyId: smartyIdOf(r.created_by), name: r.name, category: r.category, focus: r.focus,
         stars: r.difficulty_stars, rpe: rpeBy.get(r.id) ?? null, day: localClock(new Date(r.completed_at), timezone).date,
+        feeling: feelingBy.get(r.id) ?? null,
       })),
       totalCompleted: completed.length,
       everDone: { ids: [], names: completed.map((c) => c.name) },
       level: levelText as never,
-      goalCategory,
+      primaryGoalCategory,
+      secondaryGoalCategory,
+      limitations: (profile?.limitations ?? []).filter(Boolean),
       equipment: (profile?.preferred_equipment ?? []).filter(Boolean),
-      typicalMinutes: null,
+      typicalMinutes: profile?.typical_duration_min ?? null,
       planned: plannedRow
         ? { id: plannedRow.id, name: plannedRow.name, category: plannedRow.category, focus: plannedRow.focus, stars: plannedRow.difficulty_stars, date: fmtDate(plannedRow.scheduled_at) }
         : null,
@@ -260,7 +292,9 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
     const { applyCoachDecision } = await import("@/lib/coach-snapshot");
     return applyCoachDecision(decideCoachSnapshot({
       firstName,
+      greeting,
       readiness: overview.readiness,
+      readinessScore: checkin?.readiness ?? null,
       recommendation,
       hasCheckin: Boolean(checkin),
       loggedSessions: overview.loggedSessions,
@@ -269,6 +303,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       smartyPick,
       insights,
       primaryGoal: profile?.primary_goal ?? null,
+      secondaryGoal: profile?.secondary_goal ?? null,
       fitnessLevel: profile?.fitness_level ?? profile?.experience ?? null,
       equipment: (profile?.preferred_equipment ?? []).filter(Boolean),
       upcoming: scheduled?.scheduled_at

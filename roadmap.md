@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Upgrade Smarty Coach into an immediate, account-safe daily briefing focused on readiness, last session, today’s target, both Training Profile goals and the evidence behind the recommendation.
+
 - [x] Add the old-style header Smarty Coach button and five-second personal recommendation window connected to profile, check-ins, history, comparisons and records; desktop/mobile active-member flow and access rules verified.
 
 - [x] Match full Insights across app/inbox/email/PDF, including thin-line load graphs; real account app/PDF and owner-only inbox/PDF checked at desktop/phone; email rendered and inspected; 285 tests passed. Live weekly delivery not triggered.

@@ -3,11 +3,14 @@ import { decideCoachSnapshot, type CoachSnapshotDecisionInput } from "./coach-sn
 
 const base: CoachSnapshotDecisionInput = {
   firstName: "Alex",
+  greeting: "Good morning, Alex.",
   readiness: { state: "Ready", reason: "Your recent load is manageable." },
+  readinessScore: 8,
   recommendation: { id: "steady.ok", message: "Train as planned.", reason: "Two sessions logged.", suggestedStars: null, priority: 5 },
   hasCheckin: true,
   loggedSessions: 2,
   primaryGoal: "strength",
+  secondaryGoal: "mobility",
   fitnessLevel: "intermediate",
   totalCompleted: 2,
   daysSinceLast: 2,
@@ -53,5 +56,10 @@ describe("returning members", () => {
   it("opens the recommended Smarty Workout", () => {
     const r = decideCoachSnapshot({ ...base, smartyPick: { id: "x", name: "Lift", category: "STRENGTH", stars: 2, minutes: 30, why: "Because." } });
     expect(r.action.to).toBe("/smarty-workouts/$workoutId");
+  });
+  it("exposes the real readiness score and both goals", () => {
+    const r = decideCoachSnapshot(base);
+    expect(r.readinessDisplay).toEqual({ label: "Ready", score: 8, basis: "check-in" });
+    expect(r.goals).toEqual({ primary: "strength", secondary: "mobility" });
   });
 });
