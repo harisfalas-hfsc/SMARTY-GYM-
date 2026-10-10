@@ -17,15 +17,10 @@
 
 - Smarty Ritual rotation is computed from app_settings.ritual_anchor_date + position (src/lib/ritual-schedule.ts); no nightly job, so page and admin schedule never drift.
 - Public PDFs are client-generated with every visible block — why: page parity.
-- CHALLENGE uses challengeBalanceViolation for full-body, majority-bodyweight, on-level benchmarks; filterPool prefers smarty_tags — why: consistent challenge structure.
-- Difficulty is prescription-only; beginners exclude advanced rows. flowSpecialtyViolation bans balance tools/isolation machines in flow/timed formats in pool and validator — why: one WOD/custom engine.
 - Smarty Check-ins scoring lives in src/lib/checkins/score.ts, computed server-side in checkins.functions.ts and read by coach via loadCheckinSignal — one source for UI, badges and coach.
 - Coach/admin/WOD are deterministic; header Coach is read-only, account-keyed and decided only by coach/recommend.ts — why: one rule order, no cross-account state.
 - Smarty Workouts share admin controls and local media; featured uses shared cards and locally preserved original dates — why: one collection, accurate newest order, no old-project dependency.
 - Players accept verified numeric/slug IDs; bulk publishing needs a full-library audit. Native startup stays black through the first React frame.
-- Closed exercise lists, all read by rules.ts: Activation/Cool Down named lists (prep-vocabulary.ts), Pilates, Mobility & Stability, Recovery (*-vocabulary.ts) — why: generator, pool, publish gate and audit share one rule.
-- All workout rules (exercise legality per section, workout structure, dose, duration) are decided only in src/lib/workout/rules.ts (built on doctrine.ts + prep-vocabulary.ts); the pool filter, validator and smarty-compliance audit all call it — why: one rule layer, so no check can apply half the rules.
-- Stored-workout repairs go through planMigration in src/lib/workout/smarty-compliance.ts; bannedSwap blocks unsafe substitutes — why: one repair path on the one rule engine, reversible via the pre-migration backup table.
 - Admin publish failures are explained by the reporting-only publicationRuleReports layer after the existing compliance gate decides legality — why: precise section/exercise/dose/equipment guidance cannot alter workout doctrine.
 - Member-only training data (workouts, set_logs, workout_feedback, workout_results) is gated by public.has_active_membership() in RLS plus requireActiveMembership (src/lib/membership.server.ts) in server functions — why: the server, not the screen, is the entitlement boundary; data is kept, only locked.
 - First Premium activation sends one immediate email/inbox welcome, visible in Admin automation; renewals never repeat it.
@@ -34,10 +29,8 @@
 - deleteManualWorkout is creator-only and covers the original plus all community copies: social data removed, rows with training activity tombstoned (deleted_at), others hard-deleted — why: training can't be undone.
 - Route-module download failures share one classifier for update notice and root error screen; handled failures skip crash-alert reporting, unrelated errors still report — why: refresh fixes missing files without false emails.
 - Confirmations/prompts use shared branded dialogs, never native boxes — why: consistent web/native look.
-- Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
 - App panels reuse footer store links/icons and exclude announcement controls from outside dismissal — why: consistent links, independent closing.
 - Mass emails use Resend dedupe; others use managed sending. All signatures share email-brand and EmailBrandFooter — why: reliable delivery, consistent branding.
 - Insights shares one report across app, inbox and email; no Insights PDF — why: parity/privacy.
 - Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs.
-- Live readiness is computed only by liveReadiness (src/lib/performance/readiness.ts) via loadLiveReadiness in performance.server.ts, used by Training Load, Insights and Coach — why: one moment-in-time score everywhere.
