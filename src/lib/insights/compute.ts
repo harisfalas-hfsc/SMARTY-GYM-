@@ -133,7 +133,6 @@ const TIP_LIBRARY: Record<string, (x: { n: number }) => InsightTip> = {
   library: () => ({ id: "library", emoji: "📚", title: "Learn a new exercise", body: "Browse the Exercise Library and add a movement you like to your favourites.", href: "/exercise-library", label: "Exercise Library" }),
 };
 /** Fixed filler order used to guarantee the minimum number of tips. */
-const FILLERS = ["explore", "ritual", "library"];
 
 /**
  * Priority order (first wins when more than five apply):
@@ -160,7 +159,6 @@ export function selectTips(f: {
   const recovery = !zero && f.maxHardRun >= TIP_RULES.hardDaysInARow && !f.hadRecovery;
   if (recovery) ids.push({ id: "recovery", n: f.maxHardRun });
   if (!zero && f.loadHigh) ids.push({ id: "load" });
-  if (zero) ids.push({ id: "restart" });
   if (!zero && !recovery && f.completed >= TIP_RULES.strengthShareMinWorkouts && f.strengthShare > TIP_RULES.strengthShare) ids.push({ id: "cardio" });
   if (!zero && f.mobilityMissing) ids.push({ id: "mobility" });
   if (!f.plannedAhead) ids.push({ id: "plan" });
@@ -168,10 +166,6 @@ export function selectTips(f: {
   if (!f.createdAny) ids.push({ id: "create" });
   if (!zero && f.completed >= TIP_RULES.shareMinWorkouts && !f.sharedAny) ids.push({ id: "share", n: f.completed });
   if (!zero && (f.streak ?? 0) >= TIP_RULES.streakDays) ids.push({ id: "streak", n: f.streak ?? 0 });
-  for (const filler of FILLERS) {
-    if (ids.length >= TIP_RULES.minTips) break;
-    if (!ids.some((x) => x.id === filler)) ids.push({ id: filler });
-  }
   return ids.slice(0, TIP_RULES.maxTips).map((x) => TIP_LIBRARY[x.id]!({ n: x.n ?? 0 }));
 }
 

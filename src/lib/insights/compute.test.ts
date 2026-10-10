@@ -45,11 +45,9 @@ describe("weekly insights — numbers", () => {
 });
 
 describe("weekly insights — coaching rules", () => {
-  it("zero-workout week: restart first, never load/share/streak/balance tips, no division by zero", () => {
+  it("zero-workout week: no workout pick (that is Coach's job), never load/share/streak/balance tips", () => {
     const ids = tipsFor({ completed: 0, loadHigh: true, strengthShare: 1, mobilityMissing: true, streak: 30, sharedAny: false });
-    expect(ids[0]).toBe("restart");
-    for (const banned of ["load", "share", "streak", "cardio", "mobility", "recovery"]) expect(ids).not.toContain(banned);
-    expect(ids.length).toBeGreaterThanOrEqual(3);
+    for (const banned of ["restart", "load", "share", "streak", "cardio", "mobility", "recovery"]) expect(ids).not.toContain(banned);
   });
   it("safety comes first and recovery suppresses the cardio tip", () => {
     const ids = tipsFor({ maxHardRun: 4, loadHigh: true, strengthShare: 1 });
@@ -65,8 +63,8 @@ describe("weekly insights — coaching rules", () => {
     expect(tipsFor({ streak: 6 })).not.toContain("streak");
     expect(tipsFor({ streak: 7 })).toContain("streak");
   });
-  it("always 3 to 5 tips, filled in fixed order", () => {
-    expect(tipsFor({})).toEqual(["explore", "ritual", "library"]);
+  it("never adds filler tips; at most 5 real ones", () => {
+    expect(tipsFor({})).toEqual([]);
     const many = tipsFor({ maxHardRun: 3, loadHigh: true, mobilityMissing: true, plannedAhead: false, checkinDays: 0, createdAny: false, sharedAny: false, completed: 6, streak: 9 });
     expect(many).toEqual(["recovery", "load", "mobility", "plan", "checkins"]);
   });
