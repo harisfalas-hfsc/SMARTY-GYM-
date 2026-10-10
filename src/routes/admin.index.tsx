@@ -22,6 +22,7 @@ import {
   Sparkles,
   HeartPulse,
   BarChart3,
+  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
@@ -50,6 +51,7 @@ import { AdminRitualsTab } from "@/components/admin/AdminRitualsTab";
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
 import { AdminHealthTab } from "@/components/admin/AdminHealthTab";
 import { AdminGenerationFailuresTab } from "@/components/admin/AdminGenerationFailuresTab";
+import { AdminUserActivityTab } from "@/components/admin/AdminUserActivityTab";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminPage,
@@ -80,7 +82,8 @@ type SectionKey =
   | "insights"
   | "cron"
   | "health"
-  | "generation";
+  | "generation"
+  | "activity";
 
 const SECTIONS: { key: SectionKey; label: string; description: string; Icon: LucideIcon }[] = [
   {
@@ -106,6 +109,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     label: "Insights",
     description: "Google Search clicks, searches, pages and countries",
     Icon: BarChart3,
+  },
+  {
+    key: "activity",
+    label: "User activity",
+    description: "Everything each member did, by date, with PDF download",
+    Icon: Activity,
   },
   {
     key: "workouts",
@@ -287,6 +296,7 @@ function AdminPage() {
           {section === "cron" && <AdminCronTab />}
           {section === "health" && <AdminHealthTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
+          {section === "activity" && <AdminUserActivityTab />}
         </div>
       ) : (
         <AdminHub onOpen={openSection} unreadMessages={unreadMessages} badges={badges} />
