@@ -13,6 +13,7 @@ import { template as workoutReadyCustomer } from './workout-ready-customer'
 import { template as workoutReadyAdmin } from './workout-ready-admin'
 import { template as paymentFailed } from './payment-failed'
 import { template as premiumWelcome } from './premium-welcome'
+import { template as userActivityReport } from './user-activity-report'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -41,4 +42,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'workout-ready-admin': workoutReadyAdmin,
   'payment-failed': paymentFailed,
   'premium-welcome': premiumWelcome,
+  'user-activity-report': userActivityReport,
 }

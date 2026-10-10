@@ -2668,6 +2668,7 @@ export type Database = {
           duration_label: string | null
           duration_min: number
           equipment: string[]
+          favorited_at: string | null
           finisher: string | null
           focus: string | null
           format: string | null
@@ -2721,6 +2722,7 @@ export type Database = {
           duration_label?: string | null
           duration_min?: number
           equipment?: string[]
+          favorited_at?: string | null
           finisher?: string | null
           focus?: string | null
           format?: string | null
@@ -2774,6 +2776,7 @@ export type Database = {
           duration_label?: string | null
           duration_min?: number
           equipment?: string[]
+          favorited_at?: string | null
           finisher?: string | null
           focus?: string | null
           format?: string | null
