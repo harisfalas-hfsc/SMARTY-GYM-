@@ -336,3 +336,13 @@ export const getSessionLoads = createServerFn({ method: "POST" })
       })),
     };
   });
+
+/** Readiness at this moment — recomputed on every call, never cached or averaged. */
+export const getLiveReadiness = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(() => ({}))
+  .handler(async ({ context }) => {
+    await (await import("@/lib/membership.server")).requireActiveMembership(context);
+    const { loadLiveReadiness } = await import("@/lib/performance.server");
+    return loadLiveReadiness(context.supabase as never, context.userId);
+  });
