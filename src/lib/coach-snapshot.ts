@@ -32,6 +32,22 @@ export type CoachInsightsSummary = {
 export type CoachSnapshot = {
   access: "ready" | "locked";
   firstName: string;
+  greeting: string;
+  readinessDisplay: {
+    label: string;
+    score: number | null;
+    basis: "check-in" | "training-history" | "limited";
+  };
+  goals: { primary: string | null; secondary: string | null };
+  todayFocus: {
+    purpose: string;
+    category: string | null;
+    bodyFocus: string | null;
+    intensity: string;
+    workoutName: string | null;
+    duration: number | null;
+    stars: number | null;
+  };
   headline: string;
   recommendation: string;
   lastSession: { name: string; date: string; facts: string[] } | null;
@@ -50,7 +66,9 @@ export type CoachSnapshot = {
 
 export type CoachSnapshotDecisionInput = {
   firstName: string;
+  greeting: string;
   readiness: { state: ReadinessState; reason: string };
+  readinessScore: number | null;
   recommendation: CoachRecommendation;
   hasCheckin: boolean;
   /** Sessions with logged data in the last 28 days (Training Load window). */
@@ -59,6 +77,7 @@ export type CoachSnapshotDecisionInput = {
   totalCompleted: number;
   daysSinceLast: number | null;
   primaryGoal: string | null;
+  secondaryGoal: string | null;
   fitnessLevel: string | null;
   equipment: string[];
   upcoming: { name: string; date: string } | null;
@@ -93,6 +112,22 @@ export function decideCoachSnapshot(input: CoachSnapshotDecisionInput): CoachSna
   const base = {
     access: "ready" as const,
     firstName: input.firstName,
+    greeting: input.greeting,
+    readinessDisplay: {
+      label: input.readiness.state,
+      score: input.readinessScore,
+      basis: input.readinessScore !== null ? "check-in" : input.loggedSessions > 0 ? "training-history" : "limited",
+    },
+    goals: { primary: readable(input.primaryGoal), secondary: readable(input.secondaryGoal) },
+    todayFocus: {
+      purpose: recovery ? "Recovery" : "Training",
+      category: input.smartyPick?.category ?? null,
+      bodyFocus: null,
+      intensity: recovery ? "Light" : "Controlled",
+      workoutName: input.smartyPick?.name ?? input.upcoming?.name ?? null,
+      duration: input.smartyPick?.minutes ?? null,
+      stars: input.smartyPick?.stars ?? null,
+    },
     lastSession: input.lastSession,
     comparison: input.comparison,
     personalRecord: input.personalRecord,
@@ -197,5 +232,14 @@ export function applyCoachDecision(snap: CoachSnapshot, d: CoachDecision): Coach
       out.action = { label: "Open Smarty Ritual", to: "/smarty-ritual" };
       break;
   }
+  out.todayFocus = {
+    purpose: d.purpose === "intro" ? "Getting started" : d.purpose.charAt(0).toUpperCase() + d.purpose.slice(1),
+    category: d.workout?.category ?? d.planned?.category ?? d.category,
+    bodyFocus: d.workout?.focus ?? d.planned?.focus ?? null,
+    intensity: d.intensity === "rest" ? "Rest" : d.intensity.charAt(0).toUpperCase() + d.intensity.slice(1),
+    workoutName: d.workout?.name ?? d.planned?.name ?? null,
+    duration: d.workout?.minutes ?? null,
+    stars: d.workout?.stars ?? d.planned?.stars ?? null,
+  };
   return out;
 }

@@ -9,7 +9,10 @@ export async function signOutAndClearDevice(
   _email?: string | null,
 ): Promise<void> {
   try {
-    if (userId) localStorage.removeItem(`smarty:profile:${userId}`);
+    if (userId) {
+      localStorage.removeItem(`smarty:profile:${userId}`);
+      localStorage.removeItem(`smarty:coach-snapshot:v2:${userId}`);
+    }
   } catch {
     /* clearing is best-effort, signing out is not */
   }

@@ -3,11 +3,14 @@ import { decideCoachSnapshot, type CoachSnapshotDecisionInput } from "./coach-sn
 
 const base: CoachSnapshotDecisionInput = {
   firstName: "Alex",
+  greeting: "Good morning, Alex.",
   readiness: { state: "Ready", reason: "Your recent load is manageable." },
+  readinessScore: 8,
   recommendation: { id: "steady.ok", message: "Train as planned.", reason: "Two sessions logged.", suggestedStars: null, priority: 5 },
   hasCheckin: true,
   loggedSessions: 2,
   primaryGoal: "strength",
+  secondaryGoal: "mobility",
   fitnessLevel: "intermediate",
   totalCompleted: 2,
   daysSinceLast: 2,

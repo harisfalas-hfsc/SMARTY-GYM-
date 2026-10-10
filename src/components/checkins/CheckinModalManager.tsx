@@ -35,6 +35,7 @@ export function CheckinModalManager() {
       setToday(s.date);
       const t = s.today;
       const key = (k: string) => `checkin_${k}_dismissed_${s.date}`;
+      if (document.documentElement.dataset.smartyCoach === "open") return;
       if (s.window.isMorning && !t?.morning_completed && !t?.morning_modal_shown && !localStorage.getItem(key("morning")))
         setPrompt("morning");
       else if (s.window.isNight && !t?.night_completed && !t?.night_modal_shown && !localStorage.getItem(key("night")))
@@ -47,7 +48,12 @@ export function CheckinModalManager() {
   useEffect(() => {
     void check();
     const id = setInterval(() => void check(), 5 * 60 * 1000);
-    return () => clearInterval(id);
+    const afterCoach = () => void check();
+    window.addEventListener("smarty:coach-closed", afterCoach);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener("smarty:coach-closed", afterCoach);
+    };
   }, [check]);
 
   const close = (then: "form" | "later") => {

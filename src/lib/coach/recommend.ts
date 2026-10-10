@@ -50,6 +50,8 @@ export type CompletedSession = {
   rpe: number | null;
   /** Local calendar day yyyy-mm-dd. */
   day: string;
+  /** Latest post-workout feeling for this attempt, when recorded. */
+  feeling?: string | null;
 };
 
 export type LibraryWorkout = {
@@ -81,7 +83,10 @@ export type CoachEngineInput = {
   /** Smarty Workout ids/names ever completed by the member. */
   everDone: { ids: string[]; names: string[] };
   level: "beginner" | "intermediate" | "advanced" | null;
-  goalCategory: string | null;
+  primaryGoalCategory: string | null;
+  secondaryGoalCategory: string | null;
+  /** Recorded profile limitations; used as safety evidence, never guessed. */
+  limitations: string[];
   equipment: string[];
   typicalMinutes: number | null;
   planned: PlannedSession | null;
@@ -201,6 +206,14 @@ export function recoveryGate(i: CoachEngineInput): Gate {
     lower("moderate"); codes.push("checkin.poor_trend");
     why.push(`${poorDays} of your last ${THRESHOLDS.priorCheckinDays} check-ins showed poor recovery signals.`);
   }
+  const latestFeeling = i.recent[0]?.feeling?.toLowerCase() ?? null;
+  if (latestFeeling === "exhausted") {
+    lower("light"); forceRecovery = true; codes.push("feedback.exhausted");
+    why.push("You reported feeling exhausted after your last workout.");
+  } else if (latestFeeling === "tired") {
+    lower("moderate"); codes.push("feedback.tired");
+    why.push("You reported feeling tired after your last workout, so intensity stays controlled.");
+  }
   return { cap, forceRecovery, codes, why };
 }
 
@@ -217,6 +230,7 @@ type PurposePlan = {
 
 export function selectPurpose(i: CoachEngineInput, gate: Gate): PurposePlan {
   const base = { preferFocus: [] as string[], avoidFocus: [] as string[], codes: [] as string[], why: [] as string[] };
+  const goals = [i.primaryGoalCategory, i.secondaryGoalCategory].filter((value): value is string => Boolean(value));
   if (gate.forceRecovery) return { ...base, purpose: "recovery", categories: RECOVERY_CATEGORIES, cap: "light" };
 
   const last = i.recent[0] ?? null;
@@ -224,13 +238,13 @@ export function selectPurpose(i: CoachEngineInput, gate: Gate): PurposePlan {
     if (i.totalCompleted === 0) {
       return {
         ...base, purpose: "intro", cap: "light",
-        categories: [...new Set([...(i.goalCategory ? [i.goalCategory === "MUSCLE BUILDING" ? "STRENGTH" : i.goalCategory] : []), "STRENGTH", "CARDIO", "MOBILITY & STABILITY"])],
+        categories: [...new Set([...goals.map((goal) => goal === "MUSCLE BUILDING" ? "STRENGTH" : goal), "STRENGTH", "CARDIO", "MOBILITY & STABILITY"])],
         codes: ["history.none"], why: ["No completed workouts yet, so an introductory 1-star session is suggested — no assumptions about your ability."],
       };
     }
     return {
       ...base, purpose: "goal", cap: gate.cap === "hard" ? "moderate" : gate.cap,
-      categories: i.goalCategory ? [i.goalCategory] : ["STRENGTH", "CARDIO"],
+      categories: goals.length ? goals : ["STRENGTH", "CARDIO"],
       codes: ["history.restart"], why: ["No completed workout in the last 14 days, so the next session stays controlled."],
     };
   }
@@ -261,7 +275,7 @@ export function selectPurpose(i: CoachEngineInput, gate: Gate): PurposePlan {
   // Mobility, Pilates, Recovery → resume normal training.
   return {
     ...base, purpose: "goal", cap: gate.cap,
-    categories: i.goalCategory ? [i.goalCategory === "MUSCLE BUILDING" ? "STRENGTH" : i.goalCategory] : ["STRENGTH", "CARDIO"],
+    categories: goals.length ? goals.map((goal) => goal === "MUSCLE BUILDING" ? "STRENGTH" : goal) : ["STRENGTH", "CARDIO"],
     codes: ["rotation.resume"], why: [`Your last session was ${lastName}, so normal training resumes.`],
   };
 }
@@ -291,11 +305,13 @@ export function rankLibrary(i: CoachEngineInput, plan: PurposePlan): LibraryWork
   });
 
   const target = maxStars;
-  const goal = i.goalCategory === "MUSCLE BUILDING" ? "STRENGTH" : i.goalCategory;
+  const primaryGoal = i.primaryGoalCategory === "MUSCLE BUILDING" ? "STRENGTH" : i.primaryGoalCategory;
+  const secondaryGoal = i.secondaryGoalCategory === "MUSCLE BUILDING" ? "STRENGTH" : i.secondaryGoalCategory;
   const key = (w: LibraryWorkout): Array<number | string> => [
     cats.indexOf(w.category.toUpperCase()) === 0 && plan.purpose === "recovery" ? 0 : 1,
     plan.preferFocus.length ? (plan.preferFocus.includes(w.focus?.toUpperCase() ?? "") ? 0 : 1) : 0,
-    goal && w.category.toUpperCase() === goal ? 0 : 1,
+    primaryGoal && w.category.toUpperCase() === primaryGoal ? 0 : 1,
+    secondaryGoal && w.category.toUpperCase() === secondaryGoal ? 0 : 1,
     everIds.has(w.id) || everNames.has(w.name) ? 1 : 0,
     Math.abs(w.stars - target),
     i.typicalMinutes ? Math.abs(w.minutes - i.typicalMinutes) : 0,

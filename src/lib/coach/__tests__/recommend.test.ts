@@ -24,7 +24,9 @@ const base: CoachEngineInput = {
   totalCompleted: 10,
   everDone: { ids: [], names: [] },
   level: "intermediate",
-  goalCategory: "STRENGTH",
+  primaryGoalCategory: "STRENGTH",
+  secondaryGoalCategory: null,
+  limitations: [],
   equipment: [],
   typicalMinutes: 30,
   planned: null,
@@ -146,5 +148,26 @@ describe("Smarty Coach engine", () => {
   it("conflict: equipment not owned is excluded", () => {
     const d = run({ library: [W("x", "STRENGTH", 2, "UPPER BODY", ["Barbell"]), W("y", "STRENGTH", 2, "UPPER BODY")] });
     expect(d.workout?.id).toBe("y");
+  });
+  it("uses the primary goal first and the secondary goal as a tie-breaker", () => {
+    const d = run({
+      recent: [],
+      totalCompleted: 4,
+      primaryGoalCategory: "CARDIO",
+      secondaryGoalCategory: "STRENGTH",
+      library: [W("strength", "STRENGTH", 2), W("cardio", "CARDIO", 2)],
+    });
+    expect(d.workout?.category).toBe("CARDIO");
+  });
+  it("never lets a goal override recovery", () => {
+    const d = run({ primaryGoalCategory: "STRENGTH", checkin: poorCheckin });
+    expect(d.purpose).toBe("recovery");
+    expect(d.category).not.toBe("STRENGTH");
+  });
+  it("uses exhausted post-workout feedback as recovery evidence", () => {
+    const recent = [{ ...base.recent[0], feeling: "Exhausted" }];
+    const d = run({ recent });
+    expect(d.reasonCodes).toContain("feedback.exhausted");
+    expect(d.purpose).toBe("recovery");
   });
 });

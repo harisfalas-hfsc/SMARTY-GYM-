@@ -22,9 +22,16 @@ export function MobileAppPopup() {
     };
     update();
     media.addEventListener("change", update);
-    const timer = window.setTimeout(() => {
+    let timer = window.setTimeout(() => {
       setMounted(true);
-      if (media.matches) setOpen(true);
+      const tryOpen = () => {
+        if (document.documentElement.dataset.smartyCoach === "open" || document.querySelector('[role="dialog"]')) {
+          timer = window.setTimeout(tryOpen, 1_000);
+          return;
+        }
+        if (media.matches) setOpen(true);
+      };
+      tryOpen();
     }, 10000);
     return () => {
       window.clearTimeout(timer);
