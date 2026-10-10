@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getMyInsights } from "@/lib/weekly-insights.functions";
 import { getLiveReadiness } from "@/lib/performance.functions";
+import { getCoachSnapshot } from "@/lib/coach.functions";
+import type { CoachSnapshot } from "@/lib/coach-snapshot";
 import { titleCase, type WeeklyInsights } from "@/lib/insights/compute";
 import { MetricLineChart } from "@/components/performance/MetricLineChart";
 import { reportChartGeometry } from "@/lib/report-chart";
@@ -34,6 +36,28 @@ function Card({ title, icon: Icon, children, tone = "text-primary" }: { title: s
       </h3>
       {children}
     </section>
+  );
+}
+
+/** Today's pick — the exact same decision as the Smarty Coach pop-up. */
+function CoachTodayTip() {
+  const fetchSnapshot = useServerFn(getCoachSnapshot);
+  const [snap, setSnap] = useState<CoachSnapshot | null>(null);
+  useEffect(() => {
+    let active = true;
+    fetchSnapshot().then((s) => { if (active) setSnap(s as CoachSnapshot); }).catch(() => undefined);
+    return () => { active = false; };
+  }, [fetchSnapshot]);
+  if (!snap || snap.access !== "ready") return null;
+  const name = snap.todayFocus.workoutName;
+  const href = snap.action.params?.workoutId ? `/smarty-workouts/${snap.action.params.workoutId}` : snap.action.to;
+  return (
+    <div className="rounded-xl border-2 border-primary p-3 md:col-span-2">
+      <p className="font-bold">🎯 Today: {name ?? snap.headline}</p>
+      {snap.todayFocus.category ? <p className="text-xs text-muted-foreground">{titleCase(snap.todayFocus.category)}{snap.todayFocus.duration ? ` · ${snap.todayFocus.duration} min` : ""}</p> : null}
+      <p className="mt-1 text-sm text-muted-foreground">{snap.reasons[0] ?? snap.recommendation}</p>
+      <a href={href} className="mt-2 inline-block text-sm font-bold text-primary">{snap.action.label} →</a>
+    </div>
   );
 }
 
@@ -248,6 +272,7 @@ export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
 
           <Card title="Smarty Coach suggestions" icon={Brain}>
             <div className="grid gap-3 md:grid-cols-2">
+              {report ? null : <CoachTodayTip />}
               {data.tips.map((t) => (
                 <div key={t.id} className="rounded-xl border border-border border-l-4 border-l-primary p-3">
                   <p className="font-bold">{t.emoji} {t.title}</p>
