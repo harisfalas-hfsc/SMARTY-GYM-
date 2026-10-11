@@ -372,18 +372,42 @@ export async function runHealthCheck(
     const configs = await getCronConfigs(db);
     const now = Date.now();
     const late: string[] = [];
+    const failedRecently: string[] = [];
     const checked: string[] = [];
+    // last_run_on only moves on success, so a job that ran on schedule but
+    // failed would look "overdue". Consider the latest attempt from cron_runs
+    // too; a recent failed attempt is reported as failed, not overdue.
+    const { data: attempts } = await db
+      .from("cron_runs")
+      .select("job_key,status,ran_at")
+      .gte("ran_at", new Date(now - 10 * 86400000).toISOString())
+      .order("ran_at", { ascending: false })
+      .limit(500);
+    const latestAttempt = new Map<string, { status: string; ran_at: string }>();
+    for (const r of (attempts as { job_key: string; status: string; ran_at: string }[] | null) ??
+      []) {
+      if (!latestAttempt.has(r.job_key))
+        latestAttempt.set(r.job_key, { status: r.status, ran_at: r.ran_at });
+    }
     for (const c of Object.values(configs)) {
       const def = CRON_JOB_BY_KEY[c.key];
       if (!c.enabled || !def || (def.timing !== "fixed" && def.timing !== "weekly")) continue;
       if (c.key === "health-check") continue;
       checked.push(def.label);
       const maxDays = def.timing === "weekly" ? 8 : 2;
-      const last = c.last_run_on ? Date.parse(`${c.last_run_on}T00:00:00Z`) : 0;
-      if (!last || now - last > maxDays * 86400000)
+      const lastSuccess = c.last_run_on ? Date.parse(`${c.last_run_on}T00:00:00Z`) : 0;
+      const attempt = latestAttempt.get(c.key);
+      const lastAttempt = attempt ? Date.parse(attempt.ran_at) : 0;
+      const last = Math.max(lastSuccess, lastAttempt);
+      if (!last || now - last > maxDays * 86400000) {
         late.push(`${def.label} (last run ${c.last_run_on ?? "never"})`);
+      } else if (attempt && attempt.status === "failed" && lastAttempt >= lastSuccess) {
+        failedRecently.push(`${def.label} (ran on time but failed)`);
+      }
     }
     if (late.length) return ["fail", `Overdue: ${late.join(", ")}`];
+    if (failedRecently.length)
+      return ["warn", `Ran on time; latest run failed: ${failedRecently.join(", ")}`];
     return ["pass", `${checked.length} scheduled job(s) ran on time.`];
   });
 
