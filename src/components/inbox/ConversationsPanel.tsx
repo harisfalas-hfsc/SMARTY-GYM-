@@ -10,17 +10,13 @@ import {
   MessageSquare,
   Send,
   Trash2,
+  X,
 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   deleteMyThreads,
   listMyThreads,
@@ -62,8 +58,9 @@ export function ConversationsPanel({
   const [newSubject, setNewSubject] = useState("");
   const [newBody, setNewBody] = useState("");
   const [composing, setComposing] = useState(Boolean(defaultComposing));
-  const [readFilter, setReadFilter] = useState<"all" | "unread" | "read">("all");
-  const [sortOrder, setSortOrder] = useState<"latest" | "oldest">("latest");
+  const [unreadOnly, setUnreadOnly] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [confirm, setConfirm] = useState<string[] | null>(null);
 
   const reload = useCallback(async () => {
     try {
@@ -79,18 +76,24 @@ export function ConversationsPanel({
   }, [reload]);
 
   const unread = useMemo(() => threads.filter((t) => t.user_unread).length, [threads]);
-  const visibleThreads = useMemo(() => {
-    const filtered = threads.filter((thread) => {
-      if (readFilter === "unread") return thread.user_unread;
-      if (readFilter === "read") return !thread.user_unread;
-      return true;
+  const visibleThreads = useMemo(
+    () =>
+      threads
+        .filter((t) => (unreadOnly ? t.user_unread : true))
+        .sort((a, b) => new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()),
+    [threads, unreadOnly],
+  );
+  const visibleIds = useMemo(() => visibleThreads.map((t) => t.id), [visibleThreads]);
+  const picked = useMemo(() => visibleIds.filter((id) => selected.has(id)), [visibleIds, selected]);
+  const allPicked = visibleIds.length > 0 && picked.length === visibleIds.length;
+  const toggleOne = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
     });
-    return [...filtered].sort((a, b) => {
-      const difference =
-        new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime();
-      return sortOrder === "latest" ? difference : -difference;
-    });
-  }, [readFilter, sortOrder, threads]);
+  const toggleAll = () => setSelected(allPicked ? new Set() : new Set(visibleIds));
 
   useEffect(() => {
     onUnread?.(unread);
@@ -140,115 +143,98 @@ export function ConversationsPanel({
     void reload();
   }
 
-  async function toggleRead(t: SupportThread) {
-    const read = t.user_unread;
-    setThreads((prev) => prev.map((x) => (x.id === t.id ? { ...x, user_unread: !read } : x)));
-    announceInboxChanged(read ? { readMessageIds: [t.id] } : { unreadMessageIds: [t.id] });
-    try {
-      await setRead({ data: { ids: [t.id], read } });
-      announceInboxChanged();
-    } catch {
-      toast.error("Could not update that conversation.");
-    }
-  }
-
-  async function markAllRead() {
-    const ids = threads.filter((t) => t.user_unread).map((t) => t.id);
+  async function bulkRead(read: boolean, ids = picked) {
     if (!ids.length) return;
-    setThreads((prev) => prev.map((t) => ({ ...t, user_unread: false })));
-    announceInboxChanged({ readMessageIds: ids });
+    setThreads((prev) => prev.map((t) => (ids.includes(t.id) ? { ...t, user_unread: !read } : t)));
+    setSelected(new Set());
+    announceInboxChanged(read ? { readMessageIds: ids } : { unreadMessageIds: ids });
     try {
-      await setRead({ data: { ids, read: true } });
+      await setRead({ data: { ids, read } });
       announceInboxChanged();
+      toast.success(`${ids.length} marked as ${read ? "read" : "unread"}`);
     } catch {
       toast.error("Could not update those conversations.");
+      void reload();
     }
   }
 
-  async function deleteAll() {
-    const ids = threads.map((t) => t.id);
+  async function doDelete() {
+    const ids = confirm ?? [];
+    setConfirm(null);
     if (!ids.length) return;
-    setThreads([]);
-    setOpenId(null);
-    announceInboxChanged({ removedMessageIds: ids, messagesUnread: 0 });
+    setThreads((prev) => prev.filter((t) => !ids.includes(t.id)));
+    setSelected(new Set());
+    if (openId && ids.includes(openId)) setOpenId(null);
+    announceInboxChanged({ removedMessageIds: ids });
     try {
       await removeThreads({ data: { ids } });
       announceInboxChanged();
-      toast.success("Conversations deleted");
+      toast.success(`${ids.length} conversation${ids.length === 1 ? "" : "s"} deleted`);
     } catch {
       toast.error("Could not delete those conversations.");
       void reload();
     }
   }
 
-  async function deleteOne(id: string) {
-    setThreads((prev) => prev.filter((t) => t.id !== id));
-    if (openId === id) setOpenId(null);
-    announceInboxChanged({ removedMessageIds: [id] });
-    try {
-      await removeThreads({ data: { ids: [id] } });
-      announceInboxChanged();
-    } catch {
-      toast.error("Could not delete that conversation.");
-      void reload();
-    }
-  }
-
   return (
     <div>
-      <div className="mb-4 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-        <Button
-          variant={composing ? "default" : "secondary"}
-          onClick={() => setComposing((v) => !v)}
-          className="rounded-2xl"
-          aria-pressed={composing}
+      <Button
+        variant={composing ? "secondary" : "default"}
+        onClick={() => setComposing((v) => !v)}
+        className="mb-3 h-10 w-full rounded-2xl"
+        aria-pressed={composing}
+      >
+        <MessageSquare className="mr-2 h-4 w-4" /> {composing ? "Cancel" : "Write to the team"}
+      </Button>
+
+      <div className="mb-3 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => setUnreadOnly(false)}
+          className={`flex h-10 items-center justify-center rounded-2xl text-sm font-bold ${
+            unreadOnly ? "bg-secondary text-secondary-foreground" : "bg-primary text-primary-foreground"
+          }`}
         >
-          <MessageSquare className="mr-2 h-4 w-4" /> {composing ? "Cancel" : "Write to the team"}
-        </Button>
-        <Button
-          variant="secondary"
-          className="rounded-2xl"
-          onClick={markAllRead}
-          disabled={!unread}
+          All ({threads.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setUnreadOnly(true)}
+          className={`flex h-10 items-center justify-center rounded-2xl text-sm font-bold ${
+            unreadOnly ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"
+          }`}
         >
-          <MailOpen className="mr-2 h-4 w-4" /> Mark all read
-        </Button>
-        <Button
-          variant="ghost"
-          className="col-span-2 rounded-2xl text-destructive sm:col-span-1"
-          onClick={deleteAll}
-          disabled={!threads.length}
-        >
-          <Trash2 className="mr-2 h-4 w-4" /> Delete all
-        </Button>
+          Unread ({unread})
+        </button>
       </div>
 
-      <div className="mb-4 grid grid-cols-2 gap-2" aria-label="Message filters">
-        <Select
-          value={readFilter}
-          onValueChange={(value) => setReadFilter(value as typeof readFilter)}
+      <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border-2 border-blue-400 bg-background p-2">
+        <div
+          className={`flex h-9 shrink-0 items-center gap-2 rounded-xl px-2 text-xs font-bold ${
+            visibleIds.length ? "" : "pointer-events-none opacity-40"
+          }`}
         >
-          <SelectTrigger className="h-10 rounded-2xl border-2 border-primary bg-card">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All messages</SelectItem>
-            <SelectItem value="unread">Unread</SelectItem>
-            <SelectItem value="read">Read</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select
-          value={sortOrder}
-          onValueChange={(value) => setSortOrder(value as typeof sortOrder)}
-        >
-          <SelectTrigger className="h-10 rounded-2xl border-2 border-primary bg-card">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="latest">Latest first</SelectItem>
-            <SelectItem value="oldest">Oldest first</SelectItem>
-          </SelectContent>
-        </Select>
+          <Checkbox checked={allPicked} onCheckedChange={toggleAll} aria-label="Select all" disabled={!visibleIds.length} />
+          <button type="button" onClick={toggleAll} className="whitespace-nowrap">
+            {picked.length ? `${picked.length} selected` : "Select all"}
+          </button>
+        </div>
+        <div className="ml-auto flex shrink-0 items-center gap-1.5">
+          <button type="button" disabled={!picked.length} onClick={() => bulkRead(true)} aria-label="Mark selected as read" className="grid h-10 w-10 place-items-center rounded-xl bg-secondary text-secondary-foreground disabled:opacity-40">
+            <MailOpen className="h-4 w-4" />
+          </button>
+          <button type="button" disabled={!picked.length} onClick={() => bulkRead(false)} aria-label="Mark selected as unread" className="grid h-10 w-10 place-items-center rounded-xl bg-secondary text-secondary-foreground disabled:opacity-40">
+            <Mail className="h-4 w-4" />
+          </button>
+          <button type="button" disabled={!picked.length} onClick={() => setConfirm(picked)} aria-label="Delete selected" className="grid h-10 w-10 place-items-center rounded-xl bg-destructive/10 text-destructive disabled:opacity-40">
+            <Trash2 className="h-4 w-4" />
+          </button>
+          {picked.length > 0 && (
+            <button type="button" onClick={() => setSelected(new Set())} aria-label="Clear selection" className="grid h-10 w-10 place-items-center rounded-xl bg-secondary text-secondary-foreground">
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       {composing && (
@@ -288,13 +274,13 @@ export function ConversationsPanel({
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </div>
       ) : visibleThreads.length === 0 ? (
-        <p className="rounded-2xl border-2 border-blue-400 p-6 text-center text-sm text-muted-foreground">
+        <p className="rounded-2xl border-2 border-blue-400 p-8 text-center text-sm text-muted-foreground">
           {threads.length
             ? "No messages match this filter."
             : "No conversations yet. Tap \"Write to the team\" to send us a message."}
         </p>
       ) : (
-        <ul className="space-y-3">
+        <ul className="space-y-2">
           {visibleThreads.map((t) => {
             const open = openId === t.id;
             const messages = t.messages ?? [];
@@ -307,21 +293,24 @@ export function ConversationsPanel({
             return (
               <li
                 key={t.id}
-                className="overflow-hidden rounded-2xl border-2 border-primary bg-card"
+                className={`overflow-hidden rounded-2xl border transition ${
+                  selected.has(t.id)
+                    ? "border-primary bg-primary/10"
+                    : t.user_unread
+                      ? "border-primary/40 bg-primary/[0.04]"
+                      : "border-border bg-background"
+                }`}
               >
+                <div className="flex items-start gap-3 p-3">
+                <div className="grid h-9 w-9 shrink-0 place-items-center">
+                  <Checkbox checked={selected.has(t.id)} onCheckedChange={() => toggleOne(t.id)} aria-label="Select conversation" />
+                </div>
                 <button
                   type="button"
                   onClick={() => openThread(t)}
-                  className="flex w-full items-start gap-3 p-3 text-left sm:p-4"
+                  className="flex min-w-0 flex-1 items-start gap-3 text-left"
                   aria-expanded={open}
                 >
-                  <span className="mt-0.5 text-primary">
-                    {t.user_unread ? (
-                      <Mail className="h-4 w-4" />
-                    ) : (
-                      <MailOpen className="h-4 w-4" />
-                    )}
-                  </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-bold">
                       {t.user_unread && <span className="mr-1 text-primary">•</span>}
@@ -348,6 +337,7 @@ export function ConversationsPanel({
                     <ChevronDown className="mt-1 h-4 w-4 shrink-0 text-primary" />
                   )}
                 </button>
+                </div>
 
                 {open && (
                   <div className="space-y-3 border-t border-border p-4">
@@ -397,14 +387,14 @@ export function ConversationsPanel({
                       <Button
                         variant="secondary"
                         className="rounded-2xl"
-                        onClick={() => toggleRead(t)}
+                        onClick={() => bulkRead(t.user_unread, [t.id])}
                       >
                         Mark as {t.user_unread ? "read" : "unread"}
                       </Button>
                       <Button
                         variant="ghost"
                         className="rounded-2xl text-destructive"
-                        onClick={() => deleteOne(t.id)}
+                        onClick={() => setConfirm([t.id])}
                       >
                         <Trash2 className="mr-2 h-4 w-4" /> Delete
                       </Button>
@@ -416,6 +406,18 @@ export function ConversationsPanel({
           })}
         </ul>
       )}
+      <AppConfirmDialog
+        open={confirm !== null}
+        onOpenChange={(open) => !open && setConfirm(null)}
+        title="Delete conversations?"
+        description={confirm?.length === 1
+          ? "This conversation will be permanently deleted."
+          : `${confirm?.length ?? 0} conversations will be permanently deleted.`}
+        confirmLabel="Delete"
+        cancelLabel="Keep conversations"
+        tone="danger"
+        onConfirm={doDelete}
+      />
     </div>
   );
 }
