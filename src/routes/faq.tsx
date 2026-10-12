@@ -40,7 +40,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "What's included in the subscription?",
-    a: "Up to 2 workouts per day, access to ready Smarty Workouts, the daily Smarty Ritual, Smarty Check-ins, the full exercise library, all training tools, your logbook, progress tracking and every previous workout you've created.",
+    a: "Every ready Smarty Workout — more than 530 across nine categories — open to train, the daily Workout of the Day, up to 2 Smarty Coach-built workouts per day plus unlimited Build It Yourself sessions, the daily Smarty Ritual, Smarty Check-ins and your full logbook: progress tracking, Training Load, Insights and every workout you've created. The training tools, the blog articles and the Exercise Library stay free for everyone; membership unlocks the training itself.",
   },
   {
     q: "What are Smarty Workouts?",
