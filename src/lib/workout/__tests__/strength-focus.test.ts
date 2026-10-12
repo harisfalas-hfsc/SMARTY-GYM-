@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { focusBreaks, focusGroup } from "../strength-focus";
+import { focusBreaks, focusGroup, focusGroups } from "../strength-focus";
+import { ALL_PRIORITY_NAMES, PRIORITY_MOVEMENT_PATTERN } from "../priority";
 
 describe("strength focus", () => {
   it("classifies push and pull correctly", () => {
@@ -17,5 +18,26 @@ describe("strength focus", () => {
   it("accepts a correct Low Push & Upper Pull workout", () => {
     const main = ["bodyweight standing calf raise", "inverted row", "suspended row", "walking lunge", "forward lunge", "one leg squat"];
     expect(focusBreaks("LOW PUSH & UPPER PULL", main, ["inverted row", "crunch floor", "quads (bodyweight squat)"])).toEqual([]);
+  });
+  it("every coach-classified movement is one of the coach's priority exercises", () => {
+    for (const name of Object.keys(PRIORITY_MOVEMENT_PATTERN)) expect(ALL_PRIORITY_NAMES).toContain(name);
+  });
+  it("applies the coach's movement-pattern classification", () => {
+    expect(focusGroups("Shoulder Tap")).toEqual(["upper push"]);
+    expect(focusGroups("Pec Deck")).toEqual(["upper push"]);
+    expect(focusGroups("Cable Lateral Raise")).toEqual(["upper push"]);
+    expect(focusGroups("Hip Thrust")).toEqual(["lower pull"]);
+    expect(focusGroups("Inchworm")).toEqual(["core"]);
+    // Conditioning moves the coach lists under Core are NOT core for the engine.
+    expect(focusGroups("Burpee")).toEqual(["conditioning"]);
+    expect(focusGroups("Shuttle Run")).toEqual(["conditioning"]);
+    expect(focusGroups("Medicine Ball Slam")).toEqual(["conditioning"]);
+    // Compound thrusters count as both lower-body and upper-body push.
+    expect(focusGroups("Dumbbell Thruster")).toEqual(["lower push", "upper push"]);
+    expect(focusGroups("Medicine Ball Squat to Press")).toEqual(["lower push", "upper push"]);
+  });
+  it("lets a compound thruster satisfy either side of a focus", () => {
+    expect(focusBreaks("LOW PUSH & UPPER PULL", ["dumbbell thruster", "inverted row", "suspended row"], [])).toEqual([]);
+    expect(focusBreaks("LOW PULL & UPPER PUSH", ["barbell deadlift", "dumbbell thruster", "dumbbell bench press"], [])).toEqual([]);
   });
 });

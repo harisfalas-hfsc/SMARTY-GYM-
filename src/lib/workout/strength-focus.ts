@@ -1,6 +1,10 @@
 // Strength focus rules: a Strength workout's focus label (e.g. "LOW PUSH & UPPER PULL")
 // decides which movement groups may appear in its Main Workout and Finisher.
-// Pure: classification is read from the exercise name only.
+// Pure: classification is read from the exercise name only. Coach Haris's
+// hand-classified priority movements (PRIORITY_MOVEMENT_PATTERN) win over the
+// regex rules below.
+
+import { PRIORITY_ALIASES, PRIORITY_MOVEMENT_PATTERN } from "./priority";
 
 export type FocusGroup = "upper push" | "upper pull" | "lower push" | "lower pull" | "core" | "conditioning" | "other";
 
@@ -16,6 +20,32 @@ const RULES: Array<[FocusGroup, RegExp]> = [
 
 export function focusGroup(name: string): FocusGroup {
   return RULES.find(([, re]) => re.test(name))?.[0] ?? "other";
+}
+
+/** Coach-classified movements, keyed by lowercase coach name and library alias. */
+let coachLookup: Map<string, FocusGroup[]> | null = null;
+function coachPatterns(): Map<string, FocusGroup[]> {
+  if (coachLookup) return coachLookup;
+  coachLookup = new Map();
+  for (const [coach, groups] of Object.entries(PRIORITY_MOVEMENT_PATTERN)) {
+    const g = Array.isArray(groups) ? groups : [groups];
+    coachLookup.set(coach.toLowerCase(), g);
+    for (const alias of PRIORITY_ALIASES[coach] ?? []) {
+      if (!coachLookup.has(alias.toLowerCase())) coachLookup.set(alias.toLowerCase(), g);
+    }
+  }
+  return coachLookup;
+}
+
+/**
+ * Every movement group an exercise belongs to. Compound movements (thrusters,
+ * squat-to-press) return both groups; everything else returns one. The coach's
+ * hand classification wins over the regex classifier.
+ */
+export function focusGroups(name: string): FocusGroup[] {
+  const classified = coachPatterns().get(name.trim().toLowerCase());
+  if (classified) return classified;
+  return [focusGroup(name)];
 }
 
 type FocusRule = { main: FocusGroup[]; finisher: FocusGroup[]; need: FocusGroup[][] };
@@ -40,11 +70,17 @@ export function focusBreaks(focus: string | null | undefined, main: string[], fi
   const rule = FOCUS_RULES[normFocus(focus)];
   if (!rule) return [];
   const out: string[] = [];
-  for (const n of main) if (!rule.main.includes(focusGroup(n))) out.push(`"${n}" (${focusGroup(n)}) does not belong in a ${normFocus(focus)} Main Workout`);
-  for (const n of finisher) if (!rule.finisher.includes(focusGroup(n))) out.push(`"${n}" (${focusGroup(n)}) does not belong in a ${normFocus(focus)} Finisher`);
+  for (const n of main) {
+    const g = focusGroups(n);
+    if (!g.some((x) => rule.main.includes(x))) out.push(`"${n}" (${g.join(" + ")}) does not belong in a ${normFocus(focus)} Main Workout`);
+  }
+  for (const n of finisher) {
+    const g = focusGroups(n);
+    if (!g.some((x) => rule.finisher.includes(x))) out.push(`"${n}" (${g.join(" + ")}) does not belong in a ${normFocus(focus)} Finisher`);
+  }
   const min = main.length >= 4 && rule.need.length === 2 ? 2 : 1;
   for (const need of rule.need) {
-    const have = main.filter((n) => need.includes(focusGroup(n))).length;
+    const have = main.filter((n) => focusGroups(n).some((g) => need.includes(g))).length;
     if (have < min) out.push(`${normFocus(focus)} Main Workout needs at least ${min} ${need.join(" / ")} exercise${min > 1 ? "s" : ""} (has ${have})`);
   }
   return out;

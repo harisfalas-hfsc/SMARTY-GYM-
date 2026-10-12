@@ -8,6 +8,75 @@
  * library exercises with a GIF and instructions.
  */
 import type { PoolExercise } from "./pool.server";
+import type { FocusGroup } from "./strength-focus";
+
+/**
+ * Coach Haris Falas's movement-pattern classification of the priority lists
+ * (supplied 2026-10-12). AUTHORITATIVE for these movements: the regex
+ * classifier in strength-focus.ts only handles exercises not listed here.
+ *
+ * Coach's classification notes:
+ * - Thrusters (dumbbell/kettlebell) and Medicine Ball Squat to Press are
+ *   compound: lower-body push + upper-body push.
+ * - Medicine Ball Slam is a full-body power exercise (conditioning), not core.
+ * - Hip Thrust is hip-extension dominant → lower-body pull.
+ * - Pec Deck, Cable Chest Fly and Cable Lateral Raise are upper-body push
+ *   accessories.
+ * - Burpee, Jumping Jack, High Knees, Butt Kicks, Skater, Shuttle Run and
+ *   Sprint are primarily conditioning; they sit under Core only where trunk
+ *   involvement is relevant and must not be treated as core by the engine.
+ */
+export const PRIORITY_MOVEMENT_PATTERN: Record<string, FocusGroup | FocusGroup[]> = {
+  // 1. LOWER BODY PUSH
+  "Bodyweight Squat": "lower push", "Reverse Lunge": "lower push", "Forward Lunge": "lower push",
+  "Walking Lunge": "lower push", "Split Squat": "lower push", "Bulgarian Split Squat": "lower push",
+  "Step-Up": "lower push", "Calf Raise": "lower push", "Jump Squat": "lower push", "Lateral Lunge": "lower push",
+  "Goblet Squat": "lower push", "Dumbbell Squat": "lower push", "Dumbbell Reverse Lunge": "lower push",
+  "Dumbbell Forward Lunge": "lower push", "Dumbbell Walking Lunge": "lower push",
+  "Dumbbell Bulgarian Split Squat": "lower push", "Kettlebell Goblet Squat": "lower push",
+  "Kettlebell Reverse Lunge": "lower push", "TRX Squat": "lower push", "TRX Reverse Lunge": "lower push",
+  "TRX Split Squat": "lower push", "Medicine Ball Lunge": "lower push",
+  "Barbell Back Squat": "lower push", "Smith Machine Squat": "lower push", "Hack Squat": "lower push",
+  "Leg Press": "lower push", "Leg Extension": "lower push", "Seated Calf Raise": "lower push",
+  "Standing Calf Raise": "lower push",
+  // 2. LOWER BODY PULL
+  "Glute Bridge": "lower pull", "Hip Thrust": "lower pull", "Single-Leg Glute Bridge": "lower pull",
+  "Dumbbell Romanian Deadlift": "lower pull", "Dumbbell Deadlift": "lower pull", "Dumbbell Hip Thrust": "lower pull",
+  "Kettlebell Deadlift": "lower pull", "Kettlebell Swing": "lower pull", "Single-Arm Kettlebell Swing": "lower pull",
+  "Leg Curl": "lower pull", "Romanian Deadlift": "lower pull", "Barbell Deadlift": "lower pull",
+  // 3. UPPER BODY PUSH
+  "Push-Up": "upper push", "Wide-Grip Push-Up": "upper push", "Incline Push-Up": "upper push",
+  "Diamond Push-Up": "upper push", "Decline Push-Up": "upper push", "Shoulder Tap": "upper push",
+  "Dumbbell Bench Press": "upper push", "Dumbbell Shoulder Press": "upper push", "Dumbbell Push Press": "upper push",
+  "Kettlebell Press": "upper push", "Kettlebell Push Press": "upper push", "TRX Push-Up": "upper push",
+  "Medicine Ball Chest Pass": "upper push",
+  "Barbell Bench Press": "upper push", "Incline Bench Press": "upper push", "Machine Chest Press": "upper push",
+  "Pec Deck": "upper push", "Machine Shoulder Press": "upper push", "Dumbbell Incline Bench Press": "upper push",
+  "Barbell Overhead Press": "upper push", "Cable Triceps Pushdown": "upper push",
+  "Overhead Cable Triceps Extension": "upper push", "Triceps Dip": "upper push",
+  "Cable Lateral Raise": "upper push", "Cable Chest Fly": "upper push",
+  // 4. UPPER BODY PULL
+  "Pull-Up": "upper pull", "Chin-Up": "upper pull", "Neutral-Grip Pull-Up": "upper pull", "Inverted Row": "upper pull",
+  "Dumbbell Row": "upper pull", "Single-Arm Dumbbell Row": "upper pull", "Kettlebell Row": "upper pull",
+  "TRX Row": "upper pull",
+  "Lat Pulldown": "upper pull", "Seated Cable Row": "upper pull", "Chest-Supported Row Machine": "upper pull",
+  "Barbell Row": "upper pull", "Assisted Pull-Up": "upper pull",
+  "Cable Biceps Curl": "upper pull", "Dumbbell Biceps Curl": "upper pull", "Hammer Curl": "upper pull",
+  // 5. CORE
+  "Sit-Up": "core", "Crunch": "core", "Leg Raise": "core", "Dead Bug": "core", "Plank": "core",
+  "Side Plank": "core", "Inchworm": "core", "Bird Dog": "core",
+  "Medicine Ball Sit-Up": "core",
+  "Cable Crunch": "core", "Hanging Knee Raise": "core", "Hanging Leg Raise": "core", "Cable Pallof Press": "core",
+  // COMPOUND — lower-body push + upper-body push
+  "Dumbbell Thruster": ["lower push", "upper push"], "Single-Arm Dumbbell Thruster": ["lower push", "upper push"],
+  "Kettlebell Thruster": ["lower push", "upper push"], "Medicine Ball Squat to Press": ["lower push", "upper push"],
+  // CONDITIONING — listed under Core by the coach only where trunk involvement
+  // is relevant; never treated as core by the engine.
+  "Mountain Climber": "conditioning", "TRX Mountain Climber": "conditioning", "Burpee": "conditioning",
+  "Jumping Jack": "conditioning", "High Knees": "conditioning", "Butt Kicks": "conditioning",
+  "Skater": "conditioning", "Bear Crawl": "conditioning", "Shuttle Run": "conditioning", "Sprint": "conditioning",
+  "Medicine Ball Slam": "conditioning",
+};
 
 // TIER 1 — the simplest effective, most familiar movement first. Technically
 // advanced or skill movements (Turkish get-up, pistol, muscle-up, planche,
