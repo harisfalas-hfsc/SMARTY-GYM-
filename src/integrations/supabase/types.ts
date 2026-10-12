@@ -891,6 +891,7 @@ export type Database = {
           disliked_exercises: string[]
           display_name: string | null
           email: string | null
+          email_new_articles: boolean
           email_new_workouts: boolean
           email_shared_workouts: boolean
           email_weekly_insights: boolean
@@ -937,6 +938,7 @@ export type Database = {
           disliked_exercises?: string[]
           display_name?: string | null
           email?: string | null
+          email_new_articles?: boolean
           email_new_workouts?: boolean
           email_shared_workouts?: boolean
           email_weekly_insights?: boolean
@@ -983,6 +985,7 @@ export type Database = {
           disliked_exercises?: string[]
           display_name?: string | null
           email?: string | null
+          email_new_articles?: boolean
           email_new_workouts?: boolean
           email_shared_workouts?: boolean
           email_weekly_insights?: boolean

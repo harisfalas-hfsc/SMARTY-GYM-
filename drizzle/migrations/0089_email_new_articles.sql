@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS email_new_articles boolean NOT NULL DEFAULT true;
