@@ -52,7 +52,7 @@ function InboxPage() {
         className="mb-5"
         eyebrow="Inbox"
         title="Inbox"
-        subtitle="Your notifications and your conversations with the team — all in one place."
+        subtitle="Notifications are updates from SMARTYGYM. Messages are your private conversations with our team — including replies to anything you sent through Contact."
       />
 
       <div className="mb-4 grid grid-cols-2 gap-2">
@@ -71,6 +71,12 @@ function InboxPage() {
           count={messagesUnread}
         />
       </div>
+
+      <p className="mb-4 rounded-2xl border border-border-strong bg-card px-4 py-3 text-sm text-muted-foreground">
+        {tab === "updates"
+          ? "Updates sent to you: new workouts and articles, check-in reminders, Smarty Coach and your weekly Insights. Tap one to read it."
+          : "Your conversations with the SMARTYGYM team. When you write to us here or through the Contact page, our replies appear in the same conversation below."}
+      </p>
 
       <div className={tab === "updates" ? "" : "hidden"}>
         <UpdatesPanel onUnread={onUpdates} />
