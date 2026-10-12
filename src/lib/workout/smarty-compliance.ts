@@ -8,10 +8,11 @@ import { classify, isRelated, replacementConfidence, variationTier, type Confide
 import { prepTokens, prepAllowed, isBodyweightEquipment, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
 import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
+import { focusBreaks } from "./strength-focus";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
-export type ComplianceWorkout = { id: string; name: string; category: string; format: string | null; difficulty_stars: number; main_workout: string | null; duration_min?: number | null; equipment?: string[] | null };
+export type ComplianceWorkout = { id: string; name: string; category: string; format: string | null; difficulty_stars: number; main_workout: string | null; duration_min?: number | null; equipment?: string[] | null; focus?: string | null };
 export type ComplianceExercise = PoolExercise & { is_active?: boolean; gif_path?: string | null };
 
 const NO_PRIORITY = new Set<string>(["RECOVERY", "MOBILITY & STABILITY", "PILATES"]);
@@ -59,6 +60,9 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   if (mainRows.length < 3) s.add("Main Workout has fewer than 3 exercises");
   for (const r of rows) for (const v of exerciseRuleBreaks(r, ctx)) s.add(complianceRuleLabel(v));
   const finRows = finisherRows(html, lib);
+  if (cat === "STRENGTH")
+    for (const v of focusBreaks(w.focus, mainRows.map((r) => r.name), finRows.map((r) => r.name)))
+      s.add(/needs at least/.test(v) ? "Workout focus not covered" : "Exercise outside the workout focus");
   for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level }, finRows)) s.add(complianceRuleLabel(v));
   for (const st of workSteps) {
     if (!/\d/.test(st.prescription)) s.add("Exercise without a dose");
