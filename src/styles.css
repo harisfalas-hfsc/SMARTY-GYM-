@@ -36,6 +36,7 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
@@ -119,6 +120,8 @@
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.91 0 0);
+  /* Stronger hairline for cards that must stand out on a dark surface. Light mode keeps the normal border. */
+  --border-strong: var(--border);
   --input: oklch(0.91 0 0);
   --ring: oklch(0.745 0.131 220);
   --chart-1: oklch(0.745 0.131 220);
@@ -190,6 +193,7 @@
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.32 0 0);
+  --border-strong: oklch(0.5 0.015 220);
   --input: oklch(0.32 0 0);
   --ring: oklch(0.745 0.131 220);
   --gradient-brand-soft: linear-gradient(135deg, oklch(0.32 0.055 220), oklch(0.29 0.04 210));
