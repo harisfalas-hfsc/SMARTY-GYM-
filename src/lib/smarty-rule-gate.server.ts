@@ -15,7 +15,7 @@ async function loadRuleLibrary(db: any): Promise<ComplianceExercise[]> {
   return out;
 }
 
-const COLS = "id,name,category,format,difficulty_stars,duration_min,equipment,main_workout,is_visible";
+const COLS = "id,name,category,format,difficulty_stars,duration_min,equipment,focus,main_workout,is_visible";
 
 /** Rule breaks that block publishing this workout after `patch` is applied (empty = may publish). */
 export async function publishRuleBreaks(db: any, id: string, patch: Record<string, unknown>): Promise<string[]> {
