@@ -27,6 +27,15 @@ export type StepTracking = {
    * "how many reps inside this window", never "how many seconds".
    */
   windowSeconds: number | null;
+  /** Show a reps input (false when reps are fixed by the workout). */
+  askReps: boolean;
+  /** Show a seconds input, and its label ("Seconds held" / "Time taken (sec)"). */
+  askSeconds: boolean;
+  secondsLabel: string | null;
+  /** Values the workout already states — stored automatically, never typed. */
+  autoReps: number | null;
+  autoSeconds: number | null;
+  autoDistanceM: number | null;
 };
 
 export type TrackingMetricName =
@@ -67,6 +76,10 @@ const HOLD_WORDS = [
 ];
 
 const DISTANCE_WORDS = ["run", "jog", "row", "ski", "bike", "cycle", "sprint", "walk", "swim"];
+/** Sustained cardio where distance covered in a set time is meaningful. */
+const CARDIO_MACHINE_RE = /\b(rower|rowing|row erg|ski ?erg|bike|cycle|cycling|treadmill|run|running|jog|jogging|swim|walk)\b/;
+const SHORT_BURST_RE = /\b(sprint|shuttle|bear crawl|crawl)\b/;
+const ROUND_FORMATS = new Set(["CIRCUIT", "AMRAP", "FOR TIME", "LADDER"]);
 
 const REST_FRAGMENT_RE = /rest[^.;]*?\d+\s*(sec|secs|seconds|s|min|minutes|m)\b/gi;
 
@@ -130,51 +143,110 @@ export function deriveStepTracking(input: {
 }): StepTracking {
   const { step } = input;
   const category = (input.category ?? "").toUpperCase();
+  const format = (input.format ?? "").toUpperCase();
   const section = step.section ?? "Main Workout";
+  const name = step.name.toLowerCase();
   const text = `${step.name} ${step.prescription}`.toLowerCase();
   const planned = parsePlanned(step.prescription);
+  const base = {
+    load: false,
+    distance: false,
+    setBased: true,
+    windowSeconds: null,
+    askReps: false,
+    askSeconds: false,
+    secondsLabel: null,
+    autoReps: null,
+    autoSeconds: null,
+    autoDistanceM: null,
+  } satisfies Omit<StepTracking, "primary" | "metric">;
 
   // Preparation, recovery and micro sections: completion is the only honest signal.
   if (
     section === "Soft Tissue Preparation" ||
+    section === "Activation" ||
+    section === "Warm-up" ||
     section === "Cool-down" ||
     category === "RECOVERY" ||
     category === "MICRO-WORKOUTS"
   ) {
-    return { primary: "completion", load: false, distance: false, metric: "completion", setBased: false, windowSeconds: null };
+    return { ...base, primary: "completion", metric: "completion", setBased: false };
   }
 
-  if (has(text, DISTANCE_WORDS) && (planned.distanceM !== null || planned.seconds !== null)) {
-    return { primary: "duration", load: false, distance: true, metric: "distance", setBased: false, windowSeconds: planned.seconds };
+  // A prescribed distance (500 m row, 1 km run): the distance is known, ask the time.
+  if (planned.distanceM !== null && has(text, DISTANCE_WORDS)) {
+    return {
+      ...base,
+      primary: "duration",
+      metric: "distance",
+      setBased: false,
+      askSeconds: true,
+      secondsLabel: "Time taken (sec)",
+      autoDistanceM: planned.distanceM,
+    };
+  }
+
+  // Sustained timed cardio (10 min bike): the time is known, distance covered is optional.
+  if (
+    planned.seconds !== null &&
+    planned.seconds >= 60 &&
+    planned.reps === null &&
+    CARDIO_MACHINE_RE.test(name) &&
+    !SHORT_BURST_RE.test(name)
+  ) {
+    return {
+      ...base,
+      primary: "duration",
+      metric: "distance",
+      setBased: false,
+      distance: true,
+      windowSeconds: planned.seconds,
+      autoSeconds: planned.seconds,
+    };
   }
 
   const equipment = (input.equipment ?? "").trim().toLowerCase();
-  const unloaded =
-    BODYWEIGHT_EQUIPMENT.has(equipment) || UNLOADED_CATEGORIES.has(category);
+  const unloaded = BODYWEIGHT_EQUIPMENT.has(equipment) || UNLOADED_CATEGORIES.has(category);
 
-  // A stated duration on an isometric position is genuinely a hold.
-  if (has(text, HOLD_WORDS)) {
-    return { primary: "duration", load: false, distance: false, metric: "hold", setBased: true, windowSeconds: planned.seconds };
-  }
-
-  // A stated duration on a countable movement ("20 sec dumbbell clean") is a
-  // fixed work window: what matters is how many reps fit inside it.
-  if (planned.reps === null && planned.seconds !== null) {
+  // A real isometric position is genuinely a hold.
+  if (has(name, HOLD_WORDS) && !/\b(tap|taps|jack|jacks|walk|climber|reach|rotation)\b/.test(name) && planned.reps === null) {
     return {
-      primary: "reps",
-      load: !unloaded,
-      distance: false,
-      metric: "reps_in_time",
-      setBased: true,
+      ...base,
+      primary: "duration",
+      metric: "hold",
+      askSeconds: true,
+      secondsLabel: "Seconds held",
       windowSeconds: planned.seconds,
     };
   }
 
-  if (unloaded) {
-    return { primary: "reps", load: false, distance: false, metric: "reps", setBased: true, windowSeconds: null };
+  // A stated duration on a countable movement ("20 sec dumbbell clean", Tabata,
+  // 40/20 circuit, 20 sec sprint): the time is known, ask how many reps fit.
+  if (planned.reps === null && planned.seconds !== null) {
+    return {
+      ...base,
+      primary: "reps",
+      metric: "reps_in_time",
+      load: !unloaded,
+      askReps: true,
+      windowSeconds: planned.seconds,
+      autoSeconds: planned.seconds,
+    };
   }
 
-  return { primary: "reps", load: true, distance: false, metric: "reps_load", setBased: true, windowSeconds: null };
+  // Round-based circuit with fixed reps ("20 push-ups" x 5 rounds): reps are
+  // counted automatically; loaded moves only ask for the weight.
+  if (ROUND_FORMATS.has(format) && planned.reps !== null && planned.sets === null) {
+    if (unloaded) {
+      return { ...base, primary: "completion", metric: "completion", autoReps: planned.reps };
+    }
+    return { ...base, primary: "reps", metric: "reps_load", load: true, autoReps: planned.reps };
+  }
+
+  if (unloaded) {
+    return { ...base, primary: "reps", metric: "reps", askReps: true };
+  }
+  return { ...base, primary: "reps", metric: "reps_load", load: true, askReps: true };
 }
 
 // ---------------------------------------------------------------------------

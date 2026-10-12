@@ -212,22 +212,24 @@ export function WorkoutPlayerDialog({
 
   async function logSet() {
     if (!slide || slide.kind !== "exercise" || !tracking) return;
-    const repsValue = tracking.primary === "reps" && reps.trim() ? Number(reps) : null;
+    const repsValue = tracking.askReps && reps.trim() ? Number(reps) : tracking.autoReps;
     const weightValue = tracking.load && weight.trim() ? Number(weight) : null;
-    const distanceValue = tracking.distance && distance.trim() ? Number(distance) : null;
+    const distanceValue =
+      tracking.distance && distance.trim() ? Number(distance) : tracking.autoDistanceM;
     const typedSeconds = heldSeconds.trim() ? Number(heldSeconds) : null;
     const measuredSeconds =
       tracking.primary === "duration" && timing.mode === "timed" && remaining < timing.seconds
         ? timing.seconds - remaining
         : null;
-    const secondsValue = typedSeconds ?? measuredSeconds;
+    const secondsValue = typedSeconds ?? measuredSeconds ?? tracking.autoSeconds;
 
-    if (
-      repsValue === null &&
-      weightValue === null &&
-      secondsValue === null &&
-      distanceValue === null
-    ) {
+    const typedSomething =
+      (tracking.askReps && reps.trim() !== "") ||
+      (tracking.load && weight.trim() !== "") ||
+      (tracking.askSeconds && (typedSeconds !== null || measuredSeconds !== null)) ||
+      (tracking.distance && distance.trim() !== "");
+    const fixedOnly = !tracking.askReps && !tracking.askSeconds && !tracking.load && !tracking.distance;
+    if (!typedSomething && !fixedOnly) {
       toast.error("Nothing to log yet — add a value first.");
       return;
     }
@@ -520,7 +522,7 @@ export function WorkoutPlayerDialog({
           {slide?.kind === "exercise" && tracking && tracking.primary !== "completion" ? (
             <div className="space-y-2">
               <div className="grid grid-cols-2 items-end gap-2 sm:flex">
-                {tracking.primary === "reps" ? (
+                {tracking.askReps ? (
                   <StepperField
                     label={
                       tracking.windowSeconds
@@ -531,19 +533,20 @@ export function WorkoutPlayerDialog({
                     onChange={setReps}
                     step={1}
                   />
-                ) : (
+                ) : null}
+                {tracking.askSeconds ? (
                   <StepperField
-                    label="Seconds held"
+                    label={tracking.secondsLabel ?? "Seconds"}
                     value={heldSeconds}
                     onChange={setHeldSeconds}
                     step={5}
                   />
-                )}
+                ) : null}
                 {tracking.load ? (
                   <StepperField label="Weight (kg)" value={weight} onChange={setWeight} step={2.5} />
                 ) : null}
                 {tracking.distance ? (
-                  <StepperField label="Distance (m)" value={distance} onChange={setDistance} step={50} />
+                  <StepperField label="Distance covered (m)" value={distance} onChange={setDistance} step={50} />
                 ) : null}
                 <Button
                   variant="secondary"

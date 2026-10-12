@@ -35,6 +35,12 @@ type Draft = {
   load: boolean;
   distance: boolean;
   windowSeconds: number | null;
+  askReps: boolean;
+  askSeconds: boolean;
+  secondsLabel: string | null;
+  autoReps: number | null;
+  autoSeconds: number | null;
+  autoDistanceM: number | null;
   plannedReps: number | null;
   plannedWeightKg: number | null;
   plannedSeconds: number | null;
@@ -85,7 +91,10 @@ export function PerformanceEditorDialog({
           tracking: deriveStepTracking({ step, category, format }),
           planned: parsePlanned(step.prescription),
         }))
-        .filter((s) => s.tracking.primary !== "completion"),
+        .filter(
+          (s) =>
+            s.tracking.askReps || s.tracking.askSeconds || s.tracking.load || s.tracking.distance,
+        ),
     [steps, category, format],
   );
 
@@ -120,6 +129,12 @@ export function PerformanceEditorDialog({
               load: s.tracking.load,
               distance: s.tracking.distance,
               windowSeconds: s.tracking.windowSeconds,
+              askReps: s.tracking.askReps,
+              askSeconds: s.tracking.askSeconds,
+              secondsLabel: s.tracking.secondsLabel,
+              autoReps: s.tracking.autoReps,
+              autoSeconds: s.tracking.autoSeconds,
+              autoDistanceM: s.tracking.autoDistanceM,
               plannedReps: s.planned.reps,
               plannedWeightKg: s.planned.weightKg,
               plannedSeconds: s.planned.seconds,
@@ -160,10 +175,10 @@ export function PerformanceEditorDialog({
         section: r.section,
         setNumber: r.setNumber,
         metric: r.metric,
-        reps: num(r.reps),
+        reps: r.askReps ? num(r.reps) : r.autoReps,
         weightKg: num(r.weight),
-        seconds: num(r.seconds),
-        distanceM: num(r.distanceM),
+        seconds: r.askSeconds ? num(r.seconds) : r.autoSeconds,
+        distanceM: r.distance ? (num(r.distanceM) ?? r.autoDistanceM) : r.autoDistanceM,
         plannedReps: r.plannedReps,
         plannedWeightKg: r.plannedWeightKg,
         plannedSeconds: r.plannedSeconds,
@@ -217,7 +232,7 @@ export function PerformanceEditorDialog({
                     </span>
                   </p>
                   <div className="mt-2 grid grid-cols-2 gap-3">
-                    {r.primary === "reps" ? (
+                    {r.askReps ? (
                       <div className="space-y-1">
                         <Label className="text-xs">
                           {r.windowSeconds ? `Reps in ${r.windowSeconds}s` : "Reps"}
@@ -228,16 +243,17 @@ export function PerformanceEditorDialog({
                           onChange={(e) => patch(r.key, "reps", e.target.value)}
                         />
                       </div>
-                    ) : (
+                    ) : null}
+                    {r.askSeconds ? (
                       <div className="space-y-1">
-                        <Label className="text-xs">Seconds held</Label>
+                        <Label className="text-xs">{r.secondsLabel ?? "Seconds"}</Label>
                         <Input
                           inputMode="numeric"
                           value={r.seconds}
                           onChange={(e) => patch(r.key, "seconds", e.target.value)}
                         />
                       </div>
-                    )}
+                    ) : null}
                     {r.load ? (
                       <div className="space-y-1">
                         <Label className="text-xs">Weight (kg)</Label>
@@ -250,7 +266,7 @@ export function PerformanceEditorDialog({
                     ) : null}
                     {r.distance ? (
                       <div className="space-y-1">
-                        <Label className="text-xs">Distance (m)</Label>
+                        <Label className="text-xs">Distance covered (m)</Label>
                         <Input
                           inputMode="numeric"
                           value={r.distanceM}
