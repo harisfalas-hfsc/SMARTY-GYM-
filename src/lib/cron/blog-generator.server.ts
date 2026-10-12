@@ -417,6 +417,16 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
     failures,
   });
 
+  // Email every member who keeps "New article emails" on (deduped per member).
+  let memberEmails = 0;
+  try {
+    const { newArticleAnnouncement } = await import("@/lib/broadcast-content");
+    const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
+    memberEmails = await sendBroadcastEmail(db, newArticleAnnouncement(slug, parsed.title, parsed.excerpt));
+  } catch (e) {
+    failures.push(`member emails: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
   // Tell the administrator what was published.
   const emailed = await emailAdmin({
     recipient: blogRecipient(options.config),
@@ -435,7 +445,7 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
     changed: true,
     summary: `Published “${parsed.title}” (/blog/${slug}). ${notified} member${
       notified === 1 ? "" : "s"
-    } notified in their inbox; admin report ${emailed ? "emailed" : "not emailed"}.`,
+    } notified in their inbox, ${memberEmails} emailed; admin report ${emailed ? "emailed" : "not emailed"}.`,
     title: parsed.title,
     slug,
     notified,

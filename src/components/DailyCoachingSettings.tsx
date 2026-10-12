@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { BellRing, Loader2, Save } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -62,7 +62,7 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
     setSaving(true);
     try {
       await save({ data: settings });
-      toast.success("Daily coaching saved.");
+      toast.success("Settings saved.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not save.");
     } finally {
@@ -80,20 +80,15 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
 
   return (
     <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
-      <div className="flex items-center gap-3">
-        <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
-          <BellRing className="h-5 w-5" />
-        </span>
-        <div>
-          <p className="font-bold">Daily coaching</p>
-          <p className="text-sm text-muted-foreground">Messages, delivery time and WOD mode.</p>
-        </div>
+      <div>
+        <p className="font-bold">Notifications & Emails</p>
+        <p className="text-sm text-muted-foreground">Choose which messages and emails you receive.</p>
       </div>
 
       <div className="mt-4 space-y-4">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-sm font-semibold">Morning motivation</p>
+            <p className="text-sm font-semibold">Daily coaching</p>
             <p className="text-xs text-muted-foreground">
               One short message from Smarty Coach each morning.
             </p>
@@ -175,6 +170,19 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
 
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
+            <p id="new-article-email-label" className="text-sm font-semibold">New article emails</p>
+            <p className="text-xs text-muted-foreground">When a new article is published on the blog.</p>
+          </div>
+          <Switch
+            className="shrink-0"
+            aria-labelledby="new-article-email-label"
+            checked={settings.email_new_articles}
+            onCheckedChange={(v) => patch({ email_new_articles: v })}
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
             <p id="weekly-insights-email-label" className="text-sm font-semibold">Weekly Insights emails</p>
             <p className="text-xs text-muted-foreground">Your progress report every Monday morning.</p>
           </div>
@@ -190,7 +198,7 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
 
       <Button className="mt-5 h-12 w-full rounded-2xl" disabled={saving} onClick={() => void commit()}>
         {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-        Save daily coaching
+        Save settings
       </Button>
     </section>
   );

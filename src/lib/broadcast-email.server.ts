@@ -84,7 +84,7 @@ export async function sendBroadcastEmail(
 
   const { data: profiles, error: profilesError } = await db
     .from("profiles")
-    .select("id,email,email_new_workouts,email_shared_workouts")
+    .select("id,email,email_new_workouts,email_shared_workouts,email_new_articles")
     .limit(20000);
   if (profilesError) throw new Error(profilesError.message);
 
@@ -96,7 +96,7 @@ export async function sendBroadcastEmail(
   if (doneError) throw new Error(doneError.message);
   const already = new Set(((done as { user_id: string }[] | null) ?? []).map((r) => r.user_id));
 
-  const recipients = ((profiles as { id: string; email: string | null; email_new_workouts: boolean; email_shared_workouts: boolean }[] | null) ?? [])
+  const recipients = ((profiles as { id: string; email: string | null; email_new_workouts: boolean; email_shared_workouts: boolean; email_new_articles: boolean }[] | null) ?? [])
     .filter((p) => p.email && p.id !== input.exclude && !already.has(p.id) && wantsAnnouncementEmail(p, input.dedupeKey) && (!allowed || allowed.has(p.id)));
 
   if (!recipients.length) return 0;
