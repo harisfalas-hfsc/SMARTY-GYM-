@@ -22,6 +22,32 @@ export function focusGroup(name: string): FocusGroup {
   return RULES.find(([, re]) => re.test(name))?.[0] ?? "other";
 }
 
+/** Coach-classified movements, keyed by lowercase coach name and library alias. */
+let coachLookup: Map<string, FocusGroup[]> | null = null;
+function coachPatterns(): Map<string, FocusGroup[]> {
+  if (coachLookup) return coachLookup;
+  coachLookup = new Map();
+  for (const [coach, groups] of Object.entries(PRIORITY_MOVEMENT_PATTERN)) {
+    const g = Array.isArray(groups) ? groups : [groups];
+    coachLookup.set(coach.toLowerCase(), g);
+    for (const alias of PRIORITY_ALIASES[coach] ?? []) {
+      if (!coachLookup.has(alias.toLowerCase())) coachLookup.set(alias.toLowerCase(), g);
+    }
+  }
+  return coachLookup;
+}
+
+/**
+ * Every movement group an exercise belongs to. Compound movements (thrusters,
+ * squat-to-press) return both groups; everything else returns one. The coach's
+ * hand classification wins over the regex classifier.
+ */
+export function focusGroups(name: string): FocusGroup[] {
+  const classified = coachPatterns().get(name.trim().toLowerCase());
+  if (classified) return classified;
+  return [focusGroup(name)];
+}
+
 type FocusRule = { main: FocusGroup[]; finisher: FocusGroup[]; need: FocusGroup[][] };
 
 const UPPER: FocusGroup[] = ["upper push", "upper pull"];
