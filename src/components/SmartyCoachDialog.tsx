@@ -105,7 +105,8 @@ export function SmartyCoachDialog({
 
   return (
     <Dialog open={open} onOpenChange={changeOpen}>
-      <DialogContent className="max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5">
+      {/* Height: the signed-in dialog is exactly 50% taller than the visitor dialog (30rem vs 20rem). */}
+      <DialogContent className={`max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${visitor ? "h-[20rem]" : "h-[30rem]"}`}>
         <DialogHeader className="items-center pr-0 text-center">
           <div className="flex items-center gap-2">
             <img src={coachIcon} alt="" className="h-8 w-8 shrink-0 object-contain" />
