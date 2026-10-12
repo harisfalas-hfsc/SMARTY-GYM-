@@ -113,7 +113,7 @@ export function SmartyCoachDialog({
             <DialogTitle>Smarty Coach</DialogTitle>
           </div>
           <DialogDescription>
-            {visitor ? "Personal training guidance, built from your own training." : snapshot?.greeting ?? "Preparing your personal briefing."}
+            {visitor ? "Your personal coach. Anytime, anywhere." : snapshot?.greeting ?? "Preparing your personal briefing."}
           </DialogDescription>
         </DialogHeader>
 
@@ -121,8 +121,8 @@ export function SmartyCoachDialog({
           <div className="space-y-3">
             <section className="rounded-md border-2 border-primary bg-primary/5 p-4 text-center">
               <Brain className="mx-auto h-7 w-7 text-primary" />
-              <h3 className="mt-2 text-lg font-extrabold">Your training. Your next step.</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Sign in to connect Smarty Coach with your readiness, goals and completed workouts.</p>
+              <h3 className="mt-2 text-lg font-extrabold">A personal trainer in your pocket.</h3>
+              <p className="mt-1 text-sm text-muted-foreground">Your daily training companion — helping you choose what to train, when to push and when to recover. Sign in for guidance that grows with your training.</p>
             </section>
             <Button className="w-full" onClick={() => { changeOpen(false); void navigate({ to: "/auth" }); }}>
               Sign in or join <ArrowRight />
