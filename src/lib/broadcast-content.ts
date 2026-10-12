@@ -58,6 +58,20 @@ export function sharedWorkoutAnnouncement(id: string, name: string | undefined, 
   };
 }
 
+/** New blog article — same branded layout as New Smarty Workout emails. */
+export function newArticleAnnouncement(slug: string, title: string, excerpt: string): WorkoutAnnouncement {
+  return {
+    dedupeKey: `new-article:${slug}`,
+    subject: `📰 New Article: ${title}`,
+    heading: "New Article Published!",
+    body: "A new article has been added to the SMARTYGYM blog!",
+    workoutName: title,
+    supportingText: excerpt.slice(0, 240),
+    buttonLabel: "Read Article",
+    buttonHref: `${SITE_URL}/blog/${slug}`,
+  };
+}
+
 /** Manual admin broadcast: same branded email layout, any title/body. */
 export function adminBroadcastAnnouncement(title: string, body: string, stamp: string): WorkoutAnnouncement {
   return {
@@ -80,10 +94,11 @@ export function announcementInboxContent(announcement: WorkoutAnnouncement) {
 }
 
 export function wantsAnnouncementEmail(
-  preferences: { email_new_workouts?: boolean; email_shared_workouts?: boolean },
+  preferences: { email_new_workouts?: boolean; email_shared_workouts?: boolean; email_new_articles?: boolean },
   dedupeKey: string,
 ): boolean {
   if (dedupeKey.startsWith("new-workout:")) return preferences.email_new_workouts !== false;
   if (dedupeKey.startsWith("shared-workout:")) return preferences.email_shared_workouts !== false;
+  if (dedupeKey.startsWith("new-article:")) return preferences.email_new_articles !== false;
   return true;
 }
