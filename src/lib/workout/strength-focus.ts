@@ -1,6 +1,10 @@
 // Strength focus rules: a Strength workout's focus label (e.g. "LOW PUSH & UPPER PULL")
 // decides which movement groups may appear in its Main Workout and Finisher.
-// Pure: classification is read from the exercise name only.
+// Pure: classification is read from the exercise name only. Coach Haris's
+// hand-classified priority movements (PRIORITY_MOVEMENT_PATTERN) win over the
+// regex rules below.
+
+import { PRIORITY_ALIASES, PRIORITY_MOVEMENT_PATTERN } from "./priority";
 
 export type FocusGroup = "upper push" | "upper pull" | "lower push" | "lower pull" | "core" | "conditioning" | "other";
 
