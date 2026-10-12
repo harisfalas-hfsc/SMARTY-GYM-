@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { focusBreaks, focusGroup } from "../strength-focus";
+import { focusBreaks, focusGroup, focusGroups } from "../strength-focus";
+import { ALL_PRIORITY_NAMES, PRIORITY_MOVEMENT_PATTERN } from "../priority";
 
 describe("strength focus", () => {
   it("classifies push and pull correctly", () => {
