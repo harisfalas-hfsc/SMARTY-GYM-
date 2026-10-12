@@ -167,7 +167,7 @@ export function SmartyCoachDialog({
             </section>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <section className="rounded-md border border-border p-4">
+              <section className="rounded-md border border-border-strong p-4">
                 <div className="flex items-center gap-2 font-bold"><Gauge className="text-chart-2" /> Readiness</div>
                 <p className="mt-2 text-lg font-extrabold">{snapshot.readinessDisplay.label}{snapshot.readinessDisplay.score !== null ? ` · ${snapshot.readinessDisplay.score}/10` : ""}</p>
                 <p className="mt-1 text-xs text-muted-foreground">
@@ -175,7 +175,7 @@ export function SmartyCoachDialog({
                 </p>
               </section>
 
-              <section className="rounded-md border border-border p-4">
+              <section className="rounded-md border border-border-strong p-4">
                 <div className="flex items-center gap-2 font-bold"><Activity className="text-chart-3" /> Your last session</div>
                 {snapshot.lastSession ? (
                   <>
@@ -187,7 +187,7 @@ export function SmartyCoachDialog({
               </section>
             </div>
 
-            <section className="rounded-md border border-border p-4">
+            <section className="rounded-md border border-border-strong p-4">
               <div className="flex items-center gap-2 font-bold"><Brain className="text-chart-4" /> Why this fits</div>
               <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
                 {snapshot.reasons.map((reason) => <li key={reason} className="flex gap-2"><span className="text-primary">•</span><span>{reason}</span></li>)}
