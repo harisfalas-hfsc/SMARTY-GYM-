@@ -5,6 +5,7 @@
 export type FocusGroup = "upper push" | "upper pull" | "lower push" | "lower pull" | "core" | "conditioning" | "other";
 
 const RULES: Array<[FocusGroup, RegExp]> = [
+  ["core", /side bridge|side plank/i],
   ["conditioning", /climber|bear crawl|burpee|jump|jack|skater|sprint|high knee/i],
   ["lower pull", /leg curl|hamstring curl|nordic|inverse leg curl|deadlift|\brdl\b|romanian|good morning|swing|hip thrust|bridge|hip extension|back extension|hyperextension|superman|hip press|abduction|adduction|glute kickback|donkey|fire hydrant/i],
   ["lower push", /squat|leg press|lunge|step[- ]?up|leg extension|calf|hack|sissy|wall sit/i],
