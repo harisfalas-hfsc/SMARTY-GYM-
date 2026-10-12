@@ -477,7 +477,25 @@ export const startSmartyWorkout = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (existing) return { workoutId: (existing as { id: string }).id };
+    if (existing) {
+      // An untouched copy follows the latest published version of the workout.
+      const copyId = (existing as { id: string }).id;
+      const { count } = await supabaseAdmin.from("set_logs").select("id", { count: "exact", head: true }).eq("workout_id", copyId);
+      if (!count) {
+        const { data: latest } = await supabaseAdmin.from("smarty_workouts").select("*").eq("id", data.id).maybeSingle();
+        if (latest) {
+          const l = latest as unknown as SmartyWorkout;
+          await supabaseAdmin.from("workouts").update({
+            name: l.name, category: l.category, format: l.format, focus: l.focus,
+            difficulty_stars: l.difficulty_stars, duration_min: l.duration_min, duration_label: l.duration_label,
+            equipment: l.equipment ?? [], location: l.location, image_url: l.image_url,
+            description_html: l.description_html, instructions_html: l.instructions_html,
+            tips_html: l.tips_html, main_workout: l.main_workout,
+          } as never).eq("id", copyId).eq("user_id", context.userId);
+        }
+      }
+      return { workoutId: copyId };
+    }
     const { data: previousFavorite } = await supabaseAdmin.from("workouts").select("is_favorite").eq("user_id", context.userId).eq("created_by", tag).eq("is_favorite", true).limit(1).maybeSingle();
     const { data: src } = await supabaseAdmin
       .from("smarty_workouts")
