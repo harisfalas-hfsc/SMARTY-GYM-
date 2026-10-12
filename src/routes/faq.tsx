@@ -23,6 +23,10 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
     a: "An online gym with ready workouts and Create Your Own Workout: choose Smarty Coach to build around your answers, or Build It Yourself from the Exercise Library.",
   },
   {
+    q: "What is Smarty Coach, and how does it choose my next workout?",
+    a: "Your daily training companion — a personal coach in your pocket. It follows programmed training rules based on the sports science and philosophy of Haris Falas, not AI-generated advice. Your goals, equipment, current readiness, check-ins and training history guide its suggestions, with recovery and limitations taking priority. It explains each recommendation; reliability depends on accurate, up-to-date information. It cannot assess your technique or replace medical advice, and you always choose whether to follow it.",
+  },
+  {
     q: "How does Smarty Coach build my workout?",
     a: "You answer five quick questions. Smarty Coach reads your profile, fitness level and training history, then builds the session from our exercise library.",
   },
