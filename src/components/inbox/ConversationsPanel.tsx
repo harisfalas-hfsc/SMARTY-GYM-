@@ -203,7 +203,7 @@ export function ConversationsPanel({
           className="rounded-2xl"
           aria-pressed={composing}
         >
-          <MessageSquare className="mr-2 h-4 w-4" /> {composing ? "Close form" : "New message"}
+          <MessageSquare className="mr-2 h-4 w-4" /> {composing ? "Cancel" : "Write to the team"}
         </Button>
         <Button
           variant="secondary"
@@ -253,6 +253,7 @@ export function ConversationsPanel({
 
       {composing && (
         <div className="mb-5 space-y-3 rounded-2xl border-2 border-primary bg-card p-4">
+          <p className="text-sm text-muted-foreground">Ask a question or report a problem. Our reply will appear here in Messages.</p>
           <Input
             placeholder="Subject"
             value={newSubject}
@@ -290,7 +291,7 @@ export function ConversationsPanel({
         <p className="rounded-2xl border-2 border-blue-400 p-6 text-center text-sm text-muted-foreground">
           {threads.length
             ? "No messages match this filter."
-            : "No conversations yet. Start one above."}
+            : "No conversations yet. Tap \"Write to the team\" to send us a message."}
         </p>
       ) : (
         <ul className="space-y-3">
