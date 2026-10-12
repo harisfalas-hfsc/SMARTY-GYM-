@@ -96,3 +96,12 @@ describe("workout announcement email", () => {
     expect(html).toContain("Open SMARTYGYM");
   });
 });
+import { newArticleAnnouncement } from "./broadcast-content";
+describe("new article emails", () => {
+  it("respects the member's New article emails switch", () => {
+    const a = newArticleAnnouncement("my-slug", "Title", "Excerpt");
+    expect(a.buttonHref).toBe("https://smartygym.com/blog/my-slug");
+    expect(wantsAnnouncementEmail({ email_new_articles: false }, a.dedupeKey)).toBe(false);
+    expect(wantsAnnouncementEmail({ email_new_articles: true }, a.dedupeKey)).toBe(true);
+  });
+});
