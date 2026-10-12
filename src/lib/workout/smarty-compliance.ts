@@ -60,6 +60,8 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   if (mainRows.length < 3) s.add("Main Workout has fewer than 3 exercises");
   for (const r of rows) for (const v of exerciseRuleBreaks(r, ctx)) s.add(complianceRuleLabel(v));
   const finRows = finisherRows(html, lib);
+  // A Strength workout without a focus label could never be checked against its focus.
+  if (cat === "STRENGTH" && !String(w.focus ?? "").trim()) s.add("Workout focus not covered");
   if (cat === "STRENGTH")
     for (const v of focusBreaks(w.focus, mainRows.map((r) => r.name), finRows.map((r) => r.name)))
       s.add(/needs at least/.test(v) ? "Workout focus not covered" : "Exercise outside the workout focus");

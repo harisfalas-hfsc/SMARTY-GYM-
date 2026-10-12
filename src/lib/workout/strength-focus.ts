@@ -15,7 +15,7 @@ const RULES: Array<[FocusGroup, RegExp]> = [
   ["lower push", /squat|leg press|lunge|step[- ]?up|leg extension|calf|hack|sissy|wall sit/i],
   ["core", /crunch|sit[- ]?up|plank|leg raise|knee raise|dead bug|bird dog|twist|side bridge|hollow|v[- ]?up|ab wheel|rollout|pallof|\bpike\b(?!.*push)/i],
   ["upper pull", /upright row|\brows?\b|pulldown|pull[- ]?down|pull[- ]?up|chin[- ]?up|rear delt|reverse fly|face pull|curl|shrug/i],
-  ["upper push", /push[- ]?up|bench press|chest press|floor press|\bfly\b|flye|\bdips?\b|shoulder press|overhead press|military|arnold|lateral raise|front raise|triceps|pushdown|skull/i],
+  ["upper push", /push[- ]?up|bench press|chest press|floor press|incline press|decline press|\bfly\b|flye|\bdips?\b|shoulder press|overhead press|military|arnold|lateral raise|front raise|triceps|pushdown|skull/i],
 ];
 
 export function focusGroup(name: string): FocusGroup {
