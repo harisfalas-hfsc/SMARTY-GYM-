@@ -70,11 +70,17 @@ export function focusBreaks(focus: string | null | undefined, main: string[], fi
   const rule = FOCUS_RULES[normFocus(focus)];
   if (!rule) return [];
   const out: string[] = [];
-  for (const n of main) if (!rule.main.includes(focusGroup(n))) out.push(`"${n}" (${focusGroup(n)}) does not belong in a ${normFocus(focus)} Main Workout`);
-  for (const n of finisher) if (!rule.finisher.includes(focusGroup(n))) out.push(`"${n}" (${focusGroup(n)}) does not belong in a ${normFocus(focus)} Finisher`);
+  for (const n of main) {
+    const g = focusGroups(n);
+    if (!g.some((x) => rule.main.includes(x))) out.push(`"${n}" (${g.join(" + ")}) does not belong in a ${normFocus(focus)} Main Workout`);
+  }
+  for (const n of finisher) {
+    const g = focusGroups(n);
+    if (!g.some((x) => rule.finisher.includes(x))) out.push(`"${n}" (${g.join(" + ")}) does not belong in a ${normFocus(focus)} Finisher`);
+  }
   const min = main.length >= 4 && rule.need.length === 2 ? 2 : 1;
   for (const need of rule.need) {
-    const have = main.filter((n) => need.includes(focusGroup(n))).length;
+    const have = main.filter((n) => focusGroups(n).some((g) => need.includes(g))).length;
     if (have < min) out.push(`${normFocus(focus)} Main Workout needs at least ${min} ${need.join(" / ")} exercise${min > 1 ? "s" : ""} (has ${have})`);
   }
   return out;
