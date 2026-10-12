@@ -48,6 +48,7 @@ describe("player tracking rules", () => {
     expect([kb.askReps, kb.load, kb.autoReps]).toEqual([false, true, 20]);
   });
   it("warm-up and cool down are completion only", () => {
-    expect(t("Cat-Cow", "60 sec", { section: "Cool-down" }).primary).toBe("completion");
+    for (const section of ["Activation", "Warm-up", "Cool-down"])
+      expect(t("Cat-Cow", "10 reps", { section }).primary).toBe("completion");
   });
 });

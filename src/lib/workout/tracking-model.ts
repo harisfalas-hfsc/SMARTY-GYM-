@@ -164,6 +164,8 @@ export function deriveStepTracking(input: {
   // Preparation, recovery and micro sections: completion is the only honest signal.
   if (
     section === "Soft Tissue Preparation" ||
+    section === "Activation" ||
+    section === "Warm-up" ||
     section === "Cool-down" ||
     category === "RECOVERY" ||
     category === "MICRO-WORKOUTS"
