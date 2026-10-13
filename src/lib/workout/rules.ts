@@ -12,6 +12,7 @@ import { isPilatesMainExercise, isTruePilatesMovement } from "./pilates-vocabula
 import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
 import { isConditioningListCategory, isConditioningListExercise } from "./conditioning-vocabulary";
 import { onMobilityRecoveryList } from "./mobility-recovery-vocabulary";
+import { limitationAdmits, limitationDecision, limitationExplanation, type LimitationProfile } from "./limitations";
 
 const isLoadCategory = (c: Category) => c === "STRENGTH" || c === "MUSCLE BUILDING";
 
@@ -44,6 +45,8 @@ export type ExerciseRuleContext = {
   /** Work = Main Workout / Finisher. Activation / Cool Down use the prep vocabulary. */
   section?: "work" | PrepSection;
   bodyweightOnly?: boolean;
+  /** Member's Training Profile limitations — rule hierarchy level 1 (safety). */
+  limitations?: LimitationProfile;
 };
 
 export const MOMENTUM_CATEGORIES: Category[] = ["CARDIO", "CALORIE BURNING", "METABOLIC", "CHALLENGE"];
@@ -52,6 +55,13 @@ export const MOMENTUM_CATEGORIES: Category[] = ["CARDIO", "CALORIE BURNING", "ME
 export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): string[] {
   const out: string[] = [];
   const section = ctx.section ?? "work";
+  // 1. SAFETY — applies to every section and every category before any list,
+  //    priority or variety rule. Restricted moves with technique conditions
+  //    may stay; blocked moves and uncleared medical restrictions never do.
+  if (ctx.limitations && !limitationAdmits(e, ctx.limitations, { allowRestricted: true })) {
+    const d = limitationDecision(e, ctx.limitations);
+    out.push(limitationExplanation(e.name, d) ?? `"${e.name}" conflicts with your injuries & limitations.`);
+  }
   if (section !== "work") {
     if (!prepAllowed(e.name, section))
       out.push(section === "activation" ? `"${e.name}" is not an activation (mobility/stability) exercise.` : `"${e.name}" is not a cool-down stretch or mobility exercise.`);

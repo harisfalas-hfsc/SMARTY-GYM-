@@ -1,5 +1,5 @@
 import type { AthleteContext } from "./prompt.server";
-import { knownLimitations } from "./limitations";
+import { knownLimitations, type LimitationProfile } from "./limitations";
 import { enforceWorkout, estimateWorkMinutes } from "./enforce.server";
 import { validateWorkout } from "./validate.server";
 import { classifyIssuesForFallback } from "@/lib/workout-validation";
@@ -110,7 +110,11 @@ export async function generateWorkoutContent(
   // §18 — "Anywhere" is a real practicality filter (portable equipment only),
   // unless the athlete explicitly ticked fixed-station gym equipment.
   const location = resolveLocation(input.location ?? null, input.selectedEquipment);
-  const limitations = knownLimitations(input.athlete?.limitations ?? []);
+  const limitations: LimitationProfile = {
+    limitations: knownLimitations(input.athlete?.limitations ?? []),
+    pregnancyStage: input.athlete?.pregnancy_stage ?? null,
+    clearance: input.athlete?.limitation_clearance ?? false,
+  };
   const pool = filterPool(all, {
     category: input.category,
     format,
@@ -130,8 +134,8 @@ export async function generateWorkoutContent(
 
   if (pool.length < 1) {
     throw new Error(
-      limitations.length
-        ? "Not enough safe exercises match your equipment and your injuries & limitations. Try adding equipment."
+      limitations.limitations?.length
+        ? "There aren't enough safe exercises for your injuries & limitations with this equipment, so no workout was forced. Try a Recovery or Mobility & Stability session, add equipment, or review your limitations in your Training Profile — and seek guidance from a qualified professional if you're unsure."
         : "Not enough exercises match those settings. Try different equipment.",
     );
   }
@@ -205,6 +209,7 @@ export async function generateWorkoutContent(
     customEquipment,
     focus: input.focus ?? null,
     dislikedIds,
+    limitations,
     location,
     mood: input.mood ?? null,
     age: input.athlete?.age ?? null,

@@ -1,5 +1,5 @@
 import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
-import { conflictsWithLimitations } from "./limitations";
+import { knownLimitations, limitationAdmits, limitationDecision, type LimitationProfile } from "./limitations";
 import { prepAllowed } from "./prep-vocabulary";
 import { orderedPriority } from "./priority";
 import { priorityIds } from "./priority";
@@ -94,8 +94,8 @@ export type PoolFilter = {
   location?: string | null;
   /** Athlete age — past 70 impact work leaves the vocabulary entirely. */
   age?: number | null;
-  /** Training Profile injuries & limitations — hard exclusions. */
-  limitations?: string[];
+  /** Training Profile injuries & limitations — safety layer (BLOCKED / RESTRICTED / ALLOWED). */
+  limitations?: LimitationProfile;
 };
 
 const NOTE_STOPWORDS = new Set([
@@ -349,8 +349,17 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   }
 
   // 6d. Injuries & limitations (Training Profile) — hard exclusion.
-  if (f.limitations?.length) {
-    pool = pool.filter((e) => !conflictsWithLimitations(e.name, f.limitations!));
+  //     Safety ranks above every preference: BLOCKED never enters; RESTRICTED
+  //     stays out while enough fully-allowed alternatives exist (medical
+  //     restrictions need reported clinician clearance); the coach's listed
+  //     alternatives for the limitation are offered first. Priority scoring
+  //     only ever sees what survives here.
+  if (knownLimitations(f.limitations?.limitations).length) {
+    const lp = f.limitations!;
+    const allowed = pool.filter((e) => limitationAdmits(e, lp));
+    pool = allowed.length >= 8 ? allowed : pool.filter((e) => limitationAdmits(e, lp, { allowRestricted: true }));
+    const pref = (e: PoolExercise) => (limitationDecision(e, lp).preferred ? 0 : 1);
+    pool = pool.map((e, i) => [e, i] as const).sort((a, b) => pref(a[0]) - pref(b[0]) || a[1] - b[1]).map(([e]) => e);
   }
 
   // 7. Hard ban from today's note ("no burpees", "avoid bicep curls").
@@ -401,12 +410,12 @@ function prepFilter(
   dislikedIds: string[],
   match: RegExp,
   strict: boolean,
-  limitations: string[] = [],
+  limitations: LimitationProfile = { limitations: [] },
 ): PoolExercise[] {
   const banned = new Set(dislikedIds);
   return all.filter((e) => {
     if (banned.has(e.id)) return false;
-    if (limitations.length && conflictsWithLimitations(e.name, limitations)) return false;
+    if (!limitationAdmits(e, limitations)) return false;
     if (!prepEquipmentOk(e, selectedEquipment)) return false;
     if (PREP_BAN_RE.test(text(e)) && !prepAllowed(e.name, "activation")) return false;
     if (HOME_APPARATUS_RE.test(text(e))) return false;
@@ -443,11 +452,11 @@ export function buildActivationPool(
     dislikedIds?: string[];
     focus?: StrengthFocus | null;
     region?: BodyRegion;
-    limitations?: string[];
+    limitations?: LimitationProfile;
   },
 ): PoolExercise[] {
   const disliked = opts.dislikedIds ?? [];
-  const lim = opts.limitations ?? [];
+  const lim = opts.limitations ?? { limitations: [] };
   const strict = prepFilter(all, opts.selectedEquipment, disliked, ACTIVATION_OK_RE, true, lim);
   const base =
     strict.length >= 8
@@ -467,10 +476,10 @@ export function buildActivationPool(
 /** The only vocabulary allowed in 🧘 Cool Down: static stretches and breathing. */
 export function buildCooldownPool(
   all: PoolExercise[],
-  opts: { selectedEquipment: string[]; dislikedIds?: string[]; limitations?: string[] },
+  opts: { selectedEquipment: string[]; dislikedIds?: string[]; limitations?: LimitationProfile },
 ): PoolExercise[] {
   const disliked = opts.dislikedIds ?? [];
-  const lim = opts.limitations ?? [];
+  const lim = opts.limitations ?? { limitations: [] };
   const strict = prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, true, lim).filter(
     (e) => STRETCH_RE.test(e.name) || COOLDOWN_OK_RE.test(e.name),
   );
