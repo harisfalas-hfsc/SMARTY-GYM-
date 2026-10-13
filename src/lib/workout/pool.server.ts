@@ -1,4 +1,5 @@
 import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
+import { conflictsWithLimitations } from "./limitations";
 import { prepAllowed } from "./prep-vocabulary";
 import { orderedPriority } from "./priority";
 import { priorityIds } from "./priority";
@@ -93,6 +94,8 @@ export type PoolFilter = {
   location?: string | null;
   /** Athlete age — past 70 impact work leaves the vocabulary entirely. */
   age?: number | null;
+  /** Training Profile injuries & limitations — hard exclusions. */
+  limitations?: string[];
 };
 
 const NOTE_STOPWORDS = new Set([
@@ -345,6 +348,11 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
     if (impactFree.length >= 12) pool = impactFree;
   }
 
+  // 6d. Injuries & limitations (Training Profile) — hard exclusion.
+  if (f.limitations?.length) {
+    pool = pool.filter((e) => !conflictsWithLimitations(e.name, f.limitations!));
+  }
+
   // 7. Hard ban from today's note ("no burpees", "avoid bicep curls").
   if (f.bannedTerms?.length) {
     pool = pool.filter((e) => !f.bannedTerms!.some((t) => text(e).includes(t)));
@@ -393,10 +401,12 @@ function prepFilter(
   dislikedIds: string[],
   match: RegExp,
   strict: boolean,
+  limitations: string[] = [],
 ): PoolExercise[] {
   const banned = new Set(dislikedIds);
   return all.filter((e) => {
     if (banned.has(e.id)) return false;
+    if (limitations.length && conflictsWithLimitations(e.name, limitations)) return false;
     if (!prepEquipmentOk(e, selectedEquipment)) return false;
     if (PREP_BAN_RE.test(text(e)) && !prepAllowed(e.name, "activation")) return false;
     if (HOME_APPARATUS_RE.test(text(e))) return false;
@@ -433,14 +443,16 @@ export function buildActivationPool(
     dislikedIds?: string[];
     focus?: StrengthFocus | null;
     region?: BodyRegion;
+    limitations?: string[];
   },
 ): PoolExercise[] {
   const disliked = opts.dislikedIds ?? [];
-  const strict = prepFilter(all, opts.selectedEquipment, disliked, ACTIVATION_OK_RE, true);
+  const lim = opts.limitations ?? [];
+  const strict = prepFilter(all, opts.selectedEquipment, disliked, ACTIVATION_OK_RE, true, lim);
   const base =
     strict.length >= 8
       ? strict
-      : prepFilter(all, opts.selectedEquipment, disliked, ACTIVATION_OK_RE, false);
+      : prepFilter(all, opts.selectedEquipment, disliked, ACTIVATION_OK_RE, false, lim);
 
   const region = opts.region ?? focusRegion(opts.focus ?? null);
   if (region === "full") return enginePrep(base, "activation");
@@ -455,14 +467,15 @@ export function buildActivationPool(
 /** The only vocabulary allowed in 🧘 Cool Down: static stretches and breathing. */
 export function buildCooldownPool(
   all: PoolExercise[],
-  opts: { selectedEquipment: string[]; dislikedIds?: string[] },
+  opts: { selectedEquipment: string[]; dislikedIds?: string[]; limitations?: string[] },
 ): PoolExercise[] {
   const disliked = opts.dislikedIds ?? [];
-  const strict = prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, true).filter(
+  const lim = opts.limitations ?? [];
+  const strict = prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, true, lim).filter(
     (e) => STRETCH_RE.test(e.name) || COOLDOWN_OK_RE.test(e.name),
   );
   if (strict.length >= 6) return enginePrep(strict, "cooldown");
-  return enginePrep(prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, false), "cooldown");
+  return enginePrep(prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, false, lim), "cooldown");
 }
 
 /** Deterministic, rotating selection so two sessions rarely open the same way. */
