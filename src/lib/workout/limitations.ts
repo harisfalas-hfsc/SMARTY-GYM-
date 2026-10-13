@@ -278,7 +278,7 @@ export const LIMITATION_POLICY: Record<string, Policy> = {
     rules: [
       { status: "BLOCKED", when: any("heavyHinge", "heavySquat", "olympic", "spinalFlexion", "burpee", "maxEffort", "hardBrace"), reason: "strong bracing or abdominal pressure" },
       { status: "BLOCKED", when: (t) => t.has("ballistic") && t.has("kettlebell"), reason: "ballistic hip drive with strong bracing" },
-      { status: "BLOCKED", when: any("overhead"), reason: "thrusters and heavy overhead work raise abdominal pressure" },
+      { status: "BLOCKED", when: any("heavyOverhead"), reason: "thrusters and heavy overhead work raise abdominal pressure" },
       { status: "RESTRICTED", when: any("plank", "rotation", "machinePress", "lightHinge", "jump", "isometricHold"), reason: "raises abdominal pressure", condition: `Light, controlled, breathe throughout. ${CLEARANCE}` },
     ],
     prefer: /\b(walk|march|seated|machine|band|glute bridge|cable)\b/i,
