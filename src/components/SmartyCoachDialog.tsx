@@ -16,7 +16,7 @@ type CachedSnapshot = { version: number; savedAt: number; snapshot: CoachSnapsho
 
 function BriefingCard({ title, icon: Icon, tone, children }: { title: string; icon: LucideIcon; tone: string; children: ReactNode }) {
   return (
-    <section className="rounded-md border border-border-strong p-4">
+    <section className="rounded-md border border-primary/45 p-4">
       <h3 className="flex items-center gap-2 text-sm font-bold">
         <Icon className={`h-5 w-5 shrink-0 ${tone}`} />{title}
       </h3>
@@ -144,7 +144,7 @@ export function SmartyCoachDialog({
         {visitor ? (
           <div className="space-y-3">
             <section className="rounded-md border-2 border-primary bg-primary/5 p-4 text-center">
-              <Brain className="mx-auto h-7 w-7 text-primary" />
+              <img src={coachIcon} alt="" className="mx-auto h-10 w-10 object-contain" />
               <h3 className="mt-2 text-lg font-extrabold">A personal trainer in your pocket.</h3>
               <p className="mt-1 text-sm text-muted-foreground">Your daily training companion — helping you choose what to train, when to push and when to recover. Become a Premium member for personal guidance that grows with your training.</p>
             </section>
