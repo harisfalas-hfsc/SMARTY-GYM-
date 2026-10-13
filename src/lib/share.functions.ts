@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
 
 export type WorkoutShareCard = {
   id: string;
@@ -11,6 +12,8 @@ export type WorkoutShareCard = {
   duration_label: string | null;
   location: string | null;
   equipment: string[] | null;
+  format: string | null;
+  image_url: string | null;
 } | null;
 
 /**
@@ -18,15 +21,17 @@ export type WorkoutShareCard = {
  * only. The workout content itself stays behind the normal access rules.
  */
 export const getWorkoutShareCard = createServerFn({ method: "GET" })
-  .inputValidator((input: { workoutId: string }) => input)
+  .inputValidator((input: { workoutId: string }) => z.object({ workoutId: z.string().uuid() }).parse(input))
   .handler(async ({ data }): Promise<WorkoutShareCard> => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row } = await supabaseAdmin
-      .from("workouts")
-      .select(
-        "id,name,category,focus,difficulty_stars,difficulty_label,duration_min,duration_label,location,equipment",
-      )
-      .eq("id", data.workoutId)
-      .maybeSingle();
-    return (row as WorkoutShareCard) ?? null;
+    const { loadPublicShareCard } = await import("@/lib/workout-share.server");
+    return loadPublicShareCard({ kind: "community", id: data.workoutId });
+  });
+
+/** Recheck visibility before sharing; cached/private copies never grant disclosure. */
+export const getShareableWorkoutCard = createServerFn({ method: "GET" })
+  .inputValidator((input: { kind: "smarty" | "community"; id: string }) =>
+    z.object({ kind: z.enum(["smarty", "community"]), id: z.string().uuid() }).parse(input))
+  .handler(async ({ data }): Promise<WorkoutShareCard> => {
+    const { loadPublicShareCard } = await import("@/lib/workout-share.server");
+    return loadPublicShareCard(data);
   });

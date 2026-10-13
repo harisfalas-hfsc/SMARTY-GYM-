@@ -1,5 +1,5 @@
 import { coverVariant, fallbackTo } from "@/lib/cover-image";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import {
   Clock,
   Copy,
   Dumbbell,
+  Download,
   Facebook,
   Heart,
   Instagram,
@@ -32,6 +33,8 @@ import { uniqueTokenIds } from "@/lib/workout/tokens";
 import { difficultyLabel, MAX_STARS, normalizeStars } from "@/lib/workout/spec";
 import { setWorkoutMeta } from "@/lib/coach.functions";
 import { CreatorLink } from "@/components/community/CreatorLink";
+import { captureWorkoutShareCard, workoutShareTarget, workoutShareUrl, type WorkoutShareTarget } from "@/lib/workout/social-share";
+import { getShareableWorkoutCard } from "@/lib/share.functions";
 
 export type WorkoutRow = {
   id: string;
@@ -56,6 +59,9 @@ export type WorkoutRow = {
   is_favorite?: boolean | null;
   rating?: number | null;
   status: string;
+  is_shared?: boolean | null;
+  community_source_id?: string | null;
+  deleted_at?: string | null;
 };
 
 function Stars({ n }: { n: number }) {
@@ -81,10 +87,14 @@ export function WorkoutDisplay({
   creator,
   ownerName,
   ownerCreationMethod,
+  shareTarget,
+  resolveWorkoutId,
 }: {
   creator?: { id: string; name: string | null } | null;
   ownerName?: string | null;
   ownerCreationMethod?: "Smarty Coach" | "Build It Yourself" | null;
+  shareTarget?: WorkoutShareTarget | null;
+  resolveWorkoutId?: () => Promise<string>;
   workout: WorkoutRow;
   onComplete: () => void;
   onPlayerClosed?: () => void;
@@ -92,8 +102,10 @@ export function WorkoutDisplay({
   children?: React.ReactNode;
 }) {
   const html = workout.main_workout ?? "";
-  // Smarty Workouts are already public for everyone — no sharing.
-  const noShare = String(workout.created_by ?? "").startsWith("smarty");
+  const isSmarty = String(workout.created_by ?? "").startsWith("smarty:");
+  const target = previewMode ? null : shareTarget ?? workoutShareTarget(workout);
+  const headerRef = useRef<HTMLElement>(null);
+  const checkShare = useServerFn(getShareableWorkoutCard);
   const ids = useMemo(() => uniqueTokenIds(html), [html]);
   const steps = useMemo(() => parseWorkoutSteps(html), [html]);
   const softTissue = useMemo(() => extractSoftTissue(html), [html]);
@@ -102,6 +114,8 @@ export function WorkoutDisplay({
   const [openExercise, setOpenExercise] = useState<string | null>(null);
   const [reader, setReader] = useState(false);
   const [shareOptions, setShareOptions] = useState(false);
+  const [shareFile, setShareFile] = useState<File | null>(null);
+  const [preparingShare, setPreparingShare] = useState(false);
   const [fontSize, setFontSize] = useState(16);
   const [player, setPlayer] = useState(false);
   const [favorite, setFavorite] = useState(Boolean(workout.is_favorite));
@@ -120,7 +134,8 @@ export function WorkoutDisplay({
     const next = !favorite;
     setFavorite(next);
     try {
-      await saveMeta({ data: { workoutId: workout.id, is_favorite: next } });
+      const workoutId = resolveWorkoutId ? await resolveWorkoutId() : workout.id;
+      await saveMeta({ data: { workoutId, is_favorite: next } });
     } catch {
       setFavorite(!next);
       toast.error("Could not save that.");
@@ -143,12 +158,17 @@ export function WorkoutDisplay({
     }
   }
 
-  const shareUrl = typeof window === "undefined" ? "" : `${window.location.origin}/w/${workout.id}`;
+  const shareUrl = target ? workoutShareUrl(target) : "";
   const shareBits = [
     workout.category,
+    workout.format,
+    workout.serial ? `#${workout.serial}` : null,
+    workout.focus,
     workout.difficulty_label ?? difficultyLabel(workout.difficulty_stars),
+    `${normalizeStars(workout.difficulty_stars)} stars`,
     workout.duration_label ?? `${workout.duration_min} min`,
     workout.location,
+    (workout.equipment ?? []).join(", ") || "Bodyweight",
   ].filter(Boolean);
   const shareTitle = `${workout.name} — SmartyGym`;
   const shareText = `${workout.name} · ${shareBits.join(" · ")}`;
@@ -170,32 +190,53 @@ export function WorkoutDisplay({
   }
 
   async function shareWorkoutLink() {
-    const url = `${window.location.origin}/w/${workout.id}`;
-    const payload = {
-      title: shareTitle,
-      text: shareText,
-      url,
-    };
-
-    // The operating system's share sheet is the only browser API that can list
-    // every installed app. Embedded previews may block it, so keep a full menu.
+    if (!target) {
+      toast.info(previewMode ? "Sharing is unavailable in administrator preview." : "Share this workout with the Smarty Community first, then share its link.");
+      return;
+    }
+    if (preparingShare) return;
+    setPreparingShare(true);
     try {
-      if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
-        await navigator.share(payload);
+      const card = await checkShare({ data: target });
+      if (!card) {
+        toast.error("This workout is no longer publicly available to share.");
         return;
       }
-    } catch (e) {
-      if ((e as Error)?.name === "AbortError") return;
-      // Fall through to the visible share menu.
+      let file: File | null = null;
+      if (headerRef.current) {
+        try { file = await captureWorkoutShareCard(headerRef.current, workout.name); }
+        catch { toast.info("The picture could not be prepared. You can still share the workout link."); }
+      }
+      setShareFile(file);
+      if (typeof navigator.share === "function") {
+        const payload: ShareData = { title: shareTitle, text: shareText, url: shareUrl };
+        if (file && navigator.canShare?.({ files: [file] })) payload.files = [file];
+        try { await navigator.share(payload); return; }
+        catch (error) { if ((error as Error)?.name === "AbortError") return; }
+      }
+      setShareOptions(true);
+    } catch {
+      toast.error("Could not prepare sharing. Please check your connection and try again.");
+    } finally {
+      setPreparingShare(false);
     }
-    setShareOptions(true);
+  }
+
+  function downloadSharePicture() {
+    if (!shareFile) return;
+    const url = URL.createObjectURL(shareFile);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = shareFile.name;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
 
   return (
     <ExerciseMediaProvider ids={ids}>
       <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-        <header className="rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
+        <header ref={headerRef} className="rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             <span>{workout.category}</span>
             {workout.format ? <span>· {workout.format}</span> : null}
@@ -227,18 +268,18 @@ export function WorkoutDisplay({
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Created by</span>
               {creator ? (
                 <CreatorLink userId={creator.id} name={creator.name} className="text-base font-extrabold text-primary underline" />
-              ) : noShare ? (
+              ) : isSmarty ? (
                 <span className="text-base font-extrabold text-foreground">HARIS FALAS</span>
               ) : ownerCreationMethod ? (
-                <span className="text-base font-extrabold text-foreground">You</span>
+                <span data-share-creator={ownerName?.trim() || "User"} className="text-base font-extrabold text-foreground">You</span>
               ) : (
                 <span className="text-base font-extrabold text-foreground">{ownerName?.trim() || "User"}</span>
               )}
             </div>
             {creator ? (
-              <p className="mt-1 text-[11px] text-muted-foreground">Tap the creator’s name to see all their shared workouts.</p>
+              <p data-html2canvas-ignore className="mt-1 text-[11px] text-muted-foreground">Tap the creator’s name to see all their shared workouts.</p>
             ) : ownerCreationMethod ? (
-              <p className="mt-1 text-[11px] text-muted-foreground">Created with {ownerCreationMethod}</p>
+              <p data-html2canvas-ignore className="mt-1 text-[11px] text-muted-foreground">Created with {ownerCreationMethod}</p>
             ) : null}
           </div>
 
@@ -259,12 +300,12 @@ export function WorkoutDisplay({
             />
           ) : null}
 
-          <Button size="lg" className="mt-6 w-full" onClick={() => setPlayer(true)}>
+          <Button data-html2canvas-ignore size="lg" className="mt-6 w-full" onClick={() => setPlayer(true)}>
             Start Your Workout
           </Button>
         </header>
 
-        <div className={`sticky top-2 z-20 mt-5 grid ${noShare ? "grid-cols-2" : "grid-cols-3"} gap-2 rounded-2xl border-2 border-blue-400 bg-card/95 p-2 backdrop-blur`}>
+        <div className="sticky top-2 z-20 mt-5 grid grid-cols-3 gap-2 rounded-2xl border-2 border-blue-400 bg-card/95 p-2 backdrop-blur">
           <Button
             variant="secondary"
             className="h-11 w-full rounded-xl px-2 text-sm font-semibold"
@@ -284,15 +325,16 @@ export function WorkoutDisplay({
             />
             {favorite ? "Saved" : "Save"}
           </Button>
-{!noShare && (
           <Button
             variant="secondary"
             className="h-11 w-full rounded-xl px-2 text-sm font-semibold"
             onClick={shareWorkoutLink}
+            disabled={preparingShare || previewMode}
+            aria-label={preparingShare ? "Preparing share" : "Share"}
+            title={!target ? "Share with the Smarty Community first" : "Share workout"}
           >
             <Share2 className="mr-1.5 h-4 w-4 shrink-0" /> Share
           </Button>
-          )}
         </div>
 
         <article className="workout-html mt-5 rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
@@ -322,6 +364,7 @@ export function WorkoutDisplay({
         <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl border-2 border-primary p-5 sm:p-6">
           <DialogTitle>Share workout</DialogTitle>
           <p className="text-sm text-muted-foreground">Choose where to share {workout.name}.</p>
+          {shareFile && <Button variant="outline" className="h-12 w-full rounded-xl" onClick={downloadSharePicture}><Download className="mr-2 h-5 w-5" /> Save workout picture</Button>}
           <div className="grid grid-cols-2 gap-2">
             <Button asChild variant="outline" className="h-12 justify-start rounded-xl">
               <a href={`https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`} target="_blank" rel="noreferrer">
@@ -352,6 +395,9 @@ export function WorkoutDisplay({
                 <Mail className="mr-2 h-5 w-5 text-primary" /> Email
               </a>
             </Button>
+            <Button asChild variant="outline" className="h-12 justify-start rounded-xl">
+              <a href={`sms:?body=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`}><MessageCircle className="mr-2 h-5 w-5 text-primary" /> Message</a>
+            </Button>
             <Button variant="outline" className="h-12 justify-start rounded-xl" onClick={copyShareLink}>
               <Copy className="mr-2 h-5 w-5 text-primary" /> Copy link
             </Button>
@@ -361,7 +407,9 @@ export function WorkoutDisplay({
               className="h-12 w-full rounded-xl"
               onClick={async () => {
                 try {
-                  await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
+                  const payload: ShareData = { title: shareTitle, text: shareText, url: shareUrl };
+                  if (shareFile && navigator.canShare?.({ files: [shareFile] })) payload.files = [shareFile];
+                  await navigator.share(payload);
                   setShareOptions(false);
                 } catch (error) {
                   if ((error as Error)?.name !== "AbortError") toast.error("Your browser blocked the device share menu.");

@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Standardize Reader/Save/Share with public-only canonical links and header pictures. Real signed-in shared/private/Smarty workouts checked on phone/desktop; both photo/no-photo pictures inspected, private legacy links hidden and visitor community gate checked; 24 targeted tests pass and build OK. Native payload intercepted in browser; delivery through installed social apps/native binaries remains unverified.
+
 - [x] Standardize signed-in Coach cards, center the two-line greeting, and show a clear scroll affordance; verified signed-in phone/desktop, 13 tests and build. Current 9/10 reflects today's 5/10 check-in self-rating; the earlier 10/10 display cannot be reconstructed.
 
 - [x] Add factual weekly readiness evidence below Check-ins/Coming Up and before Smarty Coach suggestions across Insights, inbox and Monday email; remove the Insights PDF download.

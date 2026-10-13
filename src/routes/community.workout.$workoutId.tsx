@@ -164,9 +164,10 @@ function SharedWorkoutPage() {
         <div className="mt-4 grid gap-2">
           {!(error && access.premium) && (
             <Button asChild className="h-12 rounded-2xl font-bold">
-              <Link to="/auth">{access.signedIn ? "Renew membership" : "See membership"}</Link>
+              <Link to="/auth" search={{ next: `/community/workout/${workoutId}`, mode: access.signedIn ? "signin" : "signup" }}>{access.signedIn ? "Renew membership" : "Create an account"}</Link>
             </Button>
           )}
+          {!access.signedIn && <Button asChild variant="outline" className="h-12 rounded-2xl"><Link to="/auth" search={{ next: `/community/workout/${workoutId}`, mode: "signin" }}>Log in</Link></Button>}
           <Button asChild variant="secondary" className="h-12 rounded-2xl">
             <Link to="/community">Back to community</Link>
           </Button>
@@ -189,6 +190,8 @@ function SharedWorkoutPage() {
   return (
     <WorkoutDisplay
       workout={{ ...workout, is_favorite: false, rating: null }}
+      shareTarget={{ kind: "community", id: workoutId }}
+      resolveWorkoutId={ensureCopy}
       onComplete={start}
       creator={{ id: workout.user_id, name: creatorName }}
     >
