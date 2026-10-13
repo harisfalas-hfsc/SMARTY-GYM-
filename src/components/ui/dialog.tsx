@@ -45,7 +45,7 @@ const DialogContent = React.forwardRef<
     >
       {/* Sticky close: stays visible while long dialog content scrolls. */}
       <div className="sticky top-0 z-50 order-first -mb-10 flex h-10 shrink-0 items-start justify-end">
-        <DialogPrimitive.Close className="pointer-events-auto grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full border border-border bg-secondary text-secondary-foreground transition-colors hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
+        <DialogPrimitive.Close className="pointer-events-auto grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full border border-border bg-secondary text-secondary-foreground transition-colors outline-none [@media(hover:hover)]:hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
