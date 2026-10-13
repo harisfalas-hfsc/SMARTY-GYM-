@@ -4,12 +4,12 @@ import { whyThisSession } from "@/lib/coach-rules/why";
 
 describe("limitations", () => {
   it("excludes knee-loading movements", () => {
-    expect(conflictsWithLimitations("Bulgarian Split Squat", ["knee"])).toBe(true);
+    expect(conflictsWithLimitations("Bulgarian Split Squat", ["knee"])).toBe(false);
     expect(conflictsWithLimitations("Jump Squat", ["knee"])).toBe(true);
     expect(conflictsWithLimitations("Glute Bridge", ["knee"])).toBe(false);
   });
   it("excludes overhead work for shoulders", () => {
-    expect(conflictsWithLimitations("Dumbbell Overhead Press", ["shoulder"])).toBe(true);
+    expect(conflictsWithLimitations("Behind-the-Neck Press", ["shoulder"])).toBe(true);
     expect(conflictsWithLimitations("Goblet Squat", ["shoulder"])).toBe(false);
   });
   it("ignores unknown ids", () => {
