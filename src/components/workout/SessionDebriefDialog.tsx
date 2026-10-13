@@ -140,7 +140,7 @@ export function SessionDebriefDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="mx-auto max-h-[85vh] min-h-[50vh] w-[calc(100%-2.5rem)] max-w-md overflow-y-auto rounded-3xl border-2 border-primary p-5 sm:p-6">
-        <DialogHeader className="space-y-1 pb-1 text-left">
+        <DialogHeader className="space-y-1 pb-1 pl-0 pr-10 text-left">
           <DialogTitle className="text-base font-bold">{card.title}</DialogTitle>
           <DialogDescription className="text-xs">{card.hint}</DialogDescription>
         </DialogHeader>
