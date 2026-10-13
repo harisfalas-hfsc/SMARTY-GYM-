@@ -252,6 +252,13 @@ export async function generateWorkoutContent(
     ...enforcedPack.errors,
     ...packValidation.errors,
   ]);
+  // Safety is never "adjusted": a workout that still carries an exercise the
+  // member's limitations exclude is not delivered at all.
+  const safetyFaults = packValidation.errors.filter((m) => /because of your .* limitation|conflicts with your injuries/i.test(m));
+  if (safetyFaults.length)
+    throw new Error(
+      "We couldn't build a session that fully respects your injuries & limitations, so no workout was forced. Try a Recovery or Mobility & Stability session, or review your limitations in your Training Profile — and seek guidance from a qualified professional if you're unsure.",
+    );
   // Coaching text comes from the real Smarty Workouts library (closest match
   // on category, difficulty, equipment mode and duration); the plain template
   // copy is the fallback when nothing matches.
