@@ -33,5 +33,3 @@ export function BrandText({ text, name }: { text: string; name?: string | null }
     </>
   );
 }
-
-export type { ReactNode };
