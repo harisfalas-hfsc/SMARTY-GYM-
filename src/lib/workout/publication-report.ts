@@ -22,6 +22,7 @@ import {
   doseRuleBreak,
   exerciseRuleBreaks,
   holdDoseViolation,
+  timedMovementDoseViolation,
   workoutRuleBreaks,
 } from "./rules";
 
@@ -80,6 +81,9 @@ export function publicationRuleReports(
     const hold = holdDoseViolation(exerciseName, step.prescription);
     if (hold) {
       add("Hold or stretch dosed in reps", line("Static Hold Dose Rule", [["Section", step.section], ["Exercise", exerciseName], ["Current", step.prescription], ["Allowed", "a time-based dose"]], "Replace the rep count with seconds or minutes."));
+    }
+    if ((step.section === "Main Workout" || step.section === "Finisher") && timedMovementDoseViolation(exerciseName, step.prescription)) {
+      add("Timed movement dosed in reps", line("Timed Movement Dose Rule", [["Section", step.section], ["Exercise", exerciseName], ["Current", step.prescription], ["Allowed", "a time-based dose (seconds or minutes)"]], "Runs, steps, ropes, carries and crawls cannot be counted in reps — write them in seconds."));
     }
 
     if (step.section === "Activation" || step.section === "Warm-up") {

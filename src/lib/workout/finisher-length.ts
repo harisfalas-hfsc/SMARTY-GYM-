@@ -4,7 +4,7 @@
 // rounds/sets × (work + rest). Client-safe: used by the generator, the
 // publish gate / audit (smarty-compliance.ts) and the stored-workout repair.
 import { parseWorkoutSteps, statedIntervals } from "./parse-steps";
-import { isTimedPosition } from "./rules";
+import { isTimeDosed } from "./rules";
 
 export const FINISHER_MIN_MINUTES: Record<1 | 2 | 3, number> = { 1: 12, 2: 15, 3: 20 };
 
@@ -191,15 +191,15 @@ export function buildFinisherHtml(input: { category: string; stars: number; exer
     blocks.push(p(`⚡ <strong><u>Finisher (REPS &amp; SETS)</u></strong>`));
     blocks.push(p(`Complete all sets of one exercise before moving on. Rest 60 sec between sets. Total: about ${minutes} minutes.`));
     for (const e of ex) {
-      const unit = isTimedPosition(e.name) ? `${reps * 4} sec` : `${reps} reps`;
+      const unit = isTimeDosed(e.name) ? `${reps * 4} sec` : `${reps} reps`;
       blocks.push(li(`${sets} sets × ${unit} ${tok(e)} — Rest 60 sec between sets.`));
     }
     return done(minutes);
   }
 
   const { work, rest, reps } = LEVEL_DOSE[stars];
-  // Locomotion, rhythm and carries are done for time; countable moves for reps.
-  const unit = (e: FinisherExercise) => (isTimedPosition(e.name) || TIME_BASED_RE.test(e.name) ? `${work} sec` : `${reps} reps`);
+  // Locomotion, rhythm, carries and crawls are done for time; countable moves for reps.
+  const unit = (e: FinisherExercise) => (isTimeDosed(e.name) || TIME_BASED_RE.test(e.name) ? `${work} sec` : `${reps} reps`);
 
   if (format === "TABATA") {
     const minutes = 4 * k;

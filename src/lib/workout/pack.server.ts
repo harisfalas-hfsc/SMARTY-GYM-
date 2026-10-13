@@ -8,7 +8,7 @@ import { pickPrep, STRETCH_RE } from "./pool.server";
 import { dominantRegion, equipmentFamilyLimit, equipmentFamilyOf, isDynamicFormat, regionOf } from "./doctrine";
 import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
-import { isCardioRhythm, isTimedPosition, LIGHT_SET_CAP } from "./rules";
+import { isCardioRhythm, isTimedPosition, isTimeDosed, LIGHT_SET_CAP } from "./rules";
 import { buildFinisherHtml, finisherMinimumMinutes } from "./finisher-length";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
@@ -377,17 +377,17 @@ export function buildPackWorkout(
     // Bodyweight strength work needs more reps than a loaded lift to be a real stimulus.
     const reps = isBodyweight(e) ? Math.max(d.reps?.[1] ?? 10, 10) : (d.reps?.[0] ?? 10);
     // Fit the sets to the advertised training time (real work per set plus rest).
-    const work = isTimedPosition(e.name) ? (d.seconds?.[0] ?? 30) : reps * 5;
+    const work = isTimeDosed(e.name) ? (d.seconds?.[0] ?? 30) : reps * 5;
     const blocks = Math.max(1, mainCount);
     const fit = Math.floor((mainMinutes * 60) / (blocks * (work + d.restSec[0])));
     const sets = Math.max(1, Math.min(d.sets[1], fit));
-    const unit = isTimedPosition(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
+    const unit = isTimeDosed(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
     return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets. ${d.tempo[0]!.toUpperCase()}${d.tempo.slice(1)}.`;
   };
   mainPicks.forEach((e, i) => {
     if (input.format === "REPS & SETS" && input.plan) return void blocks.push(li(planned(input.plan.main, e)));
     const dose = doseFor(input.format, input.level, i, input.category === "RECOVERY" || input.category === "MOBILITY & STABILITY");
-    const text = isTimedPosition(e.name) && /reps/.test(dose.text) ? dose.text.replace(/\d+ reps/, "30 sec") : dose.text;
+    const text = isTimeDosed(e.name) && /reps/.test(dose.text) ? dose.text.replace(/\d+ reps/, "30 sec") : dose.text;
     blocks.push(li(`${text} ${token(e)}${dose.protocol ? ` — ${dose.protocol}` : ""}`));
   });
 
