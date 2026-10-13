@@ -1,0 +1,4 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS pregnancy_stage text;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS limitation_clearance boolean NOT NULL DEFAULT false;
+COMMENT ON COLUMN public.profiles.pregnancy_stage IS 'Member-reported stage for the Pregnant / postpartum limitation: pregnant_early, pregnant_later, postpartum_early, postpartum_later; null = unknown (most conservative).';
+COMMENT ON COLUMN public.profiles.limitation_clearance IS 'Member-reported: a clinician has cleared them for vigorous exercise with their medical limitations. Not a medical clearance by the app.';

@@ -362,6 +362,8 @@ export async function createWorkoutForUser(
           disliked_library: dislikedLibrary,
           recent_performance: performanceLines,
           limitations: (prof?.["limitations"] as string[]) ?? null,
+          pregnancy_stage: (prof?.["pregnancy_stage"] as string | null) ?? null,
+          limitation_clearance: Boolean(prof?.["limitation_clearance"]),
           location,
           mood,
           recent_feedback: feedbackLines,

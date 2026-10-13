@@ -31,10 +31,27 @@ export const createManualWorkout = createServerFn({ method: "POST" })
     const ids = [...new Set(all.map((e) => e.id))];
     const { data: rows, error } = await context.supabase
       .from("exercises")
-      .select("id,name")
+      .select("id,name,equipment,body_part,target_muscle,difficulty")
       .eq("is_active", true)
       .in("id", ids);
     if (error) throw new Error(error.message);
+    // Same safety layer as every other pathway: an exercise BLOCKED by the
+    // member's own Training Profile limitations is never saved.
+    const { data: prof } = await context.supabase
+      .from("profiles")
+      .select("limitations,pregnancy_stage,limitation_clearance")
+      .eq("id", context.userId)
+      .maybeSingle();
+    const { limitationAdmits, limitationDecision, limitationExplanation } = await import("@/lib/workout/limitations");
+    const lp = {
+      limitations: ((prof as { limitations?: string[] | null } | null)?.limitations) ?? [],
+      pregnancyStage: (prof as { pregnancy_stage?: string | null } | null)?.pregnancy_stage ?? null,
+      clearance: Boolean((prof as { limitation_clearance?: boolean } | null)?.limitation_clearance),
+    };
+    for (const r of (rows ?? []) as { id: string; name: string; equipment: string | null; body_part: string | null; target_muscle: string | null; difficulty: string | null }[]) {
+      if (!limitationAdmits(r, lp, { allowRestricted: true }))
+        throw new Error(`${limitationExplanation(r.name, limitationDecision(r, lp)) ?? `"${r.name}" conflicts with your injuries & limitations.`} Remove it, or update your limitations in your Training Profile.`);
+    }
     const names = new Map(((rows ?? []) as { id: string; name: string }[]).map((r) => [r.id, r.name]));
     const missing = ids.filter((id) => !names.has(id));
     if (missing.length) throw new Error("One of the exercises is no longer in the library. Remove it and try again.");

@@ -114,6 +114,8 @@ export type AthleteContext = {
   /** Logged sets from previous sessions, used for progressive overload. */
   recent_performance?: string[] | null;
   limitations?: string[] | null;
+  pregnancy_stage?: string | null;
+  limitation_clearance?: boolean | null;
   location?: string | null;
   mood?: string | null;
   recent_feedback?: string[] | null;

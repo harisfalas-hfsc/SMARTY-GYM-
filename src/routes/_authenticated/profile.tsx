@@ -1,3 +1,4 @@
+import { PREGNANCY_STAGES, hasMedicalLimitation } from "@/lib/workout/limitations";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -73,6 +74,8 @@ type Profile = {
   use_library_preferences: boolean;
 
   limitations: string[] | null;
+  pregnancy_stage: string | null;
+  limitation_clearance: boolean;
   health_acknowledged_at: string | null;
   onboarded: boolean;
   readiness_answers: Record<string, boolean>;
@@ -96,6 +99,8 @@ const EMPTY: Profile = {
   use_library_preferences: true,
 
   limitations: [],
+  pregnancy_stage: null,
+  limitation_clearance: false,
   health_acknowledged_at: null,
   onboarded: false,
   readiness_answers: {},
@@ -592,6 +597,28 @@ function ProfilePage() {
             value={p.limitations ?? []}
             onToggle={(id) => toggleList("limitations", id)}
           />
+          {(p.limitations ?? []).includes("Pregnant / postpartum") ? (
+            <div className="mt-4">
+              <p className="mb-2 text-sm font-semibold">Which stage are you at?</p>
+              <Pills
+                options={PREGNANCY_STAGES}
+                value={p.pregnancy_stage ? [p.pregnancy_stage] : []}
+                onToggle={(id) => setP((prev) => (prev ? { ...prev, pregnancy_stage: prev.pregnancy_stage === id ? null : id } : prev))}
+              />
+            </div>
+          ) : null}
+          {hasMedicalLimitation(p.limitations) ? (
+            <label className="mt-4 flex items-start gap-3 rounded-2xl border border-border p-3 text-sm">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-4 w-4 accent-primary"
+                checked={Boolean(p.limitation_clearance)}
+                onChange={(e) => setP((prev) => (prev ? { ...prev, limitation_clearance: e.target.checked } : prev))}
+              />
+              <span>A doctor or clinician has cleared me for vigorous exercise. Without this, sessions stay conservative.</span>
+            </label>
+          ) : null}
+          <p className="mt-3 text-xs text-muted-foreground">These choices shape exercise selection; they are not a diagnosis or medical advice.</p>
         </SectionCard>
       </div>
 
