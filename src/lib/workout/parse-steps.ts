@@ -132,6 +132,19 @@ export type StepTiming =
 
 const REST_FRAGMENT_RE = /rest[^.;]*?\d+\s*(sec|secs|seconds|s|min|minutes|m)\b/gi;
 
+/**
+ * Number of intervals / rounds a step itself states: "4 intervals", "8 rounds",
+ * "x 5 rounds", "4 intervals per block, 8 total" (the total wins). Null when
+ * the step states none.
+ */
+export function statedIntervals(prescription: string): number | null {
+  const text = prescription ?? "";
+  const total = text.match(/\b(?:intervals?|rounds?)\b[^.;]*?\b(\d{1,2})\s*total\b/i);
+  if (total) return Number(total[1]);
+  const count = text.match(/\b(\d{1,2})\s*(?:intervals?|rounds?)\b/i);
+  return count ? Number(count[1]) : null;
+}
+
 /** Decides how (or whether) a step is timed. Rest fragments never count as work. */
 export function parseStepTiming(step: {
   prescription: string;
