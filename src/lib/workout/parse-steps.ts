@@ -139,7 +139,12 @@ export function parseStepTiming(step: {
   subSection?: string | null;
 }): StepTiming {
   const all = `${step.section ?? ""} ${step.subSection ?? ""} ${step.prescription}`.toLowerCase();
-  if (all.includes("tabata")) return { mode: "tabata", work: 20, rest: 10, rounds: 8 };
+  if (all.includes("tabata")) {
+    // Use the interval count the step itself states ("4 intervals", "8 rounds");
+    // a classic Tabata block is 8 when nothing is stated.
+    const stated = statedIntervals(step.prescription);
+    return { mode: "tabata", work: 20, rest: 10, rounds: stated ?? 8 };
+  }
 
   const text = step.prescription.replace(REST_FRAGMENT_RE, " ");
   if (/\b\d+\s*(reps?|rep|sets?|x)\b/i.test(text) || /\b\d+\s*sets?\s*[x×]/i.test(text)) {
