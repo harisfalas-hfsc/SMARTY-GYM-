@@ -176,6 +176,31 @@ function Pills({
   );
 }
 
+const READINESS_SHORT: Record<string, string> = {
+  heart: "heart condition",
+  chestPain: "chest pain",
+  dizziness: "dizziness or losing consciousness",
+  jointProblem: "bone, joint or soft-tissue problem",
+  otherReason: "another reason not to exercise",
+};
+
+/** Plain summary of the saved PAR-Q answers so the member always sees their current status. */
+function ReadinessStatus({ answers, acknowledgedAt }: { answers: Record<string, boolean> | undefined; acknowledgedAt: string | null | undefined }) {
+  const a = answers ?? {};
+  const answered = Object.keys(a).length;
+  const yes = Object.entries(a).filter(([, v]) => v).map(([k]) => READINESS_SHORT[k] ?? k);
+  const date = acknowledgedAt ? new Date(acknowledgedAt).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" }) : null;
+  let text: string;
+  if (answered < 5) text = `Not completed — ${answered} of 5 questions answered.`;
+  else if (!yes.length) text = "Completed — all answers are No.";
+  else text = `Completed — you answered Yes to: ${yes.join(", ")}.${date ? ` Warning accepted on ${date}.` : " Warning not accepted yet."}`;
+  return (
+    <p className="mb-3 rounded-2xl border-2 border-blue-400 bg-background p-4 text-sm font-semibold leading-5">
+      Your current status: <span className="font-normal">{text}</span>
+    </p>
+  );
+}
+
 function ProfilePage() {
   const navigate = useNavigate();
   const { freeAccessMode } = useFreeAccessMode();
@@ -209,14 +234,8 @@ function ProfilePage() {
         ),
       ) as Partial<Profile>;
 
-      // Readiness questions always start unanswered: every visit is a fresh check,
-      // so no Yes/No button is pre-selected.
-      const row = {
-        ...EMPTY,
-        ...clean,
-        readiness_answers: {},
-        readiness_warning_acknowledged_at: null,
-      };
+      // Saved answers are shown as saved (a new member starts with nothing selected).
+      const row = { ...EMPTY, ...clean };
       setWasOnboarded(Boolean(row.onboarded));
       setP(row);
 
@@ -488,6 +507,7 @@ function ProfilePage() {
           title="Readiness questionnaire"
           hint="Mandatory before any workout can be created"
         >
+          <ReadinessStatus answers={p.readiness_answers} acknowledgedAt={p.readiness_warning_acknowledged_at} />
           <div className="space-y-3">
             {[
               ["heart", "Has a doctor ever said you have a heart condition or should only exercise under medical supervision?"],
