@@ -689,7 +689,17 @@ export function WorkoutPlayerDialog({
           {timing.mode !== "manual" ? (
 
             <div className="flex gap-2">
-              <Button onClick={() => { if (soundOnRef.current) unlockTimerBeep(); setRunning((r) => !r); }} className="min-w-32">
+              <Button
+                onClick={() => {
+                  // Pressing Start beeps at once so the member hears the work begin.
+                  if (!running && soundOnRef.current) {
+                    unlockTimerBeep();
+                    playTimerBeep();
+                  }
+                  setRunning((r) => !r);
+                }}
+                className="min-w-32"
+              >
                 {running ? <Pause className="mr-2 h-4 w-4" /> : <Play className="mr-2 h-4 w-4" />}
                 {running ? "Pause" : "Start"}
               </Button>
