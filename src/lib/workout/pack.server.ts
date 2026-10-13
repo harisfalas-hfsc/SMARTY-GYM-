@@ -387,7 +387,7 @@ export function buildPackWorkout(
 
   if (finisherPicks.length) {
     // Finisher length rule: level minimum, honest rounds/sets × (work + rest).
-    buildFinisherHtml({ category: input.category, stars: levelStars, exercises: finisherPicks }).blocks.forEach((b) => blocks.push(b));
+    buildFinisherHtml({ category: input.category, stars: levelStars, exercises: finisherPicks, mainFormat: input.format }).blocks.forEach((b) => blocks.push(b));
   }
 
   if (!isMicro) {

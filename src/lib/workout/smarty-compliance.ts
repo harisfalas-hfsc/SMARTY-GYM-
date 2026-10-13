@@ -9,7 +9,7 @@ import { prepTokens, prepAllowed, isBodyweightEquipment, ACTIVATION_NAMES, activ
 import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import { focusBreaks } from "./strength-focus";
-import { finisherLengthIssue } from "./finisher-length";
+import { finisherFormatIssue, finisherLengthIssue } from "./finisher-length";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
@@ -96,6 +96,8 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   if (D.categoryAllowsFinisher(cat)) {
     const f = finisherLengthIssue(html, w.difficulty_stars);
     if (f) s.add(f);
+    const ff = finisherFormatIssue(html, cat);
+    if (ff) s.add(ff);
   }
   if (!NO_PRIORITY.has(cat) && !hasRequiredExerciseList(cat) && rows.length) {
     const legal = library.filter((e) => isLegalExercise(e, { category: cat as never, format: (w.format ?? "REPS & SETS") as never, bodyweightOnly: ctx.bodyweightOnly }));
