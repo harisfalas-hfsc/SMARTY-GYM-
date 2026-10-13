@@ -9,6 +9,7 @@ import { dominantRegion, equipmentFamilyLimit, equipmentFamilyOf, isDynamicForma
 import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
 import { isCardioRhythm, isTimedPosition, LIGHT_SET_CAP } from "./rules";
+import { buildFinisherHtml, finisherMinimumMinutes } from "./finisher-length";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
@@ -191,17 +192,18 @@ function doseFor(format: Format, level: DifficultyLevel, index: number, light = 
   }
 }
 
-function roundsFor(format: Format, minutes: number, stations: number): string | null {
+function roundsFor(format: Format, minutes: number, stations: number, share = 0.6): string | null {
   const rounds = Math.max(2, Math.min(6, Math.round(minutes / Math.max(4, stations * 1.5))));
+  const clock = (floor: number) => Math.max(floor, Math.round(minutes * share));
   switch (format) {
     case "CIRCUIT":
       return `${rounds} rounds. Rest 60 sec between rounds.`;
     case "AMRAP":
-      return `As many rounds as possible in ${Math.max(8, Math.round(minutes * 0.6))} minutes.`;
+      return `As many rounds as possible in ${clock(8)} minutes.`;
     case "FOR TIME":
-      return `${rounds} rounds for time. Cap: ${Math.max(10, Math.round(minutes * 0.6))} minutes.`;
+      return `${rounds} rounds for time. Cap: ${clock(10)} minutes.`;
     case "EMOM":
-      return `EMOM for ${Math.max(10, Math.round(minutes * 0.6))} minutes, cycling the list.`;
+      return `EMOM for ${clock(10)} minutes, cycling the list.`;
     case "TABATA":
       return `8 rounds of 20 sec work / 10 sec rest at every station.`;
     default:
@@ -235,7 +237,14 @@ export function buildPackWorkout(
   const isMicro = input.category === "MICRO-WORKOUTS";
   const isRecovery = input.category === "RECOVERY";
   // HARD RULE: Micro Workout and Pilates never get a finisher.
-  const noFinisher = input.finisher === undefined ? isMicro || isRecovery || input.category === "PILATES" : !input.finisher;
+  const levelStars = input.level === "beginner" ? 1 : input.level === "advanced" ? 3 : 2;
+  const finMin = finisherMinimumMinutes(levelStars);
+  // A Finisher lasts its level minimum (finisher-length.ts); it exists only
+  // when the Main Workout still keeps at least 15 min of the clock.
+  const noFinisher =
+    (input.finisher === undefined ? isMicro || isRecovery || input.category === "PILATES" : !input.finisher) ||
+    input.minutes - finMin < 15;
+  const mainMinutes = noFinisher ? input.minutes : input.minutes - finMin;
   const favouriteIds = input.favoriteIds ?? [];
   const used = new Set<string>();
 
