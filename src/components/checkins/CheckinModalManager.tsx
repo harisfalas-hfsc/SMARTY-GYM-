@@ -73,7 +73,7 @@ export function CheckinModalManager() {
       <Dialog open={prompt !== null} onOpenChange={(o) => !o && close("later")}>
         <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-xl">
+            <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
               {isMorning ? <Sun className="h-6 w-6 text-primary" /> : <Moon className="h-6 w-6 text-primary" />}
               {isMorning ? "Morning" : "Night"} Smarty Check-in
             </DialogTitle>

@@ -389,7 +389,7 @@ export function ProgressSection() {
 
       <Dialog open={detail !== null} onOpenChange={(open) => !open && setDetail(null)}>
         <DialogContent className="max-h-[82vh] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-2xl p-5">
-          <DialogHeader className="pr-8 text-left">
+          <DialogHeader className="pl-0 pr-10 text-left">
             <DialogTitle>
               {detail === "score" ? "Progress score" : detail === "rank" ? "Your ranking" : detail === "current" ? "Current streak" : detail === "longest" ? "Longest streak" : detail === "days" ? "Training days" : detail === "membership" ? "Membership" : "Awards earned"}
             </DialogTitle>

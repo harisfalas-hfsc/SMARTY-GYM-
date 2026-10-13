@@ -31,25 +31,27 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { hideClose?: boolean }
+>(({ className, children, onOpenAutoFocus, hideClose = false, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
+      // Keep the round close button visually identical in every dialog: never auto-select it on open.
+      onOpenAutoFocus={onOpenAutoFocus ?? ((e) => { e.preventDefault(); (e.currentTarget as HTMLElement | null)?.focus({ preventScroll: true }); })}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] gap-5 overflow-y-auto rounded-3xl border-2 border-primary bg-card p-5 shadow-soft duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:p-6",
+        "fixed outline-none left-[50%] top-[50%] z-50 grid max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] gap-5 overflow-y-auto rounded-3xl border-2 border-primary bg-card p-5 shadow-soft duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:p-6",
         className,
       )}
       {...props}
     >
       {/* Sticky close: stays visible while long dialog content scrolls. */}
-      <div className="sticky top-0 z-50 order-first -mb-10 flex h-10 shrink-0 items-start justify-end">
+      {hideClose ? null : <div className="sticky top-0 z-50 order-first -mb-10 flex h-10 shrink-0 items-start justify-end">
         <DialogPrimitive.Close className="pointer-events-auto grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full border border-border bg-secondary text-secondary-foreground transition-colors outline-none [@media(hover:hover)]:hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
-      </div>
+      </div>}
 
       {children}
 
@@ -59,7 +61,7 @@ const DialogContent = React.forwardRef<
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col items-center space-y-2 pr-0 text-center sm:items-start sm:pr-9 sm:text-left", className)} {...props} />
+  <div className={cn("flex flex-col items-center space-y-2 px-10 text-center sm:items-start sm:pl-0 sm:pr-10 sm:text-left", className)} {...props} />
 );
 DialogHeader.displayName = "DialogHeader";
 

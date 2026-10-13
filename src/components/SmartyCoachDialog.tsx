@@ -134,7 +134,7 @@ export function SmartyCoachDialog({
     <Dialog open={open} onOpenChange={changeOpen}>
       {/* On phone, let the visitor content grow to preserve equal top/bottom padding. Signed-in and desktop sizing stay unchanged. */}
       <DialogContent onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }} className={`outline-none max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${visitor ? "max-sm:min-h-[21.25rem]" : "flex flex-col overflow-hidden max-sm:h-[31.875rem]"}`}>
-        <DialogHeader className="shrink-0 items-center pr-0 text-center sm:items-center sm:pr-0 sm:text-center">
+        <DialogHeader className="shrink-0 items-center px-10 text-center sm:items-center sm:px-10 sm:text-center">
           <DialogTitle className="text-primary">Smarty Coach</DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
             {visitor ? "Your personal coach. Anytime, anywhere." : snapshot ? <><span className="block"><BrandText text={snapshot.greeting.replace(/[.!]$/, "!")} name={snapshot.firstName} /></span><span className="block">Welcome back.</span></> : "Preparing your personal briefing."}
