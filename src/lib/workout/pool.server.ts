@@ -3,7 +3,7 @@ import { knownLimitations, limitationAdmits, limitationDecision, type Limitation
 import { prepAllowed } from "./prep-vocabulary";
 import { orderedPriority } from "./priority";
 import { priorityIds } from "./priority";
-import { isCardioRhythm, isLegalExercise, isPassiveStretch } from "./rules";
+import { isCardioRhythm, isLegalExercise, isPassiveStretch, TABATA_TRAVEL_RE } from "./rules";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Category, DifficultyLevel, EquipmentMode, Format, StrengthFocus } from "./spec";
 import {
