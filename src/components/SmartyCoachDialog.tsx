@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
-import { Activity, ArrowRight, Brain, Dumbbell, Gauge, RefreshCw, Target } from "lucide-react";
+import { Activity, ArrowRight, Brain, ChevronDown, Dumbbell, Gauge, RefreshCw, Target, type LucideIcon } from "lucide-react";
 import { getCoachSnapshot } from "@/lib/coach.functions";
 import type { CoachSnapshot } from "@/lib/coach-snapshot";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -12,6 +12,17 @@ const CACHE_VERSION = 2;
 const CACHE_MAX_AGE = 12 * 60 * 60 * 1000;
 
 type CachedSnapshot = { version: number; savedAt: number; snapshot: CoachSnapshot };
+
+function BriefingCard({ title, icon: Icon, tone, children }: { title: string; icon: LucideIcon; tone: string; children: ReactNode }) {
+  return (
+    <section className="rounded-md border border-border-strong p-4">
+      <h3 className="flex items-center gap-2 text-sm font-bold">
+        <Icon className={`h-5 w-5 shrink-0 ${tone}`} />{title}
+      </h3>
+      <div className="mt-2 space-y-1 text-sm leading-relaxed">{children}</div>
+    </section>
+  );
+}
 
 function cacheKey(accountKey: string) {
   return `smarty:coach-snapshot:v${CACHE_VERSION}:${accountKey}`;
@@ -54,6 +65,21 @@ export function SmartyCoachDialog({
   const [snapshot, setSnapshot] = useState<CoachSnapshot | null>(() => readCached(accountKey));
   const [loading, setLoading] = useState(!visitor && !readCached(accountKey));
   const [failed, setFailed] = useState(false);
+  const briefingRef = useRef<HTMLDivElement>(null);
+  const [hasMore, setHasMore] = useState(false);
+
+  useEffect(() => {
+    const element = briefingRef.current;
+    if (!element || !open) { setHasMore(false); return; }
+    element.scrollTop = 0;
+    const update = () => setHasMore(element.scrollHeight - element.clientHeight - element.scrollTop > 4);
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    if (element.firstElementChild) observer.observe(element.firstElementChild);
+    element.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => { observer.disconnect(); element.removeEventListener("scroll", update); };
+  }, [open, snapshot, visitor]);
 
   const fetchSnapshot = () => {
     if (visitor) return;
@@ -106,14 +132,14 @@ export function SmartyCoachDialog({
   return (
     <Dialog open={open} onOpenChange={changeOpen}>
       {/* On phone, let the visitor content grow to preserve equal top/bottom padding. Signed-in and desktop sizing stay unchanged. */}
-      <DialogContent className={`max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${visitor ? "max-sm:min-h-[21.25rem]" : "max-sm:h-[31.875rem]"}`}>
-        <DialogHeader className="items-center pr-0 text-center">
+      <DialogContent className={`max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${visitor ? "max-sm:min-h-[21.25rem]" : "flex flex-col overflow-hidden max-sm:h-[31.875rem]"}`}>
+        <DialogHeader className="shrink-0 items-center pr-0 text-center sm:items-center sm:pr-0 sm:text-center">
           <div className="flex items-center gap-2">
             <img src={coachIcon} alt="" className="h-8 w-8 shrink-0 object-contain" />
             <DialogTitle>Smarty Coach</DialogTitle>
           </div>
-          <DialogDescription>
-            {visitor ? "Your personal coach. Anytime, anywhere." : snapshot?.greeting ?? "Preparing your personal briefing."}
+          <DialogDescription className="text-sm leading-relaxed">
+            {visitor ? "Your personal coach. Anytime, anywhere." : snapshot ? <><span className="block">{snapshot.greeting.replace(/[.!]$/, "!")}</span><span className="block">Welcome back.</span></> : "Preparing your personal briefing."}
           </DialogDescription>
         </DialogHeader>
 
@@ -145,14 +171,12 @@ export function SmartyCoachDialog({
             <Button className="mt-4" variant="outline" onClick={fetchSnapshot}><RefreshCw /> Try again</Button>
           </div>
         ) : snapshot ? (
-          <div className="max-h-[calc(100dvh-10rem)] space-y-3 overflow-y-auto pr-1 pb-1">
-            <section className="rounded-md border-2 border-primary bg-primary/5 p-4">
-              <div className="flex items-start gap-3">
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary/10 text-primary"><Target /></span>
-                <div className="min-w-0">
-                  <p className="text-xs font-bold uppercase text-primary">Today’s focus</p>
-                  <h3 className="mt-1 text-lg font-extrabold leading-tight">{snapshot.headline}</h3>
-                  <p className="mt-1 text-sm leading-relaxed">{snapshot.recommendation}</p>
+          <>
+          <div ref={briefingRef} aria-label="Smarty Coach briefing" tabIndex={0} className="min-h-0 max-h-[calc(100dvh-13rem)] flex-1 overflow-y-auto pr-1 pb-1 [scrollbar-width:thin] [scrollbar-color:var(--primary)_var(--secondary)]">
+            <div className="space-y-3">
+            <BriefingCard title="Today’s focus" icon={Target} tone="text-primary">
+                  {snapshot.headline !== "Welcome back" ? <p className="text-base font-extrabold leading-tight">{snapshot.headline}</p> : null}
+                  <p className="text-muted-foreground">{snapshot.recommendation}</p>
                   <p className="mt-2 text-sm font-semibold text-primary">
                     {[snapshot.todayFocus.category, snapshot.todayFocus.bodyFocus, snapshot.todayFocus.intensity].filter(Boolean).join(" · ")}
                   </p>
@@ -162,33 +186,28 @@ export function SmartyCoachDialog({
                       {[snapshot.todayFocus.duration ? `${snapshot.todayFocus.duration} min` : null, snapshot.todayFocus.stars ? `${snapshot.todayFocus.stars} star${snapshot.todayFocus.stars === 1 ? "" : "s"}` : null].filter(Boolean).join(" · ")}
                     </p>
                   ) : null}
-                </div>
-              </div>
-            </section>
+            </BriefingCard>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <section className="rounded-md border border-border-strong p-4">
-                <div className="flex items-center gap-2 font-bold"><Gauge className="text-chart-2" /> Readiness</div>
-                <p className="mt-2 text-lg font-extrabold">{snapshot.readinessDisplay.label}{snapshot.readinessDisplay.score !== null ? ` · ${snapshot.readinessDisplay.score}/10` : ""}</p>
-                <p className="mt-1 text-xs text-muted-foreground">
+              <BriefingCard title="Readiness" icon={Gauge} tone="text-chart-2">
+                <p className="text-base font-extrabold leading-tight">{snapshot.readinessDisplay.label}{snapshot.readinessDisplay.score !== null ? ` · ${snapshot.readinessDisplay.score}/10` : ""}</p>
+                <p className="text-muted-foreground">
                   {snapshot.readinessDisplay.reason}
                 </p>
-              </section>
+              </BriefingCard>
 
-              <section className="rounded-md border border-border-strong p-4">
-                <div className="flex items-center gap-2 font-bold"><Activity className="text-chart-3" /> Your last session</div>
+              <BriefingCard title="Your last session" icon={Activity} tone="text-chart-3">
                 {snapshot.lastSession ? (
                   <>
-                    <p className="mt-2 font-semibold">{snapshot.lastSession.name}</p>
+                    <p className="text-base font-extrabold leading-tight">{snapshot.lastSession.name}</p>
                     <p className="text-xs text-muted-foreground">{snapshot.lastSession.date}</p>
                     {snapshot.lastSession.facts.length ? <p className="mt-1 text-sm text-muted-foreground">{snapshot.lastSession.facts.join(" · ")}</p> : null}
                   </>
                 ) : <p className="mt-2 text-sm text-muted-foreground">No completed session yet.</p>}
-              </section>
+              </BriefingCard>
             </div>
 
-            <section className="rounded-md border border-border-strong p-4">
-              <div className="flex items-center gap-2 font-bold"><Brain className="text-chart-4" /> Why this fits</div>
+            <BriefingCard title="Why this fits" icon={Brain} tone="text-chart-4">
               <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
                 {snapshot.reasons.map((reason) => <li key={reason} className="flex gap-2"><span className="text-primary">•</span><span>{reason}</span></li>)}
               </ul>
@@ -198,10 +217,13 @@ export function SmartyCoachDialog({
                 </p>
               ) : null}
               {snapshot.equipment.length ? <p className="mt-2 flex items-start gap-2 text-xs text-muted-foreground"><Dumbbell className="mt-0.5 h-3.5 w-3.5" /> Uses only equipment from your Training Profile.</p> : null}
-            </section>
+            </BriefingCard>
 
             <Button className="w-full" onClick={followAction}>{snapshot.action.label}<ArrowRight /></Button>
           </div>
+          </div>
+          {hasMore ? <Button variant="ghost" size="icon" className="mx-auto h-7 w-10 shrink-0 text-primary" aria-label="Show more of your Coach briefing" title="Show more" onClick={() => briefingRef.current?.scrollBy({ top: (briefingRef.current?.clientHeight ?? 300) * 0.75, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" })}><ChevronDown className="h-5 w-5" /></Button> : null}
+          </>
         ) : null}
       </DialogContent>
     </Dialog>

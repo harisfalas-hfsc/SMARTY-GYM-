@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Standardize signed-in Coach cards, center the two-line greeting, and show a clear scroll affordance; verified signed-in phone/desktop, 13 tests and build. Current 9/10 reflects today's 5/10 check-in self-rating; the earlier 10/10 display cannot be reconstructed.
+
 - [x] Add factual weekly readiness evidence below Check-ins/Coming Up and before Smarty Coach suggestions across Insights, inbox and Monday email; remove the Insights PDF download.
 
 - [x] Correct User Activity reporting so opening, creating, copying, completing, scheduling, favoriting and sharing workouts always use distinct factual labels.
