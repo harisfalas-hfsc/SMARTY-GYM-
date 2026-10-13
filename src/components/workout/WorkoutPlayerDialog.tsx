@@ -8,7 +8,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { Check, ChevronLeft, ChevronRight, Cylinder, Dumbbell, Flag, Minus, Pause, Play, Plus, RotateCcw, X } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Cylinder, Dumbbell, Flag, Minus, Pause, Play, Plus, RotateCcw, Volume2, VolumeX, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ExerciseImage } from "@/components/ExerciseImage";
 import { ExerciseDetailDialog } from "./ExerciseDetailDialog";
@@ -100,6 +100,48 @@ export function WorkoutPlayerDialog({
   const [attempt, setAttempt] = useState(1);
   const [lastSet, setLastSet] = useState<Record<number, { reps: string; weight: string; seconds: string; distance: string }>>({});
   const beepRef = useRef<number>(0);
+  const soundOnRef = useRef(false);
+  const logSetRef = useRef<(count?: number) => Promise<void>>(async () => {});
+  const [soundOn, setSoundOn] = useState(false);
+  const audioRef = useRef<AudioContext | null>(null);
+  useEffect(() => {
+    try {
+      setSoundOn(window.localStorage.getItem("smarty-player-sound") === "on");
+    } catch {
+      /* storage unavailable */
+    }
+  }, []);
+  function toggleSound() {
+    const next = !soundOn;
+    setSoundOn(next);
+    try {
+      window.localStorage.setItem("smarty-player-sound", next ? "on" : "off");
+    } catch {
+      /* storage unavailable */
+    }
+    if (next) {
+      // Phones only allow sound after a tap, so the context is created here.
+      try {
+        audioRef.current ??= new AudioContext();
+        void audioRef.current.resume();
+        beep(880, 0.08);
+      } catch {
+        /* audio unavailable */
+      }
+    }
+  }
+  function beep(freq: number, duration: number) {
+    const ctx = audioRef.current;
+    if (!ctx) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  }
   const loggableRef = useRef(false);
   const isLastSlideRef = useRef(false);
   const finishRef = useRef<() => void>(() => {});
@@ -180,6 +222,13 @@ export function WorkoutPlayerDialog({
     [slide],
   );
 
+  const unitWord = tracking?.roundsTotal
+    ? timing.mode === "tabata" || /interval/i.test(slide?.kind === "exercise" ? slide.step.prescription : "")
+      ? "interval"
+      : "round"
+    : "set";
+  const roundsLeft = tracking?.roundsTotal ? Math.max(0, tracking.roundsTotal - (logged[index] ?? 0)) : 0;
+
   // The countdown must not jump away from a step that still wants numbers.
   useEffect(() => {
     loggableRef.current = Boolean(tracking && tracking.primary !== "completion");
@@ -210,7 +259,7 @@ export function WorkoutPlayerDialog({
     else setRemaining(0);
   }, [index, timing]);
 
-  async function logSet() {
+  async function logSet(count = 1) {
     if (!slide || slide.kind !== "exercise" || !tracking) return;
     const repsValue = tracking.askReps && reps.trim() ? Number(reps) : tracking.autoReps;
     const weightValue = tracking.load && weight.trim() ? Number(weight) : null;
@@ -233,10 +282,11 @@ export function WorkoutPlayerDialog({
       toast.error("Nothing to log yet — add a value first.");
       return;
     }
+    const n = Math.max(1, count);
     if (previewMode) {
-      const setNumber = (logged[index] ?? 0) + 1;
+      const setNumber = (logged[index] ?? 0) + n;
       setLogged((prev) => ({ ...prev, [index]: setNumber }));
-      toast.success(`Previewed set ${setNumber} — no member data was changed.`);
+      toast.success(`Previewed ${n > 1 ? `${n} ${unitWord}s` : `${unitWord} ${setNumber}`} — no member data was changed.`);
       return;
     }
     setSavingSet(true);
@@ -244,18 +294,18 @@ export function WorkoutPlayerDialog({
       setSavingSet(false);
       return;
     }
-    const setNumber = (logged[index] ?? 0) + 1;
-    const id = crypto.randomUUID();
+    const firstNumber = (logged[index] ?? 0) + 1;
+    const setNumber = firstNumber + n - 1;
     const completedAt = new Date().toISOString();
-    const row = {
-      id,
+    const rows = Array.from({ length: n }, (_, k) => ({
+      id: crypto.randomUUID(),
       workout_id: workoutId,
       attempt,
       step_index: index,
       exercise_id: slide.step.exerciseId || null,
       exercise_name: slide.step.name,
       section: slide.step.section ?? null,
-      set_number: setNumber,
+      set_number: firstNumber + k,
       reps: repsValue,
       weight_kg: weightValue,
       seconds: secondsValue,
@@ -271,17 +321,20 @@ export function WorkoutPlayerDialog({
       completed_at: completedAt,
       rpe: null,
       rounds: null,
-      interval_index: null,
-    };
-    const { error } = await supabase.from("set_logs").upsert({ ...row, user_id: user.id } as never, {
+      interval_index: tracking.roundsTotal ? firstNumber + k : null,
+      user_id: user.id,
+    }));
+    const { error } = await supabase.from("set_logs").upsert(rows as never, {
       onConflict: "id",
     });
     setSavingSet(false);
     if (error) {
-      toast.error(`Could not save set ${setNumber}. Please try again.`);
+      toast.error(`Could not save ${unitWord} ${firstNumber}. Please try again.`);
       return;
     }
-    toast.success(`Set ${setNumber} logged.`);
+    toast.success(
+      n > 1 ? `${unitWord[0]!.toUpperCase()}${unitWord.slice(1)}s ${firstNumber}–${setNumber} logged.` : `${unitWord[0]!.toUpperCase()}${unitWord.slice(1)} ${setNumber} logged.`,
+    );
     setLogged((prev) => ({ ...prev, [index]: setNumber }));
     setLastSet((prev) => ({
       ...prev,
@@ -380,6 +433,10 @@ export function WorkoutPlayerDialog({
     if (!running || timing.mode === "manual") return;
     const id = window.setInterval(() => {
       setRemaining((prev) => {
+        if (soundOnRef.current) {
+          if (prev >= 2 && prev <= 4) beep(660, 0.12);
+          else if (prev <= 1) beep(990, 0.35);
+        }
         if (prev > 1) return prev - 1;
         if (timing.mode === "tabata") {
           if (phase === "work") {
@@ -408,6 +465,8 @@ export function WorkoutPlayerDialog({
   }, [running, timing, phase, round, api]);
 
   const total = slides.length;
+  logSetRef.current = logSet;
+  soundOnRef.current = soundOn;
   isLastSlideRef.current = total > 0 && index === total - 1;
   finishRef.current = finishWorkout;
 
@@ -436,7 +495,7 @@ export function WorkoutPlayerDialog({
         <div className="pointer-events-none absolute bottom-3 left-3 hidden h-5 w-5 border-b-4 border-l-4 border-primary sm:block" />
         <div className="pointer-events-none absolute bottom-3 right-3 hidden h-5 w-5 border-b-4 border-r-4 border-primary sm:block" />
 
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 px-4 py-3 sm:px-6">
           <div className="min-w-0">
             <p className="truncate text-base font-black sm:text-lg">{workoutName}</p>
             <div className="flex min-w-0 items-center gap-2 text-xs text-neutral-400">
@@ -448,6 +507,17 @@ export function WorkoutPlayerDialog({
               {currentSection}
             </p>
           </div>
+          <Button
+            type="button"
+            variant="secondary"
+            size="icon"
+            aria-label={soundOn ? "Turn timer sound off" : "Turn timer sound on"}
+            aria-pressed={soundOn}
+            onClick={toggleSound}
+            className="h-11 w-11 shrink-0 rounded-full border-2 border-primary bg-neutral-900 text-neutral-50 shadow-lg transition active:scale-95 hover:bg-neutral-800"
+          >
+            {soundOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+          </Button>
           <Button
             type="button"
             variant="secondary"
@@ -525,9 +595,11 @@ export function WorkoutPlayerDialog({
                 {tracking.askReps ? (
                   <StepperField
                     label={
-                      tracking.windowSeconds
-                        ? `Reps in ${tracking.windowSeconds}s`
-                        : "Reps completed"
+                      tracking.roundsTotal
+                        ? `Reps this ${unitWord}`
+                        : tracking.windowSeconds
+                          ? `Reps in ${tracking.windowSeconds}s`
+                          : "Reps completed"
                     }
                     value={reps}
                     onChange={setReps}
@@ -552,10 +624,11 @@ export function WorkoutPlayerDialog({
                   variant="secondary"
                   className="col-span-2 h-10 w-full shrink-0 sm:h-11 sm:w-auto"
                   disabled={savingSet}
-                  onClick={logSet}
+                  onClick={() => void logSet()}
                 >
                   <Check className="mr-1.5 h-4 w-4" />
-                  Log set {(logged[index] ?? 0) + 1}
+                  Log {unitWord} {(logged[index] ?? 0) + 1}
+                  {tracking.roundsTotal ? ` of ${tracking.roundsTotal}` : ""}
                 </Button>
               </div>
               {lastSet[index] ? (
@@ -573,10 +646,34 @@ export function WorkoutPlayerDialog({
                   }}
                 >
                   <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-                  Repeat last set
+                  Repeat last {unitWord}
                 </Button>
               ) : null}
-              {planned && (planned.sets || planned.reps || planned.weightKg) ? (
+              {tracking.roundsTotal && roundsLeft > 1 && (logged[index] ?? 0) > 0 && lastSet[index] ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full text-neutral-300"
+                  disabled={savingSet}
+                  onClick={() => {
+                    const prev = lastSet[index]!;
+                    setReps(prev.reps);
+                    setWeight(prev.weight);
+                    setHeldSeconds(prev.seconds);
+                    setDistance(prev.distance);
+                    window.setTimeout(() => void logSetRef.current(roundsLeft), 0);
+                  }}
+                >
+                  Same for all remaining ({roundsLeft})
+                </Button>
+              ) : null}
+              {tracking.roundsTotal ? (
+                <p className="text-center text-[11px] text-neutral-500">
+                  {tracking.roundsTotal} {unitWord}s on this exercise · logged {logged[index] ?? 0} of{" "}
+                  {tracking.roundsTotal} · log each {unitWord} — every one counts toward your training load
+                </p>
+              ) : null}
+              {tracking.roundsTotal ? null : planned && (planned.sets || planned.reps || planned.weightKg) ? (
                 <p className="text-center text-[11px] text-neutral-500">
                   Prescribed{" "}
                   {planned.sets && planned.reps

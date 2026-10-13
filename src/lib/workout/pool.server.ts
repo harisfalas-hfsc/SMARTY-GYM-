@@ -3,7 +3,7 @@ import { knownLimitations, limitationAdmits, limitationDecision, type Limitation
 import { prepAllowed } from "./prep-vocabulary";
 import { orderedPriority } from "./priority";
 import { priorityIds } from "./priority";
-import { isCardioRhythm, isLegalExercise, isPassiveStretch } from "./rules";
+import { isCardioRhythm, isLegalExercise, isPassiveStretch, TABATA_TRAVEL_RE } from "./rules";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Category, DifficultyLevel, EquipmentMode, Format, StrengthFocus } from "./spec";
 import {
@@ -237,6 +237,7 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   // ONE rule engine (rules.ts): realism, category vocabulary, micro, dynamic
   // format, flow and static-hold rules are all decided there.
   pool = pool.filter((e) => isLegalExercise(e, { category: f.category, format: f.format ?? "REPS & SETS" }));
+  if (f.format === "TABATA") pool = pool.filter((e) => !TABATA_TRAVEL_RE.test(e.name.trim()));
 
   // 1. Category vocabulary legality (doctrine §3/§7/§8/§14) — one definition,
   //    applied before anything else.
