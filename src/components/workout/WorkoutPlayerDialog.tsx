@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { ExerciseImage } from "@/components/ExerciseImage";
 import { ExerciseDetailDialog } from "./ExerciseDetailDialog";
 import { toast } from "sonner";
+import { playTimerBeep, unlockTimerBeep } from "@/lib/timer-beep";
 import { supabase } from "@/integrations/supabase/client";
 import { useKeepScreenAwake } from "@/hooks/useKeepScreenAwake";
 import { buildSlides, parseStepTiming, type WorkoutStep } from "@/lib/workout/parse-steps";
@@ -101,9 +102,9 @@ export function WorkoutPlayerDialog({
   const [lastSet, setLastSet] = useState<Record<number, { reps: string; weight: string; seconds: string; distance: string }>>({});
   const beepRef = useRef<number>(0);
   const soundOnRef = useRef(false);
+  const remainingRef = useRef(0);
   const logSetRef = useRef<(count?: number) => Promise<void>>(async () => {});
   const [soundOn, setSoundOn] = useState(false);
-  const audioRef = useRef<AudioContext | null>(null);
   useEffect(() => {
     try {
       setSoundOn(window.localStorage.getItem("smarty-player-sound") === "on");
@@ -120,27 +121,10 @@ export function WorkoutPlayerDialog({
       /* storage unavailable */
     }
     if (next) {
-      // Phones only allow sound after a tap, so the context is created here.
-      try {
-        audioRef.current ??= new AudioContext();
-        void audioRef.current.resume();
-        beep(880, 0.08);
-      } catch {
-        /* audio unavailable */
-      }
+      // Phones only allow sound after a tap; this tap unlocks it and plays a sample.
+      unlockTimerBeep();
+      playTimerBeep();
     }
-  }
-  function beep(freq: number, duration: number) {
-    const ctx = audioRef.current;
-    if (!ctx) return;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.25, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + duration);
   }
   const loggableRef = useRef(false);
   const isLastSlideRef = useRef(false);
@@ -432,11 +416,11 @@ export function WorkoutPlayerDialog({
   useEffect(() => {
     if (!running || timing.mode === "manual") return;
     const id = window.setInterval(() => {
+      // Same beep as the Workout Timer tool, at the end of every work and rest
+      // phase — from the very first round. Played outside the state updater so
+      // it can never fire twice.
+      if (soundOnRef.current && remainingRef.current <= 1) playTimerBeep();
       setRemaining((prev) => {
-        if (soundOnRef.current) {
-          if (prev >= 2 && prev <= 4) beep(660, 0.12);
-          else if (prev <= 1) beep(990, 0.35);
-        }
         if (prev > 1) return prev - 1;
         if (timing.mode === "tabata") {
           if (phase === "work") {
@@ -467,6 +451,7 @@ export function WorkoutPlayerDialog({
   const total = slides.length;
   logSetRef.current = logSet;
   soundOnRef.current = soundOn;
+  remainingRef.current = remaining;
   isLastSlideRef.current = total > 0 && index === total - 1;
   finishRef.current = finishWorkout;
 
@@ -704,7 +689,7 @@ export function WorkoutPlayerDialog({
           {timing.mode !== "manual" ? (
 
             <div className="flex gap-2">
-              <Button onClick={() => setRunning((r) => !r)} className="min-w-32">
+              <Button onClick={() => { if (soundOnRef.current) unlockTimerBeep(); setRunning((r) => !r); }} className="min-w-32">
                 {running ? <Pause className="mr-2 h-4 w-4" /> : <Play className="mr-2 h-4 w-4" />}
                 {running ? "Pause" : "Start"}
               </Button>

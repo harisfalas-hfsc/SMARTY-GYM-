@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { playTimerBeep } from "@/lib/timer-beep";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -172,23 +173,7 @@ function WorkoutTimerPage() {
     }
   };
 
-  const playBeep = useCallback(() => {
-    try {
-      const ctx = new AudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.frequency.value = 800;
-      osc.type = "sine";
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.5);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 1.5);
-    } catch {
-      /* ignore */
-    }
-  }, []);
+  const playBeep = useCallback(() => playTimerBeep(), []);
 
   useEffect(() => {
     if (!isRunning) return;
