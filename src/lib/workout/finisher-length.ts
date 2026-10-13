@@ -74,7 +74,9 @@ export function finisherRealSeconds(html: string): number | null {
   }
   // A clock-driven finisher (AMRAP / EMOM / time cap) lasts its stated clock.
   const declared = finisherDeclaredMinutes(html);
-  if (declared && /amrap|emom|cap\b|as many/.test(intro)) return Math.max(total, declared * 60);
+  // When every line states its own rounds, that math is the truth (no clock can pad it).
+  const allCounted = steps.every((st) => stepOwnsCount(st.prescription));
+  if (declared && !allCounted && /amrap|emom|cap\b|as many/.test(intro)) return Math.max(total, declared * 60);
   return total;
 }
 
