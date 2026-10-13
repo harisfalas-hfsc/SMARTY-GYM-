@@ -27,6 +27,8 @@ export type PackInput = {
   finisher?: boolean;
   /** The session blueprint — counts and doses come from here when present. */
   plan?: Pick<SessionPlan, "mainCount" | "finisherCount" | "main" | "finisher">;
+  /** Exercises already at their category usage cap (exercise-usage.ts); avoided while enough others remain. */
+  overusedIds?: string[];
 };
 
 /**
@@ -257,7 +259,11 @@ export function buildPackWorkout(
   const flow = input.format !== "REPS & SETS";
   // CARDIO blocks are rhythmic aerobic work (rules.ts): draw them from the rhythm vocabulary.
   const rhythmPool = pool.filter((e) => isCardioRhythm(e.name) && !/burpee|mountain climber|skater|sprint|jump squat|tuck|depth/i.test(e.name));
-  const workPool = input.category === "CARDIO" && rhythmPool.length >= 4 ? rhythmPool : pool;
+  const basePool = input.category === "CARDIO" && rhythmPool.length >= 4 ? rhythmPool : pool;
+  // Usage cap: skip exercises that already dominate this category while enough others remain.
+  const overused = new Set(input.overusedIds ?? []);
+  const fresh = basePool.filter((e) => !overused.has(e.id));
+  const workPool = overused.size && fresh.length >= mainCount + finisherCount + 2 ? fresh : basePool;
   const pickPriorityFirst = (count: number, favs: string[]) => {
     const first = usePriority
       ? pickPriorityByPattern(workPool, count, { exclude: used, seed: input.seed ?? input.minutes, conditioningFirst: flow })
@@ -387,7 +393,7 @@ export function buildPackWorkout(
 
   if (finisherPicks.length) {
     // Finisher length rule: level minimum, honest rounds/sets × (work + rest).
-    buildFinisherHtml({ category: input.category, stars: levelStars, exercises: finisherPicks }).blocks.forEach((b) => blocks.push(b));
+    buildFinisherHtml({ category: input.category, stars: levelStars, exercises: finisherPicks, mainFormat: input.format }).blocks.forEach((b) => blocks.push(b));
   }
 
   if (!isMicro) {

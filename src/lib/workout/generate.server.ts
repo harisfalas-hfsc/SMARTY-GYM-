@@ -4,6 +4,7 @@ import { enforceWorkout, estimateWorkMinutes } from "./enforce.server";
 import { validateWorkout } from "./validate.server";
 import { classifyIssuesForFallback } from "@/lib/workout-validation";
 import { buildPackWorkout, packCopy } from "./pack.server";
+import { overusedExerciseIds } from "./exercise-usage";
 import { buildSessionPlan } from "./programming";
 import { smartyCopy } from "./copy-bank.server";
 import { dominantRegion, focusRegion, resolveLocation } from "./doctrine";
@@ -232,6 +233,14 @@ export async function generateWorkoutContent(
     );
 
   // ---- Deterministic engine: the only generation path -------------------------
+  // Usage cap (exercise-usage.ts): read this category's Smarty Workouts; failure only skips the cap.
+  let overusedIds: string[] = [];
+  try {
+    const { data: existing } = await (supabase as any).from("smarty_workouts").select("main_workout").eq("category", input.category);
+    if (existing?.length) overusedIds = [...overusedExerciseIds(existing.map((r: { main_workout: string | null }) => r.main_workout ?? ""), pool.map((e) => e.id))];
+  } catch {
+    overusedIds = [];
+  }
   const pack = buildPackWorkout(pool, all, {
     category: input.category,
     format,
@@ -244,6 +253,7 @@ export async function generateWorkoutContent(
     seed,
     finisher: Boolean(plan.finisher),
     plan,
+    overusedIds,
   });
   const enforcedPack = enforceWorkout(pack.html, pool, enforceOpts);
 

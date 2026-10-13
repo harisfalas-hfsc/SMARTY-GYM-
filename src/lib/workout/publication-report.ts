@@ -4,7 +4,7 @@
 import * as D from "./doctrine";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import { parseWorkoutSteps, type WorkoutStep } from "./parse-steps";
-import { finisherDeclaredMinutes, finisherMinimumMinutes, finisherRealSeconds } from "./finisher-length";
+import { finisherDeclaredMinutes, finisherHeadingFormat, finisherMinimumMinutes, finisherRealSeconds, legalFinisherFormats } from "./finisher-length";
 import {
   ACTIVATION_MAX_REPS,
   ACTIVATION_MAX_SECONDS,
@@ -171,6 +171,7 @@ export function publicationRuleReports(
     const current = real === null ? null : `about ${Math.round(real / 60)} min by its rounds/sets × (work + rest)`;
     add("Finisher shorter than the level minimum", line("Finisher Length Rule", [["Section", "Finisher"], ["Current", current], ["Allowed", `at least ${minimum} min for this level (Beginner 12, Intermediate 15, Advanced 20)`]], "Add rounds or sets so the Finisher really lasts the minimum."));
     add("Finisher time does not add up", line("Finisher Time Rule", [["Section", "Finisher"], ["Stated", declared ? `${declared} min` : null], ["Current", current]], "Make the stated Finisher time match its real rounds/sets × (work + rest)."));
+    add("Finisher format not allowed", line("Finisher Format Rule", [["Section", "Finisher"], ["Current", finisherHeadingFormat(html) ?? "no format named"], ["Allowed", legalFinisherFormats(category).join(", ")]], "Name the Finisher with one of the approved formats and write it in that format."));
   }
 
   return blockingIssues.map((issue) => reports.get(issue) ?? line(`${issue} Rule`, [["Current", issue]], "Correct this issue before publishing."));

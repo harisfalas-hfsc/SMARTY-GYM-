@@ -645,6 +645,13 @@
       "when": 1791922368206,
       "tag": "0091_backup_smarty_workouts_finishers_20261013",
       "breakpoints": true
+    },
+    {
+      "idx": 92,
+      "version": "7",
+      "when": 1791923807787,
+      "tag": "0092_backup_workouts_before_finisher_format_fix",
+      "breakpoints": true
     }
   ]
 }

@@ -74,7 +74,9 @@ export function finisherRealSeconds(html: string): number | null {
   }
   // A clock-driven finisher (AMRAP / EMOM / time cap) lasts its stated clock.
   const declared = finisherDeclaredMinutes(html);
-  if (declared && /amrap|emom|cap\b|as many/.test(intro)) return Math.max(total, declared * 60);
+  // When every line states its own rounds, that math is the truth (no clock can pad it).
+  const allCounted = steps.every((st) => stepOwnsCount(st.prescription));
+  if (declared && !allCounted && /amrap|emom|cap\b|as many/.test(intro)) return Math.max(total, declared * 60);
   return total;
 }
 
@@ -97,19 +99,91 @@ const p = (inner: string) => `<p class="tiptap-paragraph">${inner}</p>`;
 const li = (inner: string) => `<ul class="tiptap-bullet-list"><li class="tiptap-list-item">${p(inner)}</li></ul>`;
 const tok = (e: FinisherExercise) => `{{exercise:${e.id}:${e.name}}}`;
 
+/** Finisher formats per category, in order of preference (set by Haris Falas, 2026-10-13). */
+export const FINISHER_FORMAT_PREFERENCE: Record<string, string[]> = {
+  CARDIO: ["EMOM", "CIRCUIT"], // steady, repeatable pace
+  "CALORIE BURNING": ["AMRAP", "TABATA"], // high output
+  METABOLIC: ["EMOM", "TABATA"], // hard work with planned recovery
+  CHALLENGE: ["FOR TIME", "AMRAP"], // a test to finish
+};
+const REST_BUILT = ["EMOM", "CIRCUIT", "TABATA"];
+const CLOCK_TEST = new Set(["FOR TIME", "AMRAP"]);
+const CATEGORY_LEGAL: Record<string, string[]> = {
+  CARDIO: ["CIRCUIT", "EMOM", "FOR TIME", "AMRAP", "TABATA"],
+  METABOLIC: ["CIRCUIT", "AMRAP", "EMOM", "FOR TIME", "TABATA"],
+  "CALORIE BURNING": ["CIRCUIT", "TABATA", "AMRAP", "FOR TIME", "EMOM"],
+  CHALLENGE: ["CIRCUIT", "TABATA", "AMRAP", "EMOM", "FOR TIME"],
+};
+
+/** The approved formats a Finisher of this category may carry. */
+export function legalFinisherFormats(category: string): string[] {
+  const c = category.toUpperCase();
+  if (LIFTING.has(c)) return ["REPS & SETS"];
+  return CATEGORY_LEGAL[c] ?? [];
+}
+
 /**
- * Builds a Finisher that meets the level minimum with honest, simple math.
- * Lifting categories: straight sets (reps + 60 sec rest). Every other
- * category with a finisher: timed intervals, one minute each (work + rest).
+ * Deterministic Finisher format: the category's purpose decides the
+ * candidates; then (1) never the Main Workout's own format, (2) Beginner gets
+ * a format with built-in rest, Advanced prefers For Time / AMRAP, (3) Tabata
+ * only when its 8 × 20/10 blocks (4 min each) reach the level minimum.
  */
-export function buildFinisherHtml(input: { category: string; stars: number; exercises: FinisherExercise[] }): { html: string; minutes: number; blocks: string[] } {
+export function chooseFinisherFormat(input: { category: string; stars: number; mainFormat?: string | null; exerciseCount: number }): string {
+  const cat = input.category.toUpperCase();
+  if (LIFTING.has(cat)) return "REPS & SETS";
+  const stars = Math.max(1, Math.min(3, Math.round(input.stars || 2)));
+  const main = (input.mainFormat ?? "").toUpperCase();
+  const min = finisherMinimumMinutes(stars);
+  const legal = legalFinisherFormats(cat);
+  const fits = (f: string) => f !== "TABATA" || input.exerciseCount * 4 >= min;
+  let c = (FINISHER_FORMAT_PREFERENCE[cat] ?? REST_BUILT).filter((f) => f !== main && fits(f) && legal.includes(f));
+  if (stars === 1) c = c.filter((f) => REST_BUILT.includes(f));
+  if (!c.length) c = REST_BUILT.filter((f) => legal.includes(f) && f !== main && fits(f));
+  if (stars === 3) {
+    const clock = c.find((f) => CLOCK_TEST.has(f));
+    if (clock) return clock;
+  }
+  return c[0] ?? (main === "CIRCUIT" ? "EMOM" : "CIRCUIT");
+}
+
+/** The format named in the Finisher heading ("Finisher (EMOM)"), upper-cased; null when none. */
+export function finisherHeadingFormat(html: string): string | null {
+  const r = finisherRange(html);
+  if (!r) return null;
+  const m = stripTags(html.slice(r[0], r[1])).match(/finisher\s*\(([^)]+)\)/i);
+  return m ? m[1]!.trim().toUpperCase() : null;
+}
+
+/** Null when the Finisher heading names one of the approved formats for the category. */
+export function finisherFormatIssue(html: string, category: string): string | null {
+  if (!finisherRange(html)) return null;
+  const f = finisherHeadingFormat(html);
+  return f && legalFinisherFormats(category).includes(f) ? null : "Finisher format not allowed";
+}
+
+const TIME_BASED_RE = /\b(run|sprints?|high knees|butt kicks|jumping jacks?|jump rope|battling ropes|ski step|quick feet|mountain climbers?|farmer'?s? (carry|walk)|crawl|back and forth step|swing 360)\b/i;
+
+const LEVEL_DOSE: Record<1 | 2 | 3, { work: number; rest: number; reps: number }> = {
+  1: { work: 30, rest: 30, reps: 10 },
+  2: { work: 40, rest: 20, reps: 12 },
+  3: { work: 45, rest: 15, reps: 15 },
+};
+
+/**
+ * Builds a Finisher in one approved format that meets the level minimum with
+ * honest, simple math. Lifting categories: REPS & SETS (60 sec rest).
+ * Others: EMOM, CIRCUIT, TABATA, AMRAP or FOR TIME (chooseFinisherFormat).
+ */
+export function buildFinisherHtml(input: { category: string; stars: number; exercises: FinisherExercise[]; mainFormat?: string | null; format?: string }): { html: string; minutes: number; blocks: string[]; format: string } {
   const min = finisherMinimumMinutes(input.stars);
   const ex = input.exercises;
   const k = Math.max(1, ex.length);
-  const stars = Math.max(1, Math.min(3, Math.round(input.stars || 2)));
+  const stars = Math.max(1, Math.min(3, Math.round(input.stars || 2))) as 1 | 2 | 3;
   const blocks: string[] = [];
+  const format = input.format ?? chooseFinisherFormat({ category: input.category, stars, mainFormat: input.mainFormat, exerciseCount: ex.length });
+  const done = (minutes: number) => ({ html: blocks.join(p("")), minutes, blocks, format });
 
-  if (LIFTING.has(input.category.toUpperCase())) {
+  if (format === "REPS & SETS") {
     const reps = stars === 2 ? 12 : 10;
     const perSet = reps * 4 + 60;
     const sets = Math.max(2, Math.min(6, Math.ceil((min * 60) / (k * perSet))));
@@ -120,14 +194,52 @@ export function buildFinisherHtml(input: { category: string; stars: number; exer
       const unit = isTimedPosition(e.name) ? `${reps * 4} sec` : `${reps} reps`;
       blocks.push(li(`${sets} sets × ${unit} ${tok(e)} — Rest 60 sec between sets.`));
     }
-    return { html: blocks.join(p("")), minutes, blocks };
+    return done(minutes);
   }
 
-  const [work, rest] = stars === 1 ? [30, 30] : stars === 2 ? [40, 20] : [45, 15];
-  const rounds = Math.max(2, Math.ceil(min / k));
-  const minutes = k * rounds;
-  blocks.push(p(`⚡ <strong><u>Finisher (Intervals)</u></strong>`));
-  blocks.push(p(`${work} sec work, ${rest} sec rest. Do all ${rounds} rounds of one exercise, then move to the next. Total: ${minutes} minutes.`));
-  for (const e of ex) blocks.push(li(`${rounds} rounds × ${work} sec ${tok(e)} — rest ${rest} sec after each round.`));
-  return { html: blocks.join(p("")), minutes, blocks };
+  const { work, rest, reps } = LEVEL_DOSE[stars];
+  // Locomotion, rhythm and carries are done for time; countable moves for reps.
+  const unit = (e: FinisherExercise) => (isTimedPosition(e.name) || TIME_BASED_RE.test(e.name) ? `${work} sec` : `${reps} reps`);
+
+  if (format === "TABATA") {
+    const minutes = 4 * k;
+    blocks.push(p(`⚡ <strong><u>Finisher (TABATA)</u></strong>`));
+    blocks.push(p(`Each exercise: 8 rounds of 20 sec work, 10 sec rest. Then go straight to the next exercise. Total: ${minutes} minutes.`));
+    for (const e of ex) blocks.push(li(`8 rounds × 20 sec ${tok(e)} — rest 10 sec after each round.`));
+    return done(minutes);
+  }
+
+  if (format === "EMOM") {
+    const rounds = Math.max(2, Math.ceil(min / k));
+    const minutes = rounds * k;
+    blocks.push(p(`⚡ <strong><u>Finisher (EMOM)</u></strong>`));
+    blocks.push(p(`EMOM ${minutes} min. At the start of every minute do the next exercise in the list: ${work} sec work, then rest until the minute ends. Go through the list ${rounds} times.`));
+    for (const e of ex) blocks.push(li(`${rounds} rounds × ${work} sec ${tok(e)} — rest ${rest} sec after each round.`));
+    return done(minutes);
+  }
+
+  if (format === "CIRCUIT") {
+    const rounds = Math.max(2, Math.ceil(min / k));
+    const minutes = rounds * k;
+    blocks.push(p(`⚡ <strong><u>Finisher (CIRCUIT)</u></strong>`));
+    blocks.push(p(`${rounds} rounds. Do each exercise for ${work} sec, rest ${rest} sec, then move to the next. Total: ${minutes} minutes.`));
+    for (const e of ex) blocks.push(li(`${rounds} rounds × ${work} sec ${tok(e)} — rest ${rest} sec after each exercise.`));
+    return done(minutes);
+  }
+
+  if (format === "AMRAP") {
+    blocks.push(p(`⚡ <strong><u>Finisher (AMRAP)</u></strong>`));
+    blocks.push(p(`AMRAP ${min} min. Do as many rounds as you can of the list below, in order, with good form. Rest only when you need it.`));
+    for (const e of ex) blocks.push(li(`${unit(e)} ${tok(e)}`));
+    return done(min);
+  }
+
+  // FOR TIME: rounds sized so the honest round time reaches the minimum; the cap equals that time.
+  const roundSec = ex.reduce((s, e) => s + lineSeconds(unit(e)), 0) || 60;
+  const rounds = Math.max(2, Math.ceil((min * 60) / roundSec));
+  const cap = Math.ceil((rounds * roundSec) / 60);
+  blocks.push(p(`⚡ <strong><u>Finisher (FOR TIME)</u></strong>`));
+  blocks.push(p(`${rounds} rounds for time: go through the list in order, then start the next round. Time cap: ${cap} minutes.`));
+  for (const e of ex) blocks.push(li(`${rounds} rounds × ${unit(e)} ${tok(e)}`));
+  return done(cap);
 }
