@@ -32,6 +32,11 @@ export const Route = createFileRoute("/_authenticated/workout/$workoutId")({
   head: () => ({
     meta: [
       { title: "Your workout — Smarty Coach" },
+      { name: "description", content: "Your SmartyGym workout, reader, player and saved training details." },
+      { property: "og:title", content: "Your workout — SmartyGym" },
+      { property: "og:description", content: "Your personal SmartyGym workout and training details." },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -283,7 +288,7 @@ function WorkoutPage() {
 
   return (
     <WorkoutDisplay
-      workout={w}
+      workout={{ ...w, is_shared: shared }}
       creator={creator}
       ownerName={displayName}
       ownerCreationMethod={
