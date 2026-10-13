@@ -3,12 +3,14 @@ import { Clock, Dumbbell, Lock, MapPin, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getWorkoutShareCard } from "@/lib/share.functions";
 import { difficultyLabel, MAX_STARS, normalizeStars } from "@/lib/workout/spec";
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
+import { SITE_URL } from "@/lib/seo/site";
 
 export const Route = createFileRoute("/w/$workoutId")({
   loader: ({ params }) => getWorkoutShareCard({ data: { workoutId: params.workoutId } }),
   head: ({ loaderData }) => {
     const w = loaderData ?? null;
-    const title = w ? `${w.name} — Smarty Gym` : "Workout — Smarty Gym";
+    const title = w ? `${w.name} — SmartyGym` : "Shared workout — SmartyGym";
     const bits = w
       ? [
           w.category,
@@ -18,8 +20,9 @@ export const Route = createFileRoute("/w/$workoutId")({
         ].filter(Boolean)
       : [];
     const description = w
-      ? `${bits.join(" · ")} — open it on Smarty Gym.`
-      : "A workout on Smarty Gym.";
+      ? `${bits.join(" · ")} — open it on SmartyGym.`
+      : "A community-shared workout on SmartyGym.";
+    const image = w?.image_url?.startsWith("https://") ? w.image_url : w?.image_url?.startsWith("/api/public/workout-cover/") ? `${SITE_URL}${w.image_url}` : null;
     return {
       meta: [
         { title },
@@ -30,6 +33,7 @@ export const Route = createFileRoute("/w/$workoutId")({
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
+        ...(image ? [{ property: "og:image", content: image }, { name: "twitter:image", content: image }] : []),
         { name: "robots", content: "noindex" },
       ],
     };
@@ -60,6 +64,7 @@ function SharePreviewPage() {
           Shared workout {w.category ? `· ${w.category}` : ""}
         </p>
         <h1 className="mt-2 text-2xl font-black sm:text-3xl">{w.name}</h1>
+        {w.format && <p className="mt-1 text-xs font-bold uppercase text-primary">{w.format}</p>}
         {w.focus ? <p className="mt-1 text-muted-foreground">{w.focus}</p> : null}
 
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
@@ -87,6 +92,8 @@ function SharePreviewPage() {
           </span>
         </div>
 
+        {w.image_url && <img src={coverVariant(w.image_url, 1280) ?? w.image_url} onError={fallbackTo(w.image_url)} alt={`${w.name} cover`} className="mt-5 h-52 w-full rounded-2xl object-cover" />}
+
         <div className="mt-6 rounded-2xl border-2 border-blue-400 bg-background/60 p-4">
           <p className="flex items-center gap-2 text-sm font-bold">
             <Lock className="h-4 w-4 text-primary" /> The full workout is for members
@@ -96,7 +103,7 @@ function SharePreviewPage() {
           </p>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             <Button asChild className="h-12 rounded-2xl font-bold">
-              <Link to="/auth">Sign in to open it</Link>
+              <Link to="/community/workout/$workoutId" params={{ workoutId: w.id }}>Open shared workout</Link>
             </Button>
             <Button asChild variant="secondary" className="h-12 rounded-2xl">
               <Link to="/how-it-works">How SmartyGym works</Link>
