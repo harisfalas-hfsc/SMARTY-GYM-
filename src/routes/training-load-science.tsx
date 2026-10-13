@@ -146,6 +146,9 @@ function TrainingLoadSciencePage() {
               <p>
                 Your body, training history and normal workload are individual. That is why SmartyGym compares you with your own recent training — never with a generic score table or another member.
               </p>
+              <p>
+                In Tabata, EMOM and circuit workouts every interval or round you log counts on its own: four logged intervals of 10 reps are 40 reps, and the working time is the interval length multiplied by the intervals you logged. Rounds you don't log are left out — they are never guessed.
+              </p>
             </div>
           </div>
         </section>
