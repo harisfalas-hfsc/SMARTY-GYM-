@@ -43,9 +43,11 @@ const toSec = (n: number, unit: string) => (/^m/i.test(unit) ? n * 60 : n);
 /** Honest seconds of one prescription line: count × (work + rest). */
 export function lineSeconds(prescription: string): number {
   const p = prescription.toLowerCase();
-  const restM = p.match(/rest\s*(\d+)\s*(sec|secs|seconds|s|min|mins|minutes)\b/);
-  const rest = restM ? toSec(Number(restM[1]), restM[2]!) : 0;
-  const body = p.replace(/rest[^.;,]*?\d+\s*(sec|secs|seconds|s|min|mins|minutes)\b/g, " ");
+  // "rest 20 sec" or "20 sec rest"
+  const REST_RE = /rest[^.;,\d]*?(\d+)\s*(sec|secs|seconds|s|min|mins|minutes)\b|(\d+)\s*(sec|secs|seconds|s|min|mins|minutes)\s+rest\b/;
+  const restM = p.match(REST_RE);
+  const rest = restM ? toSec(Number(restM[1] ?? restM[3]), (restM[2] ?? restM[4])!) : 0;
+  const body = p.replace(new RegExp(REST_RE.source, "g"), " ");
   const sets = body.match(/\b(\d{1,2})\s*sets?\b/);
   const rounds = statedIntervals(body);
   const secM = body.match(/\b(\d{1,3})\s*(sec|secs|second|seconds|s)\b/);
