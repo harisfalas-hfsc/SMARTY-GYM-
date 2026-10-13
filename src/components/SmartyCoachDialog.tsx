@@ -7,6 +7,7 @@ import type { CoachSnapshot } from "@/lib/coach-snapshot";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { BrandText } from "@/components/BrandText";
+import coachIcon from "@/assets/smarty-coach.png";
 
 const CACHE_VERSION = 2;
 const CACHE_MAX_AGE = 12 * 60 * 60 * 1000;
