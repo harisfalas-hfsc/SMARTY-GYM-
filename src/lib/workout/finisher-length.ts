@@ -159,6 +159,8 @@ export function finisherFormatIssue(html: string, category: string): string | nu
   return f && legalFinisherFormats(category).includes(f) ? null : "Finisher format not allowed";
 }
 
+const TIME_BASED_RE = /\b(run|sprints?|high knees|butt kicks|jumping jacks?|jump rope|battling ropes|ski step|quick feet|mountain climbers?|farmer'?s? (carry|walk)|crawl|back and forth step|swing 360)\b/i;
+
 const LEVEL_DOSE: Record<1 | 2 | 3, { work: number; rest: number; reps: number }> = {
   1: { work: 30, rest: 30, reps: 10 },
   2: { work: 40, rest: 20, reps: 12 },
@@ -194,7 +196,8 @@ export function buildFinisherHtml(input: { category: string; stars: number; exer
   }
 
   const { work, rest, reps } = LEVEL_DOSE[stars];
-  const unit = (e: FinisherExercise) => (isTimedPosition(e.name) ? `${work} sec` : `${reps} reps`);
+  // Locomotion, rhythm and carries are done for time; countable moves for reps.
+  const unit = (e: FinisherExercise) => (isTimedPosition(e.name) || TIME_BASED_RE.test(e.name) ? `${work} sec` : `${reps} reps`);
 
   if (format === "TABATA") {
     const minutes = 4 * k;
