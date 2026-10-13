@@ -139,7 +139,7 @@ function SmartyRitualPage() {
       </Card>
       {data?.ritual && (
         <Dialog open={readerOpen} onOpenChange={setReaderOpen}>
-          <DialogContent className="flex h-[100dvh] max-h-[100dvh] w-screen max-w-none flex-col gap-0 overflow-hidden rounded-none border-0 bg-background p-0 text-foreground sm:h-[92vh] sm:w-[min(760px,calc(100%-2rem))] sm:rounded-2xl sm:border [&>button:last-child]:hidden">
+          <DialogContent hideClose className="flex h-[100dvh] max-h-[100dvh] w-screen max-w-none flex-col gap-0 overflow-hidden rounded-none border-0 bg-background p-0 text-foreground sm:h-[92vh] sm:w-[min(760px,calc(100%-2rem))] sm:rounded-2xl sm:border">
             <div className="flex items-center justify-between border-b border-border px-5 py-3">
               <DialogTitle className="text-base font-bold">
                  Daily Smarty Ritual

@@ -31,8 +31,8 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, onOpenAutoFocus, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { hideClose?: boolean }
+>(({ className, children, onOpenAutoFocus, hideClose = false, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -46,12 +46,12 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {/* Sticky close: stays visible while long dialog content scrolls. */}
-      <div className="sticky top-0 z-50 order-first -mb-10 flex h-10 shrink-0 items-start justify-end">
+      {hideClose ? null : <div className="sticky top-0 z-50 order-first -mb-10 flex h-10 shrink-0 items-start justify-end">
         <DialogPrimitive.Close className="pointer-events-auto grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full border border-border bg-secondary text-secondary-foreground transition-colors outline-none [@media(hover:hover)]:hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
-      </div>
+      </div>}
 
       {children}
 

@@ -400,7 +400,7 @@ export function WorkoutDisplay({
 
 
       <Dialog open={reader} onOpenChange={setReader}>
-        <DialogContent className="h-[100dvh] w-full max-w-none overflow-x-hidden overflow-y-auto border-0 bg-background p-0 text-foreground [&>button]:hidden sm:h-[92vh] sm:max-w-2xl sm:rounded-3xl">
+        <DialogContent hideClose className="h-[100dvh] w-full max-w-none overflow-x-hidden overflow-y-auto border-0 bg-background p-0 text-foreground sm:h-[92vh] sm:max-w-2xl sm:rounded-3xl">
           <DialogTitle className="sr-only">{workout.name} reader mode</DialogTitle>
           <div className="sticky top-0 z-10 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border bg-background/95 px-3 py-2 backdrop-blur sm:px-4 sm:py-3">
             <p className="min-w-0 truncate text-sm font-semibold sm:text-base">{workout.name}</p>

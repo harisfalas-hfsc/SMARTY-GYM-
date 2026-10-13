@@ -442,7 +442,7 @@ function CoachPage() {
 
       <Dialog open={namingWorkoutId !== null} onOpenChange={() => undefined}>
         <DialogContent
-          className="rounded-3xl [&>button]:hidden"
+          hideClose className="rounded-3xl"
           onInteractOutside={(e) => e.preventDefault()}
           onEscapeKeyDown={(e) => e.preventDefault()}
         >
