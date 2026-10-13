@@ -154,7 +154,9 @@ describe("difficulty, micro scaling, cardio and transition cost", () => {
     expect(plan.format).toBe("REPS & SETS");
     if (plan.finisher) {
       expect(plan.finisherCount[1]).toBeLessThan(plan.mainCount[0]);
-      expect(plan.finisherMinutes).toBeLessThanOrEqual(10);
+      // Finisher length rule: exactly the level minimum (15 min at 2 stars), Main keeps the rest.
+      expect(plan.finisherMinutes).toBe(15);
+      expect(plan.finisherMinutes).toBeLessThan(plan.minutes - plan.finisherMinutes);
     }
   });
 

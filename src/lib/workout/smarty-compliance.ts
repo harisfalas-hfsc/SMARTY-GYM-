@@ -9,6 +9,7 @@ import { prepTokens, prepAllowed, isBodyweightEquipment, ACTIVATION_NAMES, activ
 import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import { focusBreaks } from "./strength-focus";
+import { finisherLengthIssue } from "./finisher-length";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
@@ -90,6 +91,11 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     if (D.durationOverflowViolation(estimateWorkMinutes(html), t)) s.add("Work time exceeds the advertised duration");
     if (D.activationOverflowViolation(estimateActivationMinutes(html), t)) s.add("Activation too long");
     if (D.cooldownOverflowViolation(estimateCooldownMinutes(html), t)) s.add("Cool Down too long");
+  }
+  // Finisher length: level minimum (12/15/20 min) and honest stated time.
+  if (D.categoryAllowsFinisher(cat)) {
+    const f = finisherLengthIssue(html, w.difficulty_stars);
+    if (f) s.add(f);
   }
   if (!NO_PRIORITY.has(cat) && !hasRequiredExerciseList(cat) && rows.length) {
     const legal = library.filter((e) => isLegalExercise(e, { category: cat as never, format: (w.format ?? "REPS & SETS") as never, bodyweightOnly: ctx.bodyweightOnly }));

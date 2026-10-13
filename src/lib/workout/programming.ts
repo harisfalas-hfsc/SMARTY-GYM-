@@ -21,6 +21,7 @@ import {
   legalFormats,
 } from "./doctrine";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
+import { finisherMinimumMinutes } from "./finisher-length";
 
 
 export type Dose = {
@@ -588,9 +589,15 @@ export function buildSessionPlan(input: {
   const rawShape = durationShape(input.minutes, input.category);
   const raw = doseFor(input.category, input.level);
   const finisher = raw.finisher;
-  // The advertised duration is TRAINING time: the main block owns the whole
-  // clock, and activation / cool down are an allowance on top of it.
-  const mainBudget = Math.max(4, input.minutes);
+  // The advertised duration is TRAINING time (Main + Finisher); activation and
+  // cool down are an allowance on top of it. A Finisher takes its level
+  // minimum (finisher-length.ts) out of the clock only when 15+ min remain.
+  const finisherFits =
+    Boolean(finisher) &&
+    categoryAllowsFinisher(input.category) &&
+    rawShape.finisherCount[1] > 0 &&
+    input.minutes - finisherMinimumMinutes(input.stars) >= 15;
+  const mainBudget = Math.max(4, finisherFits ? input.minutes - finisherMinimumMinutes(input.stars) : input.minutes);
   // The Micro Workout shape is authored end to end and never trimmed.
   const fitted =
     input.category === "MICRO-WORKOUTS"
@@ -637,6 +644,24 @@ export function buildSessionPlan(input: {
     mainMinutesEstimate = decision.mainMinutes;
     finisherDirective = decision.directive;
   }
+
+  // Finisher length rule (finisher-length.ts): a Finisher lasts at least
+  // 12 / 15 / 20 min by level. It only exists when the Main Workout still
+  // keeps at least 15 min; otherwise the session carries none.
+  const finMin = finisherMinimumMinutes(input.stars);
+  if (finisherDose && finisherCount[1] > 0) {
+    if (finisherFits) {
+      finisherMinutes = finMin;
+      if (finisherCount[0] < 2) finisherCount = [2, Math.max(3, finisherCount[1])];
+      finisherDirective = `⚡ Finisher — at least ${finMin} min, true to the category objective; its stated time must equal rounds/sets × (work + rest).`;
+    } else {
+      finisherCount = [0, 0];
+      finisherDose = null;
+      finisherMinutes = 0;
+      finisherDirective = `NO ⚡ Finisher today: a Finisher must last at least ${finMin} min and the session is too short to hold it after a real Main Workout.`;
+    }
+  }
+
 
 
 

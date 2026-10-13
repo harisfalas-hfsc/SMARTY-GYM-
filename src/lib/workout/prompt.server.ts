@@ -301,7 +301,8 @@ PRESCRIPTION RULES
 - Tempo and rest stay inline on the SAME list item as the token. Never create a bullet that only contains a tempo or "rest 90 sec".
 - Accepted units: reps, sec, min, m, km, cal, rounds, "N sets × N", "EMOM Minute N:".
 - Protocol headers look like "Main Workout (FORMAT)" and NEVER contain a duration.
-- Finisher header: "Finisher (REPS & SETS)" for STRENGTH / MUSCLE BUILDING / MOBILITY & STABILITY, otherwise "Finisher (For Time)" or "Finisher (AMRAP)" with the cap or rounds in the paragraph below.
+- Finisher header: "Finisher (REPS & SETS)" for STRENGTH / MUSCLE BUILDING, otherwise "Finisher (Intervals)" with work/rest and rounds in the paragraph below.
+- Finisher length: at least 12 min (1 star), 15 min (2 stars), 20 min (3 stars). The stated total must equal rounds/sets × (work + rest) — never write a time the prescription does not add up to.
 
 NAMING
 2-4 word creative name hinting at the category${input.focus ? " and focus" : ""}. Avoid these words: ${BANNED_NAME_WORDS.join(", ")}. Strictly forbidden: internal codes (CAL-813, BW1230, V2, #3), roman numerals, any digits, and 3-letter uppercase abbreviations with numbers.
