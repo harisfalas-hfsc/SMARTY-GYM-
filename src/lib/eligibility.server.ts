@@ -63,7 +63,6 @@ const REQUIRED_PROFILE_FIELDS = [
   ["age", "age"],
   ["fitness_level", "fitness level"],
   ["primary_goal", "primary goal"],
-  ["preferred_environment", "training environment"],
   ["typical_duration_min", "workout duration"],
 ] as const;
 

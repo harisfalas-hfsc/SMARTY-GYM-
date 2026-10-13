@@ -135,7 +135,6 @@ export function AdminMemberDetail({ userId, onBack }: Props) {
                 label="Typical session"
                 value={p.typical_duration_min ? `${p.typical_duration_min} min` : null}
               />
-              <Row label="Environment" value={p.preferred_environment} />
               <Row label="Categories" value={list(p.preferred_categories)} />
               <Row label="Equipment" value={list(p.preferred_equipment)} />
               <Row label="Limitations" value={list(p.limitations)} />

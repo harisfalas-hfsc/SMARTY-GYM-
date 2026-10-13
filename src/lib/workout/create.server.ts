@@ -341,7 +341,6 @@ export async function createWorkoutForUser(
             (prof?.["fitness_level"] as string) ?? (prof?.["experience"] as string) ?? null,
           primary_goal: (prof?.["primary_goal"] as string) ?? null,
           secondary_goal: (prof?.["secondary_goal"] as string) ?? null,
-          preferred_environment: (prof?.["preferred_environment"] as string) ?? null,
           favorite_library: favoriteLibrary,
           disliked_library: dislikedLibrary,
           recent_performance: performanceLines,
