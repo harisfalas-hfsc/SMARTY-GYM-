@@ -159,6 +159,9 @@ export function doseRuleBreak(category: Category, line: string): string | null {
 const NOT_RHYTHM_RE = /\b(glute bridge|bridge|farmers?|monster|sit|air bike|lunge|hands bike|split squat|crab|bear|duck)\b/i;
 export const isCardioRhythm = (name: string) => D.CARDIO_RHYTHM_RE.test(name) && !NOT_RHYTHM_RE.test(name);
 
+/** Travelling runs that cannot be done in a fixed-spot Tabata interval. */
+export const TABATA_TRAVEL_RE = /^(run|wind sprints?|sprint|shuttle run)$/i;
+
 /** Workout-level rules over the work rows (Main + Finisher). */
 export function workoutRuleBreaks(
   work: RuleExercise[],
@@ -192,6 +195,11 @@ export function workoutRuleBreaks(
   if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && finisher.length && finisher.length >= main.length)
     out.push(`The ${ctx.category} Finisher must be shorter than the Main Workout — it complements it, never repeats it.`);
   push(D.cardioDominanceViolation(main, ctx.category));
+  // Tabata intervals are 20 sec on a fixed spot: travelling runs/sprints don't fit.
+  if (ctx.format === "TABATA") {
+    const travel = main.find((e) => TABATA_TRAVEL_RE.test(e.name.trim()));
+    if (travel) out.push(`"${travel.name}" is a travelling run — TABATA intervals use on-the-spot movements (e.g. High Knees, Ski Step).`);
+  }
   for (const [label, block] of [["Main Workout", main], ["Finisher", finisher]] as const) {
     if (!block.length) continue;
     if (ctx.category === "CARDIO" && block.filter((e) => !isCardioRhythm(e.name)).length > 1)
