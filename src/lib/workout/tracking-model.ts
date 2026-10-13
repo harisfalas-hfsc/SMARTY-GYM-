@@ -6,7 +6,7 @@
 // exercise's own equipment field. Nothing is invented: when a value is not
 // stated it stays null and the UI simply does not ask for it.
 
-import type { WorkoutStep } from "./parse-steps";
+import { statedIntervals, type WorkoutStep } from "./parse-steps";
 
 export type PrimaryMetric = "reps" | "duration" | "completion";
 
@@ -36,6 +36,12 @@ export type StepTracking = {
   autoReps: number | null;
   autoSeconds: number | null;
   autoDistanceM: number | null;
+  /**
+   * Intervals / rounds this step is performed for, when the workout states
+   * them (or a Tabata block's standard 8). Each one is logged as its own set
+   * so training load counts every interval actually done — never just one.
+   */
+  roundsTotal: number | null;
 };
 
 export type TrackingMetricName =
@@ -135,12 +141,25 @@ export function plannedTotalReps(planned: PlannedPrescription): number | null {
   return (planned.sets ?? 1) * planned.reps;
 }
 
-export function deriveStepTracking(input: {
+type TrackingInput = {
   step: Pick<WorkoutStep, "prescription" | "section" | "subSection" | "name">;
   category?: string | null;
   format?: string | null;
   equipment?: string | null;
-}): StepTracking {
+};
+
+export function deriveStepTracking(input: TrackingInput): StepTracking {
+  const core = deriveCore(input);
+  if (core.primary === "completion" && core.autoReps === null) return { ...core, roundsTotal: null };
+  const stated = statedIntervals(input.step.prescription);
+  const tabata =
+    `${input.format ?? ""} ${input.step.subSection ?? ""} ${input.step.prescription}`
+      .toLowerCase()
+      .includes("tabata") && core.windowSeconds !== null;
+  return { ...core, roundsTotal: stated ?? (tabata ? 8 : null) };
+}
+
+function deriveCore(input: TrackingInput): Omit<StepTracking, "roundsTotal"> {
   const { step } = input;
   const category = (input.category ?? "").toUpperCase();
   const format = (input.format ?? "").toUpperCase();
@@ -159,7 +178,7 @@ export function deriveStepTracking(input: {
     autoReps: null,
     autoSeconds: null,
     autoDistanceM: null,
-  } satisfies Omit<StepTracking, "primary" | "metric">;
+  } satisfies Omit<StepTracking, "primary" | "metric" | "roundsTotal">;
 
   // Preparation, recovery and micro sections: completion is the only honest signal.
   if (
