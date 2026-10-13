@@ -12,7 +12,9 @@ function escape(text: string) {
  * wording, size and weight are untouched — only the colour changes.
  */
 export function BrandText({ text, name }: { text: string; name?: string | null }) {
-  const terms = ["Smarty Coach", name].filter((term): term is string => Boolean(term && term.trim()));
+  // "there" is the app's neutral fallback when no display name is stored — colouring
+  // it would put a random word in the brand colour, so it is never treated as a name.
+  const terms = ["Smarty Coach", name].filter((term): term is string => Boolean(term && term.trim() && term.trim() !== "there"));
   if (!terms.length) return <>{text}</>;
 
   const pattern = new RegExp(`(${terms.map(escape).join("|")})`, "g");
