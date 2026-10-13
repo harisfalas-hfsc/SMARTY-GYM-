@@ -137,6 +137,24 @@ export const isStaticHold = (name: string) => D.STATIC_HOLD_RE.test(name);
 /** Positions held still — static holds and passive stretches — are dosed in time. */
 export const isTimedPosition = (name: string) => isStaticHold(name) || isPassiveStretch(name);
 
+/**
+ * Movements that cannot be honestly counted in reps — runs, sprints, rhythm
+ * steps, ropes, carries, crawls — are dosed in time (Haris Falas, 2026-10-13).
+ */
+const TIME_BASED_MOVEMENT_RE = /\b(run|sprints?|high knees|butt kicks|jumping jacks?|jump rope|battling ropes?|ski step|quick feet|back and forth step|farmer'?s? (carry|walk)|farmers walk|bear crawl|crab walk|swing 360)\b/i;
+export const isTimeBasedMovement = (name: string) => TIME_BASED_MOVEMENT_RE.test(name) && !/\blunge\b/i.test(name);
+/** Anything dosed in time: holds, passive stretches and time-based movements. */
+export const isTimeDosed = (name: string) => isTimedPosition(name) || isTimeBasedMovement(name);
+
+/** A time-based movement written in reps ("12 reps Butt Kicks", "12 reps Farmer's Walk"). */
+export function timedMovementDoseViolation(name: string, line: string): string | null {
+  if (!isTimeBasedMovement(name)) return null;
+  const dose = line.replace(/\brest\b[^.;,]*/gi, "");
+  if (/\b\d+\s*(reps?|x)\b/i.test(dose) && !/\b\d+\s*(sec|secs|seconds|s|min|mins|minutes|m|km)\b/i.test(dose))
+    return `"${name}" cannot be counted in reps; dose it in time.`;
+  return null;
+}
+
 /** Holds (plank, wall sit, hollow …) and passive stretches must be dosed in time, never in reps. */
 export function holdDoseViolation(name: string, line: string): string | null {
   if (!isTimedPosition(name)) return null;

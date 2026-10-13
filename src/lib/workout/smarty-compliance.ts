@@ -6,7 +6,7 @@ import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds, priorityShareViolation } from "./priority";
 import { classify, isRelated, replacementConfidence, variationTier, type Confidence } from "./movement";
 import { prepTokens, prepAllowed, isBodyweightEquipment, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
-import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
+import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, timedMovementDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import { focusBreaks } from "./strength-focus";
 import { finisherFormatIssue, finisherLengthIssue } from "./finisher-length";
@@ -72,6 +72,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     if (doseRuleBreak(cat, st.prescription)) s.add("Too many sets for a light category");
   }
   for (const st of steps) if (holdDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Hold or stretch dosed in reps");
+  for (const st of workSteps) if (timedMovementDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Timed movement dosed in reps");
   const prep = prepTokens(html);
   for (const t of prep) {
     const name = lib.get(t.id)?.name ?? t.name;
