@@ -134,10 +134,8 @@ export function SmartyCoachDialog({
       {/* On phone, let the visitor content grow to preserve equal top/bottom padding. Signed-in and desktop sizing stay unchanged. */}
       <DialogContent className={`max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${visitor ? "max-sm:min-h-[21.25rem]" : "flex flex-col overflow-hidden max-sm:h-[31.875rem]"}`}>
         <DialogHeader className="shrink-0 items-center pr-0 text-center sm:items-center sm:pr-0 sm:text-center">
-          <div className="flex items-center gap-2">
-            <img src={coachIcon} alt="" className="h-8 w-8 shrink-0 object-contain" />
-            <DialogTitle>Smarty Coach</DialogTitle>
-          </div>
+          <img src={coachIcon} alt="" className="h-10 w-10 shrink-0 object-contain" />
+          <DialogTitle>Smarty Coach</DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
             {visitor ? "Your personal coach. Anytime, anywhere." : snapshot ? <><span className="block">{snapshot.greeting.replace(/[.!]$/, "!")}</span><span className="block">Welcome back.</span></> : "Preparing your personal briefing."}
           </DialogDescription>
@@ -148,7 +146,7 @@ export function SmartyCoachDialog({
             <section className="rounded-md border-2 border-primary bg-primary/5 p-4 text-center">
               <Brain className="mx-auto h-7 w-7 text-primary" />
               <h3 className="mt-2 text-lg font-extrabold">A personal trainer in your pocket.</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Your daily training companion — helping you choose what to train, when to push and when to recover. Sign in for guidance that grows with your training.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Your daily training companion — helping you choose what to train, when to push and when to recover. Become a Premium member for personal guidance that grows with your training.</p>
             </section>
             <Button className="w-full" onClick={() => { changeOpen(false); void navigate({ to: "/auth" }); }}>
               Sign in or join <ArrowRight />
