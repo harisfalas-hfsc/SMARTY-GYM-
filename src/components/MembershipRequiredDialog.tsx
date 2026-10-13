@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
+import { BrandText } from "@/components/BrandText";
 
 /**
  * Shown when a signed-in athlete without an active membership tries to use a
@@ -38,7 +39,7 @@ export function MembershipRequiredDialog({
         </DialogTitle>
 
         <p className="text-sm font-bold text-foreground">{title}</p>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-sm text-muted-foreground"><BrandText text={description} /></p>
 
         <div className="rounded-2xl border-2 border-primary bg-primary/5 p-4 text-center">
           <p className="text-sm font-extrabold text-foreground">€9.99 / month</p>

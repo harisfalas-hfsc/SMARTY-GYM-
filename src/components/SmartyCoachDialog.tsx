@@ -6,6 +6,7 @@ import { getCoachSnapshot } from "@/lib/coach.functions";
 import type { CoachSnapshot } from "@/lib/coach-snapshot";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { BrandText } from "@/components/BrandText";
 import coachIcon from "@/assets/smarty-coach.png";
 
 const CACHE_VERSION = 2;
@@ -134,9 +135,9 @@ export function SmartyCoachDialog({
       {/* On phone, let the visitor content grow to preserve equal top/bottom padding. Signed-in and desktop sizing stay unchanged. */}
       <DialogContent className={`max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${visitor ? "max-sm:min-h-[21.25rem]" : "flex flex-col overflow-hidden max-sm:h-[31.875rem]"}`}>
         <DialogHeader className="shrink-0 items-center pr-0 text-center sm:items-center sm:pr-0 sm:text-center">
-          <DialogTitle>Smarty Coach</DialogTitle>
+          <DialogTitle className="text-primary">Smarty Coach</DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
-            {visitor ? "Your personal coach. Anytime, anywhere." : snapshot ? <><span className="block">{snapshot.greeting.replace(/[.!]$/, "!")}</span><span className="block">Welcome back.</span></> : "Preparing your personal briefing."}
+            {visitor ? "Your personal coach. Anytime, anywhere." : snapshot ? <><span className="block"><BrandText text={snapshot.greeting.replace(/[.!]$/, "!")} name={snapshot.firstName} /></span><span className="block">Welcome back.</span></> : "Preparing your personal briefing."}
           </DialogDescription>
         </DialogHeader>
 
@@ -172,8 +173,8 @@ export function SmartyCoachDialog({
           <div ref={briefingRef} aria-label="Smarty Coach briefing" tabIndex={0} className="min-h-0 max-h-[calc(100dvh-13rem)] flex-1 overflow-y-auto pr-1 pb-1 [scrollbar-width:thin] [scrollbar-color:var(--primary)_var(--secondary)]">
             <div className="space-y-3">
             <BriefingCard title="Today’s focus" icon={Target} tone="text-primary">
-                  {snapshot.headline !== "Welcome back" ? <p className="text-base font-extrabold leading-tight">{snapshot.headline}</p> : null}
-                  <p className="text-muted-foreground">{snapshot.recommendation}</p>
+                  {snapshot.headline !== "Welcome back" ? <p className="text-base font-extrabold leading-tight"><BrandText text={snapshot.headline} name={snapshot.firstName} /></p> : null}
+                  <p className="text-muted-foreground"><BrandText text={snapshot.recommendation} name={snapshot.firstName} /></p>
                   <p className="mt-2 text-sm font-semibold text-primary">
                     {[snapshot.todayFocus.category, snapshot.todayFocus.bodyFocus, snapshot.todayFocus.intensity].filter(Boolean).join(" · ")}
                   </p>
@@ -206,7 +207,7 @@ export function SmartyCoachDialog({
 
             <BriefingCard title="Why this fits" icon={Brain} tone="text-chart-4">
               <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
-                {snapshot.reasons.map((reason) => <li key={reason} className="flex gap-2"><span className="text-primary">•</span><span>{reason}</span></li>)}
+                {snapshot.reasons.map((reason) => <li key={reason} className="flex gap-2"><span className="text-primary">•</span><span><BrandText text={reason} name={snapshot.firstName} /></span></li>)}
               </ul>
               {(snapshot.goals.primary || snapshot.goals.secondary) ? (
                 <p className="mt-3 text-xs text-muted-foreground">
