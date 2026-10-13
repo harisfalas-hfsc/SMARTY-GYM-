@@ -361,7 +361,10 @@ export function buildPackWorkout(
     }
   }
 
-  const protocolLine = roundsFor(input.format, input.minutes, mainPicks.length);
+  // With a Finisher the Main Workout owns exactly the minutes left after it.
+  const protocolLine = noFinisher
+    ? roundsFor(input.format, input.minutes, mainPicks.length)
+    : roundsFor(input.format, mainMinutes, mainPicks.length, 1);
   blocks.push(heading("💪", `Main Workout (${input.format})`));
   if (protocolLine) blocks.push(para(protocolLine));
   const planned = (d: SessionPlan["main"], e: PoolExercise) => {

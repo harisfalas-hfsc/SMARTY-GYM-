@@ -102,7 +102,7 @@ const tok = (e: FinisherExercise) => `{{exercise:${e.id}:${e.name}}}`;
  * Lifting categories: straight sets (reps + 60 sec rest). Every other
  * category with a finisher: timed intervals, one minute each (work + rest).
  */
-export function buildFinisherHtml(input: { category: string; stars: number; exercises: FinisherExercise[] }): { html: string; minutes: number } {
+export function buildFinisherHtml(input: { category: string; stars: number; exercises: FinisherExercise[] }): { html: string; minutes: number; blocks: string[] } {
   const min = finisherMinimumMinutes(input.stars);
   const ex = input.exercises;
   const k = Math.max(1, ex.length);
@@ -120,7 +120,7 @@ export function buildFinisherHtml(input: { category: string; stars: number; exer
       const unit = isTimedPosition(e.name) ? `${reps * 4} sec` : `${reps} reps`;
       blocks.push(li(`${sets} sets × ${unit} ${tok(e)} — Rest 60 sec between sets.`));
     }
-    return { html: blocks.join(p("")), minutes };
+    return { html: blocks.join(p("")), minutes, blocks };
   }
 
   const [work, rest] = stars === 1 ? [30, 30] : stars === 2 ? [40, 20] : [45, 15];
@@ -129,5 +129,5 @@ export function buildFinisherHtml(input: { category: string; stars: number; exer
   blocks.push(p(`⚡ <strong><u>Finisher (Intervals)</u></strong>`));
   blocks.push(p(`${work} sec work, ${rest} sec rest. Do all ${rounds} rounds of one exercise, then move to the next. Total: ${minutes} minutes.`));
   for (const e of ex) blocks.push(li(`${rounds} rounds × ${work} sec ${tok(e)} — rest ${rest} sec after each round.`));
-  return { html: blocks.join(p("")), minutes };
+  return { html: blocks.join(p("")), minutes, blocks };
 }
