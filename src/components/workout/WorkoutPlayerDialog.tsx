@@ -596,7 +596,7 @@ export function WorkoutPlayerDialog({
                   <StepperField
                     label={
                       tracking.roundsTotal
-                        ? `Reps this ${unitWord}${tracking.windowSeconds ? ` (${tracking.windowSeconds}s)` : ""}`
+                        ? `Reps this ${unitWord}`
                         : tracking.windowSeconds
                           ? `Reps in ${tracking.windowSeconds}s`
                           : "Reps completed"
