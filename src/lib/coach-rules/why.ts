@@ -20,6 +20,13 @@ export type WhyContext = {
   favoredExercises: string[];
   /** Sessions with any logged performance data. */
   loggedSessions: number;
+  /** Training Profile limitation labels the engine excluded movements for. */
+  limitationLabels?: string[];
+  /** Fitness level used when difficulty was left to Smarty, e.g. "Intermediate". */
+  autoLevelLabel?: string | null;
+  autoStars?: number | null;
+  /** Profile goals this session's category directly serves (labels). */
+  servedGoals?: string[];
 };
 
 const TIRED = new Set(["Tired", "Exhausted"]);
@@ -30,6 +37,20 @@ const TIRED = new Set(["Tired", "Exhausted"]);
  */
 export function whyThisSession(ctx: WhyContext): string[] {
   const lines: string[] = [];
+  const profileLines: string[] = [];
+  if (ctx.limitationLabels?.length) {
+    profileLines.push(
+      `Built around your ${joinLabels(ctx.limitationLabels)} limitation${ctx.limitationLabels.length > 1 ? "s" : ""}: exercises that load ${ctx.limitationLabels.length > 1 ? "them" : "it"} were left out.`,
+    );
+  }
+  if (ctx.servedGoals?.length) {
+    profileLines.push(`Chosen to support your goal${ctx.servedGoals.length > 1 ? "s" : ""}: ${joinLabels(ctx.servedGoals)}.`);
+  }
+  if (ctx.autoLevelLabel && ctx.autoStars) {
+    profileLines.push(
+      `Set at ${ctx.autoStars} star${ctx.autoStars > 1 ? "s" : ""} to match your ${ctx.autoLevelLabel} fitness level.`,
+    );
+  }
 
   if (ctx.readiness === "Recovery Recommended") {
     lines.push("Kept lighter today — your recent training suggests recovery is due.");
@@ -62,5 +83,13 @@ export function whyThisSession(ctx: WhyContext): string[] {
     lines.push("Built from your Training Profile — log a couple of sessions and SmartyCoach starts adapting to your own history.");
   }
 
-  return lines.slice(0, 3);
+  if (profileLines.length && lines.length === 1 && lines[0]!.startsWith("Built from your Training Profile")) {
+    lines.length = 0;
+  }
+  return [...profileLines, ...lines.slice(0, 3)];
+}
+
+function joinLabels(labels: string[]): string {
+  const l = labels.map((x) => x.toLowerCase());
+  return l.length <= 1 ? (l[0] ?? "") : `${l.slice(0, -1).join(", ")} and ${l[l.length - 1]}`;
 }
