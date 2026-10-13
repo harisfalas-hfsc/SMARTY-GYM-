@@ -117,7 +117,7 @@ export async function runWodForUser(
       const request = {
         minutes,
         mood: "normal",
-        location: variant.key === "bodyweight" ? "home" : prof?.preferred_environment ?? "home",
+        location: "home",
         equipment: variant.equipment,
         wod: {
           category: cycleDay.category,

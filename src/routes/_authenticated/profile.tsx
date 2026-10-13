@@ -13,7 +13,6 @@ import {
   Gauge,
   Target,
   Dumbbell,
-  MapPin,
   ThumbsDown,
   ShieldAlert,
   CheckCircle2,
@@ -24,7 +23,6 @@ import { toast } from "sonner";
 import {
   EQUIPMENT,
   GOALS,
-  LOCATIONS,
   GENDERS,
   FITNESS_LEVELS,
   DURATIONS,
@@ -265,7 +263,6 @@ function ProfilePage() {
       !p.age && "age",
       !p.fitness_level && "fitness level",
       !p.primary_goal?.trim() && "primary goal",
-      !p.preferred_environment && "training environment",
       !(p.preferred_equipment?.length) && "available equipment",
       !p.typical_duration_min && "workout duration",
       !p.health_acknowledged_at && "health acknowledgement",
@@ -458,19 +455,6 @@ function ProfilePage() {
           />
         </SectionCard>
 
-        <SectionCard icon={MapPin} title="Usual training environment">
-          <select
-            className={selectClass}
-            value={p.preferred_environment ?? "home"}
-            onChange={(e) => set("preferred_environment", e.target.value)}
-          >
-            {LOCATIONS.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.label}
-              </option>
-            ))}
-          </select>
-        </SectionCard>
         <SectionCard
           icon={Sparkles}
           title="Use my liked & disliked exercises"

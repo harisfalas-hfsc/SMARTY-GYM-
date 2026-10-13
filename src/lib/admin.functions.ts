@@ -130,7 +130,6 @@ export const adminListUsers = createServerFn({ method: "POST" })
               p.age &&
               p.fitness_level &&
               p.primary_goal &&
-              p.preferred_environment &&
               p.typical_duration_min &&
               Array.isArray(p.preferred_equipment) &&
               p.preferred_equipment.length,
