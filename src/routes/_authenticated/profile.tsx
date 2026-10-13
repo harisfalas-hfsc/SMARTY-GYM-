@@ -272,9 +272,9 @@ function ProfilePage() {
         ? {
             ...prev,
             readiness_answers: { ...(prev.readiness_answers ?? {}), [key]: value },
-            readiness_warning_acknowledged_at: value
-              ? prev.readiness_warning_acknowledged_at
-              : null,
+            // A new Yes needs the warning accepted again; other changes keep it.
+            readiness_warning_acknowledged_at:
+              value && !prev.readiness_answers?.[key] ? null : prev.readiness_warning_acknowledged_at,
           }
         : prev,
     );
