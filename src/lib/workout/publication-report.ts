@@ -4,6 +4,7 @@
 import * as D from "./doctrine";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import { parseWorkoutSteps, type WorkoutStep } from "./parse-steps";
+import { finisherDeclaredMinutes, finisherMinimumMinutes, finisherRealSeconds } from "./finisher-length";
 import {
   ACTIVATION_MAX_REPS,
   ACTIVATION_MAX_SECONDS,
@@ -161,6 +162,15 @@ export function publicationRuleReports(
     if (D.durationOverflowViolation(workMinutes, target)) add("Work time exceeds the advertised duration", line("Workout Duration Rule", [["Section", "Main Workout / Finisher"], ["Current", `approximately ${workMinutes} min`], ["Allowed", `${target} min advertised training time`]], "Reduce rounds, sets, work intervals, or rest so the prescription fits the advertised duration."));
     if (D.activationOverflowViolation(activationMinutes, target)) add("Activation too long", line("Activation Duration Rule", [["Section", "Activation"], ["Current", `approximately ${activationMinutes} min`], ["Allowed", `about ${D.activationAllowanceMinutes(target)} min`]], "Shorten the activation prescriptions."));
     if (D.cooldownOverflowViolation(cooldownMinutes, target)) add("Cool Down too long", line("Cool Down Duration Rule", [["Section", "Cool Down"], ["Current", `approximately ${cooldownMinutes} min`], ["Allowed", `about ${D.cooldownAllowanceMinutes(target)} min`]], "Shorten the cool-down prescriptions."));
+  }
+
+  {
+    const real = finisherRealSeconds(html);
+    const minimum = finisherMinimumMinutes(workout.difficulty_stars);
+    const declared = finisherDeclaredMinutes(html);
+    const current = real === null ? null : `about ${Math.round(real / 60)} min by its rounds/sets × (work + rest)`;
+    add("Finisher shorter than the level minimum", line("Finisher Length Rule", [["Section", "Finisher"], ["Current", current], ["Allowed", `at least ${minimum} min for this level (Beginner 12, Intermediate 15, Advanced 20)`]], "Add rounds or sets so the Finisher really lasts the minimum."));
+    add("Finisher time does not add up", line("Finisher Time Rule", [["Section", "Finisher"], ["Stated", declared ? `${declared} min` : null], ["Current", current]], "Make the stated Finisher time match its real rounds/sets × (work + rest)."));
   }
 
   return blockingIssues.map((issue) => reports.get(issue) ?? line(`${issue} Rule`, [["Current", issue]], "Correct this issue before publishing."));
