@@ -6,6 +6,7 @@ import { matchesSelectedEquipment, nameStem, type PoolExercise } from "./pool.se
 import { findTokens, isLibraryId, stripHtml } from "./tokens";
 import { parseWorkoutSteps } from "./parse-steps";
 import { activationDoseViolation } from "./prep-vocabulary";
+import { limitationAdmits, limitationDecision, limitationExplanation, type LimitationProfile } from "./limitations";
 import { doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks } from "./rules";
 import {
   estimateActivationMinutes,
@@ -70,6 +71,8 @@ export type ValidateOptions = {
   mood?: string | null;
   /** Athlete age — past 60 repeated impact is replaced, not just discouraged. */
   age?: number | null;
+  /** Training Profile limitations — the safety layer, checked on EVERY exercise incl. prep. */
+  limitations?: LimitationProfile;
 
 
   /** Ids allowed in 🔥 Activation / 🧘 Cool Down (prep vocabulary, bodyweight-first). */
@@ -126,6 +129,9 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
     if (row.name.toLowerCase().trim() !== token.name.toLowerCase().trim()) {
       warnings.push(`Exercise name for ${token.id} did not match the library entry.`);
     }
+    // 0a. Safety first — injuries & limitations apply to every section.
+    if (opts.limitations && !limitationAdmits(row, opts.limitations, { allowRestricted: true }))
+      errors.push(limitationExplanation(row.name, limitationDecision(row, opts.limitations)) ?? `"${row.name}" conflicts with your injuries & limitations.`);
     // Prep vocabulary (Activation / Cool Down) is bodyweight-first and lives
     // outside the session pool on purpose — it only has to be a legal prep id.
     const isPrep = prepIds.has(token.id);
