@@ -369,8 +369,8 @@ export function buildPackWorkout(
     const reps = isBodyweight(e) ? Math.max(d.reps?.[1] ?? 10, 10) : (d.reps?.[0] ?? 10);
     // Fit the sets to the advertised training time (real work per set plus rest).
     const work = isTimedPosition(e.name) ? (d.seconds?.[0] ?? 30) : reps * 5;
-    const blocks = Math.max(1, mainCount + (noFinisher ? 0 : finisherCount * 0.6));
-    const fit = Math.floor((input.minutes * 60) / (blocks * (work + d.restSec[0])));
+    const blocks = Math.max(1, mainCount);
+    const fit = Math.floor((mainMinutes * 60) / (blocks * (work + d.restSec[0])));
     const sets = Math.max(1, Math.min(d.sets[1], fit));
     const unit = isTimedPosition(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
     return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets. ${d.tempo[0]!.toUpperCase()}${d.tempo.slice(1)}.`;
@@ -383,16 +383,8 @@ export function buildPackWorkout(
   });
 
   if (finisherPicks.length) {
-    const lifting = input.category === "STRENGTH" || input.category === "MUSCLE BUILDING";
-    if (lifting && input.plan?.finisher) {
-      // Complementary accessory work on the same objective — never a second workout, never cardio.
-      blocks.push(heading("⚡", "Finisher (Accessory)"));
-      finisherPicks.forEach((e) => blocks.push(li(planned(input.plan!.finisher!, e))));
-    } else {
-      blocks.push(heading("⚡", "Finisher (For Time)"));
-      blocks.push(para("2 rounds for time. Move well, keep breathing, stop if form breaks."));
-      finisherPicks.forEach((e) => blocks.push(li(`${isTimedPosition(e.name) ? "30 sec" : "10 reps"} ${token(e)}`)));
-    }
+    // Finisher length rule: level minimum, honest rounds/sets × (work + rest).
+    buildFinisherHtml({ category: input.category, stars: levelStars, exercises: finisherPicks }).blocks.forEach((b) => blocks.push(b));
   }
 
   if (!isMicro) {
