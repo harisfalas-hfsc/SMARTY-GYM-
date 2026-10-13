@@ -449,7 +449,7 @@ function ProfilePage() {
           hint="Nothing outside this list will be programmed"
         >
           <Pills
-            options={EQUIPMENT.map((e) => ({ id: e.id, label: e.label }))}
+            options={EQUIPMENT.filter((e) => e.id !== "other").map((e) => ({ id: e.id, label: e.label }))}
             value={p.preferred_equipment ?? []}
             onToggle={(id) => toggle("preferred_equipment", id)}
           />

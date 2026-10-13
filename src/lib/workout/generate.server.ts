@@ -1,4 +1,5 @@
 import type { AthleteContext } from "./prompt.server";
+import { knownLimitations } from "./limitations";
 import { enforceWorkout, estimateWorkMinutes } from "./enforce.server";
 import { validateWorkout } from "./validate.server";
 import { classifyIssuesForFallback } from "@/lib/workout-validation";
@@ -109,6 +110,7 @@ export async function generateWorkoutContent(
   // §18 — "Anywhere" is a real practicality filter (portable equipment only),
   // unless the athlete explicitly ticked fixed-station gym equipment.
   const location = resolveLocation(input.location ?? null, input.selectedEquipment);
+  const limitations = knownLimitations(input.athlete?.limitations ?? []);
   const pool = filterPool(all, {
     category: input.category,
     format,
@@ -122,11 +124,16 @@ export async function generateWorkoutContent(
     bannedTerms,
     location,
     age: input.athlete?.age ?? null,
+    limitations,
   });
 
 
   if (pool.length < 1) {
-    throw new Error("Not enough exercises match those settings. Try different equipment.");
+    throw new Error(
+      limitations.length
+        ? "Not enough safe exercises match your equipment and your injuries & limitations. Try adding equipment."
+        : "Not enough exercises match those settings. Try different equipment.",
+    );
   }
 
   const duration = durationLabel(input.minutes);
@@ -158,12 +165,14 @@ export async function generateWorkoutContent(
     dislikedIds,
     focus: input.focus ?? null,
     region: activationRegion,
+    limitations,
   });
 
 
   const cooldownPool = buildCooldownPool(all, {
     selectedEquipment: input.selectedEquipment,
     dislikedIds,
+    limitations,
   });
   const prepIds = [...activationPool.map((e) => e.id), ...cooldownPool.map((e) => e.id)];
   const seed = `${input.category}${input.minutes}${pool.length}`.length + Date.now() % 100000;

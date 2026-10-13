@@ -1,4 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { knownLimitations, limitationLabel } from "./limitations";
+import { FITNESS_LEVELS, PROFILE_GOALS, labelFor } from "@/lib/coach-options";
 import {
   CATEGORY_FORMATS,
   difficultyLabel,
@@ -57,6 +59,21 @@ const LEVEL_STARS: Record<string, number> = {
   intermediate: 2,
   advanced: 3,
 };
+
+const GOAL_CATEGORIES: Record<string, string[]> = {
+  fat_loss: ["CALORIE BURNING", "METABOLIC", "CARDIO"],
+  muscle_gain: ["MUSCLE BUILDING", "STRENGTH"],
+  strength: ["STRENGTH"],
+  endurance: ["CARDIO", "METABOLIC"],
+  conditioning: ["CALORIE BURNING", "METABOLIC", "CARDIO", "CHALLENGE"],
+  mobility: ["MOBILITY & STABILITY", "PILATES", "RECOVERY"],
+  toning: ["MUSCLE BUILDING", "PILATES", "CALORIE BURNING"],
+  performance: ["STRENGTH", "CHALLENGE", "METABOLIC"],
+  health: ["CARDIO", "MOBILITY & STABILITY", "PILATES", "RECOVERY"],
+};
+function goalServedBy(goal: string, category: string): boolean {
+  return (GOAL_CATEGORIES[goal] ?? []).includes(String(category).toUpperCase());
+}
 
 /** REQUESTED difficulty only — mood never enters here. */
 function requestedStarsFor(
@@ -382,6 +399,18 @@ export async function createWorkoutForUser(
         avoidedExercises: dislikedLibrary,
         favoredExercises: favoriteLibrary,
         loggedSessions: overview.loggedSessions,
+        limitationLabels: knownLimitations((prof?.["limitations"] as string[] | null) ?? []).map(
+          limitationLabel,
+        ),
+        autoLevelLabel:
+          requestedLevel === "auto"
+            ? labelFor(FITNESS_LEVELS, (prof?.["fitness_level"] as string | null) ?? null) || null
+            : null,
+        autoStars: requestedLevel === "auto" ? stars : null,
+        servedGoals: [prof?.["primary_goal"], prof?.["secondary_goal"]]
+          .map((g) => String(g ?? ""))
+          .filter((g) => g && goalServedBy(g, category))
+          .map((g) => labelFor(PROFILE_GOALS, g)),
       });
     } catch {
       // Explanation is additive: never block a generation on it.
