@@ -128,6 +128,6 @@ export function buildFinisherHtml(input: { category: string; stars: number; exer
   const minutes = k * rounds;
   blocks.push(p(`⚡ <strong><u>Finisher (Intervals)</u></strong>`));
   blocks.push(p(`${work} sec work, ${rest} sec rest. Do all ${rounds} rounds of one exercise, then move to the next. Total: ${minutes} minutes.`));
-  for (const e of ex) blocks.push(li(`${rounds} rounds × ${work} sec work, ${rest} sec rest ${tok(e)}`));
+  for (const e of ex) blocks.push(li(`${rounds} rounds × ${work} sec ${tok(e)} — rest ${rest} sec after each round.`));
   return { html: blocks.join(p("")), minutes };
 }
