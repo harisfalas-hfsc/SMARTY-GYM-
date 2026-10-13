@@ -90,7 +90,7 @@ const R = {
   fly: /\b(fly|flyes?|flies|pec deck)\b/i,
   kipping: /\b(kipping|muscle-?ups?)\b/i,
   neck: /\b(neck|wrestler|headstand|head bridge)\b/i,
-  inversion: /\b(handstand|headstand|inverted|decline)\b/i,
+  inversion: /\b(handstand|headstand|inversion)\b/i,
   closeGrip: /\b(close[- ]grip|diamond|triangle push)\b/i,
   tricepsExt: /\b(skull ?crushers?|triceps? extensions?|french press|overhead triceps)\b/i,
   curl: /\bcurls?\b/i,
@@ -162,7 +162,7 @@ function traitsOf(e: LimitationExercise): Set<Trait> {
   add("fly", R.fly.test(name));
   add("kipping", R.kipping.test(name));
   add("neckLoad", R.neck.test(name));
-  add("inversion", R.inversion.test(name) && !/\bdecline (bench )?crunch\b/i.test(name) ? true : R.inversion.test(name));
+  add("inversion", R.inversion.test(name));
   add("closeGrip", R.closeGrip.test(name));
   add("tricepsExt", R.tricepsExt.test(name));
   add("heavyCurl", R.curl.test(name) && (isBarbell(`${name} ${eq}`) || advanced) && !/\b(leg|hamstring|nordic)\b/i.test(name));
@@ -260,7 +260,7 @@ export const LIMITATION_POLICY: Record<string, Policy> = {
   },
   knee: {
     rules: [
-      { status: "BLOCKED", when: (t, _c) => (t.has("jump") && (t.has("lunge") || /squat/.test("") || true)) && t.has("jump") && !t.has("jacks") ? true : t.has("deepKnee") && !t.has("lunge"), reason: "landing impact or forced deep knee flexion" },
+      { status: "BLOCKED", when: (t) => (t.has("jump") && !t.has("jacks")) || (t.has("deepKnee") && !t.has("lunge")), reason: "landing impact or forced deep knee flexion" },
       { status: "RESTRICTED", when: any("lateralCut", "sprint", "jacks", "burpee"), reason: "impact or cutting through the knee", condition: "Low intensity and only if symptom-free." },
       { status: "RESTRICTED", when: any("lunge", "stepUp"), reason: "single-leg knee loading", condition: "Approved, pain-free range only; reduce depth or step height." },
     ],
@@ -305,7 +305,6 @@ export const LIMITATION_POLICY: Record<string, Policy> = {
   asthma: {
     rules: [
       { status: "RESTRICTED", when: any("sprint", "intenseCardio", "burpee"), reason: "all-out effort can trigger symptoms", condition: `Follow your asthma action plan; use planned recovery. ${CLEARANCE}` },
-      { status: "RESTRICTED", when: (t) => t.has("jump") && /tuck|rope/.test(""), reason: "continuous high-intensity effort", condition: "Follow your asthma action plan." },
     ],
     prefer: /\b(walk|march|cycl\w*|machine|seated|cable|dumbbell|band)\b/i,
   },
