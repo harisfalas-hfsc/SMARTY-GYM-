@@ -10,7 +10,6 @@ import {
   Clock,
   Copy,
   Dumbbell,
-  Download,
   Facebook,
   Heart,
   Instagram,
@@ -222,16 +221,6 @@ export function WorkoutDisplay({
     }
   }
 
-  function downloadSharePicture() {
-    if (!shareFile) return;
-    const url = URL.createObjectURL(shareFile);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = shareFile.name;
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
 
   return (
     <ExerciseMediaProvider ids={ids}>
@@ -364,7 +353,6 @@ export function WorkoutDisplay({
         <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl border-2 border-primary p-5 sm:p-6">
           <DialogTitle>Share workout</DialogTitle>
           <p className="text-sm text-muted-foreground">Choose where to share {workout.name}.</p>
-          {shareFile && <Button variant="outline" className="h-12 w-full rounded-xl" onClick={downloadSharePicture}><Download className="mr-2 h-5 w-5" /> Save workout picture</Button>}
           <div className="grid grid-cols-2 gap-2">
             <Button asChild variant="outline" className="h-12 justify-start rounded-xl">
               <a href={`https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`} target="_blank" rel="noreferrer">
