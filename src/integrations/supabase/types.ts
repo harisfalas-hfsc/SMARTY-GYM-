@@ -905,6 +905,7 @@ export type Database = {
           id: string
           last_auto_workout_on: string | null
           last_motivation_on: string | null
+          limitation_clearance: boolean
           limitations: string[]
           motivation_hour: number
           notify_motivation: boolean
@@ -912,6 +913,7 @@ export type Database = {
           preferred_categories: string[]
           preferred_environment: string | null
           preferred_equipment: string[]
+          pregnancy_stage: string | null
           primary_goal: string | null
           readiness_answers: Json
           readiness_warning_acknowledged_at: string | null
@@ -952,6 +954,7 @@ export type Database = {
           id: string
           last_auto_workout_on?: string | null
           last_motivation_on?: string | null
+          limitation_clearance?: boolean
           limitations?: string[]
           motivation_hour?: number
           notify_motivation?: boolean
@@ -959,6 +962,7 @@ export type Database = {
           preferred_categories?: string[]
           preferred_environment?: string | null
           preferred_equipment?: string[]
+          pregnancy_stage?: string | null
           primary_goal?: string | null
           readiness_answers?: Json
           readiness_warning_acknowledged_at?: string | null
@@ -999,6 +1003,7 @@ export type Database = {
           id?: string
           last_auto_workout_on?: string | null
           last_motivation_on?: string | null
+          limitation_clearance?: boolean
           limitations?: string[]
           motivation_hour?: number
           notify_motivation?: boolean
@@ -1006,6 +1011,7 @@ export type Database = {
           preferred_categories?: string[]
           preferred_environment?: string | null
           preferred_equipment?: string[]
+          pregnancy_stage?: string | null
           primary_goal?: string | null
           readiness_answers?: Json
           readiness_warning_acknowledged_at?: string | null
