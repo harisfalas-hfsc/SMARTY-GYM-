@@ -7,6 +7,7 @@ import { buildPackWorkout, packCopy } from "./pack.server";
 import { overusedExerciseIds } from "./exercise-usage";
 import { memberQualityIssues } from "./member-quality";
 import { crossSectionRepeats } from "./section-repeats";
+import { plainWorkoutHtml } from "./plain-lines";
 import { buildSessionPlan } from "./programming";
 import { smartyCopy } from "./copy-bank.server";
 import { dominantRegion, focusRegion, resolveLocation } from "./doctrine";
@@ -275,7 +276,9 @@ export async function generateWorkoutContent(
     const nextIssues = qualityOf(next);
     if (nextIssues.length < issues.length) { pack = next; issues = nextIssues; }
   }
-  const enforcedPack = enforceWorkout(pack.html, pool, enforceOpts);
+  const enforced = enforceWorkout(pack.html, pool, enforceOpts);
+  // Plain text (plain-lines.ts): dose, exercise, side, rest — no tempo or cues.
+  const enforcedPack = { ...enforced, html: plainWorkoutHtml(enforced.html) };
 
   const packValidation = validateWorkout(enforcedPack.html, validateOpts);
   const packSplit = classifyIssuesForFallback([

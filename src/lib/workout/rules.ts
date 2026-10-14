@@ -36,7 +36,10 @@ const STRENGTH_BAN_RE =
   /\b(jump|jumping|bound|hop|hopping|burpee|plyo|plyometric|skater|sprint|jacks?|butt kicks?|high knees?|mountain climber|run|running|jog|jogging|skip|skipping|shuffle|march|inchworm|bird dog|crawl)\b/i;
 
 
-export type RuleExercise = D.ExerciseLike & { id?: string; difficulty?: string | null; smarty_tags?: string[] | null };
+export type RuleExercise = D.ExerciseLike & { id?: string; difficulty?: string | null; smarty_tags?: string[] | null; gif_path?: string | null };
+
+/** Every exercise a member sees must show its picture (Haris Falas, 14 Oct 2026). Rows read without the picture column are not judged. */
+export const lacksPicture = (e: { gif_path?: string | null }) => "gif_path" in e && !String(e.gif_path ?? "").trim();
 
 export type ExerciseRuleContext = {
   category: Category;
@@ -58,6 +61,7 @@ const GYM_KIT = /lever|machine|smith|sled|cable|barbell|trap bar|olympic|assiste
 export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): string[] {
   const out: string[] = [];
   const section = ctx.section ?? "work";
+  if (lacksPicture(e)) out.push(`"${e.name}" has no picture in the exercise library — every workout exercise must show its picture.`);
   // 1. SAFETY — applies to every section and every category before any list,
   //    priority or variety rule. Restricted moves with technique conditions
   //    may stay; blocked moves and uncleared medical restrictions never do.
