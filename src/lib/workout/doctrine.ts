@@ -441,7 +441,9 @@ export const FOCUS_RULES: Record<StrengthFocus, FocusRule> = {
   },
   "CORE & GLUTES": {
     allow:
-      /\b(plank|dead bug|pallof|bird dog|hip thrust|glute bridge|kickback|clamshell|anti-rotation|abdominal|core|oblique|glute)\b/i,
+      /\b(plank|dead bug|pallof|bird dog|hip thrust|glute bridge|bridge|kickback|clamshell|anti-rotation|abdominal|core|oblique|glute|hip extension|abduction|lunge|split squat|step-?up|deadlift|romanian|rdl|swing|goblet squat|sumo|good morning|crunch|sit-?up|leg raise|knee raise|rollout|ab wheel|hollow|v-?up|bicycle)\b/i,
+    // Inner-thigh and quad-dominant squats are not glute work.
+    deny: /\b(adduction|hack squat|front squat|full squat|zercher|leg extension|calf)\b/i,
   },
   PUSH: {
     parts: ["chest", "shoulders", "upper arms"],

@@ -11,7 +11,6 @@ import { prepAllowed } from "./prep-vocabulary";
 import { isCardioRhythm, isTimedPosition, isTimeDosed, LIGHT_SET_CAP } from "./rules";
 import { buildFinisherHtml, finisherMinimumMinutes } from "./finisher-length";
 import { dedupeMovements, improvePicks, levelMainMinimum, levelMinSets } from "./member-quality";
-import { regionOf as regionOfRow } from "./doctrine";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
@@ -368,7 +367,7 @@ export function buildPackWorkout(
   // Cool Down stretches the muscles the Main Workout trained.
   const cdAll = dedupeMovements(input.cooldownPool ?? []);
   const cdRelevant = cdAll.filter((e) => {
-    const r = regionOfRow(e);
+    const r = regionOf(e);
     if (mainRegion === "full") return true;
     return r === mainRegion || (mainRegion === "lower" && r === "core") || (mainRegion === "core" && r === "lower");
   });

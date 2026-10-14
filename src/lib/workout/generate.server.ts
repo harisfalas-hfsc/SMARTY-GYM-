@@ -5,6 +5,7 @@ import { validateWorkout } from "./validate.server";
 import { classifyIssuesForFallback } from "@/lib/workout-validation";
 import { buildPackWorkout, packCopy } from "./pack.server";
 import { overusedExerciseIds } from "./exercise-usage";
+import { memberQualityIssues } from "./member-quality";
 import { buildSessionPlan } from "./programming";
 import { smartyCopy } from "./copy-bank.server";
 import { dominantRegion, focusRegion, resolveLocation } from "./doctrine";
@@ -241,7 +242,9 @@ export async function generateWorkoutContent(
   } catch {
     overusedIds = [];
   }
-  const pack = buildPackWorkout(pool, all, {
+  // Final check (member-quality.ts): rebuild with another seed before the member sees a weak session.
+  const equipmentExpected = input.equipmentMode !== "BODYWEIGHT" && pool.some((e) => !(e.equipment ?? "").toLowerCase().includes("body weight"));
+  const buildOnce = (s: number) => buildPackWorkout(pool, all, {
     category: input.category,
     format,
     level,
@@ -250,11 +253,21 @@ export async function generateWorkoutContent(
     favoriteIds,
     activationPool,
     cooldownPool,
-    seed,
+    seed: s,
     finisher: Boolean(plan.finisher),
     plan,
     overusedIds,
+    equipmentExpected,
   });
+  const qualityOf = (p: ReturnType<typeof buildOnce>) =>
+    memberQualityIssues(p.main, { level: level === "all" ? "intermediate" : level, focus: input.focus ?? null, equipmentExpected, pool, minutesFitCount: p.fitCount });
+  let pack = buildOnce(seed);
+  let issues = qualityOf(pack);
+  for (let attempt = 1; attempt <= 6 && issues.length; attempt++) {
+    const next = buildOnce(seed + attempt * 101);
+    const nextIssues = qualityOf(next);
+    if (nextIssues.length < issues.length) { pack = next; issues = nextIssues; }
+  }
   const enforcedPack = enforceWorkout(pack.html, pool, enforceOpts);
 
   const packValidation = validateWorkout(enforcedPack.html, validateOpts);
@@ -297,6 +310,7 @@ export async function generateWorkoutContent(
       ...enforcedPack.warnings,
       ...packValidation.warnings,
       ...packSplit.soft,
+      ...issues.map((i) => `Quality: ${i}`),
       ...packSplit.structural.map((issue) => `Adjustment: ${issue}`),
     ],
     needs_review: packSplit.structural.length > 0,
