@@ -9,6 +9,8 @@ import { prepTokens, prepAllowed, isBodyweightEquipment, ACTIVATION_NAMES, activ
 import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, timedMovementDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import { focusBreaks } from "./strength-focus";
+import { crossSectionRepeats } from "./section-repeats";
+import { movementKey } from "./member-quality";
 import { finisherFormatIssue, finisherLengthIssue } from "./finisher-length";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
@@ -64,8 +66,10 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   // A Strength workout without a focus label could never be checked against its focus.
   if (cat === "STRENGTH" && !String(w.focus ?? "").trim()) s.add("Workout focus not covered");
   if (cat === "STRENGTH")
-    for (const v of focusBreaks(w.focus, mainRows.map((r) => r.name), finRows.map((r) => r.name)))
-      s.add(/needs at least/.test(v) ? "Workout focus not covered" : "Exercise outside the workout focus");
+    for (const v of focusBreaks(w.focus, mainRows, finRows))
+      s.add(/needs at least/.test(v) ? "Workout focus not covered" : / trains .* which is not part of/.test(v) ? "Exercise trains muscles outside the workout focus" : "Exercise outside the workout focus");
+  // The same exercise (or its variant) never appears in two sections (Activation / Main / Finisher).
+  if (crossSectionRepeats(html, (id, f) => lib.get(id)?.name ?? f).length) s.add("Same exercise in two sections");
   for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level }, finRows)) s.add(complianceRuleLabel(v));
   for (const st of workSteps) {
     if (!/\d/.test(st.prescription)) s.add("Exercise without a dose");
@@ -152,6 +156,8 @@ function replaceId(html: string, from: string, to: ComplianceExercise): string {
 }
 
 const fam = (e: ComplianceExercise) => D.equipmentFamilyOf(e.equipment);
+/** Movements the coach flagged as already overused (Oct 2026) are never brought in as a substitute. */
+const OVERUSED_SUBSTITUTE = /bear crawl/i;
 
 /** Swaps rejected by the coach: Crab Walk is never auto-swapped to Bear Crawl, and an advanced pistol squat is never introduced as a substitute. */
 function bannedSwap(from: ComplianceExercise, to: ComplianceExercise, _w: ComplianceWorkout): boolean {
@@ -387,6 +393,57 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
       tryApply(cur.index, cur.raw, row, role, illegal ? `Not a ${role} movement` : "Activation must be active mobility, not a second passive stretch", illegal ? `${role} vocabulary` : "Activation mostly passive stretches",
         (c) => prepAllowed(c.name, t.section) && isBodyweightEquipment(c.equipment) && (t.section !== "activation" || !isPassiveStretch(c.name)), { allowFamilyChange: true, mandatory: true });
     }
+  }
+
+  // 3e. Mandatory: work rows outside the workout focus or its muscles (library muscle data).
+  const presentKeys = () => new Set(allTokens(html).map((t) => movementKey(lib.get(t.id)?.name ?? t.raw)));
+  const focusOk = (c: ComplianceExercise, role: Role) =>
+    !focusBreaks(w.focus, role === "Finisher" ? [] : [c], role === "Finisher" ? [c] : []).some((v) => v.startsWith('"'));
+  if (cat === "STRENGTH" && w.focus) {
+    for (let guard = 0; guard < 12; guard++) {
+      const cur = issues(html);
+      if (!cur.some((i) => /outside the workout focus/.test(i))) break;
+      const bad = allTokens(html).find((t) => {
+        const role = roleOfIndex(html, t.index); const row = lib.get(t.id);
+        return row && (role === "Main Workout" || role === "Finisher") && !focusOk(row, role);
+      });
+      if (!bad) break;
+      const row = lib.get(bad.id)!; const role = roleOfIndex(html, bad.index);
+      const keys = presentKeys();
+      const want = (sameFam: boolean) => (c: ComplianceExercise) => workLegal(c) && focusOk(c, role) && !keys.has(movementKey(c.name)) && !OVERUSED_SUBSTITUTE.test(c.name) &&
+        isTimedPosition(c.name) === isTimedPosition(row.name) && (sameFam ? fam(c) === fam(row) : fam(c) === "bodyweight" || rowsIn(html, lib, "Main Workout").some((m) => fam(m) === fam(c)));
+      let r = tryApply(bad.index, bad.raw, row, role, "Exercise does not train the workout's focus muscles (library muscle data)", "Exercise outside the workout focus", want(true), { anyPattern: true, wantPriority: true, mandatory: true });
+      if (r !== "applied") r = tryApply(bad.index, bad.raw, row, role, "Exercise does not train the workout's focus muscles (library muscle data)", "Exercise outside the workout focus", want(false), { anyPattern: true, allowFamilyChange: true, wantPriority: true, mandatory: true });
+      if (r !== "applied") break;
+    }
+  }
+
+  // 3f. Mandatory: the same exercise in two sections — change the Activation drill first, else the later work row.
+  for (let guard = 0; guard < 12; guard++) {
+    const reps = crossSectionRepeats(html, (id, f) => lib.get(id)?.name ?? f);
+    if (!reps.length) break;
+    const rep = reps[0]!;
+    const key = movementKey(rep.name);
+    const toks = allTokens(html).map((t) => ({ ...t, role: roleOfIndex(html, t.index), row: lib.get(t.id) })).filter((t) => t.row && movementKey(t.row.name) === key);
+    const keys = presentKeys();
+    let done = false;
+    const act = rep.first === "Activation" ? toks.find((t) => t.role === "Activation") : undefined;
+    if (act) {
+      const r = tryApply(act.index, act.raw, act.row!, "Activation", "Same exercise already in the workout — Activation drill changed", "Same exercise in two sections",
+        (c) => prepAllowed(c.name, "activation") && isBodyweightEquipment(c.equipment) && !isPassiveStretch(c.name) && !keys.has(movementKey(c.name)), { allowFamilyChange: true, anyPattern: true, mandatory: true });
+      done = r === "applied";
+    }
+    if (!done) {
+      const later = [...toks].reverse().find((t) => t.role === rep.again && t.role !== "Activation");
+      if (later) {
+        const role = later.role; const row = later.row!;
+        const r = tryApply(later.index, later.raw, row, role, "Same exercise already in the workout — replaced", "Same exercise in two sections",
+          (c) => workLegal(c) && !OVERUSED_SUBSTITUTE.test(c.name) && (!(cat === "STRENGTH" && w.focus) || focusOk(c, role)) && !keys.has(movementKey(c.name)) && isTimedPosition(c.name) === isTimedPosition(row.name) && (fam(c) === fam(row) || fam(c) === "bodyweight"),
+          { anyPattern: true, allowFamilyChange: true, wantPriority: true, mandatory: true });
+        done = r === "applied";
+      }
+    }
+    if (!done) break;
   }
 
   // 3d. Preference: priority share — only genuinely equivalent (HIGH) priority swaps, never MEDIUM.

@@ -652,7 +652,8 @@ export function buildSessionPlan(input: {
   if (finisherDose && finisherCount[1] > 0) {
     if (finisherFits) {
       finisherMinutes = finMin;
-      if (finisherCount[0] < 2) finisherCount = [2, Math.max(3, finisherCount[1])];
+      // Coach Haris: a Finisher always has at least 3 exercises.
+      if (finisherCount[0] < 3) finisherCount = [3, Math.max(3, finisherCount[1])];
       finisherDirective = `⚡ Finisher — at least ${finMin} min, true to the category objective; its stated time must equal rounds/sets × (work + rest).`;
     } else {
       finisherCount = [0, 0];

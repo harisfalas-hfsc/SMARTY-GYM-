@@ -10,7 +10,7 @@ import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
 import { isCardioRhythm, isTimedPosition, isTimeDosed, LIGHT_SET_CAP } from "./rules";
 import { buildFinisherHtml, finisherMinimumMinutes } from "./finisher-length";
-import { dedupeMovements, improvePicks, levelMainMinimum, levelMinSets } from "./member-quality";
+import { dedupeMovements, improvePicks, levelMainMinimum, levelMinSets, movementKey } from "./member-quality";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
@@ -314,10 +314,21 @@ export function buildPackWorkout(
         const more = usePriority ? orderedPriority(src).filter((e) => !ex.has(e.id)).slice(0, finisherCount - first.length) : [];
         more.forEach((e) => ex.add(e.id));
         const prioMain = usePriority ? new Set(orderedPriority(mainPicks).map((e) => e.id)) : new Set<string>();
-        const reuse = mainPicks.filter((e) => prioMain.has(e.id)).slice(0, Math.max(0, finisherCount - first.length - more.length));
-        const got = [...first, ...more, ...reuse];
-        const picks = got.length >= finisherCount ? got : [...got, ...pickBalanced(src, finisherCount - got.length, { exclude: ex })];
-        return flowGroup(fillFromLegalPool(picks, src, finisherCount), src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));
+        void prioMain;
+        // No exercise (or variant) from the Main Workout is repeated in the Finisher (Coach Haris, 14 Oct 2026).
+        const mainKeys = new Set(mainPicks.map((e) => movementKey(e.name)));
+        const fresh = (e: PoolExercise) => !mainKeys.has(movementKey(e.name));
+        const got = [...first, ...more].filter(fresh);
+        const picks = got.length >= finisherCount ? got : [...got, ...pickBalanced(src.filter(fresh), finisherCount - got.length, { exclude: ex })];
+        const filled = fillFromLegalPool(picks, src, finisherCount);
+        const seenKeys = new Set(mainKeys);
+        const spareOf = () => src.find((e) => !seenKeys.has(movementKey(e.name)) && !used.has(e.id) && !filled.some((f) => f.id === e.id));
+        for (let i = 0; i < filled.length; i++) {
+          const k = movementKey(filled[i]!.name);
+          if (seenKeys.has(k)) { const s = spareOf(); if (s) filled[i] = s; }
+          seenKeys.add(movementKey(filled[i]!.name));
+        }
+        return flowGroup(filled, src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));
       })();
   finisherPicks.forEach((e) => used.add(e.id));
   // CHALLENGE is majority bodyweight (doctrine): swap surplus equipment picks for unused bodyweight moves.
@@ -351,14 +362,18 @@ export function buildPackWorkout(
       (mainRegion === "core" && r === "lower")
     );
   });
+  // Activation never repeats an exercise (or variant) used later in Main Workout / Finisher.
+  const workKeys = new Set([...mainPicks, ...finisherPicks].map((e) => movementKey(e.name)));
+  const notInWork = (e: PoolExercise) => !workKeys.has(movementKey(e.name));
   const relevantActivationPool = dedupeMovements(
-    derivedActivationPool.length >= 4 ? derivedActivationPool : (input.activationPool ?? []),
+    (derivedActivationPool.filter(notInWork).length >= 4 ? derivedActivationPool : (input.activationPool ?? [])).filter(notInWork),
   );
 
   const activationPicks = (relevantActivationPool.length
     ? pickPrep(relevantActivationPool, 4, seed)
     : pickBalanced(library, 4, {
         filter: (e) =>
+          notInWork(e) &&
           isBodyweight(e) &&
           prepAllowed(e.name, "activation") &&
           (e.difficulty ?? "").toLowerCase() !== "advanced",

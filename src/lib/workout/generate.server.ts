@@ -6,6 +6,7 @@ import { classifyIssuesForFallback } from "@/lib/workout-validation";
 import { buildPackWorkout, packCopy } from "./pack.server";
 import { overusedExerciseIds } from "./exercise-usage";
 import { memberQualityIssues } from "./member-quality";
+import { crossSectionRepeats } from "./section-repeats";
 import { buildSessionPlan } from "./programming";
 import { smartyCopy } from "./copy-bank.server";
 import { dominantRegion, focusRegion, resolveLocation } from "./doctrine";
@@ -259,8 +260,10 @@ export async function generateWorkoutContent(
     overusedIds,
     equipmentExpected,
   });
-  const qualityOf = (p: ReturnType<typeof buildOnce>) =>
-    memberQualityIssues(p.main, { level: level === "all" ? "intermediate" : level, focus: input.focus ?? null, equipmentExpected, pool, minutesFitCount: p.fitCount });
+  const qualityOf = (p: ReturnType<typeof buildOnce>) => [
+    ...memberQualityIssues(p.main, { level: level === "all" ? "intermediate" : level, focus: input.focus ?? null, equipmentExpected, pool, minutesFitCount: p.fitCount }),
+    ...crossSectionRepeats(p.html, (id, f) => all.find((e) => e.id === id)?.name ?? f).map((r) => `"${r.name}" appears in both ${r.first} and ${r.again}.`),
+  ];
   let pack = buildOnce(seed);
   let issues = qualityOf(pack);
   for (let attempt = 1; attempt <= 6 && issues.length; attempt++) {
