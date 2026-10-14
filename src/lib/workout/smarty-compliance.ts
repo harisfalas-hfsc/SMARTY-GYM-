@@ -113,6 +113,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
 
 /** Stable category label for a rule message (exercise names stripped). */
 export function complianceRuleLabel(v: string): string {
+  if (/never uses gym machines/.test(v)) return "Gym machine or barbell in conditioning work";
   if (/static hold/.test(v)) return "Static hold in a flow category";
   if (/advanced material/.test(v)) return "Advanced exercise in a Beginner workout";
   if (/not a bodyweight/.test(v)) return "Equipment exercise in a bodyweight workout";
