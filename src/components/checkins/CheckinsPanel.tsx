@@ -237,12 +237,12 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         ) : null}
         {openForm === "morning" && t?.morning_completed ? (
           <div className="mt-4 rounded-xl border border-border p-4">
-            <MorningCheckinForm key={`m-${t.updated_at ?? ""}`} onSubmit={morning} initial={t} readOnly={!w.isMorning} />
+            <MorningCheckinForm key={`m-${t.morning_completed_at ?? ""}`} onSubmit={morning} initial={t} readOnly={!w.isMorning} />
           </div>
         ) : null}
         {openForm === "night" && t?.night_completed ? (
           <div className="mt-4 rounded-xl border border-border p-4">
-            <NightCheckinForm key={`n-${t.updated_at ?? ""}`} onSubmit={night} initial={t} readOnly={!w.isNight} />
+            <NightCheckinForm key={`n-${t.night_completed_at ?? ""}`} onSubmit={night} initial={t} readOnly={!w.isNight} />
           </div>
         ) : null}
         {w.isMorning && t?.morning_completed && openForm !== "morning" ? (
