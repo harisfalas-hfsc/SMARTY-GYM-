@@ -46,6 +46,7 @@ import {
   MOODS,
   TIMES,
 } from "@/lib/coach-options";
+import { SPECIFIC_MUSCLES } from "@/lib/workout/muscle-spread";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -147,6 +148,8 @@ function CoachPage() {
   const runNaming = useServerFn(nameWorkout);
   const [goal, setGoal] = useState<string>("");
   const [focus, setFocus] = useState<string>("");
+  const [muscle, setMuscle] = useState<string>("");
+  const muscleOptions = SPECIFIC_MUSCLES[focus] ?? [];
   const showFocus = FOCUS_GOALS.includes(goal);
 
   const [mood, setMood] = useState<string>("");
@@ -264,6 +267,7 @@ function CoachPage() {
     const request = {
       goal,
       ...(showFocus ? { focus } : {}),
+      ...(showFocus && muscle && muscleOptions.some((m) => m.id === muscle) ? { muscle } : {}),
 
       mood,
       minutes: minutes ?? undefined,
@@ -555,11 +559,24 @@ function CoachPage() {
           >
             <Grid>
               {BODY_FOCUS.map((f) => (
-                <Chip key={f.id} active={focus === f.id} onClick={() => setFocus(f.id)}>
+                <Chip key={f.id} active={focus === f.id} onClick={() => { setFocus(f.id); setMuscle(""); }}>
                   {f.label}
                 </Chip>
               ))}
             </Grid>
+            {muscleOptions.length ? (
+              <div className="mt-4">
+                <p className="mb-2 text-sm text-muted-foreground">A specific muscle? (optional)</p>
+                <Grid>
+                  <Chip active={!muscle} onClick={() => setMuscle("")}>All muscles</Chip>
+                  {muscleOptions.map((m) => (
+                    <Chip key={m.id} active={muscle === m.id} onClick={() => setMuscle(m.id)}>
+                      {m.label}
+                    </Chip>
+                  ))}
+                </Grid>
+              </div>
+            ) : null}
           </QuestionCard>
         ) : null}
 
