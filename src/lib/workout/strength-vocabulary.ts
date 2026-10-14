@@ -9,7 +9,7 @@
 // `library` is the exercise-library name the entry resolves to (null = not in
 // the library, so it can never be programmed until it is added).
 
-export type StrengthGroup = "bodyweight" | "machine" | "free";
+export type StrengthGroup = "bodyweight" | "machine" | "free" | "band";
 export const STRENGTH_EXERCISES: ReadonlyArray<{ name: string; library: string | null; group: StrengthGroup }> = [
   { name: "Push-Up", library: "push-up", group: "bodyweight" },
   { name: "Incline Push-Up", library: "incline push-up", group: "bodyweight" },
@@ -208,7 +208,24 @@ export const STRENGTH_EXERCISES: ReadonlyArray<{ name: string; library: string |
   { name: "Lever Reverse Hyperextension", library: "lever reverse hyperextension", group: "machine" },
   { name: "Lever Standing Chest Press", library: "lever standing chest press", group: "machine" },
   { name: "Sled 45 Degrees One Leg Press", library: "sled 45 degrees one leg press", group: "machine" },
-  { name: "Bench Dip on Floor", library: "bench dip on floor", group: "bodyweight" },
+  { name: "Bench Dip on Floor", library: "bench dip on floor", group: "bodyweight" },  // Band glute & core exercises from the library, added to the list by Haris (14 Oct 2026).
+  { name: "Band Bent-over Hip Extension", library: "band bent-over hip extension", group: "band" },
+  { name: "Band Hip Lift", library: "band hip lift", group: "band" },
+  { name: "Band Pull Through", library: "band pull through", group: "band" },
+  { name: "Band Step-up", library: "band step-up", group: "band" },
+  { name: "Band Stiff Leg Deadlift", library: "band stiff leg deadlift", group: "band" },
+  { name: "Band Straight Back Stiff Leg Deadlift", library: "band straight back stiff leg deadlift", group: "band" },
+  { name: "Band Single Leg Split Squat", library: "band single leg split squat", group: "band" },
+  { name: "Resistance Band Hip Thrusts on Knees", library: "resistance band hip thrusts on knees (female)", group: "band" },
+  { name: "Resistance Band Seated Hip Abduction", library: "resistance band seated hip abduction", group: "band" },
+  { name: "Band Horizontal Pallof Press", library: "band horizontal pallof press", group: "band" },
+  { name: "Band Vertical Pallof Press", library: "band vertical pallof press", group: "band" },
+  { name: "Band Standing Crunch", library: "band standing crunch", group: "band" },
+  { name: "Band Kneeling Twisting Crunch", library: "band kneeling twisting crunch", group: "band" },
+  { name: "Band Bicycle Crunch", library: "band bicycle crunch", group: "band" },
+  { name: "Band V-up", library: "band v-up", group: "band" },
+  { name: "Band Lying Straight Leg Raise", library: "band lying straight leg raise", group: "band" },
+  { name: "Band Seated Twist", library: "band seated twist", group: "band" },
 ];
 
 const norm = (s: string) => s.toLowerCase().replace(/°/g, "").replace(/[^a-z0-9]+/g, " ").trim();
