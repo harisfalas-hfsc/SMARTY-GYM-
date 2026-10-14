@@ -76,6 +76,8 @@ export function improvePicks<T extends QExercise>(picks: T[], pool: T[], ctx: Qu
     if (!s) break;
     out.push(s);
   }
+  // A tiny legal pool keeps the block full rather than delivering fewer exercises.
+  if (out.length < n) return picks;
   const replace = (bad: (e: T) => boolean, want: (e: T) => boolean, protect: (e: T) => boolean = () => false) => {
     for (let i = out.length - 1; i >= 0; i--) {
       if (!bad(out[i]!) || protect(out[i]!)) continue;
