@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Unify the Coach photo and visitor-sized scrolling frame across all access levels; give inactive accounts visitor copy and a reactivation action, keep Premium briefing below the photo, and verify.
+
 - [x] Add the existing About coach photo to visitor and non-Premium Coach announcements; visitor phone/desktop and real signed-in non-Premium phone checked, sign-in action checked, 39 tests pass and build OK. Premium presentation branch untouched; live Premium check unavailable with the current non-Premium session.
 
 - [x] Standardize Reader/Save/Share with public-only canonical links and header pictures. Real signed-in shared/private/Smarty workouts checked on phone/desktop; both photo/no-photo pictures inspected, private legacy links hidden and visitor community gate checked; 24 targeted tests pass and build OK. Native payload intercepted in browser; delivery through installed social apps/native binaries remains unverified.
