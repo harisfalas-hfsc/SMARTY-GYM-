@@ -8,3 +8,4 @@
 - Finisher length and format (level minimum, honest stated time, approved format chosen deterministically by chooseFinisherFormat) live only in finisher-length.ts, used by the planner, pack builder, complianceIssues gate and repairs — why: one rule decides how long a Finisher is, which approved format it uses and that its stated time adds up.
 
 - Exercise usage cap (fair share per category) lives only in exercise-usage.ts; the generator passes overused ids to the pack builder — why: no single exercise dominates the library.
+- Member-built workout quality (focus coverage, selected-equipment share, Advanced vocabulary, level minimum count, no repeated movement, matching cool-down) lives in member-quality.ts; the pack builder picks with it and generate.server.ts rebuilds up to 6 seeds before delivery — why: members get a session that matches what they asked for, without widening any closed list.

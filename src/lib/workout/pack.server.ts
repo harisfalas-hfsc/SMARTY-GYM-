@@ -10,6 +10,7 @@ import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
 import { isCardioRhythm, isTimedPosition, isTimeDosed, LIGHT_SET_CAP } from "./rules";
 import { buildFinisherHtml, finisherMinimumMinutes } from "./finisher-length";
+import { dedupeMovements, improvePicks, levelMainMinimum, levelMinSets } from "./member-quality";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
@@ -29,6 +30,8 @@ export type PackInput = {
   plan?: Pick<SessionPlan, "mainCount" | "finisherCount" | "main" | "finisher">;
   /** Exercises already at their category usage cap (exercise-usage.ts); avoided while enough others remain. */
   overusedIds?: string[];
+  /** Member chose equipment beyond bodyweight: at least half the Main Workout uses it (member-quality.ts). */
+  equipmentExpected?: boolean;
 };
 
 /**
@@ -58,7 +61,7 @@ function flowGroup(picks: PoolExercise[], pool: PoolExercise[], input: PackInput
 }
 
 
-export type PackResult = { html: string; name: string; blocks: string[] };
+export type PackResult = { html: string; name: string; blocks: string[]; main: PoolExercise[]; fitCount: number };
 
 const li = (inner: string) =>
   `<ul class="tiptap-bullet-list"><li class="tiptap-list-item"><p class="tiptap-paragraph">${inner}</p></li></ul>`;
@@ -250,7 +253,14 @@ export function buildPackWorkout(
   const favouriteIds = input.favoriteIds ?? [];
   const used = new Set<string>();
 
-  const mainCount = input.plan ? Math.max(3, input.minutes <= 20 ? input.plan.mainCount[0] : input.plan.mainCount[1]) : isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
+  const baseCount = input.plan ? Math.max(3, input.minutes <= 20 ? input.plan.mainCount[0] : input.plan.mainCount[1]) : isMicro ? 4 : input.minutes >= 45 ? 6 : input.minutes >= 25 ? 5 : 4;
+  // Level minimum (Beginner 4 / Intermediate 5 / Advanced 6), fewer only when the time can't fit them.
+  const specialist = isMicro || isRecovery || input.category === "PILATES" || input.category === "MOBILITY & STABILITY";
+  const levelMin = input.level === "all" ? 4 : levelMainMinimum(input.level);
+  const minSets = input.level === "all" ? 2 : levelMinSets(input.level);
+  const perExerciseSec = input.plan ? minSets * (45 + input.plan.main.restSec[0]) : 180;
+  const fitCount = input.format === "REPS & SETS" ? Math.max(3, Math.floor((mainMinutes * 60) / perExerciseSec)) : 99;
+  const mainCount = specialist ? baseCount : Math.max(baseCount, Math.min(levelMin, fitCount));
   const finisherCount = input.plan ? Math.max(input.plan.finisherCount[0], 1) : 3;
   // Coach's priority exercises (the 3 × 50 lists) come first; the rest of the
   // legal pool is only used to top up when too few priority matches exist.
@@ -281,6 +291,15 @@ export function buildPackWorkout(
     pool,
     mainCount,
   ), pool, input, used);
+  if (!specialist) {
+    const better = improvePicks(mainPicks, workPool.length >= mainCount ? workPool : pool, {
+      level: input.level === "all" ? "intermediate" : input.level,
+      focus: input.focus ?? null,
+      equipmentExpected: Boolean(input.equipmentExpected),
+      pool: workPool,
+    });
+    mainPicks.splice(0, mainPicks.length, ...flowGroup(better, pool, input, new Set()));
+  }
   mainPicks.forEach((e) => used.add(e.id));
 
   const finisherPicks = noFinisher
@@ -332,8 +351,9 @@ export function buildPackWorkout(
       (mainRegion === "core" && r === "lower")
     );
   });
-  const relevantActivationPool =
-    derivedActivationPool.length >= 4 ? derivedActivationPool : (input.activationPool ?? []);
+  const relevantActivationPool = dedupeMovements(
+    derivedActivationPool.length >= 4 ? derivedActivationPool : (input.activationPool ?? []),
+  );
 
   const activationPicks = (relevantActivationPool.length
     ? pickPrep(relevantActivationPool, 4, seed)
@@ -344,8 +364,16 @@ export function buildPackWorkout(
           (e.difficulty ?? "").toLowerCase() !== "advanced",
       })) as PoolExercise[];
 
-  const cooldownPicks = (input.cooldownPool?.length
-    ? pickPrep(input.cooldownPool, 3, seed + 17)
+  // Cool Down stretches the muscles the Main Workout trained.
+  const cdAll = dedupeMovements(input.cooldownPool ?? []);
+  const cdRelevant = cdAll.filter((e) => {
+    const r = regionOf(e);
+    if (mainRegion === "full") return true;
+    return r === mainRegion || (mainRegion === "lower" && r === "core") || (mainRegion === "core" && r === "lower");
+  });
+  const cdPool = cdRelevant.length >= 3 ? cdRelevant : cdAll;
+  const cooldownPicks = (cdPool.length
+    ? pickPrep(cdPool, 3, seed + 17)
     : pickBalanced(library, 3, {
         filter: (e) => isBodyweight(e) && STRETCH_RE.test(e.name),
       })) as PoolExercise[];
@@ -380,7 +408,7 @@ export function buildPackWorkout(
     const work = isTimeDosed(e.name) ? (d.seconds?.[0] ?? 30) : reps * 5;
     const blocks = Math.max(1, mainCount);
     const fit = Math.floor((mainMinutes * 60) / (blocks * (work + d.restSec[0])));
-    const sets = Math.max(1, Math.min(d.sets[1], fit));
+    const sets = Math.max(minSets, Math.min(d.sets[1], fit));
     const unit = isTimeDosed(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
     return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets. ${d.tempo[0]!.toUpperCase()}${d.tempo.slice(1)}.`;
   };
@@ -410,7 +438,7 @@ export function buildPackWorkout(
   const seedWord = NAME_LEFT[(mainPicks[0]?.id.length ?? 3) % NAME_LEFT.length]!;
   const name = `${seedWord} ${NAME_RIGHT[input.category] ?? "Session"}`;
 
-  return { html: blocks.join(para("")), name, blocks };
+  return { html: blocks.join(para("")), name, blocks, main: mainPicks, fitCount };
 }
 
 export function packCopy(input: PackInput): {
