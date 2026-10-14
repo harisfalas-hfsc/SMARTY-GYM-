@@ -8,7 +8,7 @@
 // ---------------------------------------------------------------------------
 
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
-import { muscleFocusBreak } from "./strength-focus";
+import { FOCUS_RULES as GROUP_RULES, focusGroups, muscleFocusBreak } from "./strength-focus";
 
 export type ExerciseLike = {
   id?: string;
@@ -478,6 +478,10 @@ export function focusViolation(e: ExerciseLike, focus: StrengthFocus | null): st
   }
   if (rule.allow && !rule.allow.test(focusText(e)))
     return `"${e.name}" does not belong to the requested ${focus} focus.`;
+  // Movement groups (push / pull / core, coach classification → library muscle) — same rule as the publish gate.
+  const groups = GROUP_RULES[focus]?.main;
+  if (groups && !focusGroups(e).some((g) => groups.includes(g)))
+    return `"${e.name}" (${focusGroups(e).join(" + ")}) is outside the requested ${focus} focus.`;
   // Library muscle data decides too (shared with the Smarty Workouts publish gate).
   const muscle = muscleFocusBreak(focus, e, "main");
   if (muscle) return `${muscle}.`;
