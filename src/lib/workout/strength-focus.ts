@@ -112,8 +112,8 @@ export function muscleFocusBreak(focus: string | null | undefined, input: RowLik
   const m = norm(row.target_muscle);
   if (!allow || !m) return null;
   if (allow(m, row)) return null;
-  // Upper / Lower Body Finishers may carry core work (existing finisher rule).
-  if (section === "finisher" && f !== "CORE & GLUTES" && CORE_MUSCLE.test(m)) return null;
+  // Upper / Lower Body Finishers may carry core work (existing finisher rule; coach-classified core counts).
+  if (section === "finisher" && f !== "CORE & GLUTES" && (CORE_MUSCLE.test(m) || focusGroups(row).includes("core"))) return null;
   return `"${row.name}" trains ${m}, which is not part of a ${f} workout`;
 }
 
