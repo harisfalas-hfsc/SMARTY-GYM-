@@ -189,9 +189,8 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <button
             type="button"
-            disabled={!t?.morning_completed}
             onClick={() => setOpenForm(openForm === "morning" ? null : "morning")}
-            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left", t?.morning_completed && "hover:bg-muted", openForm === "morning" && "ring-2 ring-primary")}
+            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left hover:bg-muted", openForm === "morning" && "ring-2 ring-primary")}
           >
             <Sun className="h-5 w-5 text-primary" />
             <div className="min-w-0 flex-1">
@@ -202,9 +201,8 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
           </button>
           <button
             type="button"
-            disabled={!t?.night_completed}
             onClick={() => setOpenForm(openForm === "night" ? null : "night")}
-            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left", t?.night_completed && "hover:bg-muted", openForm === "night" && "ring-2 ring-primary")}
+            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left hover:bg-muted", openForm === "night" && "ring-2 ring-primary")}
           >
             <Moon className="h-5 w-5 text-primary" />
             <div className="min-w-0 flex-1">
