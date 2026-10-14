@@ -6,6 +6,7 @@ import { classifyIssuesForFallback } from "@/lib/workout-validation";
 import { buildPackWorkout, packCopy } from "./pack.server";
 import { overusedExerciseIds } from "./exercise-usage";
 import { memberQualityIssues } from "./member-quality";
+import { crossSectionRepeats } from "./section-repeats";
 import { buildSessionPlan } from "./programming";
 import { smartyCopy } from "./copy-bank.server";
 import { dominantRegion, focusRegion, resolveLocation } from "./doctrine";
