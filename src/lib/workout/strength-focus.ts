@@ -99,6 +99,8 @@ const MUSCLE_ALLOW: Record<string, (m: string, row: MuscleRow) => boolean> = {
   "LOWER BODY": (m) => /^(quads|calves|adductors|abductors|glutes|hamstrings|spine)$/.test(m),
 };
 const CORE_MUSCLE = /^(abs|obliques|hip flexors)$/;
+/** The library's target-muscle vocabulary; any other wording is left to the movement-group rules. */
+const KNOWN_MUSCLE = /^(abs|obliques|hip flexors|glutes|spine|abductors|adductors|hamstrings|quads|calves|pectorals|triceps|serratus anterior|delts|lats|upper back|biceps|traps|forearms|levator scapulae|neck|cardiovascular system)$/;
 
 /**
  * Library-muscle legality of one exercise in a focus. Returns the problem, or
@@ -110,7 +112,7 @@ export function muscleFocusBreak(focus: string | null | undefined, input: RowLik
   const f = normFocus(focus);
   const allow = MUSCLE_ALLOW[f];
   const m = norm(row.target_muscle);
-  if (!allow || !m) return null;
+  if (!allow || !m || !KNOWN_MUSCLE.test(m)) return null;
   if (allow(m, row)) return null;
   // Upper / Lower Body Finishers may carry core work (existing finisher rule; coach-classified core counts).
   if (section === "finisher" && f !== "CORE & GLUTES" && (CORE_MUSCLE.test(m) || focusGroups(row).includes("core"))) return null;

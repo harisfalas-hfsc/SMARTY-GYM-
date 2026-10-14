@@ -36,7 +36,12 @@ describe("muscle match from library data (Coach Haris, 14 Oct 2026)", () => {
 
 describe("no exercise repeated across sections", () => {
   const html = (act: string, main: string, fin: string) =>
-    `<h3>🔥 Activation</h3><ul><li>10 reps {{exercise:a:${act}}}</li></ul><h3>💪 Main Workout (REPS & SETS)</h3><ul><li>3 sets × 10 reps {{exercise:m:${main}}}</li></ul><h3>⚡ Finisher (REPS & SETS)</h3><ul><li>3 sets × 12 reps {{exercise:f:${fin}}}</li></ul><h3>🧘 Cool Down</h3><ul><li>45 sec {{exercise:c:${main}}}</li></ul>`;
+    [
+      `<p>🔥 <strong><u>Activation</u></strong></p><ul><li><p>10 reps {{exercise:a1:${act}}} — slow and controlled</p></li></ul>`,
+      `<p>💪 <strong><u>Main Workout (REPS &amp; SETS)</u></strong></p><ul><li><p>3 sets × 10 reps {{exercise:m1:${main}}} — Rest 60 sec between sets.</p></li></ul>`,
+      `<p>⚡ <strong><u>Finisher (REPS &amp; SETS)</u></strong></p><ul><li><p>3 sets × 12 reps {{exercise:f1:${fin}}} — Rest 60 sec between sets.</p></li></ul>`,
+      `<p>🧘 <strong><u>Cool Down</u></strong></p><ul><li><p>45 sec {{exercise:c1:${main}}} — breathe out</p></li></ul>`,
+    ].join("");
   it("flags Bird Dog in Activation and Finisher", () => {
     const r = crossSectionRepeats(html("Bird Dog", "Glute Bridge", "Bird Dog"));
     expect(r).toHaveLength(1);
