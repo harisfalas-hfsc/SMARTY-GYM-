@@ -19,7 +19,7 @@
 - Public PDFs are client-generated with every visible block — why: page parity.
 - Smarty Check-ins scoring lives in src/lib/checkins/score.ts, computed server-side in checkins.functions.ts and read by coach via loadCheckinSignal — one source for UI, badges and coach.
 - Coach/admin/WOD are deterministic; header Coach is read-only, account-keyed and decided only by coach/recommend.ts — why: one rule order, no cross-account state.
-- Coach briefing cards share one presentation helper and scroll within a stationary dialog frame — why: consistent styling and reachable content without moving the greeting.
+- Coach announcements share one photo-first, fixed-size scrolling frame across access levels; locked snapshots render the public introduction and reactivation action only — why: consistent presentation without locked personal briefing cards, with Premium details reachable below the photo.
 - Smarty Workouts share admin controls and local media; featured uses shared cards and locally preserved original dates — why: one collection, accurate newest order, no old-project dependency.
 - Players accept verified numeric/slug IDs; bulk publishing needs a full-library audit. Native startup stays black through the first React frame.
 - Admin publish failures are explained by the reporting-only publicationRuleReports layer after the existing compliance gate decides legality — why: precise section/exercise/dose/equipment guidance cannot alter workout doctrine.

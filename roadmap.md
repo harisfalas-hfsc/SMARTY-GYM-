@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Unify the Coach photo and visitor-sized scrolling frame across all access levels; give inactive accounts visitor copy and a reactivation action, keep Premium briefing below the photo, and verify.
+- [x] Unify the Coach photo and visitor-sized scrolling frame across all access levels; visitor phone/desktop and real Premium photo/scroll-to-action checked, inactive presentation and Account action checked with a browser-only locked snapshot (no account changes); 39 tests pass and build OK. Live inactive account not exercised in this turn.
 
 - [x] Add the existing About coach photo to visitor and non-Premium Coach announcements; visitor phone/desktop and real signed-in non-Premium phone checked, sign-in action checked, 39 tests pass and build OK. Premium presentation branch untouched; live Premium check unavailable with the current non-Premium session.
 
