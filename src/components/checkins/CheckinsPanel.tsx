@@ -233,9 +233,29 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
             <NightCheckinForm onSubmit={night} />
           </div>
         ) : null}
+        {openForm === "morning" && !t?.morning_completed ? (
+          <div className="mt-4 rounded-xl border border-border p-4">
+            <p className="text-sm font-semibold">Morning check-in not completed.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {w.isMorning
+                ? "The morning window is open now — answer below to check in."
+                : "You didn't check in this morning, so there are no answers to show. The morning window is open 07:00–10:00."}
+            </p>
+          </div>
+        ) : null}
         {openForm === "morning" && t?.morning_completed ? (
           <div className="mt-4 rounded-xl border border-border p-4">
             <MorningCheckinForm key={`m-${t.daily_smarty_score ?? ""}-${t.sleep_hours}`} onSubmit={morning} initial={t as never} readOnly={!w.isMorning} />
+          </div>
+        ) : null}
+        {openForm === "night" && !t?.night_completed ? (
+          <div className="mt-4 rounded-xl border border-border p-4">
+            <p className="text-sm font-semibold">Night check-in not completed.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {w.isNight
+                ? "The night window is open now — answer below to check in."
+                : "You didn't check in tonight, so there are no answers to show. The night window is open 19:00–22:00."}
+            </p>
           </div>
         ) : null}
         {openForm === "night" && t?.night_completed ? (
