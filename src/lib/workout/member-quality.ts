@@ -4,6 +4,7 @@
 // These never widen a closed exercise list, the focus filter or safety rules —
 // they only decide WHICH legal exercises are chosen and how many.
 import { focusGroups } from "./strength-focus";
+import { muscleBucket, muscleSpreadGap } from "./muscle-spread";
 import type { DifficultyLevel, StrengthFocus } from "./spec";
 
 export type QExercise = { id: string; name: string; equipment?: string | null; difficulty?: string | null; target_muscle?: string | null };
@@ -45,41 +46,7 @@ export function movementKey(name: string, focus?: string | null): string {
   return [...angle.filter((a) => !tail.includes(a)), ...tail].join(" ");
 }
 
-export type PushMuscle = "chest" | "triceps" | "shoulders";
-/** Upper-push muscle from the library's target muscle, else the name. */
-export function pushMuscle(e: QExercise): PushMuscle | null {
-  const m = (e.target_muscle ?? "").trim().toLowerCase();
-  if (m === "pectorals" || m === "serratus anterior") return "chest";
-  if (m === "triceps") return "triceps";
-  if (m === "delts") return /rear delt|reverse fly|face pull|upright row|\brows?\b|pull/i.test(e.name) ? null : "shoulders";
-  if (m) return null;
-  if (/triceps|pushdown|skull|kickback.*tricep|close[- ]?grip/i.test(e.name)) return "triceps";
-  if (/shoulder press|overhead press|military|arnold|lateral raise|front raise|pike push/i.test(e.name)) return "shoulders";
-  if (/bench press|chest press|push[- ]?up|\bfly\b|flye|floor press|incline press|decline press/i.test(e.name)) return "chest";
-  return null;
-}
-/** Focuses where upper push is one part among others: spread it over chest, triceps and shoulders. */
-const SPREAD_PUSH_FOCUS = /^(UPPER BODY|PUSH|LOW PULL & UPPER PUSH|FULL BODY)$/;
-export const spreadsPush = (focus?: string | null) => SPREAD_PUSH_FOCUS.test((focus ?? "").trim().toUpperCase());
-
-/**
- * Upper-push spread (Coach Haris, 14 Oct 2026): in an Upper Push / Upper Body
- * workout a push muscle repeats only after chest, triceps and shoulders each
- * have one — when the legal pool offers the missing ones. Returns the muscles
- * over their share and the ones still missing.
- */
-export function pushSpreadGap(main: QExercise[], pool: QExercise[], focus?: string | null): { over: PushMuscle[]; missing: PushMuscle[] } {
-  if (!spreadsPush(focus)) return { over: [], missing: [] };
-  const push = main.map(pushMuscle).filter((x): x is PushMuscle => Boolean(x));
-  if (push.length < 2) return { over: [], missing: [] };
-  const all: PushMuscle[] = ["chest", "triceps", "shoulders"];
-  const available = new Set(pool.map(pushMuscle).filter(Boolean) as PushMuscle[]);
-  const cap = Math.ceil(push.length / Math.max(1, Math.min(3, available.size)));
-  const count = (m: PushMuscle) => push.filter((x) => x === m).length;
-  const missing = all.filter((m) => available.has(m) && count(m) === 0);
-  const over = all.filter((m) => count(m) > cap || (count(m) > 1 && missing.length > 0));
-  return { over, missing };
-}
+export { muscleSpreadGap } from "./muscle-spread";
 
 export function dedupeMovements<T extends QExercise>(list: T[], focus?: string | null): T[] {
   const seen = new Set<string>();
@@ -94,6 +61,8 @@ export function dedupeMovements<T extends QExercise>(list: T[], focus?: string |
 export type QualityCtx = {
   level: DifficultyLevel;
   focus?: StrengthFocus | null;
+  /** Specific muscle requested inside the focus (first priority; disables the spread). */
+  muscle?: string | null;
   /** True when the member chose equipment beyond bodyweight and the pool holds equipment rows. */
   equipmentExpected: boolean;
   /** Legal pool the main block was drawn from (to know what was possible). */
@@ -176,16 +145,17 @@ export function improvePicks<T extends QExercise>(picks: T[], pool: T[], ctx: Qu
     }
   }
 
-  // 4. Upper push spread: one chest, one triceps, one shoulder exercise before any repeats.
-  for (let g = 0; g < 6; g++) {
-    const { over, missing } = pushSpreadGap(out, pool, ctx.focus);
-    if (!over.length || !missing.length) break;
+  // 4. Muscle spread: every muscle of a broad focus gets one exercise before any muscle repeats.
+  for (let g = 0; g < 8; g++) {
+    const { over, missing } = muscleSpreadGap(out, pool, ctx.focus, ctx.muscle);
+    if (!over.length) break;
     let done = false;
     for (let i = out.length - 1; i >= 0 && !done; i--) {
       const cur = out[i]!;
-      const pm = pushMuscle(cur);
-      if (!pm || !over.includes(pm)) continue;
-      const fits = (e: T) => missing.includes(pushMuscle(e) as PushMuscle) && advancedOk(e);
+      const b = muscleBucket(cur, ctx.focus);
+      if (!b || !over.includes(b) || out.filter((o) => muscleBucket(o, ctx.focus) === b).length < 2) continue;
+      if (needs && focusRole(cur) !== "other") continue;
+      const fits = (e: T) => missing.includes(muscleBucket(e, ctx.focus) ?? "") && advancedOk(e);
       const s = spare((e) => fits(e) && (!ctx.equipmentExpected || !isBodyweightRow(e) || isBodyweightRow(cur))) ?? spare(fits);
       if (s) { out[i] = s; done = true; }
     }
@@ -208,8 +178,8 @@ export function memberQualityIssues(main: QExercise[], ctx: QualityCtx & { minut
     if (main.filter(isGluteWork).length < Math.min(needs.glute, glutePossible)) issues.push("Not enough glute exercises for the Core & Glutes focus.");
     if (main.filter(isCoreWork).length < Math.min(needs.core, corePossible)) issues.push("Not enough core exercises for the Core & Glutes focus.");
   }
-  const spread = pushSpreadGap(main, ctx.pool, ctx.focus);
-  if (spread.over.length && spread.missing.length) issues.push(`Upper push repeats ${spread.over.join(" / ")} while ${spread.missing.join(" / ")} has no exercise.`);
+  const spread = muscleSpreadGap(main, ctx.pool, ctx.focus, ctx.muscle);
+  if (spread.over.length) issues.push(`Main Workout repeats ${spread.over.join(" / ")} while ${spread.missing.join(" / ")} has no exercise.`);
   if (ctx.equipmentExpected) {
     const possible = ctx.pool.filter((e) => !isBodyweightRow(e)).length;
     const want = Math.min(Math.ceil(main.length / 2), possible);
