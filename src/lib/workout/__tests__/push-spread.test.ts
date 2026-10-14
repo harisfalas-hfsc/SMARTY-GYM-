@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { improvePicks, memberQualityIssues, movementKey, pushSpreadGap } from "../member-quality";
+import { improvePicks, memberQualityIssues, movementKey } from "../member-quality";
+import { muscleRequestBreak, muscleSpreadGap } from "../muscle-spread";
 
 const ex = (id: string, name: string, target_muscle: string, equipment = "barbell") => ({ id, name, target_muscle, equipment, difficulty: "intermediate" });
 const flat = ex("1", "barbell bench press", "pectorals");
@@ -10,23 +11,37 @@ const cg = ex("5", "barbell close-grip bench press", "triceps");
 const row = ex("6", "barbell bent over row", "upper back");
 const pool = [flat, incline, decline, ohp, cg, row];
 
-describe("bench variants and upper push spread", () => {
+describe("bench variants and muscle spread", () => {
   it("flat, incline and decline bench are different exercises", () => {
     expect(new Set([flat, incline, decline].map((e) => movementKey(e.name))).size).toBe(3);
   });
   it("chest focus allows every implement as its own exercise", () => {
     expect(movementKey("dumbbell bench press", "CHEST")).not.toBe(movementKey("barbell bench press", "CHEST"));
-    expect(movementKey("dumbbell bench press", "UPPER BODY")).toBe(movementKey("barbell bench press", "UPPER BODY"));
+    expect(muscleSpreadGap([flat, incline, decline], pool, "CHEST").over).toEqual([]);
   });
-  it("chest focus may stack chest variations", () => {
-    expect(pushSpreadGap([flat, incline, decline], pool, "CHEST").over).toEqual([]);
-  });
-  it("upper body spreads push over chest, triceps and shoulders", () => {
+  it("push spreads over chest, triceps and shoulders", () => {
     const main = [flat, incline, decline, row];
-    expect(pushSpreadGap(main, pool, "UPPER BODY")).toEqual({ over: ["chest"], missing: ["triceps", "shoulders"] });
-    expect(memberQualityIssues(main, { level: "intermediate", focus: "UPPER BODY", equipmentExpected: false, pool, minutesFitCount: 4 }).join()).toMatch(/Upper push repeats/);
+    expect(muscleSpreadGap(main, pool, "UPPER BODY")).toEqual({ over: ["chest"], missing: ["shoulders", "triceps"] });
+    expect(memberQualityIssues(main, { level: "intermediate", focus: "UPPER BODY", equipmentExpected: false, pool, minutesFitCount: 4 }).join()).toMatch(/repeats/);
     const fixed = improvePicks(main, pool, { level: "intermediate", focus: "UPPER BODY", equipmentExpected: false, pool });
-    expect(pushSpreadGap(fixed, pool, "UPPER BODY").over).toEqual([]);
-    expect(fixed.map((e) => e.id).sort()).toEqual(["1", "4", "5", "6"]);
+    expect(muscleSpreadGap(fixed, pool, "UPPER BODY").over).toEqual([]);
+  });
+
+  const squat = ex("a", "barbell full squat", "quads");
+  const lunge = ex("b", "barbell lunge", "quads");
+  const front = ex("c", "barbell front squat", "quads");
+  const rdl = ex("d", "barbell romanian deadlift", "hamstrings");
+  const thrust = ex("e", "barbell hip thrust", "glutes");
+  const calf = ex("f", "barbell standing calf raise", "calves");
+  const legs = [squat, lunge, front, rdl, thrust, calf];
+  it("legs without a muscle request uses quads, hamstrings, glutes and calves", () => {
+    const fixed = improvePicks([squat, lunge, front, rdl], legs, { level: "intermediate", focus: "LEGS", equipmentExpected: false, pool: legs });
+    expect(new Set(fixed.map((e) => e.target_muscle)).size).toBe(4);
+  });
+  it("legs + quads keeps only quad exercises — no deadlifts or calf raises", () => {
+    expect(muscleRequestBreak(rdl, "LEGS", "quads")).toMatch(/quads/);
+    expect(muscleRequestBreak(calf, "LEGS", "quads")).toMatch(/quads/);
+    expect(muscleRequestBreak(front, "LEGS", "quads")).toBeNull();
+    expect(muscleSpreadGap([squat, lunge, front], legs, "LEGS", "quads").over).toEqual([]);
   });
 });

@@ -52,6 +52,9 @@ export type ExerciseRuleContext = {
 export const MOMENTUM_CATEGORIES: Category[] = ["CARDIO", "CALORIE BURNING", "METABOLIC", "CHALLENGE"];
 
 /** Every reason a single exercise is illegal in this context (empty = legal). */
+const CONDITIONING_NO_GYM = new Set<string>(["CARDIO", "METABOLIC", "CALORIE BURNING", "CHALLENGE"]);
+const GYM_KIT = /lever|machine|smith|sled|cable|barbell|trap bar|olympic|assisted|stationary|elliptical|treadmill|ski ?erg|rower|stepmill/i;
+
 export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): string[] {
   const out: string[] = [];
   const section = ctx.section ?? "work";
@@ -69,6 +72,11 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
       out.push(`"${e.name}" uses ${e.equipment} — ${section === "activation" ? "Activation" : "Cool Down"} never uses equipment.`);
     return out;
   }
+  // Conditioning categories (Coach Haris, 14 Oct 2026): never gym machines or
+  // barbells — only bodyweight or portable kit (kettlebells, dumbbells,
+  // medicine balls, TRX, battle ropes, bands, boxes, jump ropes).
+  if (CONDITIONING_NO_GYM.has(ctx.category) && e.equipment && GYM_KIT.test(e.equipment))
+    out.push(`"${e.name}" uses ${e.equipment} — conditioning work never uses gym machines or barbells.`);
   // PILATES Main Workout: ONLY the 50 exercises on the SmartyGym Pilates list
   // (pilates-vocabulary.ts). The list is the whole vocabulary — nothing else is
   // legal, and every listed exercise is legal (difficulty still applies).

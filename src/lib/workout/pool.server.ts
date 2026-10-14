@@ -1,3 +1,4 @@
+import { muscleRequestBreak } from "./muscle-spread";
 import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
 import { knownLimitations, limitationAdmits, limitationDecision, type LimitationProfile } from "./limitations";
 import { prepAllowed } from "./prep-vocabulary";
@@ -84,6 +85,8 @@ export type PoolFilter = {
   customEquipment?: string[];
   level: DifficultyLevel;
   focus?: StrengthFocus | null;
+  /** Specific muscle inside the focus — only exercises training it stay legal. */
+  muscle?: string | null;
   /** Library ids the athlete banned — removed before the model sees anything. */
   dislikedIds?: string[];
   /** Library ids the athlete loves — kept in the sample and surfaced to the model. */
@@ -326,6 +329,8 @@ export function filterPool(all: PoolExercise[], f: PoolFilter): PoolExercise[] {
   //    A focus is never widened because fewer than N exercises survive.
   if (f.focus) {
     pool = pool.filter((e) => !focusViolation(e, f.focus!));
+    // 5b. A specific muscle request is the first priority (Coach Haris, 14 Oct 2026).
+    if (f.muscle) pool = pool.filter((e) => !muscleRequestBreak(e, f.focus, f.muscle));
   }
 
 

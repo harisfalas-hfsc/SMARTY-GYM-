@@ -22,6 +22,8 @@ export type CoachRequest = {
   equipment?: string[];
   equipmentOther?: string;
   focus?: string;
+  /** Specific muscle inside the focus (e.g. quads for Legs). */
+  muscle?: string;
   format?: string;
   note?: string;
   /** When false, the athlete's library likes/dislikes are ignored for this session. */
@@ -342,6 +344,7 @@ export async function createWorkoutForUser(
         stars,
         minutes,
         focus,
+        muscle: data.muscle ?? null,
         ...(data.note ? { note: String(data.note).slice(0, 500) } : {}),
         favoriteIds,
         dislikedIds,

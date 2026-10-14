@@ -44,6 +44,8 @@ export type GenerateInput = {
   stars: number;
   minutes: number;
   focus?: StrengthFocus | null;
+  /** Specific muscle inside the focus (Strength / Muscle Building) — first priority. */
+  muscle?: string | null;
   note?: string;
   location?: string;
   mood?: string;
@@ -126,6 +128,7 @@ export async function generateWorkoutContent(
     customEquipment,
     level,
     focus: input.focus ?? null,
+    muscle: input.muscle ?? null,
     dislikedIds,
     favoriteIds,
     bannedTerms,
@@ -251,6 +254,7 @@ export async function generateWorkoutContent(
     level,
     minutes: input.minutes,
     focus: input.focus ?? null,
+    muscle: input.muscle ?? null,
     favoriteIds,
     activationPool,
     cooldownPool,
@@ -261,7 +265,7 @@ export async function generateWorkoutContent(
     equipmentExpected,
   });
   const qualityOf = (p: ReturnType<typeof buildOnce>) => [
-    ...memberQualityIssues(p.main, { level: level === "all" ? "intermediate" : level, focus: input.focus ?? null, equipmentExpected, pool, minutesFitCount: p.fitCount }),
+    ...memberQualityIssues(p.main, { level: level === "all" ? "intermediate" : level, focus: input.focus ?? null, muscle: input.muscle ?? null, equipmentExpected, pool, minutesFitCount: p.fitCount }),
     ...crossSectionRepeats(p.html, (id, f) => all.find((e) => e.id === id)?.name ?? f, input.focus ?? null).map((r) => `"${r.name}" appears in both ${r.first} and ${r.again}.`),
   ];
   let pack = buildOnce(seed);

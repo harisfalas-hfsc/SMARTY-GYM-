@@ -28,6 +28,7 @@ import {
   adminUpdateSmartyWorkout,
   type SmartyWorkout,
 } from "@/lib/smarty-workouts.functions";
+import { SPECIFIC_MUSCLES } from "@/lib/workout/muscle-spread";
 import { CATEGORY_FORMATS, FOCUS_CATEGORIES, STRENGTH_FOCUS, type Category } from "@/lib/workout/spec";
 import { EQUIPMENT, TIMES } from "@/lib/coach-options";
 import { categoryLabel, smartyToWorkoutRow } from "@/lib/smarty-workout-row";
@@ -357,6 +358,8 @@ function CreateDialog({ open, onClose, onCreated }: { open: boolean; onClose: ()
   const [category, setCategory] = useState<string>("STRENGTH");
   const [format, setFormat] = useState<string>("auto");
   const [focus, setFocus] = useState<string>("none");
+  const [muscle, setMuscle] = useState<string>("all");
+  const muscleOptions = SPECIFIC_MUSCLES[focus] ?? [];
   const [stars, setStars] = useState(2);
   const [minutes, setMinutes] = useState(30);
   const [equipment, setEquipment] = useState<string[]>(["bodyweight"]);
@@ -374,6 +377,7 @@ function CreateDialog({ open, onClose, onCreated }: { open: boolean; onClose: ()
         category: category as never,
         format: format === "auto" ? null : format,
         focus: showFocus && focus !== "none" ? focus : null,
+        muscle: showFocus && muscle !== "all" && muscleOptions.some((m) => m.id === muscle) ? muscle : null,
         stars,
         minutes,
         equipment,
@@ -413,11 +417,22 @@ function CreateDialog({ open, onClose, onCreated }: { open: boolean; onClose: ()
           </Field>
           {showFocus && (
             <Field label="Focus">
-              <Select value={focus} onValueChange={setFocus}>
+              <Select value={focus} onValueChange={(v) => { setFocus(v); setMuscle("all"); }}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">No specific focus</SelectItem>
                   {STRENGTH_FOCUS.map((f) => <SelectItem key={f} value={f}>{f}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
+          {showFocus && muscleOptions.length > 0 && (
+            <Field label="Specific muscle">
+              <Select value={muscle} onValueChange={setMuscle}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All muscles</SelectItem>
+                  {muscleOptions.map((m) => <SelectItem key={m.id} value={m.id}>{m.label}</SelectItem>)}
                 </SelectContent>
               </Select>
             </Field>
