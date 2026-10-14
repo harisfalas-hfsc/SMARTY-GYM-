@@ -427,7 +427,7 @@ export function buildPackWorkout(
     const fit = Math.floor((mainMinutes * 60) / (blocks * (work + d.restSec[0])));
     const sets = Math.max(minSets, Math.min(d.sets[1], fit));
     const unit = isTimeDosed(e.name) ? `${d.seconds?.[0] ?? 30} sec` : `${reps} reps`;
-    return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets. ${d.tempo[0]!.toUpperCase()}${d.tempo.slice(1)}.`;
+    return `${sets} sets × ${unit} ${token(e)} — Rest ${d.restSec[0]} sec between sets`;
   };
   mainPicks.forEach((e, i) => {
     if (input.format === "REPS & SETS" && input.plan) return void blocks.push(li(planned(input.plan.main, e)));

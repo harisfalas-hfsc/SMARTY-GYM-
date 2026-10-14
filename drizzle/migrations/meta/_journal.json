@@ -680,6 +680,13 @@
       "when": 1791988795912,
       "tag": "0096_backup_muscle_spread",
       "breakpoints": true
+    },
+    {
+      "idx": 97,
+      "version": "7",
+      "when": 1792008215282,
+      "tag": "0097_backup_smarty_workouts_plain_pictures",
+      "breakpoints": true
     }
   ]
 }

@@ -6,12 +6,13 @@ import { parseWorkoutSteps } from "./parse-steps";
 import { priorityIds, priorityShareViolation } from "./priority";
 import { classify, isRelated, replacementConfidence, variationTier, type Confidence } from "./movement";
 import { prepTokens, prepAllowed, isBodyweightEquipment, ACTIVATION_NAMES, activationDoseViolation, clampActivationDoses } from "./prep-vocabulary";
-import { isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, timedMovementDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
+import { lacksPicture, isTimeDosed, isLegalExercise, isTimedPosition, isPassiveStretch, activationRuleBreak, isCardioRhythm, doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, timedMovementDoseViolation, workoutRuleBreaks, hasRequiredExerciseList, type ExerciseRuleContext } from "./rules";
 import { estimateActivationMinutes, estimateCooldownMinutes, estimateWorkMinutes } from "./enforce.server";
 import { focusBreaks } from "./strength-focus";
 import { crossSectionRepeats } from "./section-repeats";
 import { movementKey } from "./member-quality";
 import { finisherFormatIssue, finisherLengthIssue } from "./finisher-length";
+import { plainWorkoutHtml, wordyLines } from "./plain-lines";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
@@ -77,6 +78,9 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   }
   for (const st of steps) if (holdDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Hold or stretch dosed in reps");
   for (const st of workSteps) if (timedMovementDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Timed movement dosed in reps");
+  // Every linked exercise in every section shows its picture; every line stays plain.
+  for (const t of allTokens(html)) { const r = lib.get(t.id); if (r && lacksPicture(r)) s.add("Exercise without a picture"); }
+  if (wordyLines(html).length) s.add("Workout text not simple");
   const prep = prepTokens(html);
   for (const t of prep) {
     const name = lib.get(t.id)?.name ?? t.name;
@@ -114,6 +118,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
 /** Stable category label for a rule message (exercise names stripped). */
 export function complianceRuleLabel(v: string): string {
   if (/never uses gym machines/.test(v)) return "Gym machine or barbell in conditioning work";
+  if (/has no picture/.test(v)) return "Exercise without a picture";
   if (/static hold/.test(v)) return "Static hold in a flow category";
   if (/advanced material/.test(v)) return "Advanced exercise in a Beginner workout";
   if (/not a bodyweight/.test(v)) return "Equipment exercise in a bodyweight workout";
@@ -259,8 +264,10 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
   // 1. Dose-only repairs (exercises untouched).
   let html = orig;
   const doseSteps: Array<[string, (h: string) => string]> = [
+    ["Workout text not simple", (h) => plainWorkoutHtml(h)],
     ["Activation dose above 10 reps / 30 sec or in sets", (h) => clampActivationDoses(h, isTimedPosition)],
     ["Hold or stretch dosed in reps", (h) => fixHoldDoses(h, lib)],
+    ["Timed movement dosed in reps", (h) => fixHoldDoses(h, lib, isTimeDosed)],
     ["Too many sets for a light category", (h) => capLightSets(h, cat)],
     ["Work time exceeds the advertised duration", (h) => fitDuration({ ...w, main_workout: h }, library, lib)],
   ];
@@ -304,7 +311,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
   const workLegal = (c: ComplianceExercise) => !perExerciseBad(c, w);
   const tryApply = (index: number, raw: string, fromRow: ComplianceExercise, role: Role, reason: string, rule: string, allowed: (c: ComplianceExercise) => boolean, opts: { allowFamilyChange?: boolean; wantPriority?: boolean; anyPattern?: boolean; mandatory: boolean }) => {
     const curIssues = issues(html);
-    for (const { c, conf } of pickFor(fromRow, role, allowed, opts).slice(0, 12)) {
+    for (const { c, conf } of pickFor(fromRow, role, allowed, opts).slice(0, mode.resolve ? 60 : 12)) {
       const next = replaceToken(html, index, raw, c);
       const ni = issues(next);
       const noNew = ni.every((i) => curIssues.includes(i));
@@ -328,8 +335,9 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
   function resolveRemaining() {
     const mainFams = () => new Set(rowsIn(html, lib, "Main Workout").map(fam));
     for (let pass = 0; pass < 3 && hardIssues(issues(html)).length; pass++) {
-      for (const t of allTokens(html)) {
-        const cur = allTokens(html).find((x) => x.index === t.index && x.id === t.id); if (!cur) continue;
+      // Walk by position, re-reading tokens each step: a swap changes the text length after it.
+      for (let k = 0; k < allTokens(html).length; k++) {
+        const cur = allTokens(html)[k]!;
         const row = lib.get(cur.id); if (!row) continue;
         const role = roleOfIndex(html, cur.index);
         if (role === "Finisher" && /Finisher introduces new equipment/.test(issues(html).join("|")) && !mainFams().has(fam(row)) && fam(row) !== "bodyweight") {
@@ -386,13 +394,13 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
     let keptStretch = false;
     for (const t of prep) {
       const row = lib.get(t.id); if (!row) continue;
-      const illegal = !prepAllowed(row.name, t.section) || !isBodyweightEquipment(row.equipment);
+      const illegal = !prepAllowed(row.name, t.section) || !isBodyweightEquipment(row.equipment) || lacksPicture(row);
       const excessStretch = t.section === "activation" && isPassiveStretch(row.name) && (keptStretch || ((keptStretch = true), false));
       if (!illegal && !excessStretch) continue;
       const role: Role = t.section === "activation" ? "Activation" : "Cool Down";
       const cur = allTokens(html).find((x) => x.index === t.index); if (!cur) continue;
       tryApply(cur.index, cur.raw, row, role, illegal ? `Not a ${role} movement` : "Activation must be active mobility, not a second passive stretch", illegal ? `${role} vocabulary` : "Activation mostly passive stretches",
-        (c) => prepAllowed(c.name, t.section) && isBodyweightEquipment(c.equipment) && (t.section !== "activation" || !isPassiveStretch(c.name)), { allowFamilyChange: true, mandatory: true });
+        (c) => !lacksPicture(c) && prepAllowed(c.name, t.section) && isBodyweightEquipment(c.equipment) && (t.section !== "activation" || !isPassiveStretch(c.name)), { allowFamilyChange: true, mandatory: true });
     }
   }
 
@@ -489,11 +497,12 @@ function capLightSets(html: string, cat: Category): string {
 }
 
 /** A hold left in a non-flow category keeps its place but is dosed in time. */
-function fixHoldDoses(html: string, lib: Map<string, ComplianceExercise>): string {
+function fixHoldDoses(html: string, lib: Map<string, ComplianceExercise>, timed: (name: string) => boolean = isTimedPosition): string {
   return html.replace(/(<(li|p)\b[^>]*>(?:(?!<\/\2>)[\s\S])*?)\b(\d+)\s*reps?\b((?:(?!<\/\2>)[\s\S])*?\{\{exercise:([A-Za-z0-9_-]+):[^}]*\}\})/g, (m, pre, _t, _n, mid, id) => {
     const name = lib.get(id)?.name ?? "";
-    return isTimedPosition(name) ? `${pre}30 sec${mid}` : m;
-  });
+    return timed(name) ? `${pre}30 sec${mid}` : m;
+  }).replace(/(\{\{exercise:([A-Za-z0-9_-]+):[^}]*\}\}[^<{]*?)\b\d+\s*reps?\b/g, (m, head: string, id: string) =>
+    timed(lib.get(id)?.name ?? "") ? `${head}30 sec` : m);
 }
 
 /**
