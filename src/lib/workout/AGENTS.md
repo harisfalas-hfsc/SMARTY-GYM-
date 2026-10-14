@@ -10,4 +10,4 @@
 
 - Exercise usage cap (fair share per category) lives only in exercise-usage.ts; the generator passes overused ids to the pack builder — why: no single exercise dominates the library.
 - Member-built workout quality (focus coverage, selected-equipment share, Advanced vocabulary, level minimum count, no repeated movement, matching cool-down) lives in member-quality.ts; the pack builder picks with it and generate.server.ts rebuilds up to 6 seeds before delivery — why: members get a session that matches what they asked for, without widening any closed list.
-- Exercise sameness (movementKey) and upper-push muscle spread (pushSpreadGap) live in member-quality.ts and take the workout focus; every repeat check passes the focus — why: single-muscle focuses allow variations, mixed focuses spread muscles.
+- Exercise sameness (movementKey, member-quality.ts) and muscle spread / specific-muscle requests (muscle-spread.ts) take the workout focus; pool filter, pack builder and member final check call them — why: a specific muscle wins, broad focuses cover every muscle.
