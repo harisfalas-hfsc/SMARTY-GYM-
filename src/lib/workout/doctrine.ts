@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
+import { muscleFocusBreak } from "./strength-focus";
 
 export type ExerciseLike = {
   id?: string;
@@ -477,6 +478,9 @@ export function focusViolation(e: ExerciseLike, focus: StrengthFocus | null): st
   }
   if (rule.allow && !rule.allow.test(focusText(e)))
     return `"${e.name}" does not belong to the requested ${focus} focus.`;
+  // Library muscle data decides too (shared with the Smarty Workouts publish gate).
+  const muscle = muscleFocusBreak(focus, e, "main");
+  if (muscle) return `${muscle}.`;
   return null;
 }
 

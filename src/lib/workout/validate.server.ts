@@ -5,6 +5,7 @@
 import { matchesSelectedEquipment, nameStem, type PoolExercise } from "./pool.server";
 import { findTokens, isLibraryId, stripHtml } from "./tokens";
 import { parseWorkoutSteps } from "./parse-steps";
+import { crossSectionRepeats } from "./section-repeats";
 import { activationDoseViolation } from "./prep-vocabulary";
 import { limitationAdmits, limitationDecision, limitationExplanation, type LimitationProfile } from "./limitations";
 import { doseRuleBreak, exerciseRuleBreaks, holdDoseViolation, workoutRuleBreaks } from "./rules";
@@ -216,6 +217,10 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
     const dr = doseRuleBreak(opts.category, step.prescription);
     if (dr) errors.push(dr);
   }
+
+  // 4b. The same exercise (or its variant) never appears in two sections.
+  for (const r of crossSectionRepeats(html, (id, f) => libraryById.get(id)?.name ?? f))
+    errors.push(`"${r.name}" appears in both ${r.first} and ${r.again}.`);
 
   // 5. Repetition guard — a session should not recycle the same two movements.
   const workIds = [...main, ...finisher].map((s) => s.exerciseId);
