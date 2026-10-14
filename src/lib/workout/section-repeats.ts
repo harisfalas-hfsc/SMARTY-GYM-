@@ -13,14 +13,14 @@ const SECTION: Record<string, "Activation" | "Main Workout" | "Finisher"> = {
 export type SectionRepeat = { name: string; exerciseId: string; first: string; again: string };
 
 /** Exercises that appear in a later section after already appearing in an earlier one (or twice in the Main/Finisher sequence across sections). */
-export function crossSectionRepeats(html: string, nameOf: (id: string, fallback: string) => string = (_i, f) => f): SectionRepeat[] {
+export function crossSectionRepeats(html: string, nameOf: (id: string, fallback: string) => string = (_i, f) => f, focus?: string | null): SectionRepeat[] {
   const seen = new Map<string, string>();
   const out: SectionRepeat[] = [];
   for (const s of parseWorkoutSteps(html)) {
     const sec = SECTION[s.section];
     if (!sec) continue;
     const name = nameOf(s.exerciseId, s.name);
-    const key = movementKey(name);
+    const key = movementKey(name, focus);
     if (!key) continue;
     const first = seen.get(key);
     if (first && first !== sec) out.push({ name, exerciseId: s.exerciseId, first, again: sec });

@@ -76,7 +76,7 @@ export function pushSpreadGap(main: QExercise[], pool: QExercise[], focus?: stri
   const available = new Set(pool.map(pushMuscle).filter(Boolean) as PushMuscle[]);
   const cap = Math.ceil(push.length / Math.max(1, Math.min(3, available.size)));
   const count = (m: PushMuscle) => push.filter((x) => x === m).length;
-  const missing = all.filter((m) => available.has(m) && count(m) < Math.min(1, cap) + (count(m) >= 1 ? 1 : 0) - (count(m) >= 1 ? 1 : 0) && count(m) === 0);
+  const missing = all.filter((m) => available.has(m) && count(m) === 0);
   const over = all.filter((m) => count(m) > cap || (count(m) > 1 && missing.length > 0));
   return { over, missing };
 }

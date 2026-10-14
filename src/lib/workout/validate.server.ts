@@ -219,7 +219,7 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
   }
 
   // 4b. The same exercise (or its variant) never appears in two sections.
-  for (const r of crossSectionRepeats(html, (id, f) => libraryById.get(id)?.name ?? f))
+  for (const r of crossSectionRepeats(html, (id, f) => libraryById.get(id)?.name ?? f, opts.focus ?? null))
     errors.push(`"${r.name}" appears in both ${r.first} and ${r.again}.`);
 
   // 5. Repetition guard — a session should not recycle the same two movements.

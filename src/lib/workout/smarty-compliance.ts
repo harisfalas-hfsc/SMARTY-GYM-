@@ -69,7 +69,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     for (const v of focusBreaks(w.focus, mainRows, finRows))
       s.add(/needs at least/.test(v) ? "Workout focus not covered" : / trains .* which is not part of/.test(v) ? "Exercise trains muscles outside the workout focus" : "Exercise outside the workout focus");
   // The same exercise (or its variant) never appears in two sections (Activation / Main / Finisher).
-  if (crossSectionRepeats(html, (id, f) => lib.get(id)?.name ?? f).length) s.add("Same exercise in two sections");
+  if (crossSectionRepeats(html, (id, f) => lib.get(id)?.name ?? f, w.focus).length) s.add("Same exercise in two sections");
   for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level }, finRows)) s.add(complianceRuleLabel(v));
   for (const st of workSteps) {
     if (!/\d/.test(st.prescription)) s.add("Exercise without a dose");
