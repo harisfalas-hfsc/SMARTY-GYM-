@@ -74,12 +74,15 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-export function MorningCheckinForm({ onSubmit }: { onSubmit: (d: MorningInput) => Promise<void> }) {
-  const [sleepHours, setSleepHours] = useState(7);
-  const [sleepQuality, setSleepQuality] = useState(3);
-  const [readiness, setReadiness] = useState(5);
-  const [soreness, setSoreness] = useState(3);
-  const [mood, setMood] = useState(3);
+type FormMode = { initial?: Partial<MorningInput & NightInput> | null; readOnly?: boolean };
+const num = (v: unknown, d: number) => (v === null || v === undefined ? d : Number(v));
+
+export function MorningCheckinForm({ onSubmit, initial, readOnly }: { onSubmit: (d: MorningInput) => Promise<void> } & FormMode) {
+  const [sleepHours, setSleepHours] = useState(num(initial?.sleep_hours, 7));
+  const [sleepQuality, setSleepQuality] = useState(num(initial?.sleep_quality, 3));
+  const [readiness, setReadiness] = useState(num(initial?.readiness_score, 5));
+  const [soreness, setSoreness] = useState(num(initial?.soreness_rating, 3));
+  const [mood, setMood] = useState(num(initial?.mood_rating, 3));
   const [busy, setBusy] = useState(false);
   return (
     <div className="space-y-5">
@@ -87,8 +90,9 @@ export function MorningCheckinForm({ onSubmit }: { onSubmit: (d: MorningInput) =
         <p className="flex items-center gap-2 text-lg font-extrabold">
           <Sun className="h-5 w-5 text-primary" /> Morning Check-in
         </p>
-        <p className="text-sm text-muted-foreground">Window open until 10:00. Takes 30 seconds.</p>
+        <p className="text-sm text-muted-foreground">{readOnly ? "The window is closed. Your answers are locked." : initial ? "You can change your answers until the window closes. Only your last save counts." : "Window open until 10:00. Takes 30 seconds."}</p>
       </div>
+      <fieldset disabled={readOnly} className={cn("space-y-5", readOnly && "pointer-events-none opacity-80")}>
       <Field label="How many hours did you sleep last night?">
         <div className="flex items-center gap-3">
           <Slider value={[sleepHours]} onValueChange={([v]) => setSleepHours(v ?? 7)} min={3} max={10} step={0.5} className="flex-1" />
@@ -134,7 +138,8 @@ export function MorningCheckinForm({ onSubmit }: { onSubmit: (d: MorningInput) =
           ))}
         </div>
       </Field>
-      <Button
+      </fieldset>
+      {readOnly ? null : <Button
         className="w-full"
         size="lg"
         disabled={busy}
@@ -147,17 +152,17 @@ export function MorningCheckinForm({ onSubmit }: { onSubmit: (d: MorningInput) =
           }
         }}
       >
-        {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : "Complete Morning Check-in"}
-      </Button>
+        {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : initial ? "Save Changes" : "Complete Morning Check-in"}
+      </Button>}
     </div>
   );
 }
 
-export function NightCheckinForm({ onSubmit }: { onSubmit: (d: NightInput) => Promise<void> }) {
-  const [steps, setSteps] = useState(3);
-  const [water, setWater] = useState(2.0);
-  const [protein, setProtein] = useState(2);
-  const [strain, setStrain] = useState(5);
+export function NightCheckinForm({ onSubmit, initial, readOnly }: { onSubmit: (d: NightInput) => Promise<void> } & FormMode) {
+  const [steps, setSteps] = useState(num(initial?.steps_bucket, 3));
+  const [water, setWater] = useState(num(initial?.hydration_liters, 2.0));
+  const [protein, setProtein] = useState(num(initial?.protein_level, 2));
+  const [strain, setStrain] = useState(num(initial?.day_strain, 5));
   const [busy, setBusy] = useState(false);
   return (
     <div className="space-y-5">
@@ -165,8 +170,9 @@ export function NightCheckinForm({ onSubmit }: { onSubmit: (d: NightInput) => Pr
         <p className="flex items-center gap-2 text-lg font-extrabold">
           <Moon className="h-5 w-5 text-primary" /> Night Check-in
         </p>
-        <p className="text-sm text-muted-foreground">Window open until 22:00. Takes 30 seconds.</p>
+        <p className="text-sm text-muted-foreground">{readOnly ? "The window is closed. Your answers are locked." : initial ? "You can change your answers until the window closes. Only your last save counts." : "Window open until 22:00. Takes 30 seconds."}</p>
       </div>
+      <fieldset disabled={readOnly} className={cn("space-y-5", readOnly && "pointer-events-none opacity-80")}>
       <Field label="How much did you move today?">
         <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
           {stepBuckets.map((o) => (
@@ -208,7 +214,8 @@ export function NightCheckinForm({ onSubmit }: { onSubmit: (d: NightInput) => Pr
         </div>
         <div className="flex justify-between text-xs text-muted-foreground"><span>0</span><span>10</span></div>
       </Field>
-      <Button
+      </fieldset>
+      {readOnly ? null : <Button
         className="w-full"
         size="lg"
         disabled={busy}
@@ -221,8 +228,8 @@ export function NightCheckinForm({ onSubmit }: { onSubmit: (d: NightInput) => Pr
           }
         }}
       >
-        {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : "Complete Night Check-in"}
-      </Button>
+        {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : initial ? "Save Changes" : "Complete Night Check-in"}
+      </Button>}
     </div>
   );
 }

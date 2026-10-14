@@ -108,10 +108,7 @@ export const submitCheckin = createServerFn({ method: "POST" })
       .eq("checkin_date", date)
       .maybeSingle();
     const row = (existing ?? {}) as Partial<CheckinRow>;
-    if (data.kind === "morning" && row.morning_completed)
-      throw new Error("You've already completed your morning check-in today.");
-    if (data.kind === "night" && row.night_completed)
-      throw new Error("You've already completed your night check-in today.");
+    // Editing inside the open window is allowed; the last save is the only one that counts.
 
     const { kind, ...answers } = data;
     const now = new Date().toISOString();
