@@ -189,9 +189,8 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <button
             type="button"
-            disabled={!t?.morning_completed}
             onClick={() => setOpenForm(openForm === "morning" ? null : "morning")}
-            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left", t?.morning_completed && "hover:bg-muted", openForm === "morning" && "ring-2 ring-primary")}
+            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left hover:bg-muted", openForm === "morning" && "ring-2 ring-primary")}
           >
             <Sun className="h-5 w-5 text-primary" />
             <div className="min-w-0 flex-1">
@@ -202,9 +201,8 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
           </button>
           <button
             type="button"
-            disabled={!t?.night_completed}
             onClick={() => setOpenForm(openForm === "night" ? null : "night")}
-            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left", t?.night_completed && "hover:bg-muted", openForm === "night" && "ring-2 ring-primary")}
+            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left hover:bg-muted", openForm === "night" && "ring-2 ring-primary")}
           >
             <Moon className="h-5 w-5 text-primary" />
             <div className="min-w-0 flex-1">
@@ -235,9 +233,29 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
             <NightCheckinForm onSubmit={night} />
           </div>
         ) : null}
+        {openForm === "morning" && !t?.morning_completed ? (
+          <div className="mt-4 rounded-xl border border-border p-4">
+            <p className="text-sm font-semibold">Morning check-in not completed.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {w.isMorning
+                ? "The morning window is open now — answer below to check in."
+                : "You didn't check in this morning, so there are no answers to show. The morning window is open 07:00–10:00."}
+            </p>
+          </div>
+        ) : null}
         {openForm === "morning" && t?.morning_completed ? (
           <div className="mt-4 rounded-xl border border-border p-4">
             <MorningCheckinForm key={`m-${t.daily_smarty_score ?? ""}-${t.sleep_hours}`} onSubmit={morning} initial={t as never} readOnly={!w.isMorning} />
+          </div>
+        ) : null}
+        {openForm === "night" && !t?.night_completed ? (
+          <div className="mt-4 rounded-xl border border-border p-4">
+            <p className="text-sm font-semibold">Night check-in not completed.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {w.isNight
+                ? "The night window is open now — answer below to check in."
+                : "You didn't check in tonight, so there are no answers to show. The night window is open 19:00–22:00."}
+            </p>
           </div>
         ) : null}
         {openForm === "night" && t?.night_completed ? (
