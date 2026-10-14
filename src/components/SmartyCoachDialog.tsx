@@ -7,7 +7,6 @@ import type { CoachSnapshot } from "@/lib/coach-snapshot";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { BrandText } from "@/components/BrandText";
-import coachIcon from "@/assets/smarty-coach.png";
 import coachPhoto from "@/assets/about-smartygym-card.jpg";
 
 const CACHE_VERSION = 2;
@@ -135,30 +134,31 @@ export function SmartyCoachDialog({
 
   return (
     <Dialog open={open} onOpenChange={changeOpen}>
-      {/* On phone, let the visitor content grow to preserve equal top/bottom padding. Signed-in and desktop sizing stay unchanged. */}
-      <DialogContent onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }} className={`outline-none max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${showCoachIntroduction ? "max-sm:min-h-[21.25rem]" : "flex flex-col overflow-hidden max-sm:h-[31.875rem]"}`}>
+      <DialogContent onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }} className="outline-none flex h-[30.625rem] max-w-lg flex-col gap-3 overflow-hidden p-4 sm:max-w-2xl sm:p-5">
         <DialogHeader className="shrink-0 items-center px-10 text-center sm:items-center sm:px-10 sm:text-center">
           <DialogTitle className="text-primary">Smarty Coach</DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
-            {visitor ? "Your personal coach. Anytime, anywhere." : snapshot ? <><span className="block"><BrandText text={snapshot.greeting.replace(/[.!]$/, "!")} name={snapshot.firstName} /></span><span className="block">Welcome back.</span></> : "Preparing your personal briefing."}
+            {showCoachIntroduction ? <><span className="block">Your personal coach. Anytime, anywhere.</span>{!visitor ? <span className="block"><BrandText text={`Welcome back${snapshot?.firstName ? `, ${snapshot.firstName}` : ""}.`} name={snapshot?.firstName} /></span> : null}</> : snapshot ? <><span className="block"><BrandText text={snapshot.greeting.replace(/[.!]$/, "!")} name={snapshot.firstName} /></span><span className="block">Welcome back.</span></> : "Preparing your personal briefing."}
           </DialogDescription>
         </DialogHeader>
 
+        <div ref={briefingRef} aria-label="Smarty Coach briefing" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto pr-1 pb-1 [scrollbar-width:thin] [scrollbar-color:var(--primary)_var(--secondary)]">
+        <div className="space-y-3">
+        <img src={coachPhoto} alt="Coach holding a tablet with a workout demonstration in the gym" className="aspect-[2/1] w-full rounded-md object-cover" />
         {showCoachIntroduction ? (
           <div className="space-y-3">
-            <img src={coachPhoto} alt="Coach holding a tablet with a workout demonstration in the gym" className="aspect-[2/1] w-full rounded-md object-cover" />
             <section className="px-1 py-1 text-center">
-              <h3 className="text-lg font-extrabold">{visitor ? "A personal trainer in your pocket." : <BrandText text={snapshot?.headline ?? "Smarty Coach"} name={snapshot?.firstName} />}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{visitor ? "Your daily training companion — helping you choose what to train, when to push and when to recover. Become a Premium member for personal guidance that grows with your training." : <BrandText text={snapshot?.recommendation ?? ""} name={snapshot?.firstName} />}</p>
+              <h3 className="text-lg font-extrabold">A personal trainer in your pocket.</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Your daily training companion — helping you choose what to train, when to push and when to recover. Become a Premium member for personal guidance that grows with your training.</p>
+              {!visitor ? <p className="mt-3 text-sm font-semibold text-primary">Your Premium membership is inactive. Reactivate it to unlock your personal guidance.</p> : null}
             </section>
             <Button className="w-full" onClick={() => { if (visitor) { changeOpen(false); void navigate({ to: "/auth" }); } else followAction(); }}>
-              {visitor ? "Sign in or join" : snapshot?.action.label} <ArrowRight />
+              {visitor ? "Sign in or join" : "Reactivate Premium"} <ArrowRight />
             </Button>
           </div>
         ) : loading && !snapshot ? (
           <div className="space-y-3" aria-label="Preparing your personal coaching briefing">
             <section className="rounded-md border-2 border-primary bg-primary/5 p-4 text-center">
-              <img src={coachIcon} alt="" className="mx-auto h-10 w-10 object-contain" />
               <p className="mt-2 font-bold">Connecting your latest training</p>
               <p className="mt-1 text-sm text-muted-foreground">Readiness, goals and recent performance are being brought together.</p>
             </section>
@@ -172,8 +172,6 @@ export function SmartyCoachDialog({
             <Button className="mt-4" variant="outline" onClick={fetchSnapshot}><RefreshCw /> Try again</Button>
           </div>
         ) : snapshot ? (
-          <>
-          <div ref={briefingRef} aria-label="Smarty Coach briefing" tabIndex={0} className="min-h-0 max-h-[calc(100dvh-13rem)] flex-1 overflow-y-auto pr-1 pb-1 [scrollbar-width:thin] [scrollbar-color:var(--primary)_var(--secondary)]">
             <div className="space-y-3">
             <BriefingCard title="Today’s focus" icon={Target} tone="text-primary">
                   {snapshot.headline !== "Welcome back" ? <p className="text-base font-extrabold leading-tight"><BrandText text={snapshot.headline} name={snapshot.firstName} /></p> : null}
@@ -222,10 +220,10 @@ export function SmartyCoachDialog({
 
             <Button className="w-full" onClick={followAction}>{snapshot.action.label}<ArrowRight /></Button>
           </div>
-          </div>
-          {hasMore ? <Button variant="ghost" size="icon" className="mx-auto h-7 w-10 shrink-0 text-primary" aria-label="Show more of your Coach briefing" title="Show more" onClick={() => briefingRef.current?.scrollBy({ top: (briefingRef.current?.clientHeight ?? 300) * 0.75, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" })}><ChevronDown className="h-5 w-5" /></Button> : null}
-          </>
         ) : null}
+        </div>
+        </div>
+        {hasMore ? <Button variant="ghost" size="icon" className="mx-auto h-7 w-10 shrink-0 text-primary" aria-label="Show more of your Coach briefing" title="Show more" onClick={() => briefingRef.current?.scrollBy({ top: (briefingRef.current?.clientHeight ?? 300) * 0.75, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" })}><ChevronDown className="h-5 w-5" /></Button> : null}
       </DialogContent>
     </Dialog>
   );
