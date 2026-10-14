@@ -19,6 +19,7 @@ export type PackInput = {
   level: DifficultyLevel;
   minutes: number;
   focus?: StrengthFocus | null;
+  muscle?: string | null;
   favoriteIds?: string[];
   /** Library-backed prep vocabulary; guarantees playable Activation / Cool Down. */
   activationPool?: PoolExercise[];
@@ -295,6 +296,7 @@ export function buildPackWorkout(
     const better = improvePicks(mainPicks, workPool.length >= mainCount ? workPool : pool, {
       level: input.level === "all" ? "intermediate" : input.level,
       focus: input.focus ?? null,
+      muscle: input.muscle ?? null,
       equipmentExpected: Boolean(input.equipmentExpected),
       pool: workPool,
     });
