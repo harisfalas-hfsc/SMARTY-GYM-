@@ -16,8 +16,6 @@ const CACHE_MAX_AGE = 12 * 60 * 60 * 1000;
 type CachedSnapshot = { version: number; savedAt: number; snapshot: CoachSnapshot };
 
 function BriefingCard({ title, icon: Icon, tone, children }: { title: string; icon: LucideIcon; tone: string; children: ReactNode }) {
-  const showCoachIntroduction = visitor || snapshot?.access === "locked";
-
   return (
     <section className="rounded-md border border-primary/45 p-4">
       <h3 className="flex items-center gap-2 text-sm font-bold">
@@ -132,6 +130,8 @@ export function SmartyCoachDialog({
       void navigate({ to: action.to });
     }
   };
+
+  const showCoachIntroduction = visitor || snapshot?.access === "locked";
 
   return (
     <Dialog open={open} onOpenChange={changeOpen}>
