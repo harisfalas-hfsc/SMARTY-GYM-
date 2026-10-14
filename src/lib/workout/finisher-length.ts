@@ -186,7 +186,8 @@ export function buildFinisherHtml(input: { category: string; stars: number; exer
   if (format === "REPS & SETS") {
     const reps = stars === 2 ? 12 : 10;
     const perSet = reps * 4 + 60;
-    const sets = Math.max(2, Math.min(6, Math.ceil((min * 60) / (k * perSet))));
+    // Strength finishers: 3–4 sets (Coach Haris); with 3+ exercises 4 sets always reach the level minimum.
+    const sets = k >= 3 ? Math.max(3, Math.min(4, Math.ceil((min * 60) / (k * perSet)))) : Math.max(2, Math.min(6, Math.ceil((min * 60) / (k * perSet))));
     const minutes = Math.round((k * sets * perSet) / 60);
     blocks.push(p(`⚡ <strong><u>Finisher (REPS &amp; SETS)</u></strong>`));
     blocks.push(p(`Complete all sets of one exercise before moving on. Rest 60 sec between sets. Total: about ${minutes} minutes.`));
