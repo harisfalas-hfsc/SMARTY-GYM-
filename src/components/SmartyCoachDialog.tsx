@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button";
 import { BrandText } from "@/components/BrandText";
 import coachIcon from "@/assets/smarty-coach.png";
+import coachPhoto from "@/assets/about-smartygym-card.jpg";
 
 const CACHE_VERSION = 2;
 const CACHE_MAX_AGE = 12 * 60 * 60 * 1000;
@@ -130,10 +131,12 @@ export function SmartyCoachDialog({
     }
   };
 
+  const showCoachIntroduction = visitor || snapshot?.access === "locked";
+
   return (
     <Dialog open={open} onOpenChange={changeOpen}>
       {/* On phone, let the visitor content grow to preserve equal top/bottom padding. Signed-in and desktop sizing stay unchanged. */}
-      <DialogContent onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }} className={`outline-none max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${visitor ? "max-sm:min-h-[21.25rem]" : "flex flex-col overflow-hidden max-sm:h-[31.875rem]"}`}>
+      <DialogContent onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }} className={`outline-none max-w-lg gap-3 p-4 sm:max-w-2xl sm:p-5 ${showCoachIntroduction ? "max-sm:min-h-[21.25rem]" : "flex flex-col overflow-hidden max-sm:h-[31.875rem]"}`}>
         <DialogHeader className="shrink-0 items-center px-10 text-center sm:items-center sm:px-10 sm:text-center">
           <DialogTitle className="text-primary">Smarty Coach</DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
@@ -141,15 +144,15 @@ export function SmartyCoachDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {visitor ? (
+        {showCoachIntroduction ? (
           <div className="space-y-3">
-            <section className="rounded-md border-2 border-primary bg-primary/5 p-4 text-center">
-              <img src={coachIcon} alt="" className="mx-auto h-10 w-10 object-contain" />
-              <h3 className="mt-2 text-lg font-extrabold">A personal trainer in your pocket.</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Your daily training companion — helping you choose what to train, when to push and when to recover. Become a Premium member for personal guidance that grows with your training.</p>
+            <img src={coachPhoto} alt="Coach holding a tablet with a workout demonstration in the gym" className="aspect-[2/1] w-full rounded-md object-cover" />
+            <section className="px-1 py-1 text-center">
+              <h3 className="text-lg font-extrabold">{visitor ? "A personal trainer in your pocket." : <BrandText text={snapshot?.headline ?? "Smarty Coach"} name={snapshot?.firstName} />}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{visitor ? "Your daily training companion — helping you choose what to train, when to push and when to recover. Become a Premium member for personal guidance that grows with your training." : <BrandText text={snapshot?.recommendation ?? ""} name={snapshot?.firstName} />}</p>
             </section>
-            <Button className="w-full" onClick={() => { changeOpen(false); void navigate({ to: "/auth" }); }}>
-              Sign in or join <ArrowRight />
+            <Button className="w-full" onClick={() => { if (visitor) { changeOpen(false); void navigate({ to: "/auth" }); } else followAction(); }}>
+              {visitor ? "Sign in or join" : snapshot?.action.label} <ArrowRight />
             </Button>
           </div>
         ) : loading && !snapshot ? (
