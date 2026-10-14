@@ -316,17 +316,17 @@ export function buildPackWorkout(
         const prioMain = usePriority ? new Set(orderedPriority(mainPicks).map((e) => e.id)) : new Set<string>();
         void prioMain;
         // No exercise (or variant) from the Main Workout is repeated in the Finisher (Coach Haris, 14 Oct 2026).
-        const mainKeys = new Set(mainPicks.map((e) => movementKey(e.name)));
-        const fresh = (e: PoolExercise) => !mainKeys.has(movementKey(e.name));
+        const mainKeys = new Set(mainPicks.map((e) => movementKey(e.name, input.focus)));
+        const fresh = (e: PoolExercise) => !mainKeys.has(movementKey(e.name, input.focus));
         const got = [...first, ...more].filter(fresh);
         const picks = got.length >= finisherCount ? got : [...got, ...pickBalanced(src.filter(fresh), finisherCount - got.length, { exclude: ex })];
         const filled = fillFromLegalPool(picks, src, finisherCount);
         const seenKeys = new Set(mainKeys);
-        const spareOf = () => src.find((e) => !seenKeys.has(movementKey(e.name)) && !used.has(e.id) && !filled.some((f) => f.id === e.id));
+        const spareOf = () => src.find((e) => !seenKeys.has(movementKey(e.name, input.focus)) && !used.has(e.id) && !filled.some((f) => f.id === e.id));
         for (let i = 0; i < filled.length; i++) {
-          const k = movementKey(filled[i]!.name);
+          const k = movementKey(filled[i]!.name, input.focus);
           if (seenKeys.has(k)) { const s = spareOf(); if (s) filled[i] = s; }
-          seenKeys.add(movementKey(filled[i]!.name));
+          seenKeys.add(movementKey(filled[i]!.name, input.focus));
         }
         return flowGroup(filled, src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));
       })();
@@ -363,8 +363,8 @@ export function buildPackWorkout(
     );
   });
   // Activation never repeats an exercise (or variant) used later in Main Workout / Finisher.
-  const workKeys = new Set([...mainPicks, ...finisherPicks].map((e) => movementKey(e.name)));
-  const notInWork = (e: PoolExercise) => !workKeys.has(movementKey(e.name));
+  const workKeys = new Set([...mainPicks, ...finisherPicks].map((e) => movementKey(e.name, input.focus)));
+  const notInWork = (e: PoolExercise) => !workKeys.has(movementKey(e.name, input.focus));
   const relevantActivationPool = dedupeMovements(
     (derivedActivationPool.filter(notInWork).length >= 4 ? derivedActivationPool : (input.activationPool ?? [])).filter(notInWork),
   );
@@ -380,7 +380,7 @@ export function buildPackWorkout(
       })) as PoolExercise[];
 
   // Cool Down stretches the muscles the Main Workout trained.
-  const cdAll = dedupeMovements(input.cooldownPool ?? []);
+  const cdAll = dedupeMovements(input.cooldownPool ?? [], input.focus);
   const cdRelevant = cdAll.filter((e) => {
     const r = regionOf(e);
     if (mainRegion === "full") return true;

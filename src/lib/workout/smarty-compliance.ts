@@ -69,7 +69,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     for (const v of focusBreaks(w.focus, mainRows, finRows))
       s.add(/needs at least/.test(v) ? "Workout focus not covered" : / trains .* which is not part of/.test(v) ? "Exercise trains muscles outside the workout focus" : "Exercise outside the workout focus");
   // The same exercise (or its variant) never appears in two sections (Activation / Main / Finisher).
-  if (crossSectionRepeats(html, (id, f) => lib.get(id)?.name ?? f).length) s.add("Same exercise in two sections");
+  if (crossSectionRepeats(html, (id, f) => lib.get(id)?.name ?? f, w.focus).length) s.add("Same exercise in two sections");
   for (const v of workoutRuleBreaks(rows, mainRows, { category: cat, format: fmt, level }, finRows)) s.add(complianceRuleLabel(v));
   for (const st of workSteps) {
     if (!/\d/.test(st.prescription)) s.add("Exercise without a dose");
@@ -396,7 +396,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
   }
 
   // 3e. Mandatory: work rows outside the workout focus or its muscles (library muscle data).
-  const presentKeys = () => new Set(allTokens(html).map((t) => movementKey(lib.get(t.id)?.name ?? t.raw)));
+  const presentKeys = () => new Set(allTokens(html).map((t) => movementKey(lib.get(t.id)?.name ?? t.raw, w.focus)));
   const focusOk = (c: ComplianceExercise, role: Role) =>
     !focusBreaks(w.focus, role === "Finisher" ? [] : [c], role === "Finisher" ? [c] : []).some((v) => v.startsWith('"'));
   if (cat === "STRENGTH" && w.focus) {
@@ -410,7 +410,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
       if (!bad) break;
       const row = lib.get(bad.id)!; const role = roleOfIndex(html, bad.index);
       const keys = presentKeys();
-      const want = (sameFam: boolean) => (c: ComplianceExercise) => workLegal(c) && focusOk(c, role) && !keys.has(movementKey(c.name)) && !OVERUSED_SUBSTITUTE.test(c.name) &&
+      const want = (sameFam: boolean) => (c: ComplianceExercise) => workLegal(c) && focusOk(c, role) && !keys.has(movementKey(c.name, w.focus)) && !OVERUSED_SUBSTITUTE.test(c.name) &&
         isTimedPosition(c.name) === isTimedPosition(row.name) && (sameFam ? fam(c) === fam(row) : fam(c) === "bodyweight" || rowsIn(html, lib, "Main Workout").some((m) => fam(m) === fam(c)));
       let r = tryApply(bad.index, bad.raw, row, role, "Exercise does not train the workout's focus muscles (library muscle data)", "Exercise outside the workout focus", want(true), { anyPattern: true, wantPriority: true, mandatory: true });
       if (r !== "applied") r = tryApply(bad.index, bad.raw, row, role, "Exercise does not train the workout's focus muscles (library muscle data)", "Exercise outside the workout focus", want(false), { anyPattern: true, allowFamilyChange: true, wantPriority: true, mandatory: true });
@@ -420,17 +420,17 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
 
   // 3f. Mandatory: the same exercise in two sections — change the Activation drill first, else the later work row.
   for (let guard = 0; guard < 12; guard++) {
-    const reps = crossSectionRepeats(html, (id, f) => lib.get(id)?.name ?? f);
+    const reps = crossSectionRepeats(html, (id, f) => lib.get(id)?.name ?? f, w.focus);
     if (!reps.length) break;
     const rep = reps[0]!;
-    const key = movementKey(rep.name);
-    const toks = allTokens(html).map((t) => ({ ...t, role: roleOfIndex(html, t.index), row: lib.get(t.id) })).filter((t) => t.row && movementKey(t.row.name) === key);
+    const key = movementKey(rep.name, w.focus);
+    const toks = allTokens(html).map((t) => ({ ...t, role: roleOfIndex(html, t.index), row: lib.get(t.id) })).filter((t) => t.row && movementKey(t.row.name, w.focus) === key);
     const keys = presentKeys();
     let done = false;
     const act = rep.first === "Activation" ? toks.find((t) => t.role === "Activation") : undefined;
     if (act) {
       const r = tryApply(act.index, act.raw, act.row!, "Activation", "Same exercise already in the workout — Activation drill changed", "Same exercise in two sections",
-        (c) => prepAllowed(c.name, "activation") && isBodyweightEquipment(c.equipment) && !isPassiveStretch(c.name) && !keys.has(movementKey(c.name)), { allowFamilyChange: true, anyPattern: true, mandatory: true });
+        (c) => prepAllowed(c.name, "activation") && isBodyweightEquipment(c.equipment) && !isPassiveStretch(c.name) && !keys.has(movementKey(c.name, w.focus)), { allowFamilyChange: true, anyPattern: true, mandatory: true });
       done = r === "applied";
     }
     if (!done) {
@@ -438,7 +438,7 @@ export function planMigration(w: ComplianceWorkout, library: ComplianceExercise[
       if (later) {
         const role = later.role; const row = later.row!;
         const r = tryApply(later.index, later.raw, row, role, "Same exercise already in the workout — replaced", "Same exercise in two sections",
-          (c) => workLegal(c) && !OVERUSED_SUBSTITUTE.test(c.name) && (!(cat === "STRENGTH" && w.focus) || focusOk(c, role)) && !keys.has(movementKey(c.name)) && isTimedPosition(c.name) === isTimedPosition(row.name) && (fam(c) === fam(row) || fam(c) === "bodyweight"),
+          (c) => workLegal(c) && !OVERUSED_SUBSTITUTE.test(c.name) && (!(cat === "STRENGTH" && w.focus) || focusOk(c, role)) && !keys.has(movementKey(c.name, w.focus)) && isTimedPosition(c.name) === isTimedPosition(row.name) && (fam(c) === fam(row) || fam(c) === "bodyweight"),
           { anyPattern: true, allowFamilyChange: true, wantPriority: true, mandatory: true });
         done = r === "applied";
       }
