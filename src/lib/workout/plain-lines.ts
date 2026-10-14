@@ -25,8 +25,9 @@ function plainTail(post: string, timedDose: boolean): string[] {
   if (side && !kept.some((k) => /\b(each|per)\s+(side|leg|arm)\b/i.test(k))) add(side[1] && !timedDose ? `${side[1]} each ${side[3]!.toLowerCase()}` : `each ${side[3]!.toLowerCase()}`);
   const load = text.match(/\b\d+(?:[.,]\d+)?\s*(?:kg|lb|%\s*(?:1RM|of))\b[^.;,—]{0,20}/i);
   if (load && load[0].length <= 30) add(load[0].trim());
-  const rest = text.replace(intervals?.[0] ?? "\u0000", " ").match(/\brest(?:\s+for)?\s+(\d+(?:\s*[–-]\s*\d+)?)\s*(sec|secs|seconds|s|min|mins|minutes?)\b(\s+between\s+(?:sets|rounds|exercises|sides|stations))?/i);
-  const restAfter = rest ? null : text.match(/\b(\d+)\s*(sec|secs|seconds|min|mins|minutes?)\s+rest\b/i);
+  const noIntervals = text.replace(intervals?.[0] ?? "\u0000", " ");
+  const rest = noIntervals.match(/\brest(?:\s+for)?\s+(\d+(?:\s*[–-]\s*\d+)?)\s*(sec|secs|seconds|s|min|mins|minutes?)\b(\s+between\s+(?:sets|rounds|exercises|sides|stations))?/i);
+  const restAfter = rest ? null : noIntervals.match(/\b(\d+)\s*(sec|secs|seconds|min|mins|minutes?)\s+rest\b/i);
   if (restAfter && restAfter[1] !== "0") add(`rest ${restAfter[1]} ${UNIT(restAfter[2]!)}`);
   if (rest && !/^0$/.test(rest[1]!)) add(`rest ${rest[1]!.replace(/\s+/g, "")} ${UNIT(rest[2]!)}${rest[3] ?? ""}`);
   return kept;
