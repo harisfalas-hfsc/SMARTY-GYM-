@@ -10,7 +10,7 @@ import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
 import { isCardioRhythm, isTimedPosition, isTimeDosed, LIGHT_SET_CAP } from "./rules";
 import { buildFinisherHtml, finisherMinimumMinutes } from "./finisher-length";
-import { dedupeMovements, improvePicks, levelMainMinimum, levelMinSets } from "./member-quality";
+import { dedupeMovements, improvePicks, levelMainMinimum, levelMinSets, movementKey } from "./member-quality";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
 export type PackInput = {
