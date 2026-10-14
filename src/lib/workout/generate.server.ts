@@ -254,6 +254,7 @@ export async function generateWorkoutContent(
     level,
     minutes: input.minutes,
     focus: input.focus ?? null,
+    muscle: input.muscle ?? null,
     favoriteIds,
     activationPool,
     cooldownPool,
