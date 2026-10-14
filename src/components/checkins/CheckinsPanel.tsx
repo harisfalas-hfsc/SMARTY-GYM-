@@ -40,7 +40,7 @@ export function useCheckinSubmit(onDone?: () => void) {
     async (d: MorningInput) => {
       try {
         await submit({ data: { kind: "morning", ...d } });
-        toast.success("Morning check-in completed!", { description: "Nice job starting your day with intention." });
+        toast.success("Morning check-in saved!", { description: "Your score has been updated." });
         window.dispatchEvent(new Event(CHECKINS_CHANGED));
         onDone?.();
       } catch (e) {
@@ -53,7 +53,7 @@ export function useCheckinSubmit(onDone?: () => void) {
     async (d: NightInput) => {
       try {
         await submit({ data: { kind: "night", ...d } });
-        toast.success("Night check-in completed!", { description: "Great job wrapping up your day." });
+        toast.success("Night check-in saved!", { description: "Your score has been updated." });
         window.dispatchEvent(new Event(CHECKINS_CHANGED));
         onDone?.();
       } catch (e) {
@@ -116,6 +116,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
   const [state, setState] = useState<CheckinState | null>(null);
   const [error, setError] = useState<false | "premium" | "other">(false);
   const [metric, setMetric] = useState<string>("daily_smarty_score");
+  const [openForm, setOpenForm] = useState<"morning" | "night" | null>(null);
 
   const load = useCallback(() => {
     fetchState({ data: { days: 90 } })
@@ -129,7 +130,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
     window.addEventListener(CHECKINS_CHANGED, load);
     return () => window.removeEventListener(CHECKINS_CHANGED, load);
   }, [load]);
-  const { morning, night } = useCheckinSubmit();
+  const { morning, night } = useCheckinSubmit(() => setOpenForm(null));
 
   const chart = useMemo(() => {
     if (!state) return [];
@@ -186,22 +187,32 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
       <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-1")}>
         <p className="font-bold">Today's check-ins</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
-          <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+          <button
+            type="button"
+            disabled={!t?.morning_completed}
+            onClick={() => setOpenForm(openForm === "morning" ? null : "morning")}
+            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left", t?.morning_completed && "hover:bg-muted", openForm === "morning" && "ring-2 ring-primary")}
+          >
             <Sun className="h-5 w-5 text-primary" />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">Morning Check-in</p>
               <p className="text-xs text-muted-foreground">07:00 – 10:00</p>
             </div>
             <StatusIcon state={morningState} />
-          </div>
-          <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+          </button>
+          <button
+            type="button"
+            disabled={!t?.night_completed}
+            onClick={() => setOpenForm(openForm === "night" ? null : "night")}
+            className={cn("flex items-center gap-3 rounded-xl bg-muted/50 p-3 text-left", t?.night_completed && "hover:bg-muted", openForm === "night" && "ring-2 ring-primary")}
+          >
             <Moon className="h-5 w-5 text-primary" />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">Night Check-in</p>
               <p className="text-xs text-muted-foreground">19:00 – 22:00</p>
             </div>
             <StatusIcon state={nightState} />
-          </div>
+          </button>
           <div className="rounded-xl bg-muted/50 p-3 text-center">
             <p className="text-xs text-muted-foreground">Today's Score</p>
             {t?.daily_smarty_score != null ? (
@@ -224,11 +235,24 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
             <NightCheckinForm onSubmit={night} />
           </div>
         ) : null}
-        {w.isMorning && t?.morning_completed ? (
-          <p className="mt-3 text-sm text-muted-foreground">Morning check-in done. Your night check-in opens at 19:00.</p>
+        {openForm === "morning" && t?.morning_completed ? (
+          <div className="mt-4 rounded-xl border border-border p-4">
+            <MorningCheckinForm key={`m-${t.updated_at ?? ""}`} onSubmit={morning} initial={t} readOnly={!w.isMorning} />
+          </div>
         ) : null}
-        {w.isNight && t?.night_completed ? (
-          <p className="mt-3 text-sm text-muted-foreground">Night check-in done. Your next morning check-in opens tomorrow at 07:00.</p>
+        {openForm === "night" && t?.night_completed ? (
+          <div className="mt-4 rounded-xl border border-border p-4">
+            <NightCheckinForm key={`n-${t.updated_at ?? ""}`} onSubmit={night} initial={t} readOnly={!w.isNight} />
+          </div>
+        ) : null}
+        {w.isMorning && t?.morning_completed && openForm !== "morning" ? (
+          <p className="mt-3 text-sm text-muted-foreground">Morning check-in done. Tap it to review or change your answers until 10:00. Your night check-in opens at 19:00.</p>
+        ) : null}
+        {w.isNight && t?.night_completed && openForm !== "night" ? (
+          <p className="mt-3 text-sm text-muted-foreground">Night check-in done. Tap it to review or change your answers until 22:00.</p>
+        ) : null}
+        {!w.isMorning && t?.morning_completed && !openForm ? (
+          <p className="mt-3 text-sm text-muted-foreground">Tap a completed check-in to see your answers.</p>
         ) : null}
         {w.next ? (
           <div className="mt-4 rounded-xl bg-muted/50 p-3 text-sm">
