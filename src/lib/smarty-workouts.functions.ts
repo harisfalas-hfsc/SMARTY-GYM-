@@ -355,6 +355,7 @@ export const adminCreateBlankSmartyWorkout = createServerFn({ method: "POST" })
 
 const updateSchema = z.object({
   id: z.string().uuid(),
+  actionId: z.string().uuid().optional(),
   patch: z
     .object({
       name: z.string().min(1).max(200),
@@ -379,10 +380,27 @@ const updateSchema = z.object({
 export const adminUpdateSmartyWorkout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: z.infer<typeof updateSchema>) => updateSchema.parse(d))
-  .handler(async ({ context, data }): Promise<{ ok: true } | { error: string }> => {
+  .handler(async ({ context, data }): Promise<{ ok: true; publication?: import("./smarty-publication.server").PublicationResult } | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      if (data.patch.is_visible === true) {
+        const { runSmartyPublication } = await import("./smarty-publication.server");
+        const publication = await runSmartyPublication(supabaseAdmin, data.actionId ?? crypto.randomUUID(), async () => {
+          const { publishRuleBreaks } = await import("@/lib/smarty-rule-gate.server");
+          const breaks = await publishRuleBreaks(supabaseAdmin, data.id, data.patch);
+          if (breaks.length) return { workouts: [], held: 1, error: breaks.join("\n\n") };
+          const { data: current, error: readError } = await supabaseAdmin.from("smarty_workouts").select("is_visible").eq("id", data.id).single();
+          if (readError) throw new Error(readError.message);
+          const { data: changed, error } = await supabaseAdmin.from("smarty_workouts")
+            .update({ ...data.patch, updated_at: new Date().toISOString() }).eq("id", data.id).eq("is_visible", current.is_visible).select("id,name,category");
+          if (error) throw new Error(error.message);
+          return { workouts: current.is_visible ? [] : changed ?? [], held: 0 };
+        });
+        if ("error" in publication) return publication;
+        if (publication.publicationError && publication.count === 0) return { error: publication.publicationError };
+        return { ok: true, publication };
+      }
       // Same hard rules as the generator: a rule-breaking workout cannot be published.
       if ("is_visible" in data.patch || "main_workout" in data.patch || "category" in data.patch || "format" in data.patch || "equipment" in data.patch) {
         const { publishRuleBreaks } = await import("@/lib/smarty-rule-gate.server");
@@ -394,10 +412,6 @@ export const adminUpdateSmartyWorkout = createServerFn({ method: "POST" })
         .update({ ...data.patch, updated_at: new Date().toISOString() })
         .eq("id", data.id);
       if (error) return { error: error.message };
-      if (data.patch.is_visible === true) {
-        const { announceNewSmartyWorkouts } = await import("@/lib/broadcast-notify.server");
-        await announceNewSmartyWorkouts(supabaseAdmin as never, [data.id]);
-      }
       return { ok: true };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed" };
@@ -683,11 +697,23 @@ export const adminAuditTransferredWorkouts = createServerFn({ method: "POST" })
 
 export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { visible: boolean; ids?: string[] }) => z.object({ visible: z.boolean(), ids: z.array(z.string().uuid()).max(20000).optional() }).parse(d))
-  .handler(async ({ context, data }): Promise<{ count: number; held: number } | { error: string }> => {
+  .inputValidator((d: { visible: boolean; ids?: string[]; actionId?: string }) => z.object({ visible: z.boolean(), ids: z.array(z.string().uuid()).max(20000).optional(), actionId: z.string().uuid().optional() }).parse(d))
+  .handler(async ({ context, data }): Promise<{ count: number; held: number; announcement?: import("./broadcast-content").PublishAnnouncementResult; publicationError?: string } | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      if (data.visible) {
+        const { runSmartyPublication, publishSmartyIds } = await import("./smarty-publication.server");
+        return await runSmartyPublication(supabaseAdmin, data.actionId ?? crypto.randomUUID(), async () => {
+          const selected = data.ids ? new Set(data.ids) : null;
+          const rows = (await loadAllSmarty(supabaseAdmin)).filter((row) => !selected || selected.has(row.id));
+          const report = await transferredWorkoutAudit(supabaseAdmin);
+          const { ruleFailingIds } = await import("@/lib/smarty-rule-gate.server");
+          const failing = new Set([...report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id), ...(await ruleFailingIds(supabaseAdmin))]);
+          const targets = visibilityTargets(rows, true, failing);
+          return publishSmartyIds(supabaseAdmin, targets.ids, targets.held);
+        });
+      }
       const selected = data.ids ? new Set(data.ids) : null;
       const rows = (await loadAllSmarty(supabaseAdmin)).filter((row) => !selected || selected.has(row.id));
       let failing = new Set<string>();
@@ -705,7 +731,7 @@ export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
         if (error) return { error: `${count} workouts changed before the action stopped: ${error.message}` };
         count += changed?.length ?? 0;
       }
-      // Preserve this visibility-only action: no announcement/email call here.
+      // Hiding never announces.
       return { count, held: targets.held };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Visibility update failed" };
@@ -793,21 +819,19 @@ export const adminLinkExerciseEverywhere = createServerFn({ method: "POST" })
 /** Admin: publishes every hidden Smarty Workout that passes the check. */
 export const adminPublishCheckedWorkouts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<{ count: number; held: number } | { error: string }> => {
+  .inputValidator((d: { actionId?: string } = {}) => z.object({ actionId: z.string().uuid().optional() }).parse(d))
+  .handler(async ({ context, data }): Promise<import("./smarty-publication.server").PublicationResult | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { auditWorkoutHtml } = await import("@/lib/workout/link-names");
-      const ids = new Set((await loadLibrary(supabaseAdmin)).map((e) => e.id));
-      const hidden = (await loadAllSmarty(supabaseAdmin)).filter((r) => !r.is_visible);
-      const ok = hidden.filter((r) => auditWorkoutHtml(r.main_workout ?? "", ids).length === 0).map((r) => r.id);
-      for (let i = 0; i < ok.length; i += 100) {
-        const { error } = await supabaseAdmin.from("smarty_workouts").update({ is_visible: true }).in("id", ok.slice(i, i + 100));
-        if (error) return { error: error.message };
-      }
-      const { announceNewSmartyWorkouts } = await import("@/lib/broadcast-notify.server");
-      await announceNewSmartyWorkouts(supabaseAdmin as never, ok);
-      return { count: ok.length, held: hidden.length - ok.length };
+      const { runSmartyPublication, publishSmartyIds } = await import("./smarty-publication.server");
+      return await runSmartyPublication(supabaseAdmin, data.actionId ?? crypto.randomUUID(), async () => {
+        const report = await transferredWorkoutAudit(supabaseAdmin);
+        const { ruleFailingIds } = await import("@/lib/smarty-rule-gate.server");
+        const failing = new Set([...report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id), ...(await ruleFailingIds(supabaseAdmin))]);
+        const targets = visibilityTargets(await loadAllSmarty(supabaseAdmin), true, failing);
+        return publishSmartyIds(supabaseAdmin, targets.ids, targets.held);
+      });
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed" };
     }
