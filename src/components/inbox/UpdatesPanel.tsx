@@ -29,6 +29,7 @@ import { loadRemote } from "@/lib/remote-data";
 import { announceInboxChanged } from "@/lib/inbox-sync";
 import { formatDate } from "@/lib/date-format";
 import { PREMIUM_WELCOME_SECTIONS } from "@/lib/premium-welcome-content";
+import { workoutAnnouncementDestination } from "@/lib/broadcast-content";
 
 import { decodeInsightMessage } from "@/lib/insights/presentation";
 import { InsightsSection } from "@/components/progress/InsightsSection";
@@ -331,14 +332,13 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
                         Read article
                       </Link>
                     )}
-                    {n.kind === "new_workout" && n.dedupe_key?.startsWith("new-workout:") && (
-                      <Link
-                        to="/smarty-workouts/$workoutId"
-                        params={{ workoutId: n.dedupe_key.slice("new-workout:".length) }}
+                    {n.kind === "new_workout" && workoutAnnouncementDestination(n.dedupe_key) && (
+                      <a
+                        href={workoutAnnouncementDestination(n.dedupe_key) ?? undefined}
                         className="flex h-10 items-center rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground"
                       >
-                        View Workout
-                      </Link>
+                        {workoutAnnouncementDestination(n.dedupe_key)?.includes("/category/") ? "View Category Workouts" : workoutAnnouncementDestination(n.dedupe_key) === "/smarty-workouts" ? "View Smarty Workouts" : "View Workout"}
+                      </a>
                     )}
                     {n.kind === "shared_workout" && n.dedupe_key?.startsWith("shared-workout:") && (
                       <Link

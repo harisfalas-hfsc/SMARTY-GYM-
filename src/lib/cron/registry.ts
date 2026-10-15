@@ -277,14 +277,14 @@ export const CRON_JOBS: CronJobDefinition[] = [
     key: "new-workout-announcement",
     label: "New workout announcement",
     description:
-      "Every time you publish a new Smarty Workout created in the Admin panel, every account (Premium and free) gets an app notification with the workout name and a View Workout button. A matching email is sent unless the member switched off new-workout emails in My Account. The same workout is never announced twice, and previously imported workouts are never announced.",
+      "Each Smarty Workouts publish action sends one combined app notification per account and one matching email per opted-in account, covering only workouts changed from hidden to visible. One workout links to itself; multiple workouts in one category link to that category; mixed categories link to Smarty Workouts. Creating hidden workouts and hiding workouts send nothing. Retrying the same publish action does not duplicate announcements.",
     timing: "continuous",
     timingNote:
-      "Event-triggered, not time-scheduled: sent the moment the workout first becomes visible. A history line is written for each announcement.",
+      "Sent when a publish action finishes. Each action has its own history entry with published count, inbox messages, emails accepted for sending and failures.",
     sends: [
       {
         title: "New Workout Added!",
-        body: "A new workout has been added to the SMARTYGYM library! • Workout name • Designed by Sports Scientist HARIS FALAS to help you achieve your fitness goals. • View Workout — identical content in app and email.",
+        body: "One new workout or a brief combined count/category summary, with one workout, category or Smarty Workouts link — identical content and destination in app and email.",
       },
     ],
     timeEditable: false,
