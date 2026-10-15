@@ -1,8 +1,8 @@
 # Roadmap
 
-- [ ] Unify Smarty publishing into one announcement per action, with category/collection links, retry protection, delivery reporting and tests; do not publish real workouts during verification.
+- [x] Unify Smarty publishing into one announcement per action, with category/collection links, retry protection and delivery reporting; 448 tests pass and build OK. Signed-in bulk confirmation verified; 50 workouts remain hidden. Publication/delivery tested with isolated fixtures, not real customer sends.
 
-- [x] Add admin workout filtered totals and explicit selection-scoped show/hide controls; real admin shows 50 hidden Muscle Building results and all/individual selection, member archive selects all 166 across pages. Bulk stays silent, individual Show warns about per-workout announcements. No visibility changes or emails triggered; 440 tests pass and build OK.
+- [x] Add admin workout filtered totals and explicit selection-scoped show/hide controls; real admin shows 50 hidden Muscle Building results and all/individual selection, member archive selects all 166 across pages. Publication announcements now follow the unified per-action rule above. No visibility changes or emails triggered during verification.
 
 - [x] Muscle-match rule from library data, no exercise repeated across sections, Cool Down matching trained muscles, finishers ≥3 exercises at 3–4 sets; all 531 Smarty Workouts audited, 138 fixed (backup first), 0 failing; member workouts untouched; 427 tests pass.
 
