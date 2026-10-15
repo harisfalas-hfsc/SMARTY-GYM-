@@ -13,6 +13,7 @@ import { crossSectionRepeats } from "./section-repeats";
 import { movementKey } from "./member-quality";
 import { finisherFormatIssue, finisherLengthIssue } from "./finisher-length";
 import { plainWorkoutHtml, wordyLines } from "./plain-lines";
+import { isMainOnlyWorkout } from "./main-only-collection";
 import type { PoolExercise } from "./pool.server";
 import type { Category, DifficultyLevel, Format } from "./spec";
 
@@ -90,6 +91,11 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   for (const st of steps.filter((x) => x.section === "Activation" || x.section === "Warm-up"))
     if (activationDoseViolation(lib.get(st.exerciseId)?.name ?? st.name, st.prescription)) s.add("Activation dose above 10 reps / 30 sec or in sets");
   if (activationRuleBreak(prep.filter((t) => t.section === "activation").map((t) => lib.get(t.id)?.name ?? t.name))) s.add("Activation mostly passive stretches");
+  if (isMainOnlyWorkout(w)) {
+    // Narrow exception (main-only-collection.ts): these must contain the Main Workout and nothing else.
+    if (steps.some((x) => x.section !== "Main Workout") || prep.length || /Activation|Cool[\s-]?Down|Finisher|Warm-?up|Soft Tissue/i.test(html.replace(/\{\{exercise:[^}]*\}\}/g, "")))
+      s.add("Main-only workout has another section");
+  } else
   for (const sec of ["activation", "cooldown"] as const) {
     const ids = prep.filter((t) => t.section === sec).map((t) => t.id);
     if (ids.length < 2) s.add(sec === "activation" ? "Activation has fewer than 2 movements" : "Cool Down has fewer than 2 movements");
