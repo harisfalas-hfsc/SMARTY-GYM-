@@ -24,6 +24,7 @@ import { formatDateTime } from "@/lib/date-format";
 import { toast } from "sonner";
 import { adminDuplicateSmartyWorkout } from "@/lib/smarty-workouts.functions";
 import { requestSmartyDraft } from "@/lib/admin-smarty-draft";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type Props = {
   /** When set, the archive is scoped to one member (their full logbook). */
@@ -58,6 +59,8 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
   const [rows, setRows] = useState<AdminWorkoutRow[]>([]);
   const [facets, setFacets] = useState<AdminWorkoutFacets>(emptyFacets);
   const [total, setTotal] = useState(0);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectingAll, setSelectingAll] = useState(false);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -116,7 +119,8 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
 
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, category, focus, source, status, equipment, duration, stars, from, to]);
+    setSelectedIds(new Set());
+  }, [userId, searchTerm, category, focus, source, status, equipment, duration, stars, from, to]);
 
   useEffect(() => {
     if (!openId) {
@@ -155,6 +159,25 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
     setTo("");
     setSearch("");
     setSearchTerm("");
+  }
+
+  async function selectAllFiltered() {
+    setSelectingAll(true);
+    try {
+      const ids = new Set<string>();
+      for (let nextPage = 1; ; nextPage += 1) {
+        const result = await listWorkouts({ data: {
+          userId, search: searchTerm, category, focus, source, status, equipment, duration,
+          ...(stars !== "all" ? { stars: Number(stars) } : {}),
+          ...(from ? { from } : {}), ...(to ? { to } : {}), page: nextPage, pageSize: 100,
+        } });
+        if ("error" in result) { toast.error(result.error); return; }
+        result.workouts.forEach((w) => ids.add(w.id));
+        if (nextPage * 100 >= result.total || !result.workouts.length) break;
+      }
+      setSelectedIds(ids);
+    } catch { toast.error("Workouts could not be selected. Please try again."); }
+    finally { setSelectingAll(false); }
   }
 
   return (
@@ -261,7 +284,7 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs text-muted-foreground">
-            {loading ? "Loading…" : `${total.toLocaleString()} workouts`}
+            {loading ? "Loading…" : `${total.toLocaleString()} matching workouts · ${rows.length} on this page · ${selectedIds.size} selected`}
             {activeFilters > 0 ? ` · ${activeFilters} filter${activeFilters > 1 ? "s" : ""}` : ""}
           </p>
           {activeFilters > 0 && (
@@ -270,6 +293,12 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
             </Button>
           )}
         </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <Button variant="outline" size="sm" disabled={loading || selectingAll || total === 0} onClick={() => void selectAllFiltered()}>{selectingAll && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Select all filtered ({total})</Button>
+        <Button variant="ghost" size="sm" disabled={selectingAll || !selectedIds.size} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
+        <p className="text-xs text-muted-foreground">Member workouts are a read-only archive. Show/hide is available only for Smarty Workouts; members’ workouts and Logbooks stay unchanged.</p>
       </div>
 
       {error && <p className="text-sm text-muted-foreground">{error}</p>}
@@ -283,12 +312,14 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
       ) : (
         <div className="grid min-w-0 max-w-full grid-cols-1 gap-3 lg:grid-cols-2">
           {rows.map((w) => (
-            <button
+            <div
               key={w.id}
-              type="button"
-              onClick={() => setOpenId(w.id)}
-              className="w-full min-w-0 overflow-hidden rounded-2xl border-2 border-blue-400 bg-card p-4 text-left transition hover:bg-accent"
+              className="w-full min-w-0 overflow-hidden rounded-2xl border-2 border-blue-400 bg-card p-4 text-left"
             >
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <Checkbox aria-label={`Select ${w.name}`} checked={selectedIds.has(w.id)} disabled={selectingAll || loading} onCheckedChange={(checked) => setSelectedIds((current) => { const next = new Set(current); if (checked === true) next.add(w.id); else next.delete(w.id); return next; })} />
+                <Button variant="outline" size="sm" onClick={() => setOpenId(w.id)}>View workout</Button>
+              </div>
               <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
                 <p className="min-w-0 break-words font-semibold leading-snug">{w.name}</p>
                 <Badge variant={w.is_wod ? "default" : "outline"} className="shrink-0 gap-1">
@@ -327,7 +358,7 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
                   Equipment: {w.equipment.join(", ")}
                 </p>
               )}
-            </button>
+            </div>
           ))}
         </div>
       )}
