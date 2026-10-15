@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { newestSmartyWorkouts } from "@/lib/smarty-workout-original-dates";
+import { visibilityTargets } from "@/lib/admin-workout-selection";
 
 /** The nine ready-workout categories, in page order. */
 export const SMARTY_WORKOUT_CATEGORIES = [
@@ -161,12 +162,15 @@ export const adminListSmartyWorkouts = createServerFn({ method: "POST" })
     try {
       await assertAdmin(context.supabase, context.userId);
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { data, error } = await supabaseAdmin
-        .from("smarty_workouts")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) return { error: error.message };
-      return { workouts: (data ?? []) as unknown as SmartyWorkout[] };
+      const workouts: SmartyWorkout[] = [];
+      for (let from = 0; ; from += 500) {
+        const { data, error } = await supabaseAdmin.from("smarty_workouts").select("*")
+          .order("created_at", { ascending: false }).order("id").range(from, from + 499);
+        if (error) return { error: error.message };
+        workouts.push(...((data ?? []) as unknown as SmartyWorkout[]));
+        if (!data || data.length < 500) break;
+      }
+      return { workouts };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed" };
     }
@@ -679,23 +683,30 @@ export const adminAuditTransferredWorkouts = createServerFn({ method: "POST" })
 
 export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { visible: boolean }) => z.object({ visible: z.boolean() }).parse(d))
-  .handler(async ({ context, data }): Promise<{ count: number } | { error: string }> => {
+  .inputValidator((d: { visible: boolean; ids?: string[] }) => z.object({ visible: z.boolean(), ids: z.array(z.string().uuid()).max(20000).optional() }).parse(d))
+  .handler(async ({ context, data }): Promise<{ count: number; held: number } | { error: string }> => {
     try {
       await assertAdmin(context.supabase, context.userId);
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      let q = supabaseAdmin.from("smarty_workouts").update({ is_visible: data.visible, updated_at: new Date().toISOString() });
+      const selected = data.ids ? new Set(data.ids) : null;
+      const rows = (await loadAllSmarty(supabaseAdmin)).filter((row) => !selected || selected.has(row.id));
+      let failing = new Set<string>();
       if (data.visible) {
         const report = await transferredWorkoutAudit(supabaseAdmin);
         const { ruleFailingIds } = await import("@/lib/smarty-rule-gate.server");
-        const failing = [...new Set([...report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id), ...(await ruleFailingIds(supabaseAdmin))])];
-        if (failing.length) q = q.not("id", "in", `(${failing.join(",")})`);
-      } else {
-        q = q.not("id", "is", null);
+        failing = new Set([...report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id), ...(await ruleFailingIds(supabaseAdmin))]);
       }
-      const { data: changed, error } = await q.select("id");
-      if (error) return { error: error.message };
-      return { count: changed?.length ?? 0 };
+      const targets = visibilityTargets(rows, data.visible, failing);
+      let count = 0;
+      for (let i = 0; i < targets.ids.length; i += 100) {
+        const { data: changed, error } = await supabaseAdmin.from("smarty_workouts")
+          .update({ is_visible: data.visible, updated_at: new Date().toISOString() })
+          .in("id", targets.ids.slice(i, i + 100)).eq("is_visible", !data.visible).select("id");
+        if (error) return { error: `${count} workouts changed before the action stopped: ${error.message}` };
+        count += changed?.length ?? 0;
+      }
+      // Preserve this visibility-only action: no announcement/email call here.
+      return { count, held: targets.held };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Visibility update failed" };
     }

@@ -33,6 +33,8 @@ import { CATEGORY_FORMATS, FOCUS_CATEGORIES, STRENGTH_FOCUS, type Category } fro
 import { EQUIPMENT, TIMES } from "@/lib/coach-options";
 import { categoryLabel, smartyToWorkoutRow } from "@/lib/smarty-workout-row";
 import { SMARTY_DRAFT_EVENT, takeSmartyDraft } from "@/lib/admin-smarty-draft";
+import { Checkbox } from "@/components/ui/checkbox";
+import { workoutSelectionScope } from "@/lib/admin-workout-selection";
 
 const LEVELS = [
   { v: 1, label: "Beginner" },
@@ -60,8 +62,10 @@ export function AdminSmartyWorkoutsTab() {
   const [draftId, setDraftId] = useState<string | null>(null);
   const [editing, setEditing] = useState<SmartyWorkout | null>(null);
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
-  const [bulkConfirm, setBulkConfirm] = useState<boolean | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkConfirm, setBulkConfirm] = useState<{ visible: boolean; ids: string[]; selected: boolean } | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<SmartyWorkout | null>(null);
+  const [showTarget, setShowTarget] = useState<SmartyWorkout | null>(null);
   const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
   const dup = useServerFn(adminDuplicateSmartyWorkout);
 
@@ -130,27 +134,38 @@ export function AdminSmartyWorkoutsTab() {
     if (eqF === "equipment" && bw) return false;
     if (durF !== "all") {
       const [min, max] = durF.split("-").map(Number);
-      if (w.duration_min < min! || w.duration_min > max!) return false;
+      if (min === undefined || max === undefined || w.duration_min < min || w.duration_min > max) return false;
     }
     if (diffF !== "all" && String(w.difficulty_stars) !== diffF) return false;
     if (fmtF !== "all" && (w.format ?? "").toLowerCase() !== fmtF) return false;
     return true;
   });
 
-  async function bulkVisibility(visible: boolean) {
+  useEffect(() => { setSelectedIds(new Set()); }, [cat, vis, query, eqF, durF, diffF, fmtF]);
+  const scope = workoutSelectionScope(shown, selectedIds);
+  const actionCount = (visible: boolean) => scope.targets.filter((w) => w.is_visible !== visible).length;
+  function confirmVisibility(visible: boolean) {
+    setBulkConfirm({ visible, ids: scope.targets.filter((w) => w.is_visible !== visible).map((w) => w.id), selected: scope.selected.length > 0 });
+  }
+
+  async function bulkVisibility(visible: boolean, ids: string[]) {
     setBulkBusy(true);
-    const result = await setTransferredVisibility({ data: { visible } });
-    setBulkBusy(false);
-    if ("error" in result) return toast.error(result.error);
-    toast.success(`${result.count} Smarty Workouts ${visible ? "published" : "hidden"}.`);
-    setBulkConfirm(null);
-    void load();
+    try {
+      const result = await setTransferredVisibility({ data: { visible, ids } });
+      if ("error" in result) { toast.error(result.error); void load(); return; }
+      toast.success(`${result.count} Smarty Workouts ${visible ? "shown" : "hidden"}.${result.held ? ` ${result.held} kept hidden: quality check failed.` : ""} No announcements sent.`);
+      setBulkConfirm(null);
+      setSelectedIds(new Set());
+      void load();
+    } catch { toast.error("Visibility could not be updated. Please try again."); }
+    finally { setBulkBusy(false); }
   }
 
   async function toggle(w: SmartyWorkout) {
     const r = await update({ data: { id: w.id, patch: { is_visible: !w.is_visible } } });
     if ("error" in r) return toast.error(r.error);
     toast.success(w.is_visible ? "Hidden from Smarty Workouts" : "Now visible on Smarty Workouts");
+    setShowTarget(null);
     void load();
   }
 
@@ -170,8 +185,8 @@ export function AdminSmartyWorkoutsTab() {
           <p className="text-xs text-muted-foreground">Ready workouts shown on the Smarty Workouts page. New workouts start hidden.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" disabled={bulkBusy} onClick={() => setBulkConfirm(true)}><Eye className="mr-1 h-4 w-4" />Show all</Button>
-          <Button variant="outline" disabled={bulkBusy} onClick={() => setBulkConfirm(false)}><EyeOff className="mr-1 h-4 w-4" />Hide all</Button>
+          <Button variant="outline" disabled={loading || bulkBusy || actionCount(true) === 0} onClick={() => confirmVisibility(true)}><Eye className="mr-1 h-4 w-4" />{scope.selected.length ? "Show selected" : "Show all filtered"} ({actionCount(true)})</Button>
+          <Button variant="outline" disabled={loading || bulkBusy || actionCount(false) === 0} onClick={() => confirmVisibility(false)}><EyeOff className="mr-1 h-4 w-4" />{scope.selected.length ? "Hide selected" : "Hide all filtered"} ({actionCount(false)})</Button>
           <Button onClick={() => setChoosing(true)}>
             <Plus className="mr-1 h-4 w-4" /> Create New Workout
           </Button>
@@ -184,7 +199,7 @@ export function AdminSmartyWorkoutsTab() {
           <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search workouts" className="pl-9" />
         </div>
         <Select value={cat} onValueChange={setCat}>
-          <SelectTrigger><SelectValue /></SelectTrigger>
+          <SelectTrigger aria-label="Category"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All categories</SelectItem>
             {SMARTY_WORKOUT_CATEGORIES.map((c) => (
@@ -193,7 +208,7 @@ export function AdminSmartyWorkoutsTab() {
           </SelectContent>
         </Select>
         <Select value={vis} onValueChange={setVis}>
-          <SelectTrigger><SelectValue /></SelectTrigger>
+          <SelectTrigger aria-label="Visibility"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Visible & hidden</SelectItem>
             <SelectItem value="visible">Visible</SelectItem>
@@ -218,14 +233,24 @@ export function AdminSmartyWorkoutsTab() {
         </Select>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-2" aria-live="polite">
+        <p className="text-sm font-semibold">{loading ? "Loading…" : `${shown.length} matching · ${rows.length} total · ${shown.filter((w) => w.is_visible).length} visible · ${shown.filter((w) => !w.is_visible).length} hidden · ${scope.selected.length} selected`}</p>
+        <div className="flex flex-wrap gap-2">
+          <Button size="sm" variant="outline" disabled={loading || bulkBusy || !shown.length} onClick={() => setSelectedIds(new Set(shown.map((w) => w.id)))}>Select all filtered ({shown.length})</Button>
+          <Button size="sm" variant="ghost" disabled={!scope.selected.length || bulkBusy} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
+        </div>
+      </div>
+      <p className="text-xs text-muted-foreground">Bulk show/hide sends no emails or inbox announcements. Individual Show announces each new workout separately when workout announcements are enabled; repeat announcements are deduplicated. See Cron jobs → New workout announcement for delivery history.</p>
+
       {loading ? (
         <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
       ) : shown.length === 0 ? (
-        <p className="py-10 text-center text-sm text-muted-foreground">You have not created any Smarty Workouts yet. Press "Create New Workout" to make your first one — it will appear here to view, edit, hide, show or delete.</p>
+        <p className="py-10 text-center text-sm text-muted-foreground">No Smarty Workouts match these filters.</p>
       ) : (
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {shown.map((w) => (
             <div key={w.id} className="flex gap-3 overflow-hidden rounded-2xl border-2 border-blue-400 bg-card p-3">
+              <Checkbox aria-label={`Select ${w.name}`} disabled={bulkBusy} checked={selectedIds.has(w.id)} onCheckedChange={(checked) => setSelectedIds((current) => { const next = new Set(current); if (checked === true) next.add(w.id); else next.delete(w.id); return next; })} />
               <div className="h-20 w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
                 {w.image_url && <img src={coverVariant(w.image_url, 640) ?? undefined} onError={fallbackTo(w.image_url)} loading="lazy" decoding="async" alt="" className="h-full w-full object-cover" />}
               </div>
@@ -242,7 +267,7 @@ export function AdminSmartyWorkoutsTab() {
                   <Button size="sm" variant="outline" onClick={() => setViewing(w)}><Eye className="mr-1 h-3.5 w-3.5" />View</Button>
                   <Button size="sm" variant="outline" onClick={() => setEditing(w)}><Pencil className="mr-1 h-3.5 w-3.5" />Edit</Button>
                   <Button size="sm" variant="outline" onClick={() => void duplicate(w)}><Copy className="mr-1 h-3.5 w-3.5" />Duplicate</Button>
-                  <Button size="sm" variant="outline" onClick={() => void toggle(w)}>
+                  <Button size="sm" variant="outline" onClick={() => w.is_visible ? void toggle(w) : setShowTarget(w)}>
                     {w.is_visible ? <><EyeOff className="mr-1 h-3.5 w-3.5" />Hide</> : <><Eye className="mr-1 h-3.5 w-3.5" />Show</>}
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setDeleteTarget(w)}><Trash2 className="mr-1 h-3.5 w-3.5" />Delete</Button>
@@ -285,17 +310,23 @@ export function AdminSmartyWorkoutsTab() {
       <AppConfirmDialog
         open={bulkConfirm !== null}
         onOpenChange={(open) => !open && setBulkConfirm(null)}
-        title={bulkConfirm ? "Show all Smarty Workouts?" : "Hide all Smarty Workouts?"}
-        description={bulkConfirm
-          ? "Every Smarty Workout will become visible to members."
-          : "Every Smarty Workout will be hidden from members until you show it again."}
-        confirmLabel={bulkConfirm ? "Show all" : "Hide all"}
+        title={`${bulkConfirm?.visible ? "Show" : "Hide"} ${bulkConfirm?.ids.length ?? 0} Smarty Workouts?`}
+        description={`Only ${bulkConfirm?.selected ? "the selected workouts" : "workouts matching the current filters"} will change. Workouts outside this scope stay unchanged.${bulkConfirm?.visible ? " Any workout failing the quality check stays hidden." : ""} No emails or inbox announcements will be sent.`}
+        confirmLabel={`${bulkConfirm?.visible ? "Show" : "Hide"} ${bulkConfirm?.ids.length ?? 0} workouts`}
         busy={bulkBusy}
-        tone={bulkConfirm ? "default" : "warning"}
+        tone={bulkConfirm?.visible ? "default" : "warning"}
         onConfirm={() => {
           if (bulkConfirm === null) return;
-          void bulkVisibility(bulkConfirm);
+          void bulkVisibility(bulkConfirm.visible, bulkConfirm.ids);
         }}
+      />
+      <AppConfirmDialog
+        open={showTarget !== null}
+        onOpenChange={(open) => !open && setShowTarget(null)}
+        title="Show this Smarty Workout?"
+        description={`“${showTarget?.name ?? "This workout"}” will become visible if it passes the quality check. When New workout announcement is enabled, this individual Show action sends one inbox announcement and up to one email per account for this workout, respecting email preferences and previous sends. It is not a combined announcement. Bulk Show sends none.`}
+        confirmLabel="Show workout"
+        onConfirm={() => { if (showTarget) void toggle(showTarget); }}
       />
       <AppConfirmDialog
         open={deleteTarget !== null}
