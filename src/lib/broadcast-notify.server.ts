@@ -3,7 +3,7 @@ import { getCronConfig, recordRun } from "@/lib/cron/jobs.server";
 
 type DB = SupabaseClient;
 const BATCH = 500;
-import { newWorkoutAnnouncement, sharedWorkoutAnnouncement, announcementInboxContent } from "@/lib/broadcast-content";
+import { publishedWorkoutsAnnouncement, sharedWorkoutAnnouncement, announcementInboxContent, type PublishedWorkout, type PublishAnnouncementResult } from "@/lib/broadcast-content";
 export { SHARED_WORKOUT_LINES, sharedWorkoutLine } from "@/lib/broadcast-content";
 
 /** One inbox message per account (except `exclude`); dedupe_key makes repeats impossible. */
@@ -14,7 +14,8 @@ async function notifyAll(
 ): Promise<number> {
   const { data, error } = await db.from("profiles").select("id").limit(20000);
   if (error) throw new Error(error.message);
-  const { data: done } = await db.from("notifications").select("user_id").eq("dedupe_key", row.dedupeKey).limit(20000);
+  const { data: done, error: doneError } = await db.from("notifications").select("user_id").eq("dedupe_key", row.dedupeKey).limit(20000);
+  if (doneError) throw new Error(doneError.message);
   const already = new Set(((done as { user_id: string }[] | null) ?? []).map((r) => r.user_id));
   const ids = ((data as { id: string }[] | null) ?? [])
     .map((r) => r.id)
@@ -35,53 +36,24 @@ async function notifyAll(
   return sent;
 }
 
-/** "New workout available" for each Smarty Workout the admin publishes for the first time. Never throws. */
-export async function announceNewSmartyWorkouts(db: DB, workoutIds: string[]): Promise<void> {
-  if (!workoutIds.length) return;
+/** One action produces one shared announcement; no origin-based exclusions. */
+export async function announcePublishedSmartyWorkouts(db: DB, actionId: string, rows: PublishedWorkout[]): Promise<PublishAnnouncementResult> {
+  const result: PublishAnnouncementResult = { inbox: 0, emails: 0 };
+  if (!rows.length) return result;
   try {
     const config = await getCronConfig(db, "new-workout-announcement");
-    if (!config.enabled) return;
-    const { data } = await db
-      .from("smarty_workouts")
-      .select("id,name,is_visible,legacy_id")
-      .in("id", workoutIds);
-    // Only workouts created in this admin panel (not the transferred library).
-    const rows = ((data as { id: string; name: string; is_visible: boolean; legacy_id: string | null }[] | null) ?? [])
-      .filter((r) => r.is_visible && !r.legacy_id);
-    for (const w of rows) {
-      try {
-        const announcement = newWorkoutAnnouncement(w.id, w.name);
-        const n = await notifyAll(db, { kind: "new_workout", ...announcementInboxContent(announcement) });
-        let emails = 0;
-        let emailError: string | null = null;
-        try {
-          const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
-          emails = await sendBroadcastEmail(db, announcement);
-        } catch (e) {
-          emailError = e instanceof Error ? e.message : "email error";
-        }
-        if (n || emails || emailError) {
-          const summary = emailError
-            ? `“${w.name}” announced to ${n} account(s); emails failed: ${emailError}`
-            : `“${w.name}” announced to ${n} account(s) (${emails} email${emails === 1 ? "" : "s"}).`;
-          await recordRun(db, {
-            jobKey: "new-workout-announcement",
-            status: emailError ? "failed" : "ok",
-            changed: Boolean(n || emails),
-            summary,
-          });
-        }
-      } catch (e) {
-        await recordRun(db, {
-          jobKey: "new-workout-announcement",
-          status: "failed",
-          summary: `“${w.name}” announcement failed: ${e instanceof Error ? e.message : "error"}`,
-        });
-      }
-    }
-  } catch (e) {
-    console.error("[new-workout-announcement]", e);
-  }
+    if (!config.enabled) return { ...result, disabled: true };
+    const announcement = publishedWorkoutsAnnouncement(actionId, rows);
+    const errors: string[] = [];
+    try { result.inbox = await notifyAll(db, { kind: "new_workout", ...announcementInboxContent(announcement) }); }
+    catch (e) { errors.push(`Inbox: ${e instanceof Error ? e.message : "failed"}`); }
+    try {
+      const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
+      result.emails = await sendBroadcastEmail(db, announcement);
+    } catch (e) { errors.push(`Email: ${e instanceof Error ? e.message : "failed"}`); }
+    if (errors.length) result.error = errors.join("; ");
+  } catch (e) { result.error = e instanceof Error ? e.message : "Announcement failed"; }
+  return result;
 }
 
 /** Tells every other account that a member shared a workout. Never throws. */
