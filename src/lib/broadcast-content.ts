@@ -41,6 +41,49 @@ export function newWorkoutAnnouncement(id: string, name: string): WorkoutAnnounc
   };
 }
 
+export type PublishedWorkout = { id: string; name: string; category: string };
+
+/** One publication action, one destination, regardless of batch size. */
+export function publishedWorkoutsAnnouncement(actionId: string, workouts: PublishedWorkout[]): WorkoutAnnouncement {
+  const unique = [...new Map(workouts.map((w) => [w.id, w])).values()];
+  const first = unique[0];
+  if (!first) throw new Error("No workouts were published");
+  const categories = [...new Set(unique.map((w) => w.category))];
+  const label = (category: string) => category.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  const slug = (category: string) => category.toLowerCase().replace(/&/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
+  const category = categories.length === 1 ? first.category : null;
+  const path = unique.length === 1 ? `/smarty-workouts/${first.id}` : category ? `/smarty-workouts/category/${slug(category)}` : "/smarty-workouts";
+  const single = unique.length === 1;
+  const countText = category ? `${unique.length} new ${label(category)} workouts` : `${unique.length} new workouts`;
+  return {
+    dedupeKey: `new-workout-publish:${actionId}:${encodeURIComponent(path)}`,
+    subject: single ? `🏋️ New Workout: ${first.name}` : `🏋️ ${countText} added`,
+    heading: single ? "New Workout Added!" : "New Workouts Added!",
+    body: single ? "A new workout has been added to the SMARTYGYM library!" : `${countText} have been added to the SMARTYGYM library!`,
+    workoutName: single ? first.name : undefined,
+    supportingText: single ? "Designed by Sports Scientist HARIS FALAS to help you achieve your fitness goals." : category ? `Check them in Smarty Workouts → ${label(category)}.` : `Explore ${categories.map(label).join(", ")} in Smarty Workouts.`,
+    buttonLabel: single ? "View Workout" : category ? `View ${label(category)} Workouts` : "View Smarty Workouts",
+    buttonHref: `${SITE_URL}${path}`,
+  };
+}
+
+/** Destination is stored with the action key; older single-workout notices still work. */
+export function workoutAnnouncementDestination(key: string | null | undefined): string | null {
+  if (key?.startsWith("new-workout:")) return `/smarty-workouts/${key.slice("new-workout:".length)}`;
+  if (!key?.startsWith("new-workout-publish:")) return null;
+  try {
+    const path = decodeURIComponent(key.split(":").slice(2).join(":"));
+    return /^\/smarty-workouts(?:\/(?:category\/[a-z-]+|[a-zA-Z0-9-]+))?$/.test(path) ? path : null;
+  } catch { return null; }
+}
+
+export type PublishAnnouncementResult = { inbox: number; emails: number; disabled?: boolean; error?: string };
+
+export function publicationDeliverySummary(result: PublishAnnouncementResult): string {
+  if (result.disabled) return "Announcements are disabled.";
+  return `${result.inbox} inbox message(s), ${result.emails} email(s) accepted for sending.${result.error ? ` Announcement failed: ${result.error}` : ""}`;
+}
+
 export function sharedWorkoutAnnouncement(id: string, name: string | undefined, creator: string, sharerId: string): WorkoutAnnouncement {
   const full = creator.trim();
   const first = full.split(/\s+/)[0] || "A member";
@@ -97,7 +140,7 @@ export function wantsAnnouncementEmail(
   preferences: { email_new_workouts?: boolean; email_shared_workouts?: boolean; email_new_articles?: boolean },
   dedupeKey: string,
 ): boolean {
-  if (dedupeKey.startsWith("new-workout:")) return preferences.email_new_workouts !== false;
+  if (dedupeKey.startsWith("new-workout:") || dedupeKey.startsWith("new-workout-publish:")) return preferences.email_new_workouts !== false;
   if (dedupeKey.startsWith("shared-workout:")) return preferences.email_shared_workouts !== false;
   if (dedupeKey.startsWith("new-article:")) return preferences.email_new_articles !== false;
   return true;

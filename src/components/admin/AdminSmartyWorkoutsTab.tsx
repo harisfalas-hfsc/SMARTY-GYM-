@@ -35,6 +35,7 @@ import { categoryLabel, smartyToWorkoutRow } from "@/lib/smarty-workout-row";
 import { SMARTY_DRAFT_EVENT, takeSmartyDraft } from "@/lib/admin-smarty-draft";
 import { Checkbox } from "@/components/ui/checkbox";
 import { workoutSelectionScope } from "@/lib/admin-workout-selection";
+import { publicationDeliverySummary } from "@/lib/broadcast-content";
 
 const LEVELS = [
   { v: 1, label: "Beginner" },
@@ -63,7 +64,8 @@ export function AdminSmartyWorkoutsTab() {
   const [editing, setEditing] = useState<SmartyWorkout | null>(null);
   const [viewing, setViewing] = useState<SmartyWorkout | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [bulkConfirm, setBulkConfirm] = useState<{ visible: boolean; ids: string[]; selected: boolean } | null>(null);
+  const [bulkConfirm, setBulkConfirm] = useState<{ visible: boolean; ids: string[]; selected: boolean; actionId: string } | null>(null);
+  const publishAction = useRef<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<SmartyWorkout | null>(null);
   const [showTarget, setShowTarget] = useState<SmartyWorkout | null>(null);
   const createBlank = useServerFn(adminCreateBlankSmartyWorkout);
@@ -145,15 +147,17 @@ export function AdminSmartyWorkoutsTab() {
   const scope = workoutSelectionScope(shown, selectedIds);
   const actionCount = (visible: boolean) => scope.targets.filter((w) => w.is_visible !== visible).length;
   function confirmVisibility(visible: boolean) {
-    setBulkConfirm({ visible, ids: scope.targets.filter((w) => w.is_visible !== visible).map((w) => w.id), selected: scope.selected.length > 0 });
+    setBulkConfirm({ visible, ids: scope.targets.filter((w) => w.is_visible !== visible).map((w) => w.id), selected: scope.selected.length > 0, actionId: crypto.randomUUID() });
   }
 
   async function bulkVisibility(visible: boolean, ids: string[]) {
     setBulkBusy(true);
     try {
-      const result = await setTransferredVisibility({ data: { visible, ids } });
+      const result = await setTransferredVisibility({ data: { visible, ids, actionId: bulkConfirm?.actionId } });
       if ("error" in result) { toast.error(result.error); void load(); return; }
-      toast.success(`${result.count} Smarty Workouts ${visible ? "shown" : "hidden"}.${result.held ? ` ${result.held} kept hidden: quality check failed.` : ""} No announcements sent.`);
+      toast.success(`${result.count} Smarty Workouts ${visible ? "shown" : "hidden"}.${result.held ? ` ${result.held} kept hidden: quality check failed.` : ""} ${result.announcement && result.count ? publicationDeliverySummary(result.announcement) : "No announcements sent."}`);
+      if (result.publicationError) toast.error(`Publication stopped: ${result.publicationError}`);
+      if (result.announcement?.error) { toast.error(result.announcement.error); void load(); return; }
       setBulkConfirm(null);
       setSelectedIds(new Set());
       void load();
@@ -162,11 +166,18 @@ export function AdminSmartyWorkoutsTab() {
   }
 
   async function toggle(w: SmartyWorkout) {
-    const r = await update({ data: { id: w.id, patch: { is_visible: !w.is_visible } } });
+    if (bulkBusy) return;
+    setBulkBusy(true);
+    try {
+    const r = await update({ data: { id: w.id, actionId: publishAction.current ?? undefined, patch: { is_visible: !w.is_visible } } });
     if ("error" in r) return toast.error(r.error);
     toast.success(w.is_visible ? "Hidden from Smarty Workouts" : "Now visible on Smarty Workouts");
+    if (r.publication?.count) toast.message(publicationDeliverySummary(r.publication.announcement));
+    if (r.publication?.announcement.error) { toast.error(r.publication.announcement.error); void load(); return; }
     setShowTarget(null);
     void load();
+    } catch { toast.error("Publication could not finish. Retry this action or check delivery history."); }
+    finally { setBulkBusy(false); }
   }
 
   async function del(w: SmartyWorkout) {
@@ -240,7 +251,7 @@ export function AdminSmartyWorkoutsTab() {
           <Button size="sm" variant="ghost" disabled={!scope.selected.length || bulkBusy} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground">Bulk show/hide sends no emails or inbox announcements. Individual Show announces each new workout separately when workout announcements are enabled; repeat announcements are deduplicated. See Cron jobs → New workout announcement for delivery history.</p>
+      <p className="text-xs text-muted-foreground">Each Show action sends one combined inbox announcement per account and one email per opted-in account when announcements are enabled. Hiding sends nothing. See Cron jobs → New workout announcement for delivery history.</p>
 
       {loading ? (
         <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
@@ -267,7 +278,7 @@ export function AdminSmartyWorkoutsTab() {
                   <Button size="sm" variant="outline" onClick={() => setViewing(w)}><Eye className="mr-1 h-3.5 w-3.5" />View</Button>
                   <Button size="sm" variant="outline" onClick={() => setEditing(w)}><Pencil className="mr-1 h-3.5 w-3.5" />Edit</Button>
                   <Button size="sm" variant="outline" onClick={() => void duplicate(w)}><Copy className="mr-1 h-3.5 w-3.5" />Duplicate</Button>
-                  <Button size="sm" variant="outline" onClick={() => w.is_visible ? void toggle(w) : setShowTarget(w)}>
+                  <Button size="sm" variant="outline" disabled={bulkBusy} onClick={() => { if (w.is_visible) void toggle(w); else { publishAction.current = crypto.randomUUID(); setShowTarget(w); } }}>
                     {w.is_visible ? <><EyeOff className="mr-1 h-3.5 w-3.5" />Hide</> : <><Eye className="mr-1 h-3.5 w-3.5" />Show</>}
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setDeleteTarget(w)}><Trash2 className="mr-1 h-3.5 w-3.5" />Delete</Button>
@@ -309,9 +320,9 @@ export function AdminSmartyWorkoutsTab() {
       </Dialog>
       <AppConfirmDialog
         open={bulkConfirm !== null}
-        onOpenChange={(open) => !open && setBulkConfirm(null)}
+        onOpenChange={(open) => !open && !bulkBusy && setBulkConfirm(null)}
         title={`${bulkConfirm?.visible ? "Show" : "Hide"} ${bulkConfirm?.ids.length ?? 0} Smarty Workouts?`}
-        description={`Only ${bulkConfirm?.selected ? "the selected workouts" : "workouts matching the current filters"} will change. Workouts outside this scope stay unchanged.${bulkConfirm?.visible ? " Any workout failing the quality check stays hidden." : ""} No emails or inbox announcements will be sent.`}
+        description={`Only ${bulkConfirm?.selected ? "the selected workouts" : "workouts matching the current filters"} will change. Workouts outside this scope stay unchanged.${bulkConfirm?.visible ? " Any workout failing the quality check stays hidden. This action sends one combined inbox message per account and one email per opted-in account when announcements are enabled, covering only successfully published workouts. One category links to that category; mixed categories link to Smarty Workouts." : " No emails or inbox announcements will be sent."}`}
         confirmLabel={`${bulkConfirm?.visible ? "Show" : "Hide"} ${bulkConfirm?.ids.length ?? 0} workouts`}
         busy={bulkBusy}
         tone={bulkConfirm?.visible ? "default" : "warning"}
@@ -322,10 +333,11 @@ export function AdminSmartyWorkoutsTab() {
       />
       <AppConfirmDialog
         open={showTarget !== null}
-        onOpenChange={(open) => !open && setShowTarget(null)}
+        onOpenChange={(open) => !open && !bulkBusy && setShowTarget(null)}
         title="Show this Smarty Workout?"
-        description={`“${showTarget?.name ?? "This workout"}” will become visible if it passes the quality check. When New workout announcement is enabled, this individual Show action sends one inbox announcement and up to one email per account for this workout, respecting email preferences and previous sends. It is not a combined announcement. Bulk Show sends none.`}
+        description={`“${showTarget?.name ?? "This workout"}” will become visible if it passes the quality check. When announcements are enabled, this action sends one inbox message per account and one email per opted-in account, with a link to this workout. Retrying this action does not duplicate announcements.`}
         confirmLabel="Show workout"
+        busy={bulkBusy}
         onConfirm={() => { if (showTarget) void toggle(showTarget); }}
       />
       <AppConfirmDialog
@@ -545,6 +557,7 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
   const image = useServerFn(adminSmartyWorkoutImage);
   const [w, setW] = useState<SmartyWorkout>(workout);
   const [saving, setSaving] = useState(false);
+  const saveAction = useRef<string | null>(null);
   const [imgBusy, setImgBusy] = useState(false);
   const [preview, setPreview] = useState(false);
   const [replaceStructureOpen, setReplaceStructureOpen] = useState(false);
@@ -558,9 +571,11 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
     if (!w.name.trim()) return toast.error("Workout name is required");
     if (!(w.main_workout ?? "").replace(/<[^>]*>/g, "").trim()) return toast.error("Workout content is required");
     setSaving(true);
+    saveAction.current ??= crypto.randomUUID();
     const r = await update({
       data: {
         id: w.id,
+        actionId: saveAction.current,
         patch: {
           name: w.name.trim(),
           category: w.category as never,
@@ -588,6 +603,9 @@ function EditDialog({ workout, onClose, onSaved }: { workout: SmartyWorkout; onC
     }
     setSaving(false);
     toast.success("Workout saved");
+    if (r.publication?.count) toast.message(publicationDeliverySummary(r.publication.announcement));
+    if (r.publication?.announcement.error) { toast.error(r.publication.announcement.error); return; }
+    saveAction.current = null;
     onSaved();
   }
 
