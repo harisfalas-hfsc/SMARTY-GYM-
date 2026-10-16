@@ -11,6 +11,8 @@ import { TRAINING_TOPICS } from "@/lib/seo/training-topics";
  * published article with its optimized description, so an assistant can answer
  * about SmartyGym accurately without crawling each page.
  */
+import { METHOD_FACTS, METHOD_FAQ, TRAINING_LOAD_FAQ } from "@/lib/seo/faq";
+
 export const Route = createFileRoute("/llms-full.txt")({
   server: {
     handlers: {
@@ -29,6 +31,13 @@ export const Route = createFileRoute("/llms-full.txt")({
             ? "Access: every feature is currently available to all registered users at no cost."
             : "Access: one membership (EUR 9.99 per month, cancel anytime) unlocks personalized workouts, Workout of the Day, the exercise library, the tools, the logbook and progress tracking.",
           "",
+          "## How SmartyGym works",
+          "",
+          ...METHOD_FACTS.map((f) => `- ${f}`),
+          "",
+          "## Frequently asked questions",
+          "",
+          ...[...METHOD_FAQ, ...TRAINING_LOAD_FAQ].flatMap((q) => [`Q: ${q.question}`, `A: ${q.answer}`, ""]),
           "## Pages",
           "",
         ];
