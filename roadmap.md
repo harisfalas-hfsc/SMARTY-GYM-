@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Add latest-three published Smarty Workouts below the mobile homepage training carousel, matching About/Community/Coach cards; verify real cards, links, ordering and unchanged desktop.
+- [x] Add latest-three published Smarty Workouts below the mobile homepage training carousel, matching About/Community/Coach cards; real three covers, matching 68px card styling, collection parity, links and desktop exclusion checked at 394/1280px; 3 ordering tests pass, build OK. No workouts published or modified.
 
 - [x] Unify Smarty publishing into one announcement per action, with category/collection links, retry protection and delivery reporting; 448 tests pass and build OK. Signed-in bulk confirmation verified; 50 workouts remain hidden. Publication/delivery tested with isolated fixtures, not real customer sends.
 
