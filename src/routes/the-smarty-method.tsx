@@ -40,7 +40,7 @@ import {
 } from "recharts";
 import { exportBrandPagePdf } from "@/lib/brand-page-export";
 import { iconTone } from "@/lib/icon-tone";
-import { faqSchema, METHOD_FAQ, METHOD_FACTS } from "@/lib/seo/faq";
+import { faqSchema, METHOD_FAQ, METHOD_COMPARISON_FAQ, METHOD_FACTS } from "@/lib/seo/faq";
 import { REPORT_LINE_WIDTH, REPORT_DOT_RADIUS } from "@/lib/report-chart";
 
 export const Route = createFileRoute("/the-smarty-method")({
@@ -87,7 +87,7 @@ export const Route = createFileRoute("/the-smarty-method")({
               about: { "@id": "https://smartygym.com/haris-falas#person" },
               publisher: { "@id": "https://smartygym.com/#organization" },
             },
-            faqSchema("https://smartygym.com/the-smarty-method", METHOD_FAQ),
+            faqSchema("https://smartygym.com/the-smarty-method", [...METHOD_FAQ, ...METHOD_COMPARISON_FAQ]),
             {
               "@type": "ItemList",
               "@id": "https://smartygym.com/the-smarty-method#facts",
