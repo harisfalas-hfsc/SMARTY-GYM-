@@ -140,23 +140,34 @@ function SmartyWorkoutsPage() {
 
       {/* Desktop: category cards, each opens its own page */}
       {featured.length > 0 && (
-        <section aria-label="Featured Workouts" className="mt-8 lg:hidden">
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-primary"><Star className="h-5 w-5" />Featured Workouts</h2>
+        <section aria-label="Featured Workouts" className="mt-6 lg:hidden">
+          <h2 className="mb-4 flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-primary">
+            <Star className="h-5 w-5" />Featured Workouts
+          </h2>
           <div className="flex flex-col gap-3">
             {featured.map((workout) => (
               <Link
                 key={workout.id}
                 to="/smarty-workouts/$workoutId"
                 params={{ workoutId: workout.id }}
-                className="grid min-h-24 grid-cols-[7rem_minmax(0,1fr)] overflow-hidden rounded-xl border-2 border-wod-border/60 bg-card text-left transition-colors hover:border-wod-border"
+                className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border-2 border-primary/60 bg-card p-1.5 transition-all duration-300 hover:border-primary hover:shadow-xl"
               >
-                <div className="relative min-h-24 bg-muted">
-                  <img src={coverVariant(workout.image_url, 640) ?? fallbackFor(workout.category)} onError={fallbackTo(workout.image_url ?? fallbackFor(workout.category))} alt={workout.name} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="relative h-[58px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
+                  <img
+                    src={workout.image_url ?? fallbackFor(workout.category)}
+                    onError={fallbackTo(fallbackFor(workout.category))}
+                    alt={workout.name}
+                    width={144}
+                    height={144}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover object-center"
+                  />
                 </div>
-                <div className="flex min-w-0 flex-col justify-center p-3">
-                  <span className="text-[10px] font-semibold uppercase text-primary">{categoryLabel(workout.category)}</span>
-                  <h3 className="mt-0.5 line-clamp-2 text-sm font-bold leading-tight text-foreground">{workout.name}</h3>
-                  <p className="mt-1 text-[11px] text-muted-foreground">{workout.duration_min} min · {difficultyLabel(workout.difficulty_stars)}</p>
+                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                  <span className="text-[9px] font-bold uppercase tracking-wide text-primary">{categoryLabel(workout.category)}</span>
+                  <h3 className="line-clamp-1 text-[13px] font-extrabold leading-tight text-foreground">{workout.name}</h3>
+                  <p className="line-clamp-1 text-[10px] leading-snug text-muted-foreground">{workout.duration_min} min · {difficultyLabel(workout.difficulty_stars)}</p>
                 </div>
               </Link>
             ))}
