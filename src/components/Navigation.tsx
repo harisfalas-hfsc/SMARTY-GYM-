@@ -29,6 +29,7 @@ import { signOutAndClearDevice } from "@/lib/sign-out";
 import { adminCheckAccess } from "@/lib/admin.functions";
 import { NotificationBell } from "@/components/NotificationBell";
 import { SmartyCoachDialog } from "@/components/SmartyCoachDialog";
+import { CheckinHeaderAlert } from "@/components/checkins/CheckinHeaderAlert";
 import coachIcon from "@/assets/smarty-coach.png";
 import {
   DropdownMenu,
@@ -177,6 +178,7 @@ export function Navigation() {
               <img src={coachIcon} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             </button>
           ) : null}
+          {!loading && user ? <CheckinHeaderAlert /> : null}
           {!loading && user ? <NotificationBell /> : null}
           {loading ? null : user ? (
             <DropdownMenu>
