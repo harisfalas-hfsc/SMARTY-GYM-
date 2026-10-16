@@ -4,12 +4,15 @@ import { MobileHomeActions } from "@/components/MobileHomeActions";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
 import { DesktopHomeStory } from "@/components/home/DesktopHomeStory";
-import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
+import { getFeaturedSmartyWorkouts, getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 
 
 
 export const Route = createFileRoute("/")({
-  loader: () => getSmartyWorkoutCounts(),
+  loader: async () => {
+    const [counts, featured] = await Promise.all([getSmartyWorkoutCounts(), getFeaturedSmartyWorkouts()]);
+    return { counts, featured };
+  },
   head: () => ({
     meta: [
       {
@@ -73,7 +76,8 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { freeAccessMode } = useFreeAccessMode();
-  const workoutCount = Route.useLoaderData()?.total ?? 0;
+  const { counts, featured } = Route.useLoaderData();
+  const workoutCount = counts.total;
   return (
     <>
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6">
@@ -97,7 +101,7 @@ function Home() {
           </p>
         </div>
 
-        <MobileHomeActions showPricing={!freeAccessMode} workoutCount={workoutCount} />
+        <MobileHomeActions showPricing={!freeAccessMode} workoutCount={workoutCount} featured={featured} />
       </section>
     </div>
 

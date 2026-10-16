@@ -1,7 +1,7 @@
 import { iconTone } from "@/lib/icon-tone";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Sparkles, BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, Layers, NotebookPen, Newspaper, Users, Wrench, type LucideIcon } from "lucide-react";
+import { Sparkles, BookOpen, CalendarCheck, ChevronLeft, ChevronRight, Crown, Dumbbell, Info, Layers, NotebookPen, Newspaper, Star, Users, Wrench, type LucideIcon } from "lucide-react";
 import premiumImage from "@/assets/premium-membership-card.jpg";
 import wodImage from "@/assets/hero-wod-card.jpg";
 import smartyWorkoutsImage from "@/assets/smarty-workouts-card.jpg";
@@ -19,6 +19,10 @@ import aboutImage from "@/assets/about-smartygym-card.jpg";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
+import type { SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
+import { categoryLabel } from "@/lib/smarty-workout-row";
+import { difficultyLabel } from "@/lib/workout/spec";
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
 
 type CarouselAction = {
   title: string;
@@ -37,7 +41,7 @@ type ExploreAction = {
   icon: LucideIcon;
 };
 
-export function MobileHomeActions({ showPricing, workoutCount }: { showPricing: boolean; workoutCount: number }) {
+export function MobileHomeActions({ showPricing, workoutCount, featured }: { showPricing: boolean; workoutCount: number; featured: SmartyWorkoutCard[] }) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeIndex, setActiveIndex] = useState(0);
   const [exploreApi, setExploreApi] = useState<CarouselApi>();
@@ -241,6 +245,42 @@ export function MobileHomeActions({ showPricing, workoutCount }: { showPricing: 
           />
         ))}
       </div>
+
+      {featured.length > 0 && (
+        <section aria-label="Featured Workouts" className="mt-6">
+          <h2 className="mb-4 flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-primary">
+            <Star className="h-5 w-5" />Featured Workouts
+          </h2>
+          <div className="flex flex-col gap-3">
+            {featured.map((workout) => (
+              <Link
+                key={workout.id}
+                to="/smarty-workouts/$workoutId"
+                params={{ workoutId: workout.id }}
+                className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border-2 border-primary/60 bg-card p-1.5 transition-all duration-300 hover:border-primary hover:shadow-xl"
+              >
+                <div className="relative h-[58px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
+                  <img
+                    src={coverVariant(workout.image_url, 640) ?? smartyWorkoutsImage}
+                    onError={fallbackTo(workout.image_url ?? smartyWorkoutsImage)}
+                    alt={workout.name}
+                    width={144}
+                    height={144}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                  <span className="text-[9px] font-bold uppercase tracking-wide text-primary">{categoryLabel(workout.category)}</span>
+                  <h3 className="line-clamp-1 text-[13px] font-extrabold leading-tight text-foreground">{workout.name}</h3>
+                  <p className="line-clamp-1 text-[10px] leading-snug text-muted-foreground">{workout.duration_min} min · {difficultyLabel(workout.difficulty_stars)}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="mt-7">
         <div className="mb-4 flex items-center justify-center gap-4">
