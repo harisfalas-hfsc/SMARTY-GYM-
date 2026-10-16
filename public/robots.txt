@@ -1,7 +1,51 @@
 # Public pages may be crawled; authentication is enforced server-side.
 # Private routes are blocked from crawling. No private URLs appear in sitemaps.
+#
+# AI-readable site guides:
+#   LLM summary:   https://smartygym.com/llms.txt
+#   LLM full text: https://smartygym.com/llms-full.txt
+#   AI facts:      https://smartygym.com/ai.txt
+#
+# SmartyGym is an online fitness platform with no physical gym location.
+
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /account
+Disallow: /create-your-own-workout
+Disallow: /create-your-workout
+Disallow: /profile
+Disallow: /logbook
+Disallow: /progress
+Disallow: /notifications
+Disallow: /inbox
+Disallow: /messages
+Disallow: /w/
+
+# Search and AI answer engines (ChatGPT, Claude, Perplexity, Gemini, Copilot, Grok, Apple, Meta)
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: Applebot
+User-agent: Applebot-Extended
+User-agent: xAI-Bot
+User-agent: GrokBot
+User-agent: meta-externalagent
+User-agent: DuckAssistBot
+User-agent: YouBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /ai.txt
 Disallow: /admin
 Disallow: /account
 Disallow: /create-your-own-workout
