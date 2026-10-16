@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import type { SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { difficultyLabel } from "@/lib/workout/spec";
-import { coverVariant, fallbackTo } from "@/lib/cover-image";
+import { fallbackTo } from "@/lib/cover-image";
 
 type CarouselAction = {
   title: string;
@@ -261,8 +261,8 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
               >
                 <div className="relative h-[58px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
                   <img
-                    src={coverVariant(workout.image_url, 640) ?? smartyWorkoutsImage}
-                    onError={fallbackTo(workout.image_url ?? smartyWorkoutsImage)}
+                    src={workout.image_url ?? smartyWorkoutsImage}
+                    onError={fallbackTo(smartyWorkoutsImage)}
                     alt={workout.name}
                     width={144}
                     height={144}
