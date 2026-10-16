@@ -40,7 +40,7 @@ import {
 } from "recharts";
 import { exportBrandPagePdf } from "@/lib/brand-page-export";
 import { iconTone } from "@/lib/icon-tone";
-import { faqSchema, METHOD_FAQ, METHOD_FACTS } from "@/lib/seo/faq";
+import { faqSchema, METHOD_FAQ, METHOD_COMPARISON_FAQ, METHOD_FACTS } from "@/lib/seo/faq";
 import { REPORT_LINE_WIDTH, REPORT_DOT_RADIUS } from "@/lib/report-chart";
 
 export const Route = createFileRoute("/the-smarty-method")({
