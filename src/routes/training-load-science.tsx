@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
 import { faqSchema, TRAINING_LOAD_FAQ } from "@/lib/seo/faq";
+import {
   Activity,
   BarChart3,
   CalendarRange,
