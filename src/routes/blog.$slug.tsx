@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 
+import { faqSchema, parseStoredFaq } from "@/lib/seo/faq";
+
 const SITE = "https://smartygym.com";
 
 function displayImageUrl(url: string): string {
@@ -176,6 +178,10 @@ export const Route = createFileRoute("/blog/$slug")({
                   },
                 ],
               },
+              ...(() => {
+                const faq = faqSchema(url, parseStoredFaq((a as { seo_faq?: unknown }).seo_faq));
+                return faq ? [faq] : [];
+              })(),
             ],
           }),
         },

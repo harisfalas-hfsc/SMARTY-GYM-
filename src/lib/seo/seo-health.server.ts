@@ -153,6 +153,45 @@ export async function runSeoHealth(db: SupabaseClient): Promise<SeoHealthItem[]>
     add("google", "Google Search Console", "warn", e instanceof Error ? e.message : String(e));
   }
 
+  // 4b. AI-crawler files and hidden FAQ data.
+  try {
+    const problems: string[] = [];
+    for (const f of ["/llms.txt", "/llms-full.txt", "/ai.txt"]) {
+      const { status, body } = await fetchText(`${SITE_URL}${f}`);
+      if (status !== 200 || body.trim().length < 200) problems.push(`${f}: HTTP ${status}`);
+    }
+    const robots = await fetchText(`${SITE_URL}/robots.txt`);
+    for (const bot of ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended", "Bingbot"]) {
+      if (!robots.body.includes(bot)) problems.push(`robots.txt missing ${bot}`);
+    }
+    const faqPages = ["/the-smarty-method", "/training-load-science", "/smarty-workouts/category/muscle-building",
+      ...locs.filter((u) => /\/blog\/[a-z0-9-]+$/.test(u)).slice(0, 2).map((u) => new URL(u).pathname)];
+    for (const path of faqPages) {
+      const { status, body } = await fetchText(`${SITE_URL}${path}`);
+      if (status !== 200 || !body.includes('"FAQPage"')) problems.push(`${path}: no FAQ data`);
+    }
+    add("ai-crawlers", "AI crawler files & FAQ data", problems.length ? "warn" : "pass",
+      problems.length ? problems.slice(0, 8).join("; ") : `AI guides live, AI crawlers named, FAQ data on ${faqPages.length} pages`);
+  } catch (e) {
+    add("ai-crawlers", "AI crawler files & FAQ data", "warn", e instanceof Error ? e.message : String(e));
+  }
+
+  // 4c. Searches that cannot convert (SmartyGym has no physical location).
+  try {
+    const end = new Date(Date.now() - 3 * 86400000).toISOString().slice(0, 10);
+    const start = new Date(Date.now() - 31 * 86400000).toISOString().slice(0, 10);
+    const r = (await gsc(`/webmasters/v3/sites/${encodeURIComponent(GSC_SITE)}/searchAnalytics/query`, {
+      method: "POST",
+      body: JSON.stringify({ startDate: start, endDate: end, dimensions: ["query"], rowLimit: 500 }),
+    })) as { rows?: { keys: string[]; impressions: number }[] };
+    const bad = (r.rows ?? []).filter((x) => /near me|24 ?h|24 hour|opening hours|open now|membership near/i.test(x.keys[0] ?? ""));
+    const imps = bad.reduce((n, x) => n + x.impressions, 0);
+    add("mismatch-queries", "Wrong-intent searches (local gym)", bad.length ? "warn" : "pass",
+      bad.length ? `${bad.length} local-gym searches, ${imps} impressions: ${bad.slice(0, 5).map((x) => x.keys[0]).join(", ")}` : "No local-gym searches in the last 28 days");
+  } catch (e) {
+    add("mismatch-queries", "Wrong-intent searches (local gym)", "warn", e instanceof Error ? e.message : String(e));
+  }
+
   // 5. Search-intent gaps against our own keyword index and public pages.
   try {
     const index = await readKeywordIndex();

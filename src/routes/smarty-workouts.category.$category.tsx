@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { listSmartyWorkouts, setSmartyWorkoutFavorite, type SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { CATEGORY_DETAILS, categoryFromSlug } from "@/lib/smarty-workout-categories";
+import { categoryFaq, faqSchema } from "@/lib/seo/faq";
 import { CATEGORY_FORMATS, type Category } from "@/lib/workout/spec";
 import { WorkoutCard, kindForWorkout } from "@/components/wod/WodMobileCards";
 
@@ -38,6 +39,20 @@ export const Route = createFileRoute("/smarty-workouts/category/$category")({
         ...(loaderData ? [] : [{ name: "robots", content: "noindex" }]),
       ],
       links: [{ rel: "canonical", href: `https://smartygym.com/smarty-workouts/category/${params.category}` }],
+      scripts: loaderData
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                ...faqSchema(
+                  `https://smartygym.com/smarty-workouts/category/${params.category}`,
+                  categoryFaq(label, CATEGORY_DETAILS[loaderData.category].description, params.category),
+                ),
+              }),
+            },
+          ]
+        : [],
     };
   },
   notFoundComponent: () => (

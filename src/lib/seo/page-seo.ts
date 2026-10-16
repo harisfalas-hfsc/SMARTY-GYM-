@@ -49,7 +49,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
     name: "Home",
     title: "Online Gym & Personalized Workout Plans | SmartyGym",
     description:
-      "An online gym with a personal coach: get personalized workouts built around your goals, your equipment and your schedule, programmed on sports science.",
+      "Online workout coach, not a local gym: personalized home and gym workout plans built around your goals, equipment and schedule, on sports science.",
     keyphrase: "online gym with a personal coach",
     keywords: [
       "personalized workout generator",

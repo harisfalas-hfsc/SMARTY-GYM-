@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { faqSchema, TRAINING_LOAD_FAQ } from "@/lib/seo/faq";
 import {
   Activity,
   BarChart3,
@@ -60,6 +61,7 @@ export const Route = createFileRoute("/training-load-science")({
               publisher: { "@id": `${SITE}/#organization` },
               isPartOf: { "@id": `${SITE}/#website` },
             },
+            faqSchema(URL, TRAINING_LOAD_FAQ),
             {
               "@type": "BreadcrumbList",
               itemListElement: [
