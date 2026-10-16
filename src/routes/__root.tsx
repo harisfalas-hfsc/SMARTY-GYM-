@@ -33,7 +33,7 @@ const SITE_URL = "https://smartygym.com";
 const OG_IMAGE = "https://smartygym.com/og-social.jpg";
 
 const SITE_DESCRIPTION =
-  "Personalized workouts built from your goals, experience, equipment and limitations, guided by Smarty Coach and sports scientist Haris Falas.";
+  "Online workout coach: personalized workouts built from your goals, experience, equipment and limitations, guided by Smarty Coach and sports scientist Haris Falas. Train at home or in any gym.";
 
 const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var q=new URLSearchParams(location.search);var marked=q.get('nativeApp')==='true'||q.get('forceHideBadge')==='true';var ua=navigator.userAgent||'';var android=/Android/i.test(ua);var androidWebView=android&&(ua.indexOf('; wv)')>=0||ua.indexOf(';wv)')>=0||(ua.indexOf('Version/')>=0&&ua.indexOf('Chrome/')>=0));var iosWebView=/(iPhone|iPad|iPod)/i.test(ua)&&/AppleWebKit/i.test(ua)&&!/Safari/i.test(ua);var native=!!window.Capacitor||marked||androidWebView||iosWebView;if(!native)return;var r=document.documentElement;r.classList.add('native-shell');r.style.backgroundColor='#000';var hide=function(){try{var p=window.Capacitor&&window.Capacitor.Plugins;if(!p)return;var legacy=p.StatusBar;if(legacy&&typeof legacy.setOverlaysWebView==='function'){Promise.resolve(legacy.setOverlaysWebView({overlay:true})).catch(function(){});}var bars=p.SystemBars||legacy;if(bars&&typeof bars.hide==='function'){Promise.resolve(bars.hide({bar:'StatusBar'})).catch(function(){});}}catch(e){}};hide();document.addEventListener('deviceready',hide,{once:true});window.addEventListener('load',hide,{once:true});}catch(e){}})();`;
 
@@ -382,6 +382,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "shortcut icon", href: "/favicon.ico" },
       { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "alternate", type: "text/plain", href: "/llms.txt", title: "LLM site summary" },
+      { rel: "alternate", type: "text/plain", href: "/llms-full.txt", title: "LLM full site text" },
     ],
     scripts: [
       {

@@ -40,6 +40,7 @@ import {
 } from "recharts";
 import { exportBrandPagePdf } from "@/lib/brand-page-export";
 import { iconTone } from "@/lib/icon-tone";
+import { faqSchema, METHOD_FAQ, METHOD_FACTS } from "@/lib/seo/faq";
 import { REPORT_LINE_WIDTH, REPORT_DOT_RADIUS } from "@/lib/report-chart";
 
 export const Route = createFileRoute("/the-smarty-method")({
@@ -55,7 +56,7 @@ export const Route = createFileRoute("/the-smarty-method")({
         name: "keywords",
         content: withExtendedKeywords(
           "/the-smarty-method",
-          "the smarty method, smartygym performance system, periodization, workout structure, strength and conditioning method, science based training",
+          "the smarty method, smartygym performance system, sports science workout programs, online workout coach, periodization, workout structure, strength and conditioning method, science based training",
         ),
       },
       { property: "og:title", content: "The Smarty Method | SmartyGym" },
@@ -85,6 +86,13 @@ export const Route = createFileRoute("/the-smarty-method")({
               isPartOf: { "@id": "https://smartygym.com/#website" },
               about: { "@id": "https://smartygym.com/haris-falas#person" },
               publisher: { "@id": "https://smartygym.com/#organization" },
+            },
+            faqSchema("https://smartygym.com/the-smarty-method", METHOD_FAQ),
+            {
+              "@type": "ItemList",
+              "@id": "https://smartygym.com/the-smarty-method#facts",
+              name: "How SmartyGym works",
+              itemListElement: METHOD_FACTS.map((name, i) => ({ "@type": "ListItem", position: i + 1, name })),
             },
             {
               "@type": "BreadcrumbList",
