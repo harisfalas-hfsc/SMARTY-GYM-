@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Add latest-three published Smarty Workouts below the mobile homepage training carousel, matching About/Community/Coach cards; verify real cards, links, ordering and unchanged desktop.
+
 - [x] Unify Smarty publishing into one announcement per action, with category/collection links, retry protection and delivery reporting; 448 tests pass and build OK. Signed-in bulk confirmation verified; 50 workouts remain hidden. Publication/delivery tested with isolated fixtures, not real customer sends.
 
 - [x] Add admin workout filtered totals and explicit selection-scoped show/hide controls; real admin shows 50 hidden Muscle Building results and all/individual selection, member archive selects all 166 across pages. Publication announcements now follow the unified per-action rule above. No visibility changes or emails triggered during verification.
