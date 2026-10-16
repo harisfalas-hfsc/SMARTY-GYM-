@@ -35,13 +35,13 @@ export const Route = createFileRoute("/about")({
         content:
           withExtendedKeywords("/about", "about smartygym, coaching philosophy, evidence based training, strength and conditioning, periodization, training methodology"),
       },
-      { title: "About Smarty Gym — Your Fitness Coach" },
+      { title: "About SmartyGym — Your Online Workout Coach" },
       {
         name: "description",
         content:
-          "Smarty Gym is not another workout app. Smarty Coach is a fitness coach built on the sports science of Haris Falas (BSc Sport Science, NSCA CSCS): strength, hypertrophy, conditioning and mobility programming with periodization and progressive overload.",
+          "SmartyGym is not another workout app. Smarty Coach is an online workout coach built on the sports science of Haris Falas (BSc Sport Science, NSCA CSCS): strength, hypertrophy, conditioning and mobility programming with periodization and progressive overload.",
       },
-      { property: "og:title", content: "About Smarty Gym — Your Fitness Coach" },
+      { property: "og:title", content: "About SmartyGym — Your Online Workout Coach" },
       {
         property: "og:description",
         content:

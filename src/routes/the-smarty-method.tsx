@@ -87,7 +87,7 @@ export const Route = createFileRoute("/the-smarty-method")({
               about: { "@id": "https://smartygym.com/haris-falas#person" },
               publisher: { "@id": "https://smartygym.com/#organization" },
             },
-            faqSchema("https://smartygym.com/the-smarty-method", METHOD_FAQ),
+            faqSchema("https://smartygym.com/the-smarty-method", [...METHOD_FAQ, ...METHOD_COMPARISON_FAQ]),
             {
               "@type": "ItemList",
               "@id": "https://smartygym.com/the-smarty-method#facts",
