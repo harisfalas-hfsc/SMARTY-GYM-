@@ -426,6 +426,12 @@ export function ExerciseLibraryPage({
   }
 
   const navigate = useNavigate();
+  // Opening an exercise moves to its own crawlable address; the slug route
+  // renders this same page with the detail dialog already open.
+  const openExercise = (ex: Exercise) => {
+    if (ex.slug) void navigate({ to: "/exercise-library/$slug", params: { slug: ex.slug } });
+    else setSelected(ex);
+  };
   const { section: targetSection } = Route.useSearch();
   const targetLabel = targetSection ? DRAFT_SECTIONS.find((s) => s.id === targetSection)!.label : "";
   const [draft, setDraft] = useState<ManualDraft | null>(null);
