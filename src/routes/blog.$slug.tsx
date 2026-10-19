@@ -74,7 +74,7 @@ export const Route = createFileRoute("/blog/$slug")({
         ],
       };
     }
-    const a = loaderData;
+    const a = loaderData.article;
     const url = `${SITE}/blog/${a.slug}`;
     // The optimization job writes seo_title / seo_description; until it has run,
     // the article's own title and excerpt are used.
