@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import { useEffect, useMemo, useRef } from "react";
 import { BlogArticleShare } from "@/components/BlogArticleShare";
 import { markArticleRead } from "@/lib/blog-read";
+import { linkifyMentions, type LinkTarget } from "@/lib/seo/inline-links";
+import { getArticleLinkTargets } from "@/lib/seo/exercise-public.functions";
 
 import DOMPurify from "dompurify";
 import { Calendar, Clock } from "lucide-react";
@@ -56,7 +58,13 @@ async function loadArticle(slug: string): Promise<Article> {
 }
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => loadArticle(params.slug),
+  loader: async ({ params }) => {
+    const [article, linkTargets] = await Promise.all([
+      loadArticle(params.slug),
+      getArticleLinkTargets().catch((): LinkTarget[] => []),
+    ]);
+    return { article, linkTargets };
+  },
   head: ({ loaderData, params }) => {
     if (!loaderData) {
       return {
