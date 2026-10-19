@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Add badge-style article sharing at the top right, with canonical article links, header pictures, native apps and workout-style alternatives; verify phone/desktop and sharing payloads.
+- [x] Add top-right badge-style blog sharing with canonical links, header pictures and workout-style alternatives; 7 tests and build pass. Real Mastery article checked at 384/1280px, clipboard and WhatsApp/email destinations verified, captured native picture inspected. Installed-app delivery remains unverified.
 
 - [x] Add latest-three published Smarty Workouts below the mobile homepage training carousel, matching About/Community/Coach cards; real three covers, matching 68px card styling, collection parity, links and desktop exclusion checked at 394/1280px; 3 ordering tests pass, build OK. No workouts published or modified.
 
