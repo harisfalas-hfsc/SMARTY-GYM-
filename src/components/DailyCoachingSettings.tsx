@@ -18,6 +18,7 @@ import {
 } from "@/lib/daily.functions";
 import { loadRemote } from "@/lib/remote-data";
 import { useAuth } from "@/hooks/useAuth";
+import { BrowserPushToggle } from "@/components/BrowserPushToggle";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const ZONES = [
@@ -193,6 +194,9 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
             onCheckedChange={(v) => patch({ email_weekly_insights: v })}
           />
         </div>
+
+        <BrowserPushToggle />
+
 
       </div>
 

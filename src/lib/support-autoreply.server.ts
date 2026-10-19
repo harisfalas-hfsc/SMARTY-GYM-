@@ -66,6 +66,8 @@ export async function autoRespondToSupportMessage(input: {
         body: body.slice(0, 240),
         dedupe_key: `support-auto-${insertedId}`,
       } as never);
+      const { sendPushToUsers } = await import("@/lib/push-notify.server");
+      await sendPushToUsers(supabaseAdmin as never, [userId], { title: escalated ? "Your message is with Haris" : "SmartyGym answered your message", body, path: "/inbox", tag: `support-auto-${insertedId}` });
     }
 
     // The member gets the answer by email too.

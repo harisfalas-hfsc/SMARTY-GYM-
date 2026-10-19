@@ -256,7 +256,11 @@ export async function runWeeklyInsights(
         const content = insightsInboxContent(i, first);
         const { error } = await db.from("notifications").insert({ user_id: p.id, kind: "weekly_insights", title: content.title, body: content.body, dedupe_key: inboxKey(p.week) } as never);
         if (error && error.code !== "23505") throw new Error(error.message);
-        if (!error) inbox++;
+        if (!error) {
+          inbox++;
+          const { sendPushToUsers } = await import("@/lib/push-notify.server");
+          await sendPushToUsers(db, [p.id], { title: content.title, body: `Hi ${first}, your weekly progress report is ready.`, path: "/logbook", tag: inboxKey(p.week) });
+        }
       }
       const ek = emailKey(p.week);
       if (p.email && p.email_weekly_insights !== false && !emailSent.has(`${p.id}|${ek}`)) {

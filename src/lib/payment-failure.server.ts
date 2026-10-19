@@ -72,7 +72,11 @@ export async function notifyPaymentFailure(input: {
 
     try {
       const { notifyOnce } = await import("@/lib/billing-notify.server");
-      await notifyOnce(db, { userId, kind: "billing", title, body, dedupeKey });
+      const created = await notifyOnce(db, { userId, kind: "billing", title, body, dedupeKey });
+      if (created) {
+        const { sendPushToUsers } = await import("@/lib/push-notify.server");
+        await sendPushToUsers(db, [userId], { title, body, path: "/account", tag: dedupeKey });
+      }
     } catch (e) {
       console.error("[payment-failure] notification failed:", e);
     }
