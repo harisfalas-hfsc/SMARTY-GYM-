@@ -37,6 +37,7 @@ describe("SEO validation", () => {
     expect(ROUTE_CLASSIFICATION["/smarty-workouts/$workoutId"]).toBe("indexable");
     const card: PublicSmartyWorkout = {
       id: "f434a9ae-56d4-44ed-8b57-b9ca215c0bf3", name: "Mindful Recovery Session",
+      slug: "mindful-recovery-session", difficulty_stars: 2,
       category: "RECOVERY", format: "MIX", focus: null, duration_min: 30,
       equipment: ["dumbbells"], image_url: "/api/public/workout-cover/example.png", updated_at: "2026-08-26T00:00:00Z",
     };
