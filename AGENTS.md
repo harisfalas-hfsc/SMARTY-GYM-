@@ -38,3 +38,4 @@
 - Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs.
 - Workout sharing rechecks public originals and captures only WorkoutDisplay headers; blog sharing uses canonical article links and the same header capture — why: native pictures without private prescriptions.
 - Interval/round steps log one set_logs row per interval (interval_index), count from statedIntervals in parse-steps.ts — why: training load sums every interval actually done, never one.
+- Browser push mirrors paired inbox+email messages only via sendPushToUsers (src/lib/push-notify.server.ts), sent only to accounts that newly got the inbox row; tokens in push_subscriptions — why: one push per message, retries never duplicate.
