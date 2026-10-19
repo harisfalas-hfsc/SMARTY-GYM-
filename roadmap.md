@@ -101,3 +101,14 @@
 - [ ] 6. HTML hygiene: img alts, sr-only h1 span, viewport fix, remove meta keywords, www→apex 301 (report if server-side only), accurate lastmod, unique titles
 - [ ] 7. Brand entity: homepage title brand-first, og:site_name/application-name, Organization @id + alternateName/slogan/founder/areaServed/parentOrganization, Person @id + sameAs, AboutPage, /logo.png ≥112px, report JSON-LD for /, /about, /haris-falas
 - [ ] 8. Verify: sitemap URL counts, 5 prerender samples (h1+JSON-LD), list skipped visible-UI items
+
+## SEO-only background task (2026-10-19) — DONE
+- [x] SSR loader data for blog index (46 articles in HTML) and exercise library (60 cards in HTML)
+- [x] Workout slug URLs + UUID 301 + canonical + ExercisePlan/BreadcrumbList schema + sitemap slug paths (581)
+- [x] Per-exercise pages /exercise-library/$slug (1,397) with HowTo/BreadcrumbList, crawlable card links, exercise sitemap
+- [x] BlogPosting schema, Twitter metadata on blog/training/workouts/wod/community/shared pages
+- [x] In-article internal links to exercises/workouts (invisible anchors, existing styling)
+- [x] Organization/MobileApplication/Person entity work, /logo.png, brand-first homepage title, sr-only H1 (mobile+desktop)
+- [x] Keywords meta removed everywhere, viewport zoom restriction removed, sitemap-index.xml + robots.txt
+- [x] 460 tests pass, types clean, build OK
+- Skipped (would change visuals or need input): build-time prerender (SSR already serves full HTML; prerendering data pages risks stale content), Haris LinkedIn/athletestests sameAs links (URLs not provided), foundingDate (not verified), www→apex 301 (hosting-level, verify at domain host)
