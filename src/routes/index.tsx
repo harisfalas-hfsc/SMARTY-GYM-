@@ -59,7 +59,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebPage",
           "@id": "https://smartygym.com/#webpage",
           url: "https://smartygym.com/",
-          name: "Online Gym & Personalized Workout Plans | SmartyGym",
+          name: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
           description:
             "An online gym with a personal coach: create your workout in seconds and train around your goals, your equipment and your schedule.",
           inLanguage: "en",
