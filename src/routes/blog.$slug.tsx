@@ -125,7 +125,7 @@ export const Route = createFileRoute("/blog/$slug")({
             "@context": "https://schema.org",
             "@graph": [
               {
-                "@type": "Article",
+                "@type": "BlogPosting",
                 headline: (a.seo_title || a.title).slice(0, 110),
                 alternativeHeadline: a.title,
                 description,

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { Calendar, Check, Clock, Newspaper, X } from "lucide-react";
@@ -64,8 +64,15 @@ export async function fetchPublishedArticles(): Promise<BlogListItem[]> {
   return (data as BlogListItem[] | null) ?? [];
 }
 
+const blogArticlesQuery = queryOptions({
+  queryKey: ["blog-articles"],
+  queryFn: fetchPublishedArticles,
+});
+
 export const Route = createFileRoute("/blog/")({
   validateSearch: zodValidator(searchSchema),
+  // Load the list on the server too, so the rendered HTML already contains it.
+  loader: ({ context }) => context.queryClient.ensureQueryData(blogArticlesQuery),
   head: () => ({
     meta: [
       {
@@ -81,6 +88,8 @@ export const Route = createFileRoute("/blog/")({
       { property: "og:url", content: URL },
       { property: "og:image", content: `${SITE}/og-social.jpg` },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
       { name: "twitter:image", content: `${SITE}/og-social.jpg` },
     ],
     links: [{ rel: "canonical", href: URL }],
@@ -115,10 +124,7 @@ function BlogIndex() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/blog/" });
   const { isRead, toggleRead } = useBlogReadState();
-  const { data: articles, isLoading } = useQuery({
-    queryKey: ["blog-articles"],
-    queryFn: fetchPublishedArticles,
-  });
+  const { data: articles, isLoading } = useSuspenseQuery(blogArticlesQuery);
 
   const sort = search.sort ?? "newest";
   const status = search.status ?? "all";
