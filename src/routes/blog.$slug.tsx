@@ -226,12 +226,15 @@ function ArticleMissing() {
 }
 
 function ArticleDetail() {
-  const article = Route.useLoaderData();
+  const { article, linkTargets } = Route.useLoaderData();
   const headerRef = useRef<HTMLDivElement>(null);
   const safeHtml = useMemo(() => {
-    if (typeof window === "undefined") return article.content;
-    return DOMPurify.sanitize(article.content, { ADD_ATTR: ["target", "rel"] });
-  }, [article.content]);
+    const clean =
+      typeof window === "undefined"
+        ? article.content
+        : DOMPurify.sanitize(article.content, { ADD_ATTR: ["target", "rel"] });
+    return linkifyMentions(clean, linkTargets);
+  }, [article.content, linkTargets]);
 
   useEffect(() => {
     markArticleRead(article.slug, true);
