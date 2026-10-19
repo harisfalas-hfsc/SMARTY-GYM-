@@ -126,7 +126,7 @@ export const Route = createFileRoute("/exercise-library")({
   component: ExerciseLibraryPage,
 });
 
-type Exercise = {
+export type Exercise = {
   id: string;
   slug: string | null;
   name: string;
