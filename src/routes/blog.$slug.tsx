@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { BlogArticleShare } from "@/components/BlogArticleShare";
 import { markArticleRead } from "@/lib/blog-read";
 
 import DOMPurify from "dompurify";
@@ -218,6 +219,7 @@ function ArticleMissing() {
 
 function ArticleDetail() {
   const article = Route.useLoaderData();
+  const headerRef = useRef<HTMLDivElement>(null);
   const safeHtml = useMemo(() => {
     if (typeof window === "undefined") return article.content;
     return DOMPurify.sanitize(article.content, { ADD_ATTR: ["target", "rel"] });
@@ -252,11 +254,13 @@ function ArticleDetail() {
 
       <article>
         <Card className="border-2 border-primary p-4 md:p-6">
-          <div className="mb-5 grid grid-cols-1 gap-4 md:grid-cols-[1.35fr_0.9fr] md:items-start md:gap-6">
+          <div ref={headerRef} className="mb-5">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <Badge variant="secondary" className="w-fit">{article.category}</Badge>
+              <BlogArticleShare article={article} headerRef={headerRef} />
+            </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.35fr_0.9fr] md:items-start md:gap-6">
             <div className="flex flex-col">
-              <Badge variant="secondary" className="mb-3 w-fit">
-                {article.category}
-              </Badge>
               <h1 className="mb-3 text-3xl font-bold leading-tight md:text-4xl">
                 {article.title}
               </h1>
@@ -305,6 +309,7 @@ function ArticleDetail() {
                 />
               </div>
             )}
+            </div>
           </div>
 
           <div

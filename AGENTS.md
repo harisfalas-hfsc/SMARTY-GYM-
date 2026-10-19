@@ -36,5 +36,5 @@
 - Mass emails use Resend dedupe; others use managed sending. All signatures share email-brand and EmailBrandFooter — why: reliable delivery, consistent branding.
 - Insights shares one report across app, inbox and email; no Insights PDF — why: parity/privacy.
 - Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs.
-- Workout social sharing resolves public Smarty/community originals, rechecks anonymous visibility and captures only the shared header through WorkoutDisplay — why: consistent actions and pictures without exposing private copies or prescriptions.
+- Workout sharing rechecks public originals and captures only WorkoutDisplay headers; blog sharing uses canonical article links and the same header capture — why: native pictures without private prescriptions.
 - Interval/round steps log one set_logs row per interval (interval_index), count from statedIntervals in parse-steps.ts — why: training load sums every interval actually done, never one.
