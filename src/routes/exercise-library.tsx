@@ -305,7 +305,15 @@ function PreferenceButtons({
   );
 }
 
-function ExerciseLibraryPage() {
+export function ExerciseLibraryPage({
+  initialExercise = null,
+  onCloseSelected,
+}: {
+  /** Set by the /exercise-library/$slug route so the detail dialog opens directly. */
+  initialExercise?: Exercise | null;
+  /** Set by the slug route to return to the library address when the dialog closes. */
+  onCloseSelected?: () => void;
+}) {
 
   const ssrList = Route.useLoaderData().initialExercises;
   const [exercises, setExercises] = useState<Exercise[]>(ssrList);
@@ -516,7 +524,7 @@ function ExerciseLibraryPage() {
       let query = supabase
         .from("exercises")
         .select(
-          "id,name,body_part,equipment,target_muscle,secondary_muscles,instructions,difficulty,category,description,gif_path",
+          "id,slug,name,body_part,equipment,target_muscle,secondary_muscles,instructions,difficulty,category,description,gif_path",
         );
       if (bodyPart !== ALL) query = query.eq("body_part", bodyPart);
       if (equipment !== ALL) query = query.eq("equipment", equipment);
@@ -688,11 +696,11 @@ function ExerciseLibraryPage() {
                     key={ex.id}
                     className="flex items-start gap-3 rounded-2xl border bg-card p-3 text-left transition-colors hover:border-primary"
                   >
-                    <button onClick={() => setSelected(ex)} className="shrink-0" aria-label={`Open ${ex.name}`}>
+                    <button onClick={() => openExercise(ex)} className="shrink-0" aria-label={`Open ${ex.name}`}>
                       <ExerciseGif path={ex.gif_path} alt={ex.name} />
                     </button>
                     <div className="min-w-0 flex-1">
-                      <button onClick={() => setSelected(ex)} className="block w-full text-left">
+                      <button onClick={() => openExercise(ex)} className="block w-full text-left">
                         <span className="block text-sm font-bold capitalize leading-snug">{ex.name}</span>
                         <span className="mt-1 flex flex-wrap gap-1">
                           {[ex.body_part, ex.equipment].filter(Boolean).map((tag) => (
@@ -740,7 +748,7 @@ function ExerciseLibraryPage() {
         </div>
       ) : null}
 
-      <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
+      <Dialog open={!!selected} onOpenChange={(open) => !open && (onCloseSelected ? onCloseSelected() : setSelected(null))}>
         <DialogContent hideClose className="max-h-[78vh] w-[calc(100vw-3rem)] max-w-md gap-0 overflow-y-auto overflow-x-hidden rounded-2xl border-2 border-primary p-0 sm:max-h-[86vh] sm:w-full sm:max-w-lg">
           {/* Media hero — flush to the top edge of the card */}
           <div className="relative w-full overflow-hidden rounded-t-[calc(1rem-2px)] border-b-2 border-primary bg-white">
