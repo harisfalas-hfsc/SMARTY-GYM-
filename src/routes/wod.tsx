@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useEffect, useState } from "react";
 import { Clock, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";

@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { isOnline } from "@/lib/connectivity";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";

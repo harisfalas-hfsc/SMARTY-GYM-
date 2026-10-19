@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";

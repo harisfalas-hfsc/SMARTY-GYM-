@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { playTimerBeep } from "@/lib/timer-beep";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";

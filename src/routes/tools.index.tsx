@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Timer, Repeat, Dumbbell, type LucideIcon } from "lucide-react";
 import timerCard from "@/assets/tools/timer-card.jpg";
 import roundsCard from "@/assets/tools/rounds-card.jpg";

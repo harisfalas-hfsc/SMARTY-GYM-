@@ -1,6 +1,5 @@
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { CreatorLink } from "@/components/community/CreatorLink";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { loadRemoteCached } from "@/lib/remote-data";
 import { useEffect, useState } from "react";

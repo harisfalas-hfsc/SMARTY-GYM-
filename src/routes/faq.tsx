@@ -1,5 +1,4 @@
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleHelp } from "lucide-react";
 import { SmartyCard } from "@/components/SmartyCard";

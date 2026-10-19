@@ -1,6 +1,5 @@
 import { iconTone } from "@/lib/icon-tone";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Heart, Quote, UserRound } from "lucide-react";
 import harisPhoto from "@/assets/haris-falas-coach.jpg";
 import { Button } from "@/components/ui/button";

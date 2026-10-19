@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard } from "@/components/SmartyCard";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 
 const SITE = "https://smartygym.com";
 const URL = `${SITE}/training-load-science`;

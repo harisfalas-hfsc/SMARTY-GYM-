@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { GymDescription } from "@/lib/brand-copy";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";

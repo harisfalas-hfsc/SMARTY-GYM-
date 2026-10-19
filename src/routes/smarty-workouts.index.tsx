@@ -5,7 +5,6 @@ import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { getSmartyWorkoutCounts, getFeaturedSmartyWorkouts, SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
 import { WorkoutCard, kindForWorkout } from "@/components/wod/WodMobileCards";
 import { categoryLabel } from "@/lib/smarty-workout-row";

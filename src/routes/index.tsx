@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
