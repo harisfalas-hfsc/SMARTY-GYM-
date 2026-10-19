@@ -64,7 +64,7 @@ export async function listDefaultLibraryExercises(): Promise<PublicExercise[]> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { loadAllExercises } = await import("@/lib/workout/pool.server");
   const { computeAllowedExerciseIds } = await import("@/lib/workout/allowed-exercises.server");
-  const allowed = computeAllowedExerciseIds(await loadAllExercises(supabaseAdmin));
+  const allowed = [...computeAllowedExerciseIds(await loadAllExercises(supabaseAdmin))];
   if (allowed.length === 0) return [];
   const batches: PublicExercise[][] = [];
   for (let index = 0; index < allowed.length; index += 150) {
