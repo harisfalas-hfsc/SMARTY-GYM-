@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import { useEffect, useMemo, useRef } from "react";
 import { BlogArticleShare } from "@/components/BlogArticleShare";
 import { markArticleRead } from "@/lib/blog-read";
+import { linkifyMentions, type LinkTarget } from "@/lib/seo/inline-links";
+import { getArticleLinkTargets } from "@/lib/seo/exercise-public.functions";
 
 import DOMPurify from "dompurify";
 import { Calendar, Clock } from "lucide-react";
@@ -56,7 +58,13 @@ async function loadArticle(slug: string): Promise<Article> {
 }
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => loadArticle(params.slug),
+  loader: async ({ params }) => {
+    const [article, linkTargets] = await Promise.all([
+      loadArticle(params.slug),
+      getArticleLinkTargets().catch((): LinkTarget[] => []),
+    ]);
+    return { article, linkTargets };
+  },
   head: ({ loaderData, params }) => {
     if (!loaderData) {
       return {
@@ -66,7 +74,7 @@ export const Route = createFileRoute("/blog/$slug")({
         ],
       };
     }
-    const a = loaderData;
+    const a = loaderData.article;
     const url = `${SITE}/blog/${a.slug}`;
     // The optimization job writes seo_title / seo_description; until it has run,
     // the article's own title and excerpt are used.
@@ -125,7 +133,7 @@ export const Route = createFileRoute("/blog/$slug")({
             "@context": "https://schema.org",
             "@graph": [
               {
-                "@type": "Article",
+                "@type": "BlogPosting",
                 headline: (a.seo_title || a.title).slice(0, 110),
                 alternativeHeadline: a.title,
                 description,
@@ -218,12 +226,15 @@ function ArticleMissing() {
 }
 
 function ArticleDetail() {
-  const article = Route.useLoaderData();
+  const { article, linkTargets } = Route.useLoaderData();
   const headerRef = useRef<HTMLDivElement>(null);
   const safeHtml = useMemo(() => {
-    if (typeof window === "undefined") return article.content;
-    return DOMPurify.sanitize(article.content, { ADD_ATTR: ["target", "rel"] });
-  }, [article.content]);
+    const clean =
+      typeof window === "undefined"
+        ? article.content
+        : DOMPurify.sanitize(article.content, { ADD_ATTR: ["target", "rel"] });
+    return linkifyMentions(clean, linkTargets);
+  }, [article.content, linkTargets]);
 
   useEffect(() => {
     markArticleRead(article.slug, true);

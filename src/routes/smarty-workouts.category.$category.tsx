@@ -36,6 +36,8 @@ export const Route = createFileRoute("/smarty-workouts/category/$category")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
         ...(loaderData ? [] : [{ name: "robots", content: "noindex" }]),
       ],
       links: [{ rel: "canonical", href: `https://smartygym.com/smarty-workouts/category/${params.category}` }],
@@ -45,10 +47,20 @@ export const Route = createFileRoute("/smarty-workouts/category/$category")({
               type: "application/ld+json",
               children: JSON.stringify({
                 "@context": "https://schema.org",
-                ...faqSchema(
-                  `https://smartygym.com/smarty-workouts/category/${params.category}`,
-                  categoryFaq(label, CATEGORY_DETAILS[loaderData.category].description, params.category),
-                ),
+                "@graph": [
+                  faqSchema(
+                    `https://smartygym.com/smarty-workouts/category/${params.category}`,
+                    categoryFaq(label, CATEGORY_DETAILS[loaderData.category].description, params.category),
+                  ),
+                  {
+                    "@type": "BreadcrumbList",
+                    itemListElement: [
+                      { "@type": "ListItem", position: 1, name: "Home", item: "https://smartygym.com/" },
+                      { "@type": "ListItem", position: 2, name: "Smarty Workouts", item: "https://smartygym.com/smarty-workouts" },
+                      { "@type": "ListItem", position: 3, name: label, item: `https://smartygym.com/smarty-workouts/category/${params.category}` },
+                    ],
+                  },
+                ].filter(Boolean),
               }),
             },
           ]

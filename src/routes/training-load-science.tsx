@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard } from "@/components/SmartyCard";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 
 const SITE = "https://smartygym.com";
 const URL = `${SITE}/training-load-science`;
@@ -28,13 +27,6 @@ const DESCRIPTION =
 export const Route = createFileRoute("/training-load-science")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content: withExtendedKeywords(
-          "/training-load-science",
-          "training load science, personal training load, strength workload, conditioning workload, workout readiness, Haris Falas training formula",
-        ),
-      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },

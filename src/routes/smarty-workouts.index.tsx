@@ -5,7 +5,6 @@ import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { getSmartyWorkoutCounts, getFeaturedSmartyWorkouts, SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
 import { WorkoutCard, kindForWorkout } from "@/components/wod/WodMobileCards";
 import { categoryLabel } from "@/lib/smarty-workout-row";
@@ -21,7 +20,6 @@ export const Route = createFileRoute("/smarty-workouts/")({
   },
   head: () => ({
     meta: [
-      { name: "keywords", content: withExtendedKeywords("/smarty-workouts", "ready workouts, smarty workouts") },
       { title: "Ready-Made Home & Gym Workouts by Category | SmartyGym" },
       {
         name: "description",
@@ -33,6 +31,8 @@ export const Route = createFileRoute("/smarty-workouts/")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/smarty-workouts" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Ready-Made Home & Gym Workouts by Category | SmartyGym" },
+      { name: "twitter:description", content: "Ready workouts by Haris Falas in nine training categories." },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/smarty-workouts" }],
   }),

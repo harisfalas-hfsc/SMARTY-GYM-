@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useEffect, useState } from "react";
 import { Clock, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -13,11 +12,6 @@ import { WodPeriodizationCalendar } from "@/components/wod/WodPeriodizationCalen
 export const Route = createFileRoute("/wod")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/wod", "workout of the day, wod, daily workout, bodyweight workout of the day, equipment workout of the day, periodized training, recovery day workout"),
-      },
       { title: "Workout of the Day: Daily Home & Gym WOD | SmartyGym" },
       {
         name: "description",
@@ -32,6 +26,8 @@ export const Route = createFileRoute("/wod")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/wod" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Workout of the Day: Daily Home & Gym WOD | SmartyGym" },
+      { name: "twitter:description", content: "Today's two expert-designed workouts — one with equipment, one without." },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/wod" }],
     scripts: [

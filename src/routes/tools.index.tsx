@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Timer, Repeat, Dumbbell, type LucideIcon } from "lucide-react";
 import timerCard from "@/assets/tools/timer-card.jpg";
 import roundsCard from "@/assets/tools/rounds-card.jpg";
@@ -10,11 +9,6 @@ import pageHeroImage from "@/assets/explore-tools.jpg";
 export const Route = createFileRoute("/tools/")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/tools", "free training tools, workout timer, interval timer, rounds tracker, 1rm calculator, one rep max calculator"),
-      },
       { title: "Free Workout Tools — Timer & 1RM | SmartyGym" },
       {
         name: "description",

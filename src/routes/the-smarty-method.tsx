@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,13 +50,6 @@ export const Route = createFileRoute("/the-smarty-method")({
         name: "description",
         content:
           "Discover The Smarty Method — a complete performance system designed by Strength & Conditioning Coach Haris Falas. Science-based workouts and intelligent periodization.",
-      },
-      {
-        name: "keywords",
-        content: withExtendedKeywords(
-          "/the-smarty-method",
-          "the smarty method, smartygym performance system, sports science workout programs, online workout coach, periodization, workout structure, strength and conditioning method, science based training",
-        ),
       },
       { property: "og:title", content: "The Smarty Method | SmartyGym" },
       {

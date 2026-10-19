@@ -34,6 +34,8 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SharedWorkoutsRouteImport } from './routes/shared-workouts'
+import { Route as SitemapExercisesDotxmlRouteImport } from './routes/sitemap-exercises[.]xml'
+import { Route as SitemapIndexDotxmlRouteImport } from './routes/sitemap-index[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SmartyCheckinsRouteImport } from './routes/smarty-checkins'
 import { Route as SmartyRitualRouteImport } from './routes/smarty-ritual'
@@ -57,6 +59,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as CommunityWorkoutsRouteImport } from './routes/community.workouts'
+import { Route as ExerciseLibrarySlugRouteImport } from './routes/exercise-library.$slug'
 import { Route as SmartyWorkoutsIndexRouteImport } from './routes/smarty-workouts.index'
 import { Route as SmartyWorkoutsWorkoutIdRouteImport } from './routes/smarty-workouts.$workoutId'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
@@ -206,6 +209,16 @@ const SharedWorkoutsRoute = SharedWorkoutsRouteImport.update({
   path: '/shared-workouts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapExercisesDotxmlRoute = SitemapExercisesDotxmlRouteImport.update({
+  id: '/sitemap-exercises.xml',
+  path: '/sitemap-exercises.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapIndexDotxmlRoute = SitemapIndexDotxmlRouteImport.update({
+  id: '/sitemap-index.xml',
+  path: '/sitemap-index.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -322,6 +335,11 @@ const CommunityWorkoutsRoute = CommunityWorkoutsRouteImport.update({
   id: '/community/workouts',
   path: '/community/workouts',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ExerciseLibrarySlugRoute = ExerciseLibrarySlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ExerciseLibraryRoute,
 } as any)
 const SmartyWorkoutsIndexRoute = SmartyWorkoutsIndexRouteImport.update({
   id: '/smarty-workouts/',
@@ -454,7 +472,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
-  '/exercise-library': typeof ExerciseLibraryRoute
+  '/exercise-library': typeof ExerciseLibraryRouteWithChildren
   '/faq': typeof FaqRoute
   '/founder-note': typeof FounderNoteRoute
   '/glossary': typeof GlossaryRoute
@@ -467,6 +485,8 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
+  '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
+  '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
@@ -487,6 +507,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/exercise-library/$slug': typeof ExerciseLibrarySlugRoute
   '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -525,7 +546,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
-  '/exercise-library': typeof ExerciseLibraryRoute
+  '/exercise-library': typeof ExerciseLibraryRouteWithChildren
   '/faq': typeof FaqRoute
   '/founder-note': typeof FounderNoteRoute
   '/glossary': typeof GlossaryRoute
@@ -538,6 +559,8 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
+  '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
+  '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
@@ -558,6 +581,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/exercise-library/$slug': typeof ExerciseLibrarySlugRoute
   '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -598,7 +622,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
-  '/exercise-library': typeof ExerciseLibraryRoute
+  '/exercise-library': typeof ExerciseLibraryRouteWithChildren
   '/faq': typeof FaqRoute
   '/founder-note': typeof FounderNoteRoute
   '/glossary': typeof GlossaryRoute
@@ -611,6 +635,8 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
+  '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
+  '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
@@ -631,6 +657,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
+  '/exercise-library/$slug': typeof ExerciseLibrarySlugRoute
   '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -684,6 +711,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/shared-workouts'
+    | '/sitemap-exercises.xml'
+    | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
     | '/smarty-ritual'
@@ -704,6 +733,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/exercise-library/$slug'
     | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -755,6 +785,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/shared-workouts'
+    | '/sitemap-exercises.xml'
+    | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
     | '/smarty-ritual'
@@ -775,6 +807,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/exercise-library/$slug'
     | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -827,6 +860,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/shared-workouts'
+    | '/sitemap-exercises.xml'
+    | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
     | '/smarty-ritual'
@@ -847,6 +882,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/community/workouts'
+    | '/exercise-library/$slug'
     | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -887,7 +923,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CreateYourWorkoutRoute: typeof CreateYourWorkoutRoute
   DisclaimerRoute: typeof DisclaimerRoute
-  ExerciseLibraryRoute: typeof ExerciseLibraryRoute
+  ExerciseLibraryRoute: typeof ExerciseLibraryRouteWithChildren
   FaqRoute: typeof FaqRoute
   FounderNoteRoute: typeof FounderNoteRoute
   GlossaryRoute: typeof GlossaryRoute
@@ -900,6 +936,8 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SharedWorkoutsRoute: typeof SharedWorkoutsRoute
+  SitemapExercisesDotxmlRoute: typeof SitemapExercisesDotxmlRoute
+  SitemapIndexDotxmlRoute: typeof SitemapIndexDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SmartyCheckinsRoute: typeof SmartyCheckinsRoute
   SmartyRitualRoute: typeof SmartyRitualRoute
@@ -1115,6 +1153,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SharedWorkoutsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap-exercises.xml': {
+      id: '/sitemap-exercises.xml'
+      path: '/sitemap-exercises.xml'
+      fullPath: '/sitemap-exercises.xml'
+      preLoaderRoute: typeof SitemapExercisesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-index.xml': {
+      id: '/sitemap-index.xml'
+      path: '/sitemap-index.xml'
+      fullPath: '/sitemap-index.xml'
+      preLoaderRoute: typeof SitemapIndexDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -1275,6 +1327,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/community/workouts'
       preLoaderRoute: typeof CommunityWorkoutsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/exercise-library/$slug': {
+      id: '/exercise-library/$slug'
+      path: '/$slug'
+      fullPath: '/exercise-library/$slug'
+      preLoaderRoute: typeof ExerciseLibrarySlugRouteImport
+      parentRoute: typeof ExerciseLibraryRoute
     }
     '/smarty-workouts/': {
       id: '/smarty-workouts/'
@@ -1461,6 +1520,18 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface ExerciseLibraryRouteChildren {
+  ExerciseLibrarySlugRoute: typeof ExerciseLibrarySlugRoute
+}
+
+const ExerciseLibraryRouteChildren: ExerciseLibraryRouteChildren = {
+  ExerciseLibrarySlugRoute: ExerciseLibrarySlugRoute,
+}
+
+const ExerciseLibraryRouteWithChildren = ExerciseLibraryRoute._addFileChildren(
+  ExerciseLibraryRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -1475,7 +1546,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CreateYourWorkoutRoute: CreateYourWorkoutRoute,
   DisclaimerRoute: DisclaimerRoute,
-  ExerciseLibraryRoute: ExerciseLibraryRoute,
+  ExerciseLibraryRoute: ExerciseLibraryRouteWithChildren,
   FaqRoute: FaqRoute,
   FounderNoteRoute: FounderNoteRoute,
   GlossaryRoute: GlossaryRoute,
@@ -1488,6 +1559,8 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SharedWorkoutsRoute: SharedWorkoutsRoute,
+  SitemapExercisesDotxmlRoute: SitemapExercisesDotxmlRoute,
+  SitemapIndexDotxmlRoute: SitemapIndexDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SmartyCheckinsRoute: SmartyCheckinsRoute,
   SmartyRitualRoute: SmartyRitualRoute,

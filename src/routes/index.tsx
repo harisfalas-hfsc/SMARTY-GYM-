@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { MobileHomeActions } from "@/components/MobileHomeActions";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
@@ -16,12 +15,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/", "online gym with a personal coach, personalized workout generator, online gym, personal coach app, workout of the day, smarty coach, training plan generator, home workout plan, gym workout plan, exercise library, Freeletics alternative, Peloton alternative, Haris Falas"),
-      },
-      {
-        title: "Online Gym & Personalized Workout Plans | SmartyGym",
+        title: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
       },
       {
         name: "description",
@@ -30,7 +24,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Online Gym & Personalized Workout Plans | SmartyGym",
+        content: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
       },
       {
         property: "og:description",
@@ -40,6 +34,12 @@ export const Route = createFileRoute("/")({
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas" },
+      {
+        name: "twitter:description",
+        content:
+          "Personalized workouts built around your body, goals and equipment, programmed on the sports science of Haris Falas. Two workouts every day with Smarty Coach.",
+      },
       { property: "og:url", content: "https://smartygym.com/" },
       {
         property: "og:image",
@@ -59,7 +59,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebPage",
           "@id": "https://smartygym.com/#webpage",
           url: "https://smartygym.com/",
-          name: "Online Gym & Personalized Workout Plans | SmartyGym",
+          name: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
           description:
             "An online gym with a personal coach: create your workout in seconds and train around your goals, your equipment and your schedule.",
           inLanguage: "en",
@@ -88,6 +88,7 @@ function Home() {
             Science-backed · Expert-designed
           </p>
           <h1 className="mt-2 text-[32px] font-extrabold uppercase leading-[1.02] tracking-tight">
+            <span className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts: </span>
             YOUR GYM
             <br />
             <span className="text-primary">RE-IMAGINED.</span>

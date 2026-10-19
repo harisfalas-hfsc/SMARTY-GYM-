@@ -1,5 +1,4 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { loadRemote } from "@/lib/remote-data";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,20 +56,24 @@ export const Route = createFileRoute("/exercise-library")({
   validateSearch: (search: Record<string, unknown>): { section?: DraftSection } =>
     isDraftSection(search.section) ? { section: search.section } : {},
   loader: async () => {
+    let schemaExercises: ExerciseSchemaItem[] = [];
+    let initialExercises: Exercise[] = [];
     try {
       const { getExerciseSchemaList } = await import("@/lib/seo/exercise-schema.functions");
-      return { schemaExercises: await getExerciseSchemaList() };
+      schemaExercises = await getExerciseSchemaList();
     } catch {
-      return { schemaExercises: [] as ExerciseSchemaItem[] };
+      schemaExercises = [];
     }
+    try {
+      const { getDefaultLibraryExercises } = await import("@/lib/seo/exercise-public.functions");
+      initialExercises = (await getDefaultLibraryExercises()) as Exercise[];
+    } catch {
+      initialExercises = [];
+    }
+    return { schemaExercises, initialExercises };
   },
   head: ({ loaderData }) => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/exercise-library", "exercise library, exercise database, animated exercise demonstrations, exercises by muscle group, exercises by equipment, movement pattern, how to perform exercise"),
-      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
@@ -78,6 +81,8 @@ export const Route = createFileRoute("/exercise-library")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: URL },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
@@ -117,8 +122,9 @@ export const Route = createFileRoute("/exercise-library")({
   component: ExerciseLibraryPage,
 });
 
-type Exercise = {
+export type Exercise = {
   id: string;
+  slug: string | null;
   name: string;
   body_part: string | null;
   equipment: string | null;
@@ -295,17 +301,26 @@ function PreferenceButtons({
   );
 }
 
-function ExerciseLibraryPage() {
+export function ExerciseLibraryPage({
+  initialExercise = null,
+  onCloseSelected,
+}: {
+  /** Set by the /exercise-library/$slug route so the detail dialog opens directly. */
+  initialExercise?: Exercise | null;
+  /** Set by the slug route to return to the library address when the dialog closes. */
+  onCloseSelected?: () => void;
+}) {
 
-  const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [loading, setLoading] = useState(true);
+  const ssrList = Route.useLoaderData().initialExercises;
+  const [exercises, setExercises] = useState<Exercise[]>(ssrList);
+  const [loading, setLoading] = useState(ssrList.length === 0);
   const [nameSearch, setNameSearch] = useState("");
   const [bodyPart, setBodyPart] = useState(ALL);
   const [equipment, setEquipment] = useState(ALL);
   const [target, setTarget] = useState(ALL);
   const [difficulty, setDifficulty] = useState(ALL);
   const [preferenceFilter, setPreferenceFilter] = useState<PreferenceFilter>("liked");
-  const [selected, setSelected] = useState<Exercise | null>(null);
+  const [selected, setSelected] = useState<Exercise | null>(initialExercise ?? null);
   const [options, setOptions] = useState<{
     bodyParts: string[];
     equipment: string[];
@@ -407,6 +422,12 @@ function ExerciseLibraryPage() {
   }
 
   const navigate = useNavigate();
+  // Opening an exercise moves to its own crawlable address; the slug route
+  // renders this same page with the detail dialog already open.
+  const openExercise = (ex: Exercise) => {
+    if (ex.slug) void navigate({ to: "/exercise-library/$slug", params: { slug: ex.slug } });
+    else setSelected(ex);
+  };
   const { section: targetSection } = Route.useSearch();
   const targetLabel = targetSection ? DRAFT_SECTIONS.find((s) => s.id === targetSection)!.label : "";
   const [draft, setDraft] = useState<ManualDraft | null>(null);
@@ -505,7 +526,7 @@ function ExerciseLibraryPage() {
       let query = supabase
         .from("exercises")
         .select(
-          "id,name,body_part,equipment,target_muscle,secondary_muscles,instructions,difficulty,category,description,gif_path",
+          "id,slug,name,body_part,equipment,target_muscle,secondary_muscles,instructions,difficulty,category,description,gif_path",
         );
       if (bodyPart !== ALL) query = query.eq("body_part", bodyPart);
       if (equipment !== ALL) query = query.eq("equipment", equipment);
@@ -677,11 +698,26 @@ function ExerciseLibraryPage() {
                     key={ex.id}
                     className="flex items-start gap-3 rounded-2xl border bg-card p-3 text-left transition-colors hover:border-primary"
                   >
-                    <button onClick={() => setSelected(ex)} className="shrink-0" aria-label={`Open ${ex.name}`}>
+                    <a
+                      href={ex.slug ? `/exercise-library/${ex.slug}` : undefined}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openExercise(ex);
+                      }}
+                      className="shrink-0"
+                      aria-label={`Open ${ex.name}`}
+                    >
                       <ExerciseGif path={ex.gif_path} alt={ex.name} />
-                    </button>
+                    </a>
                     <div className="min-w-0 flex-1">
-                      <button onClick={() => setSelected(ex)} className="block w-full text-left">
+                      <a
+                        href={ex.slug ? `/exercise-library/${ex.slug}` : undefined}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openExercise(ex);
+                        }}
+                        className="block w-full text-left"
+                      >
                         <span className="block text-sm font-bold capitalize leading-snug">{ex.name}</span>
                         <span className="mt-1 flex flex-wrap gap-1">
                           {[ex.body_part, ex.equipment].filter(Boolean).map((tag) => (
@@ -690,7 +726,7 @@ function ExerciseLibraryPage() {
                             </Badge>
                           ))}
                         </span>
-                      </button>
+                      </a>
                       <PreferenceButtons
                         state={stateFor(ex.id)}
                         busy={savingId === ex.id}
@@ -729,7 +765,7 @@ function ExerciseLibraryPage() {
         </div>
       ) : null}
 
-      <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
+      <Dialog open={!!selected} onOpenChange={(open) => !open && (onCloseSelected ? onCloseSelected() : setSelected(null))}>
         <DialogContent hideClose className="max-h-[78vh] w-[calc(100vw-3rem)] max-w-md gap-0 overflow-y-auto overflow-x-hidden rounded-2xl border-2 border-primary p-0 sm:max-h-[86vh] sm:w-full sm:max-w-lg">
           {/* Media hero — flush to the top edge of the card */}
           <div className="relative w-full overflow-hidden rounded-t-[calc(1rem-2px)] border-b-2 border-primary bg-white">

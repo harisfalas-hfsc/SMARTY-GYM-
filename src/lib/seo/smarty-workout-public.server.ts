@@ -3,17 +3,19 @@ import { SITE_URL } from "@/lib/seo/site";
 /** Only public card facts; the exercise prescription remains behind Premium. */
 export type PublicSmartyWorkout = {
   id: string;
+  slug: string | null;
   name: string;
   category: string;
   format: string | null;
   focus: string | null;
   duration_min: number;
+  difficulty_stars: number | null;
   equipment: string[] | null;
   image_url: string | null;
   updated_at: string;
 };
 
-const COLS = "id,name,category,format,focus,duration_min,equipment,image_url,updated_at";
+const COLS = "id,slug,name,category,format,focus,duration_min,difficulty_stars,equipment,image_url,updated_at";
 
 function validImage(url: string | null): string | null {
   if (!url) return null;
@@ -54,6 +56,22 @@ export async function getPublicSmartyWorkout(id: string): Promise<PublicSmartyWo
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin.from("smarty_workouts").select(COLS)
     .eq("is_visible", true).eq("id", id).maybeSingle();
+  if (error) throw error;
+  return (data as PublicSmartyWorkout | null) ?? null;
+}
+
+/** Public address for a workout: the readable slug when one exists. */
+export function smartyWorkoutPath(workout: Pick<PublicSmartyWorkout, "id" | "slug">): string {
+  return `/smarty-workouts/${workout.slug ?? workout.id}`;
+}
+
+/** Resolves either a UUID or a readable slug to a visible workout. */
+export async function getPublicSmartyWorkoutByParam(param: string): Promise<PublicSmartyWorkout | null> {
+  if (/^[0-9a-f-]{36}$/i.test(param)) return getPublicSmartyWorkout(param);
+  if (!/^[a-z0-9-]+$/.test(param)) return null;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.from("smarty_workouts").select(COLS)
+    .eq("is_visible", true).eq("slug", param).maybeSingle();
   if (error) throw error;
   return (data as PublicSmartyWorkout | null) ?? null;
 }

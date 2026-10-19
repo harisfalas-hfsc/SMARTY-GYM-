@@ -685,6 +685,7 @@ export type Database = {
           movement_pattern: string | null
           name: string
           secondary_muscles: string[]
+          slug: string | null
           smarty_tags: string[]
           tags: string[]
           target_muscle: string | null
@@ -707,6 +708,7 @@ export type Database = {
           movement_pattern?: string | null
           name: string
           secondary_muscles?: string[]
+          slug?: string | null
           smarty_tags?: string[]
           tags?: string[]
           target_muscle?: string | null
@@ -729,6 +731,7 @@ export type Database = {
           movement_pattern?: string | null
           name?: string
           secondary_muscles?: string[]
+          slug?: string | null
           smarty_tags?: string[]
           tags?: string[]
           target_muscle?: string | null
@@ -1470,6 +1473,7 @@ export type Database = {
           location: string | null
           main_workout: string | null
           name: string
+          slug: string | null
           sort_order: number
           tips_html: string | null
           updated_at: string
@@ -1493,6 +1497,7 @@ export type Database = {
           location?: string | null
           main_workout?: string | null
           name: string
+          slug?: string | null
           sort_order?: number
           tips_html?: string | null
           updated_at?: string
@@ -1516,6 +1521,7 @@ export type Database = {
           location?: string | null
           main_workout?: string | null
           name?: string
+          slug?: string | null
           sort_order?: number
           tips_html?: string | null
           updated_at?: string
@@ -3527,6 +3533,7 @@ export type Database = {
         Returns: boolean
       }
       is_app_admin: { Args: { _user_id: string }; Returns: boolean }
+      seo_slugify: { Args: { p: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "user"

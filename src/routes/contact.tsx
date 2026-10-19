@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { isOnline } from "@/lib/connectivity";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -24,11 +23,6 @@ const SUPPORT_EMAIL = "smartygym@outlook.com";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/contact", "contact smartygym, customer support, feedback, partnership enquiry, help"),
-      },
       { title: "Contact SmartyGym — We answer in 24–48 hours" },
       {
         name: "description",

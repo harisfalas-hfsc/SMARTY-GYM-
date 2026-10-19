@@ -1,5 +1,4 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { SmartyCard } from "@/components/SmartyCard";
@@ -27,15 +26,13 @@ export const Route = createFileRoute("/training/$slug")({
       meta: [
         { title: topic.title },
         { name: "description", content: topic.metaDescription },
-        {
-          name: "keywords",
-          content: withExtendedKeywords("/training", [topic.h1, topic.eyebrow, ...topic.related.map((r) => r.label)].join(", ")),
-        },
         { property: "og:title", content: topic.title },
         { property: "og:description", content: topic.metaDescription },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: topic.title },
+        { name: "twitter:description", content: topic.metaDescription },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [

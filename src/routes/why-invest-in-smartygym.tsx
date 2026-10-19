@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -54,13 +53,6 @@ export const Route = createFileRoute("/why-invest-in-smartygym")({
         name: "description",
         content:
           "Explore structured training, exercise science and the benefits of a consistent fitness routine with SmartyGym.",
-      },
-      {
-        name: "keywords",
-        content: withExtendedKeywords(
-          "/why-invest-in-smartygym",
-          "why invest in SmartyGym, fitness research, structured workout programs, exercise science, fitness results, SmartyGym",
-        ),
       },
       { property: "og:title", content: "Why Invest in SmartyGym | Structured Fitness" },
       {

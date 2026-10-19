@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, Trophy, ChevronRight } from "lucide-react";
@@ -181,13 +180,6 @@ export const Route = createFileRoute("/best-online-fitness-platform")({
       { title: TITLE },
       { name: "robots", content: "noindex, follow" },
       { name: "description", content: DESC },
-      {
-        name: "keywords",
-        content: withExtendedKeywords(
-          "/best-online-fitness-platform",
-          "online fitness platforms comparison, online gym, online fitness coach, SmartyGym, smartygym.com, Haris Falas, online personal training, structured workouts",
-        ),
-      },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "article" },

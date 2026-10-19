@@ -35,7 +35,6 @@ export const Route = createFileRoute("/community/workout/$workoutId")({
       meta: [
         { title },
         { name: "description", content: description },
-        ...(seo?.keywords?.length ? [{ name: "keywords", content: seo.keywords.join(", ") }] : []),
         {
           name: "robots",
           content: seo?.indexable

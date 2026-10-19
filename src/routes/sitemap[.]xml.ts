@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { STATIC_SITEMAP_ENTRIES } from "@/lib/seo/route-inventory";
 import { SITE_URL } from "@/lib/seo/site";
-import { listPublicSmartyWorkouts, smartyWorkoutSearchData } from "@/lib/seo/smarty-workout-public.server";
+import { listPublicSmartyWorkouts, smartyWorkoutPath, smartyWorkoutSearchData } from "@/lib/seo/smarty-workout-public.server";
 const BASE_URL = SITE_URL;
 
 interface SitemapEntry {
@@ -161,7 +161,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           smartyWorkouts = (await listPublicSmartyWorkouts()).map((workout) => {
             const seo = smartyWorkoutSearchData(workout);
             return {
-              path: `/smarty-workouts/${workout.id}`,
+              path: smartyWorkoutPath(workout),
               lastmod: workout.updated_at.slice(0, 10),
               changefreq: "monthly" as const,
               priority: "0.7",

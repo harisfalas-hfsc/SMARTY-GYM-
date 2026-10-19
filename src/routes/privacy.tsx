@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { Shield } from "lucide-react";
 import { LegalLayout } from "@/components/LegalLayout";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
@@ -7,11 +6,6 @@ import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/privacy", "smartygym privacy policy, data protection, gdpr, delete my data, cookies, personal data"),
-      },
       { title: "Privacy Policy | SmartyGym" },
       {
         name: "description",

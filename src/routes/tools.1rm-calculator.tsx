@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { withExtendedKeywords } from "@/lib/seo/extended-keywords";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,11 +21,6 @@ const DESCRIPTION =
 export const Route = createFileRoute("/tools/1rm-calculator")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/tools/1rm-calculator", "1rm calculator, one rep max calculator, estimate 1rm, training percentages, strength loads, epley formula"),
-      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
