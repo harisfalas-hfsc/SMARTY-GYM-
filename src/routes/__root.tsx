@@ -103,10 +103,13 @@ const JSONLD_GRAPH = {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
       name: "SmartyGym",
-      alternateName: ["Smarty Gym", "smartygym.com"],
+      alternateName: ["Smarty Gym", "TheSmartyGym", "SmartyGym App", "smartygym.com"],
       url: SITE_URL,
-      logo: `${SITE_URL}/icon-512.png`,
+      logo: `${SITE_URL}/logo.png`,
       image: OG_IMAGE,
+      slogan: "Your Gym Re-imagined. Anywhere, Anytime.",
+      areaServed: "Worldwide",
+      parentOrganization: { "@type": "Organization", name: "Smarty Wellness" },
       description:
         "SmartyGym creates personalized workouts through Smarty Coach, built on the coaching expertise of sports scientist Haris Falas.",
       email: "smartygym@outlook.com",
@@ -196,6 +199,11 @@ const JSONLD_GRAPH = {
 
       sameAs: [
         "https://www.instagram.com/thesmartygym",
+        "https://www.facebook.com/share/1BmxFbTsRz/",
+        "https://www.tiktok.com/@thesmartygym",
+        "https://youtube.com/@thesmartygym",
+        "https://apps.apple.com/cy/app/smarty-gym/id6776675309",
+        "https://play.google.com/store/apps/details?id=com.smartygym.webview",
       ],
       contactPoint: [
         {
@@ -213,6 +221,24 @@ const JSONLD_GRAPH = {
       name: "SmartyGym",
       description: SITE_DESCRIPTION,
       inLanguage: "en",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+    {
+      "@type": "MobileApplication",
+      "@id": `${SITE_URL}/#ios-app`,
+      name: "SmartyGym",
+      operatingSystem: "iOS",
+      applicationCategory: "HealthApplication",
+      downloadUrl: "https://apps.apple.com/cy/app/smarty-gym/id6776675309",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+    {
+      "@type": "MobileApplication",
+      "@id": `${SITE_URL}/#android-app`,
+      name: "SmartyGym",
+      operatingSystem: "Android",
+      applicationCategory: "HealthApplication",
+      downloadUrl: "https://play.google.com/store/apps/details?id=com.smartygym.webview",
       publisher: { "@id": `${SITE_URL}/#organization` },
     },
     {
@@ -332,7 +358,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       {
         title:
           "SmartyGym — Personalized Workouts with Smarty Coach",
