@@ -60,3 +60,4 @@ Disallow: /w/
 
 Sitemap: https://smartygym.com/sitemap.xml
 Sitemap: https://smartygym.com/image-sitemap.xml
+Sitemap: https://smartygym.com/sitemap-exercises.xml

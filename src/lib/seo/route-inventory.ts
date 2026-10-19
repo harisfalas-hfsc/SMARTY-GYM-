@@ -31,6 +31,7 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/how-it-works": "indexable",
   "/pricing": "indexable",
   "/exercise-library": "indexable",
+  "/exercise-library/$slug": "indexable",
   "/wod": "indexable",
   "/faq": "indexable",
   "/contact": "indexable",
