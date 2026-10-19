@@ -65,6 +65,8 @@ export const Route = createFileRoute("/community/")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/community" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Smarty Community — Train together" },
+      { name: "twitter:description", content: "Shared workouts, member rankings, workout rankings and shared-workout comments." },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/community" }],
     scripts: [

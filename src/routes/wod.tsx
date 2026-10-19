@@ -26,6 +26,8 @@ export const Route = createFileRoute("/wod")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/wod" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Workout of the Day: Daily Home & Gym WOD | SmartyGym" },
+      { name: "twitter:description", content: "Today's two expert-designed workouts — one with equipment, one without." },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/wod" }],
     scripts: [

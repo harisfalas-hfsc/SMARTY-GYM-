@@ -31,6 +31,8 @@ export const Route = createFileRoute("/smarty-workouts/")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/smarty-workouts" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Ready-Made Home & Gym Workouts by Category | SmartyGym" },
+      { name: "twitter:description", content: "Ready workouts by Haris Falas in nine training categories." },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/smarty-workouts" }],
   }),

@@ -51,6 +51,8 @@ export const Route = createFileRoute("/shared-workouts")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smartygym.com/shared-workouts" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Shared Workouts — SMARTYGYM" },
+      { name: "twitter:description", content: "Browse and filter every workout shared by Smarty Gym members." },
     ],
     links: [{ rel: "canonical", href: "https://smartygym.com/shared-workouts" }],
     scripts: [
