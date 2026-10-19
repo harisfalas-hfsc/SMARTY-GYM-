@@ -15,7 +15,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Online Gym & Personalized Workout Plans | SmartyGym",
+        title: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
       },
       {
         name: "description",
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Online Gym & Personalized Workout Plans | SmartyGym",
+        content: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
       },
       {
         property: "og:description",
@@ -34,6 +34,12 @@ export const Route = createFileRoute("/")({
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas" },
+      {
+        name: "twitter:description",
+        content:
+          "Personalized workouts built around your body, goals and equipment, programmed on the sports science of Haris Falas. Two workouts every day with Smarty Coach.",
+      },
       { property: "og:url", content: "https://smartygym.com/" },
       {
         property: "og:image",
@@ -82,6 +88,7 @@ function Home() {
             Science-backed · Expert-designed
           </p>
           <h1 className="mt-2 text-[32px] font-extrabold uppercase leading-[1.02] tracking-tight">
+            <span className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts: </span>
             YOUR GYM
             <br />
             <span className="text-primary">RE-IMAGINED.</span>
