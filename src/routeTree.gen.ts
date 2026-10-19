@@ -35,6 +35,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SharedWorkoutsRouteImport } from './routes/shared-workouts'
 import { Route as SitemapExercisesDotxmlRouteImport } from './routes/sitemap-exercises[.]xml'
+import { Route as SitemapIndexDotxmlRouteImport } from './routes/sitemap-index[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SmartyCheckinsRouteImport } from './routes/smarty-checkins'
 import { Route as SmartyRitualRouteImport } from './routes/smarty-ritual'
@@ -211,6 +212,11 @@ const SharedWorkoutsRoute = SharedWorkoutsRouteImport.update({
 const SitemapExercisesDotxmlRoute = SitemapExercisesDotxmlRouteImport.update({
   id: '/sitemap-exercises.xml',
   path: '/sitemap-exercises.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapIndexDotxmlRoute = SitemapIndexDotxmlRouteImport.update({
+  id: '/sitemap-index.xml',
+  path: '/sitemap-index.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -480,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
+  '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
@@ -553,6 +560,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
+  '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
@@ -628,6 +636,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
+  '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-ritual': typeof SmartyRitualRoute
@@ -703,6 +712,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap-exercises.xml'
+    | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
     | '/smarty-ritual'
@@ -776,6 +786,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap-exercises.xml'
+    | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
     | '/smarty-ritual'
@@ -850,6 +861,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap-exercises.xml'
+    | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
     | '/smarty-ritual'
@@ -925,6 +937,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SharedWorkoutsRoute: typeof SharedWorkoutsRoute
   SitemapExercisesDotxmlRoute: typeof SitemapExercisesDotxmlRoute
+  SitemapIndexDotxmlRoute: typeof SitemapIndexDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SmartyCheckinsRoute: typeof SmartyCheckinsRoute
   SmartyRitualRoute: typeof SmartyRitualRoute
@@ -1145,6 +1158,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap-exercises.xml'
       fullPath: '/sitemap-exercises.xml'
       preLoaderRoute: typeof SitemapExercisesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-index.xml': {
+      id: '/sitemap-index.xml'
+      path: '/sitemap-index.xml'
+      fullPath: '/sitemap-index.xml'
+      preLoaderRoute: typeof SitemapIndexDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -1540,6 +1560,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SharedWorkoutsRoute: SharedWorkoutsRoute,
   SitemapExercisesDotxmlRoute: SitemapExercisesDotxmlRoute,
+  SitemapIndexDotxmlRoute: SitemapIndexDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SmartyCheckinsRoute: SmartyCheckinsRoute,
   SmartyRitualRoute: SmartyRitualRoute,
