@@ -12,6 +12,15 @@ async function notifyAll(
   row: { kind: string; title: string; body: string; dedupeKey: string },
   exclude?: string,
 ): Promise<number> {
+  return (await notifyAllIds(db, row, exclude)).length;
+}
+
+/** Same as notifyAll, returning the accounts that newly received it (used for push). */
+async function notifyAllIds(
+  db: DB,
+  row: { kind: string; title: string; body: string; dedupeKey: string },
+  exclude?: string,
+): Promise<string[]> {
   const { data, error } = await db.from("profiles").select("id").limit(20000);
   if (error) throw new Error(error.message);
   const { data: done, error: doneError } = await db.from("notifications").select("user_id").eq("dedupe_key", row.dedupeKey).limit(20000);
@@ -20,7 +29,7 @@ async function notifyAll(
   const ids = ((data as { id: string }[] | null) ?? [])
     .map((r) => r.id)
     .filter((id) => id !== exclude && !already.has(id));
-  let sent = 0;
+  const sent: string[] = [];
   for (let i = 0; i < ids.length; i += BATCH) {
     const rows = ids.slice(i, i + BATCH).map((user_id) => ({
       user_id,
@@ -31,9 +40,15 @@ async function notifyAll(
     }));
     const { error: e } = await db.from("notifications").insert(rows as never);
     if (e) throw new Error(e.message);
-    sent += rows.length;
+    sent.push(...rows.map((r) => r.user_id));
   }
   return sent;
+}
+
+async function pushAnnouncement(db: DB, ids: string[], a: import("@/lib/broadcast-content").WorkoutAnnouncement, exclude?: string): Promise<void> {
+  if (!ids.length) return;
+  const { sendPushToUsers } = await import("@/lib/push-notify.server");
+  await sendPushToUsers(db, ids, { title: a.heading, body: [a.body, a.workoutName].filter(Boolean).join(" — "), path: a.buttonHref, tag: a.dedupeKey }, { exclude });
 }
 
 /** One action produces one shared announcement; no origin-based exclusions. */
@@ -45,7 +60,11 @@ export async function announcePublishedSmartyWorkouts(db: DB, actionId: string, 
     if (!config.enabled) return { ...result, disabled: true };
     const announcement = publishedWorkoutsAnnouncement(actionId, rows);
     const errors: string[] = [];
-    try { result.inbox = await notifyAll(db, { kind: "new_workout", ...announcementInboxContent(announcement) }); }
+    try {
+      const ids = await notifyAllIds(db, { kind: "new_workout", ...announcementInboxContent(announcement) });
+      result.inbox = ids.length;
+      await pushAnnouncement(db, ids, announcement);
+    }
     catch (e) { errors.push(`Inbox: ${e instanceof Error ? e.message : "failed"}`); }
     try {
       const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
@@ -68,7 +87,9 @@ export async function announceSharedWorkout(db: DB, workoutId: string, sharerId:
     const workoutName = (workout as { name?: string } | null)?.name;
     try {
       const announcement = sharedWorkoutAnnouncement(workoutId, workoutName, full, sharerId);
-      const n = await notifyAll(db, { kind: "shared_workout", ...announcementInboxContent(announcement) }, sharerId);
+      const ids = await notifyAllIds(db, { kind: "shared_workout", ...announcementInboxContent(announcement) }, sharerId);
+      const n = ids.length;
+      await pushAnnouncement(db, ids, announcement, sharerId);
       let emails = 0;
       let emailError: string | null = null;
       try {
