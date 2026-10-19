@@ -309,6 +309,8 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
 
   return (
     <div className="hidden lg:block">
+      {/* Semantic page heading for crawlers; the visible hero keeps its h2 styling. */}
+      <h1 className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts: Your Gym Re-imagined</h1>
       <section className="relative h-[90vh] w-full overflow-hidden">
         <div className="absolute inset-0 bg-background" />
         {heroSlides.map((src, i) => (
