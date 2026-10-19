@@ -7,7 +7,7 @@ import { publishedWorkoutsAnnouncement, sharedWorkoutAnnouncement, announcementI
 export { SHARED_WORKOUT_LINES, sharedWorkoutLine } from "@/lib/broadcast-content";
 
 /** One inbox message per account (except `exclude`); dedupe_key makes repeats impossible. */
-async function notifyAll(
+export async function notifyAll(
   db: DB,
   row: { kind: string; title: string; body: string; dedupeKey: string },
   exclude?: string,
