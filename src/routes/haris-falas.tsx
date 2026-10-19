@@ -184,7 +184,7 @@ function CoachProfilePage() {
         <Card className="border-2 border-primary">
           <CardHeader>
             <CardTitle className="text-xl text-primary sm:text-2xl">
-              Qualifications
+              <h2 className="text-xl font-semibold text-primary sm:text-2xl">Qualifications</h2>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -195,7 +195,7 @@ function CoachProfilePage() {
         <Card className="border-2 border-primary">
           <CardHeader>
             <CardTitle className="text-xl text-primary sm:text-2xl">
-              Professional Experience
+              <h2 className="text-xl font-semibold text-primary sm:text-2xl">Professional Experience</h2>
             </CardTitle>
           </CardHeader>
           <CardContent>

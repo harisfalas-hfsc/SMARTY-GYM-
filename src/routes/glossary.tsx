@@ -239,7 +239,7 @@ function GlossaryPage() {
                     params={{ slug: cat.topicSlug }}
                     className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
                   >
-                    Read more
+                    Read more<span className="sr-only"> about {cat.name}</span>
                     <ArrowRight className="h-4 w-4 shrink-0" />
                   </Link>
                 )}
