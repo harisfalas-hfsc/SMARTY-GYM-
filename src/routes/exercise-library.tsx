@@ -698,11 +698,26 @@ export function ExerciseLibraryPage({
                     key={ex.id}
                     className="flex items-start gap-3 rounded-2xl border bg-card p-3 text-left transition-colors hover:border-primary"
                   >
-                    <button onClick={() => openExercise(ex)} className="shrink-0" aria-label={`Open ${ex.name}`}>
+                    <a
+                      href={ex.slug ? `/exercise-library/${ex.slug}` : undefined}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openExercise(ex);
+                      }}
+                      className="shrink-0"
+                      aria-label={`Open ${ex.name}`}
+                    >
                       <ExerciseGif path={ex.gif_path} alt={ex.name} />
-                    </button>
+                    </a>
                     <div className="min-w-0 flex-1">
-                      <button onClick={() => openExercise(ex)} className="block w-full text-left">
+                      <a
+                        href={ex.slug ? `/exercise-library/${ex.slug}` : undefined}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openExercise(ex);
+                        }}
+                        className="block w-full text-left"
+                      >
                         <span className="block text-sm font-bold capitalize leading-snug">{ex.name}</span>
                         <span className="mt-1 flex flex-wrap gap-1">
                           {[ex.body_part, ex.equipment].filter(Boolean).map((tag) => (
