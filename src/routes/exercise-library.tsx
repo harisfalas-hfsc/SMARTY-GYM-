@@ -57,12 +57,21 @@ export const Route = createFileRoute("/exercise-library")({
   validateSearch: (search: Record<string, unknown>): { section?: DraftSection } =>
     isDraftSection(search.section) ? { section: search.section } : {},
   loader: async () => {
+    let schemaExercises: ExerciseSchemaItem[] = [];
+    let initialExercises: Exercise[] = [];
     try {
       const { getExerciseSchemaList } = await import("@/lib/seo/exercise-schema.functions");
-      return { schemaExercises: await getExerciseSchemaList() };
+      schemaExercises = await getExerciseSchemaList();
     } catch {
-      return { schemaExercises: [] as ExerciseSchemaItem[] };
+      schemaExercises = [];
     }
+    try {
+      const { getDefaultLibraryExercises } = await import("@/lib/seo/exercise-public.functions");
+      initialExercises = (await getDefaultLibraryExercises()) as Exercise[];
+    } catch {
+      initialExercises = [];
+    }
+    return { schemaExercises, initialExercises };
   },
   head: ({ loaderData }) => ({
     meta: [
@@ -119,6 +128,7 @@ export const Route = createFileRoute("/exercise-library")({
 
 type Exercise = {
   id: string;
+  slug: string | null;
   name: string;
   body_part: string | null;
   equipment: string | null;
@@ -297,15 +307,16 @@ function PreferenceButtons({
 
 function ExerciseLibraryPage() {
 
-  const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [loading, setLoading] = useState(true);
+  const ssrList = Route.useLoaderData().initialExercises;
+  const [exercises, setExercises] = useState<Exercise[]>(ssrList);
+  const [loading, setLoading] = useState(ssrList.length === 0);
   const [nameSearch, setNameSearch] = useState("");
   const [bodyPart, setBodyPart] = useState(ALL);
   const [equipment, setEquipment] = useState(ALL);
   const [target, setTarget] = useState(ALL);
   const [difficulty, setDifficulty] = useState(ALL);
   const [preferenceFilter, setPreferenceFilter] = useState<PreferenceFilter>("liked");
-  const [selected, setSelected] = useState<Exercise | null>(null);
+  const [selected, setSelected] = useState<Exercise | null>(initialExercise ?? null);
   const [options, setOptions] = useState<{
     bodyParts: string[];
     equipment: string[];
