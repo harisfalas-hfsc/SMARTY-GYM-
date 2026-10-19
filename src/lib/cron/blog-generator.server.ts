@@ -416,6 +416,10 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
     slug,
     failures,
   });
+  if (notified > 0) {
+    const { sendPushToUsers } = await import("@/lib/push-notify.server");
+    await sendPushToUsers(db, "all", { title: `New article: ${parsed.title}`, body: parsed.excerpt, path: `/blog/${slug}`, tag: `blog:${slug}` });
+  }
 
   // Email every member who keeps "New article emails" on (deduped per member).
   let memberEmails = 0;

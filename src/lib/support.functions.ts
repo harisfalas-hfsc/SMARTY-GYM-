@@ -306,6 +306,8 @@ export const adminReplyToThread = createServerFn({ method: "POST" })
           title: "SmartyGym replied to your message",
           body: body.slice(0, 240),
         } as never);
+        const { sendPushToUsers } = await import("@/lib/push-notify.server");
+        await sendPushToUsers(supabaseAdmin as never, [userId], { title: "SmartyGym replied to your message", body, path: "/inbox", tag: `support:${data.threadId}` });
       }
       const toEmail = clean((thread as any).email, 200);
       if (toEmail) {
@@ -405,6 +407,8 @@ export const adminBroadcast = createServerFn({ method: "POST" })
           await supabaseAdmin.from("notifications").insert(rows.slice(i, i + 500) as never);
         }
         sent = rows.length;
+        const { sendPushToUsers } = await import("@/lib/push-notify.server");
+        await sendPushToUsers(supabaseAdmin as never, userIds, { title, body, path: "/inbox", tag: `broadcast-${stamp}` });
       }
       let emails = 0;
       if (channel !== "inbox") {

@@ -138,6 +138,13 @@ export async function sendGenerationFailureAlerts(input: FailureAlertInput): Pro
         ]
       : [];
   await notifyInApp(memberRows);
+  if (memberRows.length) {
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { sendPushToUsers } = await import("@/lib/push-notify.server");
+      await sendPushToUsers(supabaseAdmin as never, [input.user.id], { title: memberRows[0]!.title, body: memberRows[0]!.body, path: "/inbox", tag: memberRows[0]!.dedupe_key });
+    } catch { /* push is best effort */ }
+  }
 
   return summarise(results);
 }
@@ -199,6 +206,11 @@ export async function sendGenerationRecoveryAlerts(input: RecoveryAlertInput): P
       dedupe_key: `recovered:${input.sessionId}`,
     },
   ]);
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { sendPushToUsers } = await import("@/lib/push-notify.server");
+    await sendPushToUsers(supabaseAdmin as never, [input.user.id], { title: "Your workout is ready", body: `${input.workoutName} — tap to open it.`, path: `/workout/${input.workoutId}`, tag: `recovered:${input.sessionId}` });
+  } catch { /* push is best effort */ }
 
   return summarise(results);
 }

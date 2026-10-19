@@ -31,13 +31,17 @@ export async function sendFirstPremiumWelcome(input: { db: DB; userId: string })
   const name = (profile?.display_name as string | null | undefined)?.trim() || undefined;
   const dedupeKey = `premium-welcome:${input.userId}`;
   const { notifyOnce } = await import("@/lib/billing-notify.server");
-  await notifyOnce(db, {
+  const welcomed = await notifyOnce(db, {
     userId: input.userId,
     kind: "welcome",
     title: premiumWelcomeTitle(name),
     body: PREMIUM_WELCOME_INTRO,
     dedupeKey,
   });
+  if (welcomed) {
+    const { sendPushToUsers } = await import("@/lib/push-notify.server");
+    await sendPushToUsers(db, [input.userId], { title: premiumWelcomeTitle(name), body: PREMIUM_WELCOME_INTRO, path: "/", tag: dedupeKey });
+  }
 
   const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
   await sendTemplateEmail("premium-welcome", email, {
