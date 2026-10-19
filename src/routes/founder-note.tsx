@@ -15,11 +15,6 @@ const DESCRIPTION =
 export const Route = createFileRoute("/founder-note")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/founder-note", "smartygym founder note, founder letter, why smartygym, online gym, science based workouts, haris falas"),
-      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },

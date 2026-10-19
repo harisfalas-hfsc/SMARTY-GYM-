@@ -201,7 +201,6 @@ export const Route = createFileRoute("/glossary")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
-      { name: "keywords", content: withExtendedKeywords("/glossary", KEYWORDS) },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: URL },

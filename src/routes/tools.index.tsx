@@ -10,11 +10,6 @@ import pageHeroImage from "@/assets/explore-tools.jpg";
 export const Route = createFileRoute("/tools/")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/tools", "free training tools, workout timer, interval timer, rounds tracker, 1rm calculator, one rep max calculator"),
-      },
       { title: "Free Workout Tools — Timer & 1RM | SmartyGym" },
       {
         name: "description",

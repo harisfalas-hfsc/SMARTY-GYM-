@@ -75,11 +75,6 @@ export const Route = createFileRoute("/exercise-library")({
   },
   head: ({ loaderData }) => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/exercise-library", "exercise library, exercise database, animated exercise demonstrations, exercises by muscle group, exercises by equipment, movement pattern, how to perform exercise"),
-      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },

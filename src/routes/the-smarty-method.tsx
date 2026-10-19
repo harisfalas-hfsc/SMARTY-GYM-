@@ -52,13 +52,6 @@ export const Route = createFileRoute("/the-smarty-method")({
         content:
           "Discover The Smarty Method — a complete performance system designed by Strength & Conditioning Coach Haris Falas. Science-based workouts and intelligent periodization.",
       },
-      {
-        name: "keywords",
-        content: withExtendedKeywords(
-          "/the-smarty-method",
-          "the smarty method, smartygym performance system, sports science workout programs, online workout coach, periodization, workout structure, strength and conditioning method, science based training",
-        ),
-      },
       { property: "og:title", content: "The Smarty Method | SmartyGym" },
       {
         property: "og:description",

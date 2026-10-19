@@ -30,11 +30,6 @@ export const Route = createFileRoute("/about")({
   loader: () => getSmartyWorkoutCounts(),
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/about", "about smartygym, coaching philosophy, evidence based training, strength and conditioning, periodization, training methodology"),
-      },
       { title: "About SmartyGym — Your Online Workout Coach" },
       {
         name: "description",

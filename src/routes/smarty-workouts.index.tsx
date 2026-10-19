@@ -21,7 +21,6 @@ export const Route = createFileRoute("/smarty-workouts/")({
   },
   head: () => ({
     meta: [
-      { name: "keywords", content: withExtendedKeywords("/smarty-workouts", "ready workouts, smarty workouts") },
       { title: "Ready-Made Home & Gym Workouts by Category | SmartyGym" },
       {
         name: "description",

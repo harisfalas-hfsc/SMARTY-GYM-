@@ -13,11 +13,6 @@ import { WodPeriodizationCalendar } from "@/components/wod/WodPeriodizationCalen
 export const Route = createFileRoute("/wod")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/wod", "workout of the day, wod, daily workout, bodyweight workout of the day, equipment workout of the day, periodized training, recovery day workout"),
-      },
       { title: "Workout of the Day: Daily Home & Gym WOD | SmartyGym" },
       {
         name: "description",

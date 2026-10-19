@@ -19,11 +19,6 @@ const DESCRIPTION =
 export const Route = createFileRoute("/tools/workout-timer")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/tools/workout-timer", "workout timer, interval timer, tabata timer, emom timer, hiit timer, rest timer"),
-      },
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },

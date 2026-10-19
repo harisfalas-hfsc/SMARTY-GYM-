@@ -38,7 +38,6 @@ export const Route = createFileRoute("/shared-workouts")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
-      { name: "keywords", content: withExtendedKeywords("/shared-workouts", "shared workouts") },
       { title: "Shared Workouts — SMARTYGYM" },
       {
         name: "description",

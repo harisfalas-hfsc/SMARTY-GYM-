@@ -7,11 +7,6 @@ import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/privacy", "smartygym privacy policy, data protection, gdpr, delete my data, cookies, personal data"),
-      },
       { title: "Privacy Policy | SmartyGym" },
       {
         name: "description",

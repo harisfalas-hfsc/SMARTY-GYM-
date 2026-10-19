@@ -52,11 +52,6 @@ import pageHeroImage from "@/assets/community-card.jpg";
 export const Route = createFileRoute("/community/")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/community", "shared workouts community, shared workouts, community workouts, member workouts, workout ratings, train someone elses workout"),
-      },
       { title: "Smarty Community — Train together | Smarty Gym" },
       {
         name: "description",

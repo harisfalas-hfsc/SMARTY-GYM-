@@ -24,11 +24,6 @@ const SUPPORT_EMAIL = "smartygym@outlook.com";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-          withExtendedKeywords("/contact", "contact smartygym, customer support, feedback, partnership enquiry, help"),
-      },
       { title: "Contact SmartyGym — We answer in 24–48 hours" },
       {
         name: "description",

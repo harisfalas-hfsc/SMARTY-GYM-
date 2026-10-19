@@ -10,11 +10,6 @@ export const Route = createFileRoute("/how-it-works")({
   loader: () => getSmartyWorkoutCounts(),
   head: () => ({
     meta: [
-      {
-        name: "keywords",
-        content:
-           withExtendedKeywords("/how-it-works", "how smartygym works, pre workout questionnaire, training profile, warm up activation main workout finisher cool down, sets reps tempo rest, guided workout player, session debrief, smarty ritual, daily movement recovery ritual"),
-      },
       { title: "How SmartyGym works — create, share and train" },
       {
         name: "description",
