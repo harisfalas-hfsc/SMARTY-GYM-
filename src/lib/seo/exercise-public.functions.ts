@@ -14,3 +14,14 @@ export const getDefaultLibraryExercises = createServerFn({ method: "GET" }).hand
   const { listDefaultLibraryExercises } = await import("./exercise-public.server");
   return listDefaultLibraryExercises();
 });
+
+/** Unauthenticated; name → public URL pairs for in-article internal links. */
+export const getArticleLinkTargets = createServerFn({ method: "GET" }).handler(async () => {
+  const { listExerciseLinkTargets } = await import("./exercise-public.server");
+  const { listPublicSmartyWorkouts, smartyWorkoutPath } = await import("./smarty-workout-public.server");
+  const [exercises, workouts] = await Promise.all([listExerciseLinkTargets(), listPublicSmartyWorkouts()]);
+  return [
+    ...exercises.map((e) => ({ name: e.name, url: `/exercise-library/${e.slug}` })),
+    ...workouts.map((w) => ({ name: w.name, url: smartyWorkoutPath(w) })),
+  ];
+});
