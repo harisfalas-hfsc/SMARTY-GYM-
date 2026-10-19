@@ -8,3 +8,9 @@ export const getPublicExercise = createServerFn({ method: "GET" })
     const { getPublicExerciseBySlug } = await import("./exercise-public.server");
     return getPublicExerciseBySlug(data.slug);
   });
+
+/** Unauthenticated; the anonymous first page of the library, for SSR. */
+export const getDefaultLibraryExercises = createServerFn({ method: "GET" }).handler(async () => {
+  const { listDefaultLibraryExercises } = await import("./exercise-public.server");
+  return listDefaultLibraryExercises();
+});

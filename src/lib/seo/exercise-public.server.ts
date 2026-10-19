@@ -54,3 +54,27 @@ export async function listPublicExerciseSlugs(): Promise<{ slug: string; name: s
 export async function listExerciseLinkTargets(): Promise<{ name: string; slug: string }[]> {
   return listPublicExerciseSlugs();
 }
+
+/**
+ * The exact list an anonymous visitor sees first in the library: the
+ * rule-allowed ("liked by default") exercises, alphabetical, first page of 60.
+ * Used so the server-rendered HTML already contains the real list.
+ */
+export async function listDefaultLibraryExercises(): Promise<PublicExercise[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { loadAllExercises } = await import("@/lib/workout/pool.server");
+  const { computeAllowedExerciseIds } = await import("@/lib/workout/allowed-exercises.server");
+  const allowed = computeAllowedExerciseIds(await loadAllExercises(supabaseAdmin));
+  if (allowed.length === 0) return [];
+  const batches: PublicExercise[][] = [];
+  for (let index = 0; index < allowed.length; index += 150) {
+    const { data, error } = await supabaseAdmin
+      .from("exercises")
+      .select(COLS)
+      .in("id", allowed.slice(index, index + 150))
+      .order("name");
+    if (error) throw error;
+    batches.push(((data ?? []) as PublicExercise[]));
+  }
+  return batches.flat().sort((a, b) => a.name.localeCompare(b.name)).slice(0, 60);
+}
