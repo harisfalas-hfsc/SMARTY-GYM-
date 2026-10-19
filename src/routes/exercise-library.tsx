@@ -726,7 +726,7 @@ export function ExerciseLibraryPage({
                             </Badge>
                           ))}
                         </span>
-                      </button>
+                      </a>
                       <PreferenceButtons
                         state={stateFor(ex.id)}
                         busy={savingId === ex.id}
