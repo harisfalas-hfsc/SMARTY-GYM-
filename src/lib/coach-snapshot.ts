@@ -31,6 +31,8 @@ export type CoachInsightsSummary = {
 
 export type CoachSnapshot = {
   access: "ready" | "locked";
+  /** Locked accounts only: true when the member had Premium before. */
+  wasPremium?: boolean;
   firstName: string;
   greeting: string;
   readinessDisplay: {
