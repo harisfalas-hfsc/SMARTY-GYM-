@@ -233,7 +233,9 @@ function WorkoutPage() {
         <p className="mt-2 text-sm text-muted-foreground">
           {(w as { is_wod?: boolean } | null)?.is_wod
             ? "The Workout of the Day is part of the SmartyGym membership. Join to open today's two workouts and get a new pair every morning."
-            : "This workout is safely kept in your account. Renew your SmartyGym membership to open it again."}
+            : access?.wasPremium
+              ? "This workout is safely kept in your account. Renew your SmartyGym membership to open it again."
+              : "This workout is part of the SmartyGym membership. Subscribe to open it."}
         </p>
         <Button asChild className="mt-4 h-12 rounded-2xl">
           <Link to="/auth">See plans</Link>

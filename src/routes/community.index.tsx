@@ -390,7 +390,7 @@ function CommunityPage() {
                 to="/auth"
                 className="font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
               >
-                {access.signedIn ? "Renew membership" : "Join SmartyGym"}
+                {access.signedIn ? (access.wasPremium ? "Renew membership" : "Subscribe") : "Join SmartyGym"}
               </Link>{" "}
               to open workouts, like, comment, and train shared sessions.
             </>
