@@ -21,6 +21,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         String(lockedProfile?.display_name ?? "there").trim().split(/\s+/)[0] || "there";
       return {
         access: "locked",
+        wasPremium: access.wasPremium,
         firstName: lockedName,
         greeting: `Hello, ${lockedName}.`,
         readinessDisplay: { label: "Membership paused", score: null, reason: "" },
@@ -35,11 +36,15 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
           stars: null,
         },
         headline: "Your coach is ready when you return",
-        recommendation: "Renew your membership to reconnect Smarty Coach with your saved training history.",
+        recommendation: access.wasPremium
+          ? "Renew your membership to reconnect Smarty Coach with your saved training history."
+          : "Subscribe to unlock Smarty Coach and personal guidance built around your training.",
         lastSession: null,
         comparison: "Your history stays safely stored while access is paused.",
         personalRecord: null,
-        nextStep: "Restart your membership to continue from where you left off.",
+        nextStep: access.wasPremium
+          ? "Restart your membership to continue from where you left off."
+          : "Subscribe to start your first coached session.",
         reasons: ["Protected training history remains locked until membership access is active."],
         equipment: [],
         smartyPick: null,
