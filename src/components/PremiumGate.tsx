@@ -14,7 +14,7 @@ import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog"
 export function PremiumGate({
   children,
   title = "Premium access required",
-  description = "Your workouts, logbook and progress are safely kept in your account. Renew your SmartyGym membership to open them again.",
+  description,
 }: {
   children: ReactNode;
   title?: string;
@@ -24,6 +24,7 @@ export function PremiumGate({
     isSupabaseConfigured() ? "checking" : "allowed",
   );
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [wasPremium, setWasPremium] = useState(false);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
 
@@ -34,6 +35,7 @@ export function PremiumGate({
       .then((a) => {
         if (!active) return;
         setFailed(false);
+        setWasPremium(a?.wasPremium === true);
         setState(a?.premium === true ? "allowed" : "locked");
       })
       // Offline: keep data already on the device readable. Online but the check
@@ -68,9 +70,14 @@ export function PremiumGate({
     <div className="mx-auto max-w-xl px-4 py-16 text-center">
       <Lock className="mx-auto h-8 w-8 text-primary" />
       <h1 className="mt-3 text-xl font-extrabold uppercase tracking-tight">{title}</h1>
-      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        {description ??
+          (wasPremium
+            ? "Your workouts, logbook and progress are safely kept in your account. Renew your SmartyGym membership to open them again."
+            : "Your logbook, progress and saved workouts are part of the SmartyGym membership. Subscribe to start training and tracking your progress.")}
+      </p>
       <Button className="mt-5 h-12 rounded-2xl font-bold" onClick={() => setCheckoutOpen(true)}>
-        Renew my membership
+        {wasPremium ? "Renew my membership" : "Subscribe now"}
       </Button>
       <MembershipCheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
     </div>

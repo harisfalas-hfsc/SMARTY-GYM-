@@ -313,7 +313,7 @@ export function CommunityEngagementPanel({
         </ul>
       </section>
 
-      <CommunityGateDialog open={access.gateOpen} onOpenChange={access.setGateOpen} signedIn={access.signedIn} />
+      <CommunityGateDialog open={access.gateOpen} onOpenChange={access.setGateOpen} signedIn={access.signedIn} wasPremium={access.wasPremium} />
     </>
   );
 }

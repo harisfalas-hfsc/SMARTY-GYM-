@@ -16,6 +16,7 @@ import {
 export function useCommunityAccess() {
   const { user, loading } = useAuth();
   const [premium, setPremium] = useState(false);
+  const [wasPremium, setWasPremium] = useState(false);
   const [readinessFlags, setReadinessFlags] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
@@ -33,6 +34,7 @@ export function useCommunityAccess() {
       .then((a) => {
         if (!active) return;
         setPremium(Boolean(a?.premium));
+        setWasPremium(a?.wasPremium === true);
         setReadinessFlags(a?.readinessFlagged ? (a.readinessFlags ?? []) : []);
       })
       .catch(() => {
@@ -59,6 +61,7 @@ export function useCommunityAccess() {
     signedIn: Boolean(user),
     userId: user?.id ?? null,
     premium,
+    wasPremium,
     /** PAR-Q YES answers — the same health warning every workout page shows. */
     readinessFlags,
     checked: checked && !loading,
@@ -72,10 +75,12 @@ export function CommunityGateDialog({
   open,
   onOpenChange,
   signedIn,
+  wasPremium = false,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   signedIn: boolean;
+  wasPremium?: boolean;
 }) {
   const { freeAccessMode } = useFreeAccessMode();
   return (
@@ -86,7 +91,7 @@ export function CommunityGateDialog({
           <DialogDescription>
             {freeAccessMode
               ? "Sign in to open shared workouts, like, comment and take your place in the rankings."
-              : "Smarty Community is part of the SmartyGym membership. Join or renew to open shared workouts, like, comment and take your place in the rankings."}
+              : `Smarty Community is part of the SmartyGym membership. ${wasPremium ? "Renew" : "Subscribe"} to open shared workouts, like, comment and take your place in the rankings.`}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-2">
@@ -97,7 +102,7 @@ export function CommunityGateDialog({
           ) : (
             <>
               <Button asChild className="h-12 rounded-2xl font-bold">
-                <Link to="/auth">{signedIn ? "Renew my membership" : "See membership"}</Link>
+                <Link to="/auth">{signedIn ? (wasPremium ? "Renew my membership" : "Subscribe now") : "See membership"}</Link>
               </Button>
               {!signedIn && (
                 <Button asChild variant="secondary" className="h-12 rounded-2xl">

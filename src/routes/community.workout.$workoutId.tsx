@@ -163,7 +163,7 @@ function SharedWorkoutPage() {
         <div className="mt-4 grid gap-2">
           {!(error && access.premium) && (
             <Button asChild className="h-12 rounded-2xl font-bold">
-              <Link to="/auth" search={{ next: `/community/workout/${workoutId}`, mode: access.signedIn ? "signin" : "signup" }}>{access.signedIn ? "Renew membership" : "Create an account"}</Link>
+              <Link to="/auth" search={{ next: `/community/workout/${workoutId}`, mode: access.signedIn ? "signin" : "signup" }}>{access.signedIn ? (access.wasPremium ? "Renew membership" : "Subscribe") : "Create an account"}</Link>
             </Button>
           )}
           {!access.signedIn && <Button asChild variant="outline" className="h-12 rounded-2xl"><Link to="/auth" search={{ next: `/community/workout/${workoutId}`, mode: "signin" }}>Log in</Link></Button>}
@@ -171,7 +171,7 @@ function SharedWorkoutPage() {
             <Link to="/community">Back to community</Link>
           </Button>
         </div>
-        <CommunityGateDialog open={access.gateOpen} onOpenChange={access.setGateOpen} signedIn={access.signedIn} />
+        <CommunityGateDialog open={access.gateOpen} onOpenChange={access.setGateOpen} signedIn={access.signedIn} wasPremium={access.wasPremium} />
       </div>
     );
 

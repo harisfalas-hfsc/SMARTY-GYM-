@@ -10,6 +10,8 @@ export type AccessState = {
   /** Plain-language list of the PAR-Q answers that were YES. */
   readinessFlags: string[];
   premium: boolean;
+  /** True when the account had a paid membership at some point (any status). */
+  wasPremium: boolean;
   missingProfileFields: string[];
   /** Manual (coach) generations already used today. */
   generationsUsedToday: number;
@@ -151,6 +153,19 @@ export async function getAccessStateForUser(
     generationsUsedToday = 0;
   }
 
+  let wasPremium = Boolean(subscription);
+  if (!wasPremium) {
+    try {
+      const { count } = await db
+        .from("subscriptions")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", userId);
+      wasPremium = (count ?? 0) > 0;
+    } catch {
+      wasPremium = false;
+    }
+  }
+
   const base = {
     profileComplete,
     healthAcknowledged,
@@ -160,6 +175,7 @@ export async function getAccessStateForUser(
       (key) => readinessAnswers[key] === true,
     ).map((key) => READINESS_LABELS[key] as string),
     premium,
+    wasPremium,
     missingProfileFields,
 
 
