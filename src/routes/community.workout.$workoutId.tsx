@@ -171,7 +171,7 @@ function SharedWorkoutPage() {
             <Link to="/community">Back to community</Link>
           </Button>
         </div>
-        <CommunityGateDialog open={access.gateOpen} onOpenChange={access.setGateOpen} signedIn={access.signedIn} />
+        <CommunityGateDialog open={access.gateOpen} onOpenChange={access.setGateOpen} signedIn={access.signedIn} wasPremium={access.wasPremium} />
       </div>
     );
 
