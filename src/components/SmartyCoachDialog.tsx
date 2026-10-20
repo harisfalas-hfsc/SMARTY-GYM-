@@ -148,7 +148,7 @@ export function SmartyCoachDialog({
         {showCoachIntroduction ? (
           <div className="space-y-3">
             <section className="px-1 py-1 text-center">
-              <h3 className="text-lg font-extrabold">A personal trainer in your pocket.</h3>
+              <h3 className="text-lg font-extrabold text-primary">A personal trainer in your pocket.</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Your daily training companion — helping you choose what to train, when to push and when to recover. Become a Premium member for personal guidance that grows with your training.</p>
               {!visitor ? <p className="mt-3 text-sm font-semibold text-primary">{snapshot?.wasPremium ? "Your Premium membership is inactive. Reactivate it to unlock your personal guidance." : "Subscribe to Premium to unlock your personal guidance."}</p> : null}
             </section>
