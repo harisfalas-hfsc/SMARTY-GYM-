@@ -68,7 +68,7 @@ function SmartyWorkoutsPage() {
         title="Smarty Workouts"
         subtitle={
           <>
-            <span className="font-extrabold text-primary">{counts.total.toLocaleString()}</span> expert-designed workouts across nine categories. Pick a category and start training.
+            {counts.total.toLocaleString()} expert-designed workouts across nine categories. Pick a category and start training.
           </>
         }
       />

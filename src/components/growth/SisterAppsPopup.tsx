@@ -17,7 +17,7 @@ const SISTER_APPS: SisterApp[] = [
   {
     id: "diet",
     name: "SmartyDiet",
-    tagline: "Eat smart. Fuel your body. Live longer.",
+    tagline: "Create your diet plan. Eat better, live longer.",
     url: "https://smartydiet.com",
     image: logoDiet,
   },
