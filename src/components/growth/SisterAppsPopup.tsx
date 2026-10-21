@@ -17,7 +17,7 @@ const SISTER_APPS: SisterApp[] = [
   {
     id: "diet",
     name: "SmartyDiet",
-    tagline: "Eat smart. Fuel your body. Live longer.",
+    tagline: "Create your diet plan. Eat better, live longer.",
     url: "https://smartydiet.com",
     image: logoDiet,
   },
@@ -90,7 +90,7 @@ export const SisterAppsPopup = () => {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-3 py-1 transition-transform duration-300 hover:translate-x-1 focus-visible:outline-none"
               >
-                <div className="h-14 w-14 shrink-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                <div className="h-16 w-16 shrink-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
                   <img
                     src={app.image}
                     alt={app.name}
@@ -99,8 +99,8 @@ export const SisterAppsPopup = () => {
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-extrabold leading-tight text-foreground transition-colors group-hover:text-primary">{app.name}</h3>
-                  <p className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug text-muted-foreground">{app.tagline}</p>
+                  <h3 className="text-[16px] font-extrabold leading-tight text-foreground transition-colors group-hover:text-primary">{app.name}</h3>
+                  <p className="mt-0.5 line-clamp-2 text-[12.5px] font-medium leading-snug text-muted-foreground">{app.tagline}</p>
                 </div>
                 <ExternalLink className="w-3.5 h-3.5 text-primary shrink-0" />
               </a>
