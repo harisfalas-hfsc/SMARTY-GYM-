@@ -2,7 +2,7 @@ import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { Clock, Loader2, Lock } from "lucide-react";
+import { Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
@@ -179,16 +179,6 @@ function Notice({ back, seo, title, text, children }: { back: React.ReactNode; s
               <span>{bodyweight ? "Bodyweight" : equipment.join(", ")}</span>
             </div>
           </div>
-        </div>
-      )}
-      {seo && (
-        <div className="mt-4 space-y-2" aria-label="Workout sections">
-          {["Activation", "Main Workout", "Finisher", "Cool Down"].map((s) => (
-            <div key={s} className="flex items-center justify-between rounded-2xl border-2 border-border bg-card px-5 py-4">
-              <h3 className="text-sm font-extrabold uppercase tracking-wide text-foreground">{s}</h3>
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground"><Lock className="h-4 w-4 text-primary" />Premium</span>
-            </div>
-          ))}
         </div>
       )}
       <div className="mt-4 rounded-3xl border-2 border-blue-400 bg-card p-6 text-center">
