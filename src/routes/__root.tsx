@@ -291,8 +291,8 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
-// Sister-app announcement is paused; flip this to true to bring it back.
-const SHOW_SISTER_APPS_POPUP = false;
+// Sister-app announcement is back: shows after 20 seconds on desktop and mobile.
+const SHOW_SISTER_APPS_POPUP = true;
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   // Invisible SEO preservation: addresses published by the previous
