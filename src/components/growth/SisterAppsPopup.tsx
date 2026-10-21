@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { ExternalLink, Sparkles, X } from "lucide-react";
-import logoMove from "@/assets/smartymove-logo.png";
 import logoDiet from "@/assets/smartydiet-logo.png";
 import { Button } from "@/components/ui/button";
 
@@ -22,16 +21,9 @@ const SISTER_APPS: SisterApp[] = [
     url: "https://smartydiet.com",
     image: logoDiet,
   },
-  {
-    id: "move",
-    name: "SmartyMove",
-    tagline: "Check your posture. Correct your movement. Live better.",
-    url: "https://smartymove.com",
-    image: logoMove,
-  },
 ];
 
-const DELAY_MS = 30000;
+const DELAY_MS = 20000;
 
 export const SisterAppsPopup = () => {
   const [open, setOpen] = useState(false);
