@@ -42,6 +42,8 @@ import type { CronJobDefinition } from "@/lib/cron/registry";
 import type { CronJobConfig, CronRunRow } from "@/lib/cron/jobs.server";
 import { HEALTH_CHECKS, DEFAULT_HEALTH_RECIPIENT } from "@/lib/cron/health-checks";
 import { AppConfirmDialog } from "@/components/ui/app-dialog";
+import { DEFAULT_GIFT_INTRO } from "@/lib/gifts/rules";
+import giftImage from "@/assets/smarty-gift.jpg";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -95,7 +97,7 @@ export function AdminCronTab() {
     for (const def of r.definitions) {
       const c = r.configs[def.key];
       const lines = def.key === "seo-refresh" ? c?.content?.keywords : c?.content?.lines;
-      next[def.key] = (lines ?? []).join("\n");
+      next[def.key] = def.key === "smarty-gift-reminders" ? (lines?.join("\n") || DEFAULT_GIFT_INTRO) : (lines ?? []).join("\n");
     }
     setDrafts(next);
   }
@@ -148,7 +150,7 @@ export function AdminCronTab() {
       .map((l) => l.trim())
       .filter(Boolean);
     await patch(def.key, {
-      content: def.key === "seo-refresh" ? { keywords: lines } : { lines },
+      content: { ...configs[def.key]?.content, ...(def.key === "seo-refresh" ? { keywords: lines } : { lines }) },
     });
   }
 
@@ -570,6 +572,10 @@ export function AdminCronTab() {
                       onChange={(e) => setDrafts((p) => ({ ...p, [def.key]: e.target.value }))}
                     />
                     <p className="text-xs text-muted-foreground">{def.contentHelp}</p>
+                    {def.key === "smarty-gift-reminders" && <div className="max-w-md overflow-hidden rounded-lg border border-border bg-card">
+                      <img src={giftImage} width={1536} height={1024} alt="Smarty Gift email preview" loading="lazy" className="aspect-[2/1] w-full object-cover" />
+                      <div className="space-y-3 p-4"><p className="font-bold text-primary">Smarty Gift</p><p className="whitespace-pre-line text-sm">{drafts[def.key] || DEFAULT_GIFT_INTRO}</p><p className="text-sm">[Recipient’s chosen greeting]<br />From [sender’s name]</p><Button disabled size="sm">Claim Your 1-Month Premium Gift</Button></div>
+                    </div>}
                     <Button
                       size="sm"
                       disabled={busy === def.key}
@@ -599,6 +605,10 @@ export function AdminCronTab() {
                 </Button>
               </div>
             ) : null}
+
+            {def.key === "smarty-gift-reminders" && <Button size="sm" variant="outline" disabled={busy === def.key} onClick={() => void runNow(def.key, false)}>
+              <Play className="mr-2 h-4 w-4" />Run due gift reminders now
+            </Button>}
 
             {def.key === "generate-weekly-blog-article" ? (
               <div className="flex flex-wrap gap-2">

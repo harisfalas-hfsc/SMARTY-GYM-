@@ -21,6 +21,8 @@ Disallow: /notifications
 Disallow: /inbox
 Disallow: /messages
 Disallow: /w/
+Disallow: /claim-gift
+Disallow: /smarty-gift/return
 
 # Search and AI answer engines (ChatGPT, Claude, Perplexity, Gemini, Copilot, Grok, Apple, Meta)
 User-agent: GPTBot
@@ -57,6 +59,8 @@ Disallow: /notifications
 Disallow: /inbox
 Disallow: /messages
 Disallow: /w/
+Disallow: /claim-gift
+Disallow: /smarty-gift/return
 
 Sitemap: https://smartygym.com/sitemap-index.xml
 Sitemap: https://smartygym.com/sitemap.xml
