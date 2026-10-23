@@ -18,6 +18,10 @@ export async function sendFirstPremiumWelcome(input: { db: DB; userId: string })
     .maybeSingle();
   if (subscriptionError) throw new Error(subscriptionError.message);
   if (subscription?.premium_welcome_sent_at) return false;
+  const { data: giftWelcome, error: giftWelcomeError } = await db.from("smarty_gifts")
+    .select("welcome_sent_at").eq("recipient_id", input.userId).not("welcome_sent_at", "is", null).limit(1).maybeSingle();
+  if (giftWelcomeError) throw new Error(giftWelcomeError.message);
+  if (giftWelcome) return false;
 
   const { data: profile, error: profileError } = await db
     .from("profiles")

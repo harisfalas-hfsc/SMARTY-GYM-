@@ -21,6 +21,10 @@ export const Route = createFileRoute("/auth")({
       { title: "Sign in — SmartyGym" },
       { name: "description", content: "Sign in to SmartyGym to build your personalized training plan." },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: "Sign in — SMARTYGYM" },
+      { property: "og:description", content: "Sign in or create your SMARTYGYM account with your email." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Auth,
@@ -124,7 +128,7 @@ function Auth() {
         email: normalizedEmail,
         password,
         options: {
-          emailRedirectTo: window.location.origin,
+          emailRedirectTo: next?.startsWith("/claim-gift?") ? `${window.location.origin}${next}` : window.location.origin,
           data: { name: cleanName, full_name: cleanName, age },
         },
       });

@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import {
   deleteNotifications,
@@ -299,6 +300,12 @@ export function UpdatesPanel({ onUnread }: { onUnread?: (n: number) => void }) {
 
                 {isOpen && (
                   <div className="mt-3 flex flex-wrap items-center gap-2 sm:pl-12">
+                    {n.kind === "smarty_gift" && n.dedupe_key?.startsWith("smarty-gift:") && (
+                      <Button asChild size="sm">
+                        {n.dedupe_key.endsWith(":buyer") ? <Link to="/smarty-gift">Open Smarty Gift</Link> :
+                          <Link to="/claim-gift" search={{ token: n.dedupe_key.split(":")[1], stop: false }}>Open my gift</Link>}
+                      </Button>
+                    )}
                     {n.kind === "welcome" && (
                       <div className="mb-2 grid w-full gap-2 sm:grid-cols-2">
                         {PREMIUM_WELCOME_SECTIONS.map((item, index) => {
