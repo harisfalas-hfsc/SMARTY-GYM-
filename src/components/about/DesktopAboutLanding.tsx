@@ -394,7 +394,8 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                     loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" aria-hidden="true" />
+                  <div className="absolute inset-0 bg-strip-shade transition-opacity duration-500 group-hover:opacity-0" aria-hidden="true" />
+                  <div className="absolute inset-0 bg-strip-shade-strong opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true" />
                   <span className="absolute bottom-6 left-1/2 -translate-x-1/2 rotate-180 whitespace-nowrap text-sm font-extrabold uppercase tracking-[0.2em] text-hero-foreground [writing-mode:vertical-rl] transition-opacity duration-300 group-hover:opacity-0">
                     {s.tag}
                   </span>
