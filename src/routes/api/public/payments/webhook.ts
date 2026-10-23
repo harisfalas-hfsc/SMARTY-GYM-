@@ -176,6 +176,14 @@ async function applyEvent(
       }
       break;
     }
+    case "charge.refunded": {
+      const charge = event.data.object;
+      if (charge.refunded && typeof charge.payment_intent === "string") {
+        const { error } = await (await db()).from("smarty_gifts").update({ status: "refunded", reminders_stopped: true, next_reminder_at: null, premium_ends_at: new Date().toISOString() }).eq("payment_intent_id", charge.payment_intent).eq("environment", env).in("status", ["paid", "claimed"]);
+        if (error) throw new Error(error.message);
+      }
+      break;
+    }
     case "invoice.paid":
       // Subscription state is kept current by the customer.subscription.* events.
       break;

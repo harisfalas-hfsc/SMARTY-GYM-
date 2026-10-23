@@ -308,6 +308,8 @@ export const adminRevokePremium = createServerFn({ method: "POST" })
         } as never)
         .eq("user_id", data.userId);
       if (error) return { error: error.message };
+      const { error: giftError } = await supabaseAdmin.from("smarty_gifts").update({ premium_ends_at: new Date().toISOString() }).eq("recipient_id", data.userId).eq("status", "claimed");
+      if (giftError) return { error: giftError.message };
       await supabaseAdmin
         .from("profiles")
         .update({ wod_mode: false, auto_workout_enabled: false } as never)

@@ -4,15 +4,15 @@ import { notifyOnce } from '../billing-notify.server';
 export type GiftRow = { id:string; buyer_id:string; buyer_email:string; sender_name:string; recipient_name:string; recipient_email:string; personal_message:string; environment:'sandbox'|'live'; status:string; claim_token:string; checkout_session_id:string|null; payment_intent_id:string|null; paid_at:string|null; claimed_at:string|null; recipient_id:string|null; premium_ends_at:string|null; reminder_number:number; reminder_email_sent_number:number|null; next_reminder_at:string|null; reminders_stopped:boolean; recipient_delivered_at:string|null; buyer_delivered_at:string|null; welcome_sent_at:string|null };
 export async function recipientEligibility(db: SupabaseClient, buyerId:string, buyerEmail:string, email:string) {
  const [{data:subs,error:sErr},{data:gift,error:gErr},{data:recipient,error:pErr},{data:history,error:hErr},{data:received,error:rErr}] = await Promise.all([
-  db.from('subscriptions').select('id').eq('user_id',buyerId).in('status',['active','trialing']).or(`current_period_end.is.null,current_period_end.gt.${new Date().toISOString()}`).limit(1),
+  db.from('subscriptions').select('id').eq('user_id',buyerId).eq('environment','live').in('status',['active','trialing']).or(`current_period_end.is.null,current_period_end.gt.${new Date().toISOString()}`).limit(1),
   db.from('smarty_gifts').select('id').eq('recipient_email',email).neq('status','released').limit(1),
   db.from('profiles').select('id').eq('email',email).limit(1).maybeSingle(),
   db.from('premium_email_history').select('email').eq('email',email).maybeSingle(),
-  db.from('smarty_gifts').select('id').eq('recipient_id',buyerId).eq('status','claimed').gt('premium_ends_at',new Date().toISOString()).limit(1),
+  db.from('smarty_gifts').select('id').eq('recipient_id',buyerId).eq('environment','live').eq('status','claimed').gt('premium_ends_at',new Date().toISOString()).limit(1),
  ]);
  for(const e of [sErr,gErr,pErr,hErr,rErr]) if(e) throw new Error(e.message);
  let everPremium=Boolean(history);
- if(recipient) { const {count,error}=await db.from('subscriptions').select('id',{count:'exact',head:true}).eq('user_id',recipient.id); if(error) throw new Error(error.message); everPremium ||= Boolean(count); }
+ if(recipient) { const {data:past,error:pastError}=await db.from('premium_user_history').select('user_id').eq('user_id',recipient.id).maybeSingle();if(pastError)throw new Error(pastError.message);everPremium ||= Boolean(past);const {count,error}=await db.from('subscriptions').select('id',{count:'exact',head:true}).eq('user_id',recipient.id); if(error) throw new Error(error.message); everPremium ||= Boolean(count); }
  return giftEligibility({buyerPremium:Boolean(subs?.length||received?.length),self:buyerEmail.toLowerCase()===email,everPremium,existingGift:Boolean(gift?.length)});
 }
 async function inbox(db:SupabaseClient,userId:string,title:string,body:string,key:string,path:string) {
@@ -20,13 +20,14 @@ async function inbox(db:SupabaseClient,userId:string,title:string,body:string,ke
  if(inserted) { const {sendPushToUsers}=await import('../push-notify.server'); await sendPushToUsers(db,[userId],{title,body,path,tag:key}); }
 }
 export async function deliverGift(db:SupabaseClient,gift:GiftRow) {
+ if(gift.environment!=='live')return;
  const {sendTemplateEmail}=await import('../email-templates/send-email');
  const claimUrl=`https://smartygym.com/claim-gift?token=${gift.claim_token}`;
  if(!gift.recipient_delivered_at && gift.status==='paid') {
   const {data:profile,error}=await db.from('profiles').select('id').eq('email',gift.recipient_email).limit(1).maybeSingle(); if(error) throw new Error(error.message);
   if(profile) await inbox(db,profile.id,`${gift.sender_name} sent you a Smarty Gift`,`${gift.personal_message}\n\n30 days of Premium, starting whenever you activate your gift.`, `smarty-gift:${gift.claim_token}:invitation`, `/claim-gift?token=${gift.claim_token}`);
   const {getCronConfig}=await import('../cron/jobs.server');const invitationConfig=await getCronConfig(db,'smarty-gift-reminders');
-  const result=await sendTemplateEmail('smarty-gift',gift.recipient_email,{templateData:{senderName:gift.sender_name,recipientName:gift.recipient_name,message:gift.personal_message,claimUrl,intro:invitationConfig.content.lines?.join('\n')||DEFAULT_GIFT_INTRO},idempotencyKey:`gift:${gift.id}:invitation`});
+  const result=await sendTemplateEmail('smarty-gift',gift.recipient_email,{templateData:{senderName:gift.sender_name,recipientName:gift.recipient_name,message:gift.personal_message,claimUrl,stopUrl:`${claimUrl}&stop=true`,intro:invitationConfig.content.lines?.join('\n')||DEFAULT_GIFT_INTRO},idempotencyKey:`gift:${gift.id}:invitation`});
   const {error:updateError}=await db.from('smarty_gifts').update({recipient_delivered_at:new Date().toISOString(),...(result.sent?{}:{reminders_stopped:true})}).eq('id',gift.id); if(updateError) throw new Error(updateError.message);
  }
  if(!gift.buyer_delivered_at) {
@@ -64,7 +65,7 @@ export async function giftWelcome(db:SupabaseClient,gift:GiftRow) {
 // service: these scheduled re-engagement sends must respect reminder opt-out.
 export async function runGiftReminders(db:SupabaseClient,config:import('../cron/jobs.server').CronJobConfig) {
  if(!config.enabled) return {status:'skipped' as const,summary:'Smarty Gift reminders are switched off.',changed:false};
- const {data:rows,error}=await db.from('smarty_gifts').select('*').eq('status','paid').eq('reminders_stopped',false).lte('next_reminder_at',new Date().toISOString()).order('next_reminder_at').limit(25); if(error) throw new Error(error.message);
+ const {data:rows,error}=await db.from('smarty_gifts').select('*').eq('environment','live').eq('status','paid').eq('reminders_stopped',false).lte('next_reminder_at',new Date().toISOString()).order('next_reminder_at').limit(25); if(error) throw new Error(error.message);
  let sent=0,stopped=0;const failures:string[]=[];
  for(const gift of (rows??[]) as GiftRow[]) {
   try {

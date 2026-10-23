@@ -94,7 +94,7 @@ export async function getAccessStateForUser(
   if (profileError) throw new Error(profileError.message);
   if (subscriptionError) throw new Error(subscriptionError.message);
   const { data: activeGift, error: giftError } = await db.from("smarty_gifts")
-    .select("id").eq("recipient_id", userId).eq("status", "claimed")
+    .select("id").eq("recipient_id", userId).eq("environment", "live").eq("status", "claimed")
     .gt("premium_ends_at", new Date().toISOString()).limit(1).maybeSingle();
   if (giftError) throw new Error(giftError.message);
 
@@ -161,7 +161,7 @@ export async function getAccessStateForUser(
   let wasPremium = Boolean(subscription || activeGift);
   if (!wasPremium) {
     const { count, error } = await db.from("smarty_gifts").select("id", { count: "exact", head: true })
-      .eq("recipient_id", userId).not("claimed_at", "is", null);
+      .eq("recipient_id", userId).eq("environment", "live").not("claimed_at", "is", null);
     if (error) throw new Error(error.message);
     wasPremium = Boolean(count);
   }

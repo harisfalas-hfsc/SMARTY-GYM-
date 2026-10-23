@@ -223,7 +223,9 @@ function Account() {
             {premium === null
               ? "Checking your membership…"
               : premium
-                ? membership?.cancelAtPeriodEnd
+                ? membership?.provider === "smarty_gift"
+                  ? `Your Smarty Gift Premium lasts${renewLabel ? ` until ${renewLabel}` : " for 30 days"}. No automatic renewal. Afterwards, continue for €9.99/month if you choose.`
+                  : membership?.cancelAtPeriodEnd
                   ? `Your membership is active but set to end${renewLabel ? ` on ${renewLabel}` : ""}. You keep full access until then.`
                   : `Your membership renews automatically every month${renewLabel ? ` — next payment on ${renewLabel}` : ""}. Cancel anytime.`
                 : "You don't have an active membership yet. Subscribe to unlock Smarty Coach, Workout of the Day and your full history."}

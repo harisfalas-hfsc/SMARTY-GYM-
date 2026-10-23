@@ -132,11 +132,12 @@ export function AdminUsersTab() {
         </Button>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         {FILTERS.map((f) => (
           <Button
             key={f.key}
             size="sm"
+            className={f.key === "all" ? "col-span-2 justify-self-start" : "w-full sm:w-auto"}
             variant={filter === f.key ? "default" : "outline"}
             onClick={() => setFilter(f.key)}
           >
