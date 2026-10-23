@@ -17,6 +17,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AiDottxtRouteImport } from './routes/ai[.]txt'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BestOnlineFitnessPlatformRouteImport } from './routes/best-online-fitness-platform'
+import { Route as ClaimGiftRouteImport } from './routes/claim-gift'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CreateYourWorkoutRouteImport } from './routes/create-your-workout'
@@ -38,6 +39,7 @@ import { Route as SitemapExercisesDotxmlRouteImport } from './routes/sitemap-exe
 import { Route as SitemapIndexDotxmlRouteImport } from './routes/sitemap-index[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SmartyCheckinsRouteImport } from './routes/smarty-checkins'
+import { Route as SmartyGiftRouteImport } from './routes/smarty-gift'
 import { Route as SmartyRitualRouteImport } from './routes/smarty-ritual'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TheSmartyMethodRouteImport } from './routes/the-smarty-method'
@@ -60,6 +62,7 @@ import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as CommunityWorkoutsRouteImport } from './routes/community.workouts'
 import { Route as ExerciseLibrarySlugRouteImport } from './routes/exercise-library.$slug'
+import { Route as SmartyGiftReturnRouteImport } from './routes/smarty-gift/return'
 import { Route as SmartyWorkoutsIndexRouteImport } from './routes/smarty-workouts.index'
 import { Route as SmartyWorkoutsWorkoutIdRouteImport } from './routes/smarty-workouts.$workoutId'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
@@ -124,6 +127,11 @@ const BestOnlineFitnessPlatformRoute =
     path: '/best-online-fitness-platform',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ClaimGiftRoute = ClaimGiftRouteImport.update({
+  id: '/claim-gift',
+  path: '/claim-gift',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachRoute = CoachRouteImport.update({
   id: '/coach',
   path: '/coach',
@@ -227,6 +235,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SmartyCheckinsRoute = SmartyCheckinsRouteImport.update({
   id: '/smarty-checkins',
   path: '/smarty-checkins',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartyGiftRoute = SmartyGiftRouteImport.update({
+  id: '/smarty-gift',
+  path: '/smarty-gift',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SmartyRitualRoute = SmartyRitualRouteImport.update({
@@ -340,6 +353,11 @@ const ExerciseLibrarySlugRoute = ExerciseLibrarySlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ExerciseLibraryRoute,
+} as any)
+const SmartyGiftReturnRoute = SmartyGiftReturnRouteImport.update({
+  id: '/return',
+  path: '/return',
+  getParentRoute: () => SmartyGiftRoute,
 } as any)
 const SmartyWorkoutsIndexRoute = SmartyWorkoutsIndexRouteImport.update({
   id: '/smarty-workouts/',
@@ -468,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
+  '/claim-gift': typeof ClaimGiftRoute
   '/coach': typeof CoachRoute
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
@@ -489,6 +508,7 @@ export interface FileRoutesByFullPath {
   '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
+  '/smarty-gift': typeof SmartyGiftRouteWithChildren
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
@@ -508,6 +528,7 @@ export interface FileRoutesByFullPath {
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
   '/exercise-library/$slug': typeof ExerciseLibrarySlugRoute
+  '/smarty-gift/return': typeof SmartyGiftReturnRoute
   '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -542,6 +563,7 @@ export interface FileRoutesByTo {
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
+  '/claim-gift': typeof ClaimGiftRoute
   '/coach': typeof CoachRoute
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
@@ -563,6 +585,7 @@ export interface FileRoutesByTo {
   '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
+  '/smarty-gift': typeof SmartyGiftRouteWithChildren
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
@@ -582,6 +605,7 @@ export interface FileRoutesByTo {
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
   '/exercise-library/$slug': typeof ExerciseLibrarySlugRoute
+  '/smarty-gift/return': typeof SmartyGiftReturnRoute
   '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -618,6 +642,7 @@ export interface FileRoutesById {
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
+  '/claim-gift': typeof ClaimGiftRoute
   '/coach': typeof CoachRoute
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
@@ -639,6 +664,7 @@ export interface FileRoutesById {
   '/sitemap-index.xml': typeof SitemapIndexDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smarty-checkins': typeof SmartyCheckinsRoute
+  '/smarty-gift': typeof SmartyGiftRouteWithChildren
   '/smarty-ritual': typeof SmartyRitualRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
@@ -658,6 +684,7 @@ export interface FileRoutesById {
   '/checkout/return': typeof CheckoutReturnRoute
   '/community/workouts': typeof CommunityWorkoutsRoute
   '/exercise-library/$slug': typeof ExerciseLibrarySlugRoute
+  '/smarty-gift/return': typeof SmartyGiftReturnRoute
   '/smarty-workouts/$workoutId': typeof SmartyWorkoutsWorkoutIdRoute
   '/tools/1rm-calculator': typeof Tools1rmCalculatorRoute
   '/tools/rounds-tracker': typeof ToolsRoundsTrackerRoute
@@ -694,6 +721,7 @@ export interface FileRouteTypes {
     | '/ai.txt'
     | '/auth'
     | '/best-online-fitness-platform'
+    | '/claim-gift'
     | '/coach'
     | '/contact'
     | '/create-your-workout'
@@ -715,6 +743,7 @@ export interface FileRouteTypes {
     | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
+    | '/smarty-gift'
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
@@ -734,6 +763,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/community/workouts'
     | '/exercise-library/$slug'
+    | '/smarty-gift/return'
     | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -768,6 +798,7 @@ export interface FileRouteTypes {
     | '/ai.txt'
     | '/auth'
     | '/best-online-fitness-platform'
+    | '/claim-gift'
     | '/coach'
     | '/contact'
     | '/create-your-workout'
@@ -789,6 +820,7 @@ export interface FileRouteTypes {
     | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
+    | '/smarty-gift'
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
@@ -808,6 +840,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/community/workouts'
     | '/exercise-library/$slug'
+    | '/smarty-gift/return'
     | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -843,6 +876,7 @@ export interface FileRouteTypes {
     | '/ai.txt'
     | '/auth'
     | '/best-online-fitness-platform'
+    | '/claim-gift'
     | '/coach'
     | '/contact'
     | '/create-your-workout'
@@ -864,6 +898,7 @@ export interface FileRouteTypes {
     | '/sitemap-index.xml'
     | '/sitemap.xml'
     | '/smarty-checkins'
+    | '/smarty-gift'
     | '/smarty-ritual'
     | '/terms'
     | '/the-smarty-method'
@@ -883,6 +918,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/community/workouts'
     | '/exercise-library/$slug'
+    | '/smarty-gift/return'
     | '/smarty-workouts/$workoutId'
     | '/tools/1rm-calculator'
     | '/tools/rounds-tracker'
@@ -919,6 +955,7 @@ export interface RootRouteChildren {
   AiDottxtRoute: typeof AiDottxtRoute
   AuthRoute: typeof AuthRoute
   BestOnlineFitnessPlatformRoute: typeof BestOnlineFitnessPlatformRoute
+  ClaimGiftRoute: typeof ClaimGiftRoute
   CoachRoute: typeof CoachRoute
   ContactRoute: typeof ContactRoute
   CreateYourWorkoutRoute: typeof CreateYourWorkoutRoute
@@ -940,6 +977,7 @@ export interface RootRouteChildren {
   SitemapIndexDotxmlRoute: typeof SitemapIndexDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SmartyCheckinsRoute: typeof SmartyCheckinsRoute
+  SmartyGiftRoute: typeof SmartyGiftRouteWithChildren
   SmartyRitualRoute: typeof SmartyRitualRoute
   TermsRoute: typeof TermsRoute
   TheSmartyMethodRoute: typeof TheSmartyMethodRoute
@@ -1032,6 +1070,13 @@ declare module '@tanstack/react-router' {
       path: '/best-online-fitness-platform'
       fullPath: '/best-online-fitness-platform'
       preLoaderRoute: typeof BestOnlineFitnessPlatformRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/claim-gift': {
+      id: '/claim-gift'
+      path: '/claim-gift'
+      fullPath: '/claim-gift'
+      preLoaderRoute: typeof ClaimGiftRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/coach': {
@@ -1179,6 +1224,13 @@ declare module '@tanstack/react-router' {
       path: '/smarty-checkins'
       fullPath: '/smarty-checkins'
       preLoaderRoute: typeof SmartyCheckinsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smarty-gift': {
+      id: '/smarty-gift'
+      path: '/smarty-gift'
+      fullPath: '/smarty-gift'
+      preLoaderRoute: typeof SmartyGiftRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/smarty-ritual': {
@@ -1334,6 +1386,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/exercise-library/$slug'
       preLoaderRoute: typeof ExerciseLibrarySlugRouteImport
       parentRoute: typeof ExerciseLibraryRoute
+    }
+    '/smarty-gift/return': {
+      id: '/smarty-gift/return'
+      path: '/return'
+      fullPath: '/smarty-gift/return'
+      preLoaderRoute: typeof SmartyGiftReturnRouteImport
+      parentRoute: typeof SmartyGiftRoute
     }
     '/smarty-workouts/': {
       id: '/smarty-workouts/'
@@ -1532,6 +1591,18 @@ const ExerciseLibraryRouteWithChildren = ExerciseLibraryRoute._addFileChildren(
   ExerciseLibraryRouteChildren,
 )
 
+interface SmartyGiftRouteChildren {
+  SmartyGiftReturnRoute: typeof SmartyGiftReturnRoute
+}
+
+const SmartyGiftRouteChildren: SmartyGiftRouteChildren = {
+  SmartyGiftReturnRoute: SmartyGiftReturnRoute,
+}
+
+const SmartyGiftRouteWithChildren = SmartyGiftRoute._addFileChildren(
+  SmartyGiftRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -1542,6 +1613,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiDottxtRoute: AiDottxtRoute,
   AuthRoute: AuthRoute,
   BestOnlineFitnessPlatformRoute: BestOnlineFitnessPlatformRoute,
+  ClaimGiftRoute: ClaimGiftRoute,
   CoachRoute: CoachRoute,
   ContactRoute: ContactRoute,
   CreateYourWorkoutRoute: CreateYourWorkoutRoute,
@@ -1563,6 +1635,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapIndexDotxmlRoute: SitemapIndexDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SmartyCheckinsRoute: SmartyCheckinsRoute,
+  SmartyGiftRoute: SmartyGiftRouteWithChildren,
   SmartyRitualRoute: SmartyRitualRoute,
   TermsRoute: TermsRoute,
   TheSmartyMethodRoute: TheSmartyMethodRoute,
