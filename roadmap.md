@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Smarty Gift
+- [ ] Move the three gift descriptions before the form; include free/gift members in Admin Members and gift buyer/recipient details in total Revenue.
 - [ ] Secure gift checkout, one-recipient lifetime history, webhook fulfillment and atomic 30-day claim.
 - [ ] Public gift and claim pages, ten greetings/custom note, email-only signup continuation, inbox/account integration.
 - [ ] Branded gift emails and admin-editable daily reminders with preview, run-now and durable dedupe.
