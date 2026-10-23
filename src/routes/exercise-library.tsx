@@ -72,7 +72,7 @@ export const Route = createFileRoute("/exercise-library")({
     }
     return { schemaExercises, initialExercises };
   },
-  head: ({ loaderData, matches }) => matches.some((m) => m.routeId === "/exercise-library/$slug") ? { meta: [] } : ({
+  head: ({ loaderData, matches }) => matches.some((m) => (m.routeId as string) === "/exercise-library/$slug") ? { meta: [] } : ({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
