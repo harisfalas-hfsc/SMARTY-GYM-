@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, RefreshCw, TrendingUp, AlertTriangle } from "lucide-react";
+import { Loader2, RefreshCw, TrendingUp, AlertTriangle, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -164,12 +164,13 @@ export function AdminRevenueTab() {
         <>
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             <Stat label="Monthly recurring revenue" value={money(report.mrr)} help="Active and trialing subscriptions, normalised to a month." />
-            <Stat label="Paid in range" value={money(report.grossInRange)} help={`${report.paidInvoices} paid invoices between the selected dates.`} />
+            <Stat label="Paid in range" value={money(report.grossInRange)} help={`${report.paidInvoices} subscription payments + ${report.giftCount} Smarty Gifts between the selected dates.`} />
             <Stat label="Active subscribers" value={String(report.activeCount)} help="Subscriptions currently billing normally." />
             <Stat label="On trial" value={String(report.trialingCount)} help="Subscriptions inside a trial period." />
             <Stat label="Payment problems" value={String(report.pastDueCount)} help="Subscriptions past due or unpaid — the provider keeps retrying." />
             <Stat label="Cancelled" value={String(report.canceledCount)} help="Subscriptions that ended." />
             <Stat label="Complimentary members" value={String(report.complimentaryCount)} help="Members you gave free months to from the Members section." />
+            <Stat label="Smarty Gift revenue" value={money(report.giftRevenue)} help={`${report.giftCount} one-time gifts. Included in Paid in range, never in monthly recurring revenue.`} />
             <Stat label="Unpaid / written off" value={money(report.failedAmount)} help="Invoices still open or marked uncollectible in the range." />
           </div>
 
@@ -276,10 +277,11 @@ export function AdminRevenueTab() {
                     className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold">{p.email}</p>
+                      <p className="break-words text-sm font-semibold">{p.kind === "gift" && p.buyerName ? `${p.buyerName} · ` : ""}{p.email}</p>
+                      {p.kind === "gift" && <p className="mt-1 break-words text-xs text-muted-foreground">Gift to {p.recipientName} · {p.recipientEmail}</p>}
                       <p className="text-xs text-muted-foreground">{formatDate(p.created_at)}</p>
                     </div>
-                    <span className="text-sm font-semibold">{money(p.amount)}</span>
+                    <div className="flex items-center gap-2">{p.kind === "gift" && <Badge className="gap-1"><Gift className="h-3 w-3" />Gift</Badge>}{p.status === "refunded" && <Badge variant="outline">Refunded</Badge>}<span className="text-sm font-semibold">{money(p.amount)}</span></div>
                   </div>
                 ))}
               </div>

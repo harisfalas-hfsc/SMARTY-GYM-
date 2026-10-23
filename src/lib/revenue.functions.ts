@@ -39,6 +39,10 @@ export type RevenuePayment = {
   created_at: string;
   status: string;
   url: string | null;
+  kind?: "gift";
+  buyerName?: string;
+  recipientName?: string;
+  recipientEmail?: string;
 };
 
 export type RevenueReport = {
@@ -53,6 +57,8 @@ export type RevenueReport = {
   pastDueCount: number;
   canceledCount: number;
   complimentaryCount: number;
+  giftCount: number;
+  giftRevenue: number;
   grossInRange: number;
   paidInvoices: number;
   failedAmount: number;
@@ -271,6 +277,30 @@ export const adminGetRevenue = createServerFn({ method: "POST" })
         );
       }
 
+      const giftRows: import("./gifts/admin-reporting").GiftSale[] = [];
+      for (let offset = 0; ; offset += 1000) {
+        const { data: page, error } = await supabaseAdmin.from("smarty_gifts")
+          .select("id,buyer_email,sender_name,recipient_name,recipient_email,environment,status,paid_at")
+          .eq("environment", data.environment).in("status", ["paid", "claimed", "refunded"])
+          .gte("paid_at", from.toISOString()).lte("paid_at", to.toISOString()).order("id").range(offset, offset + 999);
+        if (error) throw new Error(error.message);
+        giftRows.push(...(page ?? []));
+        if ((page ?? []).length < 1000) break;
+      }
+      const { giftSalesInRange, giftGross } = await import("./gifts/admin-reporting");
+      const giftSales = giftSalesInRange(giftRows, data.environment, from.toISOString(), to.toISOString());
+      const giftRevenue = giftGross(giftSales);
+      grossInRange += giftRevenue;
+      for (const gift of giftSales) {
+        const created = gift.paid_at ?? from.toISOString();
+        const { key, label } = bucketKey(new Date(created), granularity);
+        const bucket = bucketMap.get(key) ?? { key, label, amount: 0, invoices: 0 };
+        bucket.amount += 4.99; bucket.invoices += 1; bucketMap.set(key, bucket);
+        if (gift.status === "refunded") refundedAmount += 4.99;
+        recentPayments.push({ id: gift.id, email: gift.buyer_email, amount: 4.99, currency: "eur", created_at: created,
+          status: gift.status, url: null, kind: "gift", buyerName: gift.sender_name, recipientName: gift.recipient_name, recipientEmail: gift.recipient_email });
+      }
+
       const buckets = [...bucketMap.values()].sort((a, b) => a.key.localeCompare(b.key));
       recentPayments.sort((a, b) => b.created_at.localeCompare(a.created_at));
       failures.sort((a, b) => b.created_at.localeCompare(a.created_at));
@@ -289,6 +319,8 @@ export const adminGetRevenue = createServerFn({ method: "POST" })
           pastDueCount,
           canceledCount,
           complimentaryCount: complimentaryCount ?? 0,
+          giftCount: giftSales.length,
+          giftRevenue,
           grossInRange,
           paidInvoices,
           failedAmount,
