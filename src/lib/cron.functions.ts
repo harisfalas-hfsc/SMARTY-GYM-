@@ -152,6 +152,14 @@ export const adminRunCronJob = createServerFn({ method: "POST" })
           return { status: r.status, summary: r.summary, emailed: true };
         }
 
+        if (data.key === "smarty-gift-reminders") {
+          const config = await getCronConfig(db, "smarty-gift-reminders");
+          const { runGiftReminders } = await import("@/lib/gifts/service.server");
+          const result = await runGiftReminders(db, config);
+          await recordRun(db, { jobKey: "smarty-gift-reminders", ...result, trigger: "manual" });
+          return { status: result.status, summary: result.summary };
+        }
+
         if (data.key === "wod-selection") {
           const { selectWodForDate, addDays } = await import("@/lib/wod/select.server");
           const { localDateISO } = await import("@/lib/wod-cycle");

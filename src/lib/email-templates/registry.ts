@@ -14,6 +14,7 @@ import { template as workoutReadyAdmin } from './workout-ready-admin'
 import { template as paymentFailed } from './payment-failed'
 import { template as premiumWelcome } from './premium-welcome'
 import { template as userActivityReport } from './user-activity-report'
+import { template as smartyGift } from './smarty-gift'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -28,6 +29,7 @@ export interface TemplateEntry {
  * Template registry — maps template names to their React Email components.
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
+  'smarty-gift': smartyGift,
   'admin-alert': adminAlert,
   'contact-confirmation': contactConfirmation,
   'cron-report': cronReport,
