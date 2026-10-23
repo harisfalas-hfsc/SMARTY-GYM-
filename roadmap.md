@@ -1,10 +1,11 @@
 # Roadmap
 
 ## Smarty Gift
-- [ ] Secure gift checkout, one-recipient lifetime history, webhook fulfillment and atomic 30-day claim.
-- [ ] Public gift and claim pages, ten greetings/custom note, email-only signup continuation, inbox/account integration.
-- [ ] Branded gift emails and admin-editable daily reminders with preview, run-now and durable dedupe.
-- [ ] Tests and desktop/mobile real signed-in flow verification.
+- [x] Move descriptions before the form; include all accounts/free/gift members and gift buyer/recipient revenue details. Real admin shows 23 members, 16 free, 7 paying, 0 gifts; mobile adjacent filters and no overflow checked.
+- [x] Implement secure checkout, durable lifetime identity, signed webhooks and atomic 30-day claim; sandbox gifts excluded from real access/delivery and revenue.
+- [x] Public gift/claim pages, ten greetings/custom note, email-only continuation and inbox/account integration implemented; visitor desktop/mobile and signed-in page checked.
+- [x] Branded emails and admin-editable daily reminders with preview, run-now and delivery dedupe implemented; real Cron entry checked without sending.
+- [ ] Verify a real paid gift through recipient activation, email/inbox delivery and revenue read-back (blocked: no live gift purchase performed; current requesting account has no live qualifying membership). Eligibility correctly rejects purchase; no customer data or payments changed.
 
 - [x] Add top-right badge-style blog sharing with canonical links, header pictures and workout-style alternatives; 7 tests and build pass. Real Mastery article checked at 384/1280px, clipboard and WhatsApp/email destinations verified, captured native picture inspected. Installed-app delivery remains unverified.
 

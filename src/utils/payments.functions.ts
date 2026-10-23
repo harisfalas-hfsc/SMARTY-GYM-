@@ -172,6 +172,13 @@ export const getMyMembership = createServerFn({ method: "GET" })
       .limit(1)
       .maybeSingle();
 
+    const { data: gift, error: giftError } = await context.supabase.from("smarty_gifts").select("premium_ends_at")
+      .eq("recipient_id", context.userId).eq("environment", "live").eq("status", "claimed")
+      .gt("premium_ends_at", new Date().toISOString()).limit(1).maybeSingle();
+    if (giftError) throw new Error(giftError.message);
+    const liveSubscription = data && ["active", "trialing", "past_due"].includes(data.status) && (!data.current_period_end || Date.parse(data.current_period_end) > Date.now());
+    if (gift && !liveSubscription) return { hasBilling: false, status: "active", provider: "smarty_gift", cancelAtPeriodEnd: false, currentPeriodEnd: gift.premium_ends_at };
+
     const row = data as
       | {
           provider?: string | null;

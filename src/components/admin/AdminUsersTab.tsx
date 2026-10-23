@@ -31,11 +31,12 @@ import { AdminMemberDetail } from "@/components/admin/AdminMemberDetail";
 import { formatDate } from "@/lib/date-format";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 
-type Filter = "all" | "subscriber" | "complimentary" | "member";
+type Filter = "all" | "subscriber" | "complimentary" | "gift" | "member";
 
 const FILTERS: { key: Filter; label: string }[] = [
   { key: "all", label: "Everyone" },
   { key: "subscriber", label: "Paying subscribers" },
+  { key: "gift", label: "Gift members" },
   { key: "complimentary", label: "Complimentary" },
   { key: "member", label: "Free members" },
 ];
@@ -79,6 +80,7 @@ export function AdminUsersTab() {
       all: users.length,
       subscriber: users.filter((u) => u.membership === "subscriber").length,
       complimentary: users.filter((u) => u.membership === "complimentary").length,
+      gift: users.filter((u) => u.membership === "gift").length,
       member: users.filter((u) => u.membership === "member").length,
     }),
     [users],
@@ -130,11 +132,12 @@ export function AdminUsersTab() {
         </Button>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         {FILTERS.map((f) => (
           <Button
             key={f.key}
             size="sm"
+            className={f.key === "all" ? "col-span-2 justify-self-start" : "w-full sm:w-auto"}
             variant={filter === f.key ? "default" : "outline"}
             onClick={() => setFilter(f.key)}
           >
@@ -184,6 +187,7 @@ export function AdminUsersTab() {
                       <Gift className="h-3 w-3" /> Complimentary
                     </Badge>
                   )}
+                  {u.membership === "gift" && <Badge className="gap-1"><Gift className="h-3 w-3" />Smarty Gift</Badge>}
                   {u.membership === "member" && <Badge variant="outline">Member (free)</Badge>}
                   {u.membership_status === "past_due" && (
                     <Badge variant="destructive">Payment failed</Badge>
@@ -201,6 +205,7 @@ export function AdminUsersTab() {
                 </div>
               </div>
 
+              {u.gift_sender && <p className="mt-2 text-xs text-muted-foreground">Gifted by {u.gift_sender}</p>}
               <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground sm:grid-cols-3">
                 <span>Workouts: {u.workouts}</span>
                 <span>Joined: {formatDate(u.created_at)}</span>

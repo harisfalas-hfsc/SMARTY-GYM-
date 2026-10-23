@@ -40,3 +40,5 @@
 - Interval/round steps log one set_logs row per interval (interval_index), count from statedIntervals in parse-steps.ts — why: training load sums every interval actually done, never one.
 - Browser push only via sendPushToUsers (push-notify.server.ts), to accounts that newly got the paired inbox row — why: no duplicate pushes.
 - Smarty Gift uses separate durable gift entitlements and premium email history, service-only atomic reservation/claim functions, and the existing membership boundary; scheduled invitations use Resend with gift-specific opt-out — why: lifetime eligibility, race-safe claims, preserved billing and safe reminder delivery.
+
+- Admin gift reporting shares pure membership/sale classification in gifts/admin-reporting; gift sales add to gross receipts, never recurring revenue — why: consistent counts and one-time accounting.

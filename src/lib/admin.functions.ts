@@ -15,7 +15,7 @@ async function assertAdmin(ctx: { supabase: any; userId: string; claims: any }) 
 }
 
 /** How a member currently has access. */
-export type MembershipKind = "subscriber" | "complimentary" | "member";
+export type MembershipKind = import("./gifts/admin-reporting").MemberKind;
 
 export type AdminUserRow = {
   id: string;
@@ -32,6 +32,7 @@ export type AdminUserRow = {
   membership_status: string | null;
   membership_provider: string | null;
   membership_until: string | null;
+  gift_sender: string | null;
 };
 
 export const adminListUsers = createServerFn({ method: "POST" })
@@ -45,7 +46,7 @@ export const adminListUsers = createServerFn({ method: "POST" })
       // Fetch auth users to get email + created_at (paginated up to 1000)
       const authUsersMap = new Map<string, { email: string | null; created_at: string }>();
       let page = 1;
-      for (let i = 0; i < 10; i++) {
+      for (;;) {
         const { data: list, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
         if (error) return { error: error.message };
         for (const u of list.users) {
@@ -55,19 +56,22 @@ export const adminListUsers = createServerFn({ method: "POST" })
         page++;
       }
 
-      const { data: profiles, error: pErr } = await supabaseAdmin
-        .from("profiles")
-        .select(
-          "id, display_name, bonus_credits, created_at, age, onboarded, wod_mode, fitness_level, primary_goal, preferred_environment, typical_duration_min, preferred_equipment",
-        )
-        .order("created_at", { ascending: false })
-        .limit(500);
-      if (pErr) return { error: pErr.message };
+      const profiles: any[] = [];
+      for (let offset = 0; ; offset += 1000) {
+        const { data: page, error } = await supabaseAdmin.from("profiles")
+          .select("id, display_name, bonus_credits, created_at, age, onboarded, wod_mode, fitness_level, primary_goal, preferred_environment, typical_duration_min, preferred_equipment")
+          .order("id").range(offset, offset + 999);
+        if (error) return { error: error.message };
+        profiles.push(...(page ?? []));
+        if ((page ?? []).length < 1000) break;
+      }
+      const knownProfiles = new Set(profiles.map(p => p.id));
+      for (const [id, auth] of authUsersMap) if (!knownProfiles.has(id)) profiles.push({ id, created_at: auth.created_at });
 
       const ids = (profiles ?? []).map((p: any) => p.id);
       const filterIds = ids.length ? ids : ["00000000-0000-0000-0000-000000000000"];
 
-      const [{ data: roles }, { data: workouts }, { data: subs }] =
+      const [{ data: roles }, { data: workouts }, { data: subs }, { data: gifts, error: giftError }] =
         await Promise.all([
           supabaseAdmin.from("user_roles").select("user_id, role").in("user_id", filterIds),
           supabaseAdmin.from("workouts").select("user_id").in("user_id", filterIds).limit(20000),
@@ -76,7 +80,11 @@ export const adminListUsers = createServerFn({ method: "POST" })
             .select("user_id, provider, status, current_period_end, updated_at")
             .in("user_id", filterIds)
             .order("updated_at", { ascending: false }),
+          supabaseAdmin.from("smarty_gifts").select("recipient_id,sender_name,premium_ends_at,status").eq("environment", "live").eq("status", "claimed").gt("premium_ends_at", new Date().toISOString()),
         ]);
+      if (giftError) return { error: giftError.message };
+      const giftByUser = new Map((gifts ?? []).map(g => [g.recipient_id, g]));
+      const { memberKind } = await import("./gifts/admin-reporting");
 
       const adminByUser = new Set<string>();
       for (const r of (roles ?? []) as any[]) if (r.role === "admin") adminByUser.add(r.user_id);
@@ -107,11 +115,8 @@ export const adminListUsers = createServerFn({ method: "POST" })
         const auth = authUsersMap.get(p.id);
         const sub = subByUser.get(p.id);
         const live = sub ? isLive(sub) : false;
-        const membership: MembershipKind = !live
-          ? "member"
-          : sub.provider === "admin_grant"
-            ? "complimentary"
-            : "subscriber";
+        const gift = giftByUser.get(p.id);
+        const membership = memberKind({ subscriptionActive: live, complimentary: sub?.provider === "admin_grant", giftActive: Boolean(gift) });
         return {
           id: p.id,
           email: auth?.email ?? "",
@@ -124,7 +129,8 @@ export const adminListUsers = createServerFn({ method: "POST" })
           membership,
           membership_status: sub?.status ?? null,
           membership_provider: sub?.provider ?? null,
-          membership_until: sub?.current_period_end ?? null,
+          membership_until: membership === "gift" ? gift?.premium_ends_at ?? null : sub?.current_period_end ?? null,
+          gift_sender: gift?.sender_name ?? null,
           profile_complete: Boolean(
             p.onboarded &&
               p.age &&
@@ -142,7 +148,7 @@ export const adminListUsers = createServerFn({ method: "POST" })
         ? users.filter((u) => u.email.toLowerCase().includes(q) || u.name.toLowerCase().includes(q))
         : users;
 
-      return { users: filtered };
+      return { users: filtered.sort((a, b) => b.created_at.localeCompare(a.created_at)) };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed to list users" };
     }
@@ -302,6 +308,8 @@ export const adminRevokePremium = createServerFn({ method: "POST" })
         } as never)
         .eq("user_id", data.userId);
       if (error) return { error: error.message };
+      const { error: giftError } = await supabaseAdmin.from("smarty_gifts").update({ premium_ends_at: new Date().toISOString() }).eq("recipient_id", data.userId).eq("status", "claimed");
+      if (giftError) return { error: giftError.message };
       await supabaseAdmin
         .from("profiles")
         .update({ wod_mode: false, auto_workout_enabled: false } as never)

@@ -897,6 +897,21 @@ export type Database = {
         }
         Relationships: []
       }
+      premium_user_history: {
+        Row: {
+          first_premium_at: string
+          user_id: string
+        }
+        Insert: {
+          first_premium_at?: string
+          user_id: string
+        }
+        Update: {
+          first_premium_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           age: number | null
