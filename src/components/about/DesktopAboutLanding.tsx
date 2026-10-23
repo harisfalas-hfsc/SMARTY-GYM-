@@ -332,15 +332,15 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
           style={{ height: "22%" }}
           aria-hidden="true"
         />
-        <div className="relative z-10 h-full">
-          <div className={`mx-auto w-full max-w-[1080px] px-6 ${page === "about" ? "pt-[144px]" : "pt-[118px]"}`}>
-            <div className="w-[640px] max-w-full text-left">
+        <div className={`relative z-10 h-full ${page === "home" ? "flex items-center justify-center" : ""}`}>
+          <div className={`mx-auto w-full max-w-[1080px] px-6 ${page === "about" ? "pt-[144px]" : ""}`}>
+            <div className={`max-w-full ${page === "home" ? "mx-auto w-[760px] text-center" : "w-[640px] text-left"}`}>
               {page === "about" && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">About SmartyGym</p>}
-              <h2 className={`text-[60px] font-extrabold uppercase leading-[1.05] tracking-tight text-hero-foreground ${page === "about" ? "mt-2" : ""}`}>
+              <h2 className={`font-extrabold uppercase tracking-tight text-hero-foreground ${page === "about" ? "mt-2 text-[60px] leading-[1.05]" : "text-[64px] leading-[1.08] tracking-[0.06em]"}`}>
                 <span className="block whitespace-nowrap">Your Gym Re-imagined</span>
                 <span className="block whitespace-nowrap text-primary">Anywhere, Anytime.</span>
               </h2>
-              <p className="mt-3 text-lg leading-relaxed text-hero-foreground/85">
+              <p className={`mt-4 leading-relaxed text-hero-foreground/85 ${page === "home" ? "mx-auto max-w-[460px] text-base" : "text-lg"}`}>
                 Your online gym and fitness coach — built on the sports science and training
                 philosophy of{" "}
                 <Link to="/haris-falas" className="font-bold text-primary hover:underline">
@@ -349,7 +349,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 .
               </p>
             </div>
-            <div className="mt-5 flex flex-nowrap items-center gap-3">
+            <div className={`mt-8 flex flex-nowrap items-center gap-6 ${page === "home" ? "justify-center" : ""}`}>
               {[
                 { to: "/smarty-workouts", label: "Smarty Workouts" },
                 { to: "/wod", label: "Workout of the Day" },
@@ -358,9 +358,13 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 <Link
                   key={b.to}
                   to={b.to}
-                  className="inline-flex h-11 items-center gap-2 rounded-full bg-primary px-8 text-base font-bold text-primary-foreground transition-all hover:opacity-95"
+                  className={
+                    page === "home"
+                      ? "inline-flex h-11 items-center rounded-full border border-primary px-6 text-sm font-bold uppercase text-hero-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                      : "inline-flex h-11 items-center gap-2 rounded-full bg-primary px-8 text-base font-bold text-primary-foreground transition-all hover:opacity-95"
+                  }
                 >
-                  {b.label} <ArrowRight className="h-4 w-4" />
+                  {b.label} {page !== "home" && <ArrowRight className="h-4 w-4" />}
                 </Link>
               ))}
             </div>
