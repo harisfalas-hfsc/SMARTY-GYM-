@@ -1488,6 +1488,8 @@ export type Database = {
           recipient_email: string
           recipient_id: string | null
           recipient_name: string
+          reminder_email_sent_number: number | null
+          reminder_lease_until: string | null
           reminder_number: number
           reminders_stopped: boolean
           sender_name: string
@@ -1514,6 +1516,8 @@ export type Database = {
           recipient_email: string
           recipient_id?: string | null
           recipient_name: string
+          reminder_email_sent_number?: number | null
+          reminder_lease_until?: string | null
           reminder_number?: number
           reminders_stopped?: boolean
           sender_name: string
@@ -1540,6 +1544,8 @@ export type Database = {
           recipient_email?: string
           recipient_id?: string | null
           recipient_name?: string
+          reminder_email_sent_number?: number | null
+          reminder_lease_until?: string | null
           reminder_number?: number
           reminders_stopped?: boolean
           sender_name?: string
@@ -3671,6 +3677,8 @@ export type Database = {
           recipient_email: string
           recipient_id: string | null
           recipient_name: string
+          reminder_email_sent_number: number | null
+          reminder_lease_until: string | null
           reminder_number: number
           reminders_stopped: boolean
           sender_name: string
@@ -3723,6 +3731,8 @@ export type Database = {
           recipient_email: string
           recipient_id: string | null
           recipient_name: string
+          reminder_email_sent_number: number | null
+          reminder_lease_until: string | null
           reminder_number: number
           reminders_stopped: boolean
           sender_name: string
