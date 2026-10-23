@@ -380,7 +380,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 <h2 className="text-5xl font-black uppercase text-foreground">Everything You Need</h2>
               </div>
             </div>
-            <div className="flex h-[560px] gap-3">
+            <div className="flex h-[448px] gap-3">
               {displayedSections.map((s) => (
                 <Link
                   key={s.id}
@@ -392,7 +392,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                     src={s.image}
                     alt={s.tag}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                    className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] ${s.id === "smarty-workouts" ? "object-[73%_center]" : ""}`}
                   />
                   <div className="absolute inset-0 bg-strip-shade transition-opacity duration-500 group-hover:opacity-0" aria-hidden="true" />
                   <div className="absolute inset-0 bg-strip-shade-strong opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true" />
