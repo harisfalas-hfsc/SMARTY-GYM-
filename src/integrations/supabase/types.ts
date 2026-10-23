@@ -882,6 +882,21 @@ export type Database = {
           },
         ]
       }
+      premium_email_history: {
+        Row: {
+          email: string
+          first_premium_at: string
+        }
+        Insert: {
+          email: string
+          first_premium_at?: string
+        }
+        Update: {
+          email?: string
+          first_premium_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           age: number | null
@@ -1450,6 +1465,87 @@ export type Database = {
           steps_bucket?: number | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      smarty_gifts: {
+        Row: {
+          buyer_delivered_at: string | null
+          buyer_email: string
+          buyer_id: string
+          checkout_session_id: string | null
+          claim_token: string
+          claimed_at: string | null
+          created_at: string
+          environment: string
+          id: string
+          next_reminder_at: string | null
+          paid_at: string | null
+          payment_intent_id: string | null
+          personal_message: string
+          premium_ends_at: string | null
+          recipient_delivered_at: string | null
+          recipient_email: string
+          recipient_id: string | null
+          recipient_name: string
+          reminder_number: number
+          reminders_stopped: boolean
+          sender_name: string
+          status: string
+          updated_at: string
+          welcome_sent_at: string | null
+        }
+        Insert: {
+          buyer_delivered_at?: string | null
+          buyer_email: string
+          buyer_id: string
+          checkout_session_id?: string | null
+          claim_token?: string
+          claimed_at?: string | null
+          created_at?: string
+          environment: string
+          id?: string
+          next_reminder_at?: string | null
+          paid_at?: string | null
+          payment_intent_id?: string | null
+          personal_message: string
+          premium_ends_at?: string | null
+          recipient_delivered_at?: string | null
+          recipient_email: string
+          recipient_id?: string | null
+          recipient_name: string
+          reminder_number?: number
+          reminders_stopped?: boolean
+          sender_name: string
+          status?: string
+          updated_at?: string
+          welcome_sent_at?: string | null
+        }
+        Update: {
+          buyer_delivered_at?: string | null
+          buyer_email?: string
+          buyer_id?: string
+          checkout_session_id?: string | null
+          claim_token?: string
+          claimed_at?: string | null
+          created_at?: string
+          environment?: string
+          id?: string
+          next_reminder_at?: string | null
+          paid_at?: string | null
+          payment_intent_id?: string | null
+          personal_message?: string
+          premium_ends_at?: string | null
+          recipient_delivered_at?: string | null
+          recipient_email?: string
+          recipient_id?: string | null
+          recipient_name?: string
+          reminder_number?: number
+          reminders_stopped?: boolean
+          sender_name?: string
+          status?: string
+          updated_at?: string
+          welcome_sent_at?: string | null
         }
         Relationships: []
       }
@@ -3554,6 +3650,41 @@ export type Database = {
       }
     }
     Functions: {
+      claim_smarty_gift: {
+        Args: { p_email: string; p_token: string; p_user: string }
+        Returns: {
+          buyer_delivered_at: string | null
+          buyer_email: string
+          buyer_id: string
+          checkout_session_id: string | null
+          claim_token: string
+          claimed_at: string | null
+          created_at: string
+          environment: string
+          id: string
+          next_reminder_at: string | null
+          paid_at: string | null
+          payment_intent_id: string | null
+          personal_message: string
+          premium_ends_at: string | null
+          recipient_delivered_at: string | null
+          recipient_email: string
+          recipient_id: string | null
+          recipient_name: string
+          reminder_number: number
+          reminders_stopped: boolean
+          sender_name: string
+          status: string
+          updated_at: string
+          welcome_sent_at: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "smarty_gifts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_active_membership: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
@@ -3563,6 +3694,49 @@ export type Database = {
         Returns: boolean
       }
       is_app_admin: { Args: { _user_id: string }; Returns: boolean }
+      reserve_smarty_gift: {
+        Args: {
+          p_buyer: string
+          p_buyer_email: string
+          p_email: string
+          p_env: string
+          p_message: string
+          p_name: string
+          p_sender: string
+        }
+        Returns: {
+          buyer_delivered_at: string | null
+          buyer_email: string
+          buyer_id: string
+          checkout_session_id: string | null
+          claim_token: string
+          claimed_at: string | null
+          created_at: string
+          environment: string
+          id: string
+          next_reminder_at: string | null
+          paid_at: string | null
+          payment_intent_id: string | null
+          personal_message: string
+          premium_ends_at: string | null
+          recipient_delivered_at: string | null
+          recipient_email: string
+          recipient_id: string | null
+          recipient_name: string
+          reminder_number: number
+          reminders_stopped: boolean
+          sender_name: string
+          status: string
+          updated_at: string
+          welcome_sent_at: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "smarty_gifts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       seo_slugify: { Args: { p: string }; Returns: string }
     }
     Enums: {

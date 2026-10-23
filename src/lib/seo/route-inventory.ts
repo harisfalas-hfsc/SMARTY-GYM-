@@ -30,6 +30,9 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/founder-note": "indexable",
   "/how-it-works": "indexable",
   "/pricing": "indexable",
+  "/smarty-gift": "indexable",
+  "/claim-gift": "noindex",
+  "/smarty-gift/return": "noindex",
   "/exercise-library": "indexable",
   "/exercise-library/$slug": "indexable",
   "/wod": "indexable",
@@ -91,6 +94,8 @@ export const PRIVATE_PREFIXES = [
   "/inbox",
   "/messages",
   "/checkout",
+  "/claim-gift",
+  "/smarty-gift/return",
 ];
 
 export const STATIC_SITEMAP_ENTRIES: StaticSitemapEntry[] = [
@@ -102,6 +107,7 @@ export const STATIC_SITEMAP_ENTRIES: StaticSitemapEntry[] = [
   { path: "/founder-note", changefreq: "monthly", priority: "0.6" },
   { path: "/how-it-works", changefreq: "monthly", priority: "0.8" },
   { path: "/pricing", changefreq: "monthly", priority: "0.9", paidOnly: true },
+  { path: "/smarty-gift", changefreq: "monthly", priority: "0.7" },
   { path: "/exercise-library", changefreq: "weekly", priority: "0.9" },
   { path: "/wod", changefreq: "daily", priority: "0.9" },
   { path: "/shared-workouts", changefreq: "daily", priority: "0.75" },

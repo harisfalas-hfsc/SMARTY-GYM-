@@ -303,6 +303,20 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
         }
 
         // Daily user activity report — exact admin-set Cyprus time, previous day, once per day.
+        const giftConfig = jobs["smarty-gift-reminders"];
+        if (giftConfig && isDueNow(giftConfig)) {
+          try {
+            const { runGiftReminders } = await import("@/lib/gifts/service.server");
+            const result = await runGiftReminders(db, giftConfig);
+            await recordRun(db, { jobKey: "smarty-gift-reminders", ...result });
+            if (result.status !== "failed") await markJobRan(db, "smarty-gift-reminders", giftConfig);
+          } catch (e) {
+            const message = e instanceof Error ? e.message : "Gift reminders failed";
+            failures.push(`gift:${message}`);
+            await recordRun(db, { jobKey: "smarty-gift-reminders", status: "failed", summary: message });
+          }
+        }
+
         const activityConfig = jobs["user-activity-report"];
         if (activityConfig && isDueNow(activityConfig)) {
           try {

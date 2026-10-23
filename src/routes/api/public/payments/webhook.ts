@@ -155,7 +155,27 @@ async function applyEvent(
       await upsertSubscription(event.data.object, env, event.created);
       break;
     case "checkout.session.completed":
-    case "checkout.session.async_payment_succeeded":
+    case "checkout.session.async_payment_succeeded": {
+      const { fulfillGift } = await import("@/lib/gifts/service.server");
+      await fulfillGift(await db(), event.data.object, env);
+      break;
+    }
+    case "checkout.session.expired": {
+      const session = event.data.object;
+      if (session.metadata?.kind === "smarty_gift") {
+        await (await db()).from("smarty_gifts").update({ status: "released" })
+          .eq("id", session.metadata.giftId).eq("checkout_session_id", session.id).eq("environment", env).eq("status", "pending");
+      }
+      break;
+    }
+    case "checkout.session.async_payment_failed": {
+      const session = event.data.object;
+      if (session.metadata?.kind === "smarty_gift") {
+        await (await db()).from("smarty_gifts").update({ status: "released" })
+          .eq("id", session.metadata.giftId).eq("checkout_session_id", session.id).eq("environment", env).eq("status", "pending");
+      }
+      break;
+    }
     case "invoice.paid":
       // Subscription state is kept current by the customer.subscription.* events.
       break;

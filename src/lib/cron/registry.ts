@@ -7,6 +7,7 @@
  */
 
 export type CronJobKey =
+  | "smarty-gift-reminders"
   | "daily-motivation"
   | "wod-selection"
   | "schedule-reminders"
@@ -54,6 +55,15 @@ export interface CronJobDefinition {
 }
 
 export const CRON_JOBS: CronJobDefinition[] = [
+  {
+    key: "smarty-gift-reminders", label: "Smarty Gift reminders",
+    description: "Reminds recipients about their unclaimed gift after three days, then every seven days. Gifts never expire before activation. Claiming or choosing Stop gift reminders ends reminders. Existing accounts also receive a matching inbox message.",
+    timing: "fixed", timingNote: "Daily at the time below in Cyprus. Checks only gifts whose reminder is due; default 10:05. Failed deliveries retry on the next check.",
+    sends: [{ title: "Your Smarty Gift is waiting for you", body: "Same gift picture, sender name, personal message and Claim Your Gift button. Reminder email uses Resend and includes Stop gift reminders." }],
+    timeEditable: true, contentEditable: true, contentLabel: "Gift invitation and reminder introduction",
+    contentHelp: "Plain text shown above the sender’s personal message. Leave empty for the standard introduction. The gift picture, personal greeting and activation terms remain unchanged.",
+    runnable: true, defaults: { enabled: true, hour: 10, minute: 5 },
+  },
   {
     key: "daily-motivation",
     label: "Daily motivation message",
