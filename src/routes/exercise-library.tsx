@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatch, useNavigate } from "@tanstack/react-router";
 import { loadRemote } from "@/lib/remote-data";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/exercise-library")({
     }
     return { schemaExercises, initialExercises };
   },
-  head: ({ loaderData }) => ({
+  head: ({ loaderData, matches }) => matches.some((m) => m.routeId === "/exercise-library/$slug") ? { meta: [] } : ({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
@@ -119,8 +119,14 @@ export const Route = createFileRoute("/exercise-library")({
   }),
 
 
-  component: ExerciseLibraryPage,
+  component: ExerciseLibraryRoute,
 });
+
+/** Exercise detail URLs render their own child page (guide + dialog). */
+function ExerciseLibraryRoute() {
+  const child = useMatch({ from: "/exercise-library/$slug", shouldThrow: false });
+  return child ? <Outlet /> : <ExerciseLibraryPage />;
+}
 
 export type Exercise = {
   id: string;

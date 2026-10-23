@@ -86,7 +86,23 @@ function ExerciseSlugPage() {
   return (
     <>
       {/* Semantic heading for crawlers; the visible design is the existing dialog. */}
-      <h1 className="sr-only">{capitalizeWords(exercise.name)}</h1>
+      <article className="sr-only">
+        <h1>{capitalizeWords(exercise.name)}</h1>
+        {exercise.description ? <p>{exercise.description}</p> : null}
+        <dl>
+          {exercise.target_muscle ? (<><dt>Target muscle</dt><dd>{exercise.target_muscle}</dd></>) : null}
+          {exercise.secondary_muscles?.length ? (<><dt>Secondary muscles</dt><dd>{exercise.secondary_muscles.join(", ")}</dd></>) : null}
+          {exercise.body_part ? (<><dt>Body part</dt><dd>{exercise.body_part}</dd></>) : null}
+          {exercise.equipment ? (<><dt>Equipment</dt><dd>{exercise.equipment}</dd></>) : null}
+          {exercise.difficulty ? (<><dt>Difficulty</dt><dd>{exercise.difficulty}</dd></>) : null}
+        </dl>
+        {exercise.instructions?.length ? (
+          <>
+            <h2>How to do {capitalizeWords(exercise.name)}</h2>
+            <ol>{exercise.instructions.map((step, i) => <li key={i}>{step}</li>)}</ol>
+          </>
+        ) : null}
+      </article>
       <ExerciseLibraryPage
         initialExercise={exercise as Exercise}
         onCloseSelected={() => void navigate({ to: "/exercise-library" })}
