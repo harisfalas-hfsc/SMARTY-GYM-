@@ -470,6 +470,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
           );
         })}
       </div>
+      )}
     </div>
   );
 }
