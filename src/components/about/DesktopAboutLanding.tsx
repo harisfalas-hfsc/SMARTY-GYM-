@@ -380,8 +380,10 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 <h2 className="text-5xl font-black uppercase text-foreground">Everything You Need</h2>
               </div>
             </div>
-            <div className="flex h-[448px] gap-3">
-              {displayedSections.map((s) => (
+            <div className="flex h-[480px] gap-3">
+              {displayedSections
+                .filter((s) => s.id !== "smarty-ritual")
+                .map((s) => (
                 <Link
                   key={s.id}
                   to={s.cta.to}
