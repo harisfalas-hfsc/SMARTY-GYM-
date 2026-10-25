@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Admin exercise downloads
-- [ ] Add admin-only search and full exercise-card preview with GIF, standalone animated HTML, static picture and PDF downloads; verify real library data and files without modifying exercises or customer records.
+- [x] Add admin-only search and complete exercise previews with original GIF, embedded animated HTML, static PNG and PDF downloads. Real signed-in Dead Bug exports downloaded and inspected; 12-frame GIF preserved, description/instructions complete, mobile has no horizontal overflow, visitors excluded. Existing 485 tests and 2 export tests pass; build OK. No library or customer records modified; installed-phone sharing unverified.
 
 ## Smarty Gift
 - [x] Move descriptions before the form; include all accounts/free/gift members and gift buyer/recipient revenue details. Real admin shows 23 members, 16 free, 7 paying, 0 gifts; mobile adjacent filters and no overflow checked.
