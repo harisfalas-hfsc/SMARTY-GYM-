@@ -8,6 +8,9 @@ import { exportPdf, exportWord } from "@/lib/ritual-export";
 import { FileDown, FileText } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { adminListRituals, adminUpdateRitual } from "@/lib/ritual.functions";
+import { Checkbox } from "@/components/ui/checkbox";
+import { HtmlDownloadButton } from "./HtmlDownloadButton";
+import { ritualHtmlFile } from "@/lib/ritual-html-export";
 
 type Row = Awaited<ReturnType<typeof adminListRituals>>["rituals"][number];
 
@@ -27,6 +30,7 @@ export function AdminRitualsTab() {
   const [editing, setEditing] = useState<Row | null>(null);
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const download = async (format: "word" | "pdf", rituals: Row[], filename: string) => {
     if (exporting) return;
@@ -64,15 +68,27 @@ export function AdminRitualsTab() {
           </Button>
         </div>
       </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button variant="outline" size="sm" onClick={() => setSelectedIds(new Set(data.rituals.map(r => r.id)))}>Select all ({data.rituals.length})</Button>
+        <Button variant="ghost" size="sm" disabled={!selectedIds.size} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
+        <span className="text-xs text-muted-foreground">{selectedIds.size} selected</span>
+        <HtmlDownloadButton count={selectedIds.size || data.rituals.length} label={selectedIds.size ? "Download selected HTML" : "Download all HTML"} filename="smarty-rituals" load={async (report, embed, cancelled) => {
+          const targets = data.rituals.filter(r => !selectedIds.size || selectedIds.has(r.id));
+          const files = [];
+          for (const [index, ritual] of targets.entries()) {
+            if (cancelled()) throw new Error("Download cancelled.");
+            report(`Preparing ritual ${index + 1} of ${targets.length}…`);
+            files.push(await ritualHtmlFile(ritual, embed));
+          }
+          return files;
+        }} />
+      </div>
       {data.rituals.map((r) => {
         const isToday = r.next === data.today;
         return (
-          <button
-            key={r.id}
-            type="button"
-            onClick={() => setEditing(r)}
-            className={`flex w-full items-start gap-3 rounded-2xl border-2 p-3 text-left transition hover:bg-accent ${isToday ? "border-primary bg-primary/10" : "border-blue-400 bg-card"}`}
-          >
+          <div key={r.id} className={`flex w-full items-start gap-3 rounded-2xl border-2 p-3 text-left ${isToday ? "border-primary bg-primary/10" : "border-blue-400 bg-card"}`}>
+            <Checkbox aria-label={`Select Ritual ${r.number}`} checked={selectedIds.has(r.id)} onCheckedChange={checked => setSelectedIds(current => { const next = new Set(current); if (checked === true) next.add(r.id); else next.delete(r.id); return next; })} />
+            <Button variant="ghost" onClick={() => setEditing(r)} className="h-auto min-w-0 flex-1 items-start justify-start gap-3 whitespace-normal p-0 text-left font-normal">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 font-bold text-primary">{r.number}</span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm">{preview(r.morning_content) || "—"}</span>
@@ -80,7 +96,8 @@ export function AdminRitualsTab() {
                 Next: <strong className="text-foreground">{fmt(r.next, data.today)}</strong> · After that: {fmt(r.following, data.today)}
               </span>
             </span>
-          </button>
+            </Button>
+          </div>
         );
       })}
 
@@ -99,6 +116,7 @@ export function AdminRitualsTab() {
                 </div>
               ))}
               <div className="grid grid-cols-2 gap-2">
+                <HtmlDownloadButton count={1} filename={`smarty-ritual-${editing.number}`} load={async (_report, embed) => [await ritualHtmlFile(editing, embed)]} />
                 <Button variant="outline" disabled={exporting} onClick={() => void download("word", [editing], `smarty-ritual-${editing.number}`)}>
                   <FileText className="mr-2 h-4 w-4" /> Word
                 </Button>
