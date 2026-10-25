@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { ExerciseDownloads } from "@/components/admin/ExerciseDownloads";
 import { Database, Loader2, ShieldAlert, UploadCloud, FileJson, Images } from "lucide-react";
 import { adminCheckAccess } from "@/lib/admin.functions";
 import {
@@ -160,7 +161,8 @@ function Uploader() {
     async function worker() {
       while (index < files.length) {
         const i = index++;
-        const file = files[i]!;
+        const file = files[i];
+        if (!file) continue;
         const rel =
           ((file as File & { webkitRelativePath?: string }).webkitRelativePath || file.name)
             .split("/")
@@ -329,6 +331,7 @@ function Uploader() {
             {importLog && <p className="text-sm text-muted-foreground">{importLog}</p>}
           </CardContent>
         </Card>
+        <ExerciseDownloads />
       </div>
 
       {(status.running || status.total > 0) && (

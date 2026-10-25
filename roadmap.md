@@ -1,5 +1,8 @@
 # Roadmap
 
+## Admin exercise downloads
+- [ ] Add admin-only search and full exercise-card preview with GIF, standalone animated HTML, static picture and PDF downloads; verify real library data and files without modifying exercises or customer records.
+
 ## Smarty Gift
 - [x] Move descriptions before the form; include all accounts/free/gift members and gift buyer/recipient revenue details. Real admin shows 23 members, 16 free, 7 paying, 0 gifts; mobile adjacent filters and no overflow checked.
 - [x] Implement secure checkout, durable lifetime identity, signed webhooks and atomic 30-day claim; sandbox gifts excluded from real access/delivery and revenue.
