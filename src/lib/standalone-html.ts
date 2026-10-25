@@ -24,6 +24,7 @@ export const WORKOUT_PLAYER_CSS = `
 #player .player-content>.player-controls{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;margin:0;padding-top:8px;border-top:1px solid var(--border)}
 #player .player-content>.player-controls button{white-space:nowrap;padding:8px;font-size:14px}
 body:has(#player[open]){overflow:hidden}
+@media(max-height:740px){#player-body .demo{height:clamp(100px,22dvh,160px)}#player-body h2{margin:6px 0}#player-body p{margin:6px 0}#player-body .clock{font-size:32px;margin-top:6px}#player-body .player-controls{margin-top:8px}}
 @media(max-width:639px){#player{width:100%;height:100dvh;max-height:100dvh;max-width:none;border-radius:0;border:0}#player .player-content{padding:8px 12px;padding-bottom:max(8px,env(safe-area-inset-bottom))}}
 `;
 
