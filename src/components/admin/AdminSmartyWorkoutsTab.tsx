@@ -36,6 +36,8 @@ import { SMARTY_DRAFT_EVENT, takeSmartyDraft } from "@/lib/admin-smarty-draft";
 import { Checkbox } from "@/components/ui/checkbox";
 import { workoutSelectionScope } from "@/lib/admin-workout-selection";
 import { publicationDeliverySummary } from "@/lib/broadcast-content";
+import { HtmlDownloadButton } from "./HtmlDownloadButton";
+import { workoutHtmlFile } from "@/lib/workout-html-export";
 
 const LEVELS = [
   { v: 1, label: "Beginner" },
@@ -249,6 +251,16 @@ export function AdminSmartyWorkoutsTab() {
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="outline" disabled={loading || bulkBusy || !shown.length} onClick={() => setSelectedIds(new Set(shown.map((w) => w.id)))}>Select all filtered ({shown.length})</Button>
           <Button size="sm" variant="ghost" disabled={!scope.selected.length || bulkBusy} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
+          <HtmlDownloadButton count={scope.targets.length} disabled={loading || bulkBusy} filename="smarty-workouts" label={scope.selected.length ? "Download selected HTML" : "Download all filtered HTML"} load={async (report, embed, cancelled) => {
+            const targets = [...scope.targets];
+            const files = [];
+            for (const [index, workout] of targets.entries()) {
+              if (cancelled()) throw new Error("Download cancelled.");
+              report(`Preparing workout ${index + 1} of ${targets.length}…`);
+              files.push(await workoutHtmlFile(smartyToWorkoutRow(workout), embed));
+            }
+            return files;
+          }} />
         </div>
       </div>
       <p className="text-xs text-muted-foreground">Each Show action sends one combined inbox announcement per account and one email per opted-in account when announcements are enabled. Hiding sends nothing. See Cron jobs → New workout announcement for delivery history.</p>

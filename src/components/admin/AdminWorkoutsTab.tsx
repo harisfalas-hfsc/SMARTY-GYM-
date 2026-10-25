@@ -25,6 +25,8 @@ import { toast } from "sonner";
 import { adminDuplicateSmartyWorkout } from "@/lib/smarty-workouts.functions";
 import { requestSmartyDraft } from "@/lib/admin-smarty-draft";
 import { Checkbox } from "@/components/ui/checkbox";
+import { HtmlDownloadButton } from "./HtmlDownloadButton";
+import { workoutHtmlFile } from "@/lib/workout-html-export";
 
 type Props = {
   /** When set, the archive is scoped to one member (their full logbook). */
@@ -298,6 +300,32 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
       <div className="flex flex-wrap items-center gap-2">
         <Button variant="outline" size="sm" disabled={loading || selectingAll || total === 0} onClick={() => void selectAllFiltered()}>{selectingAll && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Select all filtered ({total})</Button>
         <Button variant="ghost" size="sm" disabled={selectingAll || !selectedIds.size} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
+        <HtmlDownloadButton count={selectedIds.size || total} disabled={loading || selectingAll} filename="member-workouts" label={selectedIds.size ? "Download selected HTML" : "Download all filtered HTML"} load={async (report, embed, cancelled) => {
+          const ids = [...selectedIds];
+          if (!ids.length) {
+            for (let nextPage = 1; ; nextPage++) {
+              if (cancelled()) throw new Error("Download cancelled.");
+              report("Loading matching workouts…");
+              const result = await listWorkouts({ data: {
+                userId, search: searchTerm, category, focus, source, status, equipment, duration,
+                ...(stars !== "all" ? { stars: Number(stars) } : {}),
+                ...(from ? { from } : {}), ...(to ? { to } : {}), page: nextPage, pageSize: 100,
+              } });
+              if ("error" in result) throw new Error(result.error);
+              ids.push(...result.workouts.map(w => w.id));
+              if (nextPage * 100 >= result.total || !result.workouts.length) break;
+            }
+          }
+          const files = [];
+          for (const [index, id] of [...new Set(ids)].entries()) {
+            if (cancelled()) throw new Error("Download cancelled.");
+            report(`Preparing workout ${index + 1} of ${ids.length}…`);
+            const result = await getWorkout({ data: { id } });
+            if ("error" in result) throw new Error(result.error);
+            files.push(await workoutHtmlFile(result.workout, embed));
+          }
+          return files;
+        }} />
         <p className="text-xs text-muted-foreground">Member workouts are a read-only archive. Show/hide is available only for Smarty Workouts; members’ workouts and Logbooks stay unchanged.</p>
       </div>
 
