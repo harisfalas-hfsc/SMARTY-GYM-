@@ -1,5 +1,10 @@
 # Roadmap
 
+## Admin ritual and workout HTML downloads
+- [ ] Add selected/all standalone ritual HTML downloads, preserving Word/PDF exports.
+- [ ] Add selected/all Smarty and member workout HTML downloads with embedded demonstrations and a read-only player without logging fields.
+- [ ] Verify real administrator downloads, archive contents, offline player and mobile/desktop layouts; run export tests.
+
 ## Admin exercise downloads
 - [x] Add admin-only search and complete exercise previews with original GIF, embedded animated HTML, static PNG and PDF downloads. Real signed-in Dead Bug exports downloaded and inspected; 12-frame GIF preserved, description/instructions complete, mobile has no horizontal overflow, visitors excluded. Existing 485 tests and 2 export tests pass; build OK. No library or customer records modified; installed-phone sharing unverified.
 
