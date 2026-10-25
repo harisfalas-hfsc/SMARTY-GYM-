@@ -35,7 +35,7 @@ export function HtmlDownloadButton({ count, disabled, load, filename, label = "D
       <DialogContent className="max-w-md"><DialogTitle>HTML download</DialogTitle><DialogDescription>{status}</DialogDescription>
         {busy && <Loader2 className="h-6 w-6 animate-spin text-primary" />}
         {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-        {ready && <Button onClick={() => { void deliverExerciseFile(ready.blob, ready.filename).catch(() => setError("The file could not be saved. Please try again.")); }}><Download className="mr-2 h-4 w-4" />Download {ready.filename.endsWith(".zip") ? "ZIP" : "HTML"}</Button>}
+        {ready && <Button onClick={() => { void deliverExerciseFile(ready.blob, ready.filename).then(() => { setOpen(false); setReady(null); generation.current++; }).catch(() => setError("The file could not be saved. Please try again.")); }}><Download className="mr-2 h-4 w-4" />Download {ready.filename.endsWith(".zip") ? "ZIP" : "HTML"}</Button>}
       </DialogContent>
     </Dialog>
   </>;

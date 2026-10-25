@@ -97,7 +97,7 @@
     "date-fns": "^4.1.0",
     "dexie": "^4.4.5",
     "docx": "^9.7.2",
-    "dompurify": "^3.4.13",
+    "dompurify": "^3.4.17",
     "embla-carousel-react": "^8.6.0",
     "fast-png": "^8.0.0",
     "firebase": "^13.0.0",
