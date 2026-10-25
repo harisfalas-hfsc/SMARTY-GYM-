@@ -42,3 +42,4 @@
 - Smarty Gift uses separate durable gift entitlements and premium email history, service-only atomic reservation/claim functions, and the existing membership boundary; scheduled invitations use Resend with gift-specific opt-out — why: lifetime eligibility, race-safe claims, preserved billing and safe reminder delivery.
 
 - Admin gift reporting shares pure membership/sale classification in gifts/admin-reporting; gift sales add to gross receipts, never recurring revenue — why: consistent counts and one-time accounting.
+- Admin exercise downloads read unchanged library facts and prepare embedded-media HTML, static PNG/PDF and original media in the browser before enabling downloads — why: portable client cards, preserved animation, no expiring links or customer-data mutations.
