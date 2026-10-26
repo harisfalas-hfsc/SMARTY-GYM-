@@ -131,3 +131,21 @@ export const announceNewMember = createServerFn({ method: "POST" })
     }
     return { ok: true };
   });
+
+/** Clears the first-sign-in password requirement once the member has set their own password. */
+export const clearPasswordChangeRequirement = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ ok: true } | { error: string }> => {
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data, error } = await supabaseAdmin.auth.admin.getUserById(context.userId);
+      if (error || !data.user) return { error: error?.message ?? "Account not found" };
+      const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(context.userId, {
+        app_metadata: { ...(data.user.app_metadata ?? {}), must_change_password: false },
+      });
+      if (updateError) return { error: updateError.message };
+      return { ok: true };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Could not update your account" };
+    }
+  });

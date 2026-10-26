@@ -158,12 +158,28 @@ export type MyMembership = {
   provider: string | null;
   cancelAtPeriodEnd: boolean;
   currentPeriodEnd: string | null;
+  isAdmin?: boolean;
 };
 
 /** The signed-in member's own membership record, used by the account page. */
 export const getMyMembership = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<MyMembership> => {
+    const { data: adminRow } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    const isAdmin = Boolean(adminRow);
+    const { data: stripeRow } = await context.supabase
+      .from("subscriptions")
+      .select("provider_customer_id")
+      .eq("user_id", context.userId)
+      .eq("provider", "stripe")
+      .not("provider_customer_id", "is", null)
+      .limit(1)
+      .maybeSingle();
     const { data } = await context.supabase
       .from("subscriptions")
       .select("provider,status,cancel_at_period_end,current_period_end,provider_customer_id")
@@ -177,7 +193,8 @@ export const getMyMembership = createServerFn({ method: "GET" })
       .gt("premium_ends_at", new Date().toISOString()).limit(1).maybeSingle();
     if (giftError) throw new Error(giftError.message);
     const liveSubscription = data && ["active", "trialing", "past_due"].includes(data.status) && (!data.current_period_end || Date.parse(data.current_period_end) > Date.now());
-    if (gift && !liveSubscription) return { hasBilling: false, status: "active", provider: "smarty_gift", cancelAtPeriodEnd: false, currentPeriodEnd: gift.premium_ends_at };
+    if (gift && !liveSubscription) return { hasBilling: Boolean(stripeRow), status: "active", provider: "smarty_gift", cancelAtPeriodEnd: false, currentPeriodEnd: gift.premium_ends_at, isAdmin };
+
 
     const row = data as
       | {
