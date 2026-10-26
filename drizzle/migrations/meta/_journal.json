@@ -715,6 +715,13 @@
       "when": 1792751889823,
       "tag": "0101_smarty_gift_lifetime_identity",
       "breakpoints": true
+    },
+    {
+      "idx": 102,
+      "version": "7",
+      "when": 1793043656788,
+      "tag": "0102_allow_admin_grant_provider",
+      "breakpoints": true
     }
   ]
 }
