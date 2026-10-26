@@ -193,8 +193,7 @@ export const getMyMembership = createServerFn({ method: "GET" })
       .gt("premium_ends_at", new Date().toISOString()).limit(1).maybeSingle();
     if (giftError) throw new Error(giftError.message);
     const liveSubscription = data && ["active", "trialing", "past_due"].includes(data.status) && (!data.current_period_end || Date.parse(data.current_period_end) > Date.now());
-    if (gift && !liveSubscription) return { hasBilling: Boolean(stripeRow), status: "active", provider: "smarty_gift", cancelAtPeriodEnd: false, currentPeriodEnd: gift.premium_ends_at, isAdmin };
-
+    if (gift && !liveSubscription) return { hasBilling: false, status: "active", provider: "smarty_gift", cancelAtPeriodEnd: false, currentPeriodEnd: gift.premium_ends_at, isAdmin };
 
     const row = data as
       | {
@@ -212,6 +211,7 @@ export const getMyMembership = createServerFn({ method: "GET" })
       provider: row?.provider ?? null,
       cancelAtPeriodEnd: Boolean(row?.cancel_at_period_end),
       currentPeriodEnd: row?.current_period_end ?? null,
+      isAdmin,
     };
   });
 
