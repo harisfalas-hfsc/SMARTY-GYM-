@@ -24,12 +24,14 @@ import {
   adminSetRole,
   adminGrantPremium,
   adminRevokePremium,
+  adminCreateComplimentaryMember,
   type AdminUserRow,
 } from "@/lib/admin.functions";
 import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
 import { AdminMemberDetail } from "@/components/admin/AdminMemberDetail";
 import { formatDate } from "@/lib/date-format";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
+import { COMPLIMENTARY_MONTH_OPTIONS, MIN_TEMP_PASSWORD } from "@/lib/complimentary";
 
 type Filter = "all" | "subscriber" | "complimentary" | "gift" | "member";
 
@@ -46,6 +48,11 @@ export function AdminUsersTab() {
   const setRole = useServerFn(adminSetRole);
   const grantPremium = useServerFn(adminGrantPremium);
   const revokePremium = useServerFn(adminRevokePremium);
+  const createComplimentary = useServerFn(adminCreateComplimentaryMember);
+  const [newOpen, setNewOpen] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newMonths, setNewMonths] = useState<number>(1);
   const { freeAccessMode } = useFreeAccessMode();
 
   const [users, setUsers] = useState<AdminUserRow[]>([]);
@@ -145,6 +152,54 @@ export function AdminUsersTab() {
           </Button>
         ))}
       </div>
+
+      {filter === "complimentary" && (
+        <div className="rounded-2xl border bg-card p-4">
+          {!newOpen ? (
+            <Button size="sm" onClick={() => setNewOpen(true)}>
+              <Gift className="mr-1 h-4 w-4" /> Add complimentary member
+            </Button>
+          ) : (
+            <div className="space-y-3">
+              <p className="font-bold">New complimentary member</p>
+              <p className="text-xs text-muted-foreground">
+                They receive the usual verification email. After verifying, they sign in with this temporary password and must choose their own.
+              </p>
+              <Input type="email" placeholder="Member email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
+              <Input type="text" placeholder={`Temporary password (min ${MIN_TEMP_PASSWORD} characters)`} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+              <div className="flex flex-wrap gap-2">
+                {COMPLIMENTARY_MONTH_OPTIONS.map((m) => (
+                  <Button key={m} size="sm" variant={newMonths === m ? "default" : "outline"} onClick={() => setNewMonths(m)}>
+                    {m === 12 ? "12 months (1 year)" : `${m} ${m === 1 ? "month" : "months"}`}
+                  </Button>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  disabled={busy}
+                  onClick={() =>
+                    void act(async () => {
+                      const r = await createComplimentary({
+                        data: { email: newEmail, password: newPassword, months: newMonths, origin: window.location.origin },
+                      });
+                      if (!("error" in r)) {
+                        setNewEmail("");
+                        setNewPassword("");
+                        setNewOpen(false);
+                      }
+                      return r;
+                    }, `Complimentary member created — ${newMonths} ${newMonths === 1 ? "month" : "months"} of free access. Verification email sent.`)
+                  }
+                >
+                  {busy ? "Creating…" : "Create member"}
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setNewOpen(false)}>Cancel</Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {freeAccessMode && (
         <p className="rounded-2xl border border-amber-500 bg-amber-500/10 p-3 text-sm">

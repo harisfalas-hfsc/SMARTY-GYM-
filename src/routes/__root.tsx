@@ -19,6 +19,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navigation } from "../components/Navigation";
 import { SiteFooter } from "../components/SiteFooter";
 import { Toaster } from "../components/ui/sonner";
+import { PasswordChangeGate } from "../components/PasswordChangeGate";
 import { SisterAppsPopup } from "../components/growth/SisterAppsPopup";
 import { MobileAppPopup } from "../components/growth/MobileAppPopup";
 import { CheckinModalManager } from "@/components/checkins/CheckinModalManager";
@@ -427,6 +428,7 @@ function RootComponent() {
           </main>
           <SiteFooter />
           <Toaster />
+          <PasswordChangeGate />
           {SHOW_SISTER_APPS_POPUP && <SisterAppsPopup />}
           <MobileAppPopup />
           <CheckinModalManager />

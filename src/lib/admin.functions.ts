@@ -1081,3 +1081,71 @@ export const adminGetMemberDetail = createServerFn({ method: "POST" })
       }
     },
   );
+
+/**
+ * Creates a new member with a temporary password and complimentary Premium.
+ * The member gets the normal verification email, and must change the
+ * password on first sign-in (app_metadata.must_change_password).
+ */
+export const adminCreateComplimentaryMember = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { email: string; password: string; months: number; origin?: string }) => data)
+  .handler(async ({ context, data }): Promise<{ ok: true; until: string } | { error: string }> => {
+    try {
+      await assertAdmin(context as any);
+      const { isComplimentaryMonths, complimentaryUntil, MIN_TEMP_PASSWORD } = await import("@/lib/complimentary");
+      const email = String(data.email ?? "").trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Enter a valid email address." };
+      if (String(data.password ?? "").length < MIN_TEMP_PASSWORD)
+        return { error: `The temporary password needs at least ${MIN_TEMP_PASSWORD} characters.` };
+      if (!isComplimentaryMonths(data.months)) return { error: "Choose 1, 2, 3, 6 or 12 months." };
+
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: existing } = await supabaseAdmin.from("profiles").select("id").ilike("email", email).maybeSingle();
+      if (existing) return { error: "This email already has an account. Use “Give free access” on their member card instead." };
+
+      const { createClient } = await import("@supabase/supabase-js");
+      const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+      const publicClient = createClient(process.env["SUPABASE_URL"]!, key, {
+        auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
+        global: {
+          fetch: (input, init) => {
+            const h = new Headers(init?.headers);
+            if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
+            h.set("apikey", key);
+            return fetch(input, { ...init, headers: h });
+          },
+        },
+      });
+      const origin = typeof data.origin === "string" && /^https?:\/\//.test(data.origin) ? data.origin : "https://smartygym.com";
+      // Normal sign-up so the member receives the usual verification email.
+      const { data: signUp, error: signUpError } = await publicClient.auth.signUp({
+        email,
+        password: data.password,
+        options: { emailRedirectTo: `${origin}/auth` },
+      });
+      if (signUpError) return { error: signUpError.message };
+      const user = signUp.user;
+      if (!user || (user.identities && user.identities.length === 0))
+        return { error: "This email already has an account. Use “Give free access” on their member card instead." };
+
+      const { error: metaError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
+        app_metadata: { ...(user.app_metadata ?? {}), must_change_password: true },
+      });
+      if (metaError) return { error: metaError.message };
+
+      const until = complimentaryUntil(new Date(), data.months);
+      const { error } = await supabaseAdmin.from("subscriptions").insert({
+        user_id: user.id,
+        provider: "admin_grant",
+        status: "active",
+        environment: "live",
+        current_period_start: new Date().toISOString(),
+        current_period_end: until.toISOString(),
+      } as never);
+      if (error) return { error: error.message };
+      return { ok: true, until: until.toISOString() };
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : "Failed to create member" };
+    }
+  });
