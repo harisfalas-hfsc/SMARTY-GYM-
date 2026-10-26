@@ -237,7 +237,9 @@ function Account() {
                   : membership?.cancelAtPeriodEnd
                   ? `Your membership is active but set to end${renewLabel ? ` on ${renewLabel}` : ""}. You keep full access until then.`
                   : `Your membership renews automatically every month${renewLabel ? ` — next payment on ${renewLabel}` : ""}. Cancel anytime.`
-                : "You don't have an active membership yet. Subscribe to unlock Smarty Coach, Workout of the Day and your full history."}
+                : membership?.provider && membership.currentPeriodEnd
+                  ? `Your ${membership.provider === "admin_grant" ? "complimentary membership" : membership.provider === "smarty_gift" ? "Smarty Gift" : "membership"} ended on ${formatDateLong(new Date(membership.currentPeriodEnd))}. Subscribe to continue with full access.`
+                  : "You don't have an active membership yet. Subscribe to unlock Smarty Coach, Workout of the Day and your full history."}
           </p>
 
           {premium ? (
@@ -292,7 +294,11 @@ function Account() {
             <div className="min-w-0">
               <p className="font-bold">Manage my membership</p>
               <p className="text-sm text-muted-foreground">
-                {membership?.status === "past_due" || membership?.status === "unpaid"
+                {membership?.isAdmin
+                  ? "Administrator account — nothing to pay or manage."
+                  : premium && membership?.provider === "admin_grant"
+                  ? `Complimentary member — active until ${renewLabel ?? "—"}. No card on file.`
+                  : membership?.status === "past_due" || membership?.status === "unpaid"
                   ? "A payment did not go through. Update your card or pay the open invoice to keep your membership."
                   : membership?.cancelAtPeriodEnd && membership?.currentPeriodEnd
                     ? `Your membership ends on ${new Date(membership.currentPeriodEnd).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
@@ -316,7 +322,9 @@ function Account() {
                 {portalBusy ? "Opening…" : "Update card, invoices & cancel"}
               </Button>
             ) : null}
-            {membership?.status === "active" ||
+            {membership?.isAdmin ||
+            (premium && !membership?.hasBilling) ||
+            membership?.status === "active" ||
             membership?.status === "trialing" ||
             membership?.status === "past_due" ||
             membership?.status === "paused" ? null : (
