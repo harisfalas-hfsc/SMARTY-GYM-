@@ -219,11 +219,20 @@ function Account() {
             </div>
           </div>
 
+          {membership?.isAdmin ? (
+            <p className="mt-3 inline-flex rounded-full border border-primary px-3 py-1 text-xs font-bold text-primary">Administrator</p>
+          ) : membership?.provider === "admin_grant" ? (
+            <p className="mt-3 inline-flex rounded-full border border-primary px-3 py-1 text-xs font-bold text-primary">Complimentary member</p>
+          ) : null}
           <p className="mt-3 text-sm text-muted-foreground">
             {premium === null
               ? "Checking your membership…"
+              : membership?.isAdmin
+                ? "You are an administrator — full access to everything, no payment needed."
               : premium
-                ? membership?.provider === "smarty_gift"
+                ? membership?.provider === "admin_grant"
+                  ? `Complimentary access from SMARTYGYM${renewLabel ? ` — active until ${renewLabel}` : ""}. No payment and no automatic renewal.`
+                  : membership?.provider === "smarty_gift"
                   ? `Your Smarty Gift Premium lasts${renewLabel ? ` until ${renewLabel}` : " for 30 days"}. No automatic renewal. Afterwards, continue for €9.99/month if you choose.`
                   : membership?.cancelAtPeriodEnd
                   ? `Your membership is active but set to end${renewLabel ? ` on ${renewLabel}` : ""}. You keep full access until then.`
