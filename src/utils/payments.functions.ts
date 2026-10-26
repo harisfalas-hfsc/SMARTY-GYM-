@@ -172,14 +172,6 @@ export const getMyMembership = createServerFn({ method: "GET" })
       .eq("role", "admin")
       .maybeSingle();
     const isAdmin = Boolean(adminRow);
-    const { data: stripeRow } = await context.supabase
-      .from("subscriptions")
-      .select("provider_customer_id")
-      .eq("user_id", context.userId)
-      .eq("provider", "stripe")
-      .not("provider_customer_id", "is", null)
-      .limit(1)
-      .maybeSingle();
     const { data } = await context.supabase
       .from("subscriptions")
       .select("provider,status,cancel_at_period_end,current_period_end,provider_customer_id")
