@@ -144,6 +144,20 @@ export const clearPasswordChangeRequirement = createServerFn({ method: "POST" })
         app_metadata: { ...(data.user.app_metadata ?? {}), must_change_password: false, password_changed_at: new Date().toISOString() },
       });
       if (updateError) return { error: updateError.message };
+      if (data.user.app_metadata?.must_change_password === true) {
+        try {
+          const { notifyAdmins } = await import("@/lib/admin-alert.server");
+          await notifyAdmins({
+            kind: "Member",
+            title: "Complimentary member activated",
+            details: `${data.user.email ?? context.userId} verified their email, signed in and set their own password.`,
+            link: "https://smartygym.com/admin",
+            dedupeKey: `complimentary-activated-${context.userId}`,
+          });
+        } catch {
+          /* alerts never block the action */
+        }
+      }
       return { ok: true };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Could not update your account" };

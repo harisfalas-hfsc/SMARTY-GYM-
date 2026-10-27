@@ -1144,6 +1144,18 @@ export const adminCreateComplimentaryMember = createServerFn({ method: "POST" })
         current_period_end: until.toISOString(),
       } as never);
       if (error) return { error: error.message };
+      try {
+        const { notifyAdmins } = await import("@/lib/admin-alert.server");
+        await notifyAdmins({
+          kind: "Member",
+          title: "Complimentary member created",
+          details: `The administrator created ${email} with ${data.months}-month complimentary Premium, active until ${until.toUTCString().slice(0, 16)}. A verification email was sent to the member.`,
+          link: "https://smartygym.com/admin",
+          dedupeKey: `complimentary-created-${user.id}`,
+        });
+      } catch {
+        /* alerts never block the action */
+      }
       return { ok: true, until: until.toISOString() };
     } catch (e) {
       return { error: e instanceof Error ? e.message : "Failed to create member" };
