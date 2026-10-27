@@ -4,6 +4,8 @@ export const ACTIVITY_TZ = "Europe/Nicosia";
 
 export type ActivityKind =
   | "joined"
+  | "verified"
+  | "password"
   | "profile"
   | "subscribed"
   | "membership-end"
@@ -50,6 +52,8 @@ export interface ActivityReport {
 
 export const KIND_LABEL: Record<ActivityKind, string> = {
   joined: "Created account",
+  verified: "Email verified",
+  password: "Password set",
   profile: "Training profile",
   subscribed: "Subscribed",
   "membership-end": "Membership ends",
@@ -202,4 +206,40 @@ export function sampleReport(): ActivityReport {
     }
   });
   return buildReport("2026-10-09", "2026-10-09", people, events);
+}
+
+export interface AccountFacts {
+  userId: string;
+  createdAt: string | null;
+  emailConfirmedAt: string | null;
+  appMetadata: Record<string, unknown> | null;
+}
+
+/** True when the account was made by an administrator (complimentary member form). */
+export function isAdminCreated(meta: Record<string, unknown> | null | undefined): boolean {
+  return !!meta && (meta.created_by_admin === true || "must_change_password" in meta);
+}
+
+/** Account lifecycle events (creation, verification, own password) inside [from, to). */
+export function accountEvents(a: AccountFacts, from: string, to: string): ActivityEvent[] {
+  const out: ActivityEvent[] = [];
+  const within = (v: string | null | undefined) => !!v && v >= from && v < to;
+  const admin = isAdminCreated(a.appMetadata);
+  if (within(a.createdAt)) out.push({ userId: a.userId, at: a.createdAt!, kind: "joined", text: admin ? "Account created by the administrator" : "Created an account" });
+  // Instant confirmation (e.g. Google sign-in) is not a separate member action.
+  const auto = a.createdAt && a.emailConfirmedAt && new Date(a.emailConfirmedAt).getTime() - new Date(a.createdAt).getTime() < 60_000;
+  if (within(a.emailConfirmedAt) && !auto) out.push({ userId: a.userId, at: a.emailConfirmedAt!, kind: "verified", text: "Verified their email address" });
+  const pw = typeof a.appMetadata?.password_changed_at === "string" ? (a.appMetadata.password_changed_at as string) : null;
+  if (within(pw)) out.push({ userId: a.userId, at: pw!, kind: "password", text: "Replaced the temporary password with their own" });
+  return out;
+}
+
+/** Wording for a new subscription row. */
+export function subscriptionText(provider: string | null | undefined, start: string | null, end: string | null): string {
+  if (provider === "admin_grant") {
+    const months = start && end ? Math.max(1, Math.round((new Date(end).getTime() - new Date(start).getTime()) / (30.44 * 86_400_000))) : null;
+    return `Administrator granted ${months ? `${months}-month ` : ""}complimentary Premium`;
+  }
+  if (provider === "smarty_gift") return "Activated a Smarty Gift (30 days Premium)";
+  return "Subscribed to Premium";
 }

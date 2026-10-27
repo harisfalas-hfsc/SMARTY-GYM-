@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { buildReport, fmtDateTime, rangeBounds, workoutCreationKind, type ActivityEvent, type ActivityReport, type ActivityUser } from "./report";
+import { accountEvents, buildReport, subscriptionText, fmtDateTime, rangeBounds, workoutCreationKind, type ActivityEvent, type ActivityReport, type ActivityUser } from "./report";
 
 type Row = Record<string, any>;
 const inRange = (v: string | null | undefined, from: string, to: string) => !!v && v >= from && v < to;
@@ -8,6 +8,17 @@ async function rows(q: PromiseLike<{ data: unknown; error: { message: string } |
   const { data, error } = await q;
   if (error) throw new Error(`${label}: ${error.message}`);
   return (data as Row[] | null) ?? [];
+}
+
+async function listAuthUsers(db: SupabaseClient): Promise<{ id: string; email_confirmed_at?: string | null; app_metadata?: Record<string, unknown> }[]> {
+  const all: { id: string; email_confirmed_at?: string | null; app_metadata?: Record<string, unknown> }[] = [];
+  for (let page = 1; page <= 20; page++) {
+    const { data, error } = await db.auth.admin.listUsers({ page, perPage: 1000 });
+    if (error) throw new Error(`accounts: ${error.message}`);
+    all.push(...(data.users as never[]));
+    if (data.users.length < 1000) break;
+  }
+  return all;
 }
 
 /** Every member action between two Cyprus dates (inclusive), grouped by member. */
@@ -19,9 +30,11 @@ export async function collectUserActivity(db: SupabaseClient, fromDate: string, 
     if (userId && at) ev.push({ userId, at, kind, text });
   };
 
-  const [profiles, subs, workouts, reactions, ratings, comments, checkins, badges, feedback, threads] = await Promise.all([
+  const [profiles, subs, questionnaires, authUsers, workouts, reactions, ratings, comments, checkins, badges, feedback, threads] = await Promise.all([
     rows(db.from("profiles").select("id,display_name,email,created_at,onboarded,updated_at").limit(10000), "profiles"),
-    rows(db.from("subscriptions").select("user_id,status,created_at,current_period_end,cancel_at_period_end").order("created_at", { ascending: false }).limit(10000), "subscriptions"),
+    rows(db.from("subscriptions").select("user_id,provider,status,created_at,current_period_start,current_period_end,cancel_at_period_end").order("created_at", { ascending: false }).limit(10000), "subscriptions"),
+    rows(db.from("questionnaires").select("user_id,created_at").gte("created_at", from).lt("created_at", to).limit(5000), "training profiles"),
+    listAuthUsers(db),
     rows(
       db
         .from("workouts")
@@ -48,13 +61,16 @@ export async function collectUserActivity(db: SupabaseClient, fromDate: string, 
   }
   const wn = (id: string) => `“${names.get(id) ?? "a workout"}”`;
 
+  const authById = new Map(authUsers.map((u) => [u.id, u]));
   for (const p of profiles) {
-    if (inRange(p.created_at, from, to)) push(p.id, p.created_at, "joined", "Created an account");
+    const u = authById.get(p.id);
+    ev.push(...accountEvents({ userId: p.id, createdAt: p.created_at, emailConfirmedAt: u?.email_confirmed_at ?? null, appMetadata: u?.app_metadata ?? null }, from, to));
   }
+  for (const q of questionnaires) push(q.user_id, q.created_at, "profile", "Completed the Training Profile");
   const latestSub = new Map<string, Row>();
   for (const s of subs) {
     if (!latestSub.has(s.user_id)) latestSub.set(s.user_id, s);
-    if (inRange(s.created_at, from, to)) push(s.user_id, s.created_at, "subscribed", "Subscribed to Premium");
+    if (inRange(s.created_at, from, to)) push(s.user_id, s.created_at, "subscribed", subscriptionText(s.provider, s.current_period_start ?? s.created_at, s.current_period_end));
     if (inRange(s.current_period_end, from, to))
       push(s.user_id, s.current_period_end, "membership-end", s.cancel_at_period_end || !["active", "trialing"].includes(s.status) ? "Membership ended" : "Membership period renewed");
   }

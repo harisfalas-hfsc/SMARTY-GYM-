@@ -1130,7 +1130,7 @@ export const adminCreateComplimentaryMember = createServerFn({ method: "POST" })
         return { error: "This email already has an account. Use “Give free access” on their member card instead." };
 
       const { error: metaError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
-        app_metadata: { ...(user.app_metadata ?? {}), must_change_password: true },
+        app_metadata: { ...(user.app_metadata ?? {}), must_change_password: true, created_by_admin: true, complimentary_months: data.months },
       });
       if (metaError) return { error: metaError.message };
 

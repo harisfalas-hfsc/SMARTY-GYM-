@@ -141,7 +141,7 @@ export const clearPasswordChangeRequirement = createServerFn({ method: "POST" })
       const { data, error } = await supabaseAdmin.auth.admin.getUserById(context.userId);
       if (error || !data.user) return { error: error?.message ?? "Account not found" };
       const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(context.userId, {
-        app_metadata: { ...(data.user.app_metadata ?? {}), must_change_password: false },
+        app_metadata: { ...(data.user.app_metadata ?? {}), must_change_password: false, password_changed_at: new Date().toISOString() },
       });
       if (updateError) return { error: updateError.message };
       return { ok: true };
