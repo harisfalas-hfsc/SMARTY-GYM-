@@ -4,6 +4,8 @@ export const ACTIVITY_TZ = "Europe/Nicosia";
 
 export type ActivityKind =
   | "joined"
+  | "verified"
+  | "password"
   | "profile"
   | "subscribed"
   | "membership-end"
