@@ -1137,7 +1137,7 @@ export const adminCreateComplimentaryMember = createServerFn({ method: "POST" })
         await notifyAdmins({
           kind: "Member",
           title: "Complimentary member created",
-          details: `The administrator created ${email} with ${data.months}-month complimentary Premium, active until ${until.toUTCString().slice(0, 16)}. A verification email was sent to the member.`,
+          details: `The administrator created ${email} with ${data.months}-month complimentary Premium, active until ${until.toUTCString().slice(0, 16)}. The email is already confirmed; the member signs in at smartygym.com/auth with the temporary password.`,
           link: "https://smartygym.com/admin",
           dedupeKey: `complimentary-created-${user.id}`,
         });
