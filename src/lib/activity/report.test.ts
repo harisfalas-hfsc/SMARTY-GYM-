@@ -29,3 +29,23 @@ describe("user activity report", () => {
     expect(workoutCreationKind({ createdBy: "community", communitySourceId: "source-id", isWod: false })).toBe("copied");
   });
 });
+import { accountEvents, subscriptionText } from "./report";
+describe("account lifecycle activity", () => {
+  const from = "2026-10-26T00:00:00Z", to = "2026-10-28T00:00:00Z";
+  it("labels admin-created accounts as created by the administrator", () => {
+    const e = accountEvents({ userId: "t", createdAt: "2026-10-26T19:30:22Z", emailConfirmedAt: null, appMetadata: { must_change_password: true } }, from, to);
+    expect(e.map((x) => x.text)).toEqual(["Account created by the administrator"]);
+  });
+  it("reports email verification and own password", () => {
+    const e = accountEvents({ userId: "t", createdAt: "2026-10-26T19:30:00Z", emailConfirmedAt: "2026-10-27T08:00:00Z", appMetadata: { must_change_password: false, password_changed_at: "2026-10-27T08:05:00Z" } }, from, to);
+    expect(e.map((x) => x.kind)).toEqual(["joined", "verified", "password"]);
+  });
+  it("ignores instant confirmation and keeps self sign-ups plain", () => {
+    const e = accountEvents({ userId: "u", createdAt: "2026-10-26T10:00:00Z", emailConfirmedAt: "2026-10-26T10:00:05Z", appMetadata: { provider: "google" } }, from, to);
+    expect(e.map((x) => x.text)).toEqual(["Created an account"]);
+  });
+  it("words complimentary grants with their months", () => {
+    expect(subscriptionText("admin_grant", "2026-10-26T19:41:00Z", "2026-11-26T19:41:00Z")).toBe("Administrator granted 1-month complimentary Premium");
+    expect(subscriptionText("stripe", null, null)).toBe("Subscribed to Premium");
+  });
+});
