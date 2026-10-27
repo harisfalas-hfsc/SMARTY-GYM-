@@ -1104,35 +1104,23 @@ export const adminCreateComplimentaryMember = createServerFn({ method: "POST" })
       const { data: existing } = await supabaseAdmin.from("profiles").select("id").ilike("email", email).maybeSingle();
       if (existing) return { error: "This email already has an account. Use “Give free access” on their member card instead." };
 
-      const { createClient } = await import("@supabase/supabase-js");
-      const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-      const publicClient = createClient(process.env["SUPABASE_URL"]!, key, {
-        auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
-        global: {
-          fetch: (input, init) => {
-            const h = new Headers(init?.headers);
-            if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
-            h.set("apikey", key);
-            return fetch(input, { ...init, headers: h });
-          },
-        },
-      });
-      const origin = typeof data.origin === "string" && /^https?:\/\//.test(data.origin) ? data.origin : "https://smartygym.com";
-      // Normal sign-up so the member receives the usual verification email.
-      const { data: signUp, error: signUpError } = await publicClient.auth.signUp({
+      // Created directly with the email already confirmed: no verification
+      // link is sent, so no link can ever point at a preview address. The
+      // member signs in at https://smartygym.com/auth and must set their own
+      // password first (must_change_password).
+      const { data: created, error: createError } = await supabaseAdmin.auth.admin.createUser({
         email,
         password: data.password,
-        options: { emailRedirectTo: `${origin}/auth` },
+        email_confirm: true,
+        app_metadata: { must_change_password: true, created_by_admin: true, complimentary_months: data.months },
       });
-      if (signUpError) return { error: signUpError.message };
-      const user = signUp.user;
-      if (!user || (user.identities && user.identities.length === 0))
-        return { error: "This email already has an account. Use “Give free access” on their member card instead." };
-
-      const { error: metaError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
-        app_metadata: { ...(user.app_metadata ?? {}), must_change_password: true, created_by_admin: true, complimentary_months: data.months },
-      });
-      if (metaError) return { error: metaError.message };
+      if (createError) {
+        if (/already|registered|exists/i.test(createError.message))
+          return { error: "This email already has an account. Use “Give free access” on their member card instead." };
+        return { error: createError.message };
+      }
+      const user = created.user;
+      if (!user) return { error: "Failed to create member" };
 
       const until = complimentaryUntil(new Date(), data.months);
       const { error } = await supabaseAdmin.from("subscriptions").insert({
@@ -1149,7 +1137,7 @@ export const adminCreateComplimentaryMember = createServerFn({ method: "POST" })
         await notifyAdmins({
           kind: "Member",
           title: "Complimentary member created",
-          details: `The administrator created ${email} with ${data.months}-month complimentary Premium, active until ${until.toUTCString().slice(0, 16)}. A verification email was sent to the member.`,
+          details: `The administrator created ${email} with ${data.months}-month complimentary Premium, active until ${until.toUTCString().slice(0, 16)}. The email is already confirmed; the member signs in at smartygym.com/auth with the temporary password.`,
           link: "https://smartygym.com/admin",
           dedupeKey: `complimentary-created-${user.id}`,
         });
