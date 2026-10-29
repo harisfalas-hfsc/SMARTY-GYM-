@@ -67,7 +67,7 @@ export const CONDITIONING_EXERCISES: ReadonlyArray<string> = [
   "Medicine Ball Catch and Overhead Throw",
   "Battling Ropes",
   "Jump Rope",
-  "Swing 360",
+  // "Swing 360" removed by Haris Falas (2026-10-29): its picture shows a bar swing, not a cardio move.
   // Added by Haris Falas (2026-10-04): approved library suggestions.
   "Kettlebell Double Alternating Hang Clean",
   "Barbell Front Chest Squat",

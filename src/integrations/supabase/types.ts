@@ -2539,6 +2539,81 @@ export type Database = {
         }
         Relationships: []
       }
+      smarty_workouts_backup_swing360_20261029: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description_html: string | null
+          difficulty_stars: number | null
+          duration_label: string | null
+          duration_min: number | null
+          equipment: string[] | null
+          focus: string | null
+          format: string | null
+          id: string | null
+          image_url: string | null
+          instructions_html: string | null
+          is_visible: boolean | null
+          legacy_id: string | null
+          location: string | null
+          main_workout: string | null
+          name: string | null
+          slug: string | null
+          sort_order: number | null
+          tips_html: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean | null
+          legacy_id?: string | null
+          location?: string | null
+          main_workout?: string | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          tips_html?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean | null
+          legacy_id?: string | null
+          location?: string | null
+          main_workout?: string | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          tips_html?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       smarty_workouts_backup_tabata_20261013: {
         Row: {
           category: string | null
@@ -3566,6 +3641,171 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      workouts_backup_swing360_20261029: {
+        Row: {
+          activation: string | null
+          category: string | null
+          coach_rationale: string[] | null
+          community_hidden: boolean | null
+          community_source_id: string | null
+          completed_at: string | null
+          cool_down: string | null
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          description_html: string | null
+          difficulty_label: string | null
+          difficulty_stars: number | null
+          duration_label: string | null
+          duration_min: number | null
+          equipment: string[] | null
+          favorited_at: string | null
+          finisher: string | null
+          focus: string | null
+          format: string | null
+          id: string | null
+          image_url: string | null
+          instructions: string | null
+          instructions_html: string | null
+          is_favorite: boolean | null
+          is_shared: boolean | null
+          is_wod: boolean | null
+          location: string | null
+          main_workout: string | null
+          mood: string | null
+          name: string | null
+          needs_review: boolean | null
+          plan: Json | null
+          rating: number | null
+          rationale: string | null
+          removed_from_logbook: boolean | null
+          review_warnings: string[] | null
+          scheduled_at: string | null
+          serial: number | null
+          shared_at: string | null
+          soft_tissue: string | null
+          status: string | null
+          tips: string[] | null
+          tips_html: string | null
+          updated_at: string | null
+          user_id: string | null
+          user_note: string | null
+          warm_up: string | null
+          wod_cycle_day: number | null
+          wod_date: string | null
+          wod_variant: string | null
+        }
+        Insert: {
+          activation?: string | null
+          category?: string | null
+          coach_rationale?: string[] | null
+          community_hidden?: boolean | null
+          community_source_id?: string | null
+          completed_at?: string | null
+          cool_down?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          description_html?: string | null
+          difficulty_label?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          favorited_at?: string | null
+          finisher?: string | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions?: string | null
+          instructions_html?: string | null
+          is_favorite?: boolean | null
+          is_shared?: boolean | null
+          is_wod?: boolean | null
+          location?: string | null
+          main_workout?: string | null
+          mood?: string | null
+          name?: string | null
+          needs_review?: boolean | null
+          plan?: Json | null
+          rating?: number | null
+          rationale?: string | null
+          removed_from_logbook?: boolean | null
+          review_warnings?: string[] | null
+          scheduled_at?: string | null
+          serial?: number | null
+          shared_at?: string | null
+          soft_tissue?: string | null
+          status?: string | null
+          tips?: string[] | null
+          tips_html?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          user_note?: string | null
+          warm_up?: string | null
+          wod_cycle_day?: number | null
+          wod_date?: string | null
+          wod_variant?: string | null
+        }
+        Update: {
+          activation?: string | null
+          category?: string | null
+          coach_rationale?: string[] | null
+          community_hidden?: boolean | null
+          community_source_id?: string | null
+          completed_at?: string | null
+          cool_down?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          description_html?: string | null
+          difficulty_label?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          favorited_at?: string | null
+          finisher?: string | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions?: string | null
+          instructions_html?: string | null
+          is_favorite?: boolean | null
+          is_shared?: boolean | null
+          is_wod?: boolean | null
+          location?: string | null
+          main_workout?: string | null
+          mood?: string | null
+          name?: string | null
+          needs_review?: boolean | null
+          plan?: Json | null
+          rating?: number | null
+          rationale?: string | null
+          removed_from_logbook?: boolean | null
+          review_warnings?: string[] | null
+          scheduled_at?: string | null
+          serial?: number | null
+          shared_at?: string | null
+          soft_tissue?: string | null
+          status?: string | null
+          tips?: string[] | null
+          tips_html?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          user_note?: string | null
+          warm_up?: string | null
+          wod_cycle_day?: number | null
+          wod_date?: string | null
+          wod_variant?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

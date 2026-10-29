@@ -6,8 +6,8 @@ const ctx = (category: any) => ({ category, format: "CIRCUIT" as any, level: "in
 
 describe("SmartyGym conditioning list", () => {
   it("holds exactly the 60 exercises", () => {
-    expect(CONDITIONING_EXERCISES).toHaveLength(63);
-    expect(new Set(CONDITIONING_EXERCISES).size).toBe(63);
+    expect(CONDITIONING_EXERCISES).toHaveLength(62);
+    expect(new Set(CONDITIONING_EXERCISES).size).toBe(62);
   });
   it("only list exercises are legal in Calorie Burning, Cardio, Metabolic and Challenge work", () => {
     for (const c of ["CALORIE BURNING", "CARDIO", "METABOLIC", "CHALLENGE"]) {
