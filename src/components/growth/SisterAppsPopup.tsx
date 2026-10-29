@@ -86,13 +86,13 @@ export const SisterAppsPopup = () => {
                 <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">How it works</p>
                 <ol className="flex flex-col gap-2.5">
                   {[
-                    { icon: ClipboardList, text: "Answer a short questionnaire" },
-                    { icon: Salad, text: "Choose your food preferences" },
-                    { icon: FileText, text: "Get your personal diet plan" },
-                    { icon: TrendingUp, text: "Follow it and track your progress" },
+                    { icon: ClipboardList, color: "text-chart-2 border-chart-2", text: "Answer a short questionnaire" },
+                    { icon: Salad, color: "text-chart-3 border-chart-3", text: "Choose your food preferences" },
+                    { icon: FileText, color: "text-chart-4 border-chart-4", text: "Get your personal diet plan" },
+                    { icon: TrendingUp, color: "text-chart-5 border-chart-5", text: "Follow it and track your progress" },
                   ].map((s, i) => (
                     <li key={i} className="flex items-center gap-2.5">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-primary text-primary">
+                      <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 ${s.color}`}>
                         <s.icon className="h-4 w-4" />
                       </span>
                       <span className="text-[13px] font-medium leading-snug text-foreground">
