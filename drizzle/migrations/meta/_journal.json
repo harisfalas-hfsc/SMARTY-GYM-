@@ -722,6 +722,13 @@
       "when": 1793043656788,
       "tag": "0102_allow_admin_grant_provider",
       "breakpoints": true
+    },
+    {
+      "idx": 103,
+      "version": "7",
+      "when": 1793292272453,
+      "tag": "0103_backup_swing360",
+      "breakpoints": true
     }
   ]
 }
