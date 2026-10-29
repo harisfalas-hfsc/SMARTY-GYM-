@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ExternalLink, Sparkles, X } from "lucide-react";
+import { ClipboardList, ExternalLink, FileText, Salad, Sparkles, TrendingUp, X } from "lucide-react";
 import logoDiet from "@/assets/smartydiet-logo.png";
 import { Button } from "@/components/ui/button";
 
@@ -71,41 +71,44 @@ export const SisterAppsPopup = () => {
         aria-hidden={!open}
         className={`fixed top-1/2 -translate-y-1/2 left-0 z-[60] flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? "translate-x-0" : "-translate-x-[calc(100%+10px)]"}`}
       >
-        <aside className="w-[280px] rounded-r-3xl border-y-2 border-r-2 border-primary bg-card py-5 pl-4 pr-3 shadow-soft">
-          <div className="mb-4">
-            <span className="inline-flex items-center gap-1.5 text-primary text-[11px] font-extrabold uppercase tracking-[0.2em]">
-              <Sparkles className="w-3.5 h-3.5 text-primary" /> Smarty Family
-            </span>
-            <h2 className="mt-1 text-[15px] font-bold leading-tight text-foreground">
-              Complete your wellness journey
-            </h2>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {others.map((app) => (
-              <a
-                key={app.id}
-                href={app.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-3 py-1 transition-transform duration-300 hover:translate-x-1 focus-visible:outline-none"
-              >
-                <div className="h-16 w-16 shrink-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
-                  <img
-                    src={app.image}
-                    alt={app.name}
-                    loading="lazy"
-                    className="max-w-full max-h-full object-contain"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[16px] font-extrabold leading-tight text-foreground transition-colors group-hover:text-primary">{app.name}</h3>
-                  <p className="mt-0.5 line-clamp-2 text-[12.5px] font-medium leading-snug text-muted-foreground">{app.tagline}</p>
-                </div>
-                <ExternalLink className="w-3.5 h-3.5 text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
+        <aside className="w-[280px] max-h-[88vh] overflow-y-auto rounded-r-3xl border-y-2 border-r-2 border-primary bg-card py-5 pl-4 pr-3 shadow-soft">
+          <span className="inline-flex items-center gap-1.5 text-primary text-[11px] font-extrabold uppercase tracking-[0.2em]">
+            <Sparkles className="w-3.5 h-3.5 text-primary" /> Smarty Family
+          </span>
+          {others.map((app) => (
+            <div key={app.id} className="mt-3 flex flex-col items-center text-center">
+              <img src={app.image} alt={app.name} loading="lazy" className="h-28 w-28 object-contain" />
+              <h2 className="mt-2 text-[24px] font-extrabold leading-tight text-primary">Smarty Diet</h2>
+              <p className="mt-1 text-[13.5px] font-semibold leading-snug text-foreground">
+                Create your diet plan, eat better, live longer.
+              </p>
+              <div className="mt-4 w-full text-left">
+                <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">How it works</p>
+                <ol className="flex flex-col gap-2.5">
+                  {[
+                    { icon: ClipboardList, text: "Answer a short questionnaire" },
+                    { icon: Salad, text: "Choose your food preferences" },
+                    { icon: FileText, text: "Get your personal diet plan" },
+                    { icon: TrendingUp, text: "Follow it and track your progress" },
+                  ].map((s, i) => (
+                    <li key={i} className="flex items-center gap-2.5">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-primary text-primary">
+                        <s.icon className="h-4 w-4" />
+                      </span>
+                      <span className="text-[13px] font-medium leading-snug text-foreground">
+                        <span className="font-extrabold text-primary">{i + 1}.</span> {s.text}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <Button asChild className="mt-5 w-full">
+                <a href={app.url} target="_blank" rel="noopener noreferrer">
+                  Create my diet plan <ExternalLink className="w-4 h-4" />
+                </a>
+              </Button>
+            </div>
+          ))}
         </aside>
 
         <Button
