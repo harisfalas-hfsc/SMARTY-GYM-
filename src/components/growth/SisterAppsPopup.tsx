@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, ExternalLink, FileText, Salad, Sparkles, TrendingUp, X } from "lucide-react";
+import { ClipboardList, ExternalLink, FileText, Salad, TrendingUp, X } from "lucide-react";
 import logoDiet from "@/assets/smartydiet-logo.png";
 import { Button } from "@/components/ui/button";
 
@@ -72,11 +72,8 @@ export const SisterAppsPopup = () => {
         className={`fixed top-1/2 -translate-y-1/2 left-0 z-[60] flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? "translate-x-0" : "-translate-x-[calc(100%+10px)]"}`}
       >
         <aside className="w-[280px] max-h-[88vh] overflow-y-auto rounded-r-3xl border-y-2 border-r-2 border-primary bg-card py-5 pl-4 pr-3 shadow-soft">
-          <span className="inline-flex items-center gap-1.5 text-primary text-[11px] font-extrabold uppercase tracking-[0.2em]">
-            <Sparkles className="w-3.5 h-3.5 text-primary" /> Smarty Family
-          </span>
           {others.map((app) => (
-            <div key={app.id} className="mt-3 flex flex-col items-center text-center">
+            <div key={app.id} className="flex flex-col items-center text-center">
               <img src={app.image} alt={app.name} loading="lazy" className="h-28 w-28 object-contain" />
               <h2 className="mt-2 text-[24px] font-extrabold leading-tight text-primary">Smarty Diet</h2>
               <p className="mt-1 text-[13.5px] font-semibold leading-snug text-foreground">
