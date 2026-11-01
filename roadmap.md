@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Right-side announcements
+- [ ] Add Smarty Gift blur/blocking background on desktop/mobile and mobile-only sequential announcement countdowns; preserve desktop timing and panel appearance.
 - [x] Make Smarty Gift a continuous full-picture announcement with readable overlaid wording and unchanged size. Desktop 1206×634 and mobile 394×634 screenshots checked: image covers full panel, title/button fit, unchanged 280×283.875 / 280×332 dimensions, gift link works without runtime errors; 16 targeted tests and build passed.
 - [x] Extend the Smarty Gift picture with title/message overlaid, preserving the existing desktop/mobile announcement dimensions. Browser measurements confirmed 280×283.875 desktop and 280×332 mobile unchanged; picture increased to 134.5/166.5px, image/title and gift link verified with no runtime errors. 16 targeted tests passed; build OK.
 - [x] Move desktop app downloads to the upper-right area; add dismissible/reopenable Smarty Gift below after 15 seconds, or on mobile after 10 seconds; preserve Smarty Diet. Browser checks passed at 1206×634, 1280×1800 and 390×844: no panel overlap, original image rendered, dismiss/reopen and gift-page link worked with no runtime errors. Native-marked browser excluded app downloads; installed apps not tested. All 501 tests passed; build OK. No payment changes or publishing.

@@ -4,39 +4,59 @@ import { Gift, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import giftImage from '@/assets/smarty-gift.jpg';
 import { giftAnnouncementDelay } from '@/lib/announcement-policy';
+import { useAnnouncement } from '@/hooks/useAnnouncement';
 
 export function SmartyGiftPopup() {
-  const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [desktop, setDesktop] = useState(false);
+  const { open, mounted, setOpen } = useAnnouncement('smarty-gift', giftAnnouncementDelay(desktop));
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const desktop = window.matchMedia('(min-width: 1024px)').matches;
-    let timer = window.setTimeout(function tryOpen() {
-      if (document.documentElement.dataset.smartyCoach === 'open' || document.querySelector('[role="dialog"]')) {
-        timer = window.setTimeout(tryOpen, 1_000);
-        return;
-      }
-      setMounted(true);
-      setOpen(true);
-    }, giftAnnouncementDelay(desktop));
-    return () => window.clearTimeout(timer);
+    const media = window.matchMedia('(min-width: 1024px)');
+    const update = () => setDesktop(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
   }, []);
 
   useEffect(() => {
     if (!open) return;
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    const previousFocus = document.activeElement;
+    const controls = () => [...(panelRef.current?.querySelectorAll<HTMLElement>('button, a[href]') ?? [])];
+    controls()[0]?.focus({ preventScroll: true });
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { event.preventDefault(); setOpen(false); }
+      if (event.key !== 'Tab') return;
+      const items = controls();
+      const first = items[0];
+      const last = items.at(-1);
+      if (event.shiftKey && (document.activeElement === first || !panelRef.current?.contains(document.activeElement))) {
+        event.preventDefault(); last?.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || !panelRef.current?.contains(document.activeElement))) {
+        event.preventDefault(); first?.focus();
+      }
+    };
     const dismissOutside = (event: MouseEvent) => {
       const target = event.target;
       if (target instanceof Element && target.closest('[data-announcement-control]')) return;
       if (target instanceof Node && panelRef.current && !panelRef.current.contains(target)) setOpen(false);
     };
     window.addEventListener('mousedown', dismissOutside);
-    return () => window.removeEventListener('mousedown', dismissOutside);
-  }, [open]);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('mousedown', dismissOutside);
+      window.removeEventListener('keydown', onKey);
+      document.documentElement.style.overflow = previousOverflow;
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
+    };
+  }, [open, setOpen]);
 
   if (!mounted) return null;
 
   return <>
+    {open && <div aria-hidden="true" data-announcement-backdrop="smarty-gift" className="fixed inset-0 z-[58] bg-background/85 backdrop-blur-sm" onClick={() => setOpen(false)} />}
     <div ref={panelRef} data-announcement-control aria-hidden={!open} inert={!open}
       className={`fixed right-0 top-1/2 z-[60] flex -translate-y-1/2 items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:bottom-5 lg:top-auto lg:translate-y-0 ${open ? 'translate-x-0' : 'translate-x-[calc(100%+10px)]'}`}>
       <Button type="button" size="icon" variant="secondary" onClick={() => setOpen(false)} aria-label="Hide Smarty Gift panel" className="mr-2 h-10 w-10 shrink-0 rounded-full border border-border shadow-soft"><X className="h-5 w-5" /></Button>
