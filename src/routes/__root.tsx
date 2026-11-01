@@ -22,6 +22,7 @@ import { Toaster } from "../components/ui/sonner";
 import { PasswordChangeGate } from "../components/PasswordChangeGate";
 import { SisterAppsPopup } from "../components/growth/SisterAppsPopup";
 import { MobileAppPopup } from "../components/growth/MobileAppPopup";
+import { SmartyGiftPopup } from '../components/growth/SmartyGiftPopup';
 import { CheckinModalManager } from "@/components/checkins/CheckinModalManager";
 import { BottomNav } from "../components/BottomNav";
 import { UpdatePrompt } from "../components/UpdatePrompt";
@@ -431,6 +432,7 @@ function RootComponent() {
           <PasswordChangeGate />
           {SHOW_SISTER_APPS_POPUP && <SisterAppsPopup />}
           <MobileAppPopup />
+          <SmartyGiftPopup />
           <CheckinModalManager />
           <BottomNav />
           <UpdatePrompt />

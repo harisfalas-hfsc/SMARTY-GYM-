@@ -33,6 +33,7 @@
 - Confirmations/prompts use shared branded dialogs, never native boxes — why: consistent web/native look.
 - Progress exports combine date-filtered workout, performance, award and check-in data in one PDF — why: members need one complete report.
 - App panels reuse footer store links/icons and exclude announcement controls from outside dismissal — why: consistent links, independent closing.
+- Right-side app and gift announcements use separate viewport-height-limited desktop regions without blocking backdrops and shared announcement timing policy — why: both panels remain usable without overlap and mobile keeps only the gift panel.
 - Mass emails use Resend dedupe; others use managed sending. All signatures share email-brand and EmailBrandFooter — why: reliable delivery, consistent branding.
 - Insights shares one report across app, inbox and email; no Insights PDF — why: parity/privacy.
 - Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs.
