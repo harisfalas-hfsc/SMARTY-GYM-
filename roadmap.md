@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Right-side announcements
+- [ ] Extend the Smarty Gift picture with title/message overlaid, preserving the existing desktop/mobile announcement dimensions.
 - [x] Move desktop app downloads to the upper-right area; add dismissible/reopenable Smarty Gift below after 15 seconds, or on mobile after 10 seconds; preserve Smarty Diet. Browser checks passed at 1206×634, 1280×1800 and 390×844: no panel overlap, original image rendered, dismiss/reopen and gift-page link worked with no runtime errors. Native-marked browser excluded app downloads; installed apps not tested. All 501 tests passed; build OK. No payment changes or publishing.
 
 ## Admin ritual and workout HTML downloads
