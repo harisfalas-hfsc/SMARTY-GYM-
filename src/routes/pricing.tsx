@@ -3,8 +3,7 @@ import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-ro
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { MembershipCheckoutDialog } from "@/components/MembershipCheckoutDialog";
-import { SmartyCard, SmartyPill, toneClasses } from "@/components/SmartyCard";
-import { cn } from "@/lib/utils";
+import { SmartyCard, SmartyPill } from "@/components/SmartyCard";
 import { PageHeader } from "@/components/PageHeader";
 import pageHeroImage from "@/assets/premium-membership-card.jpg";
 
@@ -27,13 +26,13 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "One SmartyGym subscription: €9.99 per month for 2 personalized workouts a day programmed on the sports science of Haris Falas (CSCS), the full 1,300+ exercise library, all training tools, your logbook and every past workout.",
+          "SmartyGym membership: €9.99 per month for more than 600 Smarty Workouts, Workout of the Day, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
       },
 
       { property: "og:title", content: "SmartyGym Pricing — €9.99/month" },
       {
         property: "og:description",
-        content: "2 personalized workouts a day, full exercise library, all tools and your training history.",
+        content: "More than 600 Smarty Workouts, Workout of the Day, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -50,7 +49,7 @@ export const Route = createFileRoute("/pricing")({
               "@type": "Product",
               name: "SmartyGym Subscription",
               description:
-                "One SmartyGym subscription: 2 personalized workouts a day, the full exercise library, all training tools, your logbook and every past workout.",
+                "One SmartyGym membership includes more than 600 Smarty Workouts, Workout of the Day, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
               brand: { "@id": "https://smartygym.com/#organization" },
               category: "Fitness subscription",
               image: "https://smartygym.com/og-social.jpg",
@@ -87,21 +86,17 @@ export const Route = createFileRoute("/pricing")({
 });
 
 const INCLUDES: { icon: string; label: string }[] = [
-  { icon: "🏋️", label: "2 personalized workouts every day" },
-  { icon: "🧠", label: "Smarty Coach personalization" },
+  { icon: "🏋️", label: "More than 600 Smarty Workouts" },
+  { icon: "📅", label: "Workout of the Day" },
+  { icon: "🧠", label: "Your personal Smarty Coach" },
+  { icon: "☀️", label: "Smarty Rituals and Check-ins" },
   { icon: "📚", label: "Full exercise library" },
-  { icon: "🕘", label: "All your previous workouts" },
-  { icon: "📓", label: "Logbook & progress tracking" },
-];
-
-const TOOLS: { icon: string; label: string }[] = [
-  { icon: "⏱️", label: "Workout Timer" },
-  { icon: "🔁", label: "Rounds Tracker" },
-  { icon: "🏋️", label: "1RM Calculator" },
+  { icon: "📓", label: "Logbook and progress" },
+  { icon: "⏱️", label: "Smarty Tools" },
+  { icon: "📰", label: "Blog articles" },
 ];
 
 function PricingPage() {
-  const t = toneClasses("pink");
   const { user } = useAuth();
   const navigate = useNavigate();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -125,37 +120,19 @@ function PricingPage() {
         eyebrowIcon="👑"
         title="€9.99"
         accent="per month."
-        description="Two personalized workouts a day plus every feature on the platform. Cancel anytime."
+        description="All your SmartyGym benefits in one membership. Cancel anytime."
       >
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className={cn("rounded-2xl border p-4", t.softBorder, t.softBg)}>
+        <div>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-foreground">
               Your membership includes
             </h3>
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {INCLUDES.map((it) => (
                 <SmartyPill tone="pink" key={it.label} icon={it.icon}>
                   {it.label}
                 </SmartyPill>
               ))}
             </div>
-          </div>
-
-          <div className={cn("rounded-2xl border p-4", t.softBorder, t.softBg)}>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-foreground">
-              Training tools
-            </h3>
-            <div className="grid gap-2">
-              {TOOLS.map((it) => (
-                <SmartyPill tone="pink" key={it.label} icon={it.icon}>
-                  {it.label}
-                </SmartyPill>
-              ))}
-            </div>
-            <p className="mt-3 text-xs text-muted-foreground">
-              Timer, rounds tracker and 1RM calculator — ready mid-session.
-            </p>
-          </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
