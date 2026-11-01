@@ -26,13 +26,13 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "SmartyGym membership: €9.99 per month for more than 600 Smarty Workouts, Workout of the Day, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
+          "SmartyGym membership: €9.99 per month for more than 600 Smarty Workouts, Workout of the Day, Create Your Own Workout, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
       },
 
       { property: "og:title", content: "SmartyGym Pricing — €9.99/month" },
       {
         property: "og:description",
-        content: "More than 600 Smarty Workouts, Workout of the Day, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
+        content: "More than 600 Smarty Workouts, Workout of the Day, Create Your Own Workout, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -49,7 +49,7 @@ export const Route = createFileRoute("/pricing")({
               "@type": "Product",
               name: "SmartyGym Subscription",
               description:
-                "One SmartyGym membership includes more than 600 Smarty Workouts, Workout of the Day, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
+                "One SmartyGym membership includes more than 600 Smarty Workouts, Workout of the Day, Create Your Own Workout, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
               brand: { "@id": "https://smartygym.com/#organization" },
               category: "Fitness subscription",
               image: "https://smartygym.com/og-social.jpg",
@@ -88,6 +88,7 @@ export const Route = createFileRoute("/pricing")({
 const INCLUDES: { icon: string; label: string }[] = [
   { icon: "🏋️", label: "More than 600 Smarty Workouts" },
   { icon: "📅", label: "Workout of the Day" },
+  { icon: "🛠️", label: "Create Your Own Workout" },
   { icon: "🧠", label: "Your personal Smarty Coach" },
   { icon: "☀️", label: "Smarty Rituals and Check-ins" },
   { icon: "📚", label: "Full exercise library" },

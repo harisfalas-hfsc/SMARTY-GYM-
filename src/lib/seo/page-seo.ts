@@ -267,7 +267,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
     name: "Pricing",
     title: "Pricing — SmartyGym membership €9.99/month",
     description:
-      "One membership: €9.99 per month for more than 600 Smarty Workouts, Workout of the Day, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
+      "One membership: €9.99 per month for more than 600 Smarty Workouts, Workout of the Day, Create Your Own Workout, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles.",
     keyphrase: "smartygym pricing",
     keywords: [
       "fitness subscription",
@@ -277,7 +277,7 @@ const BASE_PAGE_SEO: PageSeo[] = [
       "workout app price",
     ],
     summary:
-      "Membership includes more than 600 Smarty Workouts, Workout of the Day, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles. Members can cancel at any time.",
+      "Membership includes more than 600 Smarty Workouts, Workout of the Day, Create Your Own Workout, your personal Smarty Coach, Smarty Rituals and Check-ins, the full exercise library, Logbook and progress, Smarty Tools and blog articles. Members can cancel at any time.",
     changefreq: "monthly",
     priority: "0.9",
     schemaType: "WebPage",
