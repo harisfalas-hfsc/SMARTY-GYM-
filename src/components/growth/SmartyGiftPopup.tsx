@@ -41,13 +41,13 @@ export function SmartyGiftPopup() {
       className={`fixed right-0 top-1/2 z-[60] flex -translate-y-1/2 items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:bottom-5 lg:top-auto lg:translate-y-0 ${open ? 'translate-x-0' : 'translate-x-[calc(100%+10px)]'}`}>
       <Button type="button" size="icon" variant="secondary" onClick={() => setOpen(false)} aria-label="Hide Smarty Gift panel" className="mr-2 h-10 w-10 shrink-0 rounded-full border border-border shadow-soft"><X className="h-5 w-5" /></Button>
       <aside aria-label="Smarty Gift announcement" className="max-h-[80dvh] w-[280px] max-w-[calc(100vw-56px)] overflow-y-auto rounded-l-3xl border-y-2 border-l-2 border-primary bg-card shadow-soft lg:max-h-[calc(50dvh-32px)]">
-        <img src={giftImage} alt="Smarty Gift box with a blue ribbon" width={1536} height={1024} className="h-24 w-full object-cover" />
-        <div className="p-3">
+        <img src={giftImage} alt="Smarty Gift box with a blue ribbon" width={1536} height={1024} className="h-24 w-full object-cover lg:h-16" />
+        <div className="p-3 lg:py-2">
           <h2 className="flex items-center gap-2 text-lg font-extrabold text-primary"><Gift className="h-5 w-5" />Smarty Gift</h2>
           <p className="mt-1 text-sm font-semibold leading-snug text-foreground">Give someone you love 30 days of Premium.</p>
           <p className="mt-2 text-lg font-bold text-primary">€4.99 <span className="text-xs font-medium text-muted-foreground">one-time</span></p>
-          <p className="mt-1 text-xs leading-snug text-muted-foreground">They choose when to start. No automatic renewal. Exclusively from active Premium members to someone who has never had Premium.</p>
-          <Button asChild className="mt-3 w-full"><Link to="/smarty-gift" onClick={() => setOpen(false)}><Gift className="h-4 w-4" />Give Smarty Gift</Link></Button>
+          <p className="mt-1 text-xs leading-snug text-muted-foreground lg:text-[11px]">They choose when to start. No renewal. Active Premium buyers only; recipients must never have had Premium.</p>
+          <Button asChild className="mt-3 w-full lg:mt-2 lg:h-9"><Link to="/smarty-gift" onClick={() => setOpen(false)}><Gift className="h-4 w-4" />Give Smarty Gift</Link></Button>
         </div>
       </aside>
     </div>
