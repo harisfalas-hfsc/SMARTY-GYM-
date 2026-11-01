@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Right-side announcements
-- [ ] Move desktop app downloads to the upper-right area; add dismissible/reopenable Smarty Gift below after 15 seconds, or on mobile after 10 seconds; preserve Smarty Diet.
+- [x] Move desktop app downloads to the upper-right area; add dismissible/reopenable Smarty Gift below after 15 seconds, or on mobile after 10 seconds; preserve Smarty Diet. Browser checks passed at 1206×634, 1280×1800 and 390×844: no panel overlap, original image rendered, dismiss/reopen and gift-page link worked with no runtime errors. Native-marked browser excluded app downloads; installed apps not tested. All 501 tests passed; build OK. No payment changes or publishing.
 
 ## Admin ritual and workout HTML downloads
 - [x] Correct download dialog dismissal, remove Reader from workout HTML, and fix player frame/navigation positions. Real fresh admin downloads confirmed; all 15/17 slides plus backward navigation checked at 1280x1800, 1206x674 and 390x844 offline. Patched DOMPurify 3.4.17; security scanner cleared finding; 491 tests passed.
