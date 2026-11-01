@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ClipboardList, ExternalLink, FileText, Salad, TrendingUp, X } from "lucide-react";
 import logoDiet from "@/assets/smartydiet-logo.png";
 import { Button } from "@/components/ui/button";
+import { useAnnouncement } from '@/hooks/useAnnouncement';
+import { SISTER_APPS_DELAY_MS } from '@/lib/announcement-policy';
 
 const CURRENT_APP: "workout" | "gym" | "move" | "diet" | "logbook" = "workout";
 
@@ -23,20 +25,9 @@ const SISTER_APPS: SisterApp[] = [
   },
 ];
 
-const DELAY_MS = 20000;
-
 export const SisterAppsPopup = () => {
-  const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const { open, mounted, setOpen } = useAnnouncement('smarty-diet', SISTER_APPS_DELAY_MS, true, false);
   const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const t = window.setTimeout(() => {
-      setMounted(true);
-      setOpen(true);
-    }, DELAY_MS);
-    return () => window.clearTimeout(t);
-  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -49,7 +40,7 @@ export const SisterAppsPopup = () => {
     };
     window.addEventListener("mousedown", handleClick);
     return () => window.removeEventListener("mousedown", handleClick);
-  }, [open]);
+  }, [open, setOpen]);
 
   const others = SISTER_APPS.filter((a) => a.id !== CURRENT_APP);
 
@@ -69,6 +60,7 @@ export const SisterAppsPopup = () => {
         ref={panelRef}
         data-announcement-control
         aria-hidden={!open}
+        inert={!open}
         className={`fixed top-1/2 -translate-y-1/2 left-0 z-[60] flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? "translate-x-0" : "-translate-x-[calc(100%+10px)]"}`}
       >
         <aside className="w-[280px] max-h-[88vh] overflow-y-auto rounded-r-3xl border-y-2 border-r-2 border-primary bg-card py-5 pl-4 pr-3 shadow-soft">
