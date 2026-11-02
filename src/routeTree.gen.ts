@@ -74,6 +74,7 @@ import { Route as ToolsWorkoutTimerRouteImport } from './routes/tools.workout-ti
 import { Route as TrainingIndexRouteImport } from './routes/training.index'
 import { Route as TrainingSlugRouteImport } from './routes/training.$slug'
 import { Route as WWorkoutIdRouteImport } from './routes/w.$workoutId'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedWorkoutWorkoutIdRouteImport } from './routes/_authenticated/workout.$workoutId'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicRecoverAbandonedRouteImport } from './routes/api/public/recover-abandoned'
@@ -417,6 +418,11 @@ const WWorkoutIdRoute = WWorkoutIdRouteImport.update({
   path: '/w/$workoutId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedWorkoutWorkoutIdRoute =
   AuthenticatedWorkoutWorkoutIdRouteImport.update({
     id: '/workout/$workoutId',
@@ -556,6 +562,7 @@ export interface FileRoutesByFullPath {
   '/smarty-workouts/': typeof SmartyWorkoutsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -635,6 +642,7 @@ export interface FileRoutesByTo {
   '/smarty-workouts': typeof SmartyWorkoutsIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/training': typeof TrainingIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -716,6 +724,7 @@ export interface FileRoutesById {
   '/smarty-workouts/': typeof SmartyWorkoutsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -797,6 +806,7 @@ export interface FileRouteTypes {
     | '/smarty-workouts/'
     | '/tools/'
     | '/training/'
+    | '/.lovable/oauth/consent'
     | '/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -876,6 +886,7 @@ export interface FileRouteTypes {
     | '/smarty-workouts'
     | '/tools'
     | '/training'
+    | '/.lovable/oauth/consent'
     | '/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -956,6 +967,7 @@ export interface FileRouteTypes {
     | '/smarty-workouts/'
     | '/tools/'
     | '/training/'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -1027,6 +1039,7 @@ export interface RootRouteChildren {
   SmartyWorkoutsIndexRoute: typeof SmartyWorkoutsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   TrainingIndexRoute: typeof TrainingIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicRecoverAbandonedRoute: typeof ApiPublicRecoverAbandonedRoute
   ApiPublicRetryGenerationsRoute: typeof ApiPublicRetryGenerationsRoute
@@ -1498,6 +1511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WWorkoutIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/workout/$workoutId': {
       id: '/_authenticated/workout/$workoutId'
       path: '/workout/$workoutId'
@@ -1702,6 +1722,7 @@ const rootRouteChildren: RootRouteChildren = {
   SmartyWorkoutsIndexRoute: SmartyWorkoutsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   TrainingIndexRoute: TrainingIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicRecoverAbandonedRoute: ApiPublicRecoverAbandonedRoute,
   ApiPublicRetryGenerationsRoute: ApiPublicRetryGenerationsRoute,
