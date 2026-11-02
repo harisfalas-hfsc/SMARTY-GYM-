@@ -391,9 +391,12 @@ export async function runHealthCheck(
     }
     // A newly added job has no saved row and no attempts yet: it is waiting
     // for its first scheduled slot, which is not the same as being overdue.
-    const { data: savedRows } = await db.from("cron_jobs").select("key");
-    const saved = new Set(
-      ((savedRows as { key: string }[] | null) ?? []).map((r) => String(r.key)),
+    const { data: savedRows } = await db.from("cron_jobs").select("key,updated_at");
+    const savedAt = new Map(
+      ((savedRows as { key: string; updated_at: string | null }[] | null) ?? []).map((r) => [
+        String(r.key),
+        r.updated_at ? Date.parse(r.updated_at) : 0,
+      ]),
     );
     const waiting: string[] = [];
     for (const c of Object.values(configs)) {
@@ -406,7 +409,8 @@ export async function runHealthCheck(
       const attempt = latestAttempt.get(c.key);
       const lastAttempt = attempt ? Date.parse(attempt.ran_at) : 0;
       const last = Math.max(lastSuccess, lastAttempt);
-      if (!last && !saved.has(c.key)) {
+      const savedTime = savedAt.get(c.key);
+      if (!last && (savedTime === undefined || now - savedTime <= maxDays * 86400000)) {
         waiting.push(def.label);
       } else if (!last || now - last > maxDays * 86400000) {
         late.push(`${def.label} (last run ${c.last_run_on ?? "never"})`);
@@ -417,7 +421,8 @@ export async function runHealthCheck(
     if (late.length) return ["fail", `Overdue: ${late.join(", ")}`];
     if (failedRecently.length)
       return ["warn", `Ran on time; latest run failed: ${failedRecently.join(", ")}`];
-    return ["pass", `${checked.length} scheduled job(s) ran on time.`];
+    const pending = waiting.length ? ` · waiting for first run: ${waiting.join(", ")}` : "";
+    return ["pass", `${checked.length - waiting.length} scheduled job(s) ran on time${pending}.`];
   });
 
   await run("generation", async () => {
