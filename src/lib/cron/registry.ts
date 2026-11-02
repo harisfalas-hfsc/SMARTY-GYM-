@@ -17,6 +17,7 @@ export type CronJobKey =
   | "error-alerts"
   | "premium-welcome"
   | "generate-weekly-blog-article"
+  | "blog-email-broadcast"
   | "workout-recovery"
   | "new-workout-announcement"
   | "shared-workout-announcement"
@@ -24,6 +25,9 @@ export type CronJobKey =
   | "user-activity-report";
 
 export type CronTiming = "per-member" | "fixed" | "weekly" | "continuous";
+
+/** What a job communicates. "system" = internal processing only. */
+export type CronChannel = "member-email" | "admin-email" | "in-app" | "system";
 
 export interface CronJobDefinition {
   key: CronJobKey;
@@ -35,14 +39,20 @@ export interface CronJobDefinition {
   timingNote: string;
   /** Exactly what the member (or the admin) receives. */
   sends: { title: string; body: string }[];
+  /** Who/what the job sends to. In-app notifications always fire when the job runs. */
+  channels: CronChannel[];
+  /** Event jobs fire the moment something happens (publish, share, payment). */
+  instant?: boolean;
   /** Whether the admin can change the hour/minute. */
   timeEditable: boolean;
+  /** Per-member hourly jobs: only the hour is used (sent on the first check of that hour). */
+  hourOnly?: boolean;
   /** Whether the job has editable content (message pool, extra keywords, ...). */
   contentEditable: boolean;
   contentLabel?: string;
   contentHelp?: string;
   /** Extra settings the admin panel renders for this job. */
-  settings?: ("recipient" | "checks" | "severity" | "groupWindow")[];
+  settings?: ("recipient" | "checks" | "severity" | "groupWindow" | "nightHour")[];
   /** Whether the job can be triggered on demand from the admin panel. */
   runnable?: boolean;
   /** Weekly jobs only: day of week, 0 = Sunday. */
@@ -60,7 +70,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     description: "Reminds recipients about their unclaimed gift after three days, then every seven days. Gifts never expire before activation. Claiming or choosing Stop gift reminders ends reminders. Existing accounts also receive a matching inbox message.",
     timing: "fixed", timingNote: "Daily at the time below in Cyprus. Checks only gifts whose reminder is due; default 10:05. Failed deliveries retry on the next check.",
     sends: [{ title: "Your Smarty Gift is waiting for you", body: "Same gift picture, sender name, personal message and Claim Your Gift button. Reminder email uses Resend and includes Stop gift reminders." }],
-    timeEditable: true, contentEditable: true, contentLabel: "Gift invitation and reminder introduction",
+    channels: ["member-email","in-app"], timeEditable: true, contentEditable: true, contentLabel: "Gift invitation and reminder introduction",
     contentHelp: "Plain text shown above the sender’s personal message. Leave empty for the standard introduction. The gift picture, personal greeting and activation terms remain unchanged.",
     runnable: true, defaults: { enabled: true, hour: 10, minute: 5 },
   },
@@ -82,7 +92,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "Members on a streak of 2+ completed days get the streak headline instead.",
       },
     ],
-    timeEditable: false,
+    channels: ["in-app"], timeEditable: false,
     contentEditable: true,
     contentLabel: "Motivation message pool",
     contentHelp:
@@ -103,7 +113,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "Today's two cards (bodyweight + equipment), or one Recovery card, visible to everyone; opening them needs Premium.",
       },
     ],
-    timeEditable: true,
+    channels: ["system"], timeEditable: true,
     contentEditable: false,
     runnable: true,
     defaults: { enabled: true, hour: 0, minute: 0 },
@@ -124,7 +134,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "Mark it done, or reschedule it in your Logbook.",
       },
     ],
-    timeEditable: false,
+    channels: ["in-app"], timeEditable: false,
     contentEditable: false,
     defaults: { enabled: false, hour: 0, minute: 0 },
   },
@@ -135,7 +145,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
       "Sends one inbox message to every Premium member for each check-in window they have not completed yet — once in the morning and once at night. Members who already checked in get nothing, and nobody gets the same reminder twice in a day.",
     timing: "per-member",
     timingNote:
-      "Sent inside each window at the member's local time: 08:05 (morning window 07:00–10:00) and 20:05 (night window 19:00–22:00).",
+      "Sent at each member's local time. Morning reminder at the hour below (inside the 07:00–10:00 window, default 08:00); night reminder at the night hour below (inside 19:00–22:00, default 20:00). Notifications go out at the job time.",
     sends: [
       {
         title: "Your Morning Smarty Check-in is open",
@@ -146,7 +156,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "Review your day in 30 seconds. Open until 22:00.",
       },
     ],
-    timeEditable: false,
+    channels: ["in-app"], timeEditable: true, hourOnly: true, settings: ["nightHour"],
     contentEditable: false,
     defaults: { enabled: true, hour: 8, minute: 0 },
   },
@@ -164,7 +174,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "Email to smartygym@outlook.com with the run time, what was updated, the new keywords and anything that failed.",
       },
     ],
-    timeEditable: true,
+    channels: ["admin-email"], timeEditable: true,
     contentEditable: true,
     contentLabel: "Extra keywords to always include",
     contentHelp:
@@ -191,7 +201,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "Same report, headline naming the failures — for example “WORKOUT GENERATION UNAVAILABLE — members cannot generate workouts”.",
       },
     ],
-    timeEditable: true,
+    channels: ["admin-email"], timeEditable: true,
     contentEditable: false,
     settings: ["recipient", "checks"],
     runnable: true,
@@ -211,7 +221,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "What broke, where, the exact Cyprus time, the member affected and the technical details.",
       },
     ],
-    timeEditable: false,
+    channels: ["admin-email"], instant: true, timeEditable: false,
     contentEditable: false,
     settings: ["recipient", "severity", "groupWindow"],
     defaults: { enabled: false, hour: 0, minute: 0 },
@@ -230,7 +240,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "One branded email and one inbox guide covering Smarty Workouts, Workout of the Day, Create Your Own Workout, Training Tools, Blog, Smarty Check-ins and Smarty Ritual.",
       },
     ],
-    timeEditable: false,
+    channels: ["member-email","in-app"], instant: true, timeEditable: false,
     contentEditable: false,
     defaults: { enabled: true, hour: 0, minute: 0 },
   },
@@ -240,7 +250,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     description:
       "Writes and publishes one brand-new Fitness article on the Blog every week, in the SmartyGym voice, with an SEO title, summary and internal links to real pages only. Titles used in the last 90 days are never repeated, and if an article was already published this week the job stops without posting a second one.",
     timing: "weekly",
-    timingNote: "Runs once a week, on Sunday at the time set below (site timezone).",
+    timingNote: "Creation: once a week, on Sunday at the time set below (Cyprus time). The inbox notification and your admin report go out at this time. Member emails are sent by the separate “Blog article member email” job at its own time.",
     sends: [
       {
         title: "New Fitness article published on /blog",
@@ -255,7 +265,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "“New article: <title>” lands in each member's inbox with a Read article link straight to the new post.",
       },
     ],
-    timeEditable: true,
+    channels: ["in-app","admin-email"], timeEditable: true,
     contentEditable: true,
     contentLabel: "Extra topics to write about",
     contentHelp:
@@ -264,6 +274,23 @@ export const CRON_JOBS: CronJobDefinition[] = [
     runnable: true,
     weekday: 0,
     defaults: { enabled: false, hour: 0, minute: 0 },
+  },
+  {
+    key: "blog-email-broadcast",
+    label: "Blog article member email",
+    description:
+      "Emails every member who keeps New article emails on about each blog article published in the last 8 days. Separate from article creation, so you choose when members receive the email. Each member receives each article once; already-emailed members are never emailed again.",
+    timing: "weekly",
+    timingNote:
+      "Once a week, on Sunday at the time set below (Cyprus time) — 10:00 by default. Set it later than the article creation time so the new article is included.",
+    sends: [
+      { title: "New article: <title>", body: "Article title, summary and a Read article button — to members with New article emails on." },
+    ],
+    channels: ["member-email"], timeEditable: true,
+    contentEditable: false,
+    runnable: true,
+    weekday: 0,
+    defaults: { enabled: true, hour: 10, minute: 0 },
   },
   {
     key: "workout-recovery",
@@ -279,7 +306,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "The rebuilt workout simply appears where the member expects it.",
       },
     ],
-    timeEditable: false,
+    channels: ["system"], timeEditable: false,
     contentEditable: false,
     defaults: { enabled: true, hour: 0, minute: 0 },
   },
@@ -297,7 +324,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
         body: "One new workout or a brief combined count/category summary, with one workout, category or Smarty Workouts link — identical content and destination in app and email.",
       },
     ],
-    timeEditable: false,
+    channels: ["member-email","in-app"], instant: true, timeEditable: false,
     contentEditable: false,
     defaults: { enabled: true, hour: 0, minute: 0 },
   },
@@ -312,7 +339,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     sends: [
       { title: "New Shared Workout!", body: "Haris just shared a workout. Feeling in the mood to do it? • Workout name • Created by HARIS FALAS. • View Workout — identical content in app and email; never sent to the sharer." },
     ],
-    timeEditable: false,
+    channels: ["member-email","in-app"], instant: true, timeEditable: false,
     contentEditable: false,
     defaults: { enabled: true, hour: 0, minute: 0 },
   },
@@ -322,11 +349,11 @@ export const CRON_JOBS: CronJobDefinition[] = [
     description:
       "Every Monday morning, every account with at least one completed workout (Premium, expired or free) gets its personal weekly Smarty Insights: workouts, active days, training time, streak, score, Training Load, check-ins, what is coming up and Smarty Coach suggestions with links. Delivered to the app inbox and by email, unless the member switched off Weekly Insights emails in My Account. Never sent twice for the same week.",
     timing: "per-member",
-    timingNote: "Every Monday from 06:00 in each member's own timezone. Anything not yet delivered (for example after an email failure) is retried every hour until Sunday, never twice.",
+    timingNote: "Every Monday from the hour below (default 06:00) in each member's own timezone. Inbox message and email are delivered together. Anything not yet delivered (for example after an email failure) is retried every hour until Sunday, never twice.",
     sends: [
       { title: "Your weekly Insights are ready", body: "Inbox summary of the week plus the first Smarty Coach tip, and a full colourful email report with an Open my Insights button. Full details in Logbook → Progress → Insights." },
     ],
-    timeEditable: false,
+    channels: ["member-email","in-app"], timeEditable: true, hourOnly: true,
     contentEditable: false,
     defaults: { enabled: true, hour: 6, minute: 0 },
   },
@@ -341,7 +368,7 @@ export const CRON_JOBS: CronJobDefinition[] = [
     sends: [
       { title: "User activity 2026-10-09 — 10 members, 62 activities", body: "One card per member with their details and a timed list of everything they did." },
     ],
-    timeEditable: true,
+    channels: ["admin-email"], timeEditable: true,
     contentEditable: false,
     settings: ["recipient"],
     runnable: true,
