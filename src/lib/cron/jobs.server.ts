@@ -17,6 +17,8 @@ export interface CronContent {
   minSeverity?: "all" | "important";
   /** Instant error alerts: minutes before the same problem can email again. */
   groupWindowMin?: number;
+  /** Check-in reminders: local hour of the night reminder (19–21). */
+  nightHour?: number;
 }
 
 export interface CronJobConfig {
