@@ -44,6 +44,8 @@ import {
 } from "@/lib/preferences.functions";
 import type { ExerciseSchemaItem } from "@/lib/seo/exercise-schema.functions";
 import pageHeroImage from "@/assets/explore-exercise-library.jpg";
+import { useWebMCP } from "use-webmcp-tool";
+import { runWebMCPTool } from "@/lib/webmcp-telemetry";
 
 
 const URL = "https://smartygym.com/exercise-library";
@@ -603,6 +605,29 @@ export function ExerciseLibraryPage({
     { label: "Target muscle", value: target, set: setTarget, items: options.targets },
     { label: "Difficulty", value: difficulty, set: setDifficulty, items: options.difficulties },
   ];
+
+  useWebMCP({
+    name: "read_visible_exercises",
+    description: "Read the exercise cards currently shown, including their IDs and equipment; respects the current filters.",
+    annotations: { readOnlyHint: true, untrustedContentHint: true },
+    execute: () => runWebMCPTool("read_visible_exercises", () => loading
+      ? "Exercises are loading."
+      : exercises.length ? exercises.map(ex => `${ex.id}: ${ex.name} — ${ex.equipment ?? "unspecified equipment"}`).join("\n") : "No exercises shown."),
+  });
+  useWebMCP({
+    name: "open_visible_exercise",
+    description: "Open an exercise demonstration and instructions from the cards currently shown; use an ID from read_visible_exercises.",
+    enabled: !loading,
+    inputSchema: { type: "object", properties: { id: { type: "string", description: "ID of an exercise currently shown." } }, required: ["id"], additionalProperties: false },
+    execute: ({ id }: { id: string }) => runWebMCPTool("open_visible_exercise", () => {
+      if (typeof id !== "string") throw new Error("Exercise ID must be a string.");
+      if (loading) throw new Error("Exercises are loading.");
+      const exercise = exercises.find(ex => ex.id === id);
+      if (!exercise) throw new Error("Exercise is not in the current view.");
+      openExercise(exercise);
+      return "Exercise demonstration opened.";
+    }),
+  });
 
   return (
     <div className={`mx-auto w-full max-w-4xl px-4 lg:max-w-7xl lg:px-10 xl:max-w-[1440px] ${targetSection ? "py-4 lg:py-6" : "py-8 sm:py-12 lg:py-16"}`}>
