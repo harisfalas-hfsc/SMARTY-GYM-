@@ -19,6 +19,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BestOnlineFitnessPlatformRouteImport } from './routes/best-online-fitness-platform'
 import { Route as ClaimGiftRouteImport } from './routes/claim-gift'
 import { Route as CoachRouteImport } from './routes/coach'
+import { Route as ConnectRouteImport } from './routes/connect'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CreateYourWorkoutRouteImport } from './routes/create-your-workout'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
@@ -138,6 +139,11 @@ const ClaimGiftRoute = ClaimGiftRouteImport.update({
 const CoachRoute = CoachRouteImport.update({
   id: '/coach',
   path: '/coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectRoute = ConnectRouteImport.update({
+  id: '/connect',
+  path: '/connect',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -507,6 +513,7 @@ export interface FileRoutesByFullPath {
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/claim-gift': typeof ClaimGiftRoute
   '/coach': typeof CoachRoute
+  '/connect': typeof ConnectRoute
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -587,6 +594,7 @@ export interface FileRoutesByTo {
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/claim-gift': typeof ClaimGiftRoute
   '/coach': typeof CoachRoute
+  '/connect': typeof ConnectRoute
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -669,6 +677,7 @@ export interface FileRoutesById {
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
   '/claim-gift': typeof ClaimGiftRoute
   '/coach': typeof CoachRoute
+  '/connect': typeof ConnectRoute
   '/contact': typeof ContactRoute
   '/create-your-workout': typeof CreateYourWorkoutRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -751,6 +760,7 @@ export interface FileRouteTypes {
     | '/best-online-fitness-platform'
     | '/claim-gift'
     | '/coach'
+    | '/connect'
     | '/contact'
     | '/create-your-workout'
     | '/disclaimer'
@@ -831,6 +841,7 @@ export interface FileRouteTypes {
     | '/best-online-fitness-platform'
     | '/claim-gift'
     | '/coach'
+    | '/connect'
     | '/contact'
     | '/create-your-workout'
     | '/disclaimer'
@@ -912,6 +923,7 @@ export interface FileRouteTypes {
     | '/best-online-fitness-platform'
     | '/claim-gift'
     | '/coach'
+    | '/connect'
     | '/contact'
     | '/create-your-workout'
     | '/disclaimer'
@@ -994,6 +1006,7 @@ export interface RootRouteChildren {
   BestOnlineFitnessPlatformRoute: typeof BestOnlineFitnessPlatformRoute
   ClaimGiftRoute: typeof ClaimGiftRoute
   CoachRoute: typeof CoachRoute
+  ConnectRoute: typeof ConnectRoute
   ContactRoute: typeof ContactRoute
   CreateYourWorkoutRoute: typeof CreateYourWorkoutRoute
   DisclaimerRoute: typeof DisclaimerRoute
@@ -1124,6 +1137,13 @@ declare module '@tanstack/react-router' {
       path: '/coach'
       fullPath: '/coach'
       preLoaderRoute: typeof CoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connect': {
+      id: '/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof ConnectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -1676,6 +1696,7 @@ const rootRouteChildren: RootRouteChildren = {
   BestOnlineFitnessPlatformRoute: BestOnlineFitnessPlatformRoute,
   ClaimGiftRoute: ClaimGiftRoute,
   CoachRoute: CoachRoute,
+  ConnectRoute: ConnectRoute,
   ContactRoute: ContactRoute,
   CreateYourWorkoutRoute: CreateYourWorkoutRoute,
   DisclaimerRoute: DisclaimerRoute,

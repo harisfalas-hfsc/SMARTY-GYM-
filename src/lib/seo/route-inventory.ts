@@ -62,6 +62,7 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/w/$workoutId": "noindex",
   "/auth": "noindex",
   "/.lovable/oauth/consent": "noindex",
+  "/connect": "noindex",
   "/.well-known/oauth-protected-resource": "utility",
   "/mcp": "utility",
   "/reset-password": "noindex",
