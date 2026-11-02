@@ -448,7 +448,7 @@ export function AdminCronTab() {
               {def.timeEditable ? (
                 <div className="mt-3 flex flex-wrap items-end gap-3">
                   <div>
-                    <Label htmlFor={`${def.key}-h`}>Hour</Label>
+                    <Label htmlFor={`${def.key}-h`}>{def.settings?.includes("nightHour") ? "Morning hour" : "Hour"}</Label>
                     <Input
                       id={`${def.key}-h`}
                       type="number"
