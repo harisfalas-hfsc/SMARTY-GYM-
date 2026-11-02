@@ -12,7 +12,7 @@ export default defineTool({
     const client = supabaseForUser(ctx);
     const userId = ctx.getUserId();
     if (!userId) throw new ToolError("Sign in to connect your account.");
-    const { data: membership, error: membershipError } = await client.rpc("has_active_membership");
+    const { data: membership, error: membershipError } = await client.rpc("has_active_membership", { _user_id: userId });
     if (membershipError || membership !== true) throw new ToolError("An active SmartyGym membership is required. Your saved data is kept.");
     const { data, error } = await client.from("workouts")
       .select("id,name,category,format,status,created_at,completed_at,duration_min")
