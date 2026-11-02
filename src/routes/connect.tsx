@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Check, Copy, Plug, RefreshCw } from "lucide-react";
+import { Check, Copy, Monitor, Plug, RefreshCw } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -87,6 +87,25 @@ function ConnectPage() {
         subtitle="Link SMARTY GYM to an AI assistant like ChatGPT or Claude. Once connected, the assistant can search the exercise library and read your saved workouts while you are signed in."
       />
 
+      <div
+        role="note"
+        className="mb-8 flex gap-3 rounded-lg border-2 border-primary bg-primary/10 p-4"
+      >
+        <Monitor className="mt-0.5 h-6 w-6 shrink-0 text-primary" />
+        <div className="text-sm leading-6">
+          <p className="font-semibold text-foreground">
+            Use a desktop or laptop computer
+          </p>
+          <p className="text-muted-foreground">
+            Connecting an AI assistant only works from a computer (Windows or
+            Mac). It cannot be done from a mobile phone or from the ChatGPT or
+            Claude phone apps — those settings do not exist there. Open your AI
+            tool (ChatGPT, Claude or another) in a desktop browser, then follow
+            the steps below.
+          </p>
+        </div>
+      </div>
+
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="text-lg">Your SMARTY GYM address</CardTitle>
@@ -129,6 +148,10 @@ function ConnectPage() {
               <AccordionContent>
                 <StepList
                   steps={[
+                    <>
+                      On your computer, open chatgpt.com in a web browser (not
+                      the phone app) and sign in.
+                    </>,
                     <>
                       Open{" "}
                       <a
@@ -178,6 +201,10 @@ function ConnectPage() {
               <AccordionContent>
                 <StepList
                   steps={[
+                    <>
+                      On your computer, open claude.ai in a web browser (not
+                      the phone app) and sign in.
+                    </>,
                     <>
                       Open the{" "}
                       <a
