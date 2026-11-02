@@ -29,7 +29,7 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
     return { details: data, account: session.session?.user.email ?? "Your account" };
   },
   pendingComponent: () => <main className="mx-auto max-w-lg px-5 py-12" role="status">Loading connection request…</main>,
-  errorComponent: ({ error }) => <main className="mx-auto max-w-lg space-y-4 px-5 py-12"><h1 className="text-2xl font-bold">Connection unavailable</h1><p role="alert">{error.message}</p><Button onClick={() => window.location.reload()}>Try again</Button></main>,
+  errorComponent: ({ error }) => <main className="mx-auto max-w-lg space-y-4 px-5 py-12"><h1 className="text-2xl font-bold">Connection unavailable</h1><p role="alert">{error instanceof Error ? error.message : "Please start a new connection request."}</p><Button onClick={() => window.location.reload()}>Try again</Button></main>,
   component: Consent,
 });
 
