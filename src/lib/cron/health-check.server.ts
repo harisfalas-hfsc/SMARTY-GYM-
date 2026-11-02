@@ -389,6 +389,13 @@ export async function runHealthCheck(
       if (!latestAttempt.has(r.job_key))
         latestAttempt.set(r.job_key, { status: r.status, ran_at: r.ran_at });
     }
+    // A newly added job has no saved row and no attempts yet: it is waiting
+    // for its first scheduled slot, which is not the same as being overdue.
+    const { data: savedRows } = await db.from("cron_jobs").select("key");
+    const saved = new Set(
+      ((savedRows as { key: string }[] | null) ?? []).map((r) => String(r.key)),
+    );
+    const waiting: string[] = [];
     for (const c of Object.values(configs)) {
       const def = CRON_JOB_BY_KEY[c.key];
       if (!c.enabled || !def || (def.timing !== "fixed" && def.timing !== "weekly")) continue;
@@ -399,7 +406,9 @@ export async function runHealthCheck(
       const attempt = latestAttempt.get(c.key);
       const lastAttempt = attempt ? Date.parse(attempt.ran_at) : 0;
       const last = Math.max(lastSuccess, lastAttempt);
-      if (!last || now - last > maxDays * 86400000) {
+      if (!last && !saved.has(c.key)) {
+        waiting.push(def.label);
+      } else if (!last || now - last > maxDays * 86400000) {
         late.push(`${def.label} (last run ${c.last_run_on ?? "never"})`);
       } else if (attempt && attempt.status === "failed" && lastAttempt >= lastSuccess) {
         failedRecently.push(`${def.label} (ran on time but failed)`);
