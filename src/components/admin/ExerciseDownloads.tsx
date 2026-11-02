@@ -1,12 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Download, Loader2, Search } from "lucide-react";
+import { Download, Loader2, Search, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getExerciseMediaUrl } from "@/lib/exercise-media";
 import { blobDataUrl, deliverExerciseFile, exerciseFacts, exerciseFilename, exerciseHtml, exercisePdf, type ExportExercise } from "@/lib/exercise-card-export";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ExerciseGif } from "@/components/ExerciseGif";
+
+const ALL = "__all__";
+const PAGE = 60;
+type FilterKey = "body_part" | "equipment" | "target_muscle" | "difficulty";
+type Filters = Record<FilterKey, string>;
+const NO_FILTERS: Filters = { body_part: ALL, equipment: ALL, target_muscle: ALL, difficulty: ALL };
+const filterDefs: { key: FilterKey; label: string; plural: string }[] = [
+  { key: "body_part", label: "Body part", plural: "body parts" },
+  { key: "equipment", label: "Equipment", plural: "equipment" },
+  { key: "target_muscle", label: "Target muscle", plural: "target muscles" },
+  { key: "difficulty", label: "Difficulty", plural: "difficulties" },
+];
 
 async function loadExercises() {
   const rows: ExportExercise[] = [];
@@ -32,8 +47,17 @@ export function ExerciseDownloads() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const preview = useRef<HTMLElement>(null);
+  const [filters, setFilters] = useState<Filters>(NO_FILTERS);
+  const [limit, setLimit] = useState(PAGE);
   const q = query.toLowerCase().trim();
-  const matches = data.filter(ex => [ex.name, ex.equipment, ex.target_muscle, ex.body_part, ...(ex.secondary_muscles ?? [])].join(" ").toLowerCase().includes(q));
+  const options = useMemo(() => {
+    const uniq = (k: FilterKey) => [...new Set(data.map(d => d[k]).filter(Boolean))].sort() as string[];
+    return { body_part: uniq("body_part"), equipment: uniq("equipment"), target_muscle: uniq("target_muscle"), difficulty: uniq("difficulty") };
+  }, [data]);
+  const hasFilters = q !== "" || Object.values(filters).some(v => v !== ALL);
+  const matches = data.filter(ex =>
+    filterDefs.every(f => filters[f.key] === ALL || ex[f.key] === filters[f.key]) &&
+    [ex.name, ex.equipment, ex.target_muscle, ex.body_part, ...(ex.secondary_muscles ?? [])].join(" ").toLowerCase().includes(q));
 
   useEffect(() => {
     let active = true;
@@ -93,11 +117,31 @@ export function ExerciseDownloads() {
     <CardHeader><CardTitle className="flex items-center gap-2 text-base"><Download className="h-4 w-4 text-primary" />Download exercise cards</CardTitle></CardHeader>
     <CardContent className="space-y-4">
       <label className="relative block"><Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" /><Input aria-label="Search exercises to download" placeholder="Search by exercise, equipment or muscle" value={query} onChange={e => setQuery(e.target.value)} className="pl-9" /></label>
+      {!isLoading && !error && <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+        {filterDefs.map(f => <Select key={f.key} value={filters[f.key]} onValueChange={v => { setFilters(prev => ({ ...prev, [f.key]: v })); setLimit(PAGE); }}>
+          <SelectTrigger aria-label={f.label} className="h-9 text-xs sm:text-sm"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value={ALL}>{`All ${f.plural}`}</SelectItem>
+            {options[f.key].map(v => <SelectItem key={v} value={v} className="capitalize">{v}</SelectItem>)}
+          </SelectContent>
+        </Select>)}
+      </div>}
       {isLoading ? <p role="status" className="text-sm text-muted-foreground">Loading exercises…</p> : error ? <p role="alert" className="text-sm text-destructive">The exercise library could not be loaded.</p> : <>
-        <p className="text-sm text-muted-foreground">{matches.length} exercises</p>
-        <div className="max-h-52 overflow-y-auto divide-y divide-border rounded-lg border">
-          {matches.slice(0, 60).map(ex => <Button key={ex.id} variant={selected?.id === ex.id ? "secondary" : "ghost"} className="h-auto w-full justify-start whitespace-normal rounded-none px-3 py-2 text-left" onClick={() => setSelected(ex)}><span><span className="block capitalize">{ex.name}</span><span className="block text-xs font-normal capitalize text-muted-foreground">{[ex.equipment, ex.target_muscle].filter(Boolean).join(" · ")}</span></span></Button>)}
-          {!matches.length && <p className="p-3 text-sm text-muted-foreground">No matching exercises.</p>}
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm text-muted-foreground">{matches.length} exercises</p>
+          {hasFilters && <Button variant="ghost" size="sm" onClick={() => { setQuery(""); setFilters(NO_FILTERS); setLimit(PAGE); }}><X className="mr-1 h-4 w-4" />Clear filters</Button>}
+        </div>
+        <div className="max-h-[420px] overflow-y-auto rounded-lg border bg-muted/20 p-2">
+          {!matches.length ? <p className="p-3 text-sm text-muted-foreground">No matching exercises.</p> : <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {matches.slice(0, limit).map(ex => <button key={ex.id} type="button" onClick={() => setSelected(ex)} className={`flex items-start gap-3 rounded-lg border bg-card p-3 text-left transition-colors hover:border-primary ${selected?.id === ex.id ? "border-primary" : ""}`}>
+              <span className="shrink-0"><ExerciseGif path={ex.gif_path} alt={ex.name} /></span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-bold capitalize leading-snug">{ex.name}</span>
+                <span className="mt-1 flex flex-wrap gap-1">{[ex.body_part, ex.equipment].filter(Boolean).map(tag => <Badge key={tag as string} variant="secondary" className="capitalize">{tag}</Badge>)}</span>
+              </span>
+            </button>)}
+          </div>}
+          {matches.length > limit && <div className="mt-2 flex justify-center"><Button variant="outline" size="sm" onClick={() => setLimit(l => l + PAGE)}>Load more ({matches.length - limit} left)</Button></div>}
         </div>
       </>}
       {selected && <>
