@@ -8,11 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { isOnline } from "@/lib/connectivity";
+import { oauthReturnPath } from "@/lib/oauth-return-path";
 
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { next?: string; mode?: "signin" | "signup" | "forgot" } => {
-    const n = typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : undefined;
+    const n = typeof s.next === "string" ? oauthReturnPath(s.next) : undefined;
     const mode = s.mode === "signup" || s.mode === "forgot" || s.mode === "signin" ? s.mode : undefined;
     return { ...(n ? { next: n } : {}), ...(mode ? { mode } : {}) };
   },
@@ -128,7 +129,7 @@ function Auth() {
         email: normalizedEmail,
         password,
         options: {
-          emailRedirectTo: next?.startsWith("/claim-gift?") ? `${window.location.origin}${next}` : window.location.origin,
+          emailRedirectTo: new URL(next ?? "/", window.location.origin).href,
           data: { name: cleanName, full_name: cleanName, age },
         },
       });

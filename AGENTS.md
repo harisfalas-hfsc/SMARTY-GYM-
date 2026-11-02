@@ -11,6 +11,8 @@
 
 <!-- LOVABLE:END -->
 
+- Agent integrations use OAuth-verified caller-scoped read-only MCP tools in src/lib/mcp and page-owned WebMCP hooks; never use privileged clients or alter training history — why: delegated access preserves ownership and membership restrictions.
+
 - Shared Workouts reuses the public community-workout view and guard — why: consistent listings without duplicated rules or Community changes.
 - The workout creator's canonical route is `/create-your-own-workout`; `/create-your-workout` and `/coach` are redirects only — why: old bookmarks keep working.
 - Build It Yourself uses createManualWorkout (src/lib/manual-workout.functions.ts), saving normal MY OWN WORKOUT rows without generation/doctrine — why: members choose exercises; Smarty rules govern coach/admin workouts only.

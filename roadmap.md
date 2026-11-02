@@ -1,5 +1,8 @@
 # Roadmap
 
+## Agent integrations
+- [ ] Add OAuth consent and read-only remote account tools plus exercise-page browser tools; verify manifest, access boundaries and consent states. Republish required for hosted use.
+
 ## Right-side announcements
 - [x] Add Smarty Gift blur/blocking background on desktop/mobile and mobile-only sequential countdowns; preserve desktop timing and panel appearance. Real browser checks at 384×658 and 1280×1800 confirmed 8px blur, blocked page/scroll, dismiss/reopen/Escape and gift-page link. Mobile Gift stayed alone beyond Diet's former opening time; Diet opened 10.4 seconds after Gift closed. Desktop announcements retained independent timing. All 506 tests passed; build OK. Not published.
 - [x] Make Smarty Gift a continuous full-picture announcement with readable overlaid wording and unchanged size. Desktop 1206×634 and mobile 394×634 screenshots checked: image covers full panel, title/button fit, unchanged 280×283.875 / 280×332 dimensions, gift link works without runtime errors; 16 targeted tests and build passed.

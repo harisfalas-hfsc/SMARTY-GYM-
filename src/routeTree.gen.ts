@@ -31,6 +31,7 @@ import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ImageSitemapDotxmlRouteImport } from './routes/image-sitemap[.]xml'
 import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -46,6 +47,7 @@ import { Route as TheSmartyMethodRouteImport } from './routes/the-smarty-method'
 import { Route as TrainingLoadScienceRouteImport } from './routes/training-load-science'
 import { Route as WhyInvestInSmartygymRouteImport } from './routes/why-invest-in-smartygym'
 import { Route as WodRouteImport } from './routes/wod'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedCreateYourOwnWorkoutRouteImport } from './routes/_authenticated/create-your-own-workout'
 import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
@@ -72,6 +74,7 @@ import { Route as ToolsWorkoutTimerRouteImport } from './routes/tools.workout-ti
 import { Route as TrainingIndexRouteImport } from './routes/training.index'
 import { Route as TrainingSlugRouteImport } from './routes/training.$slug'
 import { Route as WWorkoutIdRouteImport } from './routes/w.$workoutId'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedWorkoutWorkoutIdRouteImport } from './routes/_authenticated/workout.$workoutId'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicRecoverAbandonedRouteImport } from './routes/api/public/recover-abandoned'
@@ -197,6 +200,11 @@ const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
@@ -272,6 +280,12 @@ const WodRoute = WodRouteImport.update({
   path: '/wod',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -404,6 +418,11 @@ const WWorkoutIdRoute = WWorkoutIdRouteImport.update({
   path: '/w/$workoutId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedWorkoutWorkoutIdRoute =
   AuthenticatedWorkoutWorkoutIdRouteImport.update({
     id: '/workout/$workoutId',
@@ -500,6 +519,7 @@ export interface FileRoutesByFullPath {
   '/image-sitemap.xml': typeof ImageSitemapDotxmlRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -515,6 +535,7 @@ export interface FileRoutesByFullPath {
   '/training-load-science': typeof TrainingLoadScienceRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
   '/create-your-own-workout': typeof AuthenticatedCreateYourOwnWorkoutRoute
   '/inbox': typeof AuthenticatedInboxRoute
@@ -541,6 +562,7 @@ export interface FileRoutesByFullPath {
   '/smarty-workouts/': typeof SmartyWorkoutsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -577,6 +599,7 @@ export interface FileRoutesByTo {
   '/image-sitemap.xml': typeof ImageSitemapDotxmlRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -592,6 +615,7 @@ export interface FileRoutesByTo {
   '/training-load-science': typeof TrainingLoadScienceRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
   '/create-your-own-workout': typeof AuthenticatedCreateYourOwnWorkoutRoute
   '/inbox': typeof AuthenticatedInboxRoute
@@ -618,6 +642,7 @@ export interface FileRoutesByTo {
   '/smarty-workouts': typeof SmartyWorkoutsIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/training': typeof TrainingIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -656,6 +681,7 @@ export interface FileRoutesById {
   '/image-sitemap.xml': typeof ImageSitemapDotxmlRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -671,6 +697,7 @@ export interface FileRoutesById {
   '/training-load-science': typeof TrainingLoadScienceRoute
   '/why-invest-in-smartygym': typeof WhyInvestInSmartygymRoute
   '/wod': typeof WodRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/create-your-own-workout': typeof AuthenticatedCreateYourOwnWorkoutRoute
   '/_authenticated/inbox': typeof AuthenticatedInboxRoute
@@ -697,6 +724,7 @@ export interface FileRoutesById {
   '/smarty-workouts/': typeof SmartyWorkoutsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/workout/$workoutId': typeof AuthenticatedWorkoutWorkoutIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/recover-abandoned': typeof ApiPublicRecoverAbandonedRoute
@@ -735,6 +763,7 @@ export interface FileRouteTypes {
     | '/image-sitemap.xml'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/mcp'
     | '/pricing'
     | '/privacy'
     | '/reset-password'
@@ -750,6 +779,7 @@ export interface FileRouteTypes {
     | '/training-load-science'
     | '/why-invest-in-smartygym'
     | '/wod'
+    | '/.well-known/oauth-protected-resource'
     | '/account'
     | '/create-your-own-workout'
     | '/inbox'
@@ -776,6 +806,7 @@ export interface FileRouteTypes {
     | '/smarty-workouts/'
     | '/tools/'
     | '/training/'
+    | '/.lovable/oauth/consent'
     | '/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -812,6 +843,7 @@ export interface FileRouteTypes {
     | '/image-sitemap.xml'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/mcp'
     | '/pricing'
     | '/privacy'
     | '/reset-password'
@@ -827,6 +859,7 @@ export interface FileRouteTypes {
     | '/training-load-science'
     | '/why-invest-in-smartygym'
     | '/wod'
+    | '/.well-known/oauth-protected-resource'
     | '/account'
     | '/create-your-own-workout'
     | '/inbox'
@@ -853,6 +886,7 @@ export interface FileRouteTypes {
     | '/smarty-workouts'
     | '/tools'
     | '/training'
+    | '/.lovable/oauth/consent'
     | '/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -890,6 +924,7 @@ export interface FileRouteTypes {
     | '/image-sitemap.xml'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/mcp'
     | '/pricing'
     | '/privacy'
     | '/reset-password'
@@ -905,6 +940,7 @@ export interface FileRouteTypes {
     | '/training-load-science'
     | '/why-invest-in-smartygym'
     | '/wod'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/account'
     | '/_authenticated/create-your-own-workout'
     | '/_authenticated/inbox'
@@ -931,6 +967,7 @@ export interface FileRouteTypes {
     | '/smarty-workouts/'
     | '/tools/'
     | '/training/'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/workout/$workoutId'
     | '/api/public/health'
     | '/api/public/recover-abandoned'
@@ -969,6 +1006,7 @@ export interface RootRouteChildren {
   ImageSitemapDotxmlRoute: typeof ImageSitemapDotxmlRoute
   LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
+  McpRoute: typeof McpRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -984,6 +1022,7 @@ export interface RootRouteChildren {
   TrainingLoadScienceRoute: typeof TrainingLoadScienceRoute
   WhyInvestInSmartygymRoute: typeof WhyInvestInSmartygymRoute
   WodRoute: typeof WodRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminExerciseLibraryRoute: typeof AdminExerciseLibraryRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
@@ -1000,6 +1039,7 @@ export interface RootRouteChildren {
   SmartyWorkoutsIndexRoute: typeof SmartyWorkoutsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   TrainingIndexRoute: typeof TrainingIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicRecoverAbandonedRoute: typeof ApiPublicRecoverAbandonedRoute
   ApiPublicRetryGenerationsRoute: typeof ApiPublicRetryGenerationsRoute
@@ -1170,6 +1210,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
@@ -1273,6 +1320,13 @@ declare module '@tanstack/react-router' {
       path: '/wod'
       fullPath: '/wod'
       preLoaderRoute: typeof WodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/account': {
@@ -1457,6 +1511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WWorkoutIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/workout/$workoutId': {
       id: '/_authenticated/workout/$workoutId'
       path: '/workout/$workoutId'
@@ -1627,6 +1688,7 @@ const rootRouteChildren: RootRouteChildren = {
   ImageSitemapDotxmlRoute: ImageSitemapDotxmlRoute,
   LlmsFullDottxtRoute: LlmsFullDottxtRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
+  McpRoute: McpRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
@@ -1642,6 +1704,8 @@ const rootRouteChildren: RootRouteChildren = {
   TrainingLoadScienceRoute: TrainingLoadScienceRoute,
   WhyInvestInSmartygymRoute: WhyInvestInSmartygymRoute,
   WodRoute: WodRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminExerciseLibraryRoute: AdminExerciseLibraryRoute,
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
@@ -1658,6 +1722,7 @@ const rootRouteChildren: RootRouteChildren = {
   SmartyWorkoutsIndexRoute: SmartyWorkoutsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   TrainingIndexRoute: TrainingIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicRecoverAbandonedRoute: ApiPublicRecoverAbandonedRoute,
   ApiPublicRetryGenerationsRoute: ApiPublicRetryGenerationsRoute,
