@@ -421,15 +421,8 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
     await sendPushToUsers(db, "all", { title: `New article: ${parsed.title}`, body: parsed.excerpt, path: `/blog/${slug}`, tag: `blog:${slug}` });
   }
 
-  // Email every member who keeps "New article emails" on (deduped per member).
-  let memberEmails = 0;
-  try {
-    const { newArticleAnnouncement } = await import("@/lib/broadcast-content");
-    const { sendBroadcastEmail } = await import("@/lib/broadcast-email.server");
-    memberEmails = await sendBroadcastEmail(db, newArticleAnnouncement(slug, parsed.title, parsed.excerpt));
-  } catch (e) {
-    failures.push(`member emails: ${e instanceof Error ? e.message : "failed"}`);
-  }
+  // Member emails are sent separately by the "Blog article member email" job,
+  // at its own day/time set in Admin → Automated jobs.
 
   // Tell the administrator what was published.
   const emailed = await emailAdmin({
@@ -449,7 +442,7 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
     changed: true,
     summary: `Published “${parsed.title}” (/blog/${slug}). ${notified} member${
       notified === 1 ? "" : "s"
-    } notified in their inbox, ${memberEmails} emailed; admin report ${emailed ? "emailed" : "not emailed"}.`,
+    } notified in their inbox; member emails go out at the article email time; admin report ${emailed ? "emailed" : "not emailed"}.`,
     title: parsed.title,
     slug,
     notified,

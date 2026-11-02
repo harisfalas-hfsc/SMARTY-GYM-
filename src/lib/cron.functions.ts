@@ -144,6 +144,13 @@ export const adminRunCronJob = createServerFn({ method: "POST" })
           return { status: result.status, summary: result.summary };
         }
 
+        if (data.key === "blog-email-broadcast") {
+          const { runBlogEmailBroadcast } = await import("@/lib/cron/blog-email.server");
+          const r = await runBlogEmailBroadcast(db);
+          await recordRun(db, { jobKey: "blog-email-broadcast", status: r.status, changed: r.changed, summary: r.summary, details: { failures: r.failures }, trigger: "manual" });
+          return { status: r.status, summary: r.summary };
+        }
+
         if (data.key === "user-activity-report") {
           const config = await getCronConfig(db, "user-activity-report");
           const { runUserActivityReport } = await import("@/lib/activity/run.server");

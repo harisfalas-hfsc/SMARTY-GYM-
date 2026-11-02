@@ -147,8 +147,13 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
         let checkinReminders = 0;
         if (jobs["checkin-reminders"]?.enabled && firstTickOfHour) {
           try {
-            const { runCheckinReminders } = await import("@/lib/checkin-reminders.server");
-            checkinReminders = await runCheckinReminders(db);
+            const { runCheckinReminders, checkinReminderHours } = await import("@/lib/checkin-reminders.server");
+            const ck = jobs["checkin-reminders"];
+            checkinReminders = await runCheckinReminders(
+              db,
+              new Date(),
+              checkinReminderHours(ck?.hour, ck?.content?.nightHour),
+            );
             if (checkinReminders)
               await recordRun(db, {
                 jobKey: "checkin-reminders",
@@ -276,6 +281,21 @@ export const Route = createFileRoute("/api/public/hooks/daily-run")({
               summary: `Weekly blog article crashed: ${message}`,
               trigger: "schedule",
             });
+          }
+        }
+
+        // Blog article member email — its own weekly day/time, separate from creation.
+        const blogEmailConfig = jobs["blog-email-broadcast"];
+        if (blogEmailConfig && isDueNow(blogEmailConfig)) {
+          try {
+            const { runBlogEmailBroadcast } = await import("@/lib/cron/blog-email.server");
+            const r = await runBlogEmailBroadcast(db);
+            await recordRun(db, { jobKey: "blog-email-broadcast", status: r.status, changed: r.changed, summary: r.summary, details: { failures: r.failures }, trigger: "schedule" });
+            if (r.status !== "failed") await markJobRan(db, "blog-email-broadcast", blogEmailConfig);
+          } catch (e) {
+            const message = e instanceof Error ? e.message : "error";
+            failures.push(`blog-email:${message}`);
+            await recordRun(db, { jobKey: "blog-email-broadcast", status: "failed", summary: `Blog article emails failed: ${message} (retried on the next 5-minute check)`, trigger: "schedule" });
           }
         }
 

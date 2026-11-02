@@ -38,7 +38,22 @@ import {
   adminSaveCronJob,
   type ErrorEventRow,
 } from "@/lib/cron.functions";
-import type { CronJobDefinition } from "@/lib/cron/registry";
+import type { CronChannel, CronJobDefinition } from "@/lib/cron/registry";
+
+const CHANNEL_LABEL: Record<CronChannel, string> = {
+  "member-email": "Member email",
+  "admin-email": "Admin email",
+  "in-app": "In-app notification",
+  system: "System only",
+};
+const FILTERS: { key: "all" | CronChannel | "instant"; label: string }[] = [
+  { key: "all", label: "All jobs" },
+  { key: "member-email", label: "Member emails" },
+  { key: "admin-email", label: "Admin emails" },
+  { key: "in-app", label: "In-app notifications" },
+  { key: "instant", label: "Instant (on event)" },
+  { key: "system", label: "System only" },
+];
 import type { CronJobConfig, CronRunRow } from "@/lib/cron/jobs.server";
 import { HEALTH_CHECKS, DEFAULT_HEALTH_RECIPIENT } from "@/lib/cron/health-checks";
 import { AppConfirmDialog } from "@/components/ui/app-dialog";
@@ -63,6 +78,7 @@ export function AdminCronTab() {
   const clearResolvedErrors = useServerFn(adminClearResolvedErrors);
   const [clearOpen, setClearOpen] = useState(false);
   const [problemsBusy, setProblemsBusy] = useState(false);
+  const [filter, setFilter] = useState<"all" | CronChannel | "instant">("all");
   const [expandedRuns, setExpandedRuns] = useState<Record<string, boolean>>({});
 
   const [definitions, setDefinitions] = useState<CronJobDefinition[] | null>(null);
@@ -253,8 +269,10 @@ export function AdminCronTab() {
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
           One scheduler runs every 5 minutes. Each job below decides whether it is due.
-          Member-facing jobs follow each member's own local time, so only their on/off switch can be
-          changed here. Fixed jobs run once a day at the time you set.
+          Every scheduled job has its own time below (Cyprus time, or each member's own local
+          time where noted). In-app notifications go out when their job runs. Blog article
+          creation and the blog member email have separate times. Instant jobs send the moment
+          the event happens (publish, share, payment, problem).
         </p>
         {index ? (
           <p className="mt-2 text-sm">
@@ -362,7 +380,26 @@ export function AdminCronTab() {
         )}
       </div>
 
-      {definitions.map((def) => {
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Filter jobs">
+        {FILTERS.map((f) => (
+          <Button
+            key={f.key}
+            size="sm"
+            variant={filter === f.key ? "default" : "outline"}
+            onClick={() => setFilter(f.key)}
+          >
+            {f.label} (
+            {f.key === "all"
+              ? definitions.length
+              : definitions.filter((d) => (f.key === "instant" ? d.instant : d.channels.includes(f.key as CronChannel))).length}
+            )
+          </Button>
+        ))}
+      </div>
+
+      {definitions
+        .filter((d) => filter === "all" || (filter === "instant" ? d.instant : d.channels.includes(filter)))
+        .map((def) => {
         const config = configs[def.key];
         const enabled = config?.enabled ?? def.defaults.enabled;
         const hour = config?.hour ?? def.defaults.hour;
@@ -375,6 +412,18 @@ export function AdminCronTab() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="text-base font-extrabold">{def.label}</h3>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {def.instant ? (
+                    <span className="rounded-full border border-primary px-2 py-0.5 text-xs font-semibold text-primary">
+                      Instant (on event)
+                    </span>
+                  ) : null}
+                  {def.channels.map((c) => (
+                    <span key={c} className="rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-semibold">
+                      {CHANNEL_LABEL[c]}
+                    </span>
+                  ))}
+                </div>
                 <p className="mt-1 text-sm text-muted-foreground">{def.description}</p>
               </div>
               <div className="flex shrink-0 items-center gap-2 rounded-xl border-2 border-primary/60 px-2 py-1.5">
@@ -399,7 +448,7 @@ export function AdminCronTab() {
               {def.timeEditable ? (
                 <div className="mt-3 flex flex-wrap items-end gap-3">
                   <div>
-                    <Label htmlFor={`${def.key}-h`}>Hour</Label>
+                    <Label htmlFor={`${def.key}-h`}>{def.settings?.includes("nightHour") ? "Morning hour" : "Hour"}</Label>
                     <Input
                       id={`${def.key}-h`}
                       type="number"
@@ -418,6 +467,7 @@ export function AdminCronTab() {
                       }
                     />
                   </div>
+{def.hourOnly ? null : (
                   <div>
                     <Label htmlFor={`${def.key}-m`}>Minute</Label>
                     <Input
@@ -438,10 +488,31 @@ export function AdminCronTab() {
                       }
                     />
                   </div>
+                  )}
+                  {def.settings?.includes("nightHour") ? (
+                    <div>
+                      <Label htmlFor={`${def.key}-nh`}>Night hour</Label>
+                      <Input
+                        id={`${def.key}-nh`}
+                        type="number"
+                        min={19}
+                        max={21}
+                        value={config?.content?.nightHour ?? 20}
+                        className="w-24"
+                        onChange={(e) => setContent(def.key, { nightHour: Number(e.target.value) })}
+                      />
+                    </div>
+                  ) : null}
                   <Button
                     size="sm"
                     disabled={busy === def.key}
-                    onClick={() => void patch(def.key, { hour, minute })}
+                    onClick={() =>
+                      void patch(def.key, {
+                        hour,
+                        minute: def.hourOnly ? 0 : minute,
+                        ...(def.settings?.includes("nightHour") ? { content: config?.content ?? {} } : {}),
+                      })
+                    }
                   >
                     <Save className="mr-2 h-4 w-4" /> Save time
                   </Button>
