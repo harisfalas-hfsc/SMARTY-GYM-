@@ -46,12 +46,13 @@ export function SiteFooter() {
             <span className="text-muted-foreground/40">·</span>
             <Link to="/disclaimer" className="hover:text-primary transition-colors">Disclaimer</Link>
 
+            <span className="text-muted-foreground/40">·</span>
+            <Link to="/connect" className="font-semibold text-primary hover:opacity-80 transition-opacity">Connect AI</Link>
+
             <span className="hidden md:inline text-muted-foreground/40">·</span>
             <Link to="/the-smarty-method" className="hidden md:inline hover:text-primary transition-colors">Discover the Smarty Method</Link>
             <span className="hidden md:inline text-muted-foreground/40">·</span>
             <Link to="/why-invest-in-smartygym" className="hidden md:inline hover:text-primary transition-colors">Why Invest in SmartyGym</Link>
-            <span className="hidden md:inline text-muted-foreground/40">·</span>
-            <Link to="/connect" className="hidden md:inline hover:text-primary transition-colors">Connect an AI assistant</Link>
 
 
 
