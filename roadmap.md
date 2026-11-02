@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Agent integrations
-- [ ] Add OAuth consent and read-only remote account tools plus exercise-page browser tools; verify manifest, access boundaries and consent states. Republish required for hosted use.
+- [x] Add OAuth consent, read-only exercise search/own workout summaries and exercise-page WebMCP reads/open actions. Manifest generated; anonymous MCP rejected (401); real OAuth approve/code exchange and both tools succeeded with a trusted-origin test relay (localhost is not an allowed provider origin). Deny handler and already-approved redirects exercised; hosted flow remains unverified until republish. Existing Cloud/email-password auth preserved; OAuth enabled. No training records changed.
 
 ## Right-side announcements
 - [x] Add Smarty Gift blur/blocking background on desktop/mobile and mobile-only sequential countdowns; preserve desktop timing and panel appearance. Real browser checks at 384×658 and 1280×1800 confirmed 8px blur, blocked page/scroll, dismiss/reopen/Escape and gift-page link. Mobile Gift stayed alone beyond Diet's former opening time; Diet opened 10.4 seconds after Gift closed. Desktop announcements retained independent timing. All 506 tests passed; build OK. Not published.
