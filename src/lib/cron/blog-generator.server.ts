@@ -442,7 +442,7 @@ RESPOND WITH EXACTLY THIS JSON FORMAT (no markdown, no code blocks, just raw JSO
     changed: true,
     summary: `Published “${parsed.title}” (/blog/${slug}). ${notified} member${
       notified === 1 ? "" : "s"
-    } notified in their inbox, ${memberEmails} emailed; admin report ${emailed ? "emailed" : "not emailed"}.`,
+    } notified in their inbox; member emails go out at the article email time; admin report ${emailed ? "emailed" : "not emailed"}.`,
     title: parsed.title,
     slug,
     notified,
