@@ -37,9 +37,12 @@ export const Route = createFileRoute("/connect")({
 const APP_NAME = "SMARTY GYM";
 const APP_SLUG = "smarty-gym";
 
-function StepList({ steps }: { steps: React.ReactNode[] }) {
+function StepList({ steps, start }: { steps: React.ReactNode[]; start?: number }) {
   return (
-    <ol className="list-decimal space-y-2 pl-5 text-sm leading-6 text-muted-foreground">
+    <ol
+      start={start}
+      className="list-decimal space-y-2 pl-5 text-sm leading-6 text-muted-foreground"
+    >
       {steps.map((step, i) => (
         <li key={i}>{step}</li>
       ))}
@@ -231,6 +234,7 @@ function ConnectPage() {
                 </div>
                 <div className="mt-3">
                   <StepList
+                    start={2}
                     steps={[
                       <>
                         Start Claude Code and run <code>/mcp</code> to confirm
