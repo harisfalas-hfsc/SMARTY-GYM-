@@ -402,28 +402,32 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 <h2 className="text-5xl font-black uppercase text-foreground">Everything You Need</h2>
               </div>
             </div>
-            <div className="flex h-[480px] gap-3">
-              {displayedSections
-                .filter((s) => s.id !== "smarty-ritual")
-                .map((s) => (
+            <div
+              className="flex h-[480px] gap-3"
+              onMouseEnter={() => setStripPaused(true)}
+              onMouseLeave={() => setStripPaused(false)}
+            >
+              {stripSections.map((s, i) => {
+                const active = i === activeStrip;
+                return (
                 <Link
                   key={s.id}
                   to={s.cta.to}
                   aria-label={s.cta.label}
-                  className="group relative min-w-0 flex-1 overflow-hidden rounded-2xl transition-[flex-grow] duration-500 ease-out hover:flex-[3.5]"
+                  className={`group relative min-w-0 flex-1 overflow-hidden rounded-2xl transition-[flex-grow] duration-500 ease-out hover:flex-[3.5] ${active ? "flex-[3.5]" : ""}`}
                 >
                   <img
                     src={s.image}
                     alt={s.tag}
                     loading="lazy"
-                    className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] ${s.id === "smarty-workouts" ? "object-[73%_center]" : ""}`}
+                    className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] ${active ? "scale-[1.05]" : ""} ${s.id === "smarty-workouts" ? "object-[73%_center]" : ""}`}
                   />
-                  <div className="absolute inset-0 bg-strip-shade transition-opacity duration-500 group-hover:opacity-0" aria-hidden="true" />
-                  <div className="absolute inset-0 bg-strip-shade-strong opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true" />
-                  <span className="absolute bottom-6 left-1/2 -translate-x-1/2 rotate-180 whitespace-nowrap text-sm font-extrabold uppercase tracking-[0.2em] text-hero-foreground [writing-mode:vertical-rl] transition-opacity duration-300 group-hover:opacity-0">
+                  <div className={`absolute inset-0 bg-strip-shade transition-opacity duration-500 group-hover:opacity-0 ${active ? "opacity-0" : ""}`} aria-hidden="true" />
+                  <div className={`absolute inset-0 bg-strip-shade-strong opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${active ? "opacity-100" : ""}`} aria-hidden="true" />
+                  <span className={`absolute bottom-6 left-1/2 -translate-x-1/2 rotate-180 whitespace-nowrap text-sm font-extrabold uppercase tracking-[0.2em] text-hero-foreground [writing-mode:vertical-rl] transition-opacity duration-300 group-hover:opacity-0 ${active ? "opacity-0" : ""}`}>
                     {s.tag}
                   </span>
-                  <div className="absolute inset-x-0 bottom-0 translate-y-3 p-6 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className={`absolute inset-x-0 bottom-0 translate-y-3 p-6 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 ${active ? "translate-y-0 opacity-100" : ""}`}>
                     <h3 className="text-2xl font-extrabold uppercase tracking-tight text-hero-foreground">{s.tag}</h3>
                     <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-hero-foreground/85">{s.description}</p>
                     <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">
@@ -431,7 +435,8 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                     </span>
                   </div>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
