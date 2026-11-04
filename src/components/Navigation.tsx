@@ -127,7 +127,7 @@ export function Navigation() {
 
   return (
     <header
-      className="sticky top-0 z-40 w-full bg-background lg:top-3 lg:my-3 lg:bg-background/30 lg:backdrop-blur-md"
+      className="sticky top-0 z-40 w-full bg-background lg:top-3 lg:my-3 lg:bg-background/15 lg:backdrop-blur-sm"
     >
       <div className="flex h-11 items-center justify-between gap-2 px-3">
         <div className="flex min-w-0 items-center gap-2">
