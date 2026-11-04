@@ -25,6 +25,7 @@ import {
   Users,
   LogIn, ClipboardCheck } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { adminCheckAccess } from "@/lib/admin.functions";
@@ -239,7 +240,12 @@ export function Navigation() {
         </div>
       </div>
 
-      {menuOpen && <NavDrawer onClose={() => setMenuOpen(false)} isAuthed={!!user} isAdmin={isAdmin} />}
+      {menuOpen &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <NavDrawer onClose={() => setMenuOpen(false)} isAuthed={!!user} isAdmin={isAdmin} />,
+          document.body,
+        )}
       <SmartyCoachDialog key={user?.id ?? "visitor"} accountKey={user?.id ?? null} open={coachOpen} onOpenChange={setCoachOpen} visitor={!user} />
     </header>
   );
