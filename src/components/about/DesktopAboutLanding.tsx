@@ -1,7 +1,7 @@
 import { iconTone } from "@/lib/icon-tone";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ChevronRight, type LucideIcon } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Brain,
   SlidersHorizontal,
@@ -293,6 +293,8 @@ function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
 /** Desktop-only About layout mirroring the old SmartyGym desktop homepage. */
 export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?: "home" | "about"; workoutCount?: number }) {
   const [slide, setSlide] = useState(0);
+  const [activeStrip, setActiveStrip] = useState(0);
+  const [stripPaused, setStripPaused] = useState(false);
   const sections = page === "about" ? aboutSections : homeSections;
   const displayedSections = sections.map((section) =>
     section.id === "smarty-workouts"
@@ -302,10 +304,16 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
         }
       : section,
   );
+  const stripSections = displayedSections.filter((s) => s.id !== "smarty-ritual");
   useEffect(() => {
     const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 2750);
     return () => clearInterval(id);
   }, []);
+  useEffect(() => {
+    if (page !== "home" || stripPaused) return;
+    const id = setInterval(() => setActiveStrip((i) => (i + 1) % stripSections.length), 2000);
+    return () => clearInterval(id);
+  }, [page, stripPaused, stripSections.length]);
 
   return (
     <div className="hidden lg:block">
@@ -370,10 +378,20 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
             </div>
           </div>
         </div>
+        {page === "home" && (
+          <button
+            type="button"
+            aria-label="Scroll down to explore SmartyGym"
+            onClick={() => document.getElementById("everything-you-need")?.scrollIntoView({ behavior: "smooth" })}
+            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 animate-bounce rounded-full border border-hero-foreground/40 p-2 text-hero-foreground/80 transition-colors hover:border-primary hover:text-primary"
+          >
+            <ChevronDown className="h-6 w-6" />
+          </button>
+        )}
       </section>
 
       {page === "home" ? (
-        <section className="border-t border-border bg-background py-16">
+        <section id="everything-you-need" className="border-t border-border bg-background py-16">
           <div className="mx-auto max-w-7xl px-8">
             <div className="relative mb-10 text-center">
               <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-9 text-[112px] font-black uppercase leading-none text-muted/45">
@@ -384,28 +402,32 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 <h2 className="text-5xl font-black uppercase text-foreground">Everything You Need</h2>
               </div>
             </div>
-            <div className="flex h-[480px] gap-3">
-              {displayedSections
-                .filter((s) => s.id !== "smarty-ritual")
-                .map((s) => (
+            <div
+              className="flex h-[480px] gap-3"
+              onMouseEnter={() => setStripPaused(true)}
+              onMouseLeave={() => setStripPaused(false)}
+            >
+              {stripSections.map((s, i) => {
+                const active = i === activeStrip;
+                return (
                 <Link
                   key={s.id}
                   to={s.cta.to}
                   aria-label={s.cta.label}
-                  className="group relative min-w-0 flex-1 overflow-hidden rounded-2xl transition-[flex-grow] duration-500 ease-out hover:flex-[3.5]"
+                  className={`group relative min-w-0 flex-1 overflow-hidden rounded-2xl transition-[flex-grow] duration-500 ease-out hover:flex-[3.5] ${active ? "flex-[3.5]" : ""}`}
                 >
                   <img
                     src={s.image}
                     alt={s.tag}
                     loading="lazy"
-                    className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] ${s.id === "smarty-workouts" ? "object-[73%_center]" : ""}`}
+                    className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] ${active ? "scale-[1.05]" : ""} ${s.id === "smarty-workouts" ? "object-[73%_center]" : ""}`}
                   />
-                  <div className="absolute inset-0 bg-strip-shade transition-opacity duration-500 group-hover:opacity-0" aria-hidden="true" />
-                  <div className="absolute inset-0 bg-strip-shade-strong opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true" />
-                  <span className="absolute bottom-6 left-1/2 -translate-x-1/2 rotate-180 whitespace-nowrap text-sm font-extrabold uppercase tracking-[0.2em] text-hero-foreground [writing-mode:vertical-rl] transition-opacity duration-300 group-hover:opacity-0">
+                  <div className={`absolute inset-0 bg-strip-shade transition-opacity duration-500 group-hover:opacity-0 ${active ? "opacity-0" : ""}`} aria-hidden="true" />
+                  <div className={`absolute inset-0 bg-strip-shade-strong opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${active ? "opacity-100" : ""}`} aria-hidden="true" />
+                  <span className={`absolute bottom-6 left-1/2 -translate-x-1/2 rotate-180 whitespace-nowrap text-sm font-extrabold uppercase tracking-[0.2em] text-hero-foreground [writing-mode:vertical-rl] transition-opacity duration-300 group-hover:opacity-0 ${active ? "opacity-0" : ""}`}>
                     {s.tag}
                   </span>
-                  <div className="absolute inset-x-0 bottom-0 translate-y-3 p-6 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className={`absolute inset-x-0 bottom-0 translate-y-3 p-6 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 ${active ? "translate-y-0 opacity-100" : ""}`}>
                     <h3 className="text-2xl font-extrabold uppercase tracking-tight text-hero-foreground">{s.tag}</h3>
                     <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-hero-foreground/85">{s.description}</p>
                     <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">
@@ -413,7 +435,8 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                     </span>
                   </div>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
