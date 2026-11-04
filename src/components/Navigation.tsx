@@ -127,7 +127,7 @@ export function Navigation() {
 
   return (
     <header
-      className="sticky top-0 z-40 w-full bg-background lg:top-3 lg:my-3 lg:bg-background/15 lg:backdrop-blur-sm"
+      className={`sticky top-0 z-40 w-full bg-background lg:bg-transparent lg:py-3 ${pathname === "/" ? "lg:fixed lg:inset-x-0 lg:top-0" : "lg:top-0"}`}
     >
       <div className="flex h-11 items-center justify-between gap-2 px-3">
         <div className="flex min-w-0 items-center gap-2">
@@ -174,7 +174,7 @@ export function Navigation() {
               onClick={() => setCoachOpen(true)}
               aria-label="Smarty Coach"
               title="Smarty Coach"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-background transition-colors hover:bg-primary/10"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-background transition-colors hover:bg-primary/10 lg:bg-transparent"
             >
               <img src={coachIcon} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             </button>
@@ -187,7 +187,7 @@ export function Navigation() {
                 <button
                   type="button"
                   aria-label="Account"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-primary text-xs font-bold text-primary-foreground"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-primary text-xs font-bold text-primary-foreground lg:bg-transparent lg:text-primary"
                 >
                   {initial}
                 </button>
