@@ -136,7 +136,7 @@ export function Navigation() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full bg-background lg:bg-background/15 lg:backdrop-blur-sm lg:py-3 ${pathname === "/" ? "lg:fixed lg:inset-x-0 lg:top-0" : "lg:top-0"}`}
+      className={`sticky top-0 z-40 w-full bg-background transition-colors duration-200 lg:py-3 ${scrolled ? "lg:bg-background/15 lg:backdrop-blur-sm" : "lg:bg-transparent"} ${pathname === "/" ? "lg:fixed lg:inset-x-0 lg:top-0" : "lg:top-0"}`}
     >
       <div className="flex h-11 items-center justify-between gap-2 px-3">
         <div className="flex min-w-0 items-center gap-2">
