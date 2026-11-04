@@ -378,10 +378,20 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
             </div>
           </div>
         </div>
+        {page === "home" && (
+          <button
+            type="button"
+            aria-label="Scroll down to explore SmartyGym"
+            onClick={() => document.getElementById("everything-you-need")?.scrollIntoView({ behavior: "smooth" })}
+            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 animate-bounce rounded-full border border-hero-foreground/40 p-2 text-hero-foreground/80 transition-colors hover:border-primary hover:text-primary"
+          >
+            <ChevronDown className="h-6 w-6" />
+          </button>
+        )}
       </section>
 
       {page === "home" ? (
-        <section className="border-t border-border bg-background py-16">
+        <section id="everything-you-need" className="border-t border-border bg-background py-16">
           <div className="mx-auto max-w-7xl px-8">
             <div className="relative mb-10 text-center">
               <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-9 text-[112px] font-black uppercase leading-none text-muted/45">
