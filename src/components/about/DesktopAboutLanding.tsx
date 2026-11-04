@@ -1,7 +1,7 @@
 import { iconTone } from "@/lib/icon-tone";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ChevronRight, type LucideIcon } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Brain,
   SlidersHorizontal,
@@ -293,6 +293,8 @@ function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
 /** Desktop-only About layout mirroring the old SmartyGym desktop homepage. */
 export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?: "home" | "about"; workoutCount?: number }) {
   const [slide, setSlide] = useState(0);
+  const [activeStrip, setActiveStrip] = useState(0);
+  const [stripPaused, setStripPaused] = useState(false);
   const sections = page === "about" ? aboutSections : homeSections;
   const displayedSections = sections.map((section) =>
     section.id === "smarty-workouts"
@@ -302,10 +304,16 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
         }
       : section,
   );
+  const stripSections = displayedSections.filter((s) => s.id !== "smarty-ritual");
   useEffect(() => {
     const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 2750);
     return () => clearInterval(id);
   }, []);
+  useEffect(() => {
+    if (page !== "home" || stripPaused) return;
+    const id = setInterval(() => setActiveStrip((i) => (i + 1) % stripSections.length), 2000);
+    return () => clearInterval(id);
+  }, [page, stripPaused, stripSections.length]);
 
   return (
     <div className="hidden lg:block">
