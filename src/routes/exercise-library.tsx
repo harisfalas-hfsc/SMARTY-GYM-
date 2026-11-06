@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useMatch, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { loadRemote } from "@/lib/remote-data";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -879,6 +879,16 @@ export function ExerciseLibraryPage({
                     </ol>
                   </div>
                 )}
+
+                {selected.slug ? (
+                  <Link
+                    to="/exercise-library/$slug"
+                    params={{ slug: selected.slug }}
+                    className="block text-center text-sm font-semibold text-primary"
+                  >
+                    Open the full exercise guide →
+                  </Link>
+                ) : null}
               </>
             )}
           </div>
