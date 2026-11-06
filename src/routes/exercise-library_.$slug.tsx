@@ -59,6 +59,9 @@ export const Route = createFileRoute("/exercise-library_/$slug")({
                 description,
                 inLanguage: "en",
                 isPartOf: { "@id": `${SITE_URL}/#website` },
+                ...(ex.gif_path
+                  ? { image: `${SITE_URL}/api/public/exercise-media/${ex.slug}`, video: { "@id": `${url}#demonstration` } }
+                  : {}),
                 ...(ex.equipment ? { tool: [{ "@type": "HowToTool", name: ex.equipment }] } : {}),
                 ...(ex.instructions?.length
                   ? {
@@ -70,6 +73,25 @@ export const Route = createFileRoute("/exercise-library_/$slug")({
                     }
                   : {}),
               },
+              ...(ex.gif_path
+                ? [
+                    {
+                      // Demonstration animation, described for video/rich-result indexers.
+                      "@type": "VideoObject",
+                      "@id": `${url}#demonstration`,
+                      name: `${name} demonstration`,
+                      description,
+                      thumbnailUrl: [`${SITE_URL}/api/public/exercise-media/${ex.slug}`],
+                      contentUrl: `${SITE_URL}/api/public/exercise-media/${ex.slug}`,
+                      encodingFormat: /\.gif$/i.test(ex.gif_path) ? "image/gif" : undefined,
+                      uploadDate: ex.created_at ?? "2025-01-01T00:00:00Z",
+                      isFamilyFriendly: true,
+                      inLanguage: "en",
+                      embedUrl: url,
+                      publisher: { "@id": `${SITE_URL}/#organization` },
+                    },
+                  ]
+                : []),
               {
                 "@type": "BreadcrumbList",
                 itemListElement: [
