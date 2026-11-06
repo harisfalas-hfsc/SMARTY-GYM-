@@ -14,10 +14,11 @@ export type PublicExercise = {
   category: string | null;
   description: string | null;
   gif_path: string | null;
+  created_at?: string | null;
 };
 
 const COLS =
-  "id,slug,name,body_part,equipment,target_muscle,secondary_muscles,instructions,difficulty,category,description,gif_path";
+  "id,slug,name,body_part,equipment,target_muscle,secondary_muscles,instructions,difficulty,category,description,gif_path,created_at";
 
 export async function getPublicExerciseBySlug(slug: string): Promise<PublicExercise | null> {
   if (!/^[a-z0-9-]+$/.test(slug)) return null;
