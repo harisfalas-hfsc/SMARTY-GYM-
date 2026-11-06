@@ -78,3 +78,113 @@ export async function listDefaultLibraryExercises(): Promise<PublicExercise[]> {
   }
   return batches.flat().sort((a, b) => a.name.localeCompare(b.name)).slice(0, 60);
 }
+
+/** A linked exercise card on a standalone exercise page. */
+export type ExerciseLink = {
+  slug: string;
+  name: string;
+  body_part: string | null;
+  equipment: string | null;
+  target_muscle: string | null;
+  gif_path: string | null;
+};
+
+/** A public workout card (card facts only — never the prescription). */
+export type WorkoutLink = {
+  path: string;
+  name: string;
+  category: string;
+  duration_min: number;
+  image_url: string | null;
+};
+
+export type ExerciseLanding = {
+  exercise: PublicExercise;
+  sameMuscle: ExerciseLink[];
+  sameEquipment: ExerciseLink[];
+  previous: ExerciseLink | null;
+  next: ExerciseLink | null;
+  workouts: WorkoutLink[];
+};
+
+const LINK_COLS = "slug,name,body_part,equipment,target_muscle,gif_path";
+
+/** Stable per-page ordering so links spread across the library, not just A–Z. */
+export function stableRank(seed: string, key: string): number {
+  let hash = 2166136261;
+  const text = `${seed}:${key}`;
+  for (let i = 0; i < text.length; i++) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+/** Maps an exercise's equipment to the equipment labels used on Smarty Workouts. */
+export function workoutEquipmentFor(equipment: string | null): string {
+  const e = (equipment ?? "").toLowerCase();
+  if (!e || e.includes("body weight") || e === "bodyweight" || e === "assisted") return "bodyweight";
+  if (e.includes("kettlebell")) return "kettlebells";
+  if (e.includes("dumbbell")) return "dumbbells";
+  if (e.includes("smith") || e.includes("machine") || e.includes("cable") || e.includes("leverage") || e.includes("sled")) return "machines";
+  if (e.includes("barbell") || e.includes("trap bar")) return "barbell";
+  return "other";
+}
+
+function pick<T extends { slug: string }>(rows: T[], seed: string, count: number, exclude: Set<string>): T[] {
+  return rows
+    .filter((r) => r.slug && !exclude.has(r.slug))
+    .sort((a, b) => stableRank(seed, a.slug) - stableRank(seed, b.slug))
+    .slice(0, count);
+}
+
+export async function getExerciseLandingBySlug(slug: string): Promise<ExerciseLanding | null> {
+  const exercise = await getPublicExerciseBySlug(slug);
+  if (!exercise || !exercise.slug) return null;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const base = () =>
+    supabaseAdmin.from("exercises").select(LINK_COLS).eq("is_active", true).not("slug", "is", null);
+
+  const [muscleRes, equipRes, prevRes, nextRes, workoutRes] = await Promise.all([
+    exercise.target_muscle ? base().eq("target_muscle", exercise.target_muscle).limit(200) : Promise.resolve({ data: [], error: null }),
+    exercise.equipment && exercise.body_part
+      ? base().eq("equipment", exercise.equipment).eq("body_part", exercise.body_part).limit(200)
+      : Promise.resolve({ data: [], error: null }),
+    base().lt("slug", exercise.slug).order("slug", { ascending: false }).limit(1),
+    base().gt("slug", exercise.slug).order("slug", { ascending: true }).limit(1),
+    supabaseAdmin
+      .from("smarty_workouts")
+      .select("id,slug,name,category,duration_min,image_url,equipment")
+      .eq("is_visible", true)
+      .contains("equipment", [workoutEquipmentFor(exercise.equipment)])
+      .limit(500),
+  ]);
+  for (const res of [muscleRes, equipRes, prevRes, nextRes, workoutRes]) if (res.error) throw res.error;
+
+  const seen = new Set<string>([exercise.slug]);
+  const sameMuscle = pick((muscleRes.data ?? []) as ExerciseLink[], exercise.slug, 8, seen);
+  sameMuscle.forEach((e) => seen.add(e.slug));
+  const sameEquipment = pick((equipRes.data ?? []) as ExerciseLink[], exercise.slug, 6, seen);
+
+  type Row = { id: string; slug: string | null; name: string; category: string; duration_min: number; image_url: string | null };
+  const workouts = ((workoutRes.data ?? []) as Row[])
+    .map((w) => ({ ...w, key: w.slug ?? w.id }))
+    .sort((a, b) => stableRank(exercise.slug!, a.key) - stableRank(exercise.slug!, b.key))
+    .slice(0, 4)
+    .map((w) => ({
+      path: `/smarty-workouts/${w.key}`,
+      name: w.name,
+      category: w.category,
+      duration_min: w.duration_min,
+      image_url: w.image_url,
+    }));
+
+  return {
+    exercise,
+    sameMuscle,
+    sameEquipment,
+    previous: ((prevRes.data ?? [])[0] as ExerciseLink | undefined) ?? null,
+    next: ((nextRes.data ?? [])[0] as ExerciseLink | undefined) ?? null,
+    workouts,
+  };
+}
