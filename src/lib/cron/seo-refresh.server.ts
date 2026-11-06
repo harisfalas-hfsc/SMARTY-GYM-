@@ -111,6 +111,16 @@ export async function runSeoRefresh(
     },
   ]);
 
+  // Automatic: tell search engines about public pages (e.g. new exercises) never sent before.
+  try {
+    const { pushNewPublicUrls } = await import("@/lib/seo/indexnow-bulk.server");
+    const fresh = await pushNewPublicUrls();
+    if (fresh.total) notes.push(`New public pages sent to search engines: ${fresh.submitted}/${fresh.total}`);
+    if (!fresh.ok) failures.push(`indexnow-new:${fresh.batches.map((b) => b.detail).join(", ")}`);
+  } catch (e) {
+    failures.push(`indexnow-new:${e instanceof Error ? e.message : String(e)}`);
+  }
+
   const optimization = {
     articles: articleRun?.optimized ?? 0,
     articlesQueued: articleRun?.remaining ?? 0,
