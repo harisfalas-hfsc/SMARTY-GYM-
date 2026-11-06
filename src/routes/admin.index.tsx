@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import {
   ShieldAlert,
+  Search,
   Users,
   Loader2,
   SlidersHorizontal,
@@ -49,6 +50,7 @@ import { AdminInsightsTab } from "@/components/admin/AdminInsightsTab";
 
 import { AdminRitualsTab } from "@/components/admin/AdminRitualsTab";
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
+import { AdminSeoTab } from "@/components/admin/AdminSeoTab";
 import { AdminHealthTab } from "@/components/admin/AdminHealthTab";
 import { AdminGenerationFailuresTab } from "@/components/admin/AdminGenerationFailuresTab";
 import { AdminUserActivityTab } from "@/components/admin/AdminUserActivityTab";
@@ -69,6 +71,7 @@ export const Route = createFileRoute("/admin/")({
 });
 
 type SectionKey =
+  | "seo"
   | "customers"
   | "rules"
   | "cycle"
@@ -163,6 +166,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     label: "Generation failures",
     description: "Failed workout builds, alerts and recovery",
     Icon: AlertTriangle,
+  },
+  {
+    key: "seo",
+    label: "SEO",
+    description: "Search engine notification, Google sitemaps and health checks",
+    Icon: Search,
   },
   {
     key: "cron",
@@ -294,6 +303,7 @@ function AdminPage() {
           {section === "revenue" && <AdminRevenueTab />}
           {section === "insights" && <AdminInsightsTab />}
           {section === "cron" && <AdminCronTab />}
+          {section === "seo" && <AdminSeoTab />}
           {section === "health" && <AdminHealthTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
           {section === "activity" && <AdminUserActivityTab />}
