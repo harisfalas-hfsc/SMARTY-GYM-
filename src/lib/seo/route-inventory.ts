@@ -34,7 +34,7 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/claim-gift": "noindex",
   "/smarty-gift/return": "noindex",
   "/exercise-library": "indexable",
-  "/exercise-library/$slug": "indexable",
+  "/exercise-library_/$slug": "indexable",
   "/wod": "indexable",
   "/faq": "indexable",
   "/contact": "indexable",
