@@ -25,3 +25,11 @@ export const getArticleLinkTargets = createServerFn({ method: "GET" }).handler(a
     ...workouts.map((w) => ({ name: w.name, url: smartyWorkoutPath(w) })),
   ];
 });
+
+/** Unauthenticated; one exercise plus its related exercises and public workout cards. */
+export const getExerciseLanding = createServerFn({ method: "GET" })
+  .inputValidator((data: { slug: string }) => z.object({ slug: z.string().min(1).max(160) }).parse(data))
+  .handler(async ({ data }) => {
+    const { getExerciseLandingBySlug } = await import("./exercise-public.server");
+    return getExerciseLandingBySlug(data.slug);
+  });

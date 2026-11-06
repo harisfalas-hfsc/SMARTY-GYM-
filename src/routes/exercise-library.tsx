@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useMatch, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { loadRemote } from "@/lib/remote-data";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -74,7 +74,7 @@ export const Route = createFileRoute("/exercise-library")({
     }
     return { schemaExercises, initialExercises };
   },
-  head: ({ loaderData, matches }) => matches.some((m) => (m.routeId as string) === "/exercise-library/$slug") ? { meta: [] } : ({
+  head: () => ({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
@@ -124,10 +124,8 @@ export const Route = createFileRoute("/exercise-library")({
   component: ExerciseLibraryRoute,
 });
 
-/** Exercise detail URLs render their own child page (guide + dialog). */
 function ExerciseLibraryRoute() {
-  const child = useMatch({ from: "/exercise-library/$slug", shouldThrow: false });
-  return child ? <Outlet /> : <ExerciseLibraryPage />;
+  return <ExerciseLibraryPage />;
 }
 
 export type Exercise = {
@@ -313,7 +311,7 @@ export function ExerciseLibraryPage({
   initialExercise = null,
   onCloseSelected,
 }: {
-  /** Set by the /exercise-library/$slug route so the detail dialog opens directly. */
+  /** Optional exercise whose detail dialog opens directly. */
   initialExercise?: Exercise | null;
   /** Set by the slug route to return to the library address when the dialog closes. */
   onCloseSelected?: () => void;
@@ -430,12 +428,9 @@ export function ExerciseLibraryPage({
   }
 
   const navigate = useNavigate();
-  // Opening an exercise moves to its own crawlable address; the slug route
-  // renders this same page with the detail dialog already open.
-  const openExercise = (ex: Exercise) => {
-    if (ex.slug) void navigate({ to: "/exercise-library/$slug", params: { slug: ex.slug } });
-    else setSelected(ex);
-  };
+  // Inside the library a tap opens the quick-view dialog (like / add to
+  // workout). Card links still point at each exercise's standalone page.
+  const openExercise = (ex: Exercise) => setSelected(ex);
   const { section: targetSection } = Route.useSearch();
   const targetLabel = targetSection ? DRAFT_SECTIONS.find((s) => s.id === targetSection)!.label : "";
   const [draft, setDraft] = useState<ManualDraft | null>(null);
@@ -884,6 +879,16 @@ export function ExerciseLibraryPage({
                     </ol>
                   </div>
                 )}
+
+                {selected.slug ? (
+                  <Link
+                    to="/exercise-library/$slug"
+                    params={{ slug: selected.slug }}
+                    className="block text-center text-sm font-semibold text-primary"
+                  >
+                    Open the full exercise guide →
+                  </Link>
+                ) : null}
               </>
             )}
           </div>
