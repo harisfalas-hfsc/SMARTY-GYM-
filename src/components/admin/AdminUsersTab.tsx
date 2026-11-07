@@ -33,7 +33,7 @@ import { formatDate } from "@/lib/date-format";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { COMPLIMENTARY_MONTH_OPTIONS, MIN_TEMP_PASSWORD } from "@/lib/complimentary";
 
-type Filter = "all" | "subscriber" | "complimentary" | "gift" | "member";
+type Filter = "all" | "subscriber" | "complimentary" | "gift" | "member" | "cancelled";
 
 const FILTERS: { key: Filter; label: string }[] = [
   { key: "all", label: "Everyone" },
@@ -41,9 +41,10 @@ const FILTERS: { key: Filter; label: string }[] = [
   { key: "gift", label: "Gift members" },
   { key: "complimentary", label: "Complimentary" },
   { key: "member", label: "Free members" },
+  { key: "cancelled", label: "Cancelled" },
 ];
 
-export function AdminUsersTab() {
+export function AdminUsersTab({ initialFilter = "all", initialMemberId }: { initialFilter?: Filter; initialMemberId?: string }) {
   const listUsers = useServerFn(adminListUsers);
   const setRole = useServerFn(adminSetRole);
   const grantPremium = useServerFn(adminGrantPremium);
@@ -58,7 +59,7 @@ export function AdminUsersTab() {
   const [users, setUsers] = useState<AdminUserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<Filter>(initialFilter);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [logbookFor, setLogbookFor] = useState<AdminUserRow | null>(null);
@@ -73,7 +74,10 @@ export function AdminUsersTab() {
     setLoading(true);
     const r = await listUsers({ data: { search: search.trim() || undefined } });
     if ("error" in r) setMessage(r.error);
-    else setUsers(r.users);
+    else {
+      setUsers(r.users);
+      if (initialMemberId) setDetailFor(r.users.find(u => u.id === initialMemberId) ?? null);
+    }
     setLoading(false);
   }
 
@@ -89,11 +93,12 @@ export function AdminUsersTab() {
       complimentary: users.filter((u) => u.membership === "complimentary").length,
       gift: users.filter((u) => u.membership === "gift").length,
       member: users.filter((u) => u.membership === "member").length,
+      cancelled: users.filter((u) => u.cancellation_status).length,
     }),
     [users],
   );
 
-  const rows = filter === "all" ? users : users.filter((u) => u.membership === filter);
+  const rows = filter === "all" ? users : users.filter((u) => filter === "cancelled" ? Boolean(u.cancellation_status) : u.membership === filter);
 
   async function act(fn: () => Promise<{ error?: string } | unknown>, ok: string) {
     setBusy(true);
@@ -244,6 +249,7 @@ export function AdminUsersTab() {
                   )}
                   {u.membership === "gift" && <Badge className="gap-1"><Gift className="h-3 w-3" />Smarty Gift</Badge>}
                   {u.membership === "member" && <Badge variant="outline">Member (free)</Badge>}
+                  {u.cancellation_status && <Badge variant="outline">{u.cancellation_status === "ended" ? "Subscription ended" : "Auto-renewal off"}</Badge>}
                   {u.membership_status === "past_due" && (
                     <Badge variant="destructive">Payment failed</Badge>
                   )}
@@ -261,6 +267,7 @@ export function AdminUsersTab() {
               </div>
 
               {u.gift_sender && <p className="mt-2 text-xs text-muted-foreground">Gifted by {u.gift_sender}</p>}
+              {u.cancellation_status && <p className="mt-2 text-xs text-muted-foreground">{u.cancellation_status === "ended" ? "Subscription ended" : "Paid access until"}: {u.cancellation_until ? formatDate(u.cancellation_until) : "—"}</p>}
               <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground sm:grid-cols-3">
                 <span>Workouts: {u.workouts}</span>
                 <span>Joined: {formatDate(u.created_at)}</span>

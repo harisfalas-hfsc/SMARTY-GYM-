@@ -203,6 +203,16 @@ function AdminPage() {
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [section, setSection] = useState<SectionKey | null>(null);
   const [workoutTab, setWorkoutTab] = useState("smarty");
+  const [memberFilter, setMemberFilter] = useState<"all" | "cancelled">("all");
+  const [memberId, setMemberId] = useState<string | undefined>();
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("members") === "cancelled") {
+      setMemberFilter("cancelled");
+      setMemberId(params.get("member") || undefined);
+      setSection("customers");
+    }
+  }, []);
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -282,7 +292,7 @@ function AdminPage() {
             <ArrowLeft className="mr-2 h-4 w-4" /> All sections
           </Button>
           
-          {section === "customers" && <AdminUsersTab />}
+          {section === "customers" && <AdminUsersTab initialFilter={memberFilter} initialMemberId={memberId} />}
           {section === "rules" && <AdminRulesTab />}
           {section === "cycle" && <AdminWodTab />}
           {section === "workouts" && (
@@ -300,7 +310,7 @@ function AdminPage() {
           {section === "awards" && <AdminAwardsTab />}
           {section === "reports" && <AdminReportsTab />}
           {section === "payments" && <AdminPaymentsTab />}
-          {section === "revenue" && <AdminRevenueTab />}
+          {section === "revenue" && <AdminRevenueTab onViewCancelled={() => { setMemberFilter("cancelled"); setMemberId(undefined); openSection("customers"); }} />}
           {section === "insights" && <AdminInsightsTab />}
           {section === "cron" && <AdminCronTab />}
           {section === "seo" && <AdminSeoTab />}
