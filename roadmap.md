@@ -1,8 +1,8 @@
 # Roadmap
 
 ## Cancellation alerts and member identification
-- [ ] Add instant SMARTYGYM admin emails for cancellation and auto-renewal-off, scoped to this app's live subscription and deduplicated by Stripe event.
-- [ ] Add Cancelled member filter and clickable Revenue card; verify real Admin navigation and run tests.
+- [x] Add instant SMARTYGYM admin emails for cancellation and auto-renewal-off, scoped to this app's live subscription and deduplicated by Stripe event. A clearly labelled owner test email was sent and confirmed in managed delivery logs; actual cancellation delivery requires publishing and a future Stripe event, no real subscription cancelled in testing.
+- [x] Add Cancelled member filter and clickable Revenue card; real signed-in Admin navigation displayed four members (one ended, three auto-renewal-off), profile opening worked; desktop/mobile checked with no overflow/runtime errors. All 531 tests passed; build OK.
 - [ ] Stop SMARTY WORKOUT from emailing about another app's subscriptions (requires changes in that project's own webhook; not a Stripe mailbox setting).
 
 ## Agent integrations
