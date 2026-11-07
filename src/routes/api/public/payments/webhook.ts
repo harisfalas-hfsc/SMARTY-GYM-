@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
+import type { CancellationEvent } from "@/lib/subscription-cancellation";
 
 async function db() {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -39,6 +40,8 @@ async function upsertSubscription(subscription: any, env: StripeEnv, eventCreate
   const { data: existing } = await supabase
     .from("subscriptions")
     .select("id,user_id,last_event_at")
+    .eq("provider", "stripe")
+    .eq("environment", env)
     .eq("provider_subscription_id", subscription.id)
     .maybeSingle();
 
@@ -56,6 +59,9 @@ async function upsertSubscription(subscription: any, env: StripeEnv, eventCreate
       console.error("Stripe subscription without userId metadata:", subscription.id);
       return;
     }
+    const { data: owner, error: ownerError } = await supabase.from("profiles").select("id").eq("id", userId).maybeSingle();
+    if (ownerError) throw new Error(ownerError.message);
+    if (!owner) return;
     // A member has one Stripe row; replace an older one (e.g. after a cancelled plan).
     const { error: insertError } = await supabase
       .from("subscriptions")
@@ -90,17 +96,22 @@ async function upsertSubscription(subscription: any, env: StripeEnv, eventCreate
   }
 }
 
-async function markCanceled(subscription: any, env: StripeEnv) {
+async function markCanceled(subscription: any, env: StripeEnv, eventCreated?: number) {
   const supabase = await db();
-  await supabase
+  const { data: existing, error: readError } = await supabase.from("subscriptions")
+    .select("id,last_event_at").eq("provider", "stripe")
+    .eq("provider_subscription_id", subscription.id).eq("environment", env).maybeSingle();
+  if (readError) throw new Error(readError.message);
+  if (!existing || (eventCreated && Number(existing.last_event_at) > eventCreated)) return;
+  const { error } = await supabase
     .from("subscriptions")
-    .update({ status: "canceled", updated_at: new Date().toISOString() })
-    .eq("provider_subscription_id", subscription.id)
-    .eq("environment", env);
+    .update({ status: "canceled", last_event_at: eventCreated ?? null, updated_at: new Date().toISOString() })
+    .eq("id", existing.id);
+  if (error) throw new Error(error.message);
 }
 
 async function handleWebhook(req: Request, env: StripeEnv) {
-  const event = (await verifyWebhook(req, env)) as { id?: string; type: string; created?: number; data: { object: any } };
+  const event = (await verifyWebhook(req, env)) as CancellationEvent;
 
   // Each Stripe event is applied once, even if Stripe delivers it again.
   if (event.id) {
@@ -112,9 +123,12 @@ async function handleWebhook(req: Request, env: StripeEnv) {
     if (seen) return;
   }
   await applyEvent(event, env);
+  const { notifySubscriptionCancellation } = await import("@/lib/subscription-cancellation.server");
+  await notifySubscriptionCancellation(await db(), event, env);
   // Recorded only after it was applied, so a failed event is retried by Stripe.
   if (event.id) {
-    await (await db()).from("stripe_events").upsert({ id: event.id, type: event.type });
+    const { error } = await (await db()).from("stripe_events").upsert({ id: event.id, type: event.type });
+    if (error) throw new Error(error.message);
   }
 }
 
@@ -129,7 +143,7 @@ async function applyEvent(
       await upsertSubscription(event.data.object, env, event.created);
       break;
     case "customer.subscription.deleted":
-      await markCanceled(event.data.object, env);
+      await markCanceled(event.data.object, env, event.created);
       break;
     case "invoice.payment_failed": {
       const invoice = event.data.object;
