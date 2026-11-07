@@ -33,6 +33,8 @@ export type AdminUserRow = {
   membership_provider: string | null;
   membership_until: string | null;
   gift_sender: string | null;
+  cancellation_status: "ended" | "renewal-off" | null;
+  cancellation_until: string | null;
 };
 
 export const adminListUsers = createServerFn({ method: "POST" })
@@ -77,7 +79,7 @@ export const adminListUsers = createServerFn({ method: "POST" })
           supabaseAdmin.from("workouts").select("user_id").in("user_id", filterIds).limit(20000),
           supabaseAdmin
             .from("subscriptions")
-            .select("user_id, provider, status, current_period_end, updated_at")
+            .select("user_id, provider, status, current_period_end, updated_at, cancel_at_period_end, environment")
             .in("user_id", filterIds)
             .order("updated_at", { ascending: false }),
           supabaseAdmin.from("smarty_gifts").select("recipient_id,sender_name,premium_ends_at,status").eq("environment", "live").eq("status", "claimed").gt("premium_ends_at", new Date().toISOString()),
@@ -85,6 +87,9 @@ export const adminListUsers = createServerFn({ method: "POST" })
       if (giftError) return { error: giftError.message };
       const giftByUser = new Map((gifts ?? []).map(g => [g.recipient_id, g]));
       const { memberKind } = await import("./gifts/admin-reporting");
+      const { isCancelledSubscription } = await import("./subscription-cancellation");
+      const cancellations = new Map<string, any>();
+      for (const s of subs ?? []) if (isCancelledSubscription(s) && !cancellations.has(s.user_id)) cancellations.set(s.user_id, s);
 
       const adminByUser = new Set<string>();
       for (const r of (roles ?? []) as any[]) if (r.role === "admin") adminByUser.add(r.user_id);
@@ -131,6 +136,8 @@ export const adminListUsers = createServerFn({ method: "POST" })
           membership_provider: sub?.provider ?? null,
           membership_until: membership === "gift" ? gift?.premium_ends_at ?? null : sub?.current_period_end ?? null,
           gift_sender: gift?.sender_name ?? null,
+          cancellation_status: cancellations.has(p.id) ? (cancellations.get(p.id).status === "canceled" ? "ended" : "renewal-off") : null,
+          cancellation_until: cancellations.get(p.id)?.current_period_end ?? null,
           profile_complete: Boolean(
             p.onboarded &&
               p.age &&

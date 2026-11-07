@@ -29,7 +29,7 @@ function monthsAgoIso(months: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-export function AdminRevenueTab() {
+export function AdminRevenueTab({ onViewCancelled }: { onViewCancelled?: () => void }) {
   const getRevenue = useServerFn(adminGetRevenue);
   const [report, setReport] = useState<RevenueReport | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -168,7 +168,7 @@ export function AdminRevenueTab() {
             <Stat label="Active subscribers" value={String(report.activeCount)} help="Subscriptions currently billing normally." />
             <Stat label="On trial" value={String(report.trialingCount)} help="Subscriptions inside a trial period." />
             <Stat label="Payment problems" value={String(report.pastDueCount)} help="Subscriptions past due or unpaid — the provider keeps retrying." />
-            <Stat label="Cancelled" value={String(report.canceledCount)} help="Subscriptions that ended." />
+            <Stat label="Cancelled" value={String(report.canceledCount)} help="Subscriptions that ended. Open members to see ended subscriptions and auto-renewal turned off." onClick={onViewCancelled} />
             <Stat label="Complimentary members" value={String(report.complimentaryCount)} help="Members you gave free months to from the Members section." />
             <Stat label="Smarty Gift revenue" value={money(report.giftRevenue)} help={`${report.giftCount} one-time gifts. Included in Paid in range, never in monthly recurring revenue.`} />
             <Stat label="Unpaid / written off" value={money(report.failedAmount)} help="Invoices still open or marked uncollectible in the range." />
@@ -293,7 +293,14 @@ export function AdminRevenueTab() {
   );
 }
 
-function Stat({ label, value, help }: { label: string; value: string; help: string }) {
+function Stat({ label, value, help, onClick }: { label: string; value: string; help: string; onClick?: () => void }) {
+  if (onClick) return (
+    <Button variant="outline" onClick={onClick} aria-label="View cancelled members" className="h-auto flex-col items-start whitespace-normal rounded-2xl border-2 border-primary bg-card p-4 text-left">
+      <span className="text-sm font-semibold leading-tight">{label}</span>
+      <span className="mt-1 text-2xl font-extrabold">{value}</span>
+      <span className="mt-1 text-xs font-normal leading-snug text-muted-foreground">{help}</span>
+    </Button>
+  );
   return (
     <div className="rounded-2xl border-2 border-blue-400 bg-card p-4" title={help}>
       <p className="text-sm font-semibold leading-tight">{label}</p>
