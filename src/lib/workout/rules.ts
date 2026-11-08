@@ -36,6 +36,10 @@ const STRENGTH_BAN_RE =
   /\b(jump|jumping|bound|hop|hopping|burpee|plyo|plyometric|skater|sprint|jacks?|butt kicks?|high knees?|mountain climber|run|running|jog|jogging|skip|skipping|shuffle|march|inchworm|bird dog|crawl)\b/i;
 
 
+/** Banned everywhere by Haris Falas (2026-11-08): pistol/one-leg squats, Zercher squats, good mornings, hang cleans, plyo/clap push-ups, jump lunges. */
+export const OVERCOMPLICATED_RE =
+  /\b(pistol|one leg squat|single leg squat|zercher|good morning|hang clean|plyo push|clap push|lunge with jump|jump lunge|plyo squat)\b/i;
+
 export type RuleExercise = D.ExerciseLike & { id?: string; difficulty?: string | null; smarty_tags?: string[] | null; gif_path?: string | null };
 
 /** Every exercise a member sees must show its picture (Haris Falas, 14 Oct 2026). Rows read without the picture column are not judged. */
@@ -119,6 +123,8 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     out.push(`"${e.name}" is a static hold, which breaks the flow of a ${ctx.category} session.`);
   if (ctx.category === "MOBILITY & STABILITY" && isPassiveStretch(e.name))
     out.push(`"${e.name}" is a passive stretch — it belongs in the Cool Down, not ${ctx.category} main work.`);
+  if (OVERCOMPLICATED_RE.test(e.name))
+    out.push(`"${e.name}" is an overcomplicated variation — Smarty Gym uses simple, recognisable exercises.`);
   if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && !strengthListed && STRENGTH_BAN_RE.test(e.name))
     out.push(`"${e.name}" is a plyometric or cardio drill — ${ctx.category} work is controlled loaded or bodyweight strength.`);
   if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && !listedPortable && D.CORE_ISOLATION_RE.test(e.name))

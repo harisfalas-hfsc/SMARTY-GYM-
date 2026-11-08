@@ -1618,6 +1618,42 @@ export type Database = {
         }
         Relationships: []
       }
+      smarty_workout_fix_staging_running_20261108: {
+        Row: {
+          id: string
+          new_main_workout: string
+          old_md5: string
+        }
+        Insert: {
+          id: string
+          new_main_workout: string
+          old_md5: string
+        }
+        Update: {
+          id?: string
+          new_main_workout?: string
+          old_md5?: string
+        }
+        Relationships: []
+      }
+      smarty_workout_fix_staging_running2_20261108: {
+        Row: {
+          id: string
+          new_main_workout: string
+          old_md5: string
+        }
+        Insert: {
+          id: string
+          new_main_workout: string
+          old_md5: string
+        }
+        Update: {
+          id?: string
+          new_main_workout?: string
+          old_md5?: string
+        }
+        Relationships: []
+      }
       smarty_workouts: {
         Row: {
           category: string
@@ -2482,6 +2518,81 @@ export type Database = {
           location?: string | null
           main_workout?: string | null
           name?: string | null
+          sort_order?: number | null
+          tips_html?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      smarty_workouts_backup_running_complex_20261108: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description_html: string | null
+          difficulty_stars: number | null
+          duration_label: string | null
+          duration_min: number | null
+          equipment: string[] | null
+          focus: string | null
+          format: string | null
+          id: string | null
+          image_url: string | null
+          instructions_html: string | null
+          is_visible: boolean | null
+          legacy_id: string | null
+          location: string | null
+          main_workout: string | null
+          name: string | null
+          slug: string | null
+          sort_order: number | null
+          tips_html: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean | null
+          legacy_id?: string | null
+          location?: string | null
+          main_workout?: string | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          tips_html?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean | null
+          legacy_id?: string | null
+          location?: string | null
+          main_workout?: string | null
+          name?: string | null
+          slug?: string | null
           sort_order?: number | null
           tips_html?: string | null
           updated_at?: string | null

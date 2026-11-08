@@ -5,9 +5,9 @@ import { isLegalExercise } from "../rules";
 const ctx = (category: any) => ({ category, format: "CIRCUIT" as any, level: "intermediate" as any });
 
 describe("SmartyGym conditioning list", () => {
-  it("holds exactly the 60 exercises", () => {
-    expect(CONDITIONING_EXERCISES).toHaveLength(61);
-    expect(new Set(CONDITIONING_EXERCISES).size).toBe(61);
+  it("holds exactly the 49 approved exercises (12 removed 8 Nov 2026)", () => {
+    expect(CONDITIONING_EXERCISES).toHaveLength(49);
+    expect(new Set(CONDITIONING_EXERCISES).size).toBe(49);
   });
   it("only list exercises are legal in Calorie Burning, Cardio, Metabolic and Challenge work", () => {
     for (const c of ["CALORIE BURNING", "CARDIO", "METABOLIC", "CHALLENGE"]) {
