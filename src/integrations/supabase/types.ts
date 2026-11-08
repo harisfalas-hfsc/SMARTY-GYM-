@@ -1636,6 +1636,24 @@ export type Database = {
         }
         Relationships: []
       }
+      smarty_workout_fix_staging_running2_20261108: {
+        Row: {
+          id: string
+          new_main_workout: string
+          old_md5: string
+        }
+        Insert: {
+          id: string
+          new_main_workout: string
+          old_md5: string
+        }
+        Update: {
+          id?: string
+          new_main_workout?: string
+          old_md5?: string
+        }
+        Relationships: []
+      }
       smarty_workouts: {
         Row: {
           category: string
