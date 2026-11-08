@@ -97,7 +97,7 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     out.push(`"${e.name}" is not on the SmartyGym ${ctx.category} exercise list — ${ctx.category} work uses only those exercises.`);
   // CALORIE BURNING / CARDIO / METABOLIC / CHALLENGE: ONLY the 60-exercise
   // SmartyGym conditioning list (conditioning-vocabulary.ts); category rules still apply.
-  const conditioningListed = isConditioningListCategory(ctx.category) && isConditioningListExercise(e);
+  const conditioningListed = isConditioningListCategory(ctx.category) && isConditioningListExercise(e, ctx.category);
   if (isConditioningListCategory(ctx.category) && !conditioningListed)
     out.push(`"${e.name}" is not on the SmartyGym conditioning exercise list — ${ctx.category} work uses only those 60 exercises.`);
   // The owner's list is authoritative for the movements it names: generic

@@ -35,7 +35,7 @@ export const CONDITIONING_EXERCISES: ReadonlyArray<string> = [
   "Wind Sprints",
   "Bear Crawl",
   "Wheel Run",
-  "Inchworm",
+  // "Inchworm" removed by Haris Falas (2026-11-08): preparation/mobility move, never conditioning work.
   "Clap Push Up",
   "Plyo Push Up",
   "Kettlebell Swing",
@@ -79,4 +79,18 @@ const NAMES = new Set(CONDITIONING_EXERCISES.map(norm));
 
 export const isConditioningListCategory = (c: Category) => CONDITIONING_LIST_CATEGORIES.includes(c);
 /** True only for exercises on the SmartyGym conditioning list. */
-export const isConditioningListExercise = (e: { name: string }) => NAMES.has(norm(e.name));
+// Calorie Burning must stay continuous and repeatable (Haris Falas, 2026-11-08):
+// no maximal/complex jumps, setup-heavy or partner moves, and no isolated single-muscle work.
+export const CALORIE_BURNING_EXCLUDED: ReadonlyArray<string> = [
+  "Broad Jump", "Star Jump (Male)", "Astride Jumps (Male)", "Scissor Jumps", "Wind Sprints",
+  "Medicine Ball Catch and Overhead Throw", "Dumbbell Lunge with Bicep Curl",
+];
+const CB_EXCLUDED = new Set(CALORIE_BURNING_EXCLUDED.map(norm));
+const ISOLATION = /\b(curl|triceps?|lateral raise|front raise|shrug|calf raise|kickback|fly|flye)\b/i;
+/** True only for exercises on the SmartyGym conditioning list (category-aware for Calorie Burning). */
+export const isConditioningListExercise = (e: { name: string }, category?: Category) => {
+  const n = norm(e.name);
+  if (!NAMES.has(n)) return false;
+  if (category === "CALORIE BURNING" && (CB_EXCLUDED.has(n) || ISOLATION.test(e.name))) return false;
+  return true;
+};
