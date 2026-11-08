@@ -132,38 +132,6 @@ export const ALL_PRIORITY_NAMES = Array.from(
   new Set([...PRIORITY_BODYWEIGHT, ...PRIORITY_EQUIPMENT, ...PRIORITY_FULL_GYM]),
 );
 
-/** Word-level synonyms: library spelling ↔ coach spelling. */
-const SYN: Record<string, string> = {
-  pushup: "push", pullup: "pull", chinup: "chin", situp: "sit", stepup: "step",
-  vup: "v", biceps: "biceps", bicep: "biceps", triceps: "triceps", tricep: "triceps",
-  single: "one", arm: "arm", leg: "leg", "single-arm": "one", db: "dumbbell",
-  kb: "kettlebell", medicine: "medicine", med: "medicine", smith: "smith",
-  suspension: "trx", air: "bodyweight", forward: "", back: "", "&": "and",
-  thrusters: "thruster", swings: "swing", jacks: "jack", knees: "knee", kicks: "kick",
-  jumping: "jumping", body: "", weight: "bodyweight", machine: "lever", lever: "lever",
-  rack: "", overhead: "overhead", straight: "straight", neutral: "neutral",
-};
-
-const STOP = new Set(["up", "ups", "to", "the", "with", "a", "hold", "and", "bodyweight", ""]);
-
-function tokens(s: string): string[] {
-  return s
-    .toLowerCase()
-    .replace(/push[\s-]?ups?/g, "pushup")
-    .replace(/pull[\s-]?ups?/g, "pullup")
-    .replace(/chin[\s-]?ups?/g, "chinup")
-    .replace(/sit[\s-]?ups?/g, "situp")
-    .replace(/step[\s-]?ups?/g, "stepup")
-    .replace(/body[\s-]?weight/g, "bodyweight")
-    .replace(/single[\s-]arm/g, "one arm")
-    .replace(/single[\s-]leg/g, "one leg")
-    .replace(/[^a-z&\s]/g, " ")
-    .split(/\s+/)
-    .map((w) => (w in SYN ? SYN[w] : w))
-    .map((w) => (w === "push" ? "pushup" : w === "pull" ? "pullup" : w === "chin" ? "chinup" : w === "sit" ? "situp" : w === "step" ? "stepup" : w))
-    .filter((w) => !STOP.has(w));
-}
-
 /**
  * Hand-checked library equivalents where the library spells the movement
  * differently from the coach's list — genuine movement equivalence only, exact
