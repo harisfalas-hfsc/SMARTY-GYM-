@@ -108,10 +108,7 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
     const ff = finisherFormatIssue(html, cat);
     if (ff) s.add(ff);
   }
-  if (!NO_PRIORITY.has(cat) && !hasRequiredExerciseList(cat) && rows.length) {
-    const legal = library.filter((e) => isLegalExercise(e, { category: cat as never, format: (w.format ?? "REPS & SETS") as never, bodyweightOnly: ctx.bodyweightOnly }));
-    if (priorityShareViolation(rows.map((r) => r.id), legal)) s.add("Too few priority exercises");
-  }
+  // Priority (100%, every occurrence) and running bans are decided per exercise by rules.ts above.
   return [...s];
 }
 
@@ -119,6 +116,8 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
 export function complianceRuleLabel(v: string): string {
   if (/never uses gym machines/.test(v)) return "Gym machine or barbell in conditioning work";
   if (/has no picture/.test(v)) return "Exercise without a picture";
+  if (/not a coach priority exercise/.test(v)) return "Non-priority exercise in Main Workout/Finisher";
+  if (/running or sprinting/.test(v)) return "Running or sprinting in a general workout";
   if (/static hold/.test(v)) return "Static hold in a flow category";
   if (/advanced material/.test(v)) return "Advanced exercise in a Beginner workout";
   if (/not a bodyweight/.test(v)) return "Equipment exercise in a bodyweight workout";

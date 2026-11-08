@@ -10,7 +10,8 @@ import * as D from "./doctrine";
 import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-vocabulary";
 import { isPilatesMainExercise, isTruePilatesMovement } from "./pilates-vocabulary";
 import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
-import { isConditioningListCategory, isConditioningListExercise } from "./conditioning-vocabulary";
+import { calorieBurningExcluded, isConditioningListCategory, isConditioningListExercise } from "./conditioning-vocabulary";
+import { isPriorityExercise } from "./priority";
 import { onMobilityRecoveryList } from "./mobility-recovery-vocabulary";
 import { limitationAdmits, limitationDecision, limitationExplanation, type LimitationProfile } from "./limitations";
 
