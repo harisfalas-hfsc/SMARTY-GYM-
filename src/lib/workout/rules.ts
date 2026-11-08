@@ -10,7 +10,8 @@ import * as D from "./doctrine";
 import { isBodyweightEquipment, prepAllowed, type PrepSection } from "./prep-vocabulary";
 import { isPilatesMainExercise, isTruePilatesMovement } from "./pilates-vocabulary";
 import { isStrengthBodyweightListExercise, isStrengthEquipmentListExercise } from "./strength-vocabulary";
-import { isConditioningListCategory, isConditioningListExercise } from "./conditioning-vocabulary";
+import { calorieBurningExcluded, isConditioningListCategory, isConditioningListExercise } from "./conditioning-vocabulary";
+import { isPriorityExercise } from "./priority";
 import { onMobilityRecoveryList } from "./mobility-recovery-vocabulary";
 import { limitationAdmits, limitationDecision, limitationExplanation, type LimitationProfile } from "./limitations";
 
@@ -62,6 +63,11 @@ export const MOMENTUM_CATEGORIES: Category[] = ["CARDIO", "CALORIE BURNING", "ME
 const CONDITIONING_NO_GYM = new Set<string>(["CARDIO", "METABOLIC", "CALORIE BURNING", "CHALLENGE"]);
 const GYM_KIT = /lever|machine|smith|sled|cable|barbell|trap bar|olympic|assisted|stationary|elliptical|treadmill|ski ?erg|rower|stepmill/i;
 
+const PRIORITY_EXEMPT = new Set<string>(["PILATES", "MOBILITY & STABILITY", "RECOVERY", "MICRO-WORKOUTS"]);
+/** Actual running / sprinting — never in general categories. Push to Run and Wheel Run are separate exercises (non-priority). */
+const ACTUAL_RUNNING_RE = /\b(run|running|sprints?|sprinting|jog|jogging|shuttle)\b/i;
+const NOT_RUNNING_RE = /\b(push to run|wheel run|run release|runners? stretch|sprint lunge)\b/i;
+
 export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): string[] {
   const out: string[] = [];
   const section = ctx.section ?? "work";
@@ -101,7 +107,18 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     out.push(`"${e.name}" is not on the SmartyGym ${ctx.category} exercise list — ${ctx.category} work uses only those exercises.`);
   // CALORIE BURNING / CARDIO / METABOLIC / CHALLENGE: ONLY the 60-exercise
   // SmartyGym conditioning list (conditioning-vocabulary.ts); category rules still apply.
-  const conditioningListed = isConditioningListCategory(ctx.category) && isConditioningListExercise(e, ctx.category);
+  // Coach priority lists (priority.ts, Haris Falas 2026-11-08): every general-category
+  // Main Workout / Finisher occurrence must be a priority exercise or approved alias.
+  // A priority movement also satisfies the category's closed list; every other
+  // category ban below still applies.
+  const priority = isPriorityExercise(e);
+  const general = !PRIORITY_EXEMPT.has(ctx.category);
+  if (general && !priority)
+    out.push(`"${e.name}" is not a coach priority exercise — Main Workout and Finisher use only the priority lists.`);
+  if (general && ACTUAL_RUNNING_RE.test(e.name) && !NOT_RUNNING_RE.test(e.name))
+    out.push(`"${e.name}" is running or sprinting — running belongs only in a dedicated Running programme.`);
+  const conditioningListed = isConditioningListCategory(ctx.category) &&
+    (isConditioningListExercise(e, ctx.category) || (priority && !(ctx.category === "CALORIE BURNING" && calorieBurningExcluded(e))));
   if (isConditioningListCategory(ctx.category) && !conditioningListed)
     out.push(`"${e.name}" is not on the SmartyGym conditioning exercise list — ${ctx.category} work uses only those 60 exercises.`);
   // The owner's list is authoritative for the movements it names: generic
@@ -113,7 +130,7 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
   // STRENGTH / MUSCLE BUILDING: the owner's list is authoritative the same way —
   // listed movements (pistol squat, plank, mountain climber, bear crawl...) are
   // never vetoed by generic name heuristics; format/flow rules still apply.
-  const strengthListed = isLoadCategory(ctx.category) && (isStrengthBodyweightListExercise(e) || isStrengthEquipmentListExercise(e));
+  const strengthListed = isLoadCategory(ctx.category) && (isStrengthBodyweightListExercise(e) || isStrengthEquipmentListExercise(e) || priority);
   if (!conditioningListed && !strengthListed) push(D.humanRealismViolation(e));
   if (!strengthListed) push(D.categoryExerciseViolation(e, ctx.category));
   if (ctx.category === "MICRO-WORKOUTS") push(D.microExerciseViolation(e));
@@ -138,9 +155,9 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     const bw = isBodyweightEquipment(e.equipment ?? "");
     // Equipment workouts keep the bodyweight list available beside the equipment list.
     if (bw) {
-      if (!isStrengthBodyweightListExercise(e))
+      if (!isStrengthBodyweightListExercise(e) && !priority)
         out.push(`"${e.name}" is not on the SmartyGym bodyweight Strength & Muscle Hypertrophy list — bodyweight ${ctx.category} work uses only those exercises.`);
-    } else if (!isStrengthEquipmentListExercise(e))
+    } else if (!isStrengthEquipmentListExercise(e) && !priority)
       out.push(`"${e.name}" is not on the SmartyGym equipment Strength & Muscle Hypertrophy list — equipment ${ctx.category} work uses only the gym-machine and free-weight exercises.`);
   }
   if (ctx.bodyweightOnly && !/body ?weight/i.test(e.equipment ?? ""))

@@ -77,6 +77,8 @@ export const CALORIE_BURNING_EXCLUDED: ReadonlyArray<string> = [
 ];
 const CB_EXCLUDED = new Set(CALORIE_BURNING_EXCLUDED.map(norm));
 const ISOLATION = /\b(curl|triceps?|lateral raise|front raise|shrug|calf raise|kickback|fly|flye)\b/i;
+/** Calorie Burning exclusions (maximal/complex jumps, setup-heavy moves, isolation) — apply to every source list. */
+export const calorieBurningExcluded = (e: { name: string }) => CB_EXCLUDED.has(norm(e.name)) || ISOLATION.test(e.name);
 /** True only for exercises on the SmartyGym conditioning list (category-aware for Calorie Burning). */
 export const isConditioningListExercise = (e: { name: string }, category?: Category) => {
   const n = norm(e.name);

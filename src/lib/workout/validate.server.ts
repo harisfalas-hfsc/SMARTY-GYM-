@@ -222,6 +222,16 @@ export function validateWorkout(html: string, opts: ValidateOptions): Validation
   for (const r of crossSectionRepeats(html, (id, f) => libraryById.get(id)?.name ?? f, opts.focus ?? null))
     errors.push(`"${r.name}" appears in both ${r.first} and ${r.again}.`);
 
+  // 4c. No duplicate as a workaround (Haris Falas, 2026-11-08): an exercise is
+  //     listed once per section; when the priority pool runs out the session fails.
+  for (const [label, block] of [["Main Workout", main], ["Finisher", finisher]] as const) {
+    const seen = new Set<string>();
+    for (const s of block) {
+      if (seen.has(s.exerciseId)) errors.push(`"${libraryById.get(s.exerciseId)?.name ?? s.name}" is listed twice in the ${label}.`);
+      seen.add(s.exerciseId);
+    }
+  }
+
   // 5. Repetition guard — a session should not recycle the same two movements.
   const workIds = [...main, ...finisher].map((s) => s.exerciseId);
   const unique = new Set(workIds).size;

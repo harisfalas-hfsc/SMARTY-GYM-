@@ -80,28 +80,33 @@ export const PRIORITY_MOVEMENT_PATTERN: Record<string, FocusGroup | FocusGroup[]
 
 // TIER 1 — the simplest effective, most familiar movement first. Technically
 // advanced or skill movements (Turkish get-up, pistol, muscle-up, planche,
-// levers, handstands, Olympic lifts, snatches, cleans) are NOT priority; they
-// stay legal only where the doctrine permits them.
+// levers, handstands, Olympic lifts, snatches, cleans) are NOT priority.
+// Haris Falas (2026-11-08): Main Workout and Finisher of every general
+// category use ONLY these movements (100%, every occurrence). Running and
+// sprinting (Shuttle Run, Sprint) belong to a dedicated Running programme only;
+// Inchworm is preparation/mobility, never work. Movements with no matching
+// library exercise (Single-Arm Dumbbell Thruster, TRX Squat, Medicine Ball
+// Lunge, Medicine Ball Sit-Up, Dumbbell Thruster) stay off the active lists
+// until the real exercise is added to the library.
 export const PRIORITY_BODYWEIGHT = [
   "Bodyweight Squat", "Reverse Lunge", "Forward Lunge", "Walking Lunge", "Split Squat",
   "Bulgarian Split Squat", "Step-Up", "Push-Up", "Wide-Grip Push-Up", "Incline Push-Up",
   "Diamond Push-Up", "Pull-Up", "Chin-Up", "Inverted Row", "Glute Bridge", "Hip Thrust",
   "Calf Raise", "Sit-Up", "Crunch", "Leg Raise", "Dead Bug", "Plank", "Side Plank",
   "Mountain Climber", "Burpee", "Jumping Jack", "High Knees", "Butt Kicks", "Skater",
-  "Bear Crawl", "Inchworm", "Shuttle Run", "Sprint", "Jump Squat", "Decline Push-Up",
+  "Bear Crawl", "Jump Squat", "Decline Push-Up",
   "Shoulder Tap", "Single-Leg Glute Bridge", "Bird Dog", "Lateral Lunge", "Neutral-Grip Pull-Up",
 ];
 
 export const PRIORITY_EQUIPMENT = [
   "Goblet Squat", "Dumbbell Squat", "Dumbbell Reverse Lunge", "Dumbbell Forward Lunge",
   "Dumbbell Walking Lunge", "Dumbbell Romanian Deadlift", "Dumbbell Row", "Single-Arm Dumbbell Row",
-  "Dumbbell Bench Press", "Dumbbell Shoulder Press", "Dumbbell Push Press", "Dumbbell Thruster",
-  "Single-Arm Dumbbell Thruster", "Dumbbell Bulgarian Split Squat", "Dumbbell Deadlift", "Dumbbell Hip Thrust",
+  "Dumbbell Bench Press", "Dumbbell Shoulder Press", "Dumbbell Push Press",
+  "Dumbbell Bulgarian Split Squat", "Dumbbell Deadlift", "Dumbbell Hip Thrust",
   "Kettlebell Goblet Squat", "Kettlebell Swing", "Single-Arm Kettlebell Swing", "Kettlebell Deadlift",
   "Kettlebell Row", "Kettlebell Press", "Kettlebell Push Press", "Kettlebell Thruster", "Kettlebell Reverse Lunge",
-  "TRX Row", "TRX Push-Up", "TRX Squat", "TRX Reverse Lunge", "TRX Split Squat", "TRX Mountain Climber",
-  "Medicine Ball Slam", "Medicine Ball Squat to Press", "Medicine Ball Lunge", "Medicine Ball Sit-Up",
-  "Medicine Ball Chest Pass",
+  "TRX Row", "TRX Push-Up", "TRX Reverse Lunge", "TRX Split Squat", "TRX Mountain Climber",
+  "Medicine Ball Slam", "Medicine Ball Squat to Press", "Medicine Ball Chest Pass",
 ];
 
 export const PRIORITY_FULL_GYM = [
@@ -115,109 +120,98 @@ export const PRIORITY_FULL_GYM = [
   "Cable Biceps Curl", "Dumbbell Biceps Curl", "Hammer Curl", "Cable Triceps Pushdown",
   "Overhead Cable Triceps Extension", "Triceps Dip", "Cable Lateral Raise", "Cable Chest Fly",
   "Cable Crunch", "Hanging Knee Raise", "Hanging Leg Raise", "Cable Pallof Press",
-  "Kettlebell Swing", "Dumbbell Thruster",
+  "Kettlebell Swing",
 ];
+
+/** Priority movements removed from the active lists because the library has no such exercise yet. */
+export const PRIORITY_NOT_IN_LIBRARY = ["Single-Arm Dumbbell Thruster", "TRX Squat", "Medicine Ball Lunge", "Medicine Ball Sit-Up", "Dumbbell Thruster"];
+/** Running and sprinting: dedicated Running programmes only, never a priority movement. */
+export const PRIORITY_RUNNING_REMOVED = ["Shuttle Run", "Sprint"];
 
 export const ALL_PRIORITY_NAMES = Array.from(
   new Set([...PRIORITY_BODYWEIGHT, ...PRIORITY_EQUIPMENT, ...PRIORITY_FULL_GYM]),
 );
 
-/** Word-level synonyms: library spelling ↔ coach spelling. */
-const SYN: Record<string, string> = {
-  pushup: "push", pullup: "pull", chinup: "chin", situp: "sit", stepup: "step",
-  vup: "v", biceps: "biceps", bicep: "biceps", triceps: "triceps", tricep: "triceps",
-  single: "one", arm: "arm", leg: "leg", "single-arm": "one", db: "dumbbell",
-  kb: "kettlebell", medicine: "medicine", med: "medicine", smith: "smith",
-  suspension: "trx", air: "bodyweight", forward: "", back: "", "&": "and",
-  thrusters: "thruster", swings: "swing", jacks: "jack", knees: "knee", kicks: "kick",
-  jumping: "jumping", body: "", weight: "bodyweight", machine: "lever", lever: "lever",
-  rack: "", overhead: "overhead", straight: "straight", neutral: "neutral",
-};
-
-const STOP = new Set(["up", "ups", "to", "the", "with", "a", "hold", "and", "bodyweight", ""]);
-
-function tokens(s: string): string[] {
-  return s
-    .toLowerCase()
-    .replace(/push[\s-]?ups?/g, "pushup")
-    .replace(/pull[\s-]?ups?/g, "pullup")
-    .replace(/chin[\s-]?ups?/g, "chinup")
-    .replace(/sit[\s-]?ups?/g, "situp")
-    .replace(/step[\s-]?ups?/g, "stepup")
-    .replace(/body[\s-]?weight/g, "bodyweight")
-    .replace(/single[\s-]arm/g, "one arm")
-    .replace(/single[\s-]leg/g, "one leg")
-    .replace(/[^a-z&\s]/g, " ")
-    .split(/\s+/)
-    .map((w) => (w in SYN ? SYN[w] : w))
-    .map((w) => (w === "push" ? "pushup" : w === "pull" ? "pullup" : w === "chin" ? "chinup" : w === "sit" ? "situp" : w === "step" ? "stepup" : w))
-    .filter((w) => !STOP.has(w));
-}
-
 /**
  * Hand-checked library equivalents where the library spells the movement
- * differently from the coach's list. Names that do not exist are ignored.
+ * differently from the coach's list — genuine movement equivalence only, exact
+ * library names (case-insensitive). The library's own exact spelling of a
+ * priority name also counts. Nothing else is a priority exercise: there is no
+ * approximate text matching. Names that do not exist are ignored.
+ * Removed (Haris Falas, 2026-11-08): Jack Burpee → Burpee, Star Jump → Jumping
+ * Jack, Kettlebell Sumo High Pull → Kettlebell Deadlift, Run → Shuttle Run/Sprint.
  */
 export const PRIORITY_ALIASES: Record<string, string[]> = {
-  "Push-Up": ["push-up"],
-  "Hand-Release Push-Up": ["push-up"],
-  "Bodyweight Squat": ["squat", "quads (bodyweight squat)", "squat to overhead reach"],
-  "Wide-Grip Push-Up": ["wide-grip push-up"],
-  "Reverse Lunge": ["reverse lunge", "dumbbell rear lunge"],
-  "Jump Squat": ["jump squat"],
-  "Dumbbell Squat": ["dumbbell squat", "dumbbell goblet squat"],
-  "Dumbbell Forward Lunge": ["dumbbell lunge"],
-  "Single-Arm Dumbbell Thruster": ["dumbbell one arm thruster", "dumbbell thruster"],
-  "Single-Arm Kettlebell Swing": ["kettlebell one arm swing", "kettlebell swing"],
-  "Incline Bench Press": ["barbell incline bench press", "dumbbell incline bench press"],
+  "Bodyweight Squat": ["squat", "quads (bodyweight squat)"],
+  "Forward Lunge": ["forward lunge"],
   "Split Squat": ["split squats"],
-  "Forward Lunge": ["forward lunge", "forward lunge (male)", "walking lunge"],
-  "Bulgarian Split Squat": ["split squats", "dumbbell single leg split squat"],
   "Step-Up": ["dumbbell step-up", "barbell step-up"],
-  "Glute Bridge": ["low glute bridge on floor", "glute bridge march"],
+  "Glute Bridge": ["low glute bridge on floor"],
   "Single-Leg Glute Bridge": ["single leg bridge with outstretched leg"],
-  "Hip Thrust": ["barbell glute bridge", "glute bridge two legs on bench (male)"],
+  "Hip Thrust": ["barbell glute bridge"],
   "Calf Raise": ["bodyweight standing calf raise"],
-  "Plank": ["weighted front plank", "front plank with twist"],
-  "Side Plank": ["bodyweight incline side plank", "side bridge v. 2"],
-  "Sit-Up": ["sit-up with arms on chest", "arms overhead full sit-up (male)"],
+  "Sit-Up": ["sit-up with arms on chest", "sit-up v. 2"],
   "Crunch": ["crunch floor"],
   "Leg Raise": ["lying leg raise flat bench"],
-  "Jumping Jack": ["jack jump (male)", "star jump (male)"],
-  "Burpee": ["burpee", "jack burpee"],
-  "High Knees": ["high knee against wall"],
-  "Shuttle Run": ["run"],
-  "Sprint": ["run"],
-  "Dumbbell Shoulder Press": ["dumbbell one arm shoulder press", "dumbbell arnold press"],
+  "Side Plank": ["side bridge v. 2"],
+  "Jumping Jack": ["jack jump (male)"],
+  "Skater": ["skater hops"],
+  "Lateral Lunge": ["barbell lateral lunge"],
+  "Neutral-Grip Pull-Up": ["pull up (neutral grip)"],
+  "Goblet Squat": ["dumbbell goblet squat", "kettlebell goblet squat"],
+  "Dumbbell Reverse Lunge": ["dumbbell rear lunge"],
+  "Dumbbell Forward Lunge": ["dumbbell lunge"],
   "Dumbbell Row": ["dumbbell bent over row"],
   "Single-Arm Dumbbell Row": ["dumbbell one arm bent-over row"],
-  "Dumbbell Reverse Lunge": ["dumbbell rear lunge"],
-  "Dumbbell Walking Lunge": ["dumbbell lunge"],
+  "Dumbbell Shoulder Press": ["dumbbell seated shoulder press", "dumbbell standing overhead press", "dumbbell one arm shoulder press"],
   "Dumbbell Bulgarian Split Squat": ["dumbbell single leg split squat"],
-  "Dumbbell Hip Thrust": ["barbell glute bridge"],
-  "Dumbbell Thruster": ["kettlebell thruster", "barbell thruster"],
-  "Kettlebell Deadlift": ["kettlebell sumo high pull"],
-  "Kettlebell Reverse Lunge": ["kettlebell lunge pass through"],
-  "TRX Row": ["suspended row", "inverted row with straps"],
+  "Kettlebell Row": ["kettlebell one arm row", "kettlebell alternating row"],
+  "Kettlebell Press": ["kettlebell alternating press"],
+  "Kettlebell Push Press": ["kettlebell double push press"],
+  "TRX Row": ["suspended row"],
   "TRX Push-Up": ["suspended push-up"],
   "TRX Split Squat": ["suspended split squat"],
-  "TRX Reverse Lunge": ["suspended split squat"],
-  "TRX Mountain Climber": ["suspended abdominal fallout"],
   "Medicine Ball Slam": ["medicine ball overhead slam"],
-  "Medicine Ball Squat to Press": ["medicine ball chest push from 3 point stance"],
+  "Incline Bench Press": ["barbell incline bench press"],
   "Barbell Back Squat": ["barbell full squat", "barbell high bar squat"],
   "Smith Machine Squat": ["smith squat", "smith full squat"],
-  "Hip Thrust Machine": ["barbell glute bridge"],
-  "Pec Deck": ["cable middle fly", "dumbbell fly"],
-  "Cable Chest Fly": ["cable standing fly", "cable middle fly"],
-  "Lat Pulldown": ["cable lat pulldown full range of motion", "cable pulldown"],
+  "Hack Squat": ["sled hack squat"],
+  "Leg Press": ["sled 45° leg press"],
+  "Leg Extension": ["lever leg extension"],
+  "Leg Curl": ["lever lying leg curl", "lever seated leg curl"],
+  "Lat Pulldown": ["cable pulldown", "cable lat pulldown full range of motion", "lever front pulldown"],
+  "Seated Cable Row": ["cable seated row", "cable low seated row"],
   "Chest-Supported Row Machine": ["lever seated row", "lever t bar row"],
-  "Barbell Row": ["barbell bent over row", "barbell pendlay row"],
+  "Machine Chest Press": ["lever chest press"],
+  "Pec Deck": ["lever seated fly"],
+  "Machine Shoulder Press": ["lever shoulder press", "lever military press"],
+  "Barbell Row": ["barbell bent over row"],
+  "Romanian Deadlift": ["barbell romanian deadlift"],
   "Barbell Overhead Press": ["barbell seated overhead press"],
+  "Seated Calf Raise": ["lever seated calf raise"],
+  "Standing Calf Raise": ["lever standing calf raise", "barbell standing calf raise", "dumbbell standing calf raise"],
+  "Cable Biceps Curl": ["cable curl"],
+  "Hammer Curl": ["dumbbell hammer curl"],
+  "Cable Triceps Pushdown": ["cable pushdown", "cable pushdown (with rope attachment)"],
+  "Overhead Cable Triceps Extension": ["cable overhead triceps extension (rope attachment)"],
+  "Triceps Dip": ["bench dip (knees bent)"],
+  "Cable Chest Fly": ["cable standing fly", "cable middle fly"],
   "Cable Crunch": ["cable kneeling crunch"],
   "Cable Pallof Press": ["band horizontal pallof press", "band vertical pallof press"],
-  "Triceps Dip": ["triceps dip", "bench dip (knees bent)"],
 };
+
+const PRIORITY_LIBRARY_NAMES: Map<string, string> = (() => {
+  const m = new Map<string, string>();
+  for (const p of ALL_PRIORITY_NAMES) {
+    m.set(p.toLowerCase(), p);
+    for (const a of PRIORITY_ALIASES[p] ?? []) if (!m.has(a.toLowerCase())) m.set(a.toLowerCase(), p);
+  }
+  return m;
+})();
+
+/** The coach priority movement a library exercise stands for (exact name or approved alias), or null. */
+export const priorityNameOf = (e: { name: string }): string | null => PRIORITY_LIBRARY_NAMES.get(e.name.trim().toLowerCase()) ?? null;
+export const isPriorityExercise = (e: { name: string }) => priorityNameOf(e) !== null;
 
 /**
  * Library matches for one coach name: hand-checked aliases first, then the
@@ -225,25 +219,10 @@ export const PRIORITY_ALIASES: Record<string, string[]> = {
  */
 export function resolvePriority(name: string, library: PoolExercise[], max = 2): PoolExercise[] {
   const byName = new Map(library.map((e) => [e.name.toLowerCase(), e] as const));
-  // The library's own exact spelling always wins, then hand-checked aliases.
-  const exact = byName.get(name.toLowerCase());
-  const aliased = [...(exact ? [name] : []), ...(PRIORITY_ALIASES[name] ?? [])]
+  const hits = [name, ...(PRIORITY_ALIASES[name] ?? [])]
     .map((n) => byName.get(n.toLowerCase()))
     .filter((e): e is PoolExercise => !!e);
-  if (aliased.length) return [...new Map(aliased.map((e) => [e.id, e])).values()].slice(0, max);
-  const want = tokens(name);
-  if (!want.length) return [];
-  const scored: { e: PoolExercise; extra: number }[] = [];
-  for (const e of library) {
-    const have = tokens(e.name);
-    if (!want.every((w) => have.includes(w))) continue;
-    if (/\(.*pov\)|\bv\.\s*\d/i.test(e.name)) continue; // camera-angle duplicates
-    // A modifier that changes the movement is a different exercise, not the coach's one.
-    if (/\b(side|reverse grip|depth|sit|wall|ski|back and forth|push to|drop|hanging|march|with straps|bench|on box|clap|one leg|single leg)\b/i.test(e.name) && !/\b(side|reverse grip|depth|sit|wall|ski|drop|hanging|march|bench|single leg|one leg)\b/i.test(name)) continue;
-    scored.push({ e, extra: have.length - want.length });
-  }
-  scored.sort((a, b) => a.extra - b.extra || a.e.name.length - b.e.name.length);
-  return scored.filter((s) => s.extra <= 1).slice(0, max).map((s) => s.e);
+  return [...new Map(hits.map((e) => [e.id, e])).values()].slice(0, max);
 }
 
 const cache = new WeakMap<PoolExercise[], Set<string>>();
@@ -259,11 +238,11 @@ export function priorityIds(library: PoolExercise[]): Set<string> {
 }
 
 /**
- * Returns a rejection reason when fewer than 70% of the main-workout and
- * finisher exercises are coach priority exercises; null when compliant.
+ * Returns a rejection reason when ANY main-workout or finisher exercise
+ * occurrence is not a coach priority exercise; null when 100% compliant.
  */
 export function priorityShortfall(html: string, library: PoolExercise[], category: string): string | null {
-  if (category === "MOBILITY & STABILITY" || category === "PILATES") return null;
+  if (category === "MOBILITY & STABILITY" || category === "PILATES" || category === "RECOVERY") return null;
   const start = html.search(/Main Workout/i);
   if (start < 0) return null;
   const rest = html.slice(start);
@@ -274,20 +253,13 @@ export function priorityShortfall(html: string, library: PoolExercise[], categor
   return priorityShareViolation(ids, library);
 }
 
-/** THE 70% priority-share rule, shared by the generator and the stored-workout audit. */
-export const PRIORITY_SHARE = 0.7;
+/** THE priority rule (Haris Falas, 2026-11-08): 100% of occurrences, no percentage threshold. */
+export const PRIORITY_SHARE = 1;
 export function priorityShareViolation(workIds: string[], library: PoolExercise[]): string | null {
   if (!workIds.length) return null;
-  const prio = priorityIds(library);
-  if (!prio.size) return null; // the legal pool holds no priority movement — never force one
-  // Preference subordinate to hard rules: never demand more distinct priority
-  // movements than the legal pool actually holds.
-  const unique = [...new Set(workIds)];
-  const hits = unique.filter((id) => prio.has(id)).length;
-  const need = Math.min(Math.round(unique.length * PRIORITY_SHARE), prio.size);
-  return hits >= need
-    ? null
-    : `Only ${hits} of ${workIds.length} main exercises are coach priority exercises (need at least ${PRIORITY_SHARE * 100}%).`;
+  const byId = new Map(library.map((e) => [e.id, e]));
+  const miss = workIds.filter((id) => { const e = byId.get(id); return !e || !isPriorityExercise(e); }).length;
+  return miss ? `${miss} of ${workIds.length} main/finisher exercises are not coach priority exercises (100% required).` : null;
 }
 
 type Env = "BODYWEIGHT" | "EQUIPMENT" | "FULL_GYM";
