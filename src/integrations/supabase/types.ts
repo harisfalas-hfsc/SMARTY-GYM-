@@ -1618,6 +1618,24 @@ export type Database = {
         }
         Relationships: []
       }
+      smarty_workout_fix_staging_doc_20261108: {
+        Row: {
+          created_at: string
+          id: string
+          new_main: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          new_main: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          new_main?: string
+        }
+        Relationships: []
+      }
       smarty_workout_fix_staging_running_20261108: {
         Row: {
           id: string
@@ -1802,6 +1820,81 @@ export type Database = {
         Relationships: []
       }
       smarty_workouts_backup_conditioning_fix_20261108: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description_html: string | null
+          difficulty_stars: number | null
+          duration_label: string | null
+          duration_min: number | null
+          equipment: string[] | null
+          focus: string | null
+          format: string | null
+          id: string | null
+          image_url: string | null
+          instructions_html: string | null
+          is_visible: boolean | null
+          legacy_id: string | null
+          location: string | null
+          main_workout: string | null
+          name: string | null
+          slug: string | null
+          sort_order: number | null
+          tips_html: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean | null
+          legacy_id?: string | null
+          location?: string | null
+          main_workout?: string | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          tips_html?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description_html?: string | null
+          difficulty_stars?: number | null
+          duration_label?: string | null
+          duration_min?: number | null
+          equipment?: string[] | null
+          focus?: string | null
+          format?: string | null
+          id?: string | null
+          image_url?: string | null
+          instructions_html?: string | null
+          is_visible?: boolean | null
+          legacy_id?: string | null
+          location?: string | null
+          main_workout?: string | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          tips_html?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      smarty_workouts_backup_doc_corrections_20261108: {
         Row: {
           category: string | null
           created_at: string | null
