@@ -1,5 +1,8 @@
 # Roadmap
 
+## Restore CI verification
+- [ ] Resolve the seven workout-check failures without disabling CI, weakening priority compliance, or changing saved workouts; run the full test suite and check preview build results.
+
 ## Cancellation alerts and member identification
 - [x] Add instant SMARTYGYM admin emails for cancellation and auto-renewal-off, scoped to this app's live subscription and deduplicated by Stripe event. A clearly labelled owner test email was sent and confirmed in managed delivery logs; actual cancellation delivery requires publishing and a future Stripe event, no real subscription cancelled in testing.
 - [x] Add Cancelled member filter and clickable Revenue card; real signed-in Admin navigation displayed four members (one ended, three auto-renewal-off), profile opening worked; desktop/mobile checked with no overflow/runtime errors. All 531 tests passed; build OK.

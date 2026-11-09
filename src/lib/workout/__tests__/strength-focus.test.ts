@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { focusBreaks, focusGroup, focusGroups } from "../strength-focus";
-import { ALL_PRIORITY_NAMES, PRIORITY_MOVEMENT_PATTERN } from "../priority";
+import { ALL_PRIORITY_NAMES, PRIORITY_MOVEMENT_PATTERN, PRIORITY_NOT_IN_LIBRARY, PRIORITY_RUNNING_REMOVED } from "../priority";
 
 describe("strength focus", () => {
   it("classifies push and pull correctly", () => {
@@ -19,8 +19,10 @@ describe("strength focus", () => {
     const main = ["bodyweight standing calf raise", "inverted row", "suspended row", "walking lunge", "forward lunge", "one leg squat"];
     expect(focusBreaks("LOW PUSH & UPPER PULL", main, ["inverted row", "crunch floor", "quads (bodyweight squat)"])).toEqual([]);
   });
-  it("every coach-classified movement is one of the coach's priority exercises", () => {
-    for (const name of Object.keys(PRIORITY_MOVEMENT_PATTERN)) expect(ALL_PRIORITY_NAMES).toContain(name);
+  it("retains classification for explicitly withdrawn movements without making them active priorities", () => {
+    const withdrawn = [...PRIORITY_NOT_IN_LIBRARY, ...PRIORITY_RUNNING_REMOVED, "Inchworm"];
+    for (const name of Object.keys(PRIORITY_MOVEMENT_PATTERN)) expect([...ALL_PRIORITY_NAMES, ...withdrawn]).toContain(name);
+    for (const name of withdrawn) expect(ALL_PRIORITY_NAMES).not.toContain(name);
   });
   it("applies the coach's movement-pattern classification", () => {
     expect(focusGroups("Shoulder Tap")).toEqual(["upper push"]);
