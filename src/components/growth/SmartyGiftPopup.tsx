@@ -10,6 +10,7 @@ import { useAnnouncement } from '@/hooks/useAnnouncement';
 const GIFT_POPUP_ENABLED = false;
 
 export function SmartyGiftPopup() {
+  if (!GIFT_POPUP_ENABLED) return null;
   const [desktop, setDesktop] = useState(false);
   const { open, mounted, setOpen } = useAnnouncement('smarty-gift', giftAnnouncementDelay(desktop));
   const panelRef = useRef<HTMLDivElement>(null);
