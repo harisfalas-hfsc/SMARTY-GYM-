@@ -56,7 +56,7 @@ export function SmartyGiftPopup() {
     };
   }, [open, setOpen]);
 
-  if (!mounted) return null;
+  if (!GIFT_POPUP_ENABLED || !mounted) return null;
 
   return <>
     {open && <div aria-hidden="true" data-announcement-backdrop="smarty-gift" className="fixed inset-0 z-[58] bg-background/85 backdrop-blur-sm" onClick={() => setOpen(false)} />}
