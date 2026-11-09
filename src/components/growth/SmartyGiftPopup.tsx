@@ -6,6 +6,9 @@ import giftImage from '@/assets/smarty-gift.jpg';
 import { giftAnnouncementDelay } from '@/lib/announcement-policy';
 import { useAnnouncement } from '@/hooks/useAnnouncement';
 
+// Set back to true to re-enable the Smarty Gift announcement (desktop + mobile).
+const GIFT_POPUP_ENABLED = false;
+
 export function SmartyGiftPopup() {
   const [desktop, setDesktop] = useState(false);
   const { open, mounted, setOpen } = useAnnouncement('smarty-gift', giftAnnouncementDelay(desktop));
