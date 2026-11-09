@@ -18,16 +18,23 @@ const lib = [
 ];
 const li = (dose: string, id: string, name: string) => `<ul><li><p>${dose} {{exercise:${id}:${name}}}</p></li></ul>`;
 const html = (ids: string[]) =>
-  `<p>🔥 <strong>Activation</strong></p>${li("10 reps", "0010", "Bird Dog")}${li("10 reps", "0011", "Glute Bridge")}<p>💪 <strong>Main Workout (REPS & SETS)</strong></p>${ids.map((i) => `<ul><li><p>3 sets × 10 reps {{exercise:${i}:${lib.find((e) => e.id === i)!.name}}} — Rest 60 sec</p></li></ul>`).join("")}<p>🧘 <strong>Cool Down</strong></p>${li("30 sec", "0012", "hamstring stretch")}${li("30 sec", "0013", "Pigeon Pose")}`;
+  `<p>🔥 <strong>Activation</strong></p>${li("10 reps", "0010", "Bird Dog")}${li("10 reps", "0011", "Glute Bridge")}<p>💪 <strong>Main Workout (REPS & SETS)</strong></p>${ids.map((i) => {
+    const exercise = lib.find((e) => e.id === i);
+    if (!exercise) throw new Error(`Unknown fixture exercise ${i}`);
+    return `<ul><li><p>3 sets × 10 reps {{exercise:${i}:${exercise.name}}} — Rest 60 sec</p></li></ul>`;
+  }).join("")}<p>🧘 <strong>Cool Down</strong></p>${li("30 sec", "0012", "hamstring stretch")}${li("30 sec", "0013", "Pigeon Pose")}`;
 
 describe("Smarty Workout rule compliance", () => {
-  it("flags a session without enough priority exercises and fixes it by swapping exercises only", () => {
-    const w = { id: "w", name: "W", category: "MICRO-WORKOUTS", format: "REPS & SETS", difficulty_stars: 2, main_workout: html(["0009", "0015", "0001"]) };
-    expect(complianceIssues(w, lib)).toContain("Too few priority exercises");
+  it("flags non-priority work as a hard issue and never invents an unsafe replacement", () => {
+    const w = { id: "w", name: "W", category: "METABOLIC", format: "AMRAP", difficulty_stars: 2, main_workout: html(["0009", "0002", "0001"]) };
+    expect(complianceIssues(w, lib)).toContain("Non-priority exercise in Main Workout/Finisher");
     const r = remediate(w, lib);
-    // Priority is a preference: a stretch or dip with no equivalent priority move is kept, never badly swapped.
+    // No equivalent priority neck movement exists in this library: report it, never invent a swap.
     expect(r.html).toContain("3 sets × 10 reps");
+    expect(r.html).toContain("{{exercise:0009:side push neck stretch}}");
+    expect(r.after).toContain("Non-priority exercise in Main Workout/Finisher");
     const plan = planMigration(w, lib);
+    expect(plan.status).toBe("manual");
     expect(plan.changes.filter((c) => c.kind === "replace" && c.applied).every((c) => c.confidence === "HIGH")).toBe(true);
   });
   it("never applies the old priority-share rule to categories with the owner's required lists", () => {

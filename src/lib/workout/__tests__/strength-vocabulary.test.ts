@@ -13,19 +13,19 @@ describe("SmartyGym Strength & Muscle Hypertrophy list", () => {
     expect(STRENGTH_EXERCISES.filter((e) => e.group === "free")).toHaveLength(73);
     expect(STRENGTH_EXERCISES.filter((e) => e.group === "band")).toHaveLength(17);
   });
-  it("allows listed equipment exercises and blocks others", () => {
+  it("requires priority membership even for legacy listed equipment exercises", () => {
     expect(exerciseRuleBreaks(ex("sled 45° leg press", "sled machine"), ctx)).toEqual([]);
     expect(exerciseRuleBreaks(ex("barbell full squat", "barbell"), { ...ctx, category: "MUSCLE BUILDING" })).toEqual([]);
-    expect(exerciseRuleBreaks(ex("smith bench press", "smith machine"), ctx)).toEqual([]);
-    expect(exerciseRuleBreaks(ex("dumbbell fly", "dumbbell"), ctx)).toEqual([]);
+    expect(exerciseRuleBreaks(ex("smith bench press", "smith machine"), ctx).join()).toMatch(/not a coach priority exercise/);
+    expect(exerciseRuleBreaks(ex("dumbbell fly", "dumbbell"), ctx).join()).toMatch(/not a coach priority exercise/);
     expect(exerciseRuleBreaks(ex("smith reverse calf raises", "smith machine"), ctx).join()).toMatch(/equipment Strength & Muscle Hypertrophy list/);
   });
-  it("bodyweight workouts use only the bodyweight list", () => {
+  it("accepts priority Chin-Up consistently in exercise and workout checks", () => {
     expect(exerciseRuleBreaks(ex("push-up", "body weight"), { ...ctx, bodyweightOnly: true })).toEqual([]);
     expect(exerciseRuleBreaks(ex("mountain climber", "body weight"), { ...ctx, bodyweightOnly: true })).toEqual([]);
-    expect(exerciseRuleBreaks(ex("chin-up", "body weight"), { ...ctx, bodyweightOnly: true }).join()).toMatch(/bodyweight Strength/);
+    expect(exerciseRuleBreaks(ex("chin-up", "body weight"), { ...ctx, bodyweightOnly: true })).toEqual([]);
     const work = [ex("push-up", "body weight"), ex("chin-up", "body weight")];
-    expect(workoutRuleBreaks(work, work, { ...ctx, level: "intermediate" }).join()).toMatch(/chin-up/);
+    expect(workoutRuleBreaks(work, work, { ...ctx, level: "intermediate" })).toEqual([]);
   });
   it("equipment workouts keep bodyweight-list moves available", () => {
     expect(exerciseRuleBreaks(ex("push-up", "body weight"), { ...ctx, bodyweightOnly: false })).toEqual([]);

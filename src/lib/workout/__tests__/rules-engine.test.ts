@@ -43,9 +43,10 @@ describe("one rule engine", () => {
     const ctx = { category: "CARDIO" as const, format: "EMOM" as const, level: "intermediate" as const };
     const bad = [ex("1", "Crab Walk"), ex("2", "suspended push-up"), ex("3", "Dumbbell Goblet Squat", "dumbbell"), ex("4", "Bear Crawl"), ex("5", "Butt Kicks")];
     expect(workoutRuleBreaks(bad, bad, ctx, []).some((v) => /rhythmic aerobic/.test(v))).toBe(true);
-    const good = [ex("1", "High Knees"), ex("2", "Jumping Jack"), ex("3", "run"), ex("4", "Butt Kicks"), ex("5", "push-up")];
+    const good = [ex("1", "High Knees"), ex("2", "Jumping Jack"), ex("3", "Skater Hops"), ex("4", "Butt Kicks"), ex("5", "push-up")];
     expect(workoutRuleBreaks(good, good, ctx, []).some((v) => /rhythmic aerobic/.test(v))).toBe(false);
     expect(isLegalExercise(ex("6", "crunch floor"), { category: "CARDIO", format: "EMOM" })).toBe(false);
+    expect(isLegalExercise(ex("7", "run"), ctx)).toBe(false);
   });
 
   it("keeps passive stretches out of Mobility & Stability main work", () => {
@@ -75,7 +76,8 @@ describe("one rule engine", () => {
 
   it("bans static holds in a Challenge AMRAP", () => {
     expect(exerciseRuleBreaks(ex("3544", "bodyweight incline side plank"), { category: "CHALLENGE", format: "AMRAP" }).length).toBeGreaterThan(0);
-    expect(isLegalExercise(ex("0501", "jack burpee"), { category: "CHALLENGE", format: "AMRAP" })).toBe(true);
+    expect(isLegalExercise(ex("0501", "jack burpee"), { category: "CHALLENGE", format: "AMRAP" })).toBe(false);
+    expect(isLegalExercise(ex("0662", "burpee"), { category: "CHALLENGE", format: "AMRAP" })).toBe(true);
   });
 
   it("rejects a hold dosed in reps", () => {

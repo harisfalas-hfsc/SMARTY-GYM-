@@ -9,10 +9,11 @@ describe("SmartyGym conditioning list", () => {
     expect(CONDITIONING_EXERCISES).toHaveLength(49);
     expect(new Set(CONDITIONING_EXERCISES).size).toBe(49);
   });
-  it("only list exercises are legal in Calorie Burning, Cardio, Metabolic and Challenge work", () => {
+  it("allows approved priority moves but rejects non-priority conditioning variations", () => {
     for (const c of ["CALORIE BURNING", "CARDIO", "METABOLIC", "CHALLENGE"]) {
-      expect(isLegalExercise({ name: "push-up", equipment: "body weight" } as any, ctx(c))).toBe(false);
+      expect(isLegalExercise({ name: "push-up", equipment: "body weight" } as any, ctx(c))).toBe(true);
       expect(isLegalExercise({ name: "Crab Walk", equipment: "body weight" } as any, ctx(c))).toBe(false);
+      expect(isLegalExercise({ name: "Jack Burpee", equipment: "body weight" } as any, ctx(c))).toBe(false);
     }
     expect(isLegalExercise({ name: "Burpee", equipment: "body weight" } as any, ctx("CALORIE BURNING"))).toBe(true);
     expect(isConditioningListExercise({ name: "kettlebell swing" })).toBe(true);

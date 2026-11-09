@@ -1,8 +1,8 @@
 // THE single SmartyGym rule engine.
 // Rule hierarchy when rules conflict: 1 safety/injury, 2 library legality,
 // 3 category, 4 format, 5 equipment, 6 location, 7 focus, 8 difficulty,
-// 9 human realism & flow, 10 priority preference, 11 variety. Priority is a
-// preference inside the legal system and never overrides 1-9.
+// 9 human realism & flow, 10 mandatory priority membership, 11 variety.
+// Priority membership never overrides category, safety or equipment rules.
 // Every per-exercise and per-workout rule is decided here. The exercise pool
 // filter, the post-generation validator and the stored-workout audit all call
 // these two entry points, so no rule can be applied by one and missed by another.
@@ -144,7 +144,7 @@ export function exerciseRuleBreaks(e: RuleExercise, ctx: ExerciseRuleContext): s
     out.push(`"${e.name}" is an overcomplicated variation — Smarty Gym uses simple, recognisable exercises.`);
   if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && !strengthListed && STRENGTH_BAN_RE.test(e.name))
     out.push(`"${e.name}" is a plyometric or cardio drill — ${ctx.category} work is controlled loaded or bodyweight strength.`);
-  if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && !listedPortable && D.CORE_ISOLATION_RE.test(e.name))
+  if ((ctx.category === "CARDIO" || ctx.category === "CHALLENGE") && D.CORE_ISOLATION_RE.test(e.name))
     out.push(`"${e.name}" is isolated core work — ${ctx.category} work is rhythmic or full-body movement.`);
   if (ctx.level === "beginner" && (e.difficulty ?? "").toLowerCase() === "advanced")
     out.push(`"${e.name}" is advanced material, not for a Beginner session.`);
@@ -239,10 +239,11 @@ export function workoutRuleBreaks(
     // list (same rule as exerciseRuleBreaks and the generator pool).
     const off = work.filter((e) =>
       equipped
-        ? !(isStrengthEquipmentListExercise(e) || (isBodyweightEquipment(e.equipment ?? "") && isStrengthBodyweightListExercise(e)))
-        : !isStrengthBodyweightListExercise(e),
+        ? !(isStrengthEquipmentListExercise(e) || isPriorityExercise(e) || (isBodyweightEquipment(e.equipment ?? "") && isStrengthBodyweightListExercise(e)))
+        : !(isStrengthBodyweightListExercise(e) || isPriorityExercise(e)),
     );
-    if (off.length) out.push(`"${off[0]!.name}" is not on the SmartyGym ${equipped ? "equipment" : "bodyweight"} Strength & Muscle Hypertrophy list — this ${ctx.category} workout uses only those exercises.`);
+    const firstOff = off[0];
+    if (firstOff) out.push(`"${firstOff.name}" is not on the SmartyGym ${equipped ? "equipment" : "bodyweight"} Strength & Muscle Hypertrophy list — this ${ctx.category} workout uses only those exercises.`);
   }
   // Strength / Muscle Building Finisher is complementary accessory work, never a second workout.
   if ((ctx.category === "STRENGTH" || ctx.category === "MUSCLE BUILDING") && finisher.length && finisher.length >= main.length)
