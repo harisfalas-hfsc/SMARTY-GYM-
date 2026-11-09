@@ -23,7 +23,7 @@ export function SmartyGiftPopup() {
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!GIFT_POPUP_ENABLED || !open) return;
     const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     const previousFocus = document.activeElement;
