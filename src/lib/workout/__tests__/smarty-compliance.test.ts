@@ -26,12 +26,12 @@ const html = (ids: string[]) =>
 
 describe("Smarty Workout rule compliance", () => {
   it("flags non-priority work as a hard issue and never invents an unsafe replacement", () => {
-    const w = { id: "w", name: "W", category: "METABOLIC", format: "REPS & SETS", difficulty_stars: 2, main_workout: html(["0015", "0002", "0001"]) };
+    const w = { id: "w", name: "W", category: "METABOLIC", format: "AMRAP", difficulty_stars: 2, main_workout: html(["0009", "0002", "0001"]) };
     expect(complianceIssues(w, lib)).toContain("Non-priority exercise in Main Workout/Finisher");
     const r = remediate(w, lib);
-    // No equivalent unused priority dip exists in this library: report it, never invent a swap.
+    // No equivalent priority neck movement exists in this library: report it, never invent a swap.
     expect(r.html).toContain("3 sets × 10 reps");
-    expect(r.html).toContain("{{exercise:0015:triceps dip}}");
+    expect(r.html).toContain("{{exercise:0009:side push neck stretch}}");
     expect(r.after).toContain("Non-priority exercise in Main Workout/Finisher");
     const plan = planMigration(w, lib);
     expect(plan.status).toBe("manual");
