@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Restore CI verification
-- [ ] Resolve the seven workout-check failures without disabling CI, weakening priority compliance, or changing saved workouts; run the full test suite and check preview build results.
+- [x] Resolve the seven workout-check failures: restore Cardio/Challenge core exclusion, align Strength workout checks with the existing priority gate, and update obsolete test expectations without adding aliases or disabling CI. All 537 tests across 78 files pass; preview build OK. No saved workouts or member history changed; hosted GitHub Actions rerun not observed.
 
 ## Cancellation alerts and member identification
 - [x] Add instant SMARTYGYM admin emails for cancellation and auto-renewal-off, scoped to this app's live subscription and deduplicated by Stripe event. A clearly labelled owner test email was sent and confirmed in managed delivery logs; actual cancellation delivery requires publishing and a future Stripe event, no real subscription cancelled in testing.
