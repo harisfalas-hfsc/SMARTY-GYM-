@@ -11,7 +11,7 @@ const GIFT_POPUP_ENABLED = false;
 
 export function SmartyGiftPopup() {
   const [desktop, setDesktop] = useState(false);
-  const { open, mounted, setOpen } = useAnnouncement('smarty-gift', giftAnnouncementDelay(desktop));
+  const { open, mounted, setOpen } = useAnnouncement('smarty-gift', giftAnnouncementDelay(desktop), GIFT_POPUP_ENABLED);
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
