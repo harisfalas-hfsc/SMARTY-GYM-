@@ -131,22 +131,6 @@ const aboutSections: Section[] = [
 
 const homeSections: Section[] = [
   {
-    id: "smarty-workouts",
-    image: imgSmartyWorkouts,
-    tag: "Smarty Workouts",
-    lead: "Ready workouts, built to",
-    accentWord: "train now",
-    green: true,
-    description:
-      "Choose from Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability, Pilates and Recovery. Every session is designed by Haris Falas and ready when you are.",
-    items: [
-      { id: "strength", title: "Strength & Muscle Building", meta: "Structured sets and reps", icon: Dumbbell },
-      { id: "conditioning", title: "Conditioning & Challenge", meta: "Efficient, purposeful formats", icon: Activity },
-      { id: "mobility", title: "Mobility & Pilates", meta: "Controlled movement and recovery", icon: RefreshCw },
-    ],
-    cta: { label: "Explore Smarty Workouts", to: "/smarty-workouts" },
-  },
-  {
     id: "workout-of-the-day",
     image: imgWod,
     tag: "Workout of the Day",
@@ -161,6 +145,22 @@ const homeSections: Section[] = [
       { id: "planned", title: "Planned Progression", meta: "Balanced across your training cycle", icon: TrendingUp },
     ],
     cta: { label: "Open Workout of the Day", to: "/wod" },
+  },
+  {
+    id: "smarty-workouts",
+    image: imgSmartyWorkouts,
+    tag: "Smarty Workouts",
+    lead: "Ready workouts, built to",
+    accentWord: "train now",
+    green: true,
+    description:
+      "Choose from Strength, Muscle Building, Calorie Burning, Cardio, Metabolic, Challenge, Mobility & Stability, Pilates and Recovery. Every session is designed by Haris Falas and ready when you are.",
+    items: [
+      { id: "strength", title: "Strength & Muscle Building", meta: "Structured sets and reps", icon: Dumbbell },
+      { id: "conditioning", title: "Conditioning & Challenge", meta: "Efficient, purposeful formats", icon: Activity },
+      { id: "mobility", title: "Mobility & Pilates", meta: "Controlled movement and recovery", icon: RefreshCw },
+    ],
+    cta: { label: "Explore Smarty Workouts", to: "/smarty-workouts" },
   },
   {
     id: "create-workout",
@@ -359,8 +359,8 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
             </div>
             <div className={`mt-8 flex flex-nowrap items-center gap-6 ${page === "home" ? "justify-center" : ""}`}>
               {[
-                { to: "/smarty-workouts", label: "Smarty Workouts" },
                 { to: "/wod", label: "Workout of the Day" },
+                { to: "/smarty-workouts", label: "Smarty Workouts" },
                 { to: "/create-your-own-workout", label: "Create Your Own Workout" },
               ].map((b) => (
                 <Link
