@@ -65,18 +65,18 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
 
   const carouselActions: CarouselAction[] = [
     {
-      title: "Smarty Workouts",
-      description: `${workoutCount.toLocaleString()} expert-designed workouts`,
-      to: "/smarty-workouts",
-      image: smartyWorkoutsImage,
-      icon: Layers,
-    },
-    {
       title: "Workout of the Day",
       description: "Follow today's complete training session",
       to: "/wod",
       image: wodImage,
       icon: CalendarCheck,
+    },
+    {
+      title: "Smarty Workouts",
+      description: `${workoutCount.toLocaleString()} expert-designed workouts`,
+      to: "/smarty-workouts",
+      image: smartyWorkoutsImage,
+      icon: Layers,
     },
     {
       title: "Create Your Own Workout",
