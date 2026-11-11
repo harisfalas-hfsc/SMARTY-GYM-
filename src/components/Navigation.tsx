@@ -23,10 +23,11 @@ import {
   Dumbbell,
   CalendarCheck,
   Users,
-  LogIn, ClipboardCheck } from "lucide-react";
+  LogIn, ClipboardCheck, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/lib/theme";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { adminCheckAccess } from "@/lib/admin.functions";
 import { NotificationBell } from "@/components/NotificationBell";
