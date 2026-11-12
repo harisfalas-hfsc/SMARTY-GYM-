@@ -78,7 +78,15 @@ export function Navigation() {
   }, [menuOpen]);
 
   useEffect(() => {
+    const open = () => setCoachOpen(true);
+    window.addEventListener("smarty:open-coach", open);
+    return () => window.removeEventListener("smarty:open-coach", open);
+  }, []);
+
+  useEffect(() => {
     if (loading) return;
+    // Phones: never auto-open; Coach lives in the bottom bar.
+    if (window.matchMedia("(max-width: 767px)").matches) return;
     // Members: once per browser session. Visitors: every visit (each page load).
     const key = user ? `smarty:coach-arrival:${user.id}` : null;
     if (key) {
