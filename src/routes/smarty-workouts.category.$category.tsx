@@ -255,7 +255,7 @@ function CategoryPage() {
               <p className="mt-1 text-sm text-muted-foreground">{rows.length ? "Try a different duration, level or equipment option." : "New sessions will appear here when they are published."}</p>
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((w, index) => {
                 const mine = mineById[w.id];
                 return (
@@ -265,6 +265,7 @@ function CategoryPage() {
                     kind={kindForWorkout(w)}
                     fallback={detail.image}
                     eager={index < 4}
+                    compact
                     done={Boolean(user && mine?.done)}
                     favorite={Boolean(mine?.fav)}
                     onToggleFavorite={user ? () => void toggleFavorite(w.id, !mine?.fav) : undefined}

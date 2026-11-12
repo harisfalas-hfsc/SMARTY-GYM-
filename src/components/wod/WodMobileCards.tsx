@@ -9,6 +9,7 @@ import type { WodCard } from "@/lib/wod.functions";
 import { difficultyLabel } from "@/lib/workout/spec";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { coverVariant, fallbackTo } from "@/lib/cover-image";
+import { cn } from "@/lib/utils";
 
 const LEVEL_TONE: Record<string, string> = {
   Beginner: "text-level-beginner",
@@ -55,6 +56,7 @@ export function WorkoutCard({
   favorite,
   onToggleFavorite,
   favoriteBusy,
+  compact = false,
 }: {
   workout: WorkoutCardData;
   kind: WorkoutCardKind;
@@ -64,6 +66,8 @@ export function WorkoutCard({
   favorite?: boolean;
   onToggleFavorite?: () => void;
   favoriteBusy?: boolean;
+  /** Tighter type and spacing on phones only (2-column grids). Tablet/desktop unchanged. */
+  compact?: boolean;
 }) {
   const navigate = useNavigate();
   const recovery = kind === "RECOVERY";
@@ -97,9 +101,17 @@ export function WorkoutCard({
           height={360}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <Badge className={`absolute left-3 top-3 border-0 text-wod-badge-foreground ${equipment.cls}`}>
-          <equipment.Icon className="h-4 w-4" />
-          <span className="ml-1">{equipment.label}</span>
+        <Badge
+          className={cn(
+            "absolute border-0 text-wod-badge-foreground",
+            compact
+              ? "left-1.5 top-1.5 px-1.5 py-0 text-[9px] sm:left-3 sm:top-3 sm:px-2.5 sm:py-0.5 sm:text-xs"
+              : "left-3 top-3",
+            equipment.cls,
+          )}
+        >
+          <equipment.Icon className={compact ? "h-2.5 w-2.5 sm:h-4 sm:w-4" : "h-4 w-4"} />
+          <span className={cn("font-medium", compact ? "ml-0.5 sm:ml-1" : "ml-1")}>{equipment.label}</span>
         </Badge>
         {onToggleFavorite && (
           <button
@@ -108,50 +120,88 @@ export function WorkoutCard({
             aria-pressed={Boolean(favorite)}
             disabled={favoriteBusy}
             onClick={fav}
-            className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-workout-overlay-border bg-workout-overlay text-workout-overlay-foreground shadow-sm backdrop-blur-sm"
+            className={cn(
+              "absolute grid place-items-center rounded-full border border-workout-overlay-border bg-workout-overlay text-workout-overlay-foreground shadow-sm backdrop-blur-sm",
+              compact
+                ? "right-1.5 top-1.5 h-6 w-6 sm:right-3 sm:top-3 sm:h-8 sm:w-8"
+                : "right-3 top-3 h-8 w-8",
+            )}
           >
-            <Heart className={`h-4 w-4 ${favorite ? "fill-destructive text-destructive" : ""}`} />
+            <Heart className={cn(compact ? "h-3 w-3 sm:h-4 sm:w-4" : "h-4 w-4", favorite ? "fill-destructive text-destructive" : "")} />
           </button>
         )}
         {done && (
-          <div className="absolute bottom-3 right-3">
-            <Badge className="border-0 bg-wod-border text-wod-badge-foreground">
-              <Check className="mr-1 h-3 w-3" />
+          <div className={cn("absolute", compact ? "bottom-1.5 right-1.5 sm:bottom-3 sm:right-3" : "bottom-3 right-3")}>
+            <Badge className={cn("border-0 bg-wod-border text-wod-badge-foreground", compact && "px-1.5 py-0 text-[9px] sm:px-2.5 sm:py-0.5 sm:text-xs")}>
+              <Check className={cn("mr-1", compact ? "h-2.5 w-2.5 sm:h-3 sm:w-3" : "h-3 w-3")} />
               Done
             </Badge>
           </div>
         )}
       </div>
 
-      <CardContent className="flex flex-1 flex-col p-3 sm:p-4">
-        <h3 className="mb-1.5 line-clamp-2 min-h-[3.5rem] text-lg font-bold leading-tight text-foreground transition-colors group-hover:text-primary sm:text-xl">
+      <CardContent className={cn("flex flex-1 flex-col", compact ? "p-2 sm:p-4" : "p-3 sm:p-4")}>
+        <h3
+          className={cn(
+            "line-clamp-2 font-bold leading-tight text-foreground transition-colors group-hover:text-primary",
+            compact
+              ? "mb-1 min-h-[2.5rem] text-[13px] sm:mb-1.5 sm:min-h-[3.5rem] sm:text-lg sm:text-xl"
+              : "mb-1.5 min-h-[3.5rem] text-lg sm:text-xl",
+          )}
+        >
           {w.name}
         </h3>
-        {desc && <p className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm text-muted-foreground">{desc.substring(0, 120)}...</p>}
+        {desc && (
+          <p
+            className={cn(
+              "line-clamp-2 text-muted-foreground",
+              compact
+                ? "mb-1 min-h-[2rem] text-[10px] leading-snug sm:mb-2 sm:min-h-[2.5rem] sm:text-sm"
+                : "mb-2 min-h-[2.5rem] text-sm",
+            )}
+          >
+            {desc.substring(0, 120)}...
+          </p>
+        )}
 
-        <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+        <div
+          className={cn(
+            "flex flex-wrap items-center",
+            compact
+              ? "mb-1 gap-x-1 gap-y-0.5 text-[9px] sm:mb-2 sm:gap-x-2 sm:gap-y-1 sm:text-xs"
+              : "mb-2 gap-x-2 gap-y-1 text-xs",
+          )}
+        >
           <div className="flex items-center gap-1">
-            <Layers className="h-3 w-3 text-primary" />
+            <Layers className={compact ? "h-2.5 w-2.5 sm:h-3 sm:w-3" : "h-3 w-3"} />
             <span className="font-medium text-muted-foreground">{categoryLabel(w.category).toUpperCase()}</span>
           </div>
           <span className="text-muted-foreground">•</span>
           <div className="flex items-center gap-1">
-            <Target className="h-3 w-3 text-primary" />
+            <Target className={cn(compact ? "h-2.5 w-2.5 sm:h-3 sm:w-3" : "h-3 w-3", "text-primary")} />
             <span className="font-medium text-wod-format">{w.format || "General"}</span>
           </div>
           <span className="text-muted-foreground">•</span>
           <div className="flex items-center gap-1">
-            <TrendingUp className={`h-3 w-3 ${tone}`} />
-            <span className={`font-medium capitalize ${tone}`}>{recovery ? "All Levels" : level}</span>
+            <TrendingUp className={cn(compact ? "h-2.5 w-2.5 sm:h-3 sm:w-3" : "h-3 w-3", tone)} />
+            <span className={cn("font-medium capitalize", tone)}>{recovery ? "All Levels" : level}</span>
           </div>
           <span className="text-muted-foreground">•</span>
           <div className="flex items-center gap-1">
-            <Clock className="h-3 w-3 text-wod-duration" />
+            <Clock className={cn(compact ? "h-2.5 w-2.5 sm:h-3 sm:w-3" : "h-3 w-3", "text-wod-duration")} />
             <span className="font-medium text-wod-duration">{w.duration_min} min</span>
           </div>
         </div>
 
-        <Button className="mt-auto w-full" size="sm">View Workout</Button>
+        <Button
+          className={cn(
+            "mt-auto w-full",
+            compact && "h-7 px-1 text-[10px] sm:h-8 sm:px-3 sm:text-xs",
+          )}
+          size="sm"
+        >
+          View Workout
+        </Button>
       </CardContent>
     </Card>
   );
