@@ -16,4 +16,9 @@ describe("coach feeling replies", () => {
     expect(feelingReply("tired", { ...base, readinessScore: 4, date: d })).toContain("4/10");
     expect(feelingReply("tired", { ...base, member: false, readinessScore: 4, date: d })).not.toContain("/10");
   });
+  it("tapping the same feeling again shows a different line", () => {
+    const d = new Date(2026, 10, 12, 9);
+    const ctx = { member: true, seed: "a", date: d, readinessScore: null, lastSessionName: null, recommendationName: null };
+    expect(feelingReply("great", { ...ctx, turn: 1 })).not.toBe(feelingReply("great", ctx));
+  });
 });

@@ -8,6 +8,7 @@ export type ReplyContext = {
   readinessScore: number | null;
   lastSessionName: string | null;
   recommendationName: string | null;
+  turn?: number; // extra taps on the same feeling show the next line
 };
 
 const POOLS: Record<Feeling, string[]> = {
@@ -105,15 +106,15 @@ function opener(d: Date): string {
   return time;
 }
 
-export function pickLine(pool: string[], seed: string | null, feeling: string, date: Date): string {
+export function pickLine(pool: string[], seed: string | null, feeling: string, date: Date, turn = 0): string {
   // Day-by-day walk through the pool: consecutive days never repeat.
   const offset = hash(`${seed ?? "visitor"}:${feeling}`) % pool.length;
-  return pool[(dayNumber(date) + offset) % pool.length];
+  return pool[(dayNumber(date) + offset + turn) % pool.length];
 }
 
 export function feelingReply(f: Feeling, ctx: ReplyContext): string {
   const pool = f === "decide" && !ctx.member ? VISITOR_DECIDE : POOLS[f];
-  const parts = [opener(ctx.date), pickLine(pool, ctx.seed, f, ctx.date)];
+  const parts = [opener(ctx.date), pickLine(pool, ctx.seed, f, ctx.date, ctx.turn ?? 0)];
   const score = ctx.member ? ctx.readinessScore : null;
   if (score != null) {
     if (f === "great" && score < 6) parts.push(`Your check-in readiness is ${score}/10, so warm up well and keep an eye on how you feel.`);

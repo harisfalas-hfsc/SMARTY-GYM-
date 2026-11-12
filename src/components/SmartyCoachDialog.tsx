@@ -86,6 +86,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
   const [loading, setLoading] = useState(!visitor && !readCached(accountKey));
   const [failed, setFailed] = useState(false);
   const [feeling, setFeeling] = useState<Feeling | null>(null);
+  const [turn, setTurn] = useState(0);
   const [openQ, setOpenQ] = useState<number | null>(null);
   const [openTopic, setOpenTopic] = useState<number | null>(null);
 
@@ -153,7 +154,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               <h3 className="text-base font-bold text-coach-text sm:text-lg">How are you feeling today?</h3>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-3">
                 {FEELINGS.map((f) => (
-                  <button key={f.id} type="button" aria-pressed={feeling === f.id} onClick={() => setFeeling(f.id)}
+                  <button key={f.id} type="button" aria-pressed={feeling === f.id} onClick={() => { setTurn((t) => (feeling === f.id ? t + 1 : 0)); setFeeling(f.id); }}
                     className={`flex min-h-14 items-center gap-2 rounded-md border bg-coach-card px-3 py-3 text-left text-sm font-semibold text-coach-text transition-colors last:col-span-2 sm:flex-col sm:justify-center sm:text-center sm:last:col-span-1 ${feeling === f.id ? "border-coach-gold" : "border-coach-line hover:border-coach-gold/60"}`}>
                     <f.icon className="h-5 w-5 shrink-0 text-coach-gold" />{f.label}
                   </button>
@@ -162,7 +163,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               {feeling ? (
                 <div className="flex gap-3 rounded-md border border-coach-line bg-coach-card p-4" role="status">
                   <img src={coachPhoto} alt="" className="h-9 w-9 shrink-0 rounded-full object-cover object-top" />
-                  <p className="text-sm leading-relaxed text-coach-text">{feelingReply(feeling, { member, seed: accountKey, date: new Date(), readinessScore: snapshot?.readinessDisplay?.score ?? null, lastSessionName: snapshot?.lastSession?.name ?? null, recommendationName: null })}</p>
+                  <p className="text-sm leading-relaxed text-coach-text">{feelingReply(feeling, { member, seed: accountKey, date: new Date(), readinessScore: snapshot?.readinessDisplay?.score ?? null, lastSessionName: snapshot?.lastSession?.name ?? null, recommendationName: null, turn })}</p>
                 </div>
               ) : null}
             </section>
