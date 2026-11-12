@@ -255,7 +255,7 @@ function BrowsePage() {
       />
 
       <div className="mb-6 flex items-center justify-between gap-3">
-        <Link to="/community" className="text-xs font-bold uppercase tracking-wider text-primary">
+        <Link to="/community" className="hidden md:inline text-xs font-bold uppercase tracking-wider text-primary">
           ← Smarty Community
         </Link>
       </div>

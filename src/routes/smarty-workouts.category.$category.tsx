@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Loader2, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -169,46 +169,34 @@ function CategoryPage() {
   const hasFilters = search || equipment !== ALL || duration !== ALL || difficulty !== ALL || format !== ALL;
   const clear = () => { setSearch(""); setEquipment(ALL); setDuration(ALL); setDifficulty(ALL); setFormat(ALL); };
 
-  // Mobile-only: one-line filter bar pinned under the header; hides on scroll down, returns on scroll up.
-  const [barHidden, setBarHidden] = useState(false);
+  // Mobile-only: one-line filter bar permanently pinned under the header.
   const [headerH, setHeaderH] = useState(56);
-  const lastY = useRef(0);
   useEffect(() => {
     const measure = () => setHeaderH(document.querySelector("header")?.getBoundingClientRect().height ?? 56);
     measure();
-    const onScroll = () => {
-      const y = window.scrollY;
-      const dy = y - lastY.current;
-      if (Math.abs(dy) > 6) { setBarHidden(dy > 0 && y > 200); lastY.current = y; }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", measure);
-    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", measure); };
+    return () => { window.removeEventListener("resize", measure); };
   }, []);
-  const pill = "h-9 w-auto shrink-0 gap-1 rounded-md px-3 text-xs font-semibold";
-  const activeCount = [equipment, duration, difficulty, format].filter((v) => v !== ALL).length + (search ? 1 : 0);
+  const pill = "h-9 min-w-0 flex-1 gap-0.5 rounded-md px-2 text-[11px] font-semibold [&>span]:truncate";
+  const activeCount = [equipment, duration, difficulty, format].filter((v) => v !== ALL).length;
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-[1600px] lg:px-8 lg:py-16 xl:px-12">
-      <Link to="/smarty-workouts" className="mb-3 inline-block text-xs font-bold uppercase tracking-wider text-primary">← Smarty Workouts</Link>
+      <Link to="/smarty-workouts" className="mb-3 hidden text-xs md:inline-block font-bold uppercase tracking-wider text-primary">← Smarty Workouts</Link>
       <PageHeader image={detail.image} eyebrow="SMARTY WORKOUTS" title={categoryLabel(category)} subtitle={detail.description} />
 
       <div
-        className={`sticky z-30 -mx-4 mb-3 border-y border-border bg-background/95 px-4 py-1.5 backdrop-blur transition-transform duration-200 md:hidden ${barHidden ? "-translate-y-[calc(100%+80px)]" : "translate-y-0"}`}
+        className="sticky z-30 -mx-4 mb-3 border-y border-border bg-background/95 px-4 py-1.5 backdrop-blur md:hidden"
         style={{ top: headerH }}
       >
-        <div className="flex h-9 flex-nowrap items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="relative w-32 shrink-0">
-            <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search" aria-label="Search workouts" className="h-9 pl-8 text-xs" />
-          </div>
+        <div className="flex h-9 flex-nowrap items-center gap-1.5">
           <Select value={equipment} onValueChange={setEquipment}>
             <SelectTrigger aria-label="Equipment" className={pill}><SelectValue /></SelectTrigger>
             <SelectContent><SelectItem value={ALL}>Equipment</SelectItem><SelectItem value="bodyweight">Bodyweight</SelectItem><SelectItem value="equipment">Equipment</SelectItem></SelectContent>
           </Select>
           <Select value={duration} onValueChange={setDuration}>
             <SelectTrigger aria-label="Duration" className={pill}><SelectValue /></SelectTrigger>
-            <SelectContent><SelectItem value={ALL}>Duration</SelectItem><SelectItem value="5-20">Up to 20 min</SelectItem><SelectItem value="21-30">21–30 min</SelectItem><SelectItem value="31-45">31–45 min</SelectItem><SelectItem value="46-180">46+ min</SelectItem></SelectContent>
+            <SelectContent><SelectItem value={ALL}>Duration</SelectItem><SelectItem value="5-20">≤20 min</SelectItem><SelectItem value="21-30">21–30 min</SelectItem><SelectItem value="31-45">31–45 min</SelectItem><SelectItem value="46-180">46+ min</SelectItem></SelectContent>
           </Select>
           <Select value={difficulty} onValueChange={setDifficulty}>
             <SelectTrigger aria-label="Difficulty" className={pill}><SelectValue /></SelectTrigger>
@@ -221,8 +209,8 @@ function CategoryPage() {
             </Select>
           )}
           {activeCount > 0 && (
-            <button type="button" onClick={clear} className="flex h-9 shrink-0 items-center gap-1 rounded-md border border-primary px-3 text-xs font-semibold text-primary">
-              <X className="h-3.5 w-3.5" />Clear {activeCount}
+            <button type="button" onClick={clear} aria-label="Clear filters" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-primary text-primary">
+              <X className="h-4 w-4" />
             </button>
           )}
         </div>

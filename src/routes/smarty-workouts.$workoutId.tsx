@@ -110,7 +110,7 @@ function SmartyWorkoutPage() {
   }, [workoutId, user, authLoading]);
 
   const back = (
-    <Link to="/smarty-workouts" className="text-xs font-bold uppercase tracking-wider text-primary">
+    <Link to="/smarty-workouts" className="hidden md:inline text-xs font-bold uppercase tracking-wider text-primary">
       ← Smarty Workouts
     </Link>
   );
