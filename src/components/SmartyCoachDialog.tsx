@@ -33,7 +33,7 @@ function saveCached(accountKey: string | null, snapshot: CoachSnapshot) {
 const FEELINGS: { id: Feeling; label: string; icon: LucideIcon }[] = [
   { id: "great", label: "Feeling great", icon: Smile },
   { id: "tired", label: "A little tired", icon: BatteryLow },
-  { id: "sore", label: "Sore from last session", icon: Flame },
+  { id: "sore", label: "A little sore", icon: Flame },
   { id: "short", label: "Short on time", icon: Clock },
   { id: "decide", label: "Help me decide", icon: HelpCircle },
 ];
@@ -155,7 +155,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-3">
                 {FEELINGS.map((f) => (
                   <button key={f.id} type="button" aria-pressed={feeling === f.id} onClick={() => { setTurn((t) => (feeling === f.id ? t + 1 : 0)); setFeeling(f.id); }}
-                    className={`flex min-h-14 items-center gap-2 rounded-md border bg-coach-card px-3 py-3 text-left text-sm font-semibold text-coach-text transition-colors last:col-span-2 sm:flex-col sm:justify-center sm:text-center sm:last:col-span-1 ${feeling === f.id ? "border-coach-gold" : "border-coach-line hover:border-coach-gold/60"}`}>
+                    className={`flex h-14 items-center gap-2 whitespace-nowrap rounded-md border bg-coach-card px-3 text-left text-sm font-semibold text-coach-text sm:h-24 transition-colors last:col-span-2 sm:flex-col sm:justify-center sm:text-center sm:last:col-span-1 ${feeling === f.id ? "border-coach-gold" : "border-coach-line hover:border-coach-gold/60"}`}>
                     <f.icon className="h-5 w-5 shrink-0 text-coach-gold" />{f.label}
                   </button>
                 ))}
@@ -174,7 +174,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
                             ? { label: "Start my recommended workout", run: followAction }
                             : { label: "View today's WOD", run: () => go("/wod") };
                       return (
-                        <button type="button" onClick={sol.run} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-coach-gold px-4 text-sm font-bold text-coach-bg sm:w-auto">
+                        <button type="button" onClick={sol.run} className={goldBtn}>
                           {sol.label} <ArrowRight className="h-4 w-4" />
                         </button>
                       );
