@@ -87,10 +87,9 @@ function Home() {
           <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-primary">
             Science-backed · Expert-designed
           </p>
-          <h1 className="mt-2 text-[32px] font-extrabold uppercase leading-[1.02] tracking-tight">
+          <h1 className="mt-2 whitespace-nowrap text-lg font-extrabold uppercase leading-tight">
             <span className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts: </span>
-            YOUR GYM
-            <br />
+            YOUR GYM{" "}
             <span className="text-primary">RE-IMAGINED.</span>
           </h1>
         </div>
