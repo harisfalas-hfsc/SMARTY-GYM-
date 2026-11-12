@@ -123,12 +123,20 @@ export const getSmartyWorkoutCounts = createServerFn({ method: "GET" }).handler(
 /** Public card metadata only; preserve original order, not import timestamps. */
 export const getFeaturedSmartyWorkouts = createServerFn({ method: "GET" }).handler(
   async (): Promise<SmartyWorkoutCard[]> => {
-    const db = await publicClient();
-    const { data, error } = await db.from("smarty_workouts")
-      .select(`${CARD_COLS},legacy_id`).eq("is_visible", true);
-    if (error) throw new Error("Featured workouts could not be loaded");
-    return newestSmartyWorkouts((data ?? []) as (SmartyWorkoutCard & { legacy_id?: string | null })[])
-      .map(({ legacy_id: _legacyId, ...card }) => card);
+    try {
+      const db = await publicClient();
+      const { data, error } = await db.from("smarty_workouts")
+        .select(`${CARD_COLS},legacy_id`).eq("is_visible", true);
+      if (error) {
+        console.warn("Featured workouts temporarily unavailable", { code: error.code });
+        return [];
+      }
+      return newestSmartyWorkouts((data ?? []) as (SmartyWorkoutCard & { legacy_id?: string | null })[])
+        .map(({ legacy_id: _legacyId, ...card }) => card);
+    } catch {
+      console.warn("Featured workouts temporarily unavailable: connection failed");
+      return [];
+    }
   },
 );
 
