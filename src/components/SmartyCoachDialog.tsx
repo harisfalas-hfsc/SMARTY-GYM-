@@ -71,7 +71,7 @@ function Section({ n, title, subtitle, children }: { n: string; title: string; s
 function Tile({ icon: Icon, label, onClick }: { icon: LucideIcon; label: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-md border border-coach-line bg-coach-card p-3 text-center text-sm font-semibold text-coach-text transition-colors hover:border-coach-gold/70">
-      <Icon className="h-6 w-6 shrink-0 text-coach-gold" /><span className="line-clamp-2 flex min-h-[2.5rem] items-center leading-5">{label}</span>
+      <Icon className="h-6 w-6 shrink-0 text-coach-gold" /><span className="line-clamp-2 flex min-h-[2.5rem] items-center whitespace-pre-line leading-5">{label}</span>
     </button>
   );
 }
@@ -288,7 +288,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               <Section n="04" title="Learn & Explore">
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   <Tile icon={BookOpen} label="Coaching Articles" onClick={() => go("/blog")} />
-                  <Tile icon={Zap} label="Smarty Tools" onClick={() => go("/tools")} />
+                  <Tile icon={Zap} label={"Smarty\nTools"} onClick={() => go("/tools")} />
                   <Tile icon={Library} label="Exercise Library" onClick={() => go("/exercise-library")} />
                 </div>
               </Section>
