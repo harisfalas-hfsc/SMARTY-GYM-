@@ -11,6 +11,13 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-coach-bg: oklch(0.145 0 0);
+  --color-coach-card: oklch(0.2 0 0);
+  --color-coach-line: oklch(0.3 0 0);
+  --color-coach-text: oklch(0.97 0 0);
+  --color-coach-muted: oklch(0.72 0.01 286);
+  --color-coach-gold: oklch(0.76 0.12 85);
+  --color-coach-good: oklch(0.72 0.15 150);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
