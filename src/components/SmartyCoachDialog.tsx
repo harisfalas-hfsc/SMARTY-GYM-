@@ -8,6 +8,7 @@ import {
 import { getCoachSnapshot } from "@/lib/coach.functions";
 import type { CoachSnapshot } from "@/lib/coach-snapshot";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { feelingReply, type Feeling } from "@/lib/coach/feeling-replies";
 import { BrandText } from "@/components/BrandText";
 import coachPhoto from "@/assets/haris-falas-coach.jpg";
 
@@ -29,7 +30,6 @@ function saveCached(accountKey: string | null, snapshot: CoachSnapshot) {
   try { localStorage.setItem(cacheKey(accountKey), JSON.stringify({ version: CACHE_VERSION, savedAt: Date.now(), snapshot })); } catch { /* optional */ }
 }
 
-type Feeling = "great" | "tired" | "sore" | "short" | "decide";
 const FEELINGS: { id: Feeling; label: string; icon: LucideIcon }[] = [
   { id: "great", label: "Feeling great", icon: Smile },
   { id: "tired", label: "A little tired", icon: BatteryLow },
@@ -37,16 +37,6 @@ const FEELINGS: { id: Feeling; label: string; icon: LucideIcon }[] = [
   { id: "short", label: "Short on time", icon: Clock },
   { id: "decide", label: "Help me decide", icon: HelpCircle },
 ];
-
-function feelingReply(f: Feeling, member: boolean): string {
-  switch (f) {
-    case "great": return member ? "Love it. Let's use that energy — your recommended workout below is ready for you. Give it a real effort today." : "Love it. Today's Workout of the Day is a great place to put that energy to work.";
-    case "tired": return "No problem. Showing up still counts. Choose something lighter today — Recovery or Mobility & Stability — and keep the effort comfortable. Quality over intensity.";
-    case "sore": return "Some soreness is normal after hard training. Train a different area or go for Recovery today, keep moving gently and let the sore muscles rest before you load them again.";
-    case "short": return "Short on time is not a reason to skip. Pick a shorter Smarty Workout or today's Workout of the Day, warm up properly and give every minute your full focus.";
-    case "decide": return member ? "I've got you. Follow my recommendation in your briefing — I've already matched it to your goals, your equipment and your recent training." : "Start with today's Workout of the Day. It's planned for you, so there's nothing to decide.";
-  }
-}
 
 const QUESTIONS = [
   { q: "What should I train today?", icon: Compass, a: "" },
@@ -172,7 +162,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               {feeling ? (
                 <div className="flex gap-3 rounded-md border border-coach-line bg-coach-card p-4" role="status">
                   <img src={coachPhoto} alt="" className="h-9 w-9 shrink-0 rounded-full object-cover object-top" />
-                  <p className="text-sm leading-relaxed text-coach-text">{feelingReply(feeling, member)}</p>
+                  <p className="text-sm leading-relaxed text-coach-text">{feelingReply(feeling, { member, seed: accountKey, date: new Date(), readinessScore: snapshot?.readinessDisplay?.score ?? null, lastSessionName: snapshot?.lastSession?.name ?? null, recommendationName: null })}</p>
                 </div>
               ) : null}
             </section>
