@@ -87,7 +87,7 @@ export function WorkoutCard({
 
   return (
     <Card
-      className="group flex h-full w-full cursor-pointer flex-col overflow-hidden border-2 border-wod-border/60 transition-all duration-300 hover:border-wod-border hover:shadow-xl"
+      className="group flex h-full w-full cursor-pointer flex-col overflow-hidden border border-coach-line transition-all duration-300 hover:shadow-xl"
       onClick={open}
     >
       <div className="relative aspect-video overflow-hidden">

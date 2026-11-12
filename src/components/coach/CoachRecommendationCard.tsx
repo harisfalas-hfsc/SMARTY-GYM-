@@ -43,7 +43,7 @@ export function CoachRecommendationCard({
 
   if (loading) {
     return (
-      <div className="rounded-2xl border-2 border-primary bg-primary/5 p-4">
+      <div className="rounded-2xl border border-coach-line bg-primary/5 p-4">
         <Loader2 className="h-4 w-4 animate-spin text-primary" />
       </div>
     );
@@ -53,7 +53,7 @@ export function CoachRecommendationCard({
   const rec = data.recommendation;
 
   return (
-    <div className="rounded-2xl border-2 border-primary bg-primary/5 p-4">
+    <div className="rounded-2xl border border-coach-line bg-primary/5 p-4">
       <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
         <Lightbulb className="h-4 w-4" /> Today's recommendation
       </p>

@@ -225,7 +225,7 @@ export function WorkoutDisplay({
   return (
     <ExerciseMediaProvider ids={ids}>
       <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-        <header ref={headerRef} className="rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
+        <header ref={headerRef} className="rounded-3xl border border-coach-line bg-card p-5 sm:p-7">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             <span>{workout.category}</span>
             {workout.format ? <span>· {workout.format}</span> : null}
@@ -252,7 +252,7 @@ export function WorkoutDisplay({
               {(workout.equipment ?? []).join(", ") || "bodyweight"}
             </span>
           </div>
-          <div className="mt-4 rounded-2xl border-2 border-primary px-4 py-3">
+          <div className="mt-4 rounded-2xl border border-coach-line px-4 py-3">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Created by</span>
               {creator ? (
@@ -294,7 +294,7 @@ export function WorkoutDisplay({
           </Button>
         </header>
 
-        <div className="sticky top-2 z-20 mt-5 grid grid-cols-3 gap-2 rounded-2xl border-2 border-blue-400 bg-card/95 p-2 backdrop-blur">
+        <div className="sticky top-2 z-20 mt-5 grid grid-cols-3 gap-2 rounded-2xl border border-coach-line bg-card/95 p-2 backdrop-blur">
           <Button
             variant="secondary"
             className="h-11 w-full rounded-xl px-2 text-sm font-semibold"
@@ -326,19 +326,19 @@ export function WorkoutDisplay({
           </Button>
         </div>
 
-        <article className="workout-html mt-5 rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
+        <article className="workout-html mt-5 rounded-3xl border border-coach-line bg-card p-5 sm:p-7">
           <ExerciseHTMLContent html={html} onOpenExercise={setOpenExercise} />
         </article>
 
         {workout.instructions_html ? (
-          <section className="workout-html mt-5 rounded-2xl border-2 border-blue-400 bg-card p-5">
+          <section className="workout-html mt-5 rounded-2xl border border-coach-line bg-card p-5">
             <h2 className="mb-2 text-lg font-bold">How to perform this workout</h2>
             <div dangerouslySetInnerHTML={{ __html: instructionsHtml }} />
           </section>
         ) : null}
 
         {workout.tips_html ? (
-          <section className="workout-html mt-5 rounded-2xl border-2 border-blue-400 bg-card p-5">
+          <section className="workout-html mt-5 rounded-2xl border border-coach-line bg-card p-5">
             <h2 className="mb-2 text-lg font-bold">Coach tips</h2>
             <div dangerouslySetInnerHTML={{ __html: tipsHtml }} />
           </section>
@@ -350,7 +350,7 @@ export function WorkoutDisplay({
       <ExerciseDetailDialog exerciseId={openExercise} onClose={() => setOpenExercise(null)} />
 
       <Dialog open={shareOptions} onOpenChange={setShareOptions}>
-        <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl border-2 border-primary p-5 sm:p-6">
+        <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl border border-coach-line p-5 sm:p-6">
           <DialogTitle>Share workout</DialogTitle>
           <p className="text-sm text-muted-foreground">Choose where to share {workout.name}.</p>
           <div className="grid grid-cols-2 gap-2">

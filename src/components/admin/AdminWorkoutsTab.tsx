@@ -186,7 +186,7 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
     <div className="w-full min-w-0 max-w-full space-y-4 overflow-x-clip">
       {title && <h2 className="text-lg font-extrabold">{title}</h2>}
 
-      <div className="min-w-0 rounded-2xl border-2 border-blue-400 bg-card p-3 sm:p-4">
+      <div className="min-w-0 rounded-2xl border border-coach-line bg-card p-3 sm:p-4">
         <div className="flex flex-col gap-2 sm:flex-row">
           <div className="relative min-w-0 flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -342,7 +342,7 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
           {rows.map((w) => (
             <div
               key={w.id}
-              className="w-full min-w-0 overflow-hidden rounded-2xl border-2 border-blue-400 bg-card p-4 text-left"
+              className="w-full min-w-0 overflow-hidden rounded-2xl border border-coach-line bg-card p-4 text-left"
             >
               <div className="mb-2 flex items-center justify-between gap-2">
                 <Checkbox aria-label={`Select ${w.name}`} checked={selectedIds.has(w.id)} disabled={selectingAll || loading} onCheckedChange={(checked) => setSelectedIds((current) => { const next = new Set(current); if (checked === true) next.add(w.id); else next.delete(w.id); return next; })} />

@@ -83,7 +83,7 @@ function WodPage() {
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
       <PageHeader image={pageHeroImage} eyebrow="SMARTYGYM" title="Workout of the Day" />
 
-      <Card className="mb-8 border-2 border-primary/40 bg-gradient-to-br from-primary/5 via-background to-primary/5 shadow-primary">
+      <Card className="mb-8 border border-coach-line bg-gradient-to-br from-primary/5 via-background to-primary/5 shadow-primary">
         <div className="p-4 sm:p-6">
           <p className="mx-auto hidden max-w-3xl text-center text-base text-muted-foreground sm:block">
             Every training day <span className="font-semibold text-primary">SmartyGym</span> delivers TWO fresh, expertly designed workouts following a strategic periodization cycle — one with equipment and one without. On recovery days, we provide a single guided recovery session. Each day focuses on a different category and difficulty level. Our workouts follow a science-based periodization approach designed by{" "}
@@ -113,7 +113,7 @@ function WodPage() {
           />
 
           {data.today.cards.length === 0 ? (
-            <Card className="border-2 border-dashed border-primary/30">
+            <Card className="border border-dashed border-coach-line">
               <div className="p-12 text-center">
                 <Clock className="mx-auto mb-4 h-16 w-16 text-primary/50" />
                 <h2 className="mb-2 text-2xl font-bold text-foreground">Today's Workouts are Being Prepared</h2>

@@ -96,7 +96,7 @@ export function SessionDebriefDialog({
               className={`h-12 rounded-xl border-2 text-sm font-bold transition ${
                 rpe === n
                   ? "border-primary bg-primary text-primary-foreground"
-                  : "border-blue-400/50 hover:border-primary"
+                  : "border-coach-line"
               }`}
             >
               {n}
@@ -139,7 +139,7 @@ export function SessionDebriefDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="mx-auto max-h-[85vh] min-h-[50vh] w-[calc(100%-2.5rem)] max-w-md overflow-y-auto rounded-3xl border-2 border-primary p-5 sm:p-6">
+      <DialogContent className="mx-auto max-h-[85vh] min-h-[50vh] w-[calc(100%-2.5rem)] max-w-md overflow-y-auto rounded-3xl border border-coach-line p-5 sm:p-6">
         <DialogHeader className="space-y-1 pb-1 pl-0 pr-10 text-left">
           <DialogTitle className="text-base font-bold">{card.title}</DialogTitle>
           <DialogDescription className="text-xs">{card.hint}</DialogDescription>
@@ -202,7 +202,7 @@ function Options({
           className={`h-12 rounded-xl border-2 px-3 text-sm font-semibold transition ${
             value === o
               ? "border-primary bg-primary text-primary-foreground"
-              : "border-blue-400/50 hover:border-primary"
+              : "border-coach-line"
           }`}
         >
           {o}

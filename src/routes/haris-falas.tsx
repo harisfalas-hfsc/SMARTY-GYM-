@@ -181,7 +181,7 @@ function CoachProfilePage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="border-2 border-primary">
+        <Card className="border border-coach-line">
           <CardHeader>
             <CardTitle className="text-xl text-primary sm:text-2xl">
               <h2 className="text-xl font-semibold text-primary sm:text-2xl">Qualifications</h2>
@@ -192,7 +192,7 @@ function CoachProfilePage() {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-primary">
+        <Card className="border border-coach-line">
           <CardHeader>
             <CardTitle className="text-xl text-primary sm:text-2xl">
               <h2 className="text-xl font-semibold text-primary sm:text-2xl">Professional Experience</h2>

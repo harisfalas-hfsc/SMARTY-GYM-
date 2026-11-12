@@ -169,7 +169,7 @@ function BrowsePage() {
     <div className="space-y-3">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Select value={sort} onValueChange={(v) => update({ sort: v })}>
-          <SelectTrigger className="h-11 rounded-2xl border-blue-300 text-sm font-semibold dark:border-blue-500/50">
+          <SelectTrigger className="h-11 rounded-2xl border-coach-line text-sm font-semibold ">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -185,7 +185,7 @@ function BrowsePage() {
           value={String(difficulty)}
           onValueChange={(v) => update({ difficulty: Number(v) })}
         >
-          <SelectTrigger className="h-11 rounded-2xl border-blue-300 text-sm font-semibold dark:border-blue-500/50">
+          <SelectTrigger className="h-11 rounded-2xl border-coach-line text-sm font-semibold ">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -202,7 +202,7 @@ function BrowsePage() {
           value={search.category || "all"}
           onValueChange={(v) => update({ category: v === "all" ? "" : v })}
         >
-          <SelectTrigger className="h-11 rounded-2xl border-blue-300 text-sm font-semibold dark:border-blue-500/50">
+          <SelectTrigger className="h-11 rounded-2xl border-coach-line text-sm font-semibold ">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -261,7 +261,7 @@ function BrowsePage() {
       </div>
 
       {search.creator ? (
-        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-primary bg-card px-4 py-3">
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-coach-line bg-card px-4 py-3">
           <p className="min-w-0 truncate text-sm font-bold">
             Shared workouts by <span className="text-primary">{search.creatorName || "Smarty member"}</span>
           </p>
@@ -276,7 +276,7 @@ function BrowsePage() {
         </div>
       ) : null}
 
-      <div className="rounded-3xl border-2 border-blue-400 bg-card p-5">{filterBody}</div>
+      <div className="rounded-3xl border border-coach-line bg-card p-5">{filterBody}</div>
 
       {loading && rows.length === 0 ? (
         <div className="flex min-h-[30vh] items-center justify-center">

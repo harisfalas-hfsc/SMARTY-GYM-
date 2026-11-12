@@ -67,7 +67,7 @@ export function WorkoutStatusPanel({
   }
 
   return (
-    <section className={cn("mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5", className)}>
+    <section className={cn("mt-6 rounded-2xl border border-coach-line bg-card p-5", className)}>
       <h3 className="text-lg font-bold">Workout status</h3>
       <p
         className={cn(

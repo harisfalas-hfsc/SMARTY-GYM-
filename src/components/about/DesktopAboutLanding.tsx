@@ -383,7 +383,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
             type="button"
             aria-label="Scroll down to explore SmartyGym"
             onClick={() => document.getElementById("everything-you-need")?.scrollIntoView({ behavior: "smooth" })}
-            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 animate-bounce rounded-full border border-hero-foreground/40 p-2 text-hero-foreground/80 transition-colors hover:border-primary hover:text-primary"
+            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 animate-bounce rounded-full border border-hero-foreground/40 p-2 text-hero-foreground/80 transition-colors hover:text-primary"
           >
             <ChevronDown className="h-6 w-6" />
           </button>

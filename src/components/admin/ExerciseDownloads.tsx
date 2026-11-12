@@ -133,7 +133,7 @@ export function ExerciseDownloads() {
         </div>
         <div className="max-h-[420px] overflow-y-auto rounded-lg border bg-muted/20 p-2">
           {!matches.length ? <p className="p-3 text-sm text-muted-foreground">No matching exercises.</p> : <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {matches.slice(0, limit).map(ex => <button key={ex.id} type="button" onClick={() => setSelected(ex)} className={`flex items-start gap-3 rounded-lg border bg-card p-3 text-left transition-colors hover:border-primary ${selected?.id === ex.id ? "border-primary" : ""}`}>
+            {matches.slice(0, limit).map(ex => <button key={ex.id} type="button" onClick={() => setSelected(ex)} className={`flex items-start gap-3 rounded-lg border bg-card p-3 text-left transition-colors ${selected?.id === ex.id ? "border-primary" : ""}`}>
               <span className="shrink-0"><ExerciseGif path={ex.gif_path} alt={ex.name} /></span>
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-bold capitalize leading-snug">{ex.name}</span>
@@ -153,7 +153,7 @@ export function ExerciseDownloads() {
         </div>
         {busy && <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />Preparing downloads…</p>}
         {notice && <p role="status" className="text-sm text-muted-foreground">{notice}</p>}
-        <article ref={preview} aria-label="Exercise download preview" className="mx-auto w-full max-w-lg overflow-hidden rounded-lg border-2 border-primary bg-card text-card-foreground">
+        <article ref={preview} aria-label="Exercise download preview" className="mx-auto w-full max-w-lg overflow-hidden rounded-lg border border-coach-line bg-card text-card-foreground">
           {media && <img src={media} alt={`${selected.name} demonstration`} className="block max-h-64 w-full border-b-2 border-primary object-contain" />}
           <div className="space-y-4 p-4 sm:p-5">
             <h3 className="text-xl font-bold capitalize leading-tight text-primary">{selected.name}</h3>

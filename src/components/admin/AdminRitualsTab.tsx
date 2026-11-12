@@ -86,7 +86,7 @@ export function AdminRitualsTab() {
       {data.rituals.map((r) => {
         const isToday = r.next === data.today;
         return (
-          <div key={r.id} className={`flex w-full items-start gap-3 rounded-2xl border-2 p-3 text-left ${isToday ? "border-primary bg-primary/10" : "border-blue-400 bg-card"}`}>
+          <div key={r.id} className={`flex w-full items-start gap-3 rounded-2xl border-2 p-3 text-left ${isToday ? "border-primary bg-primary/10" : "border-coach-line bg-card"}`}>
             <Checkbox aria-label={`Select Ritual ${r.number}`} checked={selectedIds.has(r.id)} onCheckedChange={checked => setSelectedIds(current => { const next = new Set(current); if (checked === true) next.add(r.id); else next.delete(r.id); return next; })} />
             <Button variant="ghost" onClick={() => setEditing(r)} className="h-auto min-w-0 flex-1 items-start justify-start gap-3 whitespace-normal p-0 text-left font-normal">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 font-bold text-primary">{r.number}</span>

@@ -20,7 +20,7 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border-2 border-primary bg-card p-4">
+    <div className="rounded-2xl border border-coach-line bg-card p-4">
       <h3 className="mb-2 text-sm font-semibold">{title}</h3>
       {children}
     </div>
@@ -94,7 +94,7 @@ export function AdminMemberDetail({ userId, onBack }: Props) {
         </Button>
       </div>
 
-      <div className="rounded-2xl border-2 border-primary bg-card p-4">
+      <div className="rounded-2xl border border-coach-line bg-card p-4">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div className="min-w-0">
             <p className="truncate text-lg font-bold">{member.name || "No name"}</p>

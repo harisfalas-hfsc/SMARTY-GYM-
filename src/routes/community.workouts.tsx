@@ -137,7 +137,7 @@ function BrowsePage() {
     <div className="space-y-3">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Select value={sort} onValueChange={(v) => update({ sort: v })}>
-          <SelectTrigger className="h-11 rounded-2xl border-blue-300 text-sm font-semibold dark:border-blue-500/50">
+          <SelectTrigger className="h-11 rounded-2xl border-coach-line text-sm font-semibold ">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -153,7 +153,7 @@ function BrowsePage() {
           value={String(difficulty)}
           onValueChange={(v) => update({ difficulty: Number(v) })}
         >
-          <SelectTrigger className="h-11 rounded-2xl border-blue-300 text-sm font-semibold dark:border-blue-500/50">
+          <SelectTrigger className="h-11 rounded-2xl border-coach-line text-sm font-semibold ">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -170,7 +170,7 @@ function BrowsePage() {
           value={search.category || "all"}
           onValueChange={(v) => update({ category: v === "all" ? "" : v })}
         >
-          <SelectTrigger className="h-11 rounded-2xl border-blue-300 text-sm font-semibold dark:border-blue-500/50">
+          <SelectTrigger className="h-11 rounded-2xl border-coach-line text-sm font-semibold ">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -228,7 +228,7 @@ function BrowsePage() {
         </Link>
       </div>
 
-      <div className="rounded-3xl border-2 border-blue-400 bg-card p-5">{filterBody}</div>
+      <div className="rounded-3xl border border-coach-line bg-card p-5">{filterBody}</div>
 
       {loading && rows.length === 0 ? (
         <div className="flex min-h-[30vh] items-center justify-center">

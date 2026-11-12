@@ -64,7 +64,7 @@ export function AdminReportsTab() {
         ) : (
           <ul className="space-y-3">
             {open.map((r) => (
-              <li key={r.id} className="rounded-2xl border-2 border-blue-400 p-4">
+              <li key={r.id} className="rounded-2xl border border-coach-line p-4">
                 <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
                   <Flag className="h-3.5 w-3.5" /> {r.target_type}
                   <span className="font-normal normal-case text-muted-foreground">
@@ -110,7 +110,7 @@ export function AdminReportsTab() {
             {closed.slice(0, 50).map((r) => (
               <li
                 key={r.id}
-                className="flex items-center justify-between gap-3 rounded-xl border-2 border-blue-400 px-3 py-2 text-sm"
+                className="flex items-center justify-between gap-3 rounded-xl border border-coach-line px-3 py-2 text-sm"
               >
                 <span className="min-w-0 truncate">{r.preview ?? r.target_id}</span>
                 <span className="shrink-0 text-xs font-semibold uppercase text-muted-foreground">
@@ -127,7 +127,7 @@ export function AdminReportsTab() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-3xl border-2 border-blue-400 bg-card p-5">
+    <section className="rounded-3xl border border-coach-line bg-card p-5">
       <h2 className="mb-3 text-lg font-extrabold">{title}</h2>
       {children}
     </section>

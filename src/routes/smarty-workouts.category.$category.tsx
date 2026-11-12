@@ -250,7 +250,7 @@ function CategoryPage() {
             {hasFilters && <Button variant="outline" size="sm" onClick={clear}><X className="mr-1 h-3.5 w-3.5" />Clear filters</Button>}
           </div>
           {filtered.length === 0 ? (
-            <div className="rounded-lg border-2 border-dashed border-primary/35 px-5 py-10 text-center">
+            <div className="rounded-lg border border-dashed border-coach-line px-5 py-10 text-center">
               <p className="font-semibold text-foreground">{rows.length ? "No workouts match these filters." : "Ready workouts are coming soon."}</p>
               <p className="mt-1 text-sm text-muted-foreground">{rows.length ? "Try a different duration, level or equipment option." : "New sessions will appear here when they are published."}</p>
             </div>

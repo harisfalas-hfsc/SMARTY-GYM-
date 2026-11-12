@@ -14,10 +14,10 @@ export type SmartyTone =
 
 // Single brand tone: every card across the site uses the same blue border.
 const BLUE = {
-  border: "border-primary",
+  border: "border border-coach-line",
   text: "text-blue-500 dark:text-blue-300",
-  softBg: "bg-blue-50 dark:bg-blue-500/15",
-  softBorder: "border-blue-200 dark:border-blue-500/40",
+  softBg: "bg-muted/40",
+  softBorder: "border-coach-line",
 };
 
 const TONE: Record<
@@ -97,7 +97,7 @@ export function SmartyCard({
   return (
     <div
       className={cn(
-        "relative flex flex-col overflow-hidden rounded-3xl border-2 bg-card p-7 shadow-soft sm:p-9",
+        "relative flex flex-col overflow-hidden rounded-3xl bg-card p-7 shadow-soft sm:p-9",
         t.border,
         centered && "text-center",
         className,

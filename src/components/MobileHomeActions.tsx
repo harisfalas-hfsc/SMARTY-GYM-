@@ -195,7 +195,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
               <CarouselItem key={action.to} className="basis-[75%] pl-3 sm:basis-[60%]">
                 <Link
                   to={action.to}
-                  className="flex flex-col overflow-hidden rounded-xl border-2 border-green-500/60 bg-card transition-all duration-300 hover:scale-[1.02] hover:border-green-500 hover:shadow-xl"
+                  className="flex flex-col overflow-hidden rounded-xl border border-coach-line bg-card transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
                 >
                   <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
                     <img
@@ -315,7 +315,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
                 <CarouselItem key={action.to} className="basis-[75%] pl-3 sm:basis-[60%]">
                   <Link
                     to={action.to}
-                    className="flex flex-col overflow-hidden rounded-xl border-2 border-primary/40 bg-card transition-all duration-300 hover:scale-[1.02] hover:border-primary hover:shadow-xl"
+                    className="flex flex-col overflow-hidden rounded-xl border border-coach-line bg-card transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
                   >
                     <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
                       <img

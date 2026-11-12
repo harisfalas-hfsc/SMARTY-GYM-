@@ -91,7 +91,7 @@ export function WodPeriodizationCalendar({ yesterday, today, tomorrow }: { yeste
                 aria-label={`Go to ${d.label}`}
                 className={cn(
                   "h-2.5 w-2.5 rounded-full border-2 bg-transparent transition-all duration-300",
-                  current === i ? "scale-125 border-primary" : "border-primary/40 hover:border-primary/60",
+                  current === i ? "scale-125 border-primary" : "border-primary/40",
                 )}
               />
             ))}

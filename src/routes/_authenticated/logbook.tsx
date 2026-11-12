@@ -206,7 +206,7 @@ function WorkoutCard({
   actions?: React.ReactNode;
 }) {
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border-2 border-blue-400 bg-card">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-coach-line bg-card">
       <Link
         to="/workout/$workoutId"
         params={{ workoutId: r.id }}
@@ -429,7 +429,7 @@ function MonthGrid({
                   ? "border-primary bg-primary/10"
                   : key === today
                     ? "border-primary/60"
-                    : "border-border hover:border-primary/40"
+                    : "border-border"
               } ${dim ? "opacity-40" : ""}`}
             >
               <span className="font-bold">{d.getDate()}</span>
@@ -538,7 +538,7 @@ function PeriodSummary({
   const n = (v: number | null, suffix = "") =>
     v === null ? "Not logged" : `${Math.round(v).toLocaleString()}${suffix}`;
   return (
-    <div className="rounded-2xl border-2 border-blue-400 bg-card p-4">
+    <div className="rounded-2xl border border-coach-line bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm font-bold">{title}</p>
         <div className="flex items-center gap-1">
@@ -638,7 +638,7 @@ function CalendarView({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border-2 border-blue-400 bg-card p-4">
+      <div className="rounded-2xl border border-coach-line bg-card p-4">
         <div className="mb-3 grid grid-cols-3 gap-2" aria-label="Calendar selection mode">
           {([
             { id: "day", label: "Day", Icon: CalendarDays },
@@ -719,7 +719,7 @@ function CalendarView({
       {!end ? <DayCheckinNote date={start} /> : null}
 
       {periodRows.length === 0 ? (
-        <div className="rounded-2xl border-2 border-blue-400 bg-card p-6 text-center text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-coach-line bg-card p-6 text-center text-sm text-muted-foreground">
           Nothing on {end ? "these days" : "this day"}.
         </div>
       ) : (
@@ -800,7 +800,7 @@ function ScheduledView({
 
   if (!months.length) {
     return (
-      <div className="rounded-2xl border-2 border-blue-400 bg-card p-8 text-center">
+      <div className="rounded-2xl border border-coach-line bg-card p-8 text-center">
         <p className="text-muted-foreground">
           Nothing scheduled yet. Open a workout and pick a date to plan it.
         </p>
@@ -822,7 +822,7 @@ function ScheduledView({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border-2 border-blue-400 bg-card p-4">
+      <div className="rounded-2xl border border-coach-line bg-card p-4">
         <div className="flex items-center justify-between">
           <Button
             variant="ghost"
@@ -859,7 +859,7 @@ function ScheduledView({
             <select
               value={safeIndex}
               onChange={(event) => setIndex(Number(event.target.value))}
-              className="mt-1 h-11 w-full rounded-xl border-2 border-primary bg-background px-3 text-sm font-semibold text-foreground"
+              className="mt-1 h-11 w-full rounded-xl border border-coach-line bg-background px-3 text-sm font-semibold text-foreground"
             >
               {months.map((key, monthIndex) => {
                 const [year, month] = key.split("-").map(Number);
@@ -1282,7 +1282,7 @@ function LogbookContent() {
           ) : null}
 
           {filtered.length === 0 ? (
-            <div className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-8 text-center">
+            <div className="mt-6 rounded-2xl border border-coach-line bg-card p-8 text-center">
               <p className="text-muted-foreground">
                 {noSavedCopy
                   ? "You're offline and this device has no saved copy of your logbook yet. Connect to the internet once and it will be stored here."

@@ -272,7 +272,7 @@ export function AdminSmartyWorkoutsTab() {
       ) : (
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {shown.map((w) => (
-            <div key={w.id} className="flex gap-3 overflow-hidden rounded-2xl border-2 border-blue-400 bg-card p-3">
+            <div key={w.id} className="flex gap-3 overflow-hidden rounded-2xl border border-coach-line bg-card p-3">
               <Checkbox aria-label={`Select ${w.name}`} disabled={bulkBusy} checked={selectedIds.has(w.id)} onCheckedChange={(checked) => setSelectedIds((current) => { const next = new Set(current); if (checked === true) next.add(w.id); else next.delete(w.id); return next; })} />
               <div className="h-20 w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
                 {w.image_url && <img src={coverVariant(w.image_url, 640) ?? undefined} onError={fallbackTo(w.image_url)} loading="lazy" decoding="async" alt="" className="h-full w-full object-cover" />}
@@ -311,7 +311,7 @@ export function AdminSmartyWorkoutsTab() {
             <button
               type="button"
               onClick={() => { setChoosing(false); setCreating(true); }}
-              className="rounded-2xl border-2 border-blue-400 bg-card p-4 text-left hover:bg-accent"
+              className="rounded-2xl border border-coach-line bg-card p-4 text-left hover:bg-accent"
             >
               <Sparkles className="mb-2 h-6 w-6 text-primary" />
               <p className="font-bold">Generate with AI</p>
@@ -321,7 +321,7 @@ export function AdminSmartyWorkoutsTab() {
               type="button"
               disabled={blankBusy}
               onClick={() => void startBlank()}
-              className="rounded-2xl border-2 border-blue-400 bg-card p-4 text-left hover:bg-accent disabled:opacity-60"
+              className="rounded-2xl border border-coach-line bg-card p-4 text-left hover:bg-accent disabled:opacity-60"
             >
               {blankBusy ? <Loader2 className="mb-2 h-6 w-6 animate-spin text-primary" /> : <Pencil className="mb-2 h-6 w-6 text-primary" />}
               <p className="font-bold">Create it myself</p>
@@ -903,7 +903,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 /** What members see under the workout on their own copy. Shown for review only. */
 function MemberSectionsPreview() {
-  const box = "mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5";
+  const box = "mt-6 rounded-2xl border border-coach-line bg-card p-5";
   return (
     <div aria-disabled className="pointer-events-none select-none">
       <p className="mt-6 rounded-xl bg-muted px-3 py-2 text-center text-xs text-muted-foreground">

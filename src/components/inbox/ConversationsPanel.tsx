@@ -208,7 +208,7 @@ export function ConversationsPanel({
         </button>
       </div>
 
-      <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border-2 border-blue-400 bg-background p-2">
+      <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border border-coach-line bg-background p-2">
         <div
           className={`flex h-9 shrink-0 items-center gap-2 rounded-xl px-2 text-xs font-bold ${
             visibleIds.length ? "" : "pointer-events-none opacity-40"
@@ -238,7 +238,7 @@ export function ConversationsPanel({
       </div>
 
       {composing && (
-        <div className="mb-5 space-y-3 rounded-2xl border-2 border-primary bg-card p-4">
+        <div className="mb-5 space-y-3 rounded-2xl border border-coach-line bg-card p-4">
           <p className="text-sm text-muted-foreground">Ask a question or report a problem. Our reply will appear here in Messages.</p>
           <Input
             placeholder="Subject"
@@ -274,7 +274,7 @@ export function ConversationsPanel({
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </div>
       ) : visibleThreads.length === 0 ? (
-        <p className="rounded-2xl border-2 border-blue-400 p-8 text-center text-sm text-muted-foreground">
+        <p className="rounded-2xl border border-coach-line p-8 text-center text-sm text-muted-foreground">
           {threads.length
             ? "No messages match this filter."
             : "No conversations yet. Tap \"Write to the team\" to send us a message."}

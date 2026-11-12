@@ -75,7 +75,7 @@ export function AdminRevenueTab({ onViewCancelled }: { onViewCancelled?: () => v
 
   return (
     <div className="space-y-4">
-      <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+      <section className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
             <TrendingUp className="h-5 w-5" />
@@ -174,7 +174,7 @@ export function AdminRevenueTab({ onViewCancelled }: { onViewCancelled?: () => v
             <Stat label="Unpaid / written off" value={money(report.failedAmount)} help="Invoices still open or marked uncollectible in the range." />
           </div>
 
-          <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+          <section className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
             <p className="font-bold">Income per period</p>
             {report.buckets.length === 0 ? (
               <p className="text-sm text-muted-foreground">No payments in the selected range yet.</p>
@@ -201,7 +201,7 @@ export function AdminRevenueTab({ onViewCancelled }: { onViewCancelled?: () => v
             )}
           </section>
 
-          <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+          <section className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
             <p className="font-bold">Subscribers ({report.subscribers.length})</p>
             {report.subscribers.length === 0 ? (
               <p className="text-sm text-muted-foreground">Nobody has subscribed yet.</p>
@@ -241,7 +241,7 @@ export function AdminRevenueTab({ onViewCancelled }: { onViewCancelled?: () => v
             )}
           </section>
 
-          <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+          <section className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
             <p className="font-bold">Failed and unpaid payments ({report.failures.length})</p>
             {report.failures.length === 0 ? (
               <p className="text-sm text-muted-foreground">No failed payments in this range.</p>
@@ -265,7 +265,7 @@ export function AdminRevenueTab({ onViewCancelled }: { onViewCancelled?: () => v
             )}
           </section>
 
-          <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+          <section className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
             <p className="font-bold">Recent payments</p>
             {report.recentPayments.length === 0 ? (
               <p className="text-sm text-muted-foreground">No payments yet.</p>
@@ -295,14 +295,14 @@ export function AdminRevenueTab({ onViewCancelled }: { onViewCancelled?: () => v
 
 function Stat({ label, value, help, onClick }: { label: string; value: string; help: string; onClick?: () => void }) {
   if (onClick) return (
-    <Button variant="outline" onClick={onClick} aria-label="View cancelled members" className="h-auto flex-col items-start whitespace-normal rounded-2xl border-2 border-primary bg-card p-4 text-left">
+    <Button variant="outline" onClick={onClick} aria-label="View cancelled members" className="h-auto flex-col items-start whitespace-normal rounded-2xl border border-coach-line bg-card p-4 text-left">
       <span className="text-sm font-semibold leading-tight">{label}</span>
       <span className="mt-1 text-2xl font-extrabold">{value}</span>
       <span className="mt-1 text-xs font-normal leading-snug text-muted-foreground">{help}</span>
     </Button>
   );
   return (
-    <div className="rounded-2xl border-2 border-blue-400 bg-card p-4" title={help}>
+    <div className="rounded-2xl border border-coach-line bg-card p-4" title={help}>
       <p className="text-sm font-semibold leading-tight">{label}</p>
       <p className="mt-1 text-2xl font-extrabold">{value}</p>
       <p className="mt-1 text-xs leading-snug text-muted-foreground">{help}</p>

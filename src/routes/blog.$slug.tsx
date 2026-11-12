@@ -212,7 +212,7 @@ function formatDate(iso: string) {
 function ArticleMissing() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-16">
-      <Card className="border-2 border-primary p-10 text-center">
+      <Card className="border border-coach-line p-10 text-center">
         <h1 className="mb-3 text-2xl font-bold">Article not found</h1>
         <p className="mb-6 text-sm text-muted-foreground">
           This article does not exist or is no longer published.
@@ -264,7 +264,7 @@ function ArticleDetail() {
       </nav>
 
       <article>
-        <Card className="border-2 border-primary p-4 md:p-6">
+        <Card className="border border-coach-line p-4 md:p-6">
           <div ref={headerRef} className="mb-5">
             <div className="mb-3 flex items-center justify-between gap-3">
               <Badge variant="secondary" className="w-fit">{article.category}</Badge>

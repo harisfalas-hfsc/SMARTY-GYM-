@@ -20,7 +20,7 @@ const fmt = (d?: string | null) =>
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="min-w-0 rounded-2xl border-2 border-blue-400 bg-card p-4">
+    <section className="min-w-0 rounded-2xl border border-coach-line bg-card p-4">
       <h2 className="text-base font-extrabold">{title}</h2>
       <div className="mt-3 space-y-3 text-sm">{children}</div>
     </section>

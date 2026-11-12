@@ -42,7 +42,7 @@ export function PendingGenerationCard() {
   if (!generation || !["building", "failed"].includes(generation.status)) return null;
 
   return (
-    <section className="mb-5 rounded-2xl border-2 border-primary bg-primary/5 p-4" aria-live="polite">
+    <section className="mb-5 rounded-2xl border border-coach-line bg-primary/5 p-4" aria-live="polite">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
           {generation.status === "building" ? (

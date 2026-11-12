@@ -63,7 +63,7 @@ export function WorkoutResultDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-sm rounded-2xl border-2 border-primary bg-neutral-950 p-5 text-neutral-50">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-coach-line bg-neutral-950 p-5 text-neutral-50">
         <DialogTitle>Record your result</DialogTitle>
         <p className="text-sm text-neutral-400">
           Optional. Anything you leave blank is simply not recorded — the workout still counts as

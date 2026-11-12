@@ -119,7 +119,7 @@ export function PerformancePanel({
 
   if (loading && !data) {
     return (
-      <section className="mt-5 rounded-2xl border-2 border-blue-400 bg-card p-5">
+      <section className="mt-5 rounded-2xl border border-coach-line bg-card p-5">
         <Loader2 className="h-4 w-4 animate-spin text-primary" />
       </section>
     );
@@ -139,7 +139,7 @@ export function PerformancePanel({
 
 
   return (
-    <section className="mt-5 rounded-2xl border-2 border-blue-400 bg-card p-5">
+    <section className="mt-5 rounded-2xl border border-coach-line bg-card p-5">
       <h2 className="mb-1 flex items-center gap-2 text-lg font-bold">
         <Activity className="h-5 w-5 text-primary" /> Performance
       </h2>
@@ -163,7 +163,7 @@ export function PerformancePanel({
       ) : (
         <div className="space-y-3">
           {attempts.length >= 2 ? (
-            <div className="rounded-xl border-2 border-primary/60 bg-primary/5 p-3">
+            <div className="rounded-xl border border-coach-line bg-primary/5 p-3">
               <h3 className="mb-2 flex items-center gap-2 text-sm font-bold">
                 <LineChart className="h-4 w-4 text-primary" /> Session comparison
               </h3>

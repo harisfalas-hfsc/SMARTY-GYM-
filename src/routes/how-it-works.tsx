@@ -188,7 +188,7 @@ function HowItWorks() {
          subtitle="Four ways to train: choose a ready Smarty Workout, create your own, follow the Workout of the Day or train with the Smarty Community — with Smarty Ritual supporting your movement and recovery."
       />
 
-       <section className="rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+       <section className="rounded-2xl border border-coach-line bg-card p-5 sm:p-8">
          <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
            Way 1 — Smarty Workouts
          </p>
@@ -209,7 +209,7 @@ function HowItWorks() {
          </div>
        </section>
 
-       <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+       <section className="mt-6 rounded-2xl border border-coach-line bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
            Way 2 — Create any workout
         </p>
@@ -246,7 +246,7 @@ function HowItWorks() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+      <section className="mt-6 rounded-2xl border border-coach-line bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
            Way 3 — Workout of the Day
         </p>
@@ -285,7 +285,7 @@ function HowItWorks() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+      <section className="mt-6 rounded-2xl border border-coach-line bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
           Daily support — Smarty Ritual
         </p>
@@ -315,7 +315,7 @@ function HowItWorks() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+      <section className="mt-6 rounded-2xl border border-coach-line bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
           Daily support — Smarty Check-ins
         </p>
@@ -348,7 +348,7 @@ function HowItWorks() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+      <section className="mt-6 rounded-2xl border border-coach-line bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
            Way 4 — Smarty Community
         </p>
@@ -387,7 +387,7 @@ function HowItWorks() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-2xl border-2 border-blue-400 bg-card p-5 sm:p-8">
+      <section className="mt-6 rounded-2xl border border-coach-line bg-card p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
           After you train — tracking &amp; progress
         </p>

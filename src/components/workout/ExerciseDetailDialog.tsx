@@ -21,11 +21,11 @@ export function ExerciseDetailDialog({
 
   return (
     <Dialog open={Boolean(exerciseId)} onOpenChange={(open) => (!open ? onClose() : undefined)}>
-      <DialogContent hideClose className="max-h-[78vh] w-[calc(100vw-3rem)] max-w-md gap-0 overflow-y-auto overflow-x-hidden rounded-2xl border-2 border-primary p-0 sm:max-h-[86vh] sm:w-full sm:max-w-lg">
+      <DialogContent hideClose className="max-h-[78vh] w-[calc(100vw-3rem)] max-w-md gap-0 overflow-y-auto overflow-x-hidden rounded-2xl border border-coach-line p-0 sm:max-h-[86vh] sm:w-full sm:max-w-lg">
         {/* Media hero — flush to the top edge of the card */}
         <div className="relative w-full overflow-hidden rounded-t-[calc(1rem-2px)] border-b-2 border-primary bg-white">
           {/* Close button sits inside the media area */}
-          <DialogClose className="absolute right-2.5 top-2.5 z-20 grid h-9 w-9 place-items-center rounded-full border-2 border-primary bg-background/90 text-primary shadow-lg backdrop-blur transition-colors hover:bg-primary hover:text-primary-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <DialogClose className="absolute right-2.5 top-2.5 z-20 grid h-9 w-9 place-items-center rounded-full border border-coach-line bg-background/90 text-primary shadow-lg backdrop-blur transition-colors hover:bg-primary hover:text-primary-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <X className="h-4 w-4" strokeWidth={3} />
             <span className="sr-only">Close</span>
           </DialogClose>
@@ -79,7 +79,7 @@ export function ExerciseDetailDialog({
                   value ? (
                     <div
                       key={label as string}
-                      className="rounded-xl border-2 border-primary/60 bg-primary/5 p-2.5"
+                      className="rounded-xl border border-coach-line bg-primary/5 p-2.5"
                     >
                       <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-primary">
                         {label}
@@ -91,7 +91,7 @@ export function ExerciseDetailDialog({
               </div>
 
               {ex.secondary_muscles?.length ? (
-                <div className="rounded-xl border-2 border-primary/60 bg-primary/5 p-3 text-sm">
+                <div className="rounded-xl border border-coach-line bg-primary/5 p-3 text-sm">
                   <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-primary">
                     Secondary muscles
                   </p>
@@ -100,13 +100,13 @@ export function ExerciseDetailDialog({
               ) : null}
 
               {ex.description ? (
-                <div className="rounded-xl border-2 border-primary/60 p-3 text-sm leading-relaxed">
+                <div className="rounded-xl border border-coach-line p-3 text-sm leading-relaxed">
                   {ex.description}
                 </div>
               ) : null}
 
               {ex.instructions?.length ? (
-                <div className="rounded-xl border-2 border-primary/60 p-3">
+                <div className="rounded-xl border border-coach-line p-3">
                   <p className="mb-2 text-[0.65rem] font-semibold uppercase tracking-wide text-primary">
                     How to perform
                   </p>

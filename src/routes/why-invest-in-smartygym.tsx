@@ -196,7 +196,7 @@ function WhyInvestInSmartyGym() {
         </div>
 
         {/* Description Card */}
-        <Card data-pdf-block className="mb-8 border-2 border-primary/30">
+        <Card data-pdf-block className="mb-8 border border-coach-line">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2">
               <Heart className="h-5 w-5 text-primary" />
@@ -216,7 +216,7 @@ function WhyInvestInSmartyGym() {
         </Card>
 
         {/* Main Research Content Card */}
-        <Card className="border-2 border-primary/50 bg-gradient-to-br from-primary/5 to-background">
+        <Card className="border border-coach-line bg-gradient-to-br from-primary/5 to-background">
           <CardContent className="space-y-10 p-6 sm:p-8">
             {/* Section 1: Foundation of Human Performance */}
             <section data-pdf-block>
@@ -801,7 +801,7 @@ function WhyInvestInSmartyGym() {
         </Card>
 
         {/* CTA Section */}
-        <Card data-pdf-block className="mt-8 border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-background">
+        <Card data-pdf-block className="mt-8 border border-coach-line bg-gradient-to-br from-primary/10 to-background">
           <CardContent className="p-6 text-center">
             <Dumbbell className="mx-auto mb-4 h-12 w-12 text-primary" />
             <h2 className="mb-2 text-2xl font-bold">Ready to Transform Your Performance?</h2>

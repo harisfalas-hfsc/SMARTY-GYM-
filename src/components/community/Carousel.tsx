@@ -56,7 +56,7 @@ export function Carousel({
               type="button"
               aria-label="Scroll left"
               onClick={() => scrollBy(-1)}
-              className="grid h-9 w-9 place-items-center rounded-full border border-blue-400 text-primary transition hover:bg-primary/10"
+              className="grid h-9 w-9 place-items-center rounded-full border border-coach-line text-primary transition hover:bg-primary/10"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -64,7 +64,7 @@ export function Carousel({
               type="button"
               aria-label="Scroll right"
               onClick={() => scrollBy(1)}
-              className="grid h-9 w-9 place-items-center rounded-full border border-blue-400 text-primary transition hover:bg-primary/10"
+              className="grid h-9 w-9 place-items-center rounded-full border border-coach-line text-primary transition hover:bg-primary/10"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

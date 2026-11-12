@@ -163,7 +163,7 @@ export function CommunityEngagementPanel({
 
   if (unavailable)
     return (
-      <section className="mt-6 rounded-3xl border-2 border-blue-400 bg-card p-5">
+      <section className="mt-6 rounded-3xl border border-coach-line bg-card p-5">
         <p className="text-xs font-bold uppercase tracking-wider text-primary">Community workout</p>
         <p className="mt-2 text-sm text-muted-foreground">{unavailable}</p>
       </section>
@@ -173,10 +173,10 @@ export function CommunityEngagementPanel({
 
   return (
     <>
-      <section className="mt-6 rounded-3xl border-2 border-blue-400 bg-card p-5">
+      <section className="mt-6 rounded-3xl border border-coach-line bg-card p-5">
         <p className="text-xs font-bold uppercase tracking-wider text-primary">Community workout</p>
 
-        <div className="mt-3 flex items-center gap-3 rounded-2xl border border-blue-200 p-3 dark:border-blue-500/40">
+        <div className="mt-3 flex items-center gap-3 rounded-2xl border border-coach-line p-3 ">
           <MemberAvatar name={creator?.display_name ?? null} avatar={creator?.avatar_url ?? null} />
           <div className="min-w-0">
             <p className="truncate text-sm font-bold">
@@ -185,7 +185,7 @@ export function CommunityEngagementPanel({
           </div>
         </div>
 
-        <div className="mt-3 rounded-2xl border border-blue-200 p-3 dark:border-blue-500/40">
+        <div className="mt-3 rounded-2xl border border-coach-line p-3 ">
           <p className="text-[10px] font-bold uppercase tracking-wider text-primary">Rate this workout</p>
           <div className="mt-2 flex items-center gap-2">
             <div className="flex items-center gap-1">
@@ -230,7 +230,7 @@ export function CommunityEngagementPanel({
             onClick={() => toggleReaction(1)}
             className={cn(
               "inline-flex h-10 items-center gap-2 rounded-2xl border px-4 text-sm font-semibold transition",
-              myReaction === 1 ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary/50",
+              myReaction === 1 ? "border-primary bg-primary text-primary-foreground" : "border-border",
             )}
           >
             <ThumbsUp className="h-4 w-4" /> {counts.likes}
@@ -240,7 +240,7 @@ export function CommunityEngagementPanel({
             onClick={() => toggleReaction(-1)}
             className={cn(
               "inline-flex h-10 items-center gap-2 rounded-2xl border px-4 text-sm font-semibold transition",
-              myReaction === -1 ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary/50",
+              myReaction === -1 ? "border-primary bg-primary text-primary-foreground" : "border-border",
             )}
           >
             <ThumbsDown className="h-4 w-4" /> {counts.dislikes}
@@ -249,7 +249,7 @@ export function CommunityEngagementPanel({
             <button
               type="button"
               onClick={() => reportTarget("workout", sourceId)}
-              className="inline-flex h-10 items-center gap-2 rounded-2xl border-2 border-blue-400 px-4 text-sm font-semibold text-muted-foreground"
+              className="inline-flex h-10 items-center gap-2 rounded-2xl border border-coach-line px-4 text-sm font-semibold text-muted-foreground"
             >
               <Flag className="h-4 w-4" /> Report
             </button>
@@ -257,7 +257,7 @@ export function CommunityEngagementPanel({
         </div>
       </section>
 
-      <section id="comments" className="mt-6 rounded-3xl border-2 border-blue-400 bg-card p-5">
+      <section id="comments" className="mt-6 rounded-3xl border border-coach-line bg-card p-5">
         <h3 className="text-lg font-bold">Comments ({comments.length})</h3>
         <div className="mt-3 flex gap-2">
           <Textarea
@@ -277,7 +277,7 @@ export function CommunityEngagementPanel({
 
         <ul className="mt-5 space-y-3">
           {comments.map((c) => (
-            <li key={c.id} className="flex gap-3 rounded-2xl border-2 border-blue-400 p-3">
+            <li key={c.id} className="flex gap-3 rounded-2xl border border-coach-line p-3">
               <MemberAvatar name={c.author_name} avatar={c.author_avatar} size={8} />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold">

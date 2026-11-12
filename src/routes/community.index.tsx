@@ -352,7 +352,7 @@ function CommunityPage() {
       <div className="hidden md:block">
         <CarouselDots api={desktopApi} activeIndex={desktopPanel} count={panels.length} />
         <Carousel setApi={setDesktopApi} opts={{ loop: true, align: "center" }} className="w-full">
-          <CarouselPrevious className="-left-11 z-10 hidden h-8 w-8 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-4 [&>svg]:w-4" />
+          <CarouselPrevious className="-left-11 z-10 hidden h-8 w-8 rounded-full border border-coach-line bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-4 [&>svg]:w-4" />
           <CarouselContent className="-ml-4">
             {panels.map((panel, i) => (
               <CarouselItem key={i} className="basis-[72%] pl-4 lg:basis-[56%]">
@@ -360,7 +360,7 @@ function CommunityPage() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselNext className="-right-11 z-10 hidden h-8 w-8 rounded-full border-2 border-blue-400 bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-4 [&>svg]:w-4" />
+          <CarouselNext className="-right-11 z-10 hidden h-8 w-8 rounded-full border border-coach-line bg-card/80 text-primary shadow-soft backdrop-blur-sm hover:bg-primary/10 md:flex [&>svg]:h-4 [&>svg]:w-4" />
         </Carousel>
       </div>
 
@@ -460,18 +460,18 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex h-full flex-col overflow-hidden rounded-3xl border-2 border-blue-400 bg-card shadow-soft">
-      <header className="border-b border-blue-200 bg-blue-50 p-4 dark:border-blue-500/40 dark:bg-blue-500/10">
+    <section className="flex h-full flex-col overflow-hidden rounded-3xl border border-coach-line bg-card shadow-soft">
+      <header className="border-b border-coach-line bg-muted/40 p-4">
         <h2 className="flex h-7 items-center gap-2 text-lg font-extrabold uppercase tracking-tight">
           <Icon className="h-5 w-5 text-primary" />
           {title}
         </h2>
-        <div className="mt-3 rounded-2xl border border-blue-300 p-3 dark:border-blue-500/40">
+        <div className="mt-3 rounded-2xl border border-coach-line p-3 ">
           {filterControl ?? <div className="grid grid-cols-1 gap-2">
             {filters.map((f) => {
               return (
                 <Select key={f.label} value={f.value} onValueChange={f.onChange}>
-                  <SelectTrigger className="h-10 w-full rounded-xl border-blue-300 text-sm font-semibold dark:border-blue-500/50">
+                  <SelectTrigger className="h-10 w-full rounded-xl border-coach-line text-sm font-semibold ">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -503,9 +503,9 @@ function Spinner() {
 /** Reserved position for a rank that nobody has claimed yet. */
 function EmptySlot({ index, label }: { index: number; label: string }) {
   return (
-    <li className="flex items-center gap-3 rounded-2xl border border-blue-200 p-2.5 dark:border-blue-500/40">
+    <li className="flex items-center gap-3 rounded-2xl border border-coach-line p-2.5 ">
       <span className="w-7 shrink-0 text-center text-sm opacity-60">{badgeFor(index)}</span>
-      <span className="h-8 w-8 shrink-0 rounded-full border border-dashed border-blue-300 dark:border-blue-500/50" />
+      <span className="h-8 w-8 shrink-0 rounded-full border border-dashed border-coach-line" />
       <p className="min-w-0 flex-1 truncate text-[11px] font-semibold text-muted-foreground">
         {label}
       </p>
@@ -550,7 +550,7 @@ function SharedWorkoutsPanel({
           {rows.slice(0, SLOTS).map((w) => (
             <li
               key={w.id}
-              className="rounded-2xl border border-blue-200 p-3 dark:border-blue-500/40"
+              className="rounded-2xl border border-coach-line p-3 "
             >
               <button
                 type="button"
@@ -624,7 +624,7 @@ function MemberRankingPanel({
               tabIndex={0}
               onClick={() => openCreator(m.user_id, m.display_name)}
               onKeyDown={(e) => e.key === "Enter" && openCreator(m.user_id, m.display_name)}
-              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-blue-200 p-2.5 transition hover:border-primary dark:border-blue-500/40"
+              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-coach-line p-2.5 transition "
             >
               <span className="w-7 shrink-0 text-center text-sm font-black text-primary">
                 {badgeFor(i)}
@@ -695,7 +695,7 @@ function WorkoutRankingPanel({
               <button
                 type="button"
                 onClick={() => onOpen(w.id)}
-                className="flex w-full items-center gap-3 rounded-2xl border border-blue-200 p-2.5 text-left transition hover:border-primary dark:border-blue-500/40"
+                className="flex w-full items-center gap-3 rounded-2xl border border-coach-line p-2.5 text-left transition "
               >
                 <span className="w-7 shrink-0 text-center text-sm font-black text-primary">
                   {badgeFor(i)}
@@ -760,7 +760,7 @@ function TalkPanel({
               <button
                 type="button"
                 onClick={() => setSelectedComment(c)}
-                className="flex w-full gap-3 rounded-2xl border border-blue-200 p-3 text-left transition hover:border-primary dark:border-blue-500/40"
+                className="flex w-full gap-3 rounded-2xl border border-coach-line p-3 text-left transition "
               >
                 <MemberAvatar name={c.author_name} avatar={c.author_avatar} size={8} />
                 <div className="min-w-0 flex-1">
@@ -781,8 +781,8 @@ function TalkPanel({
       )}
     </Panel>
     <Dialog open={selectedComment !== null} onOpenChange={(open) => !open && setSelectedComment(null)}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-sm overflow-hidden rounded-3xl border-2 border-blue-400 bg-card p-0 shadow-soft">
-        <DialogHeader className="space-y-0 border-b border-blue-200 bg-blue-50 p-4 text-left dark:border-blue-500/40 dark:bg-blue-500/10">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-sm overflow-hidden rounded-3xl border border-coach-line bg-card p-0 shadow-soft">
+        <DialogHeader className="space-y-0 border-b border-coach-line bg-muted/40 p-4 text-left">
           <DialogTitle className="flex items-center gap-2 pr-6 text-lg font-extrabold uppercase tracking-tight">
             <MessageSquare className="h-5 w-5 text-primary" />
             Comment
@@ -800,7 +800,7 @@ function TalkPanel({
               <CreatorLink userId={selectedComment?.user_id} name={selectedComment?.author_name} />
             </p>
           </div>
-          <div className="rounded-2xl border border-blue-200 p-3 dark:border-blue-500/40">
+          <div className="rounded-2xl border border-coach-line p-3 ">
             <p className="break-words text-sm leading-6">{selectedComment?.body}</p>
           </div>
           {selectedComment ? (

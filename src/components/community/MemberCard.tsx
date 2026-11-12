@@ -40,10 +40,10 @@ export function MemberCard({
   stats: { label: string; value: string | number }[];
 }) {
   return (
-    <article className="flex h-full flex-col rounded-3xl border-2 border-blue-400 bg-card p-5 shadow-soft">
+    <article className="flex h-full flex-col rounded-3xl border border-coach-line bg-card p-5 shadow-soft">
       <div className="flex items-center gap-3">
         {rank ? (
-          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-blue-300 text-sm font-black text-primary dark:border-blue-500/50">
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-coach-line text-sm font-black text-primary ">
             {rank}
           </span>
         ) : null}
@@ -59,7 +59,7 @@ export function MemberCard({
 
       <dl className="mt-4 grid grid-cols-2 gap-2">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-2xl border-2 border-blue-400 p-2.5">
+          <div key={s.label} className="rounded-2xl border border-coach-line p-2.5">
             <dt className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               {s.label}
             </dt>
@@ -75,7 +75,7 @@ export function MemberCard({
           {badges.slice(0, 3).map((b) => (
             <span
               key={b.badge_id}
-              className="rounded-full border border-blue-300 px-2 py-0.5 text-[10px] font-semibold text-primary dark:border-blue-500/50"
+              className="rounded-full border border-coach-line px-2 py-0.5 text-[10px] font-semibold text-primary "
             >
               🏆 {b.badge_name}
             </span>
@@ -100,7 +100,7 @@ export function LeaderRow({
   badge?: CommunityBadge | undefined;
 }) {
   return (
-    <li className="flex items-center gap-3 rounded-2xl border border-blue-200 bg-card p-3 dark:border-blue-500/40">
+    <li className="flex items-center gap-3 rounded-2xl border border-coach-line bg-card p-3 ">
       <span className="w-6 shrink-0 text-sm font-black text-primary">#{rank}</span>
       <MemberAvatar name={member.display_name} avatar={member.avatar_url} size={8} />
       <div className="min-w-0 flex-1">

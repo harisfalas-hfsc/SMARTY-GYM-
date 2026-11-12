@@ -96,7 +96,7 @@ function SmartyWorkoutsPage() {
                   <Link
                     to="/smarty-workouts/category/$category"
                     params={{ category: categorySlug(category) }}
-                    className="flex flex-col overflow-hidden rounded-xl border-2 border-primary/40 bg-card transition-all duration-300 hover:scale-[1.02] hover:border-primary hover:shadow-xl"
+                    className="flex flex-col overflow-hidden rounded-xl border border-coach-line bg-card transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
                   >
                     <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
                       <img src={detail.image} alt={categoryLabel(category)} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_top]" />
@@ -150,7 +150,7 @@ function SmartyWorkoutsPage() {
                 key={workout.id}
                 to="/smarty-workouts/$workoutId"
                 params={{ workoutId: workout.id }}
-                className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border-2 border-primary/60 bg-card p-1.5 transition-all duration-300 hover:border-primary hover:shadow-xl"
+                className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border border-coach-line bg-card p-1.5 transition-all duration-300 hover:shadow-xl"
               >
                 <div className="relative h-[58px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
                   <img
@@ -185,7 +185,7 @@ function SmartyWorkoutsPage() {
               key={category}
               to="/smarty-workouts/category/$category"
               params={{ category: categorySlug(category) }}
-              className="group overflow-hidden rounded-lg border-2 border-border bg-card text-center transition duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-xl"
+              className="group overflow-hidden rounded-lg border border-coach-line bg-card text-center transition duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="relative h-48 overflow-hidden bg-muted">
                 <img src={detail.image} alt={categoryLabel(category)} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
@@ -202,7 +202,7 @@ function SmartyWorkoutsPage() {
           );
         })}
         {featured.length > 0 && (
-          <section aria-label="Featured Workouts" className="flex min-w-0 flex-col overflow-hidden rounded-lg border-2 border-border bg-card p-4 xl:col-span-3">
+          <section aria-label="Featured Workouts" className="flex min-w-0 flex-col overflow-hidden rounded-lg border border-coach-line bg-card p-4 xl:col-span-3">
             <h2 className="mb-3 flex shrink-0 items-center gap-2 text-lg font-bold text-primary"><Star className="h-5 w-5" />Featured Workouts</h2>
             <div className="grid min-h-0 flex-1 grid-cols-3 gap-3 lg:max-xl:grid-cols-1">
               {featured.map((workout) => (

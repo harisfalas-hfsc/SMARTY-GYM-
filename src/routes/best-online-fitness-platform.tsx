@@ -273,7 +273,7 @@ function BestPlatformsPage() {
         <ol className="space-y-5">
           {PLATFORMS.map((p, i) => (
             <li key={p.name}>
-              <Card className={p.highlight ? "border-2 border-primary shadow-lg" : ""}>
+              <Card className={p.highlight ? "border border-coach-line shadow-lg" : ""}>
                 <CardHeader className="pb-2">
                   <CardTitle className="flex items-center gap-3 text-xl">
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-base font-bold text-primary">

@@ -263,7 +263,7 @@ export function AdminCronTab() {
         </DialogContent>
       </Dialog>
 
-      <div className="rounded-2xl border-2 border-blue-400 bg-card p-4">
+      <div className="rounded-2xl border border-coach-line bg-card p-4">
         <div className="flex items-center gap-2 text-sm font-bold">
           <CalendarClock className="h-4 w-4 text-primary" /> How the scheduler works
         </div>
@@ -288,10 +288,10 @@ export function AdminCronTab() {
       </div>
 
       {message ? (
-        <div className="rounded-2xl border-2 border-blue-400 bg-card p-3 text-sm">{message}</div>
+        <div className="rounded-2xl border border-coach-line bg-card p-3 text-sm">{message}</div>
       ) : null}
 
-      <div className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+      <div className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
         <div className="flex items-center gap-2 text-sm font-bold">
           <AlertTriangle className="h-4 w-4 text-primary" /> Latest problems
         </div>
@@ -408,7 +408,7 @@ export function AdminCronTab() {
         const jobRuns = allJobRuns.slice(0, expandedRuns[def.key] ? 30 : 10);
 
         return (
-          <div key={def.key} className="space-y-4 rounded-2xl border-2 border-blue-400 bg-card p-4">
+          <div key={def.key} className="space-y-4 rounded-2xl border border-coach-line bg-card p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="text-base font-extrabold">{def.label}</h3>
@@ -426,7 +426,7 @@ export function AdminCronTab() {
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">{def.description}</p>
               </div>
-              <div className="flex shrink-0 items-center gap-2 rounded-xl border-2 border-primary/60 px-2 py-1.5">
+              <div className="flex shrink-0 items-center gap-2 rounded-xl border border-coach-line px-2 py-1.5">
                 <span className="text-xs font-extrabold uppercase tracking-wider">
                   {enabled ? "ON" : "OFF"}
                 </span>

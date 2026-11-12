@@ -59,7 +59,7 @@ function SharePreviewPage() {
 
   return (
     <div className="mx-auto w-full max-w-xl px-4 py-10 sm:py-14 lg:max-w-3xl lg:px-8">
-      <div className="rounded-3xl border-2 border-blue-400 bg-card p-5 sm:p-7">
+      <div className="rounded-3xl border border-coach-line bg-card p-5 sm:p-7">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
           Shared workout {w.category ? `· ${w.category}` : ""}
         </p>
@@ -94,7 +94,7 @@ function SharePreviewPage() {
 
         {w.image_url && <img src={coverVariant(w.image_url, 1280) ?? w.image_url} onError={fallbackTo(w.image_url)} alt={`${w.name} cover`} className="mt-5 h-52 w-full rounded-2xl object-cover" />}
 
-        <div className="mt-6 rounded-2xl border-2 border-blue-400 bg-background/60 p-4">
+        <div className="mt-6 rounded-2xl border border-coach-line bg-background/60 p-4">
           <p className="flex items-center gap-2 text-sm font-bold">
             <Lock className="h-4 w-4 text-primary" /> The full workout is for members
           </p>

@@ -110,7 +110,7 @@ function Contact() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
       {/* Hero card */}
-      <Card className="border-2 border-primary">
+      <Card className="border border-coach-line">
         <CardContent className="p-6">
           <div className="text-center space-y-3">
             <Mail className="w-12 h-12 text-primary mx-auto" />
@@ -131,7 +131,7 @@ function Contact() {
       </Card>
 
       {sent ? (
-        <Card className="border-2 border-primary">
+        <Card className="border border-coach-line">
           <CardContent className="p-6 text-center space-y-3">
             <CheckCircle2 className="w-12 h-12 text-primary mx-auto" />
             <h2 className="text-xl font-bold text-foreground">
@@ -154,7 +154,7 @@ function Contact() {
           </CardContent>
         </Card>
       ) : (
-        <Card className="border-2 border-primary">
+        <Card className="border border-coach-line">
           <CardContent className="p-6">
             <div className="text-center space-y-1 mb-4">
               <Send className="w-10 h-10 text-primary mx-auto" />
@@ -225,7 +225,7 @@ function Contact() {
       )}
 
       {/* Direct email — independent channel */}
-      <Card className="border-2 border-primary">
+      <Card className="border border-coach-line">
         <CardContent className="p-6 text-center space-y-2">
           <Mail className="w-8 h-8 text-primary mx-auto" />
           <h2 className="text-lg font-bold text-foreground">Or email us directly</h2>

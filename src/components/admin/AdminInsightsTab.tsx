@@ -103,7 +103,7 @@ function TrafficSources({ from, to }: { from: string; to: string }) {
   const peak = Math.max(1, ...(report?.bySource.map((s) => s.visits) ?? []));
 
   return (
-    <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+    <section className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
       <div className="flex flex-wrap items-center gap-2">
         <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
           <Globe className="h-5 w-5" />
@@ -229,7 +229,7 @@ export function AdminInsightsTab() {
   return (
     <div className="space-y-4">
       <TrafficSources from={from} to={to} />
-      <section className="space-y-3 rounded-2xl border-2 border-blue-400 bg-card p-4">
+      <section className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
             <BarChart3 className="h-5 w-5" />

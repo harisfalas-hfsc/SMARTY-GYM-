@@ -65,7 +65,7 @@ function Page() {
             <Loader2 className="h-6 w-6 animate-spin text-primary" />
           </div>
         ) : !authed ? (
-          <div className="mx-auto mt-10 max-w-sm rounded-3xl border-2 border-blue-400 bg-card p-6 text-center shadow-sm">
+          <div className="mx-auto mt-10 max-w-sm rounded-3xl border border-coach-line bg-card p-6 text-center shadow-sm">
             <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
               <ShieldAlert className="h-6 w-6" />
             </div>

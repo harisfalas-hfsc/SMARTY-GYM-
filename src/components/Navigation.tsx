@@ -155,7 +155,7 @@ export function Navigation() {
               type="button"
               onClick={handleBack}
               aria-label="Go back"
-              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-primary text-primary hover:bg-primary/10"
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-coach-line text-primary hover:bg-primary/10"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -185,7 +185,7 @@ export function Navigation() {
               onClick={() => setCoachOpen(true)}
               aria-label="Smarty Coach"
               title="Smarty Coach"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-background transition-colors hover:bg-primary/10 lg:bg-transparent"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-coach-line bg-background transition-colors hover:bg-primary/10 lg:bg-transparent"
             >
               <img src={coachIcon} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             </button>
@@ -198,7 +198,7 @@ export function Navigation() {
                 <button
                   type="button"
                   aria-label="Account"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-primary text-xs font-bold text-primary-foreground lg:bg-transparent lg:text-primary"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-coach-line bg-primary text-xs font-bold text-primary-foreground lg:bg-transparent lg:text-primary"
                 >
                   {initial}
                 </button>
@@ -238,7 +238,7 @@ export function Navigation() {
                 <button
                   type="button"
                   aria-label="Account"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary text-primary hover:bg-primary/10"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-coach-line text-primary hover:bg-primary/10"
                 >
                   <User className="h-4 w-4" />
                 </button>

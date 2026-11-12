@@ -84,7 +84,7 @@ export function AdminUserActivityTab() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border-2 border-blue-400 bg-card p-4">
+      <div className="rounded-2xl border border-coach-line bg-card p-4">
         <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
           <label className="text-sm font-semibold">From<Input type="date" value={fromDate} max={toDate} onChange={(e) => setFrom(e.target.value)} className="mt-1" /></label>
           <label className="text-sm font-semibold">To<Input type="date" value={toDate} min={fromDate} onChange={(e) => setTo(e.target.value)} className="mt-1" /></label>

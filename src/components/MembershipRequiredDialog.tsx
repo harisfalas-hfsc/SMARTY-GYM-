@@ -41,7 +41,7 @@ export function MembershipRequiredDialog({
         <p className="text-sm font-bold text-foreground">{title}</p>
         <p className="text-sm text-muted-foreground"><BrandText text={description} /></p>
 
-        <div className="rounded-2xl border-2 border-primary bg-primary/5 p-4 text-center">
+        <div className="rounded-2xl border border-coach-line bg-primary/5 p-4 text-center">
           <p className="text-sm font-extrabold text-foreground">€9.99 / month</p>
           <p className="text-xs text-muted-foreground">Cancel anytime.</p>
         </div>

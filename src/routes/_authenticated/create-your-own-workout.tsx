@@ -97,7 +97,7 @@ function Chip({
       className={`flex h-12 w-full items-center justify-start truncate whitespace-nowrap rounded-2xl border px-2.5 text-left text-[13px] font-semibold leading-none transition sm:text-sm ${
         active
           ? "border-primary bg-primary text-primary-foreground shadow-sm"
-          : "border-border bg-background text-foreground hover:border-primary/50"
+          : "border-border bg-background text-foreground"
       }`}
     >
       {children}
@@ -119,7 +119,7 @@ function QuestionCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border-2 border-primary bg-card p-5 shadow-sm sm:p-6">
+    <section className="rounded-3xl border border-coach-line bg-card p-5 shadow-sm sm:p-6">
       <div className="mb-4 flex items-start gap-3">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <Icon className="h-5 w-5" />
@@ -350,7 +350,7 @@ function CoachPage() {
 
 
   const modeToggle = (
-    <div className="mb-6 grid grid-cols-2 gap-2 rounded-3xl border-2 border-primary bg-card p-1.5">
+    <div className="mb-6 grid grid-cols-2 gap-2 rounded-3xl border border-coach-line bg-card p-1.5">
       {(["coach", "build"] as const).map((m) => (
         <button
           key={m}
@@ -375,7 +375,7 @@ function CoachPage() {
           title="Complete your training profile first"
           subtitle="Your workout builds around you — it needs your profile before the first workout."
         />
-        <div className="rounded-2xl border-2 border-primary bg-card p-5 text-center">
+        <div className="rounded-2xl border border-coach-line bg-card p-5 text-center">
           <p className="text-sm text-muted-foreground">
             Your age, level, goal, equipment, environment, session length and health
             acknowledgement are required once. After that, every workout combines your profile with
@@ -425,7 +425,7 @@ function CoachPage() {
       <PendingGenerationCard />
 
       {resuming && !busy ? (
-        <div className="mb-5 rounded-2xl border-2 border-primary bg-primary/5 p-4 text-sm">
+        <div className="mb-5 rounded-2xl border border-coach-line bg-primary/5 p-4 text-sm">
           <p className="font-semibold">A workout was being built when you left.</p>
           <p className="mt-1 text-muted-foreground">
             Your workout finishes on the server, so it keeps going even if you close the page. Check
@@ -521,7 +521,7 @@ function CoachPage() {
 
 
       {wodMode ? (
-        <div className="mb-6 rounded-3xl border-2 border-primary bg-primary/5 p-5 text-center">
+        <div className="mb-6 rounded-3xl border border-coach-line bg-primary/5 p-5 text-center">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-primary">WOD mode is on</p>
           <p className="mt-2 text-sm text-muted-foreground">
             You're following the periodization programme, so two workouts are built for
@@ -606,7 +606,7 @@ function CoachPage() {
                 className={`min-h-14 rounded-2xl border px-4 py-3 text-left transition ${
                   level === l.id
                     ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                    : "border-border bg-background hover:border-primary/50"
+                    : "border-border bg-background"
                 }`}
               >
                 <span className="block text-sm font-semibold">{l.label}</span>

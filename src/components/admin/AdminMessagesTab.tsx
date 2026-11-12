@@ -136,7 +136,7 @@ export function AdminMessagesTab() {
       </div>
 
       {showBroadcast && (
-        <div className="space-y-3 rounded-2xl border-2 border-primary bg-card p-4">
+        <div className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
           <div className="grid grid-cols-2 gap-2">
             {(["all", "subscribers"] as const).map((a) => (
               <button
@@ -203,7 +203,7 @@ export function AdminMessagesTab() {
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </div>
       ) : threads.length === 0 ? (
-        <p className="rounded-2xl border-2 border-blue-400 p-6 text-center text-sm text-muted-foreground">
+        <p className="rounded-2xl border border-coach-line p-6 text-center text-sm text-muted-foreground">
           No messages yet.
         </p>
       ) : (
@@ -212,7 +212,7 @@ export function AdminMessagesTab() {
             const open = openId === t.id;
             const last = t.messages?.[t.messages.length - 1];
             return (
-              <li key={t.id} className="rounded-2xl border-2 border-blue-400 bg-card">
+              <li key={t.id} className="rounded-2xl border border-coach-line bg-card">
                 <button
                   type="button"
                   onClick={() => openThread(t)}

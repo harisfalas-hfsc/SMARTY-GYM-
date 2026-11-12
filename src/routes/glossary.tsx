@@ -227,7 +227,7 @@ function GlossaryPage() {
         <h2 id="training-categories" className="text-xs font-semibold uppercase tracking-wider text-primary">
           SmartyGym Training Categories
         </h2>
-        <Accordion type="single" collapsible className="mt-3 rounded-2xl border-2 border-primary px-4">
+        <Accordion type="single" collapsible className="mt-3 rounded-2xl border border-coach-line px-4">
           {TRAINING_CATEGORIES.map((cat) => (
             <AccordionItem key={cat.id} value={cat.id} id={categoryAnchor(cat.id)}>
               <AccordionTrigger className="text-left text-sm font-bold">{cat.name}</AccordionTrigger>
@@ -257,7 +257,7 @@ function GlossaryPage() {
           In-depth guides on how SmartyGym trains you online — personalized workouts, strength, cardio,
           metabolic conditioning, mobility and home training.
         </p>
-        <ul className="mt-3 divide-y divide-border rounded-2xl border-2 border-primary px-4">
+        <ul className="mt-3 divide-y divide-border rounded-2xl border border-coach-line px-4">
           {TRAINING_TOPICS.map((topic) => (
             <li key={topic.slug} className="py-4">
               <Link

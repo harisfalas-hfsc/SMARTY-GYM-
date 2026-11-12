@@ -499,7 +499,7 @@ export function WorkoutPlayerDialog({
             aria-label={soundOn ? "Turn timer sound off" : "Turn timer sound on"}
             aria-pressed={soundOn}
             onClick={toggleSound}
-            className="h-11 w-11 shrink-0 rounded-full border-2 border-primary bg-neutral-900 text-neutral-50 shadow-lg transition active:scale-95 hover:bg-neutral-800"
+            className="h-11 w-11 shrink-0 rounded-full border border-coach-line bg-neutral-900 text-neutral-50 shadow-lg transition active:scale-95 hover:bg-neutral-800"
           >
             {soundOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
           </Button>
@@ -509,7 +509,7 @@ export function WorkoutPlayerDialog({
             size="icon"
             aria-label="Close player"
             onClick={() => void closePlayer()}
-            className="h-11 w-11 shrink-0 rounded-full border-2 border-primary bg-neutral-50 text-neutral-950 shadow-lg transition active:scale-95 hover:bg-neutral-200"
+            className="h-11 w-11 shrink-0 rounded-full border border-coach-line bg-neutral-50 text-neutral-950 shadow-lg transition active:scale-95 hover:bg-neutral-200"
           >
             <X className="h-5 w-5" />
           </Button>
@@ -800,7 +800,7 @@ function SlideNavigation({
         aria-label="Previous exercise"
         disabled={!canGoPrevious}
         onClick={onPrevious}
-        className="absolute left-2 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full border-2 border-primary bg-neutral-50 text-neutral-950 shadow-lg hover:bg-neutral-200 disabled:opacity-35"
+        className="absolute left-2 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full border border-coach-line bg-neutral-50 text-neutral-950 shadow-lg hover:bg-neutral-200 disabled:opacity-35"
       >
         <ChevronLeft className="h-6 w-6" />
       </Button>
@@ -811,7 +811,7 @@ function SlideNavigation({
         aria-label="Next exercise"
         disabled={!canGoNext}
         onClick={onNext}
-        className="absolute right-2 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full border-2 border-primary bg-neutral-50 text-neutral-950 shadow-lg hover:bg-neutral-200 disabled:opacity-35"
+        className="absolute right-2 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full border border-coach-line bg-neutral-50 text-neutral-950 shadow-lg hover:bg-neutral-200 disabled:opacity-35"
       >
         <ChevronRight className="h-6 w-6" />
       </Button>

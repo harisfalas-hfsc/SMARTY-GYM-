@@ -89,7 +89,7 @@ function ConnectPage() {
 
       <div
         role="note"
-        className="mb-8 flex gap-3 rounded-lg border-2 border-primary bg-primary/10 p-4"
+        className="mb-8 flex gap-3 rounded-lg border border-coach-line bg-primary/10 p-4"
       >
         <Monitor className="mt-0.5 h-6 w-6 shrink-0 text-primary" />
         <div className="text-sm leading-6">

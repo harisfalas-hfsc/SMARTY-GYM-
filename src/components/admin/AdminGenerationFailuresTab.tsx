@@ -92,7 +92,7 @@ export function AdminGenerationFailuresTab() {
           <Loader2 className="h-4 w-4 animate-spin" /> Loading generation failures…
         </div>
       ) : rows.length === 0 ? (
-        <div className="rounded-2xl border-2 border-primary bg-card p-5 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-coach-line bg-card p-5 text-sm text-muted-foreground">
           No generation failures recorded. Every requested workout has been delivered.
         </div>
       ) : (

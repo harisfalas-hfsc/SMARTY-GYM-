@@ -176,7 +176,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
           { icon: TrendingUp, label: "Completion", value: `${s.completionRate}%` },
           { icon: CheckCircle2, label: "Complete days", value: s.totalComplete },
         ].map((x) => (
-          <div key={x.label} className="rounded-2xl border-2 border-blue-400 bg-card p-4">
+          <div key={x.label} className="rounded-2xl border border-coach-line bg-card p-4">
             <x.icon className="h-5 w-5 text-primary" />
             <p className="mt-2 text-2xl font-black">{x.value}</p>
             <p className="text-xs uppercase tracking-wide text-muted-foreground">{x.label}</p>
@@ -184,7 +184,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         ))}
       </div>
 
-      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-1")}>
+      <div className={cn("rounded-2xl border border-coach-line bg-card p-4", todayFirst && "order-1")}>
         <p className="font-bold">Today's check-ins</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <button
@@ -284,7 +284,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         ) : null}
       </div>
 
-      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-2")}>
+      <div className={cn("rounded-2xl border border-coach-line bg-card p-4", todayFirst && "order-2")}>
         <p className="mb-3 font-bold">Trends</p>
         <MetricPicker value={metric} onChange={setMetric} options={METRICS.map((m) => ({ key: m.key, label: m.label, color: m.color }))} />
         <div className="mt-3">
@@ -296,7 +296,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         </div>
       </div>
 
-      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-3")}>
+      <div className={cn("rounded-2xl border border-coach-line bg-card p-4", todayFirst && "order-3")}>
         <p className="flex items-center gap-2 font-bold">
           <Lightbulb className="h-5 w-5" /> Weekly Insights
         </p>
@@ -315,7 +315,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
         </div>
       </div>
 
-      <div className={cn("rounded-2xl border-2 border-blue-400 bg-card p-4", todayFirst && "order-4")}>
+      <div className={cn("rounded-2xl border border-coach-line bg-card p-4", todayFirst && "order-4")}>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="font-bold">History</p>
         </div>
@@ -362,7 +362,7 @@ export function DayCheckinNote({ date }: { date: string }) {
   const r = rows?.find((x) => x.checkin_date === date);
   if (!r) return null;
   return (
-    <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-blue-400 bg-card p-4 text-sm">
+    <div className="flex items-center justify-between gap-3 rounded-2xl border border-coach-line bg-card p-4 text-sm">
       <span className="flex items-center gap-2 font-semibold">
         <Sun className={r.morning_completed ? "h-4 w-4 text-primary" : "h-4 w-4 opacity-30"} />
         <Moon className={r.night_completed ? "h-4 w-4 text-primary" : "h-4 w-4 opacity-30"} />

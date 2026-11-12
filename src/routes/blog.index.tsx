@@ -193,7 +193,7 @@ function BlogIndex() {
           <Select value={sort} onValueChange={(v) => update({ sort: v as BlogSort })}>
             <SelectTrigger
               aria-label="Sort articles"
-              className="h-10 w-[150px] rounded-xl border-2 border-primary text-sm font-semibold"
+              className="h-10 w-[150px] rounded-xl border border-coach-line text-sm font-semibold"
             >
               <SelectValue />
             </SelectTrigger>
@@ -214,7 +214,7 @@ function BlogIndex() {
           >
             <SelectTrigger
               aria-label="Filter by read status"
-              className="h-10 w-[150px] rounded-xl border-2 border-primary text-sm font-semibold"
+              className="h-10 w-[150px] rounded-xl border border-coach-line text-sm font-semibold"
             >
               <SelectValue />
             </SelectTrigger>
@@ -230,7 +230,7 @@ function BlogIndex() {
           <button
             type="button"
             onClick={resetFilters}
-            className="inline-flex h-10 items-center gap-1.5 rounded-xl border-2 border-primary px-3 text-sm font-semibold text-primary hover:bg-primary/10"
+            className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-coach-line px-3 text-sm font-semibold text-primary hover:bg-primary/10"
           >
             <X className="h-4 w-4" />
             Reset
@@ -242,7 +242,7 @@ function BlogIndex() {
       {isLoading && (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {[0, 1, 2, 3, 4, 5].map((i) => (
-            <Card key={i} className="overflow-hidden border-2 border-primary">
+            <Card key={i} className="overflow-hidden border border-coach-line">
               <div className="aspect-video animate-pulse bg-muted" />
               <div className="space-y-3 p-5">
                 <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
@@ -254,7 +254,7 @@ function BlogIndex() {
       )}
 
       {!isLoading && filtered.length === 0 && (
-        <Card className="border-2 border-primary p-10 text-center">
+        <Card className="border border-coach-line p-10 text-center">
           <p className="text-sm text-muted-foreground">
             {articles && articles.length > 0
               ? "No articles match the selected filter."
@@ -269,7 +269,7 @@ function BlogIndex() {
           return (
             <Card
               key={article.id}
-              className="flex h-full flex-col overflow-hidden border-2 border-primary transition-all duration-300 hover:shadow-lg md:hover:scale-[1.02]"
+              className="flex h-full flex-col overflow-hidden border border-coach-line transition-all duration-300 hover:shadow-lg md:hover:scale-[1.02]"
             >
               <Link
                 to="/blog/$slug"

@@ -128,7 +128,7 @@ function ExerciseCard({ ex }: { ex: ExerciseLink }) {
     <Link
       to="/exercise-library/$slug"
       params={{ slug: ex.slug }}
-      className="flex items-center gap-3 rounded-2xl border bg-card p-3 transition-colors hover:border-primary"
+      className="flex items-center gap-3 rounded-2xl border bg-card p-3 transition-colors"
     >
       <ExerciseGif path={ex.gif_path} alt={`${ex.name} demonstration`} />
       <span className="min-w-0 flex-1">
@@ -149,7 +149,7 @@ function WorkoutCard({ w }: { w: WorkoutLink }) {
   return (
     <a
       href={w.path}
-      className="group overflow-hidden rounded-2xl border bg-card transition-colors hover:border-primary"
+      className="group overflow-hidden rounded-2xl border bg-card transition-colors"
     >
       {w.image_url ? (
         <img
@@ -194,7 +194,7 @@ function ExercisePage() {
       </nav>
 
       <article className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
-        <div className="overflow-hidden rounded-2xl border-2 border-primary bg-white lg:sticky lg:top-24">
+        <div className="overflow-hidden rounded-2xl border border-coach-line bg-white lg:sticky lg:top-24">
           {ex.gif_path ? (
             <ExerciseGif
               path={ex.gif_path}
@@ -217,7 +217,7 @@ function ExercisePage() {
           <div className="grid grid-cols-2 gap-2 text-sm">
             {facts.map(([label, value]) =>
               value ? (
-                <div key={label} className="rounded-xl border-2 border-primary/60 bg-primary/5 p-2.5">
+                <div key={label} className="rounded-xl border border-coach-line bg-primary/5 p-2.5">
                   <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-primary">{label}</p>
                   <p className="font-medium capitalize">{value}</p>
                 </div>
@@ -226,21 +226,21 @@ function ExercisePage() {
           </div>
 
           {ex.secondary_muscles?.length ? (
-            <div className="rounded-xl border-2 border-primary/60 bg-primary/5 p-3 text-sm">
+            <div className="rounded-xl border border-coach-line bg-primary/5 p-3 text-sm">
               <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-primary">Secondary muscles</p>
               <p className="capitalize">{ex.secondary_muscles.join(", ")}</p>
             </div>
           ) : null}
 
           {ex.description ? (
-            <section className="rounded-xl border-2 border-primary/60 p-3 text-sm leading-relaxed">
+            <section className="rounded-xl border border-coach-line p-3 text-sm leading-relaxed">
               <h2 className="mb-1 text-[0.65rem] font-semibold uppercase tracking-wide text-primary">About this exercise</h2>
               <p>{ex.description}</p>
             </section>
           ) : null}
 
           {ex.instructions?.length ? (
-            <section className="rounded-xl border-2 border-primary/60 p-3">
+            <section className="rounded-xl border border-coach-line p-3">
               <h2 className="mb-2 text-[0.65rem] font-semibold uppercase tracking-wide text-primary">How to do {name}</h2>
               <ol className="list-decimal space-y-1.5 pl-5 text-sm text-muted-foreground">
                 {ex.instructions.map((step, i) => (
@@ -307,7 +307,7 @@ function ExercisePage() {
             <Link
               to="/exercise-library/$slug"
               params={{ slug: previous.slug }}
-              className="flex items-center gap-2 rounded-2xl border p-3 text-sm transition-colors hover:border-primary"
+              className="flex items-center gap-2 rounded-2xl border p-3 text-sm transition-colors"
             >
               <ArrowLeft className="h-4 w-4 shrink-0 text-primary" />
               <span className="min-w-0">
@@ -322,7 +322,7 @@ function ExercisePage() {
             <Link
               to="/exercise-library/$slug"
               params={{ slug: next.slug }}
-              className="flex items-center justify-end gap-2 rounded-2xl border p-3 text-right text-sm transition-colors hover:border-primary"
+              className="flex items-center justify-end gap-2 rounded-2xl border p-3 text-right text-sm transition-colors"
             >
               <span className="min-w-0">
                 <span className="block text-xs text-muted-foreground">Next exercise</span>

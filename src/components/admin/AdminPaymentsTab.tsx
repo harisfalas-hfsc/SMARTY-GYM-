@@ -53,7 +53,7 @@ export function AdminPaymentsTab() {
     <div className="space-y-4">
       <section
         className={`space-y-4 rounded-2xl border bg-card p-4 ${
-          enabled ? "border-amber-500" : "border-blue-400"
+          enabled ? "border-amber-500" : "border-coach-line"
         }`}
       >
         <div className="flex items-center gap-3">
@@ -69,7 +69,7 @@ export function AdminPaymentsTab() {
           </div>
         </div>
 
-        <div className="space-y-3 rounded-xl border-2 border-blue-400 p-3">
+        <div className="space-y-3 rounded-xl border border-coach-line p-3">
           <div>
             <p className="text-sm font-semibold">Make the entire app free</p>
             <p className="text-xs text-muted-foreground">
@@ -91,7 +91,7 @@ export function AdminPaymentsTab() {
               checked={enabled}
               disabled={busy}
               onCheckedChange={(v) => void toggle(v)}
-              className="h-9 w-16 border-2 border-primary/60 data-[state=unchecked]:bg-muted [&>span]:h-7 [&>span]:w-7 [&>span]:bg-primary [&>span]:data-[state=checked]:translate-x-7"
+              className="h-9 w-16 border border-coach-line data-[state=unchecked]:bg-muted [&>span]:h-7 [&>span]:w-7 [&>span]:bg-primary [&>span]:data-[state=checked]:translate-x-7"
             />
           </div>
 

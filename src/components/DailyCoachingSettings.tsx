@@ -73,14 +73,14 @@ export function DailyCoachingSettings(_props: { premium?: boolean }) {
 
   if (!settings) {
     return (
-      <section className="mt-4 grid h-32 place-items-center rounded-2xl border-2 border-blue-400 bg-card">
+      <section className="mt-4 grid h-32 place-items-center rounded-2xl border border-coach-line bg-card">
         <Loader2 className="h-5 w-5 animate-spin text-primary" />
       </section>
     );
   }
 
   return (
-    <section className="mt-4 rounded-2xl border-2 border-blue-400 bg-card p-5">
+    <section className="mt-4 rounded-2xl border border-coach-line bg-card p-5">
       <div>
         <p className="font-bold">Notifications & Emails</p>
         <p className="text-sm text-muted-foreground">Choose which messages and emails you receive.</p>

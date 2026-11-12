@@ -235,7 +235,7 @@ function AboutPage() {
       </h2>
 
       <div className="mx-auto mt-4 grid max-w-xl gap-4 lg:max-w-none lg:grid-cols-2">
-        <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
+        <div className="flex flex-col rounded-2xl border border-coach-line bg-card p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Smarty Workouts
           </p>
@@ -250,7 +250,7 @@ function AboutPage() {
           </Button>
         </div>
 
-        <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
+        <div className="flex flex-col rounded-2xl border border-coach-line bg-card p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Create your workout
           </p>
@@ -266,7 +266,7 @@ function AboutPage() {
           </Button>
         </div>
 
-        <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
+        <div className="flex flex-col rounded-2xl border border-coach-line bg-card p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Workout of the Day
           </p>
@@ -283,7 +283,7 @@ function AboutPage() {
           </Button>
         </div>
 
-        <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
+        <div className="flex flex-col rounded-2xl border border-coach-line bg-card p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Smarty Community
           </p>
@@ -299,7 +299,7 @@ function AboutPage() {
           </Button>
         </div>
 
-        <div className="flex flex-col rounded-2xl border-2 border-blue-400 bg-card p-5">
+        <div className="flex flex-col rounded-2xl border border-coach-line bg-card p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Smarty Ritual
           </p>

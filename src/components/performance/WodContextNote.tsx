@@ -27,7 +27,7 @@ export function WodContextNote() {
   if (!note) return null;
 
   return (
-    <section className="rounded-2xl border-2 border-blue-400 bg-card px-5 py-4">
+    <section className="rounded-2xl border border-coach-line bg-card px-5 py-4">
       <p className="flex items-start gap-2 text-sm text-muted-foreground">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
         <span>

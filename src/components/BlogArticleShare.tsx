@@ -65,7 +65,7 @@ export function BlogArticleShare({ article, headerRef }: {
         {preparing ? <Loader2 className="animate-spin" /> : <Share2 />} Share
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl border-2 border-primary p-5 sm:p-6">
+        <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl border border-coach-line p-5 sm:p-6">
           <DialogTitle>Share article</DialogTitle>
           <DialogDescription>{article.title}</DialogDescription>
           <div className="grid grid-cols-2 gap-2">
