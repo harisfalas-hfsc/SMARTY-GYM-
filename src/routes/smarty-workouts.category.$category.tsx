@@ -177,7 +177,7 @@ function CategoryPage() {
     window.addEventListener("resize", measure);
     return () => { window.removeEventListener("resize", measure); };
   }, []);
-  const pill = "h-9 min-w-0 flex-1 gap-0.5 rounded-md px-2 text-[11px] font-semibold [&>span]:truncate";
+  const pill = "focus:ring-0 focus-visible:ring-1 h-9 min-w-0 flex-1 gap-0.5 rounded-md px-2 text-[11px] font-semibold [&>span]:truncate";
   const activeCount = [equipment, duration, difficulty, format].filter((v) => v !== ALL).length;
 
   return (
