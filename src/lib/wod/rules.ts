@@ -33,13 +33,32 @@ export function slotForWorkout(w: Pick<WodCandidate, "category" | "location">): 
   return w.location === "anywhere" ? "BODYWEIGHT" : "EQUIPMENT";
 }
 
-/** Every workout that may fill the slot (exact category, level and equipment — no difficulty fallback). */
+/** WOD-only shared resistance pool; library categories remain unchanged. */
+export function categoriesForDay(category: string): string[] {
+  return category === "STRENGTH" || category === "MUSCLE BUILDING"
+    ? ["STRENGTH", "MUSCLE BUILDING"]
+    : [category];
+}
+
+/** Broad resistance-day focuses also recognise the library's specific muscle focuses. */
+export function matchesDayFocus(workoutFocus: string | null, dayFocus: string): boolean {
+  const focus = (workoutFocus ?? "").trim().toUpperCase();
+  const target = dayFocus.trim().toUpperCase();
+  const groups: Record<string, string[]> = {
+    "LOWER BODY": ["LOWER BODY", "LEGS", "LEGS (FRONT)", "LEGS (BACK)", "QUADS", "HAMSTRINGS", "GLUTES", "CALVES"],
+    "UPPER BODY": ["UPPER BODY", "CHEST", "BACK", "SHOULDERS", "ARMS", "BICEPS", "TRICEPS"],
+    "FULL BODY": ["FULL BODY", "ALL BODY"],
+  };
+  return groups[target]?.includes(focus) ?? focus === target;
+}
+
+/** Every workout that may fill the slot (shared resistance category, exact level/equipment — no difficulty fallback). */
 export function eligibleForSlot(pool: WodCandidate[], day: CycleDay, slot: WodSlot): WodCandidate[] {
   const stars = slot === "RECOVERY" ? null : starsForDifficulty(day.difficulty);
   return pool.filter(
     (w) =>
       w.is_visible &&
-      w.category === day.category &&
+      categoriesForDay(day.category).includes(w.category) &&
       !!w.main_workout &&
       !!w.image_url &&
       slotForWorkout(w) === slot &&
@@ -63,7 +82,7 @@ export function candidatesForSlot(
   const neverUsed = shuffle(eligible.filter((w) => !lastUsed.has(w.id)));
   const focus = day.strengthFocus?.toUpperCase();
   const prioritised = focus
-    ? [...neverUsed.filter((w) => (w.focus ?? "").toUpperCase().includes(focus)), ...neverUsed.filter((w) => !(w.focus ?? "").toUpperCase().includes(focus))]
+    ? [...neverUsed.filter((w) => matchesDayFocus(w.focus, focus)), ...neverUsed.filter((w) => !matchesDayFocus(w.focus, focus))]
     : neverUsed;
   const recycled = eligible
     .filter((w) => lastUsed.has(w.id))

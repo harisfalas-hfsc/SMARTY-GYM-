@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getDayIn84Cycle, type CycleDay } from "@/lib/wod-cycle";
-import { candidatesForSlot, slotsForDay, type WodCandidate, type WodSlot } from "@/lib/wod/rules";
+import { candidatesForSlot, categoriesForDay, slotsForDay, type WodCandidate, type WodSlot } from "@/lib/wod/rules";
 
 /**
  * Shared Workout of the Day picker — same behaviour as the old SMARTYGYM
@@ -28,7 +28,7 @@ export async function loadCycleDay(date: string): Promise<CycleDay> {
 }
 
 async function loadPool(db: DB, category: string): Promise<WodCandidate[]> {
-  const { data, error } = await db.from("smarty_workouts").select(CARD_COLUMNS).eq("category", category).eq("is_visible", true);
+  const { data, error } = await db.from("smarty_workouts").select(CARD_COLUMNS).in("category", categoriesForDay(category)).eq("is_visible", true);
   if (error) throw new Error(error.message);
   return (data ?? []) as WodCandidate[];
 }
