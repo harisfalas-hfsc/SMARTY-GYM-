@@ -163,7 +163,23 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               {feeling ? (
                 <div className="flex gap-3 rounded-md border border-coach-line bg-coach-card p-4" role="status">
                   <img src={coachPhoto} alt="" className="h-9 w-9 shrink-0 rounded-full object-cover object-top" />
-                  <p className="text-sm leading-relaxed text-coach-text">{feelingReply(feeling, { member, seed: accountKey, date: new Date(), readinessScore: snapshot?.readinessDisplay?.score ?? null, lastSessionName: snapshot?.lastSession?.name ?? null, recommendationName: null, turn })}</p>
+                  <div className="min-w-0 flex-1 space-y-3">
+                    <p className="text-sm leading-relaxed text-coach-text">{feelingReply(feeling, { member, seed: accountKey, date: new Date(), readinessScore: snapshot?.readinessDisplay?.score ?? null, lastSessionName: snapshot?.lastSession?.name ?? null, recommendationName: null, turn })}</p>
+                    {(() => {
+                      const sol = feeling === "tired" || feeling === "sore"
+                        ? { label: feeling === "sore" ? "Open Recovery workouts" : "Open lighter Recovery workouts", run: () => { changeOpen(false); void navigate({ to: "/smarty-workouts/category/$category", params: { category: "recovery" } }); } }
+                        : feeling === "short"
+                          ? { label: "Build a short workout", run: () => go("/create-your-own-workout") }
+                          : member && snapshot
+                            ? { label: "Start my recommended workout", run: followAction }
+                            : { label: "View today's WOD", run: () => go("/wod") };
+                      return (
+                        <button type="button" onClick={sol.run} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-coach-gold px-4 text-sm font-bold text-coach-bg sm:w-auto">
+                          {sol.label} <ArrowRight className="h-4 w-4" />
+                        </button>
+                      );
+                    })()}
+                  </div>
                 </div>
               ) : null}
             </section>
