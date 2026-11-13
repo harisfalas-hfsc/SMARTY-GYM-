@@ -76,11 +76,11 @@ function SmartyWorkoutsPage() {
       {/* Mobile: same card style as the homepage carousel */}
       <div className="lg:hidden">
         <div className="mb-4 flex items-center justify-center gap-4">
-          <Button type="button" variant="ghost" size="icon" onClick={() => api?.scrollPrev()} aria-label="Previous category" className="h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20">
+          <Button type="button" variant="ghost" size="icon" onClick={() => api?.scrollPrev()} aria-label="Previous category" className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80">
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          <p className="text-lg font-extrabold uppercase text-primary">Categories</p>
-          <Button type="button" variant="ghost" size="icon" onClick={() => api?.scrollNext()} aria-label="Next category" className="h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20">
+          <p className="text-lg font-extrabold uppercase text-foreground">Categories</p>
+          <Button type="button" variant="ghost" size="icon" onClick={() => api?.scrollNext()} aria-label="Next category" className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80">
             <ChevronRight className="h-5 w-5" />
           </Button>
         </div>
@@ -141,7 +141,7 @@ function SmartyWorkoutsPage() {
       {/* Desktop: category cards, each opens its own page */}
       {featured.length > 0 && (
         <section aria-label="Featured Workouts" className="mt-6 lg:hidden">
-          <h2 className="mb-4 flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-primary">
+          <h2 className="mb-4 flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-foreground">
             <Star className="h-5 w-5" />Featured Workouts
           </h2>
           <div className="flex flex-col gap-3">
@@ -203,7 +203,7 @@ function SmartyWorkoutsPage() {
         })}
         {featured.length > 0 && (
           <section aria-label="Featured Workouts" className="app-card flex min-w-0 flex-col overflow-hidden p-4 xl:col-span-3">
-            <h2 className="mb-3 flex shrink-0 items-center gap-2 text-lg font-bold text-primary"><Star className="h-5 w-5" />Featured Workouts</h2>
+            <h2 className="mb-3 flex shrink-0 items-center gap-2 text-lg font-bold text-foreground"><Star className="h-5 w-5" />Featured Workouts</h2>
             <div className="grid min-h-0 flex-1 grid-cols-3 gap-3 lg:max-xl:grid-cols-1">
               {featured.map((workout) => (
                 <div key={workout.id} className="min-w-0 [&>div]:h-full [&_h3]:min-h-0 [&_h3]:text-base [&_h3]:leading-tight [&_p]:hidden lg:max-xl:[&>div]:flex-row lg:max-xl:[&>div>div:first-child]:w-24 lg:max-xl:[&>div>div:first-child]:shrink-0 lg:max-xl:[&>div>div:last-child]:p-2 lg:max-xl:[&_button]:hidden lg:max-xl:[&_span]:text-[10px]">

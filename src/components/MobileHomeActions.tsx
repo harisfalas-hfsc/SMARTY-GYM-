@@ -170,7 +170,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
           size="icon"
           onClick={() => carouselApi?.scrollPrev()}
           aria-label="Previous option"
-          className="h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20"
+          className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80"
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
@@ -181,7 +181,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
           size="icon"
           onClick={() => carouselApi?.scrollNext()}
           aria-label="Next option"
-          className="h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20"
+          className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80"
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
@@ -290,7 +290,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
             size="icon"
             onClick={() => exploreApi?.scrollPrev()}
             aria-label="Previous Explore option"
-            className="h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20"
+            className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
@@ -301,7 +301,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
             size="icon"
             onClick={() => exploreApi?.scrollNext()}
             aria-label="Next Explore option"
-            className="h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20"
+            className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80"
           >
             <ChevronRight className="h-5 w-5" />
           </Button>
