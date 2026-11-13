@@ -84,7 +84,7 @@ function Home() {
       {/* MOBILE — hero text lives inside a card sized like the other homepage cards */}
       <section className="py-6 lg:hidden">
         <div className="flex flex-col items-center justify-center px-4 text-center">
-          <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-primary">
+          <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-foreground">
             Science-backed · Expert-designed
           </p>
           <h1 className="mt-2 whitespace-nowrap text-lg font-extrabold uppercase leading-tight">

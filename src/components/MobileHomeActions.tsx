@@ -174,7 +174,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
-        <p className="text-lg font-extrabold uppercase text-primary">Start training</p>
+        <p className="text-lg font-extrabold uppercase text-foreground">Start training</p>
         <Button
           type="button"
           variant="ghost"
@@ -248,7 +248,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
 
       {featured.length > 0 && (
         <section aria-label="Featured Workouts" className="mt-6">
-          <h2 className="mb-4 flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-primary">
+          <h2 className="mb-4 flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-foreground">
             <Star className="h-5 w-5" />Featured Workouts
           </h2>
           <div className="flex flex-col gap-3">
@@ -294,7 +294,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          <p className="text-lg font-extrabold uppercase text-primary">Explore</p>
+          <p className="text-lg font-extrabold uppercase text-foreground">Explore</p>
           <Button
             type="button"
             variant="ghost"
