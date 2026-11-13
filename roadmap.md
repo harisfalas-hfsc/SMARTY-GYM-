@@ -1,5 +1,8 @@
 # Roadmap
 
+## Mobile bright-white appearance
+- [x] Default mobile to light independently of desktop; bright-white shared surfaces, neutral controls/circles/dots, branding-only blue. Visitor Home/Workouts/Blog/FAQ/Tools/Shared and real member Coach/Account/Logbook/Check-ins checked at 384px; mobile toggle persistence and desktop default/saved preference independence verified; 563 tests pass, preview build OK. Installed-app startup not exercised.
+
 ## Shared card styling
 - [x] Apply one neutral Coach-style shell to shared and custom cards on mobile/desktop; preserve controls, content and existing grids. Public Home/catalogue/Shared/FAQ/About and real member Logbook/Account/Check-ins checked at 394/1280px; 558 tests pass and preview build OK.
 

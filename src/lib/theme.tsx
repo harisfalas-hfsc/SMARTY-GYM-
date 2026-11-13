@@ -3,9 +3,11 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 export type Theme = "dark" | "light";
 
 export const THEME_STORAGE_KEY = "smartygym-theme";
+export const MOBILE_THEME_STORAGE_KEY = "smartygym-mobile-theme";
+const MOBILE_QUERY = "(max-width: 767px)";
 
-/** Runs before hydration so the first frame matches the saved theme (dark by default). */
-export const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('${THEME_STORAGE_KEY}');var d=t!=='light';document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}})();`;
+/** Mobile preferences are independent; existing desktop preferences remain untouched. */
+export const THEME_INIT_SCRIPT = `(function(){var m=window.matchMedia('${MOBILE_QUERY}').matches;var d=!m;try{var t=localStorage.getItem(m?'${MOBILE_THEME_STORAGE_KEY}':'${THEME_STORAGE_KEY}');d=t==='dark'||(t!=='light'&&!m);}catch(e){}document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';})();`;
 
 type ThemeContextValue = {
   theme: Theme;
@@ -20,10 +22,12 @@ const ThemeContext = createContext<ThemeContextValue>({
 });
 
 function readStoredTheme(): Theme {
+  const mobile = window.matchMedia(MOBILE_QUERY).matches;
   try {
-    return localStorage.getItem(THEME_STORAGE_KEY) === "light" ? "light" : "dark";
+    const saved = localStorage.getItem(mobile ? MOBILE_THEME_STORAGE_KEY : THEME_STORAGE_KEY);
+    return saved === "light" || saved === "dark" ? saved : mobile ? "light" : "dark";
   } catch {
-    return "dark";
+    return mobile ? "light" : "dark";
   }
 }
 
@@ -38,14 +42,22 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Sync with the theme the init script already applied, without a hydration mismatch.
   useEffect(() => {
-    setThemeState(readStoredTheme());
+    const sync = () => {
+      const next = readStoredTheme();
+      setThemeState(next);
+      applyTheme(next);
+    };
+    sync();
+    const query = window.matchMedia(MOBILE_QUERY);
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
   }, []);
 
   const setTheme = useCallback((next: Theme) => {
     setThemeState(next);
     applyTheme(next);
     try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
+      localStorage.setItem(window.matchMedia(MOBILE_QUERY).matches ? MOBILE_THEME_STORAGE_KEY : THEME_STORAGE_KEY, next);
     } catch {
       // Storage unavailable (private mode); theme still applies for this session.
     }

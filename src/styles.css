@@ -5,17 +5,19 @@
 /* Brand name highlighting (Smarty Gym, Haris Falas) — applied via
    the CSS Custom Highlight API, so no DOM is ever mutated (hydration-safe). */
 ::highlight(brand-name) {
-  color: var(--primary);
+  color: var(--brand-blue, var(--primary));
 }
+::highlight(founder-name) { color: var(--primary); }
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-coach-bg: oklch(0.145 0 0);
-  --color-coach-card: oklch(0.2 0 0);
-  --color-coach-line: oklch(0.3 0 0);
-  --color-coach-text: oklch(0.97 0 0);
-  --color-coach-muted: oklch(0.72 0.01 286);
+  --color-coach-bg: var(--coach-bg);
+  --color-coach-card: var(--coach-card);
+  --color-coach-line: var(--coach-line);
+  --color-coach-text: var(--coach-text);
+  --color-coach-muted: var(--coach-muted);
+  --color-brand-blue: var(--brand-blue);
   --color-coach-gold: var(--primary);
   --color-coach-good: oklch(0.72 0.15 150);
   --radius-card: 0.625rem;
@@ -83,6 +85,12 @@
  * Light mode now uses the dark-view blue (oklch(0.745 0.131 220)) everywhere.
  */
 :root {
+  --brand-blue: oklch(0.745 0.131 220);
+  --coach-bg: oklch(0.145 0 0);
+  --coach-card: oklch(0.2 0 0);
+  --coach-line: oklch(0.3 0 0);
+  --coach-text: oklch(0.97 0 0);
+  --coach-muted: oklch(0.72 0.01 286);
   --radius: 0.75rem;
   /* Light mode: every blue matches the dark-view blue. */
   --color-blue-50: oklch(0.955 0.03 266);
@@ -254,6 +262,73 @@
   box-shadow: none;
 }
 .coach-floor { --card: var(--color-coach-card); }
+
+/* One mobile palette for every route and portalled menu/dialog. Desktop tokens
+   remain unchanged. Brand wording alone retains blue; controls use neutral ink. */
+@media (max-width: 767px) {
+  :root {
+    --primary: oklch(0.27 0 0);
+    --primary-foreground: oklch(1 0 0);
+    --primary-hover: oklch(0.38 0 0);
+    --accent: oklch(0.96 0 0);
+    --accent-foreground: var(--foreground);
+    --ring: oklch(0.5 0 0);
+    --chart-1: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-ring: var(--ring);
+    --tone-0-fg: var(--foreground);
+    --tone-0-bg: var(--muted);
+    --gradient-primary: linear-gradient(var(--primary), var(--primary));
+    --gradient-brand-soft: linear-gradient(var(--background), var(--muted));
+    --shadow-primary: var(--shadow-soft);
+    --color-blue-50: var(--muted);
+    --color-blue-100: var(--muted);
+    --color-blue-200: var(--border);
+    --color-blue-300: var(--muted-foreground);
+    --color-blue-400: var(--foreground);
+    --color-blue-500: var(--foreground);
+    --color-blue-600: var(--foreground);
+    --color-blue-700: var(--foreground);
+    --color-sky-400: var(--foreground);
+    --color-sky-500: var(--foreground);
+    --color-cyan-400: var(--foreground);
+    --color-cyan-500: var(--foreground);
+    --wod-bodyweight: var(--foreground);
+    --wod-format: var(--muted-foreground);
+    --level-recovery: var(--muted-foreground);
+  }
+  :root:not(.dark) {
+    --background: oklch(1 0 0);
+    --card: oklch(1 0 0);
+    --popover: oklch(1 0 0);
+    --border: oklch(0.82 0 0);
+    --input: var(--border);
+    --sidebar: var(--background);
+    --coach-bg: var(--background);
+    --coach-card: var(--card);
+    --coach-line: var(--border);
+    --coach-text: var(--foreground);
+    --coach-muted: var(--muted-foreground);
+    --workout-overlay: oklch(1 0 0 / 0.96);
+    --workout-overlay-foreground: var(--foreground);
+    --workout-overlay-muted: var(--muted-foreground);
+    --workout-overlay-border: var(--border);
+  }
+  :root.dark {
+    --primary: oklch(0.96 0 0);
+    --primary-foreground: oklch(0.21 0 0);
+    --primary-hover: oklch(0.85 0 0);
+    --accent: var(--muted);
+  }
+  :root:not(.dark) [class*="border-primary"] {
+    border-color: var(--coach-line) !important;
+  }
+  :root:not(.dark) .coach-floor .bg-coach-gold {
+    color: var(--primary-foreground);
+  }
+  [data-brand-logo] > span { color: var(--brand-blue); }
+}
 
 @layer utilities {
   .gradient-primary { background: var(--gradient-primary); }

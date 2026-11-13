@@ -47,6 +47,7 @@ function applyBrandHighlights(): void {
   if (!api?.highlights || !HighlightCtor) return;
 
   const ranges: Range[] = [];
+  const founderRanges: Range[] = [];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let node = walker.nextNode();
   while (node) {
@@ -60,7 +61,8 @@ function applyBrandHighlights(): void {
           const range = document.createRange();
           range.setStart(textNode, match.index);
           range.setEnd(textNode, match.index + match[0].length);
-          ranges.push(range);
+          if (/^Haris/i.test(match[0])) founderRanges.push(range);
+          else ranges.push(range);
         }
       }
     }
@@ -68,6 +70,7 @@ function applyBrandHighlights(): void {
   }
 
   api.highlights.set(HIGHLIGHT_NAME, new HighlightCtor(...ranges));
+  api.highlights.set("founder-name", new HighlightCtor(...founderRanges));
 }
 
 /** Re-computes highlights whenever the DOM changes (dynamic content, navigations). */

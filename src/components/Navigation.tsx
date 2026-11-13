@@ -138,7 +138,7 @@ export function Navigation() {
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
-            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-primary hover:bg-primary/10"
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10 md:border-transparent"
           >
             <Menu className="h-5 w-5" />
           </button>
@@ -164,7 +164,7 @@ export function Navigation() {
             className="bg-transparent p-0 text-lg font-extrabold leading-none tracking-tight no-underline hover:no-underline"
             style={{ textDecoration: "none" }}
           >
-            <span data-brand-skip><span className="text-primary">SMARTY</span><span className="text-green-500">GYM</span></span>
+            <span data-brand-skip data-brand-logo><span className="text-primary">SMARTY</span><span className="text-green-500">GYM</span></span>
           </button>
 
 
@@ -332,7 +332,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         className="absolute left-0 top-0 flex h-full w-[85%] max-w-[340px] flex-col bg-background shadow-2xl"
       >
         <div className="flex h-12 items-center justify-between px-4">
-          <div className="text-base font-extrabold" data-brand-skip>
+          <div className="text-base font-extrabold" data-brand-skip data-brand-logo>
             <span className="text-primary">SMARTY</span><span className="text-green-500">GYM</span>
           </div>
 
