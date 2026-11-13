@@ -22,6 +22,7 @@ import { fetchBadgesFor, fetchCategories, fetchCommunityWorkouts } from "@/lib/c
 import { SORTS, type CommunityBadge, type CommunitySort, type CommunityWorkoutCard as CardData } from "@/lib/community";
 import { CATEGORIES, MAX_STARS } from "@/lib/workout/spec";
 import { loadRemote } from "@/lib/remote-data";
+import { MobileWorkoutFilters } from "@/components/community/MobileWorkoutFilters";
 
 const searchSchema = z.object({
   sort: fallback(z.string(), "latest").default("latest"),
@@ -228,7 +229,8 @@ function BrowsePage() {
         </Link>
       </div>
 
-      <div className="app-card p-5">{filterBody}</div>
+      <MobileWorkoutFilters sort={sort} difficulty={difficulty} category={search.category} categories={categories} active={filtersActive} onChange={update} onReset={() => { setCreatorQuery(""); update({ sort: "latest", difficulty: 0, category: "", q: "" }); }} />
+      <div className="app-card hidden p-5 md:block">{filterBody}</div>
 
       {loading && rows.length === 0 ? (
         <div className="flex min-h-[30vh] items-center justify-center">

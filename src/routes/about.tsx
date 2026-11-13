@@ -132,7 +132,7 @@ function AboutPage() {
         </SmartyCard>
 
         <SmartyCard
-          tone="blue"
+          tone="green"
           eyebrow="How"
           eyebrowIcon={Compass}
           title={
@@ -163,7 +163,7 @@ function AboutPage() {
         </SmartyCard>
 
         <SmartyCard
-          tone="blue"
+          tone="orange"
           eyebrow="When"
           eyebrowIcon={Clock}
           title={
@@ -185,7 +185,7 @@ function AboutPage() {
 
       {/* Four pillars in one card */}
       <SmartyCard
-        tone="blue"
+        tone="purple"
         eyebrow="Built to be"
         eyebrowIcon={Sparkles}
         title={

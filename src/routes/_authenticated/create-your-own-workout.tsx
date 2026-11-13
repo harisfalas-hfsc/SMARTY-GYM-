@@ -76,6 +76,10 @@ export const Route = createFileRoute("/_authenticated/create-your-own-workout")(
           "Answer your goal, mood, time and equipment and get a personalised workout built from a 1,300+ exercise library.",
       },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: "Create Your Own Workout — SMARTYGYM" },
+      { property: "og:description", content: "Build your session around your goals, equipment and time." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: CoachPage,
@@ -121,11 +125,11 @@ function QuestionCard({
   return (
     <section className="app-card p-5 sm:p-6">
       <div className="mb-4 flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary mobile-accent-${(step - 1) % 4}`}>
           <Icon className="h-5 w-5" />
         </span>
         <div className="min-w-0">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+          <p className={`text-[11px] font-bold uppercase tracking-[0.18em] text-primary mobile-accent-${(step - 1) % 4}`}>
             Step {step}
           </p>
           <h2 className="text-lg font-extrabold leading-tight">{title}</h2>

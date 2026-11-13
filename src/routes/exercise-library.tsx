@@ -650,7 +650,7 @@ export function ExerciseLibraryPage({
       <Card className="mb-6 border border-coach-line">
         <CardContent className="space-y-3 p-4 sm:p-6">
           <div className="flex items-center gap-2">
-            <Dumbbell className="h-5 w-5 text-primary" />
+            <Dumbbell className="h-5 w-5 text-primary mobile-accent-3" />
             <h2 className="text-lg font-semibold">Exercise Database</h2>
           </div>
 
@@ -667,9 +667,9 @@ export function ExerciseLibraryPage({
           </div>
 
           <div className="grid grid-cols-2 gap-2 lg:grid-cols-5">
-            {filters.map((f) => (
+            {filters.map((f, index) => (
               <Select key={f.label} value={f.value} onValueChange={f.set}>
-                <SelectTrigger aria-label={f.label} className="h-9 min-w-0 px-2 text-xs xl:px-3 xl:text-sm">
+                <SelectTrigger aria-label={f.label} className={`h-9 min-w-0 px-2 text-xs xl:px-3 xl:text-sm mobile-accent-${index}`}>
                   <SelectValue placeholder={f.label} />
                 </SelectTrigger>
                 <SelectContent className="max-h-60">

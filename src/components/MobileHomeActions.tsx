@@ -23,6 +23,7 @@ import type { SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { difficultyLabel } from "@/lib/workout/spec";
 import { fallbackTo } from "@/lib/cover-image";
+import { MobileHomeLayout } from "@/components/home/MobileHomeLayout";
 
 type CarouselAction = {
   title: string;
@@ -42,6 +43,10 @@ type ExploreAction = {
 };
 
 export function MobileHomeActions({ showPricing, workoutCount, featured }: { showPricing: boolean; workoutCount: number; featured: SmartyWorkoutCard[] }) {
+  return <><MobileHomeLayout workoutCount={workoutCount} featured={featured} /><div className="hidden md:block"><TabletHomeActions showPricing={showPricing} workoutCount={workoutCount} featured={featured} /></div></>;
+}
+
+function TabletHomeActions({ showPricing, workoutCount, featured }: { showPricing: boolean; workoutCount: number; featured: SmartyWorkoutCard[] }) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeIndex, setActiveIndex] = useState(0);
   const [exploreApi, setExploreApi] = useState<CarouselApi>();

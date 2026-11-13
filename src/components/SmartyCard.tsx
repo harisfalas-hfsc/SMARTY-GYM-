@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
+import { iconInk } from "@/lib/icon-tone";
 
 export type SmartyTone =
   | "cyan"
@@ -114,7 +115,7 @@ export function SmartyCard({
             )}
           >
             {eyebrowIcon && (
-              <IconOrEmoji icon={eyebrowIcon} className="h-4 w-4 shrink-0 text-sm" />
+              <IconOrEmoji icon={eyebrowIcon} className={cn("h-4 w-4 shrink-0 text-sm", `mobile-accent-${({ cyan: 0, blue: 0, green: 1, orange: 2, purple: 3, yellow: 6, pink: 7 })[tone]}`)} />
             )}
             <span className="min-w-0 truncate">{eyebrow}</span>
           </div>

@@ -113,7 +113,7 @@ function Contact() {
       <Card className="border border-coach-line">
         <CardContent className="p-6">
           <div className="text-center space-y-3">
-            <Mail className="w-12 h-12 text-primary mx-auto" />
+            <Mail className="w-12 h-12 text-primary mobile-accent-0 mx-auto" />
             <h1 className="text-2xl font-bold text-foreground">
               Get in <span className="text-primary">Touch</span>
             </h1>
@@ -122,9 +122,9 @@ function Contact() {
               <strong className="text-primary">24 to 48 hours</strong>.
             </p>
             <div className="grid grid-cols-3 gap-3 pt-2">
-              <MiniInfo Icon={Clock} label="24–48h reply" />
-              <MiniInfo Icon={MessageSquare} label="Real humans" />
-              <MiniInfo Icon={ShieldCheck} label="Private" />
+              <MiniInfo Icon={Clock} label="24–48h reply" tone={2} />
+              <MiniInfo Icon={MessageSquare} label="Real humans" tone={1} />
+              <MiniInfo Icon={ShieldCheck} label="Private" tone={3} />
             </div>
           </div>
         </CardContent>
@@ -227,7 +227,7 @@ function Contact() {
       {/* Direct email — independent channel */}
       <Card className="border border-coach-line">
         <CardContent className="p-6 text-center space-y-2">
-          <Mail className="w-8 h-8 text-primary mx-auto" />
+          <Mail className="w-8 h-8 text-primary mobile-accent-0 mx-auto" />
           <h2 className="text-lg font-bold text-foreground">Or email us directly</h2>
           <p className="text-sm text-muted-foreground">
             Prefer your own email app? Write to us and we'll answer from there.
@@ -244,13 +244,15 @@ function Contact() {
 function MiniInfo({
   Icon,
   label,
+  tone,
 }: {
   Icon: React.ComponentType<{ className?: string }>;
   label: string;
+  tone: number;
 }) {
   return (
     <div className="flex flex-col items-center gap-1">
-      <Icon className="w-5 h-5 text-primary" />
+      <Icon className={`w-5 h-5 text-primary mobile-accent-${tone}`} />
       <span className="text-[11px] font-semibold text-foreground text-center leading-tight">
         {label}
       </span>

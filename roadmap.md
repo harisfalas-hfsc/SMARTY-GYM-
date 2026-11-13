@@ -1,5 +1,10 @@
 # Roadmap
 
+## Mobile native homepage and page accents
+- [ ] Rebuild mobile homepage with the three-photo training carousel, four quick actions, Coach card, three live featured workouts and existing footer/navigation.
+- [ ] Apply semantic colorful mobile icons/steps, founder and Gym highlights, vivid Gift photo and persistent Shared Workouts filters.
+- [ ] Standardize mobile carousel photo geometry/controls without changing desktop or saved training; verify mobile and desktop and run tests.
+
 ## Mobile bright-white appearance
 - [x] Default mobile to light independently of desktop; bright-white shared surfaces, neutral controls/circles/dots, branding-only blue. Visitor Home/Workouts/Blog/FAQ/Tools/Shared and real member Coach/Account/Logbook/Check-ins checked at 384px; mobile toggle persistence and desktop default/saved preference independence verified; 563 tests pass, preview build OK. Installed-app startup not exercised.
 

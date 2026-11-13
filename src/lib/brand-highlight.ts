@@ -11,7 +11,7 @@
 
 const HIGHLIGHT_NAME = "brand-name";
 
-const BRAND_RE = /\b(Smarty\s*Gym|Haris\s+Falas)\b/gi;
+const BRAND_RE = /\b(Smarty\s*Gym|Gym|Haris\s+Falas)\b/gi;
 
 const SKIP_TAGS = new Set([
   "SCRIPT",

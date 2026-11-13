@@ -463,7 +463,7 @@ function Panel({
     <section className="app-card flex h-full flex-col overflow-hidden">
       <header className="border-b border-coach-line bg-muted/40 p-4">
         <h2 className="flex h-7 items-center gap-2 text-lg font-extrabold uppercase tracking-tight">
-          <Icon className="h-5 w-5 text-primary" />
+          <Icon className={`h-5 w-5 text-primary mobile-accent-${title.includes("Member") ? 2 : title.includes("Ranking") ? 7 : title.includes("Talk") || title.includes("Comment") ? 1 : 0}`} />
           {title}
         </h2>
         <div className="mt-3 rounded-2xl border border-coach-line p-3 ">

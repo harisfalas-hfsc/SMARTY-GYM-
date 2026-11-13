@@ -7,7 +7,7 @@
 ::highlight(brand-name) {
   color: var(--brand-blue, var(--primary));
 }
-::highlight(founder-name) { color: var(--primary); }
+::highlight(founder-name) { color: var(--brand-blue); }
 
 @custom-variant dark (&:is(.dark *));
 
@@ -277,8 +277,8 @@
     --sidebar-primary: var(--primary);
     --sidebar-primary-foreground: var(--primary-foreground);
     --sidebar-ring: var(--ring);
-    --tone-0-fg: var(--foreground);
-    --tone-0-bg: var(--muted);
+    --tone-0-fg: var(--brand-blue);
+    --tone-0-bg: color-mix(in oklab, var(--brand-blue) 12%, var(--background));
     --gradient-primary: linear-gradient(var(--primary), var(--primary));
     --gradient-brand-soft: linear-gradient(var(--background), var(--muted));
     --shadow-primary: var(--shadow-soft);
@@ -328,7 +328,31 @@
     color: var(--primary-foreground);
   }
   [data-brand-logo] > span { color: var(--brand-blue); }
+  .mobile-accent-0 { color: var(--tone-0-fg); }
+  .mobile-accent-1 { color: var(--tone-1-fg); }
+  .mobile-accent-2 { color: var(--tone-2-fg); }
+  .mobile-accent-3 { color: var(--tone-3-fg); }
+  .mobile-accent-4 { color: var(--tone-4-fg); }
+  .mobile-accent-5 { color: var(--tone-5-fg); }
+  .mobile-accent-6 { color: var(--tone-6-fg); }
+  .mobile-accent-7 { color: var(--tone-7-fg); }
 }
+
+/* Photo cards use a dedicated image palette, independent of page theme. */
+.mobile-photo-card {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  border: 1px solid var(--coach-line);
+  border-radius: var(--radius-card);
+  color: var(--color-hero-foreground);
+}
+.mobile-photo-card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mobile-photo-shade { position: absolute; inset: 0; background: var(--gradient-photo-card); }
+.mobile-photo-copy { position: absolute; left: 1rem; right: 3.5rem; bottom: 1rem; }
+.mobile-photo-action { position: absolute; right: 0.75rem; bottom: 0.75rem; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid currentColor; border-radius: 9999px; }
+:root { --gradient-photo-card: linear-gradient(90deg, oklch(0.1 0 0 / 0.85), oklch(0.1 0 0 / 0.15)), linear-gradient(to top, oklch(0.1 0 0 / 0.65), transparent); }
 
 @layer utilities {
   .gradient-primary { background: var(--gradient-primary); }
