@@ -153,7 +153,7 @@ function BlogIndex() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
-      <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted-foreground">
+      <nav aria-label="Breadcrumb" className="mb-6 hidden text-xs text-muted-foreground md:block">
         <ol className="flex flex-wrap items-center gap-1.5">
           <li>
             <Link to="/" className="hover:text-primary">
@@ -187,7 +187,55 @@ function BlogIndex() {
       </p>
 
 
-      <div className="mb-6 flex flex-wrap items-center gap-3">
+      {/* Mobile: sticky one-line filter bar, same pattern as workout categories */}
+      <div
+        className="sticky top-14 z-30 -mx-4 mb-3 border-y border-border bg-background/95 px-4 py-1.5 backdrop-blur md:hidden"
+      >
+        <div className="flex h-9 flex-nowrap items-center gap-1.5">
+          <Select value={sort} onValueChange={(v) => update({ sort: v as BlogSort })}>
+            <SelectTrigger
+              aria-label="Sort articles"
+              className="h-9 min-w-0 flex-1 gap-0.5 rounded-md px-2 text-[11px] font-semibold focus:ring-0 focus-visible:ring-1 [&>span]:truncate"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="newest">Newest</SelectItem>
+              <SelectItem value="oldest">Oldest</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select
+            value={status}
+            onValueChange={(v) =>
+              update({ status: v === "all" ? undefined : (v as BlogReadFilter) })
+            }
+          >
+            <SelectTrigger
+              aria-label="Filter by read status"
+              className="h-9 min-w-0 flex-1 gap-0.5 rounded-md px-2 text-[11px] font-semibold focus:ring-0 focus-visible:ring-1 [&>span]:truncate"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="unread">Unread</SelectItem>
+              <SelectItem value="read">Read</SelectItem>
+            </SelectContent>
+          </Select>
+          {filtersActive && (
+            <button
+              type="button"
+              onClick={resetFilters}
+              aria-label="Clear filters"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-primary text-primary"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="mb-6 hidden flex-wrap items-center gap-3 md:flex">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span className="hidden sm:inline">Sort:</span>
           <Select value={sort} onValueChange={(v) => update({ sort: v as BlogSort })}>
@@ -240,7 +288,7 @@ function BlogIndex() {
 
 
       {isLoading && (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <Card key={i} className="overflow-hidden border border-coach-line">
               <div className="aspect-video animate-pulse bg-muted" />
@@ -263,7 +311,7 @@ function BlogIndex() {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
         {filtered.map((article) => {
           const read = isRead(article.slug);
           return (
@@ -288,7 +336,7 @@ function BlogIndex() {
                       className="h-full w-full object-cover"
                     />
                     {read && (
-                      <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+                      <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground sm:right-3 sm:top-3 sm:px-3 sm:py-1 sm:text-xs">
                         <Check className="h-3 w-3" />
                         Read
                       </span>
@@ -296,19 +344,19 @@ function BlogIndex() {
                   </div>
                 )}
 
-                <div className="p-5">
-                  <h2 className="mb-2 line-clamp-2 text-xl font-bold">{article.title}</h2>
+                <div className="p-2.5 sm:p-5">
+                  <h2 className="mb-1 line-clamp-2 text-[13px] font-bold leading-snug sm:mb-2 sm:text-xl">{article.title}</h2>
                   {article.excerpt && (
-                    <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
+                    <p className="mb-2 line-clamp-2 text-[10px] text-muted-foreground sm:mb-4 sm:text-sm">
                       {article.excerpt}
                     </p>
                   )}
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {article.read_time ?? "5 min read"}
+                  <div className="flex items-center justify-between gap-1 text-[9px] text-muted-foreground sm:text-xs">
+                    <span className="flex min-w-0 items-center gap-1">
+                      <Clock className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{article.read_time ?? "5 min read"}</span>
                     </span>
-                    <span className="flex items-center gap-1">
+                    <span className="flex shrink-0 items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       {formatDate(article.published_at ?? article.created_at)}
                     </span>
@@ -320,7 +368,7 @@ function BlogIndex() {
                 type="button"
                 onClick={() => toggleRead(article.slug)}
                 aria-pressed={read}
-                className="mt-auto border-t-2 border-primary px-5 py-3 text-xs font-semibold text-primary hover:bg-primary/10"
+                className="mt-auto border-t border-coach-line px-2.5 py-2 text-[10px] font-semibold text-primary hover:bg-primary/10 sm:px-5 sm:py-3 sm:text-xs"
               >
                 {read ? "Mark as unread" : "Mark as read"}
               </button>
