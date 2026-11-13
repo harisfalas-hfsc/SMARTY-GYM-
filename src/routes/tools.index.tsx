@@ -120,7 +120,7 @@ function ToolCard({ tool }: { tool: Tool }) {
   return (
     <Link
       to={tool.to as never}
-      className="group relative block h-56 overflow-hidden rounded-2xl border border-coach-line transition-all duration-300 hover:shadow-xl sm:h-64"
+      className="app-card group relative block h-56 overflow-hidden transition-all duration-300 sm:h-64"
     >
       <img
         src={tool.image}

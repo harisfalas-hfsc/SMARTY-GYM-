@@ -1,5 +1,8 @@
 # Roadmap
 
+## Shared card styling
+- [x] Apply one neutral Coach-style shell to shared and custom cards on mobile/desktop; preserve controls, content and existing grids. Public Home/catalogue/Shared/FAQ/About and real member Logbook/Account/Check-ins checked at 394/1280px; 558 tests pass and preview build OK.
+
 ## Coach arrival and alignment
 - [x] Restore blue circles on header controls in both views; browser computed borders match the brand blue for Coach, Account and Inbox.
 - [x] Open Coach immediately on arrival and auth account changes in both views, preserving close and navigation. Real visitor and restored signed-in arrivals and repeat arrivals checked at 394/1280px; actual password sign-in transition not exercised.

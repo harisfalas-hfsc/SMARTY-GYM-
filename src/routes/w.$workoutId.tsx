@@ -59,7 +59,7 @@ function SharePreviewPage() {
 
   return (
     <div className="mx-auto w-full max-w-xl px-4 py-10 sm:py-14 lg:max-w-3xl lg:px-8">
-      <div className="rounded-3xl border border-coach-line bg-card p-5 sm:p-7">
+      <div className="app-card p-5 sm:p-7">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
           Shared workout {w.category ? `· ${w.category}` : ""}
         </p>

@@ -70,13 +70,13 @@ function Section({ n, title, subtitle, children }: { n: string; title: string; s
 
 function Tile({ icon: Icon, label, onClick }: { icon: LucideIcon; label: string; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-md border border-coach-line bg-coach-card p-3 text-center text-sm font-semibold text-coach-text transition-colors hover:border-coach-gold/70">
+    <button type="button" onClick={onClick} className="app-card flex min-h-24 flex-col items-center justify-center gap-2 p-3 text-center text-sm font-semibold text-coach-text transition-colors">
       <Icon className="h-6 w-6 shrink-0 text-coach-gold" /><span className="line-clamp-2 flex min-h-[2.5rem] items-center whitespace-pre-line leading-5">{label}</span>
     </button>
   );
 }
 
-const card = "rounded-md border border-coach-line bg-coach-card p-4 sm:p-5";
+const card = "app-card p-4 sm:p-5";
 const goldBtn = "flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-coach-gold px-4 text-sm font-extrabold uppercase tracking-wide text-coach-bg transition-opacity hover:opacity-90";
 
 export function SmartyCoachDialog({ open, onOpenChange, visitor = false, accountKey }: { open: boolean; onOpenChange: (open: boolean) => void; visitor?: boolean; accountKey: string | null }) {
@@ -133,7 +133,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
     <Dialog open={open} onOpenChange={changeOpen}>
       <DialogContent
         onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }}
-        className="fixed inset-2 left-2 top-2 flex h-auto w-auto max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-lg border-coach-line bg-coach-bg p-0 text-coach-text outline-none sm:max-w-none md:inset-4 md:left-1/2 md:top-4 md:w-[min(72rem,calc(100vw-2rem))] md:-translate-x-1/2 [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:rounded-md [&>button]:border [&>button]:border-coach-line [&>button]:bg-coach-card [&>button]:p-2 [&>button]:text-coach-text [&>button]:opacity-100 [&>button_svg]:h-5 [&>button_svg]:w-5"
+        className="coach-floor fixed inset-2 left-2 top-2 flex h-auto w-auto max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-lg border-coach-line bg-coach-bg p-0 text-coach-text outline-none sm:max-w-none md:inset-4 md:left-1/2 md:top-4 md:w-[min(72rem,calc(100vw-2rem))] md:-translate-x-1/2 [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:rounded-md [&>button]:border [&>button]:border-coach-line [&>button]:bg-coach-card [&>button]:p-2 [&>button]:text-coach-text [&>button]:opacity-100 [&>button_svg]:h-5 [&>button_svg]:w-5"
       >
         <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
           {/* Header */}
@@ -161,7 +161,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
                 ))}
               </div>
               {feeling ? (
-                <div className="flex gap-3 rounded-md border border-coach-line bg-coach-card p-4" role="status">
+                <div className="app-card flex gap-3 p-4" role="status">
                   <img src={coachPhoto} alt="" className="h-9 w-9 shrink-0 rounded-full object-cover object-top" />
                   <div className="min-w-0 flex-1 space-y-3">
                     <p className="text-sm leading-relaxed text-coach-text">{feelingReply(feeling, { member, seed: accountKey, date: new Date(), readinessScore: snapshot?.readinessDisplay?.score ?? null, lastSessionName: snapshot?.lastSession?.name ?? null, recommendationName: null, turn })}</p>
@@ -261,7 +261,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
             <Section n="03" title="Ask Coach Haris" subtitle="Real coaching guidance, whenever you need it.">
               <div className="space-y-2">
                 {QUESTIONS.map((item, i) => (
-                  <div key={item.q} className="rounded-md border border-coach-line bg-coach-card">
+                  <div key={item.q} className="app-card">
                     <button type="button" aria-expanded={openQ === i} onClick={() => setOpenQ(openQ === i ? null : i)} className="flex min-h-13 w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold">
                       <item.icon className="h-5 w-5 shrink-0 text-coach-gold" /><span className="flex-1">{item.q}</span>
                       <ChevronRight className={`h-5 w-5 shrink-0 text-coach-muted transition-transform ${openQ === i ? "rotate-90" : ""}`} />
@@ -273,7 +273,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               <p className="pt-2 text-xs font-bold uppercase tracking-wide text-coach-muted">More topics</p>
               <div className="grid items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {TOPICS.map((t, i) => (
-                  <div key={t.title} className="rounded-md border border-coach-line bg-coach-card">
+                  <div key={t.title} className="app-card">
                     <button type="button" aria-expanded={openTopic === i} onClick={() => setOpenTopic(openTopic === i ? null : i)} className="flex h-20 w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold">
                       <span className="flex h-10 min-w-0 items-center leading-5">{t.title}</span><ChevronDown className={`h-4 w-4 shrink-0 text-coach-muted transition-transform ${openTopic === i ? "rotate-180" : ""}`} />
                     </button>
@@ -303,7 +303,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
                         { icon: NotebookPen, label: "Last trained", value: snapshot.lastSession?.date ?? "—" },
                         { icon: Trophy, label: "Personal record", value: snapshot.personalRecord ?? "—" },
                       ].map((m) => (
-                        <button type="button" key={m.label} onClick={() => go("/logbook")} className="flex min-h-24 flex-col items-center justify-start gap-1 rounded-md border border-coach-line bg-coach-card p-3 text-center transition-colors hover:border-coach-gold/70">
+                        <button type="button" key={m.label} onClick={() => go("/logbook")} className="app-card flex min-h-24 flex-col items-center justify-start gap-1 p-3 text-center transition-colors">
                           <m.icon className="h-5 w-5 shrink-0 text-coach-gold" />
                           <span className="line-clamp-2 flex h-10 items-center text-sm font-extrabold leading-5">{m.value}</span>
                           <span className="line-clamp-2 flex h-[1.875rem] items-center text-[11px] leading-[0.9375rem] text-coach-muted">{m.label}</span>

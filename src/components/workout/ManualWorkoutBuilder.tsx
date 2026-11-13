@@ -39,7 +39,7 @@ function SectionCard({
   };
 
   return (
-    <section className="rounded-3xl border border-coach-line bg-card p-5">
+    <section className="app-card p-5">
       <h2 className="text-lg font-extrabold">{section.label}</h2>
       <div className="mt-3 space-y-2">
         {list.length === 0 ? (
@@ -143,7 +143,7 @@ export function ManualWorkoutBuilder({
 
   return (
     <div className="space-y-4">
-      <section className="rounded-3xl border border-coach-line bg-card p-5">
+      <section className="app-card p-5">
         <h2 className="text-lg font-extrabold">Name your workout</h2>
         <Input
           value={draft.name}

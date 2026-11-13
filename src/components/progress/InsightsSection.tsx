@@ -30,7 +30,7 @@ function Delta({ now, prev }: { now: number; prev: number }) {
 
 function Card({ title, icon: Icon, children, tone = "text-primary" }: { title: string; icon: typeof Brain; children: React.ReactNode; tone?: string }) {
   return (
-    <section className="rounded-2xl border border-border bg-card p-4 sm:p-5">
+    <section className="app-card p-4 sm:p-5">
       <h3 className="mb-3 flex items-center gap-2 text-base font-black">
         <Icon className={cn("h-5 w-5", tone)} /> {title}
       </h3>
@@ -123,7 +123,7 @@ export function InsightsCard() {
   return (
     <Collapsible id="insights" open={open} onOpenChange={setOpen} className="mt-4">
       <CollapsibleTrigger asChild>
-        <Button variant="outline" className="h-auto min-h-16 w-full justify-start gap-3 whitespace-normal rounded-2xl border border-coach-line bg-card p-4 text-left text-foreground">
+        <Button variant="outline" className="app-card h-auto min-h-16 w-full justify-start gap-3 whitespace-normal p-4 text-left text-foreground">
           <Brain className="h-5 w-5 shrink-0 text-primary" />
           <span className="min-w-0 flex-1">
             <span className="block text-base font-black">Insights</span>

@@ -56,7 +56,7 @@ export function CommunityWorkoutCard({
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") onOpen(workout.id);
       }}
-      className="flex h-full cursor-pointer flex-col rounded-3xl border border-coach-line bg-card p-5 text-left shadow-soft transition hover:shadow-md"
+      className="app-card flex h-full cursor-pointer flex-col p-5 text-left transition"
     >
       <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-primary">
         <span className="truncate">{workout.category}</span>
@@ -78,7 +78,7 @@ export function CommunityWorkoutCard({
         </p>
       )}
 
-      <div className="mt-4 rounded-2xl border border-coach-line bg-muted/40 p-3">
+      <div className="mt-4 border-t border-coach-line pt-3">
         <p className="text-[10px] font-bold uppercase tracking-wider text-primary">Created by</p>
         <div className="mt-1.5 flex items-center gap-2">
           {workout.creator_avatar ? (

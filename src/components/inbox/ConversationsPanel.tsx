@@ -238,7 +238,7 @@ export function ConversationsPanel({
       </div>
 
       {composing && (
-        <div className="mb-5 space-y-3 rounded-2xl border border-coach-line bg-card p-4">
+        <div className="app-card mb-5 space-y-3 p-4">
           <p className="text-sm text-muted-foreground">Ask a question or report a problem. Our reply will appear here in Messages.</p>
           <Input
             placeholder="Subject"

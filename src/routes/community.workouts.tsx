@@ -228,7 +228,7 @@ function BrowsePage() {
         </Link>
       </div>
 
-      <div className="rounded-3xl border border-coach-line bg-card p-5">{filterBody}</div>
+      <div className="app-card p-5">{filterBody}</div>
 
       {loading && rows.length === 0 ? (
         <div className="flex min-h-[30vh] items-center justify-center">

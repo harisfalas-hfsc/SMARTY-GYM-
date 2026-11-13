@@ -86,17 +86,17 @@ function Stat({
         type="button"
         variant="outline"
         onClick={onClick}
-        className="h-auto min-h-32 w-full items-start justify-start whitespace-normal rounded-2xl border border-coach-line bg-card p-4 text-left text-foreground"
+        className="app-card h-auto min-h-32 w-full items-start justify-start whitespace-normal p-4 text-left text-foreground"
       >
         <span>{body}</span>
       </Button>
     );
-  if (!to) return <div className="rounded-2xl border border-coach-line bg-card p-4">{body}</div>;
+  if (!to) return <div className="app-card p-4">{body}</div>;
   return (
     <Link
       to="/logbook"
       search={{ filter: to.filter, view: "list" as const }}
-      className="block rounded-2xl border border-coach-line bg-card p-4 transition"
+      className="app-card block p-4 transition"
     >
       {body}
       <span className="mt-2 block text-[11px] font-semibold text-primary">See these workouts →</span>
@@ -210,7 +210,7 @@ export function ProgressSection() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-3xl border border-coach-line bg-card p-5 sm:p-7">
+      <section className="app-card p-5 sm:p-7">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-primary">Progress report</p>
@@ -232,7 +232,7 @@ export function ProgressSection() {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-coach-line bg-card p-5 sm:p-7">
+      <section className="app-card p-5 sm:p-7">
         <p className="text-xs font-bold uppercase tracking-wider text-primary">Smarty Progress</p>
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
           <button type="button" onClick={() => setDetail("score")} className="text-left">
@@ -315,7 +315,7 @@ export function ProgressSection() {
             const unit = CATEGORY_UNIT[category] ?? "";
             const pct = next ? Math.min(100, Math.round((value / next.threshold) * 100)) : 100;
             return (
-              <div key={category} className="rounded-2xl border border-coach-line bg-card p-4">
+              <div key={category} className="app-card p-4">
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="font-bold">{CATEGORY_LABEL[category]}</p>
                   <p className="text-xs text-muted-foreground">

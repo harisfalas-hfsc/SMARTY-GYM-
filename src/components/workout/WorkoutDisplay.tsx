@@ -225,7 +225,7 @@ export function WorkoutDisplay({
   return (
     <ExerciseMediaProvider ids={ids}>
       <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:py-12 lg:max-w-6xl lg:px-8 lg:py-16">
-        <header ref={headerRef} className="rounded-3xl border border-coach-line bg-card p-5 sm:p-7">
+        <header ref={headerRef} className="app-card p-5 sm:p-7">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             <span>{workout.category}</span>
             {workout.format ? <span>· {workout.format}</span> : null}
@@ -326,19 +326,19 @@ export function WorkoutDisplay({
           </Button>
         </div>
 
-        <article className="workout-html mt-5 rounded-3xl border border-coach-line bg-card p-5 sm:p-7">
+        <article className="app-card workout-html mt-5 p-5 sm:p-7">
           <ExerciseHTMLContent html={html} onOpenExercise={setOpenExercise} />
         </article>
 
         {workout.instructions_html ? (
-          <section className="workout-html mt-5 rounded-2xl border border-coach-line bg-card p-5">
+          <section className="app-card workout-html mt-5 p-5">
             <h2 className="mb-2 text-lg font-bold">How to perform this workout</h2>
             <div dangerouslySetInnerHTML={{ __html: instructionsHtml }} />
           </section>
         ) : null}
 
         {workout.tips_html ? (
-          <section className="workout-html mt-5 rounded-2xl border border-coach-line bg-card p-5">
+          <section className="app-card workout-html mt-5 p-5">
             <h2 className="mb-2 text-lg font-bold">Coach tips</h2>
             <div dangerouslySetInnerHTML={{ __html: tipsHtml }} />
           </section>

@@ -40,7 +40,7 @@ export function MemberCard({
   stats: { label: string; value: string | number }[];
 }) {
   return (
-    <article className="flex h-full flex-col rounded-3xl border border-coach-line bg-card p-5 shadow-soft">
+    <article className="app-card flex h-full flex-col p-5">
       <div className="flex items-center gap-3">
         {rank ? (
           <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-coach-line text-sm font-black text-primary ">
@@ -100,7 +100,7 @@ export function LeaderRow({
   badge?: CommunityBadge | undefined;
 }) {
   return (
-    <li className="flex items-center gap-3 rounded-2xl border border-coach-line bg-card p-3 ">
+    <li className="app-card flex items-center gap-3 p-3">
       <span className="w-6 shrink-0 text-sm font-black text-primary">#{rank}</span>
       <MemberAvatar name={member.display_name} avatar={member.avatar_url} size={8} />
       <div className="min-w-0 flex-1">

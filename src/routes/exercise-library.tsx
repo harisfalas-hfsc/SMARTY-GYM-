@@ -722,7 +722,7 @@ export function ExerciseLibraryPage({
                 {exercises.map((ex) => (
                   <div
                     key={ex.id}
-                    className="flex items-start gap-3 rounded-2xl border bg-card p-3 text-left transition-colors"
+                    className="app-card flex items-start gap-3 p-3 text-left transition-colors"
                   >
                     <a
                       href={ex.slug ? `/exercise-library/${ex.slug}` : undefined}

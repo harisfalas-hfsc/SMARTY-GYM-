@@ -17,7 +17,7 @@ function LoadRow({
   icon: typeof Dumbbell;
 }) {
   return (
-    <div className="rounded-2xl border border-coach-line bg-card p-4">
+    <div className="app-card p-4">
       <p className="flex items-center gap-2 font-bold text-primary">
         <Icon className="h-4 w-4 shrink-0" />
         {label}
@@ -56,7 +56,7 @@ export function TrainingLoadPanel() {
 
   if (loading) {
     return (
-      <div className="mt-3 rounded-2xl border border-coach-line bg-card p-4">
+      <div className="app-card mt-3 p-4">
         <Loader2 className="h-4 w-4 animate-spin text-primary" />
       </div>
     );
@@ -73,7 +73,7 @@ export function TrainingLoadPanel() {
 
   return (
     <div className="mt-3 space-y-3">
-      <div className="rounded-2xl border border-coach-line bg-card p-4">
+      <div className="app-card p-4">
         <p className="flex items-center gap-2 font-bold text-primary">
           <Gauge className="h-4 w-4 shrink-0" /> Readiness
         </p>
@@ -95,7 +95,7 @@ export function TrainingLoadPanel() {
       </div>
 
       {!showExample && data.coverage.level !== "complete" ? (
-        <div className="rounded-2xl border border-coach-line bg-card p-4">
+        <div className="app-card p-4">
           <p className="flex items-center gap-2 font-bold text-primary">
             <Info className="h-4 w-4 shrink-0" /> Why data is limited
           </p>

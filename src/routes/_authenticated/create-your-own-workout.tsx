@@ -119,7 +119,7 @@ function QuestionCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border border-coach-line bg-card p-5 shadow-sm sm:p-6">
+    <section className="app-card p-5 sm:p-6">
       <div className="mb-4 flex items-start gap-3">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <Icon className="h-5 w-5" />
@@ -350,7 +350,7 @@ function CoachPage() {
 
 
   const modeToggle = (
-    <div className="mb-6 grid grid-cols-2 gap-2 rounded-3xl border border-coach-line bg-card p-1.5">
+    <div className="app-card mb-6 grid grid-cols-2 gap-2 p-1.5">
       {(["coach", "build"] as const).map((m) => (
         <button
           key={m}
@@ -375,7 +375,7 @@ function CoachPage() {
           title="Complete your training profile first"
           subtitle="Your workout builds around you — it needs your profile before the first workout."
         />
-        <div className="rounded-2xl border border-coach-line bg-card p-5 text-center">
+        <div className="app-card p-5 text-center">
           <p className="text-sm text-muted-foreground">
             Your age, level, goal, equipment, environment, session length and health
             acknowledgement are required once. After that, every workout combines your profile with

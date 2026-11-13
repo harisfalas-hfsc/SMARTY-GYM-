@@ -460,7 +460,7 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex h-full flex-col overflow-hidden rounded-3xl border border-coach-line bg-card shadow-soft">
+    <section className="app-card flex h-full flex-col overflow-hidden">
       <header className="border-b border-coach-line bg-muted/40 p-4">
         <h2 className="flex h-7 items-center gap-2 text-lg font-extrabold uppercase tracking-tight">
           <Icon className="h-5 w-5 text-primary" />

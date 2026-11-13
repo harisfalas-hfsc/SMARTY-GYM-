@@ -38,7 +38,7 @@ export function SignInDetails({ email }: { email: string | null | undefined }) {
   }
 
   return (
-    <section className="mt-4 rounded-2xl border border-coach-line bg-card p-5">
+    <section className="app-card mt-4 p-5">
       <p className="font-bold">Sign-in details</p>
       <p className="mt-1 text-sm text-muted-foreground">Current email: {email ?? "—"}</p>
       <div className="mt-3 grid gap-2">

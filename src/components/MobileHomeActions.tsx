@@ -195,7 +195,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
               <CarouselItem key={action.to} className="basis-[75%] pl-3 sm:basis-[60%]">
                 <Link
                   to={action.to}
-                  className="flex flex-col overflow-hidden rounded-xl border border-coach-line bg-card transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+                  className="app-card flex flex-col overflow-hidden transition-all duration-300"
                 >
                   <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
                     <img
@@ -257,7 +257,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
                 key={workout.id}
                 to="/smarty-workouts/$workoutId"
                 params={{ workoutId: workout.id }}
-                className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border border-coach-line bg-card p-1.5 transition-colors duration-300"
+                className="app-card flex h-[68px] items-center gap-3 overflow-hidden p-1.5 transition-colors duration-300"
               >
                 <div className="relative h-[58px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
                   <img
@@ -315,7 +315,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
                 <CarouselItem key={action.to} className="basis-[75%] pl-3 sm:basis-[60%]">
                   <Link
                     to={action.to}
-                    className="flex flex-col overflow-hidden rounded-xl border border-coach-line bg-card transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+                    className="app-card flex flex-col overflow-hidden transition-all duration-300"
                   >
                     <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
                       <img
@@ -402,7 +402,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
             <Link
               key={card.to}
               to={card.to}
-              className="flex h-[68px] items-center gap-3 overflow-hidden rounded-xl border border-coach-line bg-card p-1.5 transition-colors duration-300"
+              className="app-card flex h-[68px] items-center gap-3 overflow-hidden p-1.5 transition-colors duration-300"
             >
               <div className={cn("relative shrink-0 overflow-hidden rounded-lg bg-primary/10", card.thumbClass)}>
                 <img

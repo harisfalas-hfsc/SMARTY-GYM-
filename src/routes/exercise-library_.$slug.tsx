@@ -128,7 +128,7 @@ function ExerciseCard({ ex }: { ex: ExerciseLink }) {
     <Link
       to="/exercise-library/$slug"
       params={{ slug: ex.slug }}
-      className="flex items-center gap-3 rounded-2xl border bg-card p-3 transition-colors"
+      className="app-card flex items-center gap-3 p-3 transition-colors"
     >
       <ExerciseGif path={ex.gif_path} alt={`${ex.name} demonstration`} />
       <span className="min-w-0 flex-1">
@@ -149,7 +149,7 @@ function WorkoutCard({ w }: { w: WorkoutLink }) {
   return (
     <a
       href={w.path}
-      className="group overflow-hidden rounded-2xl border bg-card transition-colors"
+      className="app-card group overflow-hidden transition-colors"
     >
       {w.image_url ? (
         <img

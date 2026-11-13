@@ -326,7 +326,7 @@ function WorkoutPage() {
 
 
       {ownCreation && (
-      <section className="mt-6 rounded-2xl border border-coach-line bg-card p-5">
+      <section className="app-card mt-6 p-5">
         <h3 className="flex items-center gap-2 text-lg font-bold">
           <Share2 className="h-4 w-4 text-primary" /> Smarty Community
         </h3>
@@ -413,7 +413,7 @@ function WorkoutPage() {
           I finished this workout
         </Button>
       ) : (
-        <section className="mt-6 space-y-4 rounded-2xl border border-coach-line bg-card p-5">
+        <section className="app-card mt-6 space-y-4 p-5">
           <div>
             <h3 className="text-lg font-bold">Your session debrief</h3>
             <p className="mt-1 text-sm text-muted-foreground">

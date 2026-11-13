@@ -12,7 +12,7 @@ export type SmartyTone =
   | "pink"
   | "blue";
 
-// Single brand tone: every card across the site uses the same blue border.
+// Card shells stay neutral; brand colour belongs to text and controls.
 const BLUE = {
   border: "border border-coach-line",
   text: "text-blue-500 dark:text-blue-300",
@@ -97,10 +97,11 @@ export function SmartyCard({
   return (
     <div
       className={cn(
-        "relative flex flex-col overflow-hidden rounded-3xl bg-card p-7 shadow-soft sm:p-9",
+        "relative flex flex-col overflow-hidden p-7 sm:p-9",
         t.border,
         centered && "text-center",
         className,
+        "app-card",
       )}
     >
       {hasHeader && (
@@ -217,7 +218,7 @@ export function SmartyPill({ tone = "cyan", icon, children }: SmartyPillProps) {
   return (
     <div
       className={cn(
-        "grid min-h-14 grid-cols-[2rem_minmax(0,1fr)] items-center gap-4 rounded-xl border bg-card px-4 py-3",
+        "app-card grid min-h-14 grid-cols-[2rem_minmax(0,1fr)] items-center gap-4 px-4 py-3",
         t.softBorder,
       )}
     >

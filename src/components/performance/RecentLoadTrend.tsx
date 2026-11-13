@@ -82,14 +82,14 @@ export function RecentLoadTrend() {
 
   if (sessions === null) {
     return (
-      <div className="rounded-2xl border border-coach-line bg-card p-4">
+      <div className="app-card p-4">
         <Loader2 className="h-4 w-4 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-coach-line bg-card p-4">
+    <div className="app-card p-4">
       <p className="font-bold">Last 10 sessions</p>
       <p className="mt-1 text-xs text-muted-foreground">
         One point per recorded session. Each session stands on its own, so

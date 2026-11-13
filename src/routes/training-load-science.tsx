@@ -120,7 +120,7 @@ function TrainingLoadSciencePage() {
         />
 
         <section className="mx-auto max-w-3xl">
-          <div className="relative overflow-hidden rounded-2xl border border-coach-line bg-card p-6 shadow-[0_20px_60px_-30px_var(--primary)] sm:p-8">
+          <div className="app-card relative overflow-hidden p-6 sm:p-8">
             <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
             <div className="relative flex items-center gap-3">
               <div className="icon-tone-1 grid h-11 w-11 shrink-0 place-items-center rounded-lg border">
@@ -161,7 +161,7 @@ function TrainingLoadSciencePage() {
               </SmartyCard>
             ))}
           </div>
-          <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-border bg-card/60 px-5 py-4 text-center text-sm leading-6 text-muted-foreground">
+          <div className="app-card mx-auto mt-4 max-w-3xl px-5 py-4 text-center text-sm leading-6 text-muted-foreground">
             Bodyweight repetitions are never converted into invented kilograms. Missing values are left missing, not treated as zero, and unlike measurements are never added together.
           </div>
         </section>
@@ -172,7 +172,7 @@ function TrainingLoadSciencePage() {
             <h2 className="mt-2 text-2xl font-extrabold uppercase sm:text-3xl">Your last seven days versus your own baseline</h2>
           </div>
           <div className="mt-6 grid gap-4 lg:grid-cols-2">
-            <div className="rounded-2xl border border-coach-line bg-card p-6">
+            <div className="app-card p-6">
               <div className="icon-tone-2 grid h-11 w-11 place-items-center rounded-lg border">
                 <CalendarRange className="h-5 w-5" />
               </div>
@@ -181,7 +181,7 @@ function TrainingLoadSciencePage() {
                 SmartyGym totals comparable work from your most recent seven days, then compares it with your typical week across the preceding three weeks. A single unusual measurement cannot dominate the result because the middle of the available comparisons is used.
               </p>
             </div>
-            <div className="rounded-2xl border border-coach-line bg-card p-6" aria-label="Training load states">
+            <div className="app-card p-6" aria-label="Training load states">
               <div className="icon-tone-3 grid h-11 w-11 place-items-center rounded-lg border">
                 <BarChart3 className="h-5 w-5" />
               </div>
@@ -222,7 +222,7 @@ function TrainingLoadSciencePage() {
             <h2 className="mt-2 text-2xl font-extrabold uppercase sm:text-3xl">As accurate as the training you record</h2>
           </div>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-coach-line bg-card p-6">
+            <div className="app-card p-6">
               <div className="icon-tone-4 grid h-11 w-11 place-items-center rounded-lg border">
                 <Target className="h-5 w-5" />
               </div>
@@ -231,7 +231,7 @@ function TrainingLoadSciencePage() {
                 The calculation is exact for the information entered: recorded sets, reps, external weight, time, distance, rounds, intervals and effort. Its usefulness grows as you log consistently and build comparable history. If a measure is not recorded, SmartyGym cannot infer it — and deliberately does not try.
               </p>
             </div>
-            <div className="rounded-2xl border border-coach-line bg-card p-6">
+            <div className="app-card p-6">
               <div className="icon-tone-5 grid h-11 w-11 place-items-center rounded-lg border">
                 <Stethoscope className="h-5 w-5" />
               </div>

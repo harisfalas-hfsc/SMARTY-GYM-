@@ -261,7 +261,7 @@ function BrowsePage() {
       </div>
 
       {search.creator ? (
-        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-coach-line bg-card px-4 py-3">
+        <div className="app-card mb-4 flex items-center justify-between gap-3 px-4 py-3">
           <p className="min-w-0 truncate text-sm font-bold">
             Shared workouts by <span className="text-primary">{search.creatorName || "Smarty member"}</span>
           </p>
@@ -276,7 +276,7 @@ function BrowsePage() {
         </div>
       ) : null}
 
-      <div className="rounded-3xl border border-coach-line bg-card p-5">{filterBody}</div>
+      <div className="app-card p-5">{filterBody}</div>
 
       {loading && rows.length === 0 ? (
         <div className="flex min-h-[30vh] items-center justify-center">

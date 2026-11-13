@@ -163,7 +163,7 @@ export function CommunityEngagementPanel({
 
   if (unavailable)
     return (
-      <section className="mt-6 rounded-3xl border border-coach-line bg-card p-5">
+      <section className="app-card mt-6 p-5">
         <p className="text-xs font-bold uppercase tracking-wider text-primary">Community workout</p>
         <p className="mt-2 text-sm text-muted-foreground">{unavailable}</p>
       </section>
@@ -173,7 +173,7 @@ export function CommunityEngagementPanel({
 
   return (
     <>
-      <section className="mt-6 rounded-3xl border border-coach-line bg-card p-5">
+      <section className="app-card mt-6 p-5">
         <p className="text-xs font-bold uppercase tracking-wider text-primary">Community workout</p>
 
         <div className="mt-3 flex items-center gap-3 rounded-2xl border border-coach-line p-3 ">
@@ -257,7 +257,7 @@ export function CommunityEngagementPanel({
         </div>
       </section>
 
-      <section id="comments" className="mt-6 rounded-3xl border border-coach-line bg-card p-5">
+      <section id="comments" className="app-card mt-6 p-5">
         <h3 className="text-lg font-bold">Comments ({comments.length})</h3>
         <div className="mt-3 flex gap-2">
           <Textarea

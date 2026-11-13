@@ -181,7 +181,7 @@ function Account() {
         subtitle="Your personal details and preferences."
       />
 
-      <section className="mt-6 rounded-2xl border border-coach-line bg-card p-5">
+      <section className="app-card mt-6 p-5">
         <div className="flex items-center gap-3">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
             <User className="h-5 w-5" />
@@ -208,7 +208,7 @@ function Account() {
       <DailyCoachingSettings premium={premium === true} />
 
       {freeAccessMode || !paymentsConfigured() ? null : (
-        <section className="mt-4 rounded-2xl border border-coach-line bg-card p-5">
+        <section className="app-card mt-4 p-5">
           <div className="flex items-center gap-3">
             <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
               <Crown className="h-5 w-5" />
@@ -272,7 +272,7 @@ function Account() {
 
 
 
-      <section className="mt-4 rounded-2xl border border-coach-line bg-card p-5">
+      <section className="app-card mt-4 p-5">
         <p className="font-bold">Need a hand?</p>
         <p className="mt-1 text-sm text-muted-foreground">
           Everything in SmartyGym is free for members.
@@ -286,7 +286,7 @@ function Account() {
 
 
       {freeAccessMode || !paymentsConfigured() ? null : (
-        <section className="mt-4 rounded-2xl border border-coach-line bg-card p-5">
+        <section className="app-card mt-4 p-5">
           <div className="flex items-center gap-3">
             <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">
               <CreditCard className="h-5 w-5" />
@@ -345,7 +345,7 @@ function Account() {
 
       <SignInDetails email={user?.email} />
 
-      <section className="mt-4 rounded-2xl border border-coach-line bg-card p-5">
+      <section className="app-card mt-4 p-5">
         <p className="font-bold">Delete account</p>
         <p className="mt-1 text-sm text-muted-foreground">
           This permanently removes your profile, workouts, logbook and notifications.

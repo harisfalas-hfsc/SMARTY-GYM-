@@ -162,7 +162,7 @@ function Notice({ back, seo, title, text, children }: { back: React.ReactNode; s
     <div className="mx-auto w-full max-w-xl px-4 py-12 lg:max-w-6xl lg:px-8 lg:py-16">
       {back}
       {seo && (
-        <div className="mt-4 overflow-hidden rounded-2xl border border-coach-line bg-card">
+        <div className="app-card mt-4 overflow-hidden">
           {(seo.image ?? fallback) && (
             <div className="relative aspect-[3/2] bg-muted lg:aspect-[16/7]">
               <img src={coverVariant(seo.image_url, 1280) ?? fallback} onError={fallbackTo(seo.image_url ?? fallback)} alt={seo.name} decoding="async" className="h-full w-full object-cover" />
@@ -181,7 +181,7 @@ function Notice({ back, seo, title, text, children }: { back: React.ReactNode; s
           </div>
         </div>
       )}
-      <div className="mt-4 rounded-3xl border border-coach-line bg-card p-6 text-center">
+      <div className="app-card mt-4 p-6 text-center">
         {seo ? <h2 className="text-xl font-extrabold">{title}</h2> : <h1 className="text-xl font-extrabold">{title}</h1>}
         <p className="mt-2 text-sm text-muted-foreground">{text}</p>
         {children && <div className="mt-4 flex justify-center">{children}</div>}

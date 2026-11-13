@@ -72,7 +72,7 @@ function InboxPage() {
         />
       </div>
 
-      <p className="mb-4 rounded-2xl border border-border-strong bg-card px-4 py-3 text-sm text-muted-foreground">
+      <p className="app-card mb-4 px-4 py-3 text-sm text-muted-foreground">
         {tab === "updates"
           ? "Updates sent to you: new workouts and articles, check-in reminders, Smarty Coach and your weekly Insights. Tap one to read it."
           : "Your conversations with the SMARTYGYM team. When you write to us here or through the Contact page, our replies appear in the same conversation below."}

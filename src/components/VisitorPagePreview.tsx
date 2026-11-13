@@ -68,7 +68,7 @@ export function VisitorPagePreview({ pathname }: { pathname: string }) {
   const dismiss = () => void router.navigate({ to: "/" });
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 px-4 backdrop-blur-sm" onClick={(e) => e.target === e.currentTarget && dismiss()}>
-      <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 text-center">
+      <div className="app-card w-full max-w-xl p-6 text-center">
         <h1 className="text-2xl font-bold text-foreground">{info.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{info.text}</p>
         <ul className="mt-5 space-y-2 text-left">

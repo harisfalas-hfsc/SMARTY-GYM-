@@ -105,7 +105,7 @@ function ValueGrid({ items }: { items: typeof promiseValues }) {
   return (
     <div className="grid grid-cols-4 gap-5">
       {items.map(({ title, text, image, Icon }) => (
-        <article key={title} className="overflow-hidden rounded-lg border border-border bg-card">
+        <article key={title} className="app-card overflow-hidden">
           <div className="aspect-[16/9] overflow-hidden">
             <img src={image} alt="" loading="lazy" width={703} height={450} className="h-full w-full object-cover" />
           </div>
@@ -129,7 +129,7 @@ export function DesktopHomeStory() {
           <Heading ghost="EXPLORE" eyebrow="More in SmartyGym">Everything In One Place</Heading>
           <div className="grid grid-cols-4 gap-5">
             {destinations.map((destination) => (
-              <Link key={destination.title} to={destination.to} className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card">
+              <Link key={destination.title} to={destination.to} className="app-card group flex flex-col overflow-hidden">
                 <div className="aspect-[16/9] overflow-hidden">
                   <img src={destination.image} alt={destination.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
                 </div>
@@ -152,7 +152,7 @@ export function DesktopHomeStory() {
           </p>
           <div className="mt-10 grid grid-cols-4 gap-5">
             {partnerValues.map(({ title, text, image, Icon }) => (
-              <article key={title} className="overflow-hidden rounded-lg border border-border bg-card">
+              <article key={title} className="app-card overflow-hidden">
                 <img src={image} alt="" loading="lazy" width={703} height={450} className="aspect-[16/9] w-full object-cover" />
                 <div className="p-5">
                   <h3 className="flex items-center gap-2 font-bold text-foreground"><Icon className={`h-5 w-5 ${iconInk(title)}`} />{title}</h3>
