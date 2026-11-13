@@ -55,7 +55,7 @@ const TOPICS: { title: string; items: string[] }[] = [
 
 function Section({ n, title, subtitle, children }: { n: string; title: string; subtitle?: string; children: ReactNode }) {
   return (
-    <section className="space-y-4">
+    <section className="flex min-w-0 flex-col gap-4">
       <header className="flex items-baseline gap-3 border-b border-coach-line pb-3">
         <span className="text-sm font-bold text-coach-gold">{n}</span>
         <div>
@@ -133,7 +133,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
     <Dialog open={open} onOpenChange={changeOpen}>
       <DialogContent
         onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }}
-        className="fixed inset-2 left-2 top-2 flex h-auto w-auto max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-lg border-coach-line bg-coach-bg p-0 text-coach-text outline-none sm:max-w-none md:inset-4 md:left-1/2 md:top-4 md:w-[min(64rem,calc(100vw-2rem))] md:-translate-x-1/2 [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:rounded-md [&>button]:border [&>button]:border-coach-line [&>button]:bg-coach-card [&>button]:p-2 [&>button]:text-coach-text [&>button]:opacity-100 [&>button_svg]:h-5 [&>button_svg]:w-5"
+        className="fixed inset-2 left-2 top-2 flex h-auto w-auto max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-lg border-coach-line bg-coach-bg p-0 text-coach-text outline-none sm:max-w-none md:inset-4 md:left-1/2 md:top-4 md:w-[min(72rem,calc(100vw-2rem))] md:-translate-x-1/2 [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:rounded-md [&>button]:border [&>button]:border-coach-line [&>button]:bg-coach-card [&>button]:p-2 [&>button]:text-coach-text [&>button]:opacity-100 [&>button_svg]:h-5 [&>button_svg]:w-5"
       >
         <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
           {/* Header */}
@@ -184,7 +184,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               ) : null}
             </section>
 
-            <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr]">
+            <div className="grid gap-10">
               {/* 01 Briefing */}
               <Section n="01" title="Your Daily Briefing">
                 {locked ? (
@@ -271,11 +271,11 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
                 ))}
               </div>
               <p className="pt-2 text-xs font-bold uppercase tracking-wide text-coach-muted">More topics</p>
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+              <div className="grid items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {TOPICS.map((t, i) => (
                   <div key={t.title} className="rounded-md border border-coach-line bg-coach-card">
-                    <button type="button" aria-expanded={openTopic === i} onClick={() => setOpenTopic(openTopic === i ? null : i)} className="flex min-h-12 w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm font-semibold">
-                      {t.title}<ChevronDown className={`h-4 w-4 shrink-0 text-coach-muted transition-transform ${openTopic === i ? "rotate-180" : ""}`} />
+                    <button type="button" aria-expanded={openTopic === i} onClick={() => setOpenTopic(openTopic === i ? null : i)} className="flex h-20 w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold">
+                      <span className="flex h-10 min-w-0 items-center leading-5">{t.title}</span><ChevronDown className={`h-4 w-4 shrink-0 text-coach-muted transition-transform ${openTopic === i ? "rotate-180" : ""}`} />
                     </button>
                     {openTopic === i ? <ul className="space-y-2 border-t border-coach-line px-3 py-3 text-sm text-coach-muted">{t.items.map((x) => <li key={x}>{x}</li>)}</ul> : null}
                   </div>
@@ -283,7 +283,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               </div>
             </Section>
 
-            <div className="grid gap-10 lg:grid-cols-2">
+            <div className="grid gap-10">
               {/* 04 Learn */}
               <Section n="04" title="Learn & Explore">
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">

@@ -49,7 +49,7 @@ export function CheckinHeaderAlert() {
       to="/smarty-checkins"
       aria-label={label}
       title={label}
-      className={`inline-flex h-8 w-8 animate-pulse items-center justify-center rounded-full border border-coach-line ${iconTone("Smarty Check-ins")}`}
+      className={`inline-flex h-8 w-8 animate-pulse items-center justify-center rounded-full border border-primary! ${iconTone("Smarty Check-ins")}`}
     >
       <ClipboardCheck className="h-4 w-4" />
     </Link>

@@ -1,5 +1,10 @@
 # Roadmap
 
+## Coach arrival and alignment
+- [x] Restore blue circles on header controls in both views; browser computed borders match the brand blue for Coach, Account and Inbox.
+- [x] Open Coach immediately on arrival and auth account changes in both views, preserving close and navigation. Real visitor and restored signed-in arrivals and repeat arrivals checked at 394/1280px; actual password sign-in transition not exercised.
+- [x] Widen desktop Coach and use consistent full-width section rows with equal 80px topic controls; desktop/mobile screenshots and topic expansion checked. All 558 tests pass; build OK.
+
 ## Restore CI verification
 - [x] Resolve the seven workout-check failures: restore Cardio/Challenge core exclusion, align Strength workout checks with the existing priority gate, and update obsolete test expectations without adding aliases or disabling CI. All 537 tests across 78 files pass; preview build OK. No saved workouts or member history changed; hosted GitHub Actions rerun not observed.
 
