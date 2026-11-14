@@ -142,7 +142,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
             <img src={coachPhoto} alt="Coach Haris Falas" className="h-20 w-20 shrink-0 rounded-md border border-coach-line object-cover object-top sm:h-28 sm:w-28" />
             <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-coach-gold">Smarty Coach</p>
-              <DialogTitle className="mt-1 text-2xl font-extrabold text-coach-text sm:text-4xl">Hey, I'm Haris.</DialogTitle>
+              <DialogTitle className="mt-1 text-2xl font-extrabold text-coach-text sm:text-4xl">Hey, I'm <button type="button" onClick={() => go("/haris-falas")} className="cursor-pointer font-extrabold text-primary">Haris</button>.</DialogTitle>
               <DialogDescription className="mt-1 text-sm text-coach-muted sm:text-base">
                 {member && name ? <BrandText text={`Good to see you, ${name}. Let's make today count.`} name={name} /> : "Let's make today count."}
               </DialogDescription>
@@ -191,7 +191,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
                 {locked ? (
                   <div className={`${card} space-y-4`}>
                     <p className="text-lg font-extrabold text-coach-text">A personal coach in your pocket.</p>
-                    <p className="text-sm leading-relaxed text-coach-muted">Every SMARTYGYM workout is designed by me, Haris Falas. As a Premium member I read your check-ins and your training, tell you how ready you are, what you did last and exactly what to do next.</p>
+                    <p className="text-sm leading-relaxed text-coach-muted">Every SMARTYGYM workout is designed by me, <button type="button" onClick={() => go("/haris-falas")} className="cursor-pointer font-semibold text-primary">Haris Falas</button>. As a Premium member I read your check-ins and your training, tell you how ready you are, what you did last and exactly what to do next.</p>
                     {!visitor ? <p className="text-sm font-semibold text-coach-text">{snapshot?.wasPremium ? "Your Premium membership is inactive. Reactivate it to unlock your personal briefing." : "Join Premium to unlock your personal briefing."}</p> : null}
                     <button type="button" className={goldBtn} onClick={() => (visitor ? go("/auth") : followAction())}>
                       {visitor ? "Sign in or join" : snapshot?.wasPremium ? "Reactivate Premium" : "Join Premium"} <ArrowRight className="h-4 w-4" />

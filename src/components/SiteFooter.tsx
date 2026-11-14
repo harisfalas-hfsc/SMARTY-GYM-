@@ -46,8 +46,6 @@ export function SiteFooter() {
             <span className="text-muted-foreground/40">·</span>
             <Link to="/disclaimer" className="hover:text-primary transition-colors">Disclaimer</Link>
 
-            <span className="text-muted-foreground/40">·</span>
-            <Link to="/founder-note" className="font-semibold text-primary hover:opacity-80 transition-opacity">A Note from the Coach</Link>
 
             <span className="hidden md:inline text-muted-foreground/40">·</span>
             <Link to="/the-smarty-method" className="hidden md:inline hover:text-primary transition-colors">Discover the Smarty Method</Link>
