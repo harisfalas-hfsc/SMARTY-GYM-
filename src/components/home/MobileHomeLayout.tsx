@@ -67,14 +67,14 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
         <span className="flex min-h-8 items-center text-[11px] font-bold leading-4">{title}</span>
       </Link>)}
     </nav>
-    <Button variant="ghost" onClick={() => window.dispatchEvent(new Event("smarty:open-coach"))} className="app-card mt-5 flex h-auto min-h-28 w-full justify-start gap-3 overflow-hidden p-0 text-left whitespace-normal" aria-label="Talk to Coach Haris">
-      <img src={harisImage} alt="Haris Falas" width={112} height={128} className="h-32 w-24 shrink-0 object-cover object-top" />
-      <span className="flex min-w-0 flex-1 flex-col gap-1 py-3">
-        <span className="text-[10px] font-bold uppercase">Smarty <span className="brand-ink">Coach</span></span>
-        <span className="text-base font-extrabold leading-5">Talk to Coach Haris.</span>
-        <span className="text-xs font-normal leading-5 text-muted-foreground">Your daily briefing and personal recommendation.</span>
+    <Button variant="ghost" onClick={() => window.dispatchEvent(new Event("smarty:open-coach"))} className="coach-promo mt-5 flex h-24 w-full justify-start gap-3 overflow-hidden p-0 text-left whitespace-normal" aria-label="Talk to Coach Haris">
+      <img src={harisImage} alt="Haris Falas" width={96} height={96} className="h-24 w-24 shrink-0 object-cover object-top" />
+      <span className="flex min-w-0 flex-1 flex-col justify-center gap-0.5">
+        <span className="text-[10px] font-bold uppercase tracking-wide">Smarty <span className="brand-ink">Coach</span></span>
+        <span className="text-[15px] font-extrabold leading-5">Talk to Coach Haris.</span>
+        <span className="line-clamp-2 text-[11px] font-normal leading-4 text-muted-foreground">Daily briefing & personal recommendation</span>
       </span>
-      <ChevronRight className="mr-3 h-5 w-5 shrink-0" />
+      <span className="mr-3 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-blue text-hero-foreground"><ChevronRight className="h-5 w-5" /></span>
     </Button>
     {featured.length > 0 && <section aria-label="Featured Workouts" className="mt-7">
       <div className="mb-3 flex items-center justify-between gap-2">

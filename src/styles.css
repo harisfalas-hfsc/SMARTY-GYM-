@@ -265,6 +265,7 @@
   border-color: var(--color-coach-line);
   box-shadow: none;
 }
+.coach-promo { border: 1.5px solid var(--brand-blue); border-radius: var(--radius-card); background: linear-gradient(90deg, color-mix(in oklab, var(--brand-blue) 10%, var(--card)), var(--card)); box-shadow: 0 6px 18px -10px color-mix(in oklab, var(--brand-blue) 60%, transparent); }
 .coach-floor { --card: var(--color-coach-card); }
 
 /* One mobile palette for every route and portalled menu/dialog. Desktop tokens
