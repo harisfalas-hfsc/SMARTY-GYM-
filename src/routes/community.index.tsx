@@ -379,7 +379,7 @@ function CommunityPage() {
         <p className="mt-4 text-center text-sm text-muted-foreground">
           {freeAccessMode ? (
             <>
-              <Link to="/auth" className="font-semibold text-primary underline underline-offset-4 hover:text-primary/80">
+              <Link to="/auth" className="font-semibold text-primary hover:text-primary/80">
                 Sign in
               </Link>{" "}
               to open workouts, like, comment, and train shared sessions.
@@ -388,7 +388,7 @@ function CommunityPage() {
             <>
               <Link
                 to="/auth"
-                className="font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
+                className="font-semibold text-primary hover:text-primary/80"
               >
                 {access.signedIn ? (access.wasPremium ? "Renew membership" : "Subscribe") : "Join SmartyGym"}
               </Link>{" "}

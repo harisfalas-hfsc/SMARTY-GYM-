@@ -574,7 +574,7 @@ function WhyInvestInSmartyGym() {
                 </p>
                 <Link
                   to="/best-online-fitness-platform"
-                  className="inline-flex items-center gap-1 font-semibold text-green-600 hover:underline dark:text-green-500"
+                  className="inline-flex items-center gap-1 font-semibold text-green-600 dark:text-green-500"
                 >
                   Best Online Fitness Platforms 2026
                   <ChevronRight className="h-4 w-4" />
@@ -846,7 +846,7 @@ function WhyInvestInSmartyGym() {
                     href="https://www.who.int/publications/i/item/9789240059153"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary"
                   >
                     WHO Publications <ExternalLink className="h-3 w-3" />
                   </a>
@@ -861,7 +861,7 @@ function WhyInvestInSmartyGym() {
                     href="https://www.acsm.org"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary"
                   >
                     ACSM <ExternalLink className="h-3 w-3" />
                   </a>
@@ -876,7 +876,7 @@ function WhyInvestInSmartyGym() {
                     href="https://www.health.harvard.edu"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary"
                   >
                     Harvard Health <ExternalLink className="h-3 w-3" />
                   </a>
@@ -891,7 +891,7 @@ function WhyInvestInSmartyGym() {
                     href="https://www.apa.org/news/press/releases/stress"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary"
                   >
                     APA Research <ExternalLink className="h-3 w-3" />
                   </a>
@@ -906,7 +906,7 @@ function WhyInvestInSmartyGym() {
                     href="https://www.nimh.nih.gov"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary"
                   >
                     NIMH <ExternalLink className="h-3 w-3" />
                   </a>
@@ -921,7 +921,7 @@ function WhyInvestInSmartyGym() {
                     href="https://journals.lww.com/nsca-jscr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary"
                   >
                     JSCR <ExternalLink className="h-3 w-3" />
                   </a>
@@ -938,7 +938,7 @@ function WhyInvestInSmartyGym() {
                     href="https://www.rand.org/pubs/research_reports/RR254.html"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary"
                   >
                     RAND Research <ExternalLink className="h-3 w-3" />
                   </a>
@@ -953,7 +953,7 @@ function WhyInvestInSmartyGym() {
                     href="https://bjsm.bmj.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary"
                   >
                     BJSM <ExternalLink className="h-3 w-3" />
                   </a>

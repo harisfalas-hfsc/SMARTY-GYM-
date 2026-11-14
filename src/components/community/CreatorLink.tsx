@@ -46,7 +46,7 @@ export function CreatorLink({
         if (e.key === "Enter" || e.key === " ") go(e);
       }}
       className={cn(
-        "cursor-pointer underline-offset-2 hover:text-primary hover:underline focus-visible:underline focus-visible:outline-none",
+        "cursor-pointer underline-offset-2 hover:text-primary focus-visible:outline-none",
         className,
       )}
     >

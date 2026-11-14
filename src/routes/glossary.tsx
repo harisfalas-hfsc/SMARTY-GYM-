@@ -237,7 +237,7 @@ function GlossaryPage() {
                   <Link
                     to="/training/$slug"
                     params={{ slug: cat.topicSlug }}
-                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
                   >
                     Read more<span className="sr-only"> about {cat.name}</span>
                     <ArrowRight className="h-4 w-4 shrink-0" />
@@ -263,7 +263,7 @@ function GlossaryPage() {
               <Link
                 to="/training/$slug"
                 params={{ slug: topic.slug }}
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-primary"
               >
                 {topic.h1}
                 <ArrowRight className="h-4 w-4 shrink-0" />

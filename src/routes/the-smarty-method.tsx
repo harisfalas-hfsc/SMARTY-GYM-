@@ -379,7 +379,7 @@ function TheSmartyMethod() {
           <p className="mx-auto max-w-3xl leading-relaxed text-muted-foreground">
             <SG /> is not a collection of random workouts. It is a structured ecosystem designed by
             Strength and Conditioning Coach{" "}
-            <Link to="/haris-falas" className="font-semibold text-primary hover:underline">
+            <Link to="/haris-falas" className="font-semibold text-primary">
               Haris Falas
             </Link>
             , built on science, real-world coaching experience, and intelligent periodization. Every
@@ -401,7 +401,7 @@ function TheSmartyMethod() {
               </div>
               <div className="space-y-4 leading-relaxed text-muted-foreground">
                 <p>
-                  <Link to="/haris-falas" className="font-semibold text-primary hover:underline">
+                  <Link to="/haris-falas" className="font-semibold text-primary">
                     Haris Falas
                   </Link>{" "}
                   is a qualified Strength and Conditioning Coach with a degree in Sports Science and
@@ -525,7 +525,7 @@ function TheSmartyMethod() {
           </div>
 
           <div className="mb-8 flex justify-center">
-            <Link to="/training-load-science" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline">
+            <Link to="/training-load-science" className="inline-flex items-center gap-1.5 font-semibold text-primary">
               Discover the training load science <ChevronRight className="h-4 w-4" />
             </Link>
           </div>

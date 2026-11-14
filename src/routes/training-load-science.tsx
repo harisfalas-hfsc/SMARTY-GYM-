@@ -134,7 +134,7 @@ function TrainingLoadSciencePage() {
             <div className="relative mt-5 space-y-4 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
               <p>
                 The SmartyGym training-load formula was created by Sports Scientist and Strength &amp; Conditioning Coach{" "}
-                <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>.
+                <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link>.
                 It translates the work you log into a clear training-management signal without pretending that one universal number can describe every person.
               </p>
               <p>

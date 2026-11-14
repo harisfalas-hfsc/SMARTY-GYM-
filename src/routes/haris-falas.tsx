@@ -210,7 +210,7 @@ function CoachProfilePage() {
                     href="https://hfsc.eu/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-primary underline underline-offset-2"
+                    className="font-medium text-primary"
                   >
                     HFSC
                   </a>
@@ -229,7 +229,7 @@ function CoachProfilePage() {
         </Button>
         <Link
           to="/founder-note"
-          className="inline-flex items-center gap-2 text-sm font-bold text-primary underline underline-offset-4"
+          className="inline-flex items-center gap-2 text-sm font-bold text-primary"
         >
           <PenLine className="h-4 w-4" />
           A note from the founder

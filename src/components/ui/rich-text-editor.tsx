@@ -195,7 +195,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-primary hover:underline',
+          class: 'text-primary',
         },
       }),
       Placeholder.configure({

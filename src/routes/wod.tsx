@@ -87,13 +87,13 @@ function WodPage() {
         <div className="p-4 sm:p-6">
           <p className="mx-auto hidden max-w-3xl text-center text-base text-muted-foreground sm:block">
             Every training day <span className="font-semibold text-primary">SmartyGym</span> delivers TWO fresh, expertly designed workouts following a strategic periodization cycle — one with equipment and one without. On recovery days, we provide a single guided recovery session. Each day focuses on a different category and difficulty level. Our workouts follow a science-based periodization approach designed by{" "}
-            <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Coach Haris Falas</Link>
+            <Link to="/haris-falas" className="font-semibold text-primary">Coach Haris Falas</Link>
             , ensuring that within each weekly cycle, you train all fitness parameters. Unlike random workouts you find on YouTube or Instagram, following{" "}
             <span className="font-semibold text-primary">SmartyGym</span>'s structured program means you can rest assured that your training is reliable, professionally organized, and designed to systematically improve all aspects of your fitness.
           </p>
           <p className="mx-auto block max-w-3xl text-center text-sm text-muted-foreground sm:hidden">
             Our WOD's follow a science-based periodization approach designed by Coach{" "}
-            <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>
+            <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link>
             , ensuring that within each weekly cycle, you train all fitness parameters. Following{" "}
             <span className="font-semibold text-primary">SmartyGym</span>'s structured program means you can rest assured that your training is reliable, professionally organized, and designed to systematically improve all aspects of your fitness.
           </p>

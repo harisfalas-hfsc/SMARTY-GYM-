@@ -103,7 +103,7 @@ function FounderNotePage() {
           eyebrow="A note from the founder"
           title={<>Haris <span className="text-primary">Falas</span></>}
           subtitle={
-            <Link to="/haris-falas" className="font-semibold text-primary underline underline-offset-2">
+            <Link to="/haris-falas" className="font-semibold text-primary">
               Read the full coach profile
             </Link>
           }
@@ -135,15 +135,15 @@ function FounderNotePage() {
 
         <NoteCard icon={<UserRound size={20} />} title="My work and my mission">
           <Paragraph>
-            I also run my own physical gym, <a href="https://hfsc.eu" target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-2">HFSC</a>,
+            I also run my own physical gym, <a href="https://hfsc.eu" target="_blank" rel="noreferrer" className="font-bold text-primary">HFSC</a>,
             where I work directly with real people and real training challenges. That daily
             experience keeps my work practical, personal, and grounded in what people genuinely
             need.
           </Paragraph>
           <Paragraph>
             SmartyGym belongs to the <strong className="text-foreground">Smarty family</strong>,
-            together with <a href="https://smartydiet.com" target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-2">Smarty Diet</a>,
-            created to support personalised nutrition, and <a href="https://smartymove.com" target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-2">Smarty Move</a>,
+            together with <a href="https://smartydiet.com" target="_blank" rel="noreferrer" className="font-bold text-primary">Smarty Diet</a>,
+            created to support personalised nutrition, and <a href="https://smartymove.com" target="_blank" rel="noreferrer" className="font-bold text-primary">Smarty Move</a>,
             created for movement analysis, movement quality, and corrective guidance. Each one
             focuses on a different part of a healthier life, while sharing the same commitment to
             expert knowledge, individual needs, and practical support.
@@ -174,7 +174,7 @@ function FounderNotePage() {
         <Button asChild size="lg" className="font-extrabold uppercase">
           <Link to="/create-your-own-workout">Create your own workout</Link>
         </Button>
-        <Link to="/haris-falas" className="text-sm font-semibold text-primary underline underline-offset-2">
+        <Link to="/haris-falas" className="text-sm font-semibold text-primary">
           More about Haris Falas
         </Link>
       </div>

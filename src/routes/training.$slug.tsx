@@ -131,7 +131,7 @@ function TopicPage() {
               <li key={l.to}>
                 <Link
                   to={l.to as never}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline sm:text-base"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary sm:text-base"
                 >
                   {l.label}
                   <ArrowRight className="h-4 w-4 shrink-0" />
@@ -147,7 +147,7 @@ function TopicPage() {
               <li key={l.to}>
                 <Link
                   to={l.to as never}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline sm:text-base"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary sm:text-base"
                 >
                   {l.label}
                   <ArrowRight className="h-4 w-4 shrink-0" />

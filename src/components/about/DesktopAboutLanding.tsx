@@ -351,7 +351,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
               <p className={`mt-4 leading-relaxed text-hero-foreground/85 ${page === "home" ? "mx-auto max-w-[460px] text-base" : "text-lg"}`}>
                 Your online gym and fitness coach — built on the sports science and training
                 philosophy of{" "}
-                <Link to="/haris-falas" className="font-bold text-primary hover:underline">
+                <Link to="/haris-falas" className="font-bold text-primary">
                   Sports Scientist Haris Falas
                 </Link>
                 .

@@ -213,7 +213,7 @@ function Contact() {
               {signedIn && (
                 <p className="text-center text-xs text-muted-foreground">
                   All your conversations live in{" "}
-                  <Link to="/inbox" search={{ tab: "messages" as const, compose: false }} className="font-semibold text-primary hover:underline">
+                  <Link to="/inbox" search={{ tab: "messages" as const, compose: false }} className="font-semibold text-primary">
                     Messages
                   </Link>
                   .

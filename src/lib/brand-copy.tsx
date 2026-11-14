@@ -14,7 +14,7 @@ export function GymDescription() {
       of{" "}
       <Link
         to="/haris-falas"
-        className="whitespace-nowrap font-semibold text-primary underline underline-offset-2"
+        className="whitespace-nowrap font-semibold text-primary"
       >
         Sports Scientist Haris Falas
       </Link>

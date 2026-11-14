@@ -55,7 +55,7 @@ function SmartyRitualPage() {
       <PageHeader image={pageHeroImage}
         eyebrow="Smarty Ritual"
         title={<>Move. Reset. <span className="text-primary">Recover.</span></>}
-        subtitle={<>Your daily Morning, Midday and Evening plan for movement, recovery and performance, designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>.</>}
+        subtitle={<>Your daily Morning, Midday and Evening plan for movement, recovery and performance, designed by <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link>.</>}
       />
 
       <Card className="overflow-hidden">
@@ -68,7 +68,7 @@ function SmartyRitualPage() {
           <div className="flex flex-col items-center text-center">
             <Sparkles aria-label="Smarty Ritual" className="mb-3 h-16 w-16 text-purple-500 sm:h-20 sm:w-20" />
             <p className="mb-2 text-sm text-muted-foreground">
-              Designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>
+              Designed by <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link>
             </p>
             <h2 className="mb-2 text-2xl font-bold sm:text-3xl">
               Daily <span className="text-primary">Smarty</span> Ritual

@@ -33,7 +33,7 @@ function CoachNoteCard() {
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">A note from the coach</p>
         <p className="mt-2 text-base font-extrabold uppercase">Why I built SmartyGym</p>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Read why <Link to="/haris-falas" className="font-semibold text-primary underline underline-offset-2">Haris Falas</Link> created SmartyGym, his mission and his promise to you.
+          Read why <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link> created SmartyGym, his mission and his promise to you.
         </p>
         <div className="mt-4 flex flex-col gap-2 sm:flex-row">
           <Button asChild className="font-extrabold uppercase"><Link to="/founder-note">Read the note from the coach</Link></Button>
@@ -144,7 +144,7 @@ function AboutPage() {
         >
           <Link
             to="/why-invest-in-smartygym"
-            className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 hover:underline dark:text-green-500 dark:hover:text-green-400"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400"
           >
             Why Invest in SmartyGym
             <ChevronRight className="h-4 w-4" />
@@ -175,7 +175,7 @@ function AboutPage() {
         >
           <Link
             to="/the-smarty-method"
-            className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 hover:underline dark:text-green-500 dark:hover:text-green-400"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400"
           >
             Discover The Smarty Method
             <ChevronRight className="h-4 w-4" />

@@ -174,7 +174,7 @@ function BlogIndex() {
             <span className="block">Evidence-based training articles</span>
             <Link
               to="/haris-falas"
-              className="mt-1 block font-semibold text-primary underline underline-offset-2"
+              className="mt-1 block font-semibold text-primary"
             >
               Haris Falas, Sports Scientist, CSCS certified
             </Link>

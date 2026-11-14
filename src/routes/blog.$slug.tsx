@@ -217,7 +217,7 @@ function ArticleMissing() {
         <p className="mb-6 text-sm text-muted-foreground">
           This article does not exist or is no longer published.
         </p>
-        <Link to="/blog" className="text-sm font-semibold text-primary hover:underline">
+        <Link to="/blog" className="text-sm font-semibold text-primary">
           Back to the blog
         </Link>
       </Card>
@@ -291,7 +291,7 @@ function ArticleDetail() {
                 <div>
                   <Link
                     to="/haris-falas"
-                    className="inline-block whitespace-nowrap font-semibold text-primary hover:underline"
+                    className="inline-block whitespace-nowrap font-semibold text-primary"
                   >
                     {article.author_name ?? "Haris Falas"}
                   </Link>
@@ -324,7 +324,7 @@ function ArticleDetail() {
           </div>
 
           <div
-            className="max-w-none text-[15px] leading-7 text-foreground [&_a]:font-medium [&_a]:text-primary [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:sm:text-2xl [&_h3]:mb-2 [&_h3]:mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_li]:mb-1.5 [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:mb-4 [&_strong]:font-semibold [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5"
+            className="max-w-none text-[15px] leading-7 text-foreground [&_a]:font-medium [&_a]:text-primary [&_h2]:mb-3 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:sm:text-2xl [&_h3]:mb-2 [&_h3]:mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_li]:mb-1.5 [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:mb-4 [&_strong]:font-semibold [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5"
             dangerouslySetInnerHTML={{ __html: safeHtml }}
           />
 

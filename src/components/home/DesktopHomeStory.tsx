@@ -162,8 +162,8 @@ export function DesktopHomeStory() {
             ))}
           </div>
           <div className="mt-10 flex items-center justify-center gap-8">
-            <Link to="/why-invest-in-smartygym" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline">Why Invest in SmartyGym <ChevronRight className="h-4 w-4" /></Link>
-            <Link to="/the-smarty-method" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"><BookOpen className="h-4 w-4" /> Discover The Smarty Method <ChevronRight className="h-4 w-4" /></Link>
+            <Link to="/why-invest-in-smartygym" className="inline-flex items-center gap-1.5 font-semibold text-primary">Why Invest in SmartyGym <ChevronRight className="h-4 w-4" /></Link>
+            <Link to="/the-smarty-method" className="inline-flex items-center gap-1.5 font-semibold text-primary"><BookOpen className="h-4 w-4" /> Discover The Smarty Method <ChevronRight className="h-4 w-4" /></Link>
           </div>
           <div className="mt-12 border-t border-border pt-8">
             <p className="mb-5 text-center text-sm font-bold uppercase tracking-[0.24em] text-muted-foreground">Who is SmartyGym for?</p>
@@ -206,7 +206,7 @@ export function DesktopHomeStory() {
           <div className="grid grid-cols-[300px_minmax(0,1fr)] gap-12 border-t border-border pt-10">
             <div>
               <img src={harisPhoto} alt="Haris Falas, founder of SmartyGym" loading="lazy" className="aspect-[4/5] w-full rounded-lg object-cover" />
-              <Link to="/haris-falas" className="mt-5 inline-flex items-center gap-1.5 text-lg font-bold text-primary hover:underline">Haris Falas <ChevronRight className="h-5 w-5" /></Link>
+              <Link to="/haris-falas" className="mt-5 inline-flex items-center gap-1.5 text-lg font-bold text-primary">Haris Falas <ChevronRight className="h-5 w-5" /></Link>
               <p className="mt-1 text-sm text-muted-foreground">Founder · Sports Scientist · Strength & Conditioning Coach</p>
             </div>
             <div className="space-y-5 text-lg leading-relaxed text-muted-foreground">

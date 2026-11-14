@@ -51,7 +51,7 @@ function SmartyCheckinsPage() {
           <>
             Two 30-second check-ins a day turn how you slept, feel and lived into one Smarty Score,{" "}
             <span className="whitespace-nowrap">
-              designed by <Link to="/haris-falas" className="font-semibold text-primary hover:underline">Haris Falas</Link>
+              designed by <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link>
             </span>
             .
           </>

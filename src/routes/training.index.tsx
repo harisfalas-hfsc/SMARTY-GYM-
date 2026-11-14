@@ -98,7 +98,7 @@ function TrainingHub() {
             <Link
               to="/training/$slug"
               params={{ slug: topic.slug }}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
             >
               Read about {topic.h1.toLowerCase()}
               <ArrowRight className="h-4 w-4 shrink-0" />
