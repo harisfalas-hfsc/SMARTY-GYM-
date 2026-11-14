@@ -21,7 +21,7 @@ export function BottomNav() {
     <>
       <div aria-hidden className={`${user ? "" : "md:hidden "}h-[calc(3.5rem+env(safe-area-inset-bottom))]`} />
       <nav
-        className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur`}
+        className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label="Primary"
       >
@@ -30,13 +30,13 @@ export function BottomNav() {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("smarty:open-coach"))}
-            className="flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-muted-foreground"
+            className="flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-foreground"
           >
-            <MessageCircle className="h-5 w-5 text-primary" />
+            <MessageCircle className="h-5 w-5" />
             Coach
           </button>
         </li>
-        {items.map(({ to, label, Icon, iconColor }) => {
+        {items.map(({ to, label, Icon }) => {
           const active = pathname === to || pathname.startsWith(`${to}/`);
           return (
             <li key={to}>
@@ -45,13 +45,14 @@ export function BottomNav() {
                 {...(to === "/logbook"
                   ? { search: { filter: "all", view: "list" as const } }
                   : {})}
-                className={`flex h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold no-underline transition ${
-                  active ? "text-primary" : "text-muted-foreground"
+                className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold no-underline transition ${
+                  active ? "text-brand-blue" : "text-foreground"
                 }`}
                 style={{ textDecoration: "none" }}
               >
-                <Icon className={`h-5 w-5 ${iconColor}`} />
+                <Icon className="h-5 w-5" />
                 {label}
+                {active && <span aria-hidden className="absolute bottom-1 h-0.5 w-8 rounded-full bg-brand-blue" />}
               </Link>
             </li>
           );

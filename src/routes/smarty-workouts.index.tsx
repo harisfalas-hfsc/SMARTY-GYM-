@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { MobileCategoryTiles } from "@/components/workouts/MobileCategoryTiles";
 import { MobilePhotoCard } from "@/components/home/MobilePhotoCard";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -74,8 +75,9 @@ function SmartyWorkoutsPage() {
         }
       />
 
-      {/* Mobile: same card style as the homepage carousel */}
-      <div className="lg:hidden">
+      <MobileCategoryTiles />
+      {/* Tablet: category photo carousel */}
+      <div className="hidden md:block lg:hidden">
         <div className="mb-4 flex items-center justify-center gap-4">
           <Button type="button" variant="ghost" size="icon" onClick={() => api?.scrollPrev()} aria-label="Previous category" className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80">
             <ChevronLeft className="h-5 w-5" />

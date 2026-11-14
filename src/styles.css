@@ -328,6 +328,12 @@
     color: var(--primary-foreground);
   }
   [data-brand-logo] > span { color: var(--brand-blue); }
+  /* Explicit brand interactive tokens: active nav, selected states, links. */
+  .brand-ink { color: var(--brand-blue); }
+  .brand-selected { color: var(--brand-blue); background-color: color-mix(in oklab, var(--brand-blue) 12%, var(--background)); border-color: var(--brand-blue); }
+  .mobile-category-tile { display: flex; width: 5.25rem; height: 5.25rem; flex-direction: column; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.4rem; border: 1px solid var(--border); border-radius: 0.75rem; background: var(--card); color: var(--foreground); text-align: center; font-size: 11px; font-weight: 700; line-height: 1.15; text-decoration: none; }
+  .mobile-category-tile svg { color: var(--brand-blue); }
+  .mobile-category-tile.is-active { color: var(--brand-blue); background-color: color-mix(in oklab, var(--brand-blue) 12%, var(--background)); border-color: var(--brand-blue); }
   .mobile-accent-0 { color: var(--tone-0-fg); }
   .mobile-accent-1 { color: var(--tone-1-fg); }
   .mobile-accent-2 { color: var(--tone-2-fg); }

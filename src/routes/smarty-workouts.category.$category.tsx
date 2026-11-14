@@ -5,6 +5,7 @@ import { Loader2, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { MobileCategoryTiles } from "@/components/workouts/MobileCategoryTiles";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -184,6 +185,7 @@ function CategoryPage() {
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-[1600px] lg:px-8 lg:py-16 xl:px-12">
       <Link to="/smarty-workouts" className="mb-3 hidden text-xs md:inline-block font-bold uppercase tracking-wider text-primary">← Smarty Workouts</Link>
       <PageHeader image={detail.image} eyebrow="SMARTY WORKOUTS" title={categoryLabel(category)} subtitle={detail.description} />
+      <MobileCategoryTiles selected={category} />
 
       <div
         className="sticky z-30 -mx-4 mb-3 border-y border-border bg-background/95 px-4 py-1.5 backdrop-blur md:hidden"
