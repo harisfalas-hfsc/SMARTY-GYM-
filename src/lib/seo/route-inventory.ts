@@ -39,6 +39,7 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/faq": "indexable",
   "/contact": "indexable",
   "/glossary": "indexable",
+  "/social-media": "noindex",
   "/training/": "indexable",
   "/training/$slug": "indexable",
   "/blog/": "indexable",
