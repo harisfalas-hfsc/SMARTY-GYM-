@@ -11,6 +11,7 @@ import { fallbackTo } from "@/lib/cover-image";
 import wodImage from "@/assets/hero-wod-card.jpg";
 import workoutImage from "@/assets/smarty-workouts-card.jpg";
 import createImage from "@/assets/create-workout-card.jpg";
+import sharedImage from "@/assets/shared-workouts-card.jpg";
 import harisImage from "@/assets/haris-falas-coach.jpg";
 
 export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: number; featured: SmartyWorkoutCard[] }) {
@@ -20,6 +21,7 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
     { title: "Workout of the Day", eyebrow: "Today's featured", description: "Follow today's complete training session", image: wodImage, to: "/wod" as const },
     { title: "Smarty Workouts", eyebrow: "Expert collection", description: `${workoutCount.toLocaleString()} expert-designed workouts`, image: workoutImage, to: "/smarty-workouts" as const },
     { title: "Create Your Own Workout", eyebrow: "Your training, your way", description: "Choose your exercises or build with Smarty Coach", image: createImage, to: "/create-your-own-workout" as const },
+    { title: "Shared Workouts", eyebrow: "From the community", description: "Train with workouts shared by members", image: sharedImage, to: "/shared-workouts" as const },
   ];
   const quick = [
     { title: "Smarty Ritual", to: "/smarty-ritual" as const, Icon: Sparkles },

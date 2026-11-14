@@ -6,13 +6,13 @@ import { categoryLabel } from "@/lib/smarty-workout-row";
 /** Mobile-only scrollable category tiles; the selected one uses the brand-blue state. */
 export function MobileCategoryTiles({ selected }: { selected?: string }) {
   return (
-    <nav aria-label="Workout categories" className="-mx-4 mb-4 overflow-x-auto px-4 md:hidden [scrollbar-width:none]">
-      <ul className="flex gap-2 pb-1">
+    <nav aria-label="Workout categories" className="mb-4 md:hidden">
+      <ul className="grid grid-cols-4 gap-2">
         {SMARTY_WORKOUT_CATEGORIES.map((category) => {
           const { Icon } = CATEGORY_DETAILS[category];
           const active = selected === category;
           return (
-            <li key={category} className="shrink-0">
+            <li key={category}>
               <Link
                 to="/smarty-workouts/category/$category"
                 params={{ category: categorySlug(category) }}
