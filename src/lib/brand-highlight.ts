@@ -11,7 +11,11 @@
 
 const HIGHLIGHT_NAME = "brand-name";
 
-const BRAND_RE = /\b(Smarty\s*Gym|Gym|Haris\s+Falas)\b/gi;
+const BRAND_RE = /\b(Smarty\s*Gym|Gym|Haris(?:\s+Falas)?)\b/gi;
+
+/** Founder mentions outside existing links; clicking one opens his coach page. */
+let founderLinkRanges: Range[] = [];
+export const FOUNDER_PATH = "/haris-falas";
 
 const SKIP_TAGS = new Set([
   "SCRIPT",
@@ -69,6 +73,7 @@ function applyBrandHighlights(): void {
     node = walker.nextNode();
   }
 
+  founderLinkRanges = founderRanges.filter((r) => !r.startContainer.parentElement?.closest("a,button,[role=button],label,select"));
   api.highlights.set(HIGHLIGHT_NAME, new HighlightCtor(...ranges));
   api.highlights.set("founder-name", new HighlightCtor(...founderRanges));
 }
@@ -99,6 +104,40 @@ function watchBrandHighlights(): void {
  * Starts highlighting once the page has painted, then keeps it in sync with
  * DOM changes. Returns a cleanup function.
  */
+function founderRangeAt(x: number, y: number): boolean {
+  for (const range of founderLinkRanges) {
+    if (!range.startContainer.isConnected) continue;
+    for (const rect of Array.from(range.getClientRects())) {
+      if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) return true;
+    }
+  }
+  return false;
+}
+
+/** Every plain "Haris" / "Haris Falas" mention behaves as a link to the coach page. */
+export function startFounderLinks(navigate: (to: string) => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  const onClick = (e: MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0 || !founderRangeAt(e.clientX, e.clientY)) return;
+    e.preventDefault();
+    navigate(FOUNDER_PATH);
+  };
+  let pointer = false;
+  const onMove = (e: MouseEvent) => {
+    const over = founderRangeAt(e.clientX, e.clientY);
+    if (over === pointer) return;
+    pointer = over;
+    document.documentElement.style.cursor = over ? "pointer" : "";
+  };
+  document.addEventListener("click", onClick);
+  document.addEventListener("mousemove", onMove, { passive: true });
+  return () => {
+    document.removeEventListener("click", onClick);
+    document.removeEventListener("mousemove", onMove);
+    document.documentElement.style.cursor = "";
+  };
+}
+
 export function startBrandHighlights(): () => void {
   if (typeof window === "undefined") return () => {};
   let cancelled = false;

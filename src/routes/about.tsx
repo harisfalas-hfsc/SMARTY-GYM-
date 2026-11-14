@@ -23,6 +23,26 @@ import {
 import pageHeroImage from "@/assets/about-smartygym-card.jpg";
 import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 import { DesktopAboutLanding } from "@/components/about/DesktopAboutLanding";
+import harisPhoto from "@/assets/haris-falas-coach.jpg";
+
+function CoachNoteCard() {
+  return (
+    <div className="app-card mx-auto mt-6 flex max-w-xl flex-col gap-4 p-5 sm:flex-row sm:items-center lg:max-w-7xl">
+      <img src={harisPhoto} alt="Haris Falas" loading="lazy" className="h-24 w-24 shrink-0 self-center rounded-full border-2 border-primary object-cover" />
+      <div className="min-w-0 flex-1 text-center sm:text-left">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">A note from the coach</p>
+        <p className="mt-2 text-base font-extrabold uppercase">Why I built SmartyGym</p>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          Read why <Link to="/haris-falas" className="font-semibold text-primary underline underline-offset-2">Haris Falas</Link> created SmartyGym, his mission and his promise to you.
+        </p>
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+          <Button asChild className="font-extrabold uppercase"><Link to="/founder-note">Read the note from the coach</Link></Button>
+          <Button asChild variant="outline" className="font-extrabold uppercase"><Link to="/haris-falas">Meet the coach</Link></Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 
 export const Route = createFileRoute("/about")({
@@ -368,7 +388,9 @@ function AboutPage() {
         </div>
       </SmartyCard>
 
+      <CoachNoteCard />
     </div>
+    <div className="hidden px-8 pb-12 lg:block"><CoachNoteCard /></div>
     </>
   );
 }

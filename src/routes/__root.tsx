@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-router";
 import { resolveLegacyPath } from "../lib/seo/legacy-redirects";
 import { useEffect, type ReactNode } from "react";
-import { startBrandHighlights } from "../lib/brand-highlight";
+import { startBrandHighlights, startFounderLinks } from "../lib/brand-highlight";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -418,6 +418,8 @@ function RootComponent() {
   useEffect(() => {
     return startBrandHighlights();
   }, [pathname]);
+  const rootRouter = useRouter();
+  useEffect(() => startFounderLinks((to) => void rootRouter.navigate({ to })), [rootRouter]);
 
   return (
     <QueryClientProvider client={queryClient}>
