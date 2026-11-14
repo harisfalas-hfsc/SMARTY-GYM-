@@ -98,9 +98,9 @@ export function NotificationBell() {
       to="/inbox"
       search={{ tab: messagesUnread > 0 && updatesUnread === 0 ? ("messages" as const) : ("updates" as const), compose: false }}
       aria-label={unread ? `Inbox (${unread} unread)` : "Inbox"}
-      className="relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10"
+      className="relative inline-flex h-5 w-5 md:h-8 md:w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10"
     >
-      <Bell className="h-4 w-4" />
+      <Bell className="h-3 w-3 md:h-4 md:w-4" />
       {unread > 0 && (
         <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-destructive px-1 text-[10px] font-bold leading-none text-destructive-foreground">
           {unread > 9 ? "9+" : unread}

@@ -61,9 +61,10 @@ export const SisterAppsPopup = () => {
         data-announcement-control
         aria-hidden={!open}
         inert={!open}
-        className={`fixed top-1/2 -translate-y-1/2 left-0 z-[60] flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? "translate-x-0" : "-translate-x-[calc(100%+10px)]"}`}
+        className={`fixed z-[60] flex transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] max-md:inset-x-0 max-md:bottom-0 ${open ? "max-md:translate-y-0" : "max-md:translate-y-[calc(100%+10px)]"} md:left-0 md:top-1/2 md:items-center ${open ? "md:-translate-y-1/2 md:translate-x-0" : "md:-translate-y-1/2 md:-translate-x-[calc(100%+10px)]"}`}
       >
-        <aside className="w-[280px] max-h-[88vh] overflow-y-auto rounded-r-3xl border-y-2 border-r-2 border-primary bg-card py-5 pl-4 pr-3 shadow-soft">
+        <aside className="w-[280px] max-h-[88vh] overflow-y-auto rounded-r-3xl border-y-2 border-r-2 border-primary bg-card py-5 pl-4 pr-3 shadow-soft max-md:w-full max-md:max-h-[85dvh] max-md:rounded-t-3xl max-md:rounded-b-none max-md:border-x-0 max-md:border-b-0 max-md:border-t max-md:border-coach-line max-md:px-5 max-md:pt-2 max-md:pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+          <div aria-hidden className="mx-auto mb-2 h-1.5 w-11 rounded-full bg-muted-foreground/35 md:hidden" onTouchStart={(e) => { (e.currentTarget as HTMLElement).dataset.y = String(e.touches[0]?.clientY ?? 0); }} onTouchEnd={(e) => { if ((e.changedTouches[0]?.clientY ?? 0) - Number((e.currentTarget as HTMLElement).dataset.y ?? 0) > 40) setOpen(false); }} />
           {others.map((app) => (
             <div key={app.id} className="flex flex-col items-center text-center">
               <img src={app.image} alt={app.name} loading="lazy" className="h-28 w-28 object-contain" />
@@ -106,7 +107,7 @@ export const SisterAppsPopup = () => {
           variant="secondary"
           onClick={() => setOpen(false)}
           aria-label="Hide panel"
-          className="ml-2 h-12 w-12 rounded-full border border-border shadow-soft"
+          className="ml-2 h-12 w-12 rounded-full border border-border shadow-soft max-md:absolute max-md:right-3 max-md:top-3 max-md:ml-0 max-md:h-9 max-md:w-9"
         >
           <X className="w-7 h-7" />
         </Button>

@@ -133,23 +133,23 @@ export function Navigation() {
       className={`sticky top-0 z-40 w-full bg-background transition-colors duration-200 lg:py-3 ${scrolled ? "lg:bg-background/15 lg:backdrop-blur-sm" : "lg:bg-transparent"} ${pathname === "/" ? "lg:fixed lg:inset-x-0 lg:top-0" : "lg:top-0"}`}
     >
       <div className="flex h-11 items-center justify-between gap-2 px-3">
-        <div className="flex min-w-0 items-center gap-2">
+        <div className="flex min-w-0 items-center gap-1.5 md:gap-2">
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
-            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10 md:border-transparent"
+            className="inline-flex h-5 w-5 md:h-8 md:w-8 shrink-0 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10 md:border-transparent"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-3.5 w-3.5 md:h-5 md:w-5" />
           </button>
           {canGoBack && (
             <button
               type="button"
               onClick={handleBack}
               aria-label="Go back"
-              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10"
+              className="inline-flex h-5 w-5 md:h-8 md:w-8 shrink-0 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-3.5 w-3.5 md:h-4 md:w-4" />
             </button>
           )}
           <button
@@ -161,7 +161,7 @@ export function Navigation() {
               window.scrollTo({ top: 0, behavior: "auto" });
             }}
             aria-label="SmartyGym home and refresh"
-            className="bg-transparent p-0 text-lg font-extrabold leading-none tracking-tight no-underline hover:no-underline"
+            className="bg-transparent p-0 text-[1.85rem] md:text-lg font-extrabold leading-none tracking-tight no-underline hover:no-underline"
             style={{ textDecoration: "none" }}
           >
             <span data-brand-skip data-brand-logo><span className="text-primary">SMARTY</span><span className="text-green-500">GYM</span></span>
@@ -170,16 +170,16 @@ export function Navigation() {
 
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 md:gap-2">
           {!loading ? (
             <button
               type="button"
               onClick={() => setCoachOpen(true)}
               aria-label="Smarty Coach"
               title="Smarty Coach"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary bg-background transition-colors hover:bg-primary/10 lg:bg-transparent"
+              className="inline-flex h-5 w-5 md:h-8 md:w-8 items-center justify-center rounded-full border border-primary bg-background transition-colors hover:bg-primary/10 lg:bg-transparent"
             >
-              <img src={coachIcon} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
+              <img src={coachIcon} alt="" aria-hidden="true" className="h-4 w-4 object-contain md:h-6 md:w-6" />
             </button>
           ) : null}
           {!loading && user ? <CheckinHeaderAlert /> : null}
@@ -190,7 +190,7 @@ export function Navigation() {
                 <button
                   type="button"
                   aria-label="Account"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary bg-primary text-xs font-bold text-primary-foreground lg:bg-transparent lg:text-primary"
+                  className="inline-flex h-5 w-5 md:h-8 md:w-8 items-center justify-center rounded-full border border-primary bg-primary text-xs font-bold text-primary-foreground lg:bg-transparent lg:text-primary"
                 >
                   {initial}
                 </button>
@@ -230,9 +230,9 @@ export function Navigation() {
                 <button
                   type="button"
                   aria-label="Account"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10"
+                  className="inline-flex h-5 w-5 md:h-8 md:w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10"
                 >
-                  <User className="h-4 w-4" />
+                  <User className="h-3 w-3 md:h-4 md:w-4" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
