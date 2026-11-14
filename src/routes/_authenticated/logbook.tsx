@@ -1,3 +1,4 @@
+import { iconInk, iconTone } from "@/lib/icon-tone";
 import { PremiumGate } from "@/components/PremiumGate";
 import { DayCheckinNote } from "@/components/checkins/CheckinsPanel";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
@@ -652,7 +653,7 @@ function CalendarView({
               className="h-11 w-full min-w-0 rounded-2xl px-2"
               onClick={() => { setSelectionMode(id); setEnd(null); }}
             >
-              <Icon className="h-4 w-4 shrink-0" />
+              <Icon className={`h-4 w-4 shrink-0 ${selectionMode === id ? "" : iconInk(label)}`} />
               <span className="truncate text-xs sm:text-sm">{label}</span>
             </Button>
           ))}
@@ -1127,7 +1128,7 @@ function LogbookContent() {
             className="h-11 w-full min-w-0 rounded-2xl px-2"
             onClick={() => navigate({ search: (p: LogSearch) => ({ ...p, view: id }) })}
           >
-            <Icon className="h-4 w-4 shrink-0" />
+            <Icon className={`h-4 w-4 shrink-0 ${view === id ? "" : iconInk(label)}`} />
             <span className="truncate text-xs sm:text-sm">{label}</span>
           </Button>
         ))}

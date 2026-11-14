@@ -1,3 +1,4 @@
+import { iconInk, iconTone } from "@/lib/icon-tone";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -191,7 +192,7 @@ export function SmartyRow({ icon, title, subtitle }: SmartyRowProps) {
       {icon && (
         <div
           className={cn(
-            "icon-tone-auto grid h-10 w-10 flex-none place-items-center rounded-xl border",
+            iconTone(title), "grid h-10 w-10 flex-none place-items-center rounded-xl border",
           )}
         >
           <IconOrEmoji icon={icon} className="h-4 w-4 text-base" />

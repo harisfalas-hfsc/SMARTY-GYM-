@@ -1,3 +1,4 @@
+import { iconInk, iconTone } from "@/lib/icon-tone";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -70,7 +71,7 @@ export function PageHeader({
           titleClassName,
         )}
       >
-        {Icon && <Icon className="h-7 w-7 shrink-0 text-primary sm:h-8 sm:w-8" />}
+        {Icon && <Icon className={`h-7 w-7 shrink-0 sm:h-8 sm:w-8 ${iconInk(typeof title === "string" ? title : "page")}`} />}
         {typeof icon === "string" && (
           <span className="text-2xl leading-none sm:text-3xl">{icon}</span>
         )}

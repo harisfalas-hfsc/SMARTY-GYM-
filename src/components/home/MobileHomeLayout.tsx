@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { BookOpen, ChevronLeft, ChevronRight, Newspaper, Play, Sparkles, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { iconInk } from "@/lib/icon-tone";
 import { MobilePhotoCard } from "./MobilePhotoCard";
 import type { SmartyWorkoutCard } from "@/lib/smarty-workouts.functions";
 import { categoryLabel } from "@/lib/smarty-workout-row";
@@ -62,7 +63,7 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
     </div>
     <nav aria-label="Explore" className="grid grid-cols-4 gap-2">
       {quick.map(({ title, to, Icon }) => <Link key={to} to={to} className="app-card flex min-h-24 flex-col items-center justify-center gap-2 p-2 text-center">
-        <span className="brand-ink grid h-8 w-8 place-items-center"><Icon className="h-5 w-5" /></span>
+        <span className="grid h-8 w-8 place-items-center"><Icon className={`h-5 w-5 ${iconInk(title)}`} /></span>
         <span className="flex min-h-8 items-center text-[11px] font-bold leading-4">{title}</span>
       </Link>)}
     </nav>

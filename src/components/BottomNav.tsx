@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { BookOpen, CalendarCheck, Dumbbell, LogIn, MessageCircle, Sparkles } from "lucide-react";
+import { iconInk } from "@/lib/icon-tone";
 import { useAuth } from "@/hooks/useAuth";
 
 const ITEMS = [
@@ -32,7 +33,7 @@ export function BottomNav() {
             onClick={() => window.dispatchEvent(new Event("smarty:open-coach"))}
             className="flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-foreground"
           >
-            <MessageCircle className="h-5 w-5" />
+            <MessageCircle className={`h-5 w-5 ${iconInk("Coach")}`} />
             Coach
           </button>
         </li>
@@ -50,7 +51,7 @@ export function BottomNav() {
                 }`}
                 style={{ textDecoration: "none" }}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className={`h-5 w-5 ${iconInk(label)}`} />
                 {label}
                 {active && <span aria-hidden className="absolute bottom-1 h-0.5 w-8 rounded-full bg-brand-blue" />}
               </Link>

@@ -1,3 +1,4 @@
+import { iconInk } from "@/lib/icon-tone";
 import { useEffect, useState, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
@@ -71,7 +72,7 @@ function Section({ n, title, subtitle, children }: { n: string; title: string; s
 function Tile({ icon: Icon, label, onClick }: { icon: LucideIcon; label: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="app-card flex min-h-24 flex-col items-center justify-center gap-2 p-3 text-center text-sm font-semibold text-coach-text transition-colors">
-      <Icon className="h-6 w-6 shrink-0 text-coach-gold" /><span className="line-clamp-2 flex min-h-[2.5rem] items-center whitespace-pre-line leading-5">{label}</span>
+      <Icon className={`h-6 w-6 shrink-0 ${iconInk(label)}`} /><span className="line-clamp-2 flex min-h-[2.5rem] items-center whitespace-pre-line leading-5">{label}</span>
     </button>
   );
 }

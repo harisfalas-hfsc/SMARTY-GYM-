@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
 import { CATEGORY_DETAILS, categorySlug } from "@/lib/smarty-workout-categories";
+import { iconInk } from "@/lib/icon-tone";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 
 /** Mobile-only scrollable category tiles; the selected one uses the brand-blue state. */
@@ -19,7 +20,7 @@ export function MobileCategoryTiles({ selected }: { selected?: string }) {
                 aria-current={active ? "page" : undefined}
                 className={`mobile-category-tile ${active ? "is-active" : ""}`}
               >
-                <Icon className="h-6 w-6" />
+                <Icon className={`h-6 w-6 ${iconInk(category)}`} />
                 <span>{categoryLabel(category)}</span>
               </Link>
             </li>

@@ -6,6 +6,7 @@ import { MobilePhotoCard } from "@/components/home/MobilePhotoCard";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { iconInk, iconTone } from "@/lib/icon-tone";
 import { cn } from "@/lib/utils";
 import { getSmartyWorkoutCounts, getFeaturedSmartyWorkouts, SMARTY_WORKOUT_CATEGORIES } from "@/lib/smarty-workouts.functions";
 import { WorkoutCard, kindForWorkout } from "@/components/wod/WodMobileCards";
@@ -111,7 +112,7 @@ function SmartyWorkoutsPage() {
                     <div className="hidden flex-1 flex-col justify-center p-2 text-center md:flex">
                       <div className="mb-0.5 flex items-center justify-center gap-1.5">
                         <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                          <Icon className="h-3 w-3 text-primary" />
+                          <Icon className={`h-3 w-3 ${iconInk(category)}`} />
                         </span>
                         <h2 className="whitespace-nowrap text-xs font-bold leading-tight text-foreground">{categoryLabel(category)}</h2>
                       </div>
@@ -198,7 +199,7 @@ function SmartyWorkoutsPage() {
                 </span>
               </div>
               <div className="flex min-h-[190px] flex-col items-center px-5 py-5">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10"><Icon className="h-6 w-6 text-primary" /></span>
+                <span className={`flex h-12 w-12 items-center justify-center rounded-full ${iconTone(category)}`}><Icon className="h-6 w-6" /></span>
                 <h2 className="mt-3 text-lg font-bold text-foreground">{categoryLabel(category)}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{detail.description}</p>
               </div>

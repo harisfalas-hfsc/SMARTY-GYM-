@@ -1,3 +1,4 @@
+import { iconInk, iconTone } from "@/lib/icon-tone";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
@@ -75,7 +76,7 @@ function Stat({
 }) {
   const body = (
     <>
-      <Icon className="h-5 w-5 text-primary" />
+      <Icon className={`h-5 w-5 ${iconInk(label)}`} />
       <p className="mt-2 text-2xl font-black">{value}</p>
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
     </>
