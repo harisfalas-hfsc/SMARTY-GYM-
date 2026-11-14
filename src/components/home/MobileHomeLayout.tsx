@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, ChevronRight, Newspaper, Play, Sparkles, Wrench } from "lucide-react";
+import { BookOpen, ChevronLeft, ChevronRight, Newspaper, Play, Sparkles, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { MobilePhotoCard } from "./MobilePhotoCard";
@@ -41,9 +41,16 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
         <Link to="/wod"><Play className="h-4 w-4 fill-current" />Start Training</Link>
       </Button>
     </div>
-    <Carousel setApi={setApi} opts={{ align: "center", loop: true }} aria-label="Start training">
-      <CarouselContent className="-ml-3">
-        {actions.map(action => <CarouselItem key={action.to} className="basis-[94%] pl-3">
+    <div className="mb-3 flex items-center justify-between">
+      <h2 className="text-lg font-extrabold">Explore</h2>
+      <div className="flex gap-2">
+        <Button type="button" variant="outline" size="icon" aria-label="Previous" onClick={() => api?.scrollPrev()} className="h-8 w-8 rounded-full"><ChevronLeft className="h-4 w-4" /></Button>
+        <Button type="button" variant="outline" size="icon" aria-label="Next" onClick={() => api?.scrollNext()} className="h-8 w-8 rounded-full"><ChevronRight className="h-4 w-4" /></Button>
+      </div>
+    </div>
+    <Carousel setApi={setApi} opts={{ align: "start", loop: true }} aria-label="Start training">
+      <CarouselContent className="-ml-2">
+        {actions.map(action => <CarouselItem key={action.to} className="basis-[88%] pl-2">
           <Link to={action.to} className="block"><MobilePhotoCard {...action} /></Link>
         </CarouselItem>)}
       </CarouselContent>
