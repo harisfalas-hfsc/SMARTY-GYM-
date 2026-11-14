@@ -23,7 +23,7 @@ export function BottomNav() {
       <div aria-hidden className={`${user ? "" : "md:hidden "}h-[calc(3.5rem+env(safe-area-inset-bottom))]`} />
       <nav
         className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background`}
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        style={{ paddingBottom: "env(safe-area-inset-bottom)", pointerEvents: "auto" }}
         aria-label="Primary"
       >
       <ul className="mx-auto grid max-w-lg grid-cols-6">
@@ -62,11 +62,11 @@ export function BottomNav() {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("smarty:open-menu"))}
-            aria-label="Open menu"
+            aria-label="More"
             className="flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-foreground"
           >
             <Menu className={`h-5 w-5 ${iconInk("Menu")}`} />
-            Menu
+            More
           </button>
         </li>
       </ul>

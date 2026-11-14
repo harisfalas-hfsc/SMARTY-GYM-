@@ -80,7 +80,10 @@ export function Navigation() {
   useEffect(() => {
     const open = () => setCoachOpen(true);
     const close = () => setCoachOpen(false);
-    const openMenu = () => setMenuOpen(true);
+    const openMenu = () => {
+      setCoachOpen(false);
+      setMenuOpen(true);
+    };
     window.addEventListener("smarty:open-coach", open);
     window.addEventListener("smarty:close-coach", close);
     window.addEventListener("smarty:open-menu", openMenu);
