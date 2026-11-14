@@ -83,18 +83,7 @@ function Home() {
     <div className="mx-auto flex max-w-6xl flex-col px-4 pb-4 pt-0 sm:pb-6 lg:hidden">
       {/* Mobile introduction; desktop composition remains separate. */}
       <section className="py-6 lg:hidden">
-        <div className="flex flex-col items-center justify-center px-4 text-center">
-          <p className="text-[10px] font-bold uppercase text-muted-foreground md:text-[12px] md:text-foreground">
-            Science-backed · Expert-designed
-          </p>
-          <h1 className="mt-3 whitespace-nowrap text-xl font-extrabold leading-tight md:mt-2 md:text-lg md:uppercase">
-            <span className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts: </span>
-            Your <span className="text-brand-blue md:text-inherit">Gym</span>{" "}
-            <span className="text-foreground md:text-primary">Re-imagined.</span>
-          </h1>
-          <p className="mt-2 text-lg font-bold text-foreground md:hidden">Anywhere, Anytime.</p>
-        </div>
-
+        <h1 className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts by Haris Falas</h1>
         <MobileHomeActions showPricing={!freeAccessMode} workoutCount={workoutCount} featured={featured} />
       </section>
     </div>

@@ -80,11 +80,14 @@ export function Navigation() {
   useEffect(() => {
     const open = () => setCoachOpen(true);
     const close = () => setCoachOpen(false);
+    const openMenu = () => setMenuOpen(true);
     window.addEventListener("smarty:open-coach", open);
     window.addEventListener("smarty:close-coach", close);
+    window.addEventListener("smarty:open-menu", openMenu);
     return () => {
       window.removeEventListener("smarty:open-coach", open);
       window.removeEventListener("smarty:close-coach", close);
+      window.removeEventListener("smarty:open-menu", openMenu);
     };
   }, []);
 
@@ -143,7 +146,7 @@ export function Navigation() {
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
-            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10 md:border-transparent"
+            className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10 md:inline-flex md:border-transparent"
           >
             <Menu className="h-5 w-5" />
           </button>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, ChevronLeft, ChevronRight, Newspaper, Play, Sparkles, Wrench } from "lucide-react";
+import { BookOpen, ChevronLeft, ChevronRight, Newspaper, Sparkles, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { iconInk } from "@/lib/icon-tone";
@@ -37,12 +37,7 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
     return () => { api.off("select", sync); api.off("reInit", sync); };
   }, [api]);
   return <div className="md:hidden">
-    <div className="mb-6 mt-5 flex justify-center">
-      <Button asChild size="lg" className="h-12 rounded-full bg-brand-blue px-8 text-base font-bold text-hero-foreground hover:bg-brand-blue/90">
-        <Link to="/wod"><Play className="h-4 w-4 fill-current" />Start Training</Link>
-      </Button>
-    </div>
-    <div className="mb-3 flex items-center justify-between">
+    <div className="mb-3 mt-5 flex items-center justify-between">
       <h2 className="text-lg font-extrabold">Explore</h2>
       <div className="flex gap-2">
         <Button type="button" variant="outline" size="icon" aria-label="Previous" onClick={() => api?.scrollPrev()} className="h-8 w-8 rounded-full"><ChevronLeft className="h-4 w-4" /></Button>

@@ -168,30 +168,6 @@ function TabletHomeActions({ showPricing, workoutCount, featured }: { showPricin
 
   return (
     <div className="mt-5 lg:hidden">
-      <div className="mb-4 flex items-center justify-center gap-4">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={() => carouselApi?.scrollPrev()}
-          aria-label="Previous option"
-          className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </Button>
-        <p className="text-lg font-extrabold uppercase text-foreground">Start training</p>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={() => carouselApi?.scrollNext()}
-          aria-label="Next option"
-          className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </Button>
-      </div>
-
       <Carousel className="w-full" opts={{ align: "center", loop: true }} setApi={setCarouselApi}>
         <CarouselContent className="-ml-3">
           {carouselActions.map((action, index) => {

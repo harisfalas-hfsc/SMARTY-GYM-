@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, CalendarCheck, Dumbbell, LogIn, MessageCircle, Sparkles } from "lucide-react";
+import { BookOpen, CalendarCheck, Dumbbell, LogIn, Menu, MessageCircle, Sparkles } from "lucide-react";
 import { iconInk } from "@/lib/icon-tone";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -26,7 +26,7 @@ export function BottomNav() {
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label="Primary"
       >
-      <ul className="mx-auto grid max-w-lg grid-cols-5">
+      <ul className="mx-auto grid max-w-lg grid-cols-6">
         <li>
           <button
             type="button"
@@ -58,6 +58,17 @@ export function BottomNav() {
             </li>
           );
         })}
+        <li>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("smarty:open-menu"))}
+            aria-label="Open menu"
+            className="flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-foreground"
+          >
+            <Menu className={`h-5 w-5 ${iconInk("Menu")}`} />
+            Menu
+          </button>
+        </li>
       </ul>
       </nav>
     </>
