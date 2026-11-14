@@ -1,5 +1,8 @@
 # Roadmap
 
+## Mobile bottom sheets
+- [x] Phone pop-ups slide up from the bottom with a swipe-down handle; desktop unchanged.
+
 ## Gym-floor workout player
 - [x] Replace variable controls with fixed demonstration, prescription, action and bottom-button zones; preserve existing tracking and correct original exercise indices for recap parity. Real signed-in read-only Cable Press Mass preview checked at 384×714 and 1280×1800; primary anchor unchanged through set/rest. Kinetic Vortex Tabata timer/pause, interval 1 → 10s rest → interval 2 checked. Weight 20kg retained; all 568 tests pass, preview build OK; no training data changed.
 - [ ] Verify a real saved set and Logbook read-back (blocked: requesting account has a PAR-Q health waiver; not accepted on the user's behalf. Read-only administrator preview verified instead). Installed-device wake lock/audio remain unverified.

@@ -133,6 +133,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
   return (
     <Dialog open={open} onOpenChange={changeOpen}>
       <DialogContent
+        sheet={false}
         onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }}
         className="coach-floor fixed inset-2 left-2 top-2 flex h-auto w-auto max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-lg border-coach-line bg-coach-bg p-0 text-coach-text outline-none sm:max-w-none md:inset-4 md:left-1/2 md:top-4 md:w-[min(72rem,calc(100vw-2rem))] md:-translate-x-1/2 [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:rounded-md [&>button]:border [&>button]:border-coach-line [&>button]:bg-coach-card [&>button]:p-2 [&>button]:text-coach-text [&>button]:opacity-100 [&>button_svg]:h-5 [&>button_svg]:w-5"
       >

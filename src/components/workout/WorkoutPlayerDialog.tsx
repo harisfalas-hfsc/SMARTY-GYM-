@@ -493,6 +493,7 @@ export function WorkoutPlayerDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        sheet={false}
         hideClose
         aria-describedby={undefined}
         className="workout-floor"
