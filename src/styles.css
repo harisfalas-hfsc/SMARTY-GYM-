@@ -36,7 +36,7 @@
 ::highlight(brand-name) {
   color: var(--brand-blue, var(--primary));
 }
-::highlight(founder-name) { color: var(--brand-blue); text-decoration: underline; text-underline-offset: 2px; }
+::highlight(founder-name) { color: var(--brand-blue); }
 
 @custom-variant dark (&:is(.dark *));
 
