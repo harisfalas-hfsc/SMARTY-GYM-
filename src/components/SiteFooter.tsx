@@ -10,10 +10,11 @@ const instagramClass = `${socialClass} text-[#E1306C]`;
 const facebookClass = `${socialClass} text-[#1877F2]`;
 const tiktokClass = `${socialClass} text-[#010101] dark:text-white`;
 const youtubeClass = `${socialClass} text-[#FF0000]`;
+export const SOCIAL_ICON_CLASSES = { instagramClass, facebookClass, tiktokClass, youtubeClass };
 
 export function SiteFooter() {
   return (
-    <footer className="bg-background w-full pt-4 pb-4 px-4">
+    <footer className="hidden md:block bg-background w-full pt-4 pb-4 px-4">
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col items-center gap-3">
           <div className="flex items-center gap-4">

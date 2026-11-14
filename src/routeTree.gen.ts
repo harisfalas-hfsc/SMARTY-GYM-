@@ -43,6 +43,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SmartyCheckinsRouteImport } from './routes/smarty-checkins'
 import { Route as SmartyGiftRouteImport } from './routes/smarty-gift'
 import { Route as SmartyRitualRouteImport } from './routes/smarty-ritual'
+import { Route as SocialMediaRouteImport } from './routes/social-media'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TheSmartyMethodRouteImport } from './routes/the-smarty-method'
 import { Route as TrainingLoadScienceRouteImport } from './routes/training-load-science'
@@ -260,6 +261,11 @@ const SmartyGiftRoute = SmartyGiftRouteImport.update({
 const SmartyRitualRoute = SmartyRitualRouteImport.update({
   id: '/smarty-ritual',
   path: '/smarty-ritual',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SocialMediaRoute = SocialMediaRouteImport.update({
+  id: '/social-media',
+  path: '/social-media',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -544,6 +550,7 @@ export interface FileRoutesByFullPath {
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-gift': typeof SmartyGiftRouteWithChildren
   '/smarty-ritual': typeof SmartyRitualRoute
+  '/social-media': typeof SocialMediaRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
   '/training-load-science': typeof TrainingLoadScienceRoute
@@ -626,6 +633,7 @@ export interface FileRoutesByTo {
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-gift': typeof SmartyGiftRouteWithChildren
   '/smarty-ritual': typeof SmartyRitualRoute
+  '/social-media': typeof SocialMediaRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
   '/training-load-science': typeof TrainingLoadScienceRoute
@@ -710,6 +718,7 @@ export interface FileRoutesById {
   '/smarty-checkins': typeof SmartyCheckinsRoute
   '/smarty-gift': typeof SmartyGiftRouteWithChildren
   '/smarty-ritual': typeof SmartyRitualRoute
+  '/social-media': typeof SocialMediaRoute
   '/terms': typeof TermsRoute
   '/the-smarty-method': typeof TheSmartyMethodRoute
   '/training-load-science': typeof TrainingLoadScienceRoute
@@ -794,6 +803,7 @@ export interface FileRouteTypes {
     | '/smarty-checkins'
     | '/smarty-gift'
     | '/smarty-ritual'
+    | '/social-media'
     | '/terms'
     | '/the-smarty-method'
     | '/training-load-science'
@@ -876,6 +886,7 @@ export interface FileRouteTypes {
     | '/smarty-checkins'
     | '/smarty-gift'
     | '/smarty-ritual'
+    | '/social-media'
     | '/terms'
     | '/the-smarty-method'
     | '/training-load-science'
@@ -959,6 +970,7 @@ export interface FileRouteTypes {
     | '/smarty-checkins'
     | '/smarty-gift'
     | '/smarty-ritual'
+    | '/social-media'
     | '/terms'
     | '/the-smarty-method'
     | '/training-load-science'
@@ -1043,6 +1055,7 @@ export interface RootRouteChildren {
   SmartyCheckinsRoute: typeof SmartyCheckinsRoute
   SmartyGiftRoute: typeof SmartyGiftRouteWithChildren
   SmartyRitualRoute: typeof SmartyRitualRoute
+  SocialMediaRoute: typeof SocialMediaRoute
   TermsRoute: typeof TermsRoute
   TheSmartyMethodRoute: typeof TheSmartyMethodRoute
   TrainingLoadScienceRoute: typeof TrainingLoadScienceRoute
@@ -1320,6 +1333,13 @@ declare module '@tanstack/react-router' {
       path: '/smarty-ritual'
       fullPath: '/smarty-ritual'
       preLoaderRoute: typeof SmartyRitualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/social-media': {
+      id: '/social-media'
+      path: '/social-media'
+      fullPath: '/social-media'
+      preLoaderRoute: typeof SocialMediaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -1730,6 +1750,7 @@ const rootRouteChildren: RootRouteChildren = {
   SmartyCheckinsRoute: SmartyCheckinsRoute,
   SmartyGiftRoute: SmartyGiftRouteWithChildren,
   SmartyRitualRoute: SmartyRitualRoute,
+  SocialMediaRoute: SocialMediaRoute,
   TermsRoute: TermsRoute,
   TheSmartyMethodRoute: TheSmartyMethodRoute,
   TrainingLoadScienceRoute: TrainingLoadScienceRoute,

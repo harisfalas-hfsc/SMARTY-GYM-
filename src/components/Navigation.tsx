@@ -328,7 +328,10 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
     },
     {
       heading: "Discover",
-      items: [{ to: "/glossary", label: "Glossary & training topics", Icon: BookOpen }],
+      items: [
+        { to: "/glossary", label: "Glossary & training topics", Icon: BookOpen },
+        { to: "/social-media", label: "Social Media", Icon: Users, className: "md:hidden" },
+      ],
     },
   ];
 
