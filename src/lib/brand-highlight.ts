@@ -120,6 +120,8 @@ export function startFounderLinks(navigate: (to: string) => void): () => void {
   const onClick = (e: MouseEvent) => {
     if (e.defaultPrevented || e.button !== 0 || !founderRangeAt(e.clientX, e.clientY)) return;
     e.preventDefault();
+    // Close any open panel (e.g. Smarty Coach) so the coach page is actually seen.
+    window.dispatchEvent(new Event("smarty:close-coach"));
     navigate(FOUNDER_PATH);
   };
   let pointer = false;

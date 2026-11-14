@@ -79,8 +79,13 @@ export function Navigation() {
 
   useEffect(() => {
     const open = () => setCoachOpen(true);
+    const close = () => setCoachOpen(false);
     window.addEventListener("smarty:open-coach", open);
-    return () => window.removeEventListener("smarty:open-coach", open);
+    window.addEventListener("smarty:close-coach", close);
+    return () => {
+      window.removeEventListener("smarty:open-coach", open);
+      window.removeEventListener("smarty:close-coach", close);
+    };
   }, []);
 
   useEffect(() => {
