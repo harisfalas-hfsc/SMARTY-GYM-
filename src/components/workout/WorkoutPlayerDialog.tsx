@@ -8,7 +8,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { Check, ChevronLeft, ChevronRight, Cylinder, Dumbbell, Flag, Minus, Pause, Play, Plus, RotateCcw, Volume2, VolumeX, X } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Cylinder, Flag, Minus, Pause, Play, Plus, RotateCcw, Volume2, VolumeX, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ExerciseImage } from "@/components/ExerciseImage";
 import { ExerciseDetailDialog } from "./ExerciseDetailDialog";
@@ -31,6 +31,7 @@ import { getSessionFeedback } from "@/lib/feedback.functions";
 import { setWorkoutStatus } from "@/lib/coach.functions";
 import { useExerciseMedia } from "./ExerciseMediaProvider";
 import { useAuth } from "@/hooks/useAuth";
+import { afterPlayerSet, playerLogStepIndex, playerSetTarget, prescribedRestSeconds } from "@/lib/workout/player-flow";
 
 
 function fmt(total: number) {
@@ -74,7 +75,7 @@ export function WorkoutPlayerDialog({
   const readFeedback = useServerFn(getSessionFeedback);
   const markStatus = useServerFn(setWorkoutStatus);
   const { user } = useAuth();
-  const [attemptId, setAttemptId] = useState<string | null>(null);
+  const [attemptReady, setAttemptReady] = useState(false);
   const loggedAnythingRef = useRef(false);
   const planHash = useMemo(
     () => prescriptionHash({ format, category, steps }),
@@ -85,9 +86,11 @@ export function WorkoutPlayerDialog({
   const [api, setApi] = useState<CarouselApi>();
   const [index, setIndex] = useState(0);
   const [running, setRunning] = useState(false);
-  const [phase, setPhase] = useState<"work" | "rest">("work");
+  const [resting, setResting] = useState(false);
+  const [restRemaining, setRestRemaining] = useState(0);
+  const [advanceAfterRest, setAdvanceAfterRest] = useState(false);
+  const completingRef = useRef(false);
   const [remaining, setRemaining] = useState(0);
-  const [round, setRound] = useState(1);
   const [logged, setLogged] = useState<Record<number, number>>({});
   const [reps, setReps] = useState("");
   const [weight, setWeight] = useState("");
@@ -100,10 +103,8 @@ export function WorkoutPlayerDialog({
   const [existingFeedback, setExistingFeedback] = useState<Awaited<ReturnType<typeof getSessionFeedback>>["feedback"]>(null);
   const [attempt, setAttempt] = useState(1);
   const [lastSet, setLastSet] = useState<Record<number, { reps: string; weight: string; seconds: string; distance: string }>>({});
-  const beepRef = useRef<number>(0);
   const soundOnRef = useRef(false);
   const remainingRef = useRef(0);
-  const logSetRef = useRef<(count?: number) => Promise<void>>(async () => {});
   const [soundOn, setSoundOn] = useState(false);
   useEffect(() => {
     try {
@@ -126,9 +127,6 @@ export function WorkoutPlayerDialog({
       playTimerBeep();
     }
   }
-  const loggableRef = useRef(false);
-  const isLastSlideRef = useRef(false);
-  const finishRef = useRef<() => void>(() => {});
   const startedAtRef = useRef<number | null>(null);
 
   useKeepScreenAwake(open);
@@ -142,15 +140,16 @@ export function WorkoutPlayerDialog({
   useEffect(() => {
     if (!open || previewMode) return;
     let active = true;
+    setAttemptReady(false);
     if (!user) return;
     void beginAttempt({ data: { workoutId } })
       .then((res) => {
         if (active) {
           setAttempt(res.attempt);
-          setAttemptId(crypto.randomUUID());
+          setAttemptReady(true);
         }
       })
-      .catch(() => undefined);
+      .catch(() => { if (active) toast.error("Could not start your session. Close the player and try again."); });
     return () => {
       active = false;
     };
@@ -211,12 +210,6 @@ export function WorkoutPlayerDialog({
       ? "interval"
       : "round"
     : "set";
-  const roundsLeft = tracking?.roundsTotal ? Math.max(0, tracking.roundsTotal - (logged[index] ?? 0)) : 0;
-
-  // The countdown must not jump away from a step that still wants numbers.
-  useEffect(() => {
-    loggableRef.current = Boolean(tracking && tracking.primary !== "completion");
-  }, [tracking]);
 
   // Preload media for the current window of slides.
   useEffect(() => {
@@ -232,8 +225,7 @@ export function WorkoutPlayerDialog({
   // Reset the timer whenever the slide changes.
   useEffect(() => {
     setRunning(false);
-    setPhase("work");
-    setRound(1);
+    setResting(false);
     setReps("");
     setWeight("");
     setHeldSeconds("");
@@ -267,11 +259,12 @@ export function WorkoutPlayerDialog({
       return;
     }
     const n = Math.max(1, count);
+    if ((logged[index] ?? 0) >= playerSetTarget(slide.step.prescription, tracking)) return false;
     if (previewMode) {
       const setNumber = (logged[index] ?? 0) + n;
       setLogged((prev) => ({ ...prev, [index]: setNumber }));
-      toast.success(`Previewed ${n > 1 ? `${n} ${unitWord}s` : `${unitWord} ${setNumber}`} — no member data was changed.`);
-      return;
+      setLastSet((prev) => ({ ...prev, [index]: { reps, weight, seconds: heldSeconds, distance } }));
+      return true;
     }
     setSavingSet(true);
     if (!user) {
@@ -285,7 +278,7 @@ export function WorkoutPlayerDialog({
       id: crypto.randomUUID(),
       workout_id: workoutId,
       attempt,
-      step_index: index,
+      step_index: playerLogStepIndex(slide),
       exercise_id: slide.step.exerciseId || null,
       exercise_name: slide.step.name,
       section: slide.step.section ?? null,
@@ -314,21 +307,18 @@ export function WorkoutPlayerDialog({
     setSavingSet(false);
     if (error) {
       toast.error(`Could not save ${unitWord} ${firstNumber}. Please try again.`);
-      return;
+      return false;
     }
     toast.success(
-      n > 1 ? `${unitWord[0]!.toUpperCase()}${unitWord.slice(1)}s ${firstNumber}–${setNumber} logged.` : `${unitWord[0]!.toUpperCase()}${unitWord.slice(1)} ${setNumber} logged.`,
+      n > 1 ? `${unitWord.charAt(0).toUpperCase()}${unitWord.slice(1)}s ${firstNumber}–${setNumber} logged.` : `${unitWord.charAt(0).toUpperCase()}${unitWord.slice(1)} ${setNumber} logged.`,
     );
     setLogged((prev) => ({ ...prev, [index]: setNumber }));
     setLastSet((prev) => ({
       ...prev,
       [index]: { reps, weight, seconds: heldSeconds, distance },
     }));
-    setReps("");
-    setWeight("");
-    setHeldSeconds("");
-    setDistance("");
     loggedAnythingRef.current = true;
+    return true;
   }
 
   /**
@@ -413,47 +403,80 @@ export function WorkoutPlayerDialog({
 
 
 
+  // Work never advances before the member has confirmed the actual numbers.
   useEffect(() => {
-    if (!running || timing.mode === "manual") return;
+    if (!running || timing.mode === "manual" || resting) return;
     const id = window.setInterval(() => {
-      // Same beep as the Workout Timer tool, at the end of every work and rest
-      // phase — from the very first round. Played outside the state updater so
-      // it can never fire twice.
-      if (soundOnRef.current && remainingRef.current <= 1) playTimerBeep();
-      setRemaining((prev) => {
-        if (prev > 1) return prev - 1;
-        if (timing.mode === "tabata") {
-          if (phase === "work") {
-            setPhase("rest");
-            return timing.rest;
-          }
-          if (round < timing.rounds) {
-            setRound((r) => r + 1);
-            setPhase("work");
-            return timing.work;
-          }
-        }
-        setRunning(false);
-        beepRef.current += 1;
-        // Loggable steps stop here so there is time to write the numbers down.
-        if (isLastSlideRef.current) {
-          // Last slide: the timer finishing ends the workout, so no extra button is needed.
-          window.setTimeout(() => finishRef.current(), 400);
-        } else if (!loggableRef.current) {
-          window.setTimeout(() => api?.scrollNext(), 400);
-        }
-        return 0;
-      });
+      if (soundOnRef.current && remainingRef.current <= 3 && remainingRef.current > 0) playTimerBeep();
+      setRemaining((prev) => Math.max(0, prev - 1));
+      if (remainingRef.current <= 1) setRunning(false);
     }, 1000);
     return () => window.clearInterval(id);
-  }, [running, timing, phase, round, api]);
+  }, [running, timing, resting]);
+
+  function advanceExercise() {
+    if (index === slides.length - 1) finishWorkout();
+    else api?.scrollNext();
+  }
+
+  function endRest() {
+    setResting(false);
+    if (advanceAfterRest) advanceExercise();
+    else {
+        setRemaining(timing.mode === "tabata" ? timing.work : timing.mode === "timed" ? timing.seconds : 0);
+    }
+  }
+
+  useEffect(() => {
+    if (!resting || !running) return;
+    const id = window.setInterval(() => {
+      setRestRemaining((prev) => Math.max(0, prev - 1));
+      if (soundOnRef.current && restRemaining <= 3 && restRemaining > 0) playTimerBeep();
+      if (restRemaining <= 1) {
+        setRunning(false);
+        endRest();
+      }
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [resting, running, restRemaining, advanceAfterRest, index, api]);
+
+  async function completeSet() {
+    if (completingRef.current || savingSet) return;
+    completingRef.current = true;
+    try {
+      const isExercise = slide?.kind === "exercise";
+      const target = isExercise ? playerSetTarget(slide.step.prescription, tracking) : 1;
+      const alreadyDone = (logged[index] ?? 0) >= target;
+      const needsLog = isExercise && tracking && (tracking.primary !== "completion" || tracking.autoReps !== null);
+      if (alreadyDone) { advanceExercise(); return; }
+      if (needsLog && !(await logSet())) return;
+      const outcome = afterPlayerSet({
+        logged: (logged[index] ?? 0) + 1,
+        target: needsLog ? target : 1,
+        restSeconds: isExercise ? timing.mode === "tabata" ? timing.rest : prescribedRestSeconds(slide.step.prescription) : 0,
+      });
+      setRunning(false);
+      if (outcome.restSeconds > 0) {
+        setAdvanceAfterRest(outcome.nextExercise);
+        setRestRemaining(outcome.restSeconds);
+        setResting(true);
+        setRunning(true);
+        if (soundOnRef.current) { unlockTimerBeep(); playTimerBeep(); }
+      } else if (outcome.nextExercise) advanceExercise();
+      else {
+          setRemaining(timing.mode === "tabata" ? timing.work : timing.mode === "timed" ? timing.seconds : 0);
+      }
+    } catch {
+      setSavingSet(false);
+      toast.error("Could not save your set. Please try again.");
+    } finally { completingRef.current = false; }
+  }
 
   const total = slides.length;
-  logSetRef.current = logSet;
   soundOnRef.current = soundOn;
   remainingRef.current = remaining;
-  isLastSlideRef.current = total > 0 && index === total - 1;
-  finishRef.current = finishWorkout;
+  const nextSlide = slides[index + 1];
+  const nextLabel = nextSlide?.kind === "exercise" ? nextSlide.step.name : index === total - 1 ? "Session recap" : "Next phase";
 
   if (!open) return null;
 
@@ -470,20 +493,16 @@ export function WorkoutPlayerDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="grid h-[100dvh] max-h-[100dvh] max-w-none grid-rows-[auto_4px_auto_minmax(0,1fr)_auto] sm:h-[90dvh] gap-0 overflow-hidden border-0 bg-neutral-950 p-0 text-neutral-50 [&>div.sticky]:hidden sm:max-w-2xl sm:rounded-3xl sm:border-2 sm:border-primary/40 sm:shadow-[0_0_60px_-15px_rgba(56,189,248,0.3)]"
+        hideClose
+        aria-describedby={undefined}
+        className="workout-floor"
       >
         <DialogTitle className="sr-only">{workoutName} player</DialogTitle>
-
-        {/* Desktop-only branded corner brackets so the player frame reads as a distinct card. */}
-        <div className="pointer-events-none absolute left-3 top-3 hidden h-5 w-5 border-l-4 border-t-4 border-primary sm:block" />
-        <div className="pointer-events-none absolute right-3 top-3 hidden h-5 w-5 border-r-4 border-t-4 border-primary sm:block" />
-        <div className="pointer-events-none absolute bottom-3 left-3 hidden h-5 w-5 border-b-4 border-l-4 border-primary sm:block" />
-        <div className="pointer-events-none absolute bottom-3 right-3 hidden h-5 w-5 border-b-4 border-r-4 border-primary sm:block" />
 
         <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 px-4 py-3 sm:px-6">
           <div className="min-w-0">
             <p className="truncate text-base font-black sm:text-lg">{workoutName}</p>
-            <div className="flex min-w-0 items-center gap-2 text-xs text-neutral-400">
+            <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
               {[category, format].filter(Boolean).map((detail) => (
                 <span key={detail} className="truncate">{detail}</span>
               ))}
@@ -499,7 +518,7 @@ export function WorkoutPlayerDialog({
             aria-label={soundOn ? "Turn timer sound off" : "Turn timer sound on"}
             aria-pressed={soundOn}
             onClick={toggleSound}
-            className="h-11 w-11 shrink-0 rounded-full border border-coach-line bg-neutral-900 text-neutral-50 shadow-lg transition active:scale-95 hover:bg-neutral-800"
+            className="h-11 w-11 shrink-0 rounded-full border border-coach-line bg-card text-foreground shadow-lg transition active:scale-95 hover:bg-muted"
           >
             {soundOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
           </Button>
@@ -509,17 +528,17 @@ export function WorkoutPlayerDialog({
             size="icon"
             aria-label="Close player"
             onClick={() => void closePlayer()}
-            className="h-11 w-11 shrink-0 rounded-full border border-coach-line bg-neutral-50 text-neutral-950 shadow-lg transition active:scale-95 hover:bg-neutral-200"
+            className="h-11 w-11 shrink-0 rounded-full border border-coach-line bg-card text-foreground shadow-lg transition active:scale-95 hover:bg-muted"
           >
             <X className="h-5 w-5" />
           </Button>
         </div>
 
-        <div className="h-1 w-full bg-neutral-800" aria-label={`Workout progress ${Math.round(progress)}%`}>
+        <div className="h-1 w-full bg-muted" aria-label={`Workout progress ${Math.round(progress)}%`}>
           <div className="h-1 bg-primary transition-all" style={{ width: `${progress}%` }} />
         </div>
 
-        <div className="relative h-[calc(clamp(9rem,26dvh,15rem)+8rem+0.75rem)] overflow-hidden pt-3">
+        <div className="player-demonstration" data-player-zone="demonstration">
           <Carousel setApi={setApi} className="h-full overflow-hidden">
             <CarouselContent className="ml-0 h-full min-h-0">
               {slides.map((s, i) => (
@@ -560,181 +579,53 @@ export function WorkoutPlayerDialog({
 
 
 
-        <div className="min-h-0 space-y-2 overflow-y-auto border-t border-neutral-800 px-4 py-2 sm:space-y-3 sm:px-6 sm:py-3">
-          {timing.mode !== "manual" ? (
-            <div className="text-center">
-              <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">
-                {timing.mode === "tabata" ? `${phase} · round ${round}/${timing.rounds}` : phase}
-              </p>
-              <p className="font-mono text-4xl font-black tabular-nums">{fmt(remaining)}</p>
-            </div>
-          ) : (
-            <p className="text-center text-sm text-neutral-400">
-              Complete the prescribed reps, then swipe.
+        <div className="player-action-slot" data-player-zone="action">
+          <div className="player-clock">
+            <p className="text-xs font-bold uppercase text-muted-foreground">
+              {resting ? "Rest" : slide?.kind === "exercise" ? `${unitWord} ${Math.min((logged[index] ?? 0) + 1, playerSetTarget(slide.step.prescription, tracking))} of ${playerSetTarget(slide.step.prescription, tracking)}` : "Preparation"}
             </p>
-          )}
-
-          {slide?.kind === "exercise" && tracking && tracking.primary !== "completion" ? (
-            <div className="space-y-2">
-              <div className="grid grid-cols-2 items-end gap-2 sm:flex">
-                {tracking.askReps ? (
-                  <StepperField
-                    label={
-                      tracking.roundsTotal
-                        ? `Reps this ${unitWord}`
-                        : tracking.windowSeconds
-                          ? `Reps in ${tracking.windowSeconds}s`
-                          : "Reps completed"
-                    }
-                    value={reps}
-                    onChange={setReps}
-                    step={1}
-                  />
-                ) : null}
-                {tracking.askSeconds ? (
-                  <StepperField
-                    label={tracking.secondsLabel ?? "Seconds"}
-                    value={heldSeconds}
-                    onChange={setHeldSeconds}
-                    step={5}
-                  />
-                ) : null}
-                {tracking.load ? (
-                  <StepperField label="Weight (kg)" value={weight} onChange={setWeight} step={2.5} />
-                ) : null}
-                {tracking.distance ? (
-                  <StepperField label="Distance covered (m)" value={distance} onChange={setDistance} step={50} />
-                ) : null}
-                <Button
-                  variant="secondary"
-                  className="col-span-2 h-10 w-full shrink-0 sm:h-11 sm:w-auto"
-                  disabled={savingSet}
-                  onClick={() => void logSet()}
-                >
-                  <Check className="mr-1.5 h-4 w-4" />
-                  Log {unitWord} {(logged[index] ?? 0) + 1}
-                  {tracking.roundsTotal ? ` of ${tracking.roundsTotal}` : ""}
-                </Button>
-              </div>
-              {lastSet[index] ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full text-neutral-300"
-                  disabled={savingSet}
-                  onClick={() => {
-                    const prev = lastSet[index]!;
-                    setReps(prev.reps);
-                    setWeight(prev.weight);
-                    setHeldSeconds(prev.seconds);
-                    setDistance(prev.distance);
-                  }}
-                >
-                  <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-                  Repeat last {unitWord}
-                </Button>
-              ) : null}
-              {tracking.roundsTotal && roundsLeft > 1 && (logged[index] ?? 0) > 0 && lastSet[index] ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full text-neutral-300"
-                  disabled={savingSet}
-                  onClick={() => {
-                    const prev = lastSet[index]!;
-                    setReps(prev.reps);
-                    setWeight(prev.weight);
-                    setHeldSeconds(prev.seconds);
-                    setDistance(prev.distance);
-                    window.setTimeout(() => void logSetRef.current(roundsLeft), 0);
-                  }}
-                >
-                  Same for all remaining ({roundsLeft})
-                </Button>
-              ) : null}
-              {tracking.roundsTotal ? (
-                <p className="text-center text-[11px] text-neutral-500">
-                  {tracking.roundsTotal} {unitWord}s on this exercise · logged {logged[index] ?? 0} of{" "}
-                  {tracking.roundsTotal} · log each {unitWord} — every one counts toward your training load
-                </p>
-              ) : null}
-              {tracking.roundsTotal ? null : planned && (planned.sets || planned.reps || planned.weightKg) ? (
-                <p className="text-center text-[11px] text-neutral-500">
-                  Prescribed{" "}
-                  {planned.sets && planned.reps
-                    ? `${planned.sets} × ${planned.reps}`
-                    : planned.reps
-                      ? `${planned.reps} reps`
-                      : `${planned.sets} sets`}
-                  {planned.weightKg ? ` @ ${planned.weightKg} kg` : ""} · logged{" "}
-                  {logged[index] ?? 0}
-                  {planned.sets ? ` of ${planned.sets}` : ""} · you can also fill this in at the end
-                </p>
-              ) : (
-                <p className="text-center text-[11px] text-neutral-500">
-                  Skip it if you are moving — you can fill it in on the recap at the end.
-                </p>
-              )}
-            </div>
-          ) : null}
-
-
-
-
-
+            <p className="font-mono text-4xl font-black tabular-nums">
+              {resting ? fmt(restRemaining) : timing.mode !== "manual" ? fmt(remaining) : planned?.reps ? `${planned.reps} REPS` : "READY"}
+            </p>
+            <p className="line-clamp-1 text-xs text-muted-foreground">
+              {resting ? advanceAfterRest ? `Up next: ${nextLabel}` : `Up next: ${slide?.kind === "exercise" ? slide.step.name : "Continue"}` : tracking?.load ? "Reps · Weight (kg)" : tracking?.primary === "completion" ? "Complete at your own pace" : "Record your actual work"}
+            </p>
+          </div>
+          <div className="player-fields">
+            {!resting && slide?.kind === "exercise" && tracking ? <>
+              {tracking.askReps ? <StepperField label="Reps completed" value={reps} onChange={setReps} step={1} /> : null}
+              {tracking.askSeconds ? <StepperField label={tracking.secondsLabel ?? "Seconds"} value={heldSeconds} onChange={setHeldSeconds} step={5} /> : null}
+              {tracking.load ? <StepperField label="Weight (kg)" value={weight} onChange={setWeight} step={2.5} /> : null}
+              {tracking.distance ? <StepperField label="Distance covered (m)" value={distance} onChange={setDistance} step={50} /> : null}
+            </> : null}
+          </div>
+          <div className="flex h-8 items-center justify-center text-xs text-muted-foreground">
+            {!resting && lastSet[index] ? "Last set values kept · adjust if needed" : resting ? "Recover before continuing" : ""}
+          </div>
         </div>
 
-        <div className="space-y-2 border-t border-neutral-800 px-4 py-3 sm:px-6">
-          <div className="flex min-h-10 items-center justify-center gap-2">
-          {timing.mode !== "manual" ? (
-
-            <div className="flex gap-2">
-              <Button
-                onClick={() => {
-                  // Pressing Start beeps at once so the member hears the work begin.
-                  if (!running && soundOnRef.current) {
-                    unlockTimerBeep();
-                    playTimerBeep();
-                  }
-                  setRunning((r) => !r);
-                }}
-                className="min-w-32"
-              >
+        <div className="player-anchor" data-player-zone="anchor">
+          <div className="grid h-11 grid-cols-[1fr_auto_auto] items-center gap-2">
+            {resting || timing.mode !== "manual" ? <>
+              <Button variant="secondary" className="h-11" onClick={() => {
+                if (!running && soundOnRef.current) { unlockTimerBeep(); playTimerBeep(); }
+                setRunning((r) => !r);
+              }}>
                 {running ? <Pause className="mr-2 h-4 w-4" /> : <Play className="mr-2 h-4 w-4" />}
-                {running ? "Pause" : "Start"}
+                {running ? "Pause timer" : "Start timer"}
               </Button>
-              <Button
-                variant="secondary"
-                size="icon"
-                onClick={() => {
-                  setRunning(false);
-                  setPhase("work");
-                  setRound(1);
-                  setRemaining(timing.mode === "tabata" ? timing.work : timing.seconds);
-                }}
-              >
-                <RotateCcw className="h-4 w-4" />
-              </Button>
-              <Button variant="secondary" onClick={finishWorkout} title="Finish workout and fill in your results">
-                <Flag className="mr-1.5 h-4 w-4" />
-                Finish
-              </Button>
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <Button onClick={() => (index === total - 1 ? finishWorkout() : api?.scrollNext())}>
-                {index === total - 1 ? "Done — finish" : "Done — next"}
-              </Button>
-              {index < total - 1 ? (
-                <Button variant="secondary" onClick={finishWorkout} title="Finish workout and fill in your results">
-                  <Flag className="mr-1.5 h-4 w-4" />
-                  Finish
-                </Button>
-              ) : null}
-            </div>
-          )}
-        </div>
-
+              <Button variant="secondary" size="icon" aria-label="Reset timer" className="h-11 w-11" onClick={() => {
+                setRunning(false);
+                if (resting) setRestRemaining(slide?.kind === "exercise" ? timing.mode === "tabata" ? timing.rest : prescribedRestSeconds(slide.step.prescription) : 0);
+                else setRemaining(timing.mode === "tabata" ? timing.work : timing.mode === "timed" ? timing.seconds : 0);
+              }}><RotateCcw className="h-4 w-4" /></Button>
+            </> : <div />}
+            <Button variant="ghost" size="icon" aria-label="Finish workout" title="Finish workout" className="h-11 w-11" onClick={finishWorkout}><Flag className="h-5 w-5" /></Button>
+          </div>
+          <Button className="h-14 w-full text-base font-bold" disabled={savingSet || (!previewMode && !attemptReady)} onClick={() => resting ? (setRunning(false), endRest()) : void completeSet()}>
+            <Check className="mr-2 h-5 w-5" />
+            {savingSet ? "Saving set…" : resting ? "End rest" : slide?.kind !== "exercise" || tracking?.primary === "completion" && tracking.autoReps === null ? "Continue" : (logged[index] ?? 0) >= playerSetTarget(slide.step.prescription, tracking) ? "Next exercise" : `Complete ${unitWord}`}
+          </Button>
         </div>
 
         <SessionDebriefDialog
@@ -800,7 +691,7 @@ function SlideNavigation({
         aria-label="Previous exercise"
         disabled={!canGoPrevious}
         onClick={onPrevious}
-        className="absolute left-2 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full border border-coach-line bg-neutral-50 text-neutral-950 shadow-lg hover:bg-neutral-200 disabled:opacity-35"
+        className="absolute left-2 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full border border-coach-line bg-card text-foreground shadow-lg hover:bg-muted disabled:opacity-35"
       >
         <ChevronLeft className="h-6 w-6" />
       </Button>
@@ -811,7 +702,7 @@ function SlideNavigation({
         aria-label="Next exercise"
         disabled={!canGoNext}
         onClick={onNext}
-        className="absolute right-2 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full border border-coach-line bg-neutral-50 text-neutral-950 shadow-lg hover:bg-neutral-200 disabled:opacity-35"
+        className="absolute right-2 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full border border-coach-line bg-card text-foreground shadow-lg hover:bg-muted disabled:opacity-35"
       >
         <ChevronRight className="h-6 w-6" />
       </Button>
@@ -820,13 +711,13 @@ function SlideNavigation({
 }
 
 const MEDIA_FRAME_CLASS =
-  "relative mx-3 flex h-[clamp(9rem,26dvh,15rem)] items-center justify-center overflow-hidden rounded-2xl bg-neutral-50 sm:mx-6";
+  "relative mx-3 flex h-[var(--player-media-height)] items-center justify-center overflow-hidden rounded-lg bg-card sm:mx-6";
 
 function SlideShell({ media, info }: { media: React.ReactNode; info: React.ReactNode }) {
   return (
-    <div className="grid h-full min-h-0 w-full grid-rows-[clamp(9rem,26dvh,15rem)_8rem] content-start overflow-hidden text-center">
+    <div className="grid h-full min-h-0 w-full grid-rows-[var(--player-media-height)_7rem] content-start overflow-hidden text-center">
       <div className={MEDIA_FRAME_CLASS}>{media}</div>
-      <div className="flex h-32 w-full min-w-0 flex-col justify-center gap-0.5 overflow-hidden border-b border-neutral-800 px-4 py-2 sm:px-6">{info}</div>
+      <div className="flex h-28 w-full min-w-0 flex-col justify-center gap-0.5 overflow-hidden border-b border-border px-4 py-2 sm:px-6">{info}</div>
     </div>
   );
 }
@@ -846,7 +737,7 @@ function SoftTissueSlide({
       info={
         <>
           <h2 className="line-clamp-2 text-xl font-black">Soft Tissue Preparation</h2>
-          <p className="line-clamp-2 text-sm text-neutral-300">
+          <p className="line-clamp-2 text-sm text-muted-foreground">
             {lines.join(" · ") || "Foam roller, lacrosse or trigger ball. Take your time before you move."}
           </p>
         </>
@@ -860,7 +751,7 @@ function TransitionSlide({ next, ...navigation }: { next: string } & SlideNaviga
     <SlideShell
       media={
         <>
-          <div className="px-12 text-neutral-950">
+          <div className="px-12 text-foreground">
             <p className="text-xs font-bold uppercase text-primary">Next phase</p>
             <h2 className="mt-2 line-clamp-2 text-2xl font-black">{next}</h2>
           </div>
@@ -870,7 +761,7 @@ function TransitionSlide({ next, ...navigation }: { next: string } & SlideNaviga
       info={
         <>
           <p className="text-sm font-bold uppercase text-primary">Transition</p>
-          <p className="line-clamp-2 text-sm text-neutral-300">
+          <p className="line-clamp-2 text-sm text-muted-foreground">
             Take a breath, reset, and continue when ready.
           </p>
         </>
@@ -901,25 +792,26 @@ function PlayerSlideView({
     <SlideShell
       media={
         <>
-          <button
+          <Button
+            variant="ghost"
             type="button"
             onClick={() => step.exerciseId && setInfoOpen(true)}
             aria-label={`See full instructions for ${step.name}`}
-            className="relative block h-full w-full"
+            className="relative block h-full w-full rounded-none p-0"
           >
             <ExerciseImage
               path={gifPath}
               url={gifUrl}
               alt={`${step.name} demonstration`}
-              className="block h-full w-full rounded-none bg-neutral-50 object-contain"
-              fallbackClassName="flex h-full w-full items-center justify-center bg-neutral-50"
+              className="block h-full w-full rounded-none bg-card object-contain"
+              fallbackClassName="flex h-full w-full items-center justify-center bg-card"
             />
             {step.exerciseId ? (
               <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-background/90 px-2.5 py-0.5 text-[11px] font-bold text-primary shadow">
                 Tap for full instructions
               </span>
             ) : null}
-          </button>
+          </Button>
           <ExerciseDetailDialog exerciseId={infoOpen ? step.exerciseId : null} onClose={() => setInfoOpen(false)} />
           <SlideNavigation
             canGoPrevious={canGoPrevious}
@@ -936,7 +828,7 @@ function PlayerSlideView({
           ) : null}
           <h2 className="line-clamp-2 text-xl font-black capitalize sm:text-2xl">{step.name}</h2>
           {step.prescription ? (
-            <p className="line-clamp-2 text-sm text-neutral-300 sm:text-base">{step.prescription}</p>
+            <p className="line-clamp-2 text-sm text-muted-foreground sm:text-base">{step.prescription}</p>
           ) : null}
         </>
       }
@@ -963,7 +855,7 @@ function StepperField({
   };
   return (
     <div className="min-w-0 flex-1 space-y-1">
-      <p className="truncate text-[10px] uppercase tracking-[0.15em] text-neutral-400">{label}</p>
+      <p className="truncate text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{label}</p>
       <div className="flex items-center gap-1">
         <Button
           type="button"
@@ -976,10 +868,14 @@ function StepperField({
           <Minus className="h-4 w-4" />
         </Button>
         <Input
+          aria-label={label}
+          type="number"
+          min="0"
+          step={step}
           inputMode="decimal"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="h-10 min-w-0 flex-1 border-neutral-700 bg-neutral-900 px-1 text-center text-neutral-50 sm:h-11"
+          className="h-10 min-w-0 flex-1 border-input bg-card px-1 text-center text-foreground sm:h-11"
         />
         <Button
           type="button"

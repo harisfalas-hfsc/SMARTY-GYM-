@@ -45,6 +45,7 @@
 - Logbook mounts Insights above view content, outside ProgressSection — why: persistent entry across tabs.
 - Workout sharing rechecks public originals and captures only WorkoutDisplay headers; blog sharing uses canonical article links and the same header capture — why: native pictures without private prescriptions.
 - Interval/round steps log one set_logs row per interval (interval_index), count from statedIntervals in parse-steps.ts — why: training load sums every interval actually done, never one.
+- Workout player uses fixed media/prescription/action/anchor zones and player-flow for set targets/rest; confirmations reuse set_logs and never auto-log timer finishes — why: stable controls and actual performed work.
 - Browser push only via sendPushToUsers (push-notify.server.ts), to accounts that newly got the paired inbox row — why: no duplicate pushes.
 - Smarty Gift uses separate durable gift entitlements and premium email history, service-only atomic reservation/claim functions, and the existing membership boundary; scheduled invitations use Resend with gift-specific opt-out — why: lifetime eligibility, race-safe claims, preserved billing and safe reminder delivery.
 

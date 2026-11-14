@@ -2,6 +2,35 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Stable gym-floor zones: optional fields never resize the demonstration or anchor. */
+.workout-floor {
+  --player-media-height: clamp(8rem, 24dvh, 18rem);
+  display: grid;
+  grid-template-rows: 6rem 4px calc(var(--player-media-height) + 7rem + 0.75rem) minmax(0, 1fr) 8.25rem;
+  width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  max-width: 56rem;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--background);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.player-demonstration { overflow: hidden; padding-top: 0.75rem; min-height: 0; }
+.player-action-slot { min-height: 0; overflow-y: auto; padding: 0.5rem 1rem; border-top: 1px solid var(--border); }
+.player-clock { height: 4.5rem; text-align: center; }
+.player-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: center; gap: 0.5rem; min-height: 4rem; }
+.player-anchor { display: grid; grid-template-rows: 2.75rem 3.5rem; gap: 0.5rem; padding: 0.5rem 1rem max(0.5rem, env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: var(--background); }
+@media (min-width: 640px) {
+  .workout-floor { height: min(94dvh, 64rem); max-height: 94dvh; width: calc(100% - 2rem); border-radius: var(--radius-lg); }
+}
+@media (max-height: 660px) {
+  .workout-floor { --player-media-height: 7rem; grid-template-rows: 5rem 4px calc(var(--player-media-height) + 7rem + 0.75rem) minmax(0, 1fr) 8.25rem; }
+}
+
 /* Brand name highlighting (Smarty Gym, Haris Falas) — applied via
    the CSS Custom Highlight API, so no DOM is ever mutated (hydration-safe). */
 ::highlight(brand-name) {

@@ -1,5 +1,9 @@
 # Roadmap
 
+## Gym-floor workout player
+- [x] Replace variable controls with fixed demonstration, prescription, action and bottom-button zones; preserve existing tracking and correct original exercise indices for recap parity. Real signed-in read-only Cable Press Mass preview checked at 384×714 and 1280×1800; primary anchor unchanged through set/rest. Kinetic Vortex Tabata timer/pause, interval 1 → 10s rest → interval 2 checked. Weight 20kg retained; all 568 tests pass, preview build OK; no training data changed.
+- [ ] Verify a real saved set and Logbook read-back (blocked: requesting account has a PAR-Q health waiver; not accepted on the user's behalf. Read-only administrator preview verified instead). Installed-device wake lock/audio remain unverified.
+
 ## Mobile native homepage and page accents
 - [x] Rebuild mobile homepage with the three-photo training carousel, four quick actions, Coach card, three live featured workouts and existing footer/navigation; real visitor and member screenshots checked at 394px, Coach tap opens the existing floor and member Logbook tab is visible.
 - [x] Apply semantic colorful mobile icons/steps, founder and Gym highlights, vivid Gift photo and persistent Shared Workouts filters; About/How/Contact/Gift/Library/Community/creator checked, filters stay at y=56 while scrolling and select/reset update the existing query.
