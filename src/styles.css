@@ -296,6 +296,11 @@
 }
 .coach-promo { border: 1.5px solid var(--brand-blue); border-radius: var(--radius-card); background: linear-gradient(90deg, color-mix(in oklab, var(--brand-blue) 10%, var(--card)), var(--card)); box-shadow: 0 6px 18px -10px color-mix(in oklab, var(--brand-blue) 60%, transparent); }
 .coach-floor { --card: var(--color-coach-card); }
+/* Desktop light mode: clean white page and the original soft card borders. */
+@media (min-width: 768px) {
+  :root:not(.dark) { --background: oklch(1 0 0); }
+  :root:not(.dark) .app-card, :root:not(.dark) .app-card:hover { border-color: var(--border); }
+}
 
 /* One mobile palette for every route and portalled menu/dialog. Desktop tokens
    remain unchanged. Brand wording alone retains blue; controls use neutral ink. */
