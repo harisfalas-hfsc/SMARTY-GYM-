@@ -223,9 +223,9 @@ function HowItWorks() {
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
-          {STEPS.map((s) => (
+          {STEPS.map((s, index) => (
             <div key={s.n} className="flex flex-col items-center text-center">
-              <div className="text-4xl font-black leading-none text-primary sm:text-5xl">
+              <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>
                 {s.n}
               </div>
               <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
@@ -261,9 +261,9 @@ function HowItWorks() {
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
-          {WOD_STEPS.map((s) => (
+          {WOD_STEPS.map((s, index) => (
             <div key={s.n} className="flex flex-col items-center text-center">
-              <div className="text-4xl font-black leading-none text-primary sm:text-5xl">
+              <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>
                 {s.n}
               </div>
               <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
@@ -299,9 +299,9 @@ function HowItWorks() {
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-3 sm:gap-4">
-          {RITUAL_STEPS.map((s) => (
+          {RITUAL_STEPS.map((s, index) => (
             <div key={s.n} className="flex flex-col items-center text-center">
-              <div className="text-4xl font-black leading-none text-primary sm:text-5xl">{s.n}</div>
+              <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>{s.n}</div>
               <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
               <div className="mt-1 text-sm text-muted-foreground">{s.desc}</div>
             </div>
@@ -332,9 +332,9 @@ function HowItWorks() {
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-3 sm:gap-4">
-          {CHECKIN_STEPS.map((s) => (
+          {CHECKIN_STEPS.map((s, index) => (
             <div key={s.n} className="flex flex-col items-center text-center">
-              <div className="text-4xl font-black leading-none text-primary sm:text-5xl">{s.n}</div>
+              <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>{s.n}</div>
               <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
               <div className="mt-1 text-sm text-muted-foreground">{s.desc}</div>
             </div>
@@ -364,9 +364,9 @@ function HowItWorks() {
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
-          {COMMUNITY_STEPS.map((s) => (
+          {COMMUNITY_STEPS.map((s, index) => (
             <div key={s.n} className="flex flex-col items-center text-center">
-              <div className="text-4xl font-black leading-none text-primary sm:text-5xl">
+              <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>
                 {s.n}
               </div>
               <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
@@ -401,9 +401,9 @@ function HowItWorks() {
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
-          {TRACKING_STEPS.map((s) => (
+          {TRACKING_STEPS.map((s, index) => (
             <div key={s.n} className="flex flex-col items-center text-center">
-              <div className="text-4xl font-black leading-none text-primary sm:text-5xl">
+              <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>
                 {s.n}
               </div>
               <div className="mt-3 text-base font-bold uppercase">{s.title}</div>

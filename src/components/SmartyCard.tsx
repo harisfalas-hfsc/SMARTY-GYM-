@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
-import { iconInk } from "@/lib/icon-tone";
 
 export type SmartyTone =
   | "cyan"

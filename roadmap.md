@@ -1,9 +1,9 @@
 # Roadmap
 
 ## Mobile native homepage and page accents
-- [ ] Rebuild mobile homepage with the three-photo training carousel, four quick actions, Coach card, three live featured workouts and existing footer/navigation.
-- [ ] Apply semantic colorful mobile icons/steps, founder and Gym highlights, vivid Gift photo and persistent Shared Workouts filters.
-- [ ] Standardize mobile carousel photo geometry/controls without changing desktop or saved training; verify mobile and desktop and run tests.
+- [x] Rebuild mobile homepage with the three-photo training carousel, four quick actions, Coach card, three live featured workouts and existing footer/navigation; real visitor and member screenshots checked at 394px, Coach tap opens the existing floor and member Logbook tab is visible.
+- [x] Apply semantic colorful mobile icons/steps, founder and Gym highlights, vivid Gift photo and persistent Shared Workouts filters; About/How/Contact/Gift/Library/Community/creator checked, filters stay at y=56 while scrolling and select/reset update the existing query.
+- [x] Match mobile Home/category/WOD photo geometry and controls while keeping functional Community panels intact; desktop Home/Contact/catalogue/Shared checked at 1280px, no horizontal overflow or runtime errors. Real member Coach, creator, WOD and Logbook loaded; 563 tests passed and preview build OK. No saved training or database changes; installed-app delivery not exercised.
 
 ## Mobile bright-white appearance
 - [x] Default mobile to light independently of desktop; bright-white shared surfaces, neutral controls/circles/dots, branding-only blue. Visitor Home/Workouts/Blog/FAQ/Tools/Shared and real member Coach/Account/Logbook/Check-ins checked at 384px; mobile toggle persistence and desktop default/saved preference independence verified; 563 tests pass, preview build OK. Installed-app startup not exercised.

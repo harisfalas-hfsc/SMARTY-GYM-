@@ -36,7 +36,7 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
   }, [api]);
   return <div className="md:hidden">
     <div className="mb-6 mt-5 flex justify-center">
-      <Button asChild size="lg" className="h-12 rounded-full px-8 text-base font-bold">
+      <Button asChild size="lg" className="h-12 rounded-full bg-brand-blue px-8 text-base font-bold text-hero-foreground hover:bg-brand-blue/90">
         <Link to="/wod"><Play className="h-4 w-4 fill-current" />Start Training</Link>
       </Button>
     </div>

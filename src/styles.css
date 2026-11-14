@@ -336,6 +336,8 @@
   .mobile-accent-5 { color: var(--tone-5-fg); }
   .mobile-accent-6 { color: var(--tone-6-fg); }
   .mobile-accent-7 { color: var(--tone-7-fg); }
+  .wod-photo-card { aspect-ratio: 2 / 1; }
+  .wod-photo-card > [data-slot="badge"] { z-index: 1; }
 }
 
 /* Photo cards use a dedicated image palette, independent of page theme. */

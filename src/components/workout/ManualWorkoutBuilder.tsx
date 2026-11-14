@@ -40,7 +40,7 @@ function SectionCard({
 
   return (
     <section className="app-card p-5">
-      <h2 className="text-lg font-extrabold">{section.label}</h2>
+      <h2 className="flex items-center gap-2 text-lg font-extrabold"><span className={`text-primary mobile-accent-${DRAFT_SECTIONS.findIndex(s => s.id === section.id) % 4}`}>{String(DRAFT_SECTIONS.findIndex(s => s.id === section.id) + 1).padStart(2, "0")}</span>{section.label}</h2>
       <div className="mt-3 space-y-2">
         {list.length === 0 ? (
           <p className="text-sm text-muted-foreground">No exercises yet.</p>

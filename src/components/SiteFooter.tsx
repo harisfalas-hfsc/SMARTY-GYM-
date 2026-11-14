@@ -13,7 +13,7 @@ const youtubeClass = `${socialClass} text-[#FF0000]`;
 
 export function SiteFooter() {
   return (
-    <footer className="bg-background w-full pt-4 pb-4 px-4">
+    <footer className="bg-background w-full pt-4 pb-24 md:pb-4 px-4">
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col items-center gap-3">
           <div className="flex items-center gap-4">

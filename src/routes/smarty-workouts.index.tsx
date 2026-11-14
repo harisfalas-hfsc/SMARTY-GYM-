@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { MobilePhotoCard } from "@/components/home/MobilePhotoCard";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
@@ -92,19 +93,20 @@ function SmartyWorkoutsPage() {
               if (!detail) return null;
               const Icon = detail.Icon;
               return (
-                <CarouselItem key={category} className="basis-[75%] pl-3 sm:basis-[60%]">
+                <CarouselItem key={category} className="basis-[94%] pl-3 md:basis-[60%]">
                   <Link
                     to="/smarty-workouts/category/$category"
                     params={{ category: categorySlug(category) }}
-                    className="app-card flex flex-col overflow-hidden transition-all duration-300"
+                    className="block overflow-hidden transition-all duration-300 md:app-card md:flex md:flex-col"
                   >
-                    <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
+                    <div className="md:hidden"><MobilePhotoCard image={detail.image} title={categoryLabel(category)} eyebrow={`${counts.byCategory[category] ?? 0} workouts`} description={detail.description} /></div>
+                    <div className="relative hidden aspect-[16/8] w-full shrink-0 overflow-hidden md:block">
                       <img src={detail.image} alt={categoryLabel(category)} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_top]" />
                       <span className="absolute right-2 top-2 rounded-full bg-background/90 px-2.5 py-1 text-[10px] font-extrabold text-foreground shadow-sm backdrop-blur-sm">
                         {counts.byCategory[category] ?? 0}
                       </span>
                     </div>
-                    <div className="flex flex-1 flex-col justify-center p-2 text-center">
+                    <div className="hidden flex-1 flex-col justify-center p-2 text-center md:flex">
                       <div className="mb-0.5 flex items-center justify-center gap-1.5">
                         <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
                           <Icon className="h-3 w-3 text-primary" />

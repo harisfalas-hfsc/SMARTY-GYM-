@@ -1,6 +1,6 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Check, Clock, Dumbbell, Heart, Home, Layers, Shuffle, Target, TrendingUp } from "lucide-react";
+import { Check, Clock, Dumbbell, Heart, Home, Layers, Play, Shuffle, Target, TrendingUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,6 +57,7 @@ export function WorkoutCard({
   onToggleFavorite,
   favoriteBusy,
   compact = false,
+  cinematic = false,
 }: {
   workout: WorkoutCardData;
   kind: WorkoutCardKind;
@@ -68,6 +69,7 @@ export function WorkoutCard({
   favoriteBusy?: boolean;
   /** Tighter type and spacing on phones only (2-column grids). Tablet/desktop unchanged. */
   compact?: boolean;
+  cinematic?: boolean;
 }) {
   const navigate = useNavigate();
   const recovery = kind === "RECOVERY";
@@ -90,7 +92,7 @@ export function WorkoutCard({
       className="group flex h-full w-full cursor-pointer flex-col overflow-hidden border border-coach-line transition-all duration-300 hover:shadow-xl"
       onClick={open}
     >
-      <div className="relative aspect-video overflow-hidden">
+      <div className={cn("relative aspect-video overflow-hidden", cinematic && "wod-photo-card")}>
         <img
           src={coverVariant(w.image_url, 640) ?? fallback}
           onError={fallbackTo(w.image_url ?? fallback)}
@@ -101,6 +103,11 @@ export function WorkoutCard({
           height={360}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        {cinematic && <div className="pointer-events-none md:hidden" data-brand-skip>
+          <div className="mobile-photo-shade" />
+          <div className="mobile-photo-copy text-hero-foreground"><p className="text-[10px] font-bold uppercase">Today's featured</p><h3 className="mt-2 text-lg font-extrabold leading-tight">{w.name}</h3><p className="mt-2 text-xs">{w.duration_min} min · {level}</p></div>
+          <span className="mobile-photo-action text-hero-foreground"><Play className="h-4 w-4 fill-current" /></span>
+        </div>}
         <Badge
           className={cn(
             "absolute border-0 text-wod-badge-foreground",
@@ -223,7 +230,7 @@ export function WodMobileCards({ cards, fallback }: { cards: WodCard[]; fallback
   if (cards.length === 1) {
     return (
       <div className="w-full">
-        <WorkoutCard workout={cards[0]!.workout} kind={cards[0]!.slot} fallback={fallback} />
+        {cards[0] && <WorkoutCard workout={cards[0].workout} kind={cards[0].slot} fallback={fallback} cinematic />}
       </div>
     );
   }
@@ -233,8 +240,8 @@ export function WodMobileCards({ cards, fallback }: { cards: WodCard[]; fallback
       <Carousel setApi={setApi} opts={{ align: "center", loop: true, startIndex: 0 }} className="w-full">
         <CarouselContent className="-ml-2">
           {cards.map((c) => (
-            <CarouselItem key={c.slot} className="basis-[85%] pl-2">
-              <WorkoutCard workout={c.workout} kind={c.slot} fallback={fallback} />
+            <CarouselItem key={c.slot} className="basis-[94%] pl-2 md:basis-[85%]">
+              <WorkoutCard workout={c.workout} kind={c.slot} fallback={fallback} cinematic />
             </CarouselItem>
           ))}
         </CarouselContent>
