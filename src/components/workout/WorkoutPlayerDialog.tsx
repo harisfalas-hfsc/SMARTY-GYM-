@@ -433,6 +433,7 @@ export function WorkoutPlayerDialog({
       setRestRemaining((prev) => Math.max(0, prev - 1));
       if (soundOnRef.current && restRemaining <= 3 && restRemaining > 0) playTimerBeep();
       if (restRemaining <= 1) {
+        try { navigator.vibrate?.([200, 100, 200]); } catch { /* unsupported */ }
         setRunning(false);
         endRest();
       }

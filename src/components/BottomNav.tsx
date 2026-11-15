@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { BookOpen, CalendarCheck, Dumbbell, Menu, MessageCircle, Sparkles } from "lucide-react";
 import { iconInk } from "@/lib/icon-tone";
@@ -14,6 +15,18 @@ export function BottomNav() {
   const { user, loading } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
+  const [coachOpen, setCoachOpen] = useState(false);
+  useEffect(() => {
+    const el = document.documentElement;
+    const sync = () => setCoachOpen(el.dataset.smartyCoach === "open");
+    sync();
+    const mo = new MutationObserver(sync);
+    mo.observe(el, { attributes: true, attributeFilter: ["data-smarty-coach"] });
+    return () => mo.disconnect();
+  }, []);
+  // While Coach is open, any tab closes it first, then goes on.
+  const leaveCoach = () => { if (coachOpen) window.dispatchEvent(new Event("smarty:close-coach")); };
+
   if (loading) return null;
   const items = ITEMS;
 
@@ -21,27 +34,31 @@ export function BottomNav() {
     <>
       <div aria-hidden className={`${user ? "" : "md:hidden "}h-[calc(3.5rem+env(safe-area-inset-bottom))]`} />
       <nav
-        className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background`}
+        className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-background`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)", pointerEvents: "auto" }}
         aria-label="Primary"
+        data-bottom-nav=""
       >
       <ul className="mx-auto grid max-w-lg grid-cols-6">
         <li>
           <button
             type="button"
-            onClick={() => window.dispatchEvent(new Event("smarty:open-coach"))}
-            className="flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-foreground"
+            onClick={() => window.dispatchEvent(new Event(coachOpen ? "smarty:close-coach" : "smarty:open-coach"))}
+            aria-pressed={coachOpen}
+            className={`relative flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold ${coachOpen ? "text-brand-blue" : "text-foreground"}`}
           >
             <MessageCircle className={`h-5 w-5 ${iconInk("Coach")}`} />
             Coach
+            {coachOpen && <span aria-hidden className="absolute bottom-1 h-0.5 w-8 rounded-full bg-brand-blue" />}
           </button>
         </li>
         {items.map(({ to, label, Icon }) => {
-          const active = pathname === to || pathname.startsWith(`${to}/`);
+          const active = !coachOpen && (pathname === to || pathname.startsWith(`${to}/`));
           return (
             <li key={to}>
               <Link
                 to={to}
+                onClick={leaveCoach}
                 {...(to === "/logbook"
                   ? { search: { filter: "all", view: "list" as const } }
                   : {})}
@@ -60,7 +77,7 @@ export function BottomNav() {
         <li>
           <button
             type="button"
-            onClick={() => window.dispatchEvent(new Event("smarty:open-menu"))}
+            onClick={() => { leaveCoach(); window.dispatchEvent(new Event("smarty:open-menu")); }}
             aria-label="More"
             className="flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-foreground"
           >

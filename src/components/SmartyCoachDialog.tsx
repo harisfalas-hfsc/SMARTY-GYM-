@@ -133,8 +133,9 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
   return (
     <Dialog open={open} onOpenChange={changeOpen}>
       <DialogContent
+        onInteractOutside={(e) => { if ((e.target as HTMLElement | null)?.closest?.("[data-bottom-nav]")) e.preventDefault(); }}
         onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); }}
-        className="coach-floor fixed inset-2 left-2 top-2 flex h-auto w-auto max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-lg border-0 bg-coach-bg p-0 text-coach-text shadow-none! outline-none sm:max-w-none md:inset-4 md:left-1/2 md:top-4 md:w-[min(72rem,calc(100vw-2rem))] md:-translate-x-1/2 [&>div:first-child>button]:border-primary [&>div:first-child>button]:bg-primary [&>div:first-child>button]:text-primary-foreground [&>div:first-child>button:hover]:bg-primary-hover [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:rounded-md [&>button]:border [&>button]:border-coach-line [&>button]:bg-coach-card [&>button]:p-2 [&>button]:text-coach-text [&>button]:opacity-100 [&>button_svg]:h-5 [&>button_svg]:w-5"
+        className="coach-floor fixed inset-2 left-2 top-2 max-md:top-[calc(0.5rem+env(safe-area-inset-top))] max-md:bottom-[calc(4rem+env(safe-area-inset-bottom))] flex h-auto w-auto max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-lg border-0 bg-coach-bg p-0 text-coach-text shadow-none! outline-none sm:max-w-none md:inset-4 md:left-1/2 md:top-4 md:w-[min(72rem,calc(100vw-2rem))] md:-translate-x-1/2 [&>div:first-child>button]:border-primary [&>div:first-child>button]:bg-primary [&>div:first-child>button]:text-primary-foreground [&>div:first-child>button:hover]:bg-primary-hover [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:rounded-md [&>button]:border [&>button]:border-coach-line [&>button]:bg-coach-card [&>button]:p-2 [&>button]:text-coach-text [&>button]:opacity-100 [&>button_svg]:h-5 [&>button_svg]:w-5"
       >
         <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
           {/* Header */}

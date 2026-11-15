@@ -32,7 +32,13 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { hideClose?: boolean }
->(({ className, children, onOpenAutoFocus, hideClose = false, ...props }, ref) => (
+>(({ className, children, onOpenAutoFocus, hideClose = false, ...props }, ref) => {
+  // Phones: ordinary dialogs become native bottom sheets. Full-screen dialogs (Coach, player) keep their own frame.
+  const fullFrame = /(^|\s)(inset-|h-full|h-dvh|h-\[100|top-0|workout-floor|coach-floor)/.test(className ?? "");
+  const sheet = fullFrame ? "" : "max-md:top-auto max-md:bottom-0 max-md:left-0 max-md:w-full max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 max-md:rounded-b-none max-md:rounded-t-3xl max-md:max-h-[88dvh] max-md:pb-[calc(1.25rem+env(safe-area-inset-bottom))] max-md:data-[state=open]:slide-in-from-bottom max-md:data-[state=closed]:slide-out-to-bottom max-md:data-[state=open]:zoom-in-100 max-md:data-[state=closed]:zoom-out-100";
+  const closeRef = React.useRef<HTMLButtonElement>(null);
+  const startY = React.useRef<number | null>(null);
+  return (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -41,13 +47,25 @@ const DialogContent = React.forwardRef<
       onOpenAutoFocus={onOpenAutoFocus ?? ((e) => { e.preventDefault(); (e.currentTarget as HTMLElement | null)?.focus({ preventScroll: true }); })}
       className={cn(
         "fixed outline-none left-[50%] top-[50%] z-50 grid max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] gap-5 overflow-y-auto rounded-3xl border border-coach-line bg-card p-5 shadow-soft duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:p-6",
+        sheet,
         className,
       )}
       {...props}
     >
+      {sheet ? (
+        <div
+          aria-hidden
+          className="md:hidden order-first -mt-2 -mb-3 flex h-6 shrink-0 cursor-grab touch-none items-center justify-center"
+          onTouchStart={(e) => { startY.current = e.touches[0].clientY; }}
+          onTouchEnd={(e) => { if (startY.current !== null && e.changedTouches[0].clientY - startY.current > 50) closeRef.current?.click(); startY.current = null; }}
+        >
+          <span className="h-1.5 w-10 rounded-full bg-muted-foreground/40" />
+        </div>
+      ) : null}
+      {hideClose && sheet ? <DialogPrimitive.Close ref={closeRef} className="hidden" tabIndex={-1} aria-hidden /> : null}
       {/* Sticky close: stays visible while long dialog content scrolls. */}
       {hideClose ? null : <div className="sticky top-0 z-50 order-first -mb-10 flex h-10 shrink-0 items-start justify-end">
-        <DialogPrimitive.Close className="pointer-events-auto grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full border border-border bg-secondary text-secondary-foreground transition-colors outline-none [@media(hover:hover)]:hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none">
+        <DialogPrimitive.Close ref={closeRef} className="pointer-events-auto grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full border border-border bg-secondary text-secondary-foreground transition-colors outline-none [@media(hover:hover)]:hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
@@ -57,7 +75,8 @@ const DialogContent = React.forwardRef<
 
     </DialogPrimitive.Content>
   </DialogPortal>
-));
+  );
+});
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
