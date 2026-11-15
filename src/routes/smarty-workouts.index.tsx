@@ -106,7 +106,7 @@ function SmartyWorkoutsPage() {
               return (
                 <CarouselItem key={category} className="basis-[88%] pl-2">
                   <Link to="/smarty-workouts/category/$category" params={{ category: categorySlug(category) }} className="block">
-                    <MobilePhotoCard image={detail.image} title={categoryLabel(category)} eyebrow={`${counts.byCategory[category] ?? 0} workouts`} description={detail.description} />
+                    <MobilePhotoCard image={detail.image} title={categoryLabel(category)} eyebrow={`${counts.byCategory[category] ?? 0} workouts`} description={detail.description} uniform />
                   </Link>
                 </CarouselItem>
               );
@@ -146,7 +146,7 @@ function SmartyWorkoutsPage() {
                     params={{ category: categorySlug(category) }}
                     className="block overflow-hidden transition-all duration-300 md:app-card md:flex md:flex-col"
                   >
-                    <div className="md:hidden"><MobilePhotoCard image={detail.image} title={categoryLabel(category)} eyebrow={`${counts.byCategory[category] ?? 0} workouts`} description={detail.description} /></div>
+                    <div className="md:hidden"><MobilePhotoCard image={detail.image} title={categoryLabel(category)} eyebrow={`${counts.byCategory[category] ?? 0} workouts`} description={detail.description} uniform /></div>
                     <div className="relative hidden aspect-[16/8] w-full shrink-0 overflow-hidden md:block">
                       <img src={detail.image} alt={categoryLabel(category)} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_top]" />
                       <span className="absolute right-2 top-2 rounded-full bg-background/90 px-2.5 py-1 text-[10px] font-extrabold text-foreground shadow-sm backdrop-blur-sm">
