@@ -172,7 +172,7 @@ export function Navigation() {
               window.scrollTo({ top: 0, behavior: "auto" });
             }}
             aria-label="SmartyGym home and refresh"
-            className="bg-transparent p-0 text-lg font-extrabold leading-none tracking-tight no-underline hover:no-underline"
+            className="bg-transparent p-0 text-[1.40625rem] md:text-lg font-extrabold leading-none tracking-tight no-underline hover:no-underline"
             style={{ textDecoration: "none" }}
           >
             <span data-brand-skip data-brand-logo><span className="text-primary">SMARTY</span><span className="text-green-500">GYM</span></span>
