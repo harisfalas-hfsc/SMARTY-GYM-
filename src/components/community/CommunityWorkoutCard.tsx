@@ -56,7 +56,7 @@ export function CommunityWorkoutCard({
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") onOpen(workout.id);
       }}
-      className="app-card flex h-full cursor-pointer flex-col p-5 text-left transition"
+      className="app-card !border-primary flex h-full cursor-pointer flex-col p-5 text-left transition"
     >
       <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-primary">
         <span className="truncate">{workout.category}</span>
