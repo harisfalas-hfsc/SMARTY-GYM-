@@ -34,7 +34,7 @@ export function BottomNav() {
     <>
       <div aria-hidden className={`${user ? "" : "md:hidden "}h-[calc(3.5rem+env(safe-area-inset-bottom))]`} />
       <nav
-        className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-background`}
+        className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 ${coachOpen ? "z-[60]" : "z-40"} border-t border-border bg-background`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)", pointerEvents: "auto" }}
         aria-label="Primary"
         data-bottom-nav=""
