@@ -410,7 +410,11 @@ export function WorkoutPlayerDialog({
     const id = window.setInterval(() => {
       if (soundOnRef.current && remainingRef.current <= 3 && remainingRef.current > 0) playTimerBeep();
       setRemaining((prev) => Math.max(0, prev - 1));
-      if (remainingRef.current <= 1) setRunning(false);
+      if (remainingRef.current <= 1) {
+        setRunning(false);
+        try { navigator.vibrate?.([200, 100, 200]); } catch { /* unsupported */ }
+        setRestFlash((n) => n + 1);
+      }
     }, 1000);
     return () => window.clearInterval(id);
   }, [running, timing, resting]);
