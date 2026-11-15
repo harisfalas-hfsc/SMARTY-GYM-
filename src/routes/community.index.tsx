@@ -458,13 +458,13 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="app-card flex h-full flex-col overflow-hidden">
+    <section className="app-card !border-primary flex h-full flex-col overflow-hidden">
       <header className="border-b border-coach-line bg-muted/40 p-4">
         <h2 className="flex h-7 items-center gap-2 text-lg font-extrabold uppercase tracking-tight">
           <Icon className={`h-5 w-5 text-primary mobile-accent-${title.includes("Member") ? 2 : title.includes("Ranking") ? 7 : title.includes("Talk") || title.includes("Comment") ? 1 : 0}`} />
           {title}
         </h2>
-        <div className="mt-3 rounded-2xl border border-coach-line p-3 ">
+        <div className="mt-3 rounded-2xl border border-primary/60 p-3 ">
           {filterControl ?? <div className="grid grid-cols-1 gap-2">
             {filters.map((f) => {
               return (
@@ -501,7 +501,7 @@ function Spinner() {
 /** Reserved position for a rank that nobody has claimed yet. */
 function EmptySlot({ index, label }: { index: number; label: string }) {
   return (
-    <li className="flex items-center gap-3 rounded-2xl border border-coach-line p-2.5 ">
+    <li className="flex items-center gap-3 rounded-2xl border border-primary/60 p-2.5 ">
       <span className="w-7 shrink-0 text-center text-sm opacity-60">{badgeFor(index)}</span>
       <span className="h-8 w-8 shrink-0 rounded-full border border-dashed border-coach-line" />
       <p className="min-w-0 flex-1 truncate text-[11px] font-semibold text-muted-foreground">
@@ -548,7 +548,7 @@ function SharedWorkoutsPanel({
           {rows.slice(0, SLOTS).map((w) => (
             <li
               key={w.id}
-              className="rounded-2xl border border-coach-line p-3 "
+              className="rounded-2xl border border-primary/60 p-3 "
             >
               <button
                 type="button"
@@ -622,7 +622,7 @@ function MemberRankingPanel({
               tabIndex={0}
               onClick={() => openCreator(m.user_id, m.display_name)}
               onKeyDown={(e) => e.key === "Enter" && openCreator(m.user_id, m.display_name)}
-              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-coach-line p-2.5 transition "
+              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-primary/60 p-2.5 transition "
             >
               <span className="w-7 shrink-0 text-center text-sm font-black text-primary">
                 {badgeFor(i)}
@@ -693,7 +693,7 @@ function WorkoutRankingPanel({
               <button
                 type="button"
                 onClick={() => onOpen(w.id)}
-                className="flex w-full items-center gap-3 rounded-2xl border border-coach-line p-2.5 text-left transition "
+                className="flex w-full items-center gap-3 rounded-2xl border border-primary/60 p-2.5 text-left transition "
               >
                 <span className="w-7 shrink-0 text-center text-sm font-black text-primary">
                   {badgeFor(i)}
@@ -758,7 +758,7 @@ function TalkPanel({
               <button
                 type="button"
                 onClick={() => setSelectedComment(c)}
-                className="flex w-full gap-3 rounded-2xl border border-coach-line p-3 text-left transition "
+                className="flex w-full gap-3 rounded-2xl border border-primary/60 p-3 text-left transition "
               >
                 <MemberAvatar name={c.author_name} avatar={c.author_avatar} size={8} />
                 <div className="min-w-0 flex-1">
