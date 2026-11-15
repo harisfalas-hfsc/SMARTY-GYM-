@@ -1,5 +1,5 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { Lock, Check } from "lucide-react";
+import { Lock, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Info = { title: string; text: string; points: string[] };
@@ -65,10 +65,24 @@ export function VisitorPagePreview({ pathname }: { pathname: string }) {
   const info = PAGES[pathname] ?? FALLBACK;
   const router = useRouter();
   // Tapping anywhere outside the card dismisses it, like every other announcement.
-  const dismiss = () => void router.navigate({ to: "/" });
+  const dismiss = () => {
+    if (window.history.length > 1) {
+      router.history.back();
+      return;
+    }
+    void router.navigate({ to: "/" });
+  };
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 px-4 backdrop-blur-sm" onClick={(e) => e.target === e.currentTarget && dismiss()}>
-      <div className="app-card w-full max-w-xl p-6 text-center">
+      <div className="app-card relative w-full max-w-xl p-6 text-center">
+        <button
+          type="button"
+          onClick={dismiss}
+          aria-label="Go back"
+          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10"
+        >
+          <X className="h-4 w-4" />
+        </button>
         <h1 className="text-2xl font-bold text-foreground">{info.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{info.text}</p>
         <ul className="mt-5 space-y-2 text-left">
