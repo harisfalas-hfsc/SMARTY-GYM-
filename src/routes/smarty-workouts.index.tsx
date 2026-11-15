@@ -50,6 +50,8 @@ function SmartyWorkoutsPage() {
   };
   const [api, setApi] = useState<CarouselApi>();
   const [active, setActive] = useState(0);
+  const [featuredApi, setFeaturedApi] = useState<CarouselApi>();
+  const [featuredActive, setFeaturedActive] = useState(0);
 
   useEffect(() => {
     if (!api) return;
@@ -62,6 +64,18 @@ function SmartyWorkoutsPage() {
       api.off("reInit", update);
     };
   }, [api]);
+
+  useEffect(() => {
+    if (!featuredApi) return;
+    const update = () => setFeaturedActive(featuredApi.selectedScrollSnap());
+    update();
+    featuredApi.on("select", update);
+    featuredApi.on("reInit", update);
+    return () => {
+      featuredApi.off("select", update);
+      featuredApi.off("reInit", update);
+    };
+  }, [featuredApi]);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
@@ -146,35 +160,64 @@ function SmartyWorkoutsPage() {
       {/* Desktop: category cards, each opens its own page */}
       {featured.length > 0 && (
         <section aria-label="Featured Workouts" className="mt-6 lg:hidden">
-          <h2 className="mb-4 flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-foreground">
-            <Star className="h-5 w-5" />Featured Workouts
-          </h2>
-          <div className="flex flex-col gap-3">
-            {featured.slice(0, 6).map((workout) => (
-              <Link
+          <div className="mb-4 flex items-center justify-center gap-4">
+            <Button type="button" variant="ghost" size="icon" onClick={() => featuredApi?.scrollPrev()} aria-label="Previous featured workout" className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80">
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <h2 className="flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-foreground">
+              <Star className="h-5 w-5" />Featured Workouts
+            </h2>
+            <Button type="button" variant="ghost" size="icon" onClick={() => featuredApi?.scrollNext()} aria-label="Next featured workout" className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80">
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </div>
+
+          <Carousel className="w-full" opts={{ align: "center", loop: true }} setApi={setFeaturedApi}>
+            <CarouselContent className="-ml-3">
+              {featured.slice(0, 6).map((workout, index) => (
+                <CarouselItem key={workout.id} className="basis-[75%] pl-3 sm:basis-[60%]">
+                  <Link
+                    to="/smarty-workouts/$workoutId"
+                    params={{ workoutId: workout.id }}
+                    className="app-card flex h-full flex-col overflow-hidden transition-all duration-300"
+                  >
+                    <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
+                      <img
+                        src={workout.image_url ?? fallbackFor(workout.category)}
+                        onError={fallbackTo(fallbackFor(workout.category))}
+                        alt={workout.name}
+                        width={1280}
+                        height={640}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        className="absolute inset-0 h-full w-full object-cover object-[center_top]"
+                      />
+                    </div>
+                    <div className="flex flex-1 flex-col justify-center p-2 text-center">
+                      <span className="text-[9px] font-bold uppercase tracking-wide text-primary">{categoryLabel(workout.category)}</span>
+                      <h3 className="line-clamp-1 text-xs font-bold leading-tight text-foreground">{workout.name}</h3>
+                      <p className="line-clamp-1 text-[10px] leading-snug text-muted-foreground">{workout.duration_min} min · {difficultyLabel(workout.difficulty_stars)}</p>
+                      <span className="mt-0.5 flex items-center justify-center gap-1 text-[9px] font-medium text-primary">
+                        Explore<ChevronRight className="h-2.5 w-2.5" />
+                      </span>
+                    </div>
+                  </Link>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+
+          <div className="mt-3 flex justify-center gap-2">
+            {featured.slice(0, 6).map((workout, index) => (
+              <Button
                 key={workout.id}
-                to="/smarty-workouts/$workoutId"
-                params={{ workoutId: workout.id }}
-                className="app-card flex h-[68px] items-center gap-3 overflow-hidden p-1.5 transition-all duration-300"
-              >
-                <div className="relative h-[58px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
-                  <img
-                    src={workout.image_url ?? fallbackFor(workout.category)}
-                    onError={fallbackTo(fallbackFor(workout.category))}
-                    alt={workout.name}
-                    width={144}
-                    height={144}
-                    loading="lazy"
-                    decoding="async"
-                    className="absolute inset-0 h-full w-full object-cover object-center"
-                  />
-                </div>
-                <div className="flex min-w-0 flex-1 flex-col justify-center">
-                  <span className="text-[9px] font-bold uppercase tracking-wide text-primary">{categoryLabel(workout.category)}</span>
-                  <h3 className="line-clamp-1 text-[13px] font-extrabold leading-tight text-foreground">{workout.name}</h3>
-                  <p className="line-clamp-1 text-[10px] leading-snug text-muted-foreground">{workout.duration_min} min · {difficultyLabel(workout.difficulty_stars)}</p>
-                </div>
-              </Link>
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label={`Go to ${workout.name}`}
+                onClick={() => featuredApi?.scrollTo(index)}
+                className={cn("h-2.5 w-2.5 rounded-full p-0 transition-all", featuredActive === index ? "scale-125 bg-primary hover:bg-primary" : "bg-primary/30 hover:bg-primary/50")}
+              />
             ))}
           </div>
         </section>
