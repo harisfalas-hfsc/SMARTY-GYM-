@@ -115,6 +115,7 @@
  */
 :root {
   --brand-blue: oklch(0.745 0.131 220);
+  --on-brand: oklch(0.99 0 0);
   --coach-bg: oklch(0.145 0 0);
   --coach-card: oklch(0.2 0 0);
   --coach-line: oklch(0.3 0 0);
