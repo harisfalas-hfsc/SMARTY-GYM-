@@ -1,22 +1,21 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, CalendarCheck, Dumbbell, LogIn, Menu, MessageCircle, Sparkles } from "lucide-react";
+import { BookOpen, CalendarCheck, Dumbbell, Menu, MessageCircle, Sparkles } from "lucide-react";
 import { iconInk } from "@/lib/icon-tone";
 import { useAuth } from "@/hooks/useAuth";
 
 const ITEMS = [
-  { to: "/smarty-workouts", label: "Workouts", Icon: Dumbbell, iconColor: "text-chart-1" },
   { to: "/wod", label: "WOD", Icon: CalendarCheck, iconColor: "text-chart-2" },
+  { to: "/smarty-workouts", label: "Workouts", Icon: Dumbbell, iconColor: "text-chart-1" },
   { to: "/create-your-own-workout", label: "Create", Icon: Sparkles, iconColor: "text-chart-3" },
+  { to: "/logbook", label: "Logbook", Icon: BookOpen, iconColor: "text-chart-5" },
 ] as const;
-const MEMBER_LAST = { to: "/logbook", label: "Logbook", Icon: BookOpen, iconColor: "text-chart-5" } as const;
-const VISITOR_LAST = { to: "/auth", label: "Sign in", Icon: LogIn, iconColor: "text-chart-5" } as const;
 
 export function BottomNav() {
   const { user, loading } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   if (loading) return null;
-  const items = [...ITEMS, user ? MEMBER_LAST : VISITOR_LAST];
+  const items = ITEMS;
 
   return (
     <>
