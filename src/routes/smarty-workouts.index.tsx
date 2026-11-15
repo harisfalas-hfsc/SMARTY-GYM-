@@ -18,7 +18,7 @@ import { coverVariant, fallbackTo } from "@/lib/cover-image";
 
 export const Route = createFileRoute("/smarty-workouts/")({
   loader: async () => {
-    const [counts, featured] = await Promise.all([getSmartyWorkoutCounts(), getFeaturedSmartyWorkouts()]);
+    const [counts, featured] = await Promise.all([getSmartyWorkoutCounts(), getFeaturedSmartyWorkouts({ data: { count: 6 } })]);
     return { counts, featured };
   },
   head: () => ({
@@ -150,7 +150,7 @@ function SmartyWorkoutsPage() {
             <Star className="h-5 w-5" />Featured Workouts
           </h2>
           <div className="flex flex-col gap-3">
-            {featured.map((workout) => (
+            {featured.slice(0, 6).map((workout) => (
               <Link
                 key={workout.id}
                 to="/smarty-workouts/$workoutId"
@@ -210,7 +210,7 @@ function SmartyWorkoutsPage() {
           <section aria-label="Featured Workouts" className="app-card flex min-w-0 flex-col overflow-hidden p-4 xl:col-span-3">
             <h2 className="mb-3 flex shrink-0 items-center gap-2 text-lg font-bold text-foreground"><Star className="h-5 w-5" />Featured Workouts</h2>
             <div className="grid min-h-0 flex-1 grid-cols-3 gap-3 lg:max-xl:grid-cols-1">
-              {featured.map((workout) => (
+              {featured.slice(0, 3).map((workout) => (
                 <div key={workout.id} className="min-w-0 [&>div]:h-full [&_h3]:min-h-0 [&_h3]:text-base [&_h3]:leading-tight [&_p]:hidden lg:max-xl:[&>div]:flex-row lg:max-xl:[&>div>div:first-child]:w-24 lg:max-xl:[&>div>div:first-child]:shrink-0 lg:max-xl:[&>div>div:last-child]:p-2 lg:max-xl:[&_button]:hidden lg:max-xl:[&_span]:text-[10px]">
                   <WorkoutCard workout={workout} kind={kindForWorkout(workout)} fallback={fallbackFor(workout.category)} eager={false} />
                 </div>

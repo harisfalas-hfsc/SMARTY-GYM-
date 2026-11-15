@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
 import {
-  ArrowRight, BatteryLow, BookOpen, CalendarCheck, ChevronDown, ChevronRight, Clock, Compass, Dumbbell,
+  Apple, ArrowRight, BatteryLow, LogIn, BookOpen, CalendarCheck, ChevronDown, ChevronRight, Clock, Compass, Dumbbell,
   Flame, HelpCircle, Library, NotebookPen, RefreshCw, Smile, Timer, Trophy, Users, Wrench, Zap, type LucideIcon,
 } from "lucide-react";
 import { getCoachSnapshot } from "@/lib/coach.functions";
@@ -46,12 +46,12 @@ const QUESTIONS = [
   { q: "How do I choose my working weight?", icon: Dumbbell, a: "Choose a weight you can lift for every rep with good form, finishing each set with about two or three reps left in the tank (around 7–8 out of 10 effort). If form breaks, go lighter. If it feels easy, go up a little next time." },
 ];
 
-const TOPICS: { title: string; items: string[] }[] = [
-  { title: "Training Principles", items: ["Consistency beats intensity. Three good sessions a week, every week, wins.", "Always start with the Activation section — never skip your warm-up.", "Progress a little at a time: one more rep or slightly more weight."] },
-  { title: "Strength & Hypertrophy", items: ["Good form first, then load.", "Control every rep — no swinging, no rushing.", "Train each muscle group about twice a week."] },
-  { title: "Conditioning", items: ["Work hard in the intervals, recover fully in the rests.", "You should be breathing hard but still in control of your movement.", "Mix conditioning with strength across the week."] },
-  { title: "Recovery & Mobility", items: ["Sleep is your best recovery tool.", "Easy days help hard days work better.", "Do the Cool-down section after every workout."] },
-  { title: "Nutrition Fundamentals", items: ["Eat enough protein at every meal.", "Drink water through the day, more on training days.", "Keep it simple: mostly whole foods, regular meals."] },
+const TOPICS: { title: string; icon: LucideIcon; items: string[] }[] = [
+  { title: "Training Principles", icon: Compass, items: ["Consistency beats intensity. Three good sessions a week, every week, wins.", "Always start with the Activation section — never skip your warm-up.", "Progress a little at a time: one more rep or slightly more weight."] },
+  { title: "Strength & Hypertrophy", icon: Dumbbell, items: ["Good form first, then load.", "Control every rep — no swinging, no rushing.", "Train each muscle group about twice a week."] },
+  { title: "Conditioning", icon: Flame, items: ["Work hard in the intervals, recover fully in the rests.", "You should be breathing hard but still in control of your movement.", "Mix conditioning with strength across the week."] },
+  { title: "Recovery & Mobility", icon: BatteryLow, items: ["Sleep is your best recovery tool.", "Easy days help hard days work better.", "Do the Cool-down section after every workout."] },
+  { title: "Nutrition Fundamentals", icon: Apple, items: ["Eat enough protein at every meal.", "Drink water through the day, more on training days.", "Keep it simple: mostly whole foods, regular meals."] },
 ];
 
 function Section({ n, title, subtitle, children }: { n: string; title: string; subtitle?: string; children: ReactNode }) {
@@ -275,8 +275,8 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
               <div className="grid items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {TOPICS.map((t, i) => (
                   <div key={t.title} className="app-card">
-                    <button type="button" aria-expanded={openTopic === i} onClick={() => setOpenTopic(openTopic === i ? null : i)} className="flex h-20 w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold">
-                      <span className="flex h-10 min-w-0 items-center leading-5">{t.title}</span><ChevronDown className={`h-4 w-4 shrink-0 text-coach-muted transition-transform ${openTopic === i ? "rotate-180" : ""}`} />
+                    <button type="button" aria-expanded={openTopic === i} onClick={() => setOpenTopic(openTopic === i ? null : i)} className="flex min-h-13 w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold">
+                      <t.icon className="h-5 w-5 shrink-0 text-coach-gold" /><span className="min-w-0 flex-1">{t.title}</span><ChevronDown className={`h-4 w-4 shrink-0 text-coach-muted transition-transform ${openTopic === i ? "rotate-180" : ""}`} />
                     </button>
                     {openTopic === i ? <ul className="space-y-2 border-t border-coach-line px-3 py-3 text-sm text-coach-muted">{t.items.map((x) => <li key={x}>{x}</li>)}</ul> : null}
                   </div>
@@ -314,8 +314,9 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
                     <button type="button" onClick={() => go("/logbook")} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-coach-gold text-sm font-extrabold uppercase tracking-wide text-coach-gold">Open my Logbook <ArrowRight className="h-4 w-4" /></button>
                   </>
                 ) : (
-                  <div className={card}>
+                  <div className={`${card} space-y-3`}>
                     <p className="text-sm text-coach-muted">Your workouts, progress and personal records live in your Logbook as a Premium member.</p>
+                    {visitor ? <button type="button" onClick={() => go("/auth")} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-coach-gold text-sm font-extrabold uppercase tracking-wide text-coach-gold"><LogIn className="h-4 w-4" /> Sign in / Log in</button> : null}
                   </div>
                 )}
               </Section>
