@@ -104,7 +104,7 @@ export function NotificationBell({ className }: { className?: string }) {
       to="/inbox"
       search={{ tab: messagesUnread > 0 && updatesUnread === 0 ? ("messages" as const) : ("updates" as const), compose: false }}
       aria-label={unread ? `Inbox (${unread} unread)` : "Inbox"}
-      className={`relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10 ${className ?? ""}`}
+      className={`relative h-8 w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10 ${className ?? "inline-flex"}`}
     >
       <Bell className="h-4 w-4" />
       {unread > 0 && (
