@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { MobileCategoryTiles } from "@/components/workouts/MobileCategoryTiles";
 import { MobilePhotoCard } from "@/components/home/MobilePhotoCard";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -50,8 +49,8 @@ function SmartyWorkoutsPage() {
   };
   const [api, setApi] = useState<CarouselApi>();
   const [active, setActive] = useState(0);
-  const [featuredApi, setFeaturedApi] = useState<CarouselApi>();
-  const [featuredActive, setFeaturedActive] = useState(0);
+  const [mobileApi, setMobileApi] = useState<CarouselApi>();
+  const [mobileActive, setMobileActive] = useState(0);
 
   useEffect(() => {
     if (!api) return;
@@ -66,16 +65,16 @@ function SmartyWorkoutsPage() {
   }, [api]);
 
   useEffect(() => {
-    if (!featuredApi) return;
-    const update = () => setFeaturedActive(featuredApi.selectedScrollSnap());
+    if (!mobileApi) return;
+    const update = () => setMobileActive(mobileApi.selectedScrollSnap());
     update();
-    featuredApi.on("select", update);
-    featuredApi.on("reInit", update);
+    mobileApi.on("select", update);
+    mobileApi.on("reInit", update);
     return () => {
-      featuredApi.off("select", update);
-      featuredApi.off("reInit", update);
+      mobileApi.off("select", update);
+      mobileApi.off("reInit", update);
     };
-  }, [featuredApi]);
+  }, [mobileApi]);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
@@ -90,7 +89,38 @@ function SmartyWorkoutsPage() {
         }
       />
 
-      <MobileCategoryTiles />
+      {/* Mobile: category photo carousel, same style as the homepage Explore carousel */}
+      <div className="md:hidden">
+        <div className="mb-3 mt-5 flex items-center justify-between">
+          <h2 className="text-lg font-extrabold">Explore</h2>
+          <div className="flex gap-2">
+            <Button type="button" variant="outline" size="icon" aria-label="Previous category" onClick={() => mobileApi?.scrollPrev()} className="h-8 w-8 rounded-full"><ChevronLeft className="h-4 w-4" /></Button>
+            <Button type="button" variant="outline" size="icon" aria-label="Next category" onClick={() => mobileApi?.scrollNext()} className="h-8 w-8 rounded-full"><ChevronRight className="h-4 w-4" /></Button>
+          </div>
+        </div>
+        <Carousel setApi={setMobileApi} opts={{ align: "start", loop: true }} aria-label="Workout categories">
+          <CarouselContent className="-ml-2">
+            {SMARTY_WORKOUT_CATEGORIES.map((category) => {
+              const detail = CATEGORY_DETAILS[category];
+              if (!detail) return null;
+              return (
+                <CarouselItem key={category} className="basis-[88%] pl-2">
+                  <Link to="/smarty-workouts/category/$category" params={{ category: categorySlug(category) }} className="block">
+                    <MobilePhotoCard image={detail.image} title={categoryLabel(category)} eyebrow={`${counts.byCategory[category] ?? 0} workouts`} description={detail.description} />
+                  </Link>
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+        </Carousel>
+        <div className="mobile-carousel-dots my-3 flex justify-center gap-1">
+          {SMARTY_WORKOUT_CATEGORIES.map((category, index) => (
+            <Button key={category} size="icon" variant="ghost" aria-label={`Go to ${categoryLabel(category)}`} aria-current={index === mobileActive ? "true" : undefined} onClick={() => mobileApi?.scrollTo(index)} className="h-8 w-8 rounded-full p-0">
+              <span className={index === mobileActive ? "h-2 w-2 rounded-full bg-brand-blue" : "h-2 w-2 rounded-full bg-muted-foreground/30"} />
+            </Button>
+          ))}
+        </div>
+      </div>
       {/* Tablet: category photo carousel */}
       <div className="hidden md:block lg:hidden">
         <div className="mb-4 flex items-center justify-center gap-4">
@@ -160,64 +190,35 @@ function SmartyWorkoutsPage() {
       {/* Desktop: category cards, each opens its own page */}
       {featured.length > 0 && (
         <section aria-label="Featured Workouts" className="mt-6 lg:hidden">
-          <div className="mb-4 flex items-center justify-center gap-4">
-            <Button type="button" variant="ghost" size="icon" onClick={() => featuredApi?.scrollPrev()} aria-label="Previous featured workout" className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80">
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-            <h2 className="flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-foreground">
-              <Star className="h-5 w-5" />Featured Workouts
-            </h2>
-            <Button type="button" variant="ghost" size="icon" onClick={() => featuredApi?.scrollNext()} aria-label="Next featured workout" className="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/80">
-              <ChevronRight className="h-5 w-5" />
-            </Button>
-          </div>
-
-          <Carousel className="w-full" opts={{ align: "center", loop: true }} setApi={setFeaturedApi}>
-            <CarouselContent className="-ml-3">
-              {featured.slice(0, 6).map((workout, index) => (
-                <CarouselItem key={workout.id} className="basis-[75%] pl-3 sm:basis-[60%]">
-                  <Link
-                    to="/smarty-workouts/$workoutId"
-                    params={{ workoutId: workout.id }}
-                    className="app-card flex h-full flex-col overflow-hidden transition-all duration-300"
-                  >
-                    <div className="relative aspect-[16/8] w-full shrink-0 overflow-hidden">
-                      <img
-                        src={workout.image_url ?? fallbackFor(workout.category)}
-                        onError={fallbackTo(fallbackFor(workout.category))}
-                        alt={workout.name}
-                        width={1280}
-                        height={640}
-                        loading={index === 0 ? "eager" : "lazy"}
-                        decoding="async"
-                        className="absolute inset-0 h-full w-full object-cover object-[center_top]"
-                      />
-                    </div>
-                    <div className="flex flex-1 flex-col justify-center p-2 text-center">
-                      <span className="text-[9px] font-bold uppercase tracking-wide text-primary">{categoryLabel(workout.category)}</span>
-                      <h3 className="line-clamp-1 text-xs font-bold leading-tight text-foreground">{workout.name}</h3>
-                      <p className="line-clamp-1 text-[10px] leading-snug text-muted-foreground">{workout.duration_min} min · {difficultyLabel(workout.difficulty_stars)}</p>
-                      <span className="mt-0.5 flex items-center justify-center gap-1 text-[9px] font-medium text-primary">
-                        Explore<ChevronRight className="h-2.5 w-2.5" />
-                      </span>
-                    </div>
-                  </Link>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-
-          <div className="mt-3 flex justify-center gap-2">
-            {featured.slice(0, 6).map((workout, index) => (
-              <Button
+          <h2 className="mb-4 flex items-center justify-center gap-2 text-lg font-extrabold uppercase text-foreground">
+            <Star className="h-5 w-5" />Featured Workouts
+          </h2>
+          <div className="flex flex-col gap-3">
+            {featured.slice(0, 6).map((workout) => (
+              <Link
                 key={workout.id}
-                type="button"
-                variant="ghost"
-                size="icon"
-                aria-label={`Go to ${workout.name}`}
-                onClick={() => featuredApi?.scrollTo(index)}
-                className={cn("h-2.5 w-2.5 rounded-full p-0 transition-all", featuredActive === index ? "scale-125 bg-primary hover:bg-primary" : "bg-primary/30 hover:bg-primary/50")}
-              />
+                to="/smarty-workouts/$workoutId"
+                params={{ workoutId: workout.id }}
+                className="app-card flex h-[68px] items-center gap-3 overflow-hidden p-1.5 transition-all duration-300"
+              >
+                <div className="relative h-[58px] w-[58px] shrink-0 overflow-hidden rounded-lg bg-primary/10">
+                  <img
+                    src={workout.image_url ?? fallbackFor(workout.category)}
+                    onError={fallbackTo(fallbackFor(workout.category))}
+                    alt={workout.name}
+                    width={144}
+                    height={144}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                  <span className="text-[9px] font-bold uppercase tracking-wide text-primary">{categoryLabel(workout.category)}</span>
+                  <h3 className="line-clamp-1 text-[13px] font-extrabold leading-tight text-foreground">{workout.name}</h3>
+                  <p className="line-clamp-1 text-[10px] leading-snug text-muted-foreground">{workout.duration_min} min · {difficultyLabel(workout.difficulty_stars)}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </section>
