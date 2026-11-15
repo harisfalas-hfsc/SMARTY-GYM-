@@ -11,6 +11,7 @@ interface PageHeaderProps {
   subtitle?: ReactNode;
   /** Optional shorter introduction for phones; desktop keeps the original subtitle. */
   mobileSubtitle?: ReactNode;
+  mobileDescriptionCard?: boolean;
   className?: string;
   /**
    * Heading element used for the title. Defaults to "h1".
@@ -34,12 +35,14 @@ export function PageHeader({
   title,
   subtitle,
   mobileSubtitle,
+  mobileDescriptionCard = true,
   className,
   as: Heading = "h1",
   titleClassName,
   image,
 }: PageHeaderProps) {
   const Icon = typeof icon === "function" ? icon : null;
+  const Description = mobileDescriptionCard ? MobilePageDescription : "p";
   return (
     <div
       className={cn(
@@ -83,14 +86,14 @@ export function PageHeader({
       </Heading>
 
       {subtitle && (
-        <MobilePageDescription
+        <Description
           className={cn(
             "mx-auto mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base",
             image && "lg:mx-0 lg:mt-4 lg:text-lg lg:leading-8 lg:text-foreground/80",
           )}
         >
           {mobileSubtitle ? <><span className="md:hidden">{mobileSubtitle}</span><span className="hidden md:inline">{subtitle}</span></> : subtitle}
-        </MobilePageDescription>
+        </Description>
       )}
       </div>
     </div>

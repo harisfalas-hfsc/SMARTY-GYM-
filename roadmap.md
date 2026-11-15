@@ -1,8 +1,8 @@
 # Roadmap
 
 ## Mobile page introduction consistency
-- [ ] Put existing page descriptions in a shared mobile-only introduction card; shorten long mobile introductions and match Workout of the Day without changing desktop.
-- [ ] Verify named public and signed-in pages, desktop parity, tests and preview.
+- [x] Put existing customer page descriptions in a shared mobile-only introduction card; shorten long mobile introductions and match Workout of the Day without changing desktop or administrator headers.
+- [x] Verified all eight named pages, both creator modes, Tools, Blog, Library, About and Inbox at 384px with the requesting account; five desktop introductions remain undecorated. Screenshots inspected, 568 tests passed, preview build OK; no training data changed.
 
 ## Gym-floor workout player
 - [x] Replace variable controls with fixed demonstration, prescription, action and bottom-button zones; preserve existing tracking and correct original exercise indices for recap parity. Real signed-in read-only Cable Press Mass preview checked at 384×714 and 1280×1800; primary anchor unchanged through set/rest. Kinetic Vortex Tabata timer/pause, interval 1 → 10s rest → interval 2 checked. Weight 20kg retained; all 568 tests pass, preview build OK; no training data changed.

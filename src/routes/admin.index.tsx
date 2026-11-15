@@ -281,6 +281,7 @@ function AdminPage() {
   return (
     <Shell>
       <PageHeader
+        mobileDescriptionCard={false}
         eyebrow="Administration"
         title={active ? active.label : "Admin panel"}
         subtitle={active ? active.description : "Everything that runs SmartyGym"}
