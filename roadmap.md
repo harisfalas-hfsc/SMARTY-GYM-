@@ -1,5 +1,9 @@
 # Roadmap
 
+## Mobile page introduction consistency
+- [ ] Put existing page descriptions in a shared mobile-only introduction card; shorten long mobile introductions and match Workout of the Day without changing desktop.
+- [ ] Verify named public and signed-in pages, desktop parity, tests and preview.
+
 ## Gym-floor workout player
 - [x] Replace variable controls with fixed demonstration, prescription, action and bottom-button zones; preserve existing tracking and correct original exercise indices for recap parity. Real signed-in read-only Cable Press Mass preview checked at 384×714 and 1280×1800; primary anchor unchanged through set/rest. Kinetic Vortex Tabata timer/pause, interval 1 → 10s rest → interval 2 checked. Weight 20kg retained; all 568 tests pass, preview build OK; no training data changed.
 - [ ] Verify a real saved set and Logbook read-back (blocked: requesting account has a PAR-Q health waiver; not accepted on the user's behalf. Read-only administrator preview verified instead). Installed-device wake lock/audio remain unverified.

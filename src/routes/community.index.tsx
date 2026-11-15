@@ -317,6 +317,7 @@ function CommunityPage() {
         eyebrow="Smarty Community"
         icon={Users}
         title="Together"
+        mobileSubtitle={<>Train together, share workouts and celebrate your progress.<span className="mt-2 block">{PANEL_DESCRIPTIONS[mobilePanel]}</span></>}
         subtitle={
           <>
             <Hi>Train</Hi> together. <Hi>Share</Hi> your workouts. <Hi>Discover</Hi> sessions from
@@ -324,9 +325,6 @@ function CommunityPage() {
           </>
         }
       />
-      <p className="mt-3 text-center text-sm text-muted-foreground md:hidden">
-        {PANEL_DESCRIPTIONS[mobilePanel]}
-      </p>
       <p className="mt-3 hidden text-center text-sm text-muted-foreground md:block">
         {PANEL_DESCRIPTIONS[desktopPanel]}
       </p>

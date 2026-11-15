@@ -115,6 +115,7 @@ function AboutPage() {
           </>
         }
         subtitle={<GymDescription />}
+        mobileSubtitle={<>Your online gym anywhere, anytime — expert-designed training by <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link>.</>}
       />
 
       {/* What / How / When — the core story */}

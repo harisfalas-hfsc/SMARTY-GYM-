@@ -53,6 +53,7 @@ function InboxPage() {
         eyebrow="Inbox"
         title="Inbox"
         subtitle="Notifications are updates from SMARTYGYM. Messages are your private conversations with our team — including replies to anything you sent through Contact."
+        mobileSubtitle="Your SmartyGym updates and private conversations with our team."
       />
 
       <div className="mb-4 grid grid-cols-2 gap-2">

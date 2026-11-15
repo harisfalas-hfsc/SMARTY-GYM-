@@ -2,12 +2,15 @@ import { iconInk, iconTone } from "@/lib/icon-tone";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MobilePageDescription } from "@/components/MobilePageDescription";
 
 interface PageHeaderProps {
   eyebrow?: string;
   icon?: LucideIcon | string;
   title: ReactNode;
   subtitle?: ReactNode;
+  /** Optional shorter introduction for phones; desktop keeps the original subtitle. */
+  mobileSubtitle?: ReactNode;
   className?: string;
   /**
    * Heading element used for the title. Defaults to "h1".
@@ -30,6 +33,7 @@ export function PageHeader({
   icon,
   title,
   subtitle,
+  mobileSubtitle,
   className,
   as: Heading = "h1",
   titleClassName,
@@ -79,14 +83,14 @@ export function PageHeader({
       </Heading>
 
       {subtitle && (
-        <p
+        <MobilePageDescription
           className={cn(
             "mx-auto mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base",
             image && "lg:mx-0 lg:mt-4 lg:text-lg lg:leading-8 lg:text-foreground/80",
           )}
         >
-          {subtitle}
-        </p>
+          {mobileSubtitle ? <><span className="md:hidden">{mobileSubtitle}</span><span className="hidden md:inline">{subtitle}</span></> : subtitle}
+        </MobilePageDescription>
       )}
       </div>
     </div>

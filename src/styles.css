@@ -306,6 +306,20 @@
 /* One mobile palette for every route and portalled menu/dialog. Desktop tokens
    remain unchanged. Brand wording alone retains blue; controls use neutral ink. */
 @media (max-width: 767px) {
+  .mobile-page-description {
+    width: 100%;
+    max-width: none;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--coach-line);
+    border-radius: var(--radius-card);
+    background: var(--card);
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: center;
+    box-shadow: none;
+  }
   :root {
     --tone-0-fg: var(--brand-blue);
     --tone-0-bg: color-mix(in oklab, var(--brand-blue) 12%, var(--background));

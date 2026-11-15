@@ -644,6 +644,7 @@ export function ExerciseLibraryPage({
               time a workout is generated for you.
             </>
           }
+          mobileSubtitle="Explore demonstrated exercises. Filter by body part, equipment, muscle or difficulty."
         />
       ) : null}
 

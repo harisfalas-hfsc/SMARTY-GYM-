@@ -117,6 +117,7 @@ function TrainingLoadSciencePage() {
           icon={Activity}
           title={<>The science behind <span className="text-primary">training load</span></>}
           subtitle="A personal measure of the work you have actually recorded — designed to help you understand when your recent training is below, near or above your own normal level."
+          mobileSubtitle="Understand your recorded training load and how it compares with your usual level."
         />
 
         <section className="mx-auto max-w-3xl">
