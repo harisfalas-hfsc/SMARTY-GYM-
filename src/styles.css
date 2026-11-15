@@ -553,3 +553,10 @@ body {
 .ProseMirror hr { border-color: var(--border); margin: 0.75rem 0; }
 .ProseMirror img { max-width: 100%; height: auto; }
 .ProseMirror p.is-editor-empty:first-child::before { content: attr(data-placeholder); color: var(--muted-foreground); float: left; height: 0; pointer-events: none; }
+
+/* Workout player: visual flash when a rest timer reaches zero */
+@keyframes player-rest-flash {
+  0%, 50%, 100% { box-shadow: 0 0 0 0 transparent; background-color: transparent; }
+  25%, 75% { box-shadow: 0 0 0 3px var(--primary); background-color: color-mix(in oklab, var(--primary) 22%, transparent); }
+}
+.player-rest-flash { animation: player-rest-flash 1.6s ease-in-out 1; border-radius: var(--radius); }

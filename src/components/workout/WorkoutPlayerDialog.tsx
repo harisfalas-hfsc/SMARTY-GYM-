@@ -88,6 +88,7 @@ export function WorkoutPlayerDialog({
   const [running, setRunning] = useState(false);
   const [resting, setResting] = useState(false);
   const [restRemaining, setRestRemaining] = useState(0);
+  const [restFlash, setRestFlash] = useState(0);
   const [advanceAfterRest, setAdvanceAfterRest] = useState(false);
   const completingRef = useRef(false);
   const [remaining, setRemaining] = useState(0);
@@ -434,6 +435,7 @@ export function WorkoutPlayerDialog({
       if (soundOnRef.current && restRemaining <= 3 && restRemaining > 0) playTimerBeep();
       if (restRemaining <= 1) {
         try { navigator.vibrate?.([200, 100, 200]); } catch { /* unsupported */ }
+        setRestFlash((n) => n + 1);
         setRunning(false);
         endRest();
       }
@@ -580,7 +582,7 @@ export function WorkoutPlayerDialog({
 
 
 
-        <div className="player-action-slot" data-player-zone="action">
+        <div key={restFlash ? `flash-${restFlash}` : undefined} className={`player-action-slot${restFlash ? " player-rest-flash" : ""}`} data-player-zone="action">
           <div className="player-clock">
             <p className="text-xs font-bold uppercase text-muted-foreground">
               {resting ? "Rest" : slide?.kind === "exercise" ? `${unitWord} ${Math.min((logged[index] ?? 0) + 1, playerSetTarget(slide.step.prescription, tracking))} of ${playerSetTarget(slide.step.prescription, tracking)}` : "Preparation"}
