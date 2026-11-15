@@ -23,14 +23,14 @@ import {
   Dumbbell,
   CalendarCheck,
   Users,
-  LogIn, ClipboardCheck, Moon, Sun } from "lucide-react";
+  LogIn, ClipboardCheck, Moon, Sun, Bell } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/lib/theme";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { adminCheckAccess } from "@/lib/admin.functions";
-import { NotificationBell } from "@/components/NotificationBell";
+import { NotificationBell, useInboxUnread } from "@/components/NotificationBell";
 import { SmartyCoachDialog } from "@/components/SmartyCoachDialog";
 import { CheckinHeaderAlert } from "@/components/checkins/CheckinHeaderAlert";
 import coachIcon from "@/assets/smarty-coach.png";
@@ -53,6 +53,7 @@ export function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [coachOpen, setCoachOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { unread: inboxUnread } = useInboxUnread();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -188,22 +189,27 @@ export function Navigation() {
               onClick={() => setCoachOpen(true)}
               aria-label="Smarty Coach"
               title="Smarty Coach"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary bg-background transition-colors hover:bg-primary/10 lg:bg-transparent"
+              className="hidden h-8 w-8 items-center justify-center rounded-full border border-primary bg-background transition-colors hover:bg-primary/10 lg:inline-flex lg:bg-transparent"
             >
               <img src={coachIcon} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             </button>
           ) : null}
           {!loading && user ? <CheckinHeaderAlert /> : null}
-          {!loading && user ? <NotificationBell /> : null}
+          {!loading && user ? <NotificationBell className="hidden lg:inline-flex" /> : null}
           {loading ? null : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  aria-label="Account"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary bg-primary text-xs font-bold text-primary-foreground lg:bg-transparent lg:text-primary"
+                  aria-label={inboxUnread ? `Account (${inboxUnread} unread notifications)` : "Account"}
+                  className="relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary bg-primary text-xs font-bold text-primary-foreground lg:bg-transparent lg:text-primary"
                 >
                   {initial}
+                  {inboxUnread > 0 && (
+                    <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-destructive px-1 text-[10px] font-bold leading-none text-destructive-foreground lg:hidden">
+                      {inboxUnread > 9 ? "9+" : inboxUnread}
+                    </span>
+                  )}
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -215,6 +221,19 @@ export function Navigation() {
                 </DropdownMenuLabel>
                 <DropdownMenuItem asChild>
                   <Link to="/account"><User className="h-4 w-4 mr-2" /> My account</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/inbox"
+                    search={{ tab: "updates" as const, compose: false }}
+                  >
+                    <Bell className="h-4 w-4 mr-2" /> Inbox
+                    {inboxUnread > 0 && (
+                      <span className="ml-auto grid h-4 min-w-4 place-items-center rounded-full bg-destructive px-1 text-[10px] font-bold leading-none text-destructive-foreground">
+                        {inboxUnread > 9 ? "9+" : inboxUnread}
+                      </span>
+                    )}
+                  </Link>
                 </DropdownMenuItem>
                 {isAdmin && (
                   <>

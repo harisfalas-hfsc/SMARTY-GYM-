@@ -21,7 +21,7 @@ type Item = {
   at: string;
 };
 
-export function NotificationBell() {
+export function useInboxUnread() {
   const load = useServerFn(listNotifications);
   const loadThreads = useServerFn(listMyThreads);
   const { user } = useAuth();
@@ -93,12 +93,18 @@ export function NotificationBell() {
     };
   }, [load, loadThreads, user?.id]);
 
+  return { unread, updatesUnread, messagesUnread };
+}
+
+export function NotificationBell({ className }: { className?: string }) {
+  const { unread, updatesUnread, messagesUnread } = useInboxUnread();
+
   return (
     <Link
       to="/inbox"
       search={{ tab: messagesUnread > 0 && updatesUnread === 0 ? ("messages" as const) : ("updates" as const), compose: false }}
       aria-label={unread ? `Inbox (${unread} unread)` : "Inbox"}
-      className="relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10"
+      className={`relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary text-primary hover:bg-primary/10 ${className ?? ""}`}
     >
       <Bell className="h-4 w-4" />
       {unread > 0 && (
