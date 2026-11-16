@@ -394,11 +394,11 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
         <section id="everything-you-need" className="border-t border-border bg-background py-16">
           <div className="mx-auto max-w-7xl px-8">
             <div className="relative mb-10 text-center">
-              <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-9 text-[112px] font-black uppercase leading-none text-muted/45">
+              <span aria-hidden="true" className="desktop-section-backdrop pointer-events-none absolute inset-x-0 -top-9 text-[112px] font-black uppercase leading-none text-muted/45">
                 EXPLORE
               </span>
               <div className="relative pt-8">
-                <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-primary">Inside SmartyGym</p>
+                <p className="desktop-section-label mb-3 text-xs font-bold uppercase tracking-[0.3em] text-primary">Inside SmartyGym</p>
                 <h2 className="text-5xl font-black uppercase text-foreground">Everything You Need</h2>
               </div>
             </div>

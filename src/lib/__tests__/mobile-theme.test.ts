@@ -12,12 +12,21 @@ function initialTheme(mobile: boolean, saved: Record<string, string> = {}, unava
   return root.style.colorScheme;
 }
 
-describe("independent mobile theme default", () => {
+describe("independent light theme defaults", () => {
   it("defaults mobile to light even with a saved desktop dark preference", () => {
     expect(initialTheme(true, { [THEME_STORAGE_KEY]: "dark" })).toBe("light");
   });
-  it("preserves the desktop dark default", () => {
-    expect(initialTheme(false)).toBe("dark");
+  it("defaults desktop to light", () => {
+    expect(initialTheme(false)).toBe("light");
+  });
+  it("honors an explicit desktop dark choice", () => {
+    expect(initialTheme(false, { [THEME_STORAGE_KEY]: "dark" })).toBe("dark");
+  });
+  it("defaults desktop to light when storage is unavailable", () => {
+    expect(initialTheme(false, {}, true)).toBe("light");
+  });
+  it("defaults desktop to light with an invalid saved preference", () => {
+    expect(initialTheme(false, { [THEME_STORAGE_KEY]: "invalid" })).toBe("light");
   });
   it("preserves the saved desktop light preference despite mobile dark", () => {
     expect(initialTheme(false, { [THEME_STORAGE_KEY]: "light", [MOBILE_THEME_STORAGE_KEY]: "dark" })).toBe("light");

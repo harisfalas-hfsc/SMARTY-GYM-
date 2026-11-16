@@ -90,11 +90,11 @@ const destinations = [
 function Heading({ ghost, eyebrow, children }: { ghost: string; eyebrow: string; children: ReactNode }) {
   return (
     <div className="relative mb-12 text-center">
-      <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-9 text-[112px] font-black uppercase leading-none text-muted/45">
+      <span aria-hidden="true" className="desktop-section-backdrop pointer-events-none absolute inset-x-0 -top-9 text-[112px] font-black uppercase leading-none text-muted/45">
         {ghost}
       </span>
       <div className="relative pt-8">
-        <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-primary">{eyebrow}</p>
+        <p className="desktop-section-label mb-3 text-xs font-bold uppercase tracking-[0.3em] text-primary">{eyebrow}</p>
         <h2 className="text-5xl font-black uppercase text-foreground">{children}</h2>
       </div>
     </div>

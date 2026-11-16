@@ -172,3 +172,7 @@
 
 ## Desktop Coach and persistent filters
 - [x] Inset desktop Coach close control by an additional 24px; category and Blog filters stay below the 68px desktop header at scroll positions 900 and 1400. Bodyweight and Oldest first selections verified in the live app; screenshots inspected, 568 tests passed and preview build OK. Mobile classes unchanged.
+
+## Light appearance defaults and desktop homepage contrast
+- [x] Make desktop homepage section labels and backdrop words readable in light mode, without changing mobile styling; desktop screenshots inspected.
+- [x] Default both devices to light and preserve saved choices; fresh mobile/desktop defaults and saved dark mode verified in browser, 571 tests passed and preview build OK.

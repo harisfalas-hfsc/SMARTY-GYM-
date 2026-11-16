@@ -299,7 +299,9 @@
 .coach-floor { --card: var(--color-coach-card); }
 /* Desktop light mode: clean white page and the original soft card borders. */
 @media (min-width: 768px) {
-  :root:not(.dark) { --background: oklch(1 0 0); --coach-line: var(--border); }
+  :root:not(.dark) { --background: oklch(1 0 0); --coach-line: var(--border); --section-backdrop: oklch(0.62 0 0); }
+  :root:not(.dark) .desktop-section-backdrop { color: var(--section-backdrop); }
+  :root:not(.dark) .desktop-section-label { color: var(--foreground); }
   :root:not(.dark) .coach-floor { --coach-line: oklch(0.3 0 0); }
   :root:not(.dark) .app-card, :root:not(.dark) .app-card:hover { border-color: var(--border); }
 }
