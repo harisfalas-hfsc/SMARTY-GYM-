@@ -330,7 +330,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-status-bar-style", content: "black" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "theme-color", content: "#000000" },
-      { name: "color-scheme", content: "dark" },
+      { name: "color-scheme", content: "light dark" },
 
       { property: "og:site_name", content: "SmartyGym" },
       { property: "og:locale", content: "en_US" },
@@ -390,8 +390,7 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className="dark"
-      style={{ colorScheme: "dark" }}
+      style={{ colorScheme: "light" }}
       suppressHydrationWarning
     >
       <head>
