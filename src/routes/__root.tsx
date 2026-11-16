@@ -294,7 +294,8 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 // Sister-app announcement is back: shows after 20 seconds on desktop and mobile.
-const SHOW_SISTER_APPS_POPUP = true;
+// Smarty Diet announcement disabled (kept for possible re-enable, like the Gift popup)
+const SHOW_SISTER_APPS_POPUP = false;
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   // Invisible SEO preservation: addresses published by the previous
