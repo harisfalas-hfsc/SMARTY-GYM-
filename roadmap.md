@@ -177,3 +177,4 @@
 - [x] Make desktop homepage section labels and backdrop words readable in light mode, without changing mobile styling; desktop screenshots inspected.
 - [x] Default both devices to light and preserve saved choices; fresh mobile/desktop defaults and saved dark mode verified in browser, 571 tests passed and preview build OK.
 - [x] Consistency sweep: root document now also starts light before scripts; Home/About/Smarty Workouts navigation and both avatar-menu theme switches verified on mobile/desktop. Shared provider, storage, initializer, desktop heading groups and print appearance read; native splash remains unchanged.
+- [x] Corrected desktop heading overlap: all six backdrop words now sit above labels with a measured 16px gap. Desktop Coach and every card follow light mode; light/dark colors checked and final screenshots inspected. 571 tests passed; final card correction retested and build OK. Mobile CSS unchanged.
