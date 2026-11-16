@@ -11,6 +11,8 @@ const BATCH = 10000; // IndexNow maximum per request
 
 export interface BulkPushResult {
   ok: boolean;
+  /** True when IndexNow rate-limited (429) a batch; those URLs stay unsent for a later retry. */
+  deferred: boolean;
   total: number;
   submitted: number;
   batches: { size: number; status: number | null; detail: string }[];
@@ -53,6 +55,8 @@ async function post(urlList: string[]): Promise<{ status: number | null; ok: boo
       }),
       signal: AbortSignal.timeout(30000),
     });
+    if (res.status === 429)
+      return { status: 429, ok: false, detail: `IndexNow is busy (429); ${urlList.length} URL(s) kept for a later retry.` };
     // 200 = received, 202 = accepted (key check pending). Both are success.
     return { status: res.status, ok: res.status === 200 || res.status === 202, detail: `IndexNow answered ${res.status}` };
   } catch (e) {
@@ -85,8 +89,11 @@ export async function pushUrls(urls: string[], mode: "all" | "new"): Promise<Bul
       await recordSent(chunk);
     }
   }
+  const failed = batches.filter((b) => b.status !== 200 && b.status !== 202);
+  const deferred = failed.length > 0 && failed.every((b) => b.status === 429);
   const result: BulkPushResult = {
-    ok: urls.length === 0 || submitted === urls.length,
+    ok: urls.length === 0 || submitted === urls.length || deferred,
+    deferred,
     total: urls.length,
     submitted,
     batches,

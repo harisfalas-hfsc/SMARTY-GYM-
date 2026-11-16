@@ -116,6 +116,8 @@ export async function runSeoRefresh(
     const { pushNewPublicUrls } = await import("@/lib/seo/indexnow-bulk.server");
     const fresh = await pushNewPublicUrls();
     if (fresh.total) notes.push(`New public pages sent to search engines: ${fresh.submitted}/${fresh.total}`);
+    if (fresh.deferred)
+      notes.push(`Search engines asked us to slow down; ${fresh.total - fresh.submitted} page(s) will be sent on the next run`);
     if (!fresh.ok) failures.push(`indexnow-new:${fresh.batches.map((b) => b.detail).join(", ")}`);
   } catch (e) {
     failures.push(`indexnow-new:${e instanceof Error ? e.message : String(e)}`);
