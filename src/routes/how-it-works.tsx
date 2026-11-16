@@ -189,9 +189,48 @@ function HowItWorks() {
          mobileSubtitle="Choose a Smarty Workout, create your own, follow the WOD or train with the community."
       />
 
-       <section className="app-card p-5 sm:p-8">
+      <section className="app-card p-5 sm:p-8">
+        <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+           Way 1 — Workout of the Day
+        </p>
+        <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
+          Your training is planned.
+        </h2>
+        <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
+          Every day you get two ready workouts — one with equipment, one bodyweight only — expertly
+          designed by Coach Haris Falas. Both follow a scientific periodization plan:
+          strength, endurance, power, mobility and recovery days are sequenced so you never
+          overtrain, never undertrain, and every fitness quality is developed in the right order.
+        </p>
+
+        <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
+          {WOD_STEPS.map((s, index) => (
+            <div key={s.n} className="flex flex-col items-center text-center">
+              <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>
+                {s.n}
+              </div>
+              <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
+              <div className="mt-1 text-sm text-muted-foreground">{s.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-6 text-center text-sm font-semibold leading-snug text-muted-foreground">
+          Instead of improvising something different every day, it is like having a{" "}
+          <span className="text-primary">personal trainer</span> who already knows what you must do
+          today, next week and next month.
+        </p>
+
+        <div className="mt-6 flex justify-center">
+          <Button asChild size="lg" className="font-extrabold uppercase">
+            <Link to="/wod">See the Workout of the Day</Link>
+          </Button>
+        </div>
+      </section>
+
+       <section className="app-card mt-6 p-5 sm:p-8">
          <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-           Way 1 — Smarty Workouts
+           Way 2 — Smarty Workouts
          </p>
          <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
            Find a ready workout and train.
@@ -212,7 +251,7 @@ function HowItWorks() {
 
        <section className="app-card mt-6 p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-           Way 2 — Create any workout
+           Way 3 — Create any workout
         </p>
         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
           Create your own workout, your way.
@@ -249,20 +288,21 @@ function HowItWorks() {
 
       <section className="app-card mt-6 p-5 sm:p-8">
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-           Way 3 — Workout of the Day
+           Way 4 — Smarty Community
         </p>
         <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
-          Your training is planned.
+          Train the workouts other members share.
         </h2>
         <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-          Every day you get two ready workouts — one with equipment, one bodyweight only — expertly
-          designed by Coach Haris Falas. Both follow a scientific periodization plan:
-          strength, endurance, power, mobility and recovery days are sequenced so you never
-          overtrain, never undertrain, and every fitness quality is developed in the right order.
+          Members can share their own Smarty Coach or Build It Yourself workouts. Open one with the
+          same player as your logbook, train it, like it or comment. Creators can unshare at any time,
+          removing it from Shared Workouts, or delete it for everyone. Likes, comments and favourites
+          go with a deleted workout; completed training stays in each member's progress. A workout
+          you saved from Shared Workouts is yours to train, not to re-share or delete.
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
-          {WOD_STEPS.map((s, index) => (
+          {COMMUNITY_STEPS.map((s, index) => (
             <div key={s.n} className="flex flex-col items-center text-center">
               <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>
                 {s.n}
@@ -274,14 +314,13 @@ function HowItWorks() {
         </div>
 
         <p className="mt-6 text-center text-sm font-semibold leading-snug text-muted-foreground">
-          Instead of improvising something different every day, it is like having a{" "}
-          <span className="text-primary">personal trainer</span> who already knows what you must do
-          today, next week and next month.
+          Training alone is hard. Training with{" "}
+          <span className="text-primary">other Smarty members</span> keeps you accountable.
         </p>
 
         <div className="mt-6 flex justify-center">
           <Button asChild size="lg" className="font-extrabold uppercase">
-            <Link to="/wod">See the Workout of the Day</Link>
+            <Link to="/community">Open Smarty Community</Link>
           </Button>
         </div>
       </section>
@@ -345,45 +384,6 @@ function HowItWorks() {
         <div className="mt-6 flex justify-center">
           <Button asChild size="lg" className="font-extrabold uppercase">
             <Link to="/smarty-checkins">Open Smarty Check-ins</Link>
-          </Button>
-        </div>
-      </section>
-
-      <section className="app-card mt-6 p-5 sm:p-8">
-        <p className="text-center text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-           Way 4 — Smarty Community
-        </p>
-        <h2 className="mt-2 text-center text-xl font-extrabold uppercase sm:text-2xl">
-          Train the workouts other members share.
-        </h2>
-        <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-          Members can share their own Smarty Coach or Build It Yourself workouts. Open one with the
-          same player as your logbook, train it, like it or comment. Creators can unshare at any time,
-          removing it from Shared Workouts, or delete it for everyone. Likes, comments and favourites
-          go with a deleted workout; completed training stays in each member's progress. A workout
-          you saved from Shared Workouts is yours to train, not to re-share or delete.
-        </p>
-
-        <div className="mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
-          {COMMUNITY_STEPS.map((s, index) => (
-            <div key={s.n} className="flex flex-col items-center text-center">
-              <div className={`text-4xl font-black leading-none text-primary sm:text-5xl mobile-accent-${index % 4}`}>
-                {s.n}
-              </div>
-              <div className="mt-3 text-base font-bold uppercase">{s.title}</div>
-              <div className="mt-1 text-sm text-muted-foreground">{s.desc}</div>
-            </div>
-          ))}
-        </div>
-
-        <p className="mt-6 text-center text-sm font-semibold leading-snug text-muted-foreground">
-          Training alone is hard. Training with{" "}
-          <span className="text-primary">other Smarty members</span> keeps you accountable.
-        </p>
-
-        <div className="mt-6 flex justify-center">
-          <Button asChild size="lg" className="font-extrabold uppercase">
-            <Link to="/community">Open Smarty Community</Link>
           </Button>
         </div>
       </section>
