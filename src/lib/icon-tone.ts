@@ -20,6 +20,8 @@ const IDENTITY: Record<string, number> = {
   pricing: 6, premium: 6, membership: 6, gift: 7, smartygift: 7,
   about: 0, howitworks: 3, contact: 2, faq: 3,
   privacy: 8, privacypolicy: 8, terms: 8, termsconditions: 8, disclaimer: 8, connectai: 5,
+  // Audience identities stay distinct rather than relying on hash collisions.
+  busyadults: 0, parents: 1, beginners: 2, experienced: 3, travellers: 4, gymgoers: 5,
   // Workout categories
   strength: 4, musclebuilding: 3, calorieburning: 2, cardio: 7, metabolic: 6,
   challenge: 8, mobilitystability: 5, pilates: 9, recovery: 1,

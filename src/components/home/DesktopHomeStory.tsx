@@ -167,10 +167,10 @@ export function DesktopHomeStory() {
           </div>
           <div className="mt-12 border-t border-border pt-8">
             <p className="mb-5 text-center text-sm font-bold uppercase tracking-[0.24em] text-muted-foreground">Who is SmartyGym for?</p>
-            <div className="mx-auto grid max-w-4xl grid-cols-6 gap-4">
+            <div className="mx-auto grid max-w-5xl grid-cols-6 gap-4">
               {audiences.map(({ label, Icon }) => (
-                <div key={label} className="flex flex-col items-center gap-2 text-center">
-                  <Icon className={`h-7 w-7 ${iconInk(label)}`} />
+                <div key={label} className="app-card flex min-h-28 flex-col items-center justify-center gap-3 px-3 py-4 text-center">
+                  <Icon className={`h-8 w-8 ${iconInk(label)}`} />
                   <span className="text-sm font-bold text-foreground">{label}</span>
                 </div>
               ))}

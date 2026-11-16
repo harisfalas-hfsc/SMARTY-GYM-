@@ -17,4 +17,8 @@ describe("permanent icon identity colours", () => {
     const q = ["Smarty Ritual","Smarty Tools","Exercise Library","Blog & Insights"].map(iconInk);
     expect(new Set(q).size).toBe(4);
   });
+  it("each homepage audience has its own permanent colour", () => {
+    const audiences = ["Busy Adults", "Parents", "Beginners", "Experienced", "Travellers", "Gym-Goers"];
+    expect(audiences.map(toneIndex)).toEqual([0, 1, 2, 3, 4, 5]);
+  });
 });
