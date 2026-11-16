@@ -169,3 +169,6 @@
 - [x] Keywords meta removed everywhere, viewport zoom restriction removed, sitemap-index.xml + robots.txt
 - [x] 460 tests pass, types clean, build OK
 - Skipped (would change visuals or need input): build-time prerender (SSR already serves full HTML; prerendering data pages risks stale content), Haris LinkedIn/athletestests sameAs links (URLs not provided), foundingDate (not verified), www→apex 301 (hosting-level, verify at domain host)
+
+## Desktop Coach and persistent filters
+- [x] Inset desktop Coach close control by an additional 24px; category and Blog filters stay below the 68px desktop header at scroll positions 900 and 1400. Bodyweight and Oldest first selections verified in the live app; screenshots inspected, 568 tests passed and preview build OK. Mobile classes unchanged.

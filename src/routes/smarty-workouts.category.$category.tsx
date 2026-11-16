@@ -216,7 +216,7 @@ function CategoryPage() {
         </div>
       </div>
 
-      <div className={`mb-4 hidden gap-3 md:grid rounded-lg border border-border bg-card p-4 sm:grid-cols-2 ${showFormat ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}>
+      <div aria-label="Workout filters" style={{ top: headerH }} className={`sticky z-30 mb-4 hidden gap-3 md:grid rounded-lg border border-border bg-card p-4 sm:grid-cols-2 ${showFormat ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}>
         <div className="relative sm:col-span-2 lg:col-span-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search workouts" className="pl-9" />

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -136,6 +136,13 @@ function BlogIndex() {
   }, [articles, status, sort, isRead]);
 
   const filtersActive = sort !== "newest" || status !== "all";
+  const [headerH, setHeaderH] = useState(68);
+  useEffect(() => {
+    const measure = () => setHeaderH(document.querySelector("header")?.getBoundingClientRect().height ?? 68);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   function update(patch: { sort?: BlogSort; status?: BlogReadFilter }) {
     void navigate({
@@ -235,7 +242,7 @@ function BlogIndex() {
         </div>
       </div>
 
-      <div className="mb-6 hidden flex-wrap items-center gap-3 md:flex">
+      <div aria-label="Article filters" style={{ top: headerH }} className="sticky z-30 mb-6 hidden flex-wrap items-center gap-3 bg-background py-3 md:flex">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span className="hidden sm:inline">Sort:</span>
           <Select value={sort} onValueChange={(v) => update({ sort: v as BlogSort })}>
