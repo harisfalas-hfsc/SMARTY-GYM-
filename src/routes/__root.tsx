@@ -421,6 +421,22 @@ function RootComponent() {
   const rootRouter = useRouter();
   useEffect(() => startFounderLinks((to) => void rootRouter.navigate({ to })), [rootRouter]);
 
+  // Native-style slide-in of the new screen on each page change (CSS limits it to phones).
+  useEffect(
+    () =>
+      rootRouter.subscribe("onResolved", (e) => {
+        if (!e.pathChanged) return;
+        const main = document.querySelector("main");
+        if (!main) return;
+        main.classList.remove("sg-page-enter");
+        void main.offsetWidth;
+        main.classList.add("sg-page-enter");
+        // Drop the class afterwards so no lingering transform affects fixed/sticky children.
+        main.addEventListener("animationend", () => main.classList.remove("sg-page-enter"), { once: true });
+      }),
+    [rootRouter],
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>

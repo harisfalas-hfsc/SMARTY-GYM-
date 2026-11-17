@@ -572,3 +572,9 @@ body {
   25%, 75% { box-shadow: 0 0 0 3px var(--primary); background-color: color-mix(in oklab, var(--primary) 22%, transparent); }
 }
 .player-rest-flash { animation: player-rest-flash 1.6s ease-in-out 1; border-radius: var(--radius); }
+
+/* Native-style page change — phones only; desktop switches instantly. */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  main.sg-page-enter { animation: sg-page-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
+}
+@keyframes sg-page-in { from { opacity: 0; transform: translateX(28px); } }
