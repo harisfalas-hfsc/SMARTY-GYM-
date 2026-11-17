@@ -5,7 +5,7 @@
  */
 const IDENTITY: Record<string, number> = {
   // Features
-  coach: 0, smartycoach: 0, talktocoachharis: 0,
+  coach: 0, smartycoach: 0, talktocoachharis: 0, meetthecoach: 0,
   workouts: 0, smartyworkouts: 0, browseworkouts: 0,
   wod: 2, workoutoftheday: 2,
   create: 3, createyourownworkout: 3, buildmyworkout: 3, createyourworkout: 3,

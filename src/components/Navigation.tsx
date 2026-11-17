@@ -324,8 +324,6 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
         { to: "/", label: "Home", Icon: Home },
         { to: "/about", label: "About", Icon: Info, className: "lg:hidden" },
         { to: "/how-it-works", label: "How It Works", Icon: BookOpen },
-        { to: "/haris-falas", label: "Meet the Coach", Icon: User },
-        { to: "/founder-note", label: "A Note from the Coach", Icon: FileText },
         ...(isAuthed ? [] : [{ to: "/wod", label: "Workout of the Day", Icon: CalendarCheck }]),
         ...(isAuthed ? [] : [{ to: "/smarty-workouts", label: "Smarty Workouts", Icon: Dumbbell }]),
         ...(isAuthed ? [] : [{ to: "/create-your-own-workout", label: "Create Your Own Workout", Icon: Sparkles }]),
@@ -354,6 +352,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
     {
       heading: "Discover",
       items: [
+        { to: "/haris-falas", label: "Meet the Coach", Icon: User },
         { to: "/glossary", label: "Glossary & training topics", Icon: BookOpen },
         { to: "/social-media", label: "Social Media", Icon: Users, className: "md:hidden" },
       ],
