@@ -2,6 +2,9 @@ import { iconInk, iconTone } from "@/lib/icon-tone";
 import { PremiumGate } from "@/components/PremiumGate";
 import { DayCheckinNote } from "@/components/checkins/CheckinsPanel";
 import { DayActivityList } from "@/components/logbook/DayActivityList";
+import { useQuery } from "@tanstack/react-query";
+import { loadActivity } from "@/lib/logbook/activity-reads";
+import { eventsByDay } from "@/lib/logbook/activity";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -385,6 +388,7 @@ function MonthGrid({
   onSelect,
   onlyScheduled,
   inRange,
+  activityDays,
 }: {
   cursor: Date;
   byDay: Map<string, Row[]>;
@@ -393,6 +397,8 @@ function MonthGrid({
   onlyScheduled?: boolean;
   /** When given, highlights every day of the selected period. */
   inRange?: (key: string) => boolean;
+  /** Days with at least one recorded activity (any kind). */
+  activityDays?: Set<string>;
 }) {
 
   const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
@@ -434,7 +440,12 @@ function MonthGrid({
                     : "border-border"
               } ${dim ? "opacity-40" : ""}`}
             >
-              <span className="font-bold">{d.getDate()}</span>
+              <span className="flex items-center justify-between gap-0.5">
+                <span className="font-bold">{d.getDate()}</span>
+                {activityDays?.has(key) ? (
+                  <span aria-label="Activity recorded" className="grid h-3.5 w-3.5 place-items-center rounded-full bg-brand-blue text-[8px] leading-none text-white">✓</span>
+                ) : null}
+              </span>
               <span className="mt-1 flex flex-wrap gap-0.5">
                 {items.slice(0, 4).map((r) => (
                   <span key={r.id} className={`h-1.5 w-1.5 rounded-full ${dotClass(r)}`} />
@@ -454,6 +465,9 @@ function MonthGrid({
 function Legend() {
   return (
     <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-muted-foreground">
+      <span className="inline-flex items-center gap-1">
+        <span className="grid h-3 w-3 place-items-center rounded-full bg-brand-blue text-[7px] leading-none text-white">✓</span> Activity
+      </span>
       <span className="inline-flex items-center gap-1">
         <span className="h-2 w-2 rounded-full bg-primary" /> Completed
       </span>
@@ -632,6 +646,15 @@ function CalendarView({
     }
   }
 
+  const { user: activityUser } = useAuth();
+  const monthStart = cursor.toISOString();
+  const monthEnd = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1).toISOString();
+  const monthActivity = useQuery({
+    queryKey: ["logbook-month-activity", activityUser?.id, monthStart],
+    enabled: Boolean(activityUser),
+    queryFn: () => loadActivity(activityUser!.id, monthStart, monthEnd),
+  });
+  const activityDays = useMemo(() => new Set(eventsByDay(monthActivity.data ?? []).keys()), [monthActivity.data]);
   const inRange = (key: string) => (end ? key >= start && key <= end : key === start);
   const periodRows = rows.filter((r) => inRange(dayKey(anchorDate(r))));
   const periodSessions = sessions.filter((s) => inRange(dayKey(new Date(s.performedAt))));
@@ -687,6 +710,7 @@ function CalendarView({
           selected={start}
           onSelect={pick}
           inRange={inRange}
+          activityDays={activityDays}
         />
         <Legend />
         <p className="mt-2 text-sm font-medium text-foreground">
