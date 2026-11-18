@@ -1,1 +1,2 @@
 - Member activity is derived only by activity.ts from owner-scoped rows, read-only; home strip ticks days with ≥1 event, Logbook calendar lists them — why: one activity definition, no writes.
+- Preview-only samples (demo-activity.ts) add marked activity and display-only workouts (sample- ids, no links/actions) to the calendar; never on live hosts, never saved — why: every calendar mark is visible for review without touching real data.

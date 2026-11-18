@@ -2,7 +2,7 @@ import { dayKey } from "./rows";
 
 /** Every member action recorded in the Logbook calendar and the home weekly strip. */
 export type ActivityKind = "completed" | "created" | "added" | "shared" | "favorited" | "checkin" | "comment" | "reaction" | "rating";
-export type ActivityEvent = { at: string; kind: ActivityKind; label: string };
+export type ActivityEvent = { at: string; kind: ActivityKind; label: string; sample?: boolean };
 
 export const ACTIVITY_LABEL: Record<ActivityKind, string> = {
   completed: "Workout completed", created: "Workout created", added: "Workout added to Logbook",

@@ -4,6 +4,7 @@ import { DayCheckinNote } from "@/components/checkins/CheckinsPanel";
 import { DayActivityList } from "@/components/logbook/DayActivityList";
 import { useQuery } from "@tanstack/react-query";
 import { loadActivity } from "@/lib/logbook/activity-reads";
+import { demoActivityOn, demoWorkouts, isSampleId } from "@/lib/logbook/demo-activity";
 import { eventsByDay } from "@/lib/logbook/activity";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -181,6 +182,11 @@ const DOT_CLASS: Record<DotKind, string> = {
   missed: SCHEDULE_TONE_DOT.missed,
   created: "bg-muted-foreground/50",
 };
+const DOT_LABEL: Record<DotKind, string> = {
+  scheduled: "Workout planned",
+  missed: "Planned but missed",
+  created: "Saved, not done yet",
+};
 function dotKind(r: Row): DotKind | null {
   if (r.status === "completed") return null;
   const tone = scheduleTone(r.scheduled_at, false);
@@ -218,13 +224,22 @@ function WorkoutCard({
   onToggleFavorite?: (id: string, next: boolean) => void;
   actions?: React.ReactNode;
 }) {
-  return (
-    <div className="app-card relative flex h-full flex-col overflow-hidden">
+  const sample = isSampleId(r.id);
+  const Wrap = ({ children }: { children: React.ReactNode }) =>
+    sample ? (
+      <div className="block flex-1 p-4">{children}</div>
+    ) : (
       <Link
         to="/workout/$workoutId"
         params={{ workoutId: r.id }}
         className="block flex-1 p-4 transition hover:bg-blue-50 dark:hover:bg-blue-500/10"
       >
+        {children}
+      </Link>
+    );
+  return (
+    <div className="app-card relative flex h-full flex-col overflow-hidden">
+      <Wrap>
         <div className="flex items-center justify-between gap-2 pr-10">
           <p className="truncate text-[11px] font-bold uppercase tracking-[0.16em] text-primary">
             {r.category}
@@ -302,7 +317,10 @@ function WorkoutCard({
               .join(" · ")}
           </p>
         ) : null}
-      </Link>
+        {sample ? (
+          <p className="mt-2 text-[11px] text-muted-foreground">Sample — preview only, not saved.</p>
+        ) : null}
+      </Wrap>
 
       {actions ? <div className="px-4 pb-4">{actions}</div> : null}
 
@@ -310,6 +328,7 @@ function WorkoutCard({
         type="button"
         aria-label={r.is_favorite ? "Remove from favourites" : "Mark as favourite"}
         aria-pressed={Boolean(r.is_favorite)}
+        disabled={sample}
         onClick={() => onToggleFavorite?.(r.id, !r.is_favorite)}
         className="absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
       >
@@ -452,15 +471,15 @@ function MonthGrid({
               <span className="flex items-center justify-between gap-0.5">
                 <span className="font-bold">{d.getDate()}</span>
                 {activityDays?.has(key) ? (
-                  <span aria-label="Activity recorded" className="grid h-3.5 w-3.5 place-items-center rounded-full bg-brand-blue text-[8px] leading-none text-primary-foreground">✓</span>
+                  <span aria-label="You did something" className="grid h-4 w-4 place-items-center rounded-full bg-brand-blue text-[9px] leading-none text-primary-foreground">✓</span>
                 ) : null}
               </span>
-              <span className="mt-1 flex flex-wrap gap-0.5">
-                {dotted.slice(0, 4).map(({ r, k }) => (
-                  <span key={r.id} className={`h-1.5 w-1.5 rounded-full ${DOT_CLASS[k]}`} />
+              <span className="mt-1.5 flex flex-wrap gap-1">
+                {dotted.slice(0, 3).map(({ r, k }) => (
+                  <span key={r.id} aria-label={DOT_LABEL[k]} className={`h-2.5 w-2.5 rounded-full ${DOT_CLASS[k]}`} />
                 ))}
-                {dotted.length > 4 ? (
-                  <span className="text-muted-foreground">+{dotted.length - 4}</span>
+                {dotted.length > 3 ? (
+                  <span className="text-[9px] leading-none text-muted-foreground">+{dotted.length - 3}</span>
                 ) : null}
               </span>
             </button>
@@ -471,21 +490,27 @@ function MonthGrid({
   );
 }
 
-/** Shows only the marks that actually appear in the month on screen. */
-function Legend({ cursor, byDay, activityDays }: { cursor: Date; byDay: Map<string, Row[]>; activityDays?: Set<string> }) {
-  const prefix = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`;
-  const kinds = new Set<DotKind>();
-  for (const [key, rows] of byDay) if (key.startsWith(prefix)) for (const r of rows) { const k = dotKind(r); if (k) kinds.add(k); }
-  const hasActivity = [...(activityDays ?? [])].some((k) => k.startsWith(prefix));
+/** The full key, always shown, so every mark on the calendar can be read at a glance. */
+function Legend({ showActivity = true }: { showActivity?: boolean }) {
   const items: [string, React.ReactNode][] = [];
-  if (hasActivity) items.push(["You did something this day", <span className="grid h-3 w-3 place-items-center rounded-full bg-brand-blue text-[7px] leading-none text-primary-foreground">✓</span>]);
-  if (kinds.has("scheduled")) items.push(["Planned workout", <span className={`h-2 w-2 rounded-full ${DOT_CLASS.scheduled}`} />]);
-  if (kinds.has("missed")) items.push(["Planned, missed", <span className={`h-2 w-2 rounded-full ${DOT_CLASS.missed}`} />]);
-  if (kinds.has("created")) items.push(["Saved, not done yet", <span className={`h-2 w-2 rounded-full ${DOT_CLASS.created}`} />]);
-  if (!items.length) return <p className="mt-3 text-[11px] text-muted-foreground">Nothing recorded this month yet.</p>;
+  if (showActivity) items.push(["You did something — tap the day to see what", <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full bg-brand-blue text-[9px] leading-none text-primary-foreground">✓</span>]);
+  items.push(
+    [`${DOT_LABEL.scheduled} for that day`, <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${DOT_CLASS.scheduled}`} />],
+    [`${DOT_LABEL.missed}`, <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${DOT_CLASS.missed}`} />],
+    [`${DOT_LABEL.created}`, <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${DOT_CLASS.created}`} />],
+    ["Today", <span className="h-4 w-4 shrink-0 rounded-md border-2 border-primary/60" />],
+  );
   return (
-    <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-muted-foreground">
-      {items.map(([label, mark]) => <span key={label} className="inline-flex items-center gap-1">{mark} {label}</span>)}
+    <div className="mt-4 rounded-xl border border-border p-3">
+      <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">How to read the calendar</p>
+      <ul className="mt-2 space-y-1.5 text-sm">
+        {items.map(([label, mark]) => (
+          <li key={label} className="grid grid-cols-[1.25rem_minmax(0,1fr)] items-center gap-2">
+            <span className="grid place-items-center">{mark}</span>
+            <span>{label}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -595,7 +620,7 @@ function PeriodSummary({
 
 
 function CalendarView({
-  rows,
+  rows: realRows,
   sessions,
   onToggleFavorite,
   actions,
@@ -618,6 +643,10 @@ function CalendarView({
   const [start, setStart] = useState<string>(() => dayKey(new Date()));
   const [end, setEnd] = useState<string | null>(null);
   const [selectionMode, setSelectionMode] = useState<"day" | "period" | "scheduled">("day");
+  // Preview only: sample workouts so planned, missed and saved marks can be seen. Never saved.
+  const [samples, setSamples] = useState<Row[]>([]);
+  useEffect(() => { if (demoActivityOn()) setSamples(demoWorkouts(new Date()) as Row[]); }, []);
+  const rows = useMemo(() => [...realRows, ...samples], [realRows, samples]);
 
   const byDay = useMemo(() => {
     const map = new Map<string, Row[]>();
@@ -670,7 +699,7 @@ function CalendarView({
         <div className="mb-3 grid grid-cols-3 gap-2" aria-label="Calendar selection mode">
           {([
             { id: "day", label: "Day", Icon: CalendarDays },
-            { id: "period", label: "Dates", Icon: CalendarRange },
+            { id: "period", label: "Date range", Icon: CalendarRange },
             { id: "scheduled", label: "Scheduled", Icon: CalendarCheck },
           ] as const).map(({ id, label, Icon }) => (
             <Button
@@ -685,6 +714,15 @@ function CalendarView({
             </Button>
           ))}
         </div>
+        <p className="mb-3 rounded-xl bg-muted/60 px-3 py-2 text-sm text-foreground">
+          {selectionMode === "day"
+            ? "Day: tap any day to see what you did and which workouts were planned."
+            : selectionMode === "period"
+              ? end
+                ? "Date range: showing everything between the two days. Tap a day to start again."
+                : "Date range: tap the first day, then the last day, to see that whole stretch together."
+              : "Scheduled: only the workouts you planned for a date, month by month."}
+        </p>
         {selectionMode === "scheduled" ? null : (
         <>
         <div className="flex items-center justify-between">
@@ -715,14 +753,7 @@ function CalendarView({
           inRange={inRange}
           activityDays={activityDays}
         />
-        <Legend cursor={cursor} byDay={byDay} activityDays={activityDays} />
-        <p className="mt-2 text-sm font-medium text-foreground">
-          {selectionMode === "day"
-            ? "Tap a day to see everything you did."
-            : end
-              ? "Range selected. Select another day to start a new range."
-              : "Select the first day, then select the last day of the range."}
-        </p>
+        <Legend />
                 </>
         )}
       </div>
@@ -731,12 +762,47 @@ function CalendarView({
         <ScheduledView rows={rows} onToggleFavorite={onToggleFavorite} actions={actions} busy={busy} />
       ) : (
       <>
+      <h2 className="px-1 text-lg font-bold">
+        {end
+          ? `${formatDate(`${start}T00:00:00`)} → ${formatDate(`${end}T00:00:00`)}`
+          : formatWeekdayLong(new Date(`${start}T00:00:00`))}
+      </h2>
+      <DayActivityList start={start} end={end ?? start} />
+      {!end ? <DayCheckinNote date={start} /> : null}
+
+      <section className="space-y-3" aria-label="Workouts">
+        <p className="px-1 text-base font-bold">Workouts {end ? "on these days" : "on this day"}</p>
+        {periodRows.length === 0 ? (
+          <div className="app-card p-5 text-center text-sm text-muted-foreground">
+            No workouts planned or done {end ? "on these days" : "on this day"}.
+          </div>
+        ) : (
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {periodRows.map((r) => (
+              <li key={r.id}>
+                <WorkoutCard
+                  r={r}
+                  onToggleFavorite={onToggleFavorite}
+                  actions={
+                    isSampleId(r.id) ? undefined : (
+                      <DayActions
+                        r={r}
+                        busy={busy}
+                        onComplete={actions.complete}
+                        onReschedule={actions.reschedule}
+                        onClear={actions.clear}
+                      />
+                    )
+                  }
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
       <PeriodSummary
-        title={
-          end
-            ? `${formatDate(`${start}T00:00:00`)} → ${formatDate(`${end}T00:00:00`)}`
-            : formatWeekdayLong(new Date(`${start}T00:00:00`))
-        }
+        title="Training numbers"
         totals={totals}
         completedCount={completedCount}
         sessions={periodSessions}
@@ -744,34 +810,6 @@ function CalendarView({
         end={end ?? start}
         onClear={end ? () => { setSelectionMode("day"); setEnd(null); } : undefined}
       />
-      {!end ? <DayCheckinNote date={start} /> : null}
-      <DayActivityList start={start} end={end ?? start} />
-
-      {periodRows.length === 0 ? (
-        <div className="app-card p-6 text-center text-sm text-muted-foreground">
-          Nothing on {end ? "these days" : "this day"}.
-        </div>
-      ) : (
-        <ul className="grid gap-3 sm:grid-cols-2">
-          {periodRows.map((r) => (
-            <li key={r.id}>
-              <WorkoutCard
-                r={r}
-                onToggleFavorite={onToggleFavorite}
-                actions={
-                  <DayActions
-                    r={r}
-                    busy={busy}
-                    onComplete={actions.complete}
-                    onReschedule={actions.reschedule}
-                    onClear={actions.clear}
-                  />
-                }
-              />
-            </li>
-          ))}
-        </ul>
-      )}
       </>
       )}
     </div>
@@ -903,7 +941,7 @@ function ScheduledView({
         ) : null}
 
         <MonthGrid cursor={cursor} byDay={byDay} selected="" onSelect={() => {}} onlyScheduled />
-        <Legend cursor={cursor} byDay={byDay} />
+        <Legend showActivity={false} />
       </div>
 
       <ul className="grid gap-3 sm:grid-cols-2">
@@ -913,7 +951,7 @@ function ScheduledView({
               r={r}
               onToggleFavorite={onToggleFavorite}
               actions={
-                <DayActions
+                isSampleId(r.id) ? undefined : <DayActions
                   r={r}
                   busy={busy}
                   onComplete={actions.complete}
