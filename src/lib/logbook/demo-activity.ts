@@ -1,16 +1,19 @@
 import type { ActivityEvent, ActivityKind } from "./activity";
 
+const LIVE_HOSTS = ["smartygym.com", "www.smartygym.com", "thesmartygym.lovable.app"];
+
 /**
- * Preview-only sample activity, shown when the page is opened with ?demoActivity=1
- * (kept for the browser tab with sessionStorage; ?demoActivity=0 turns it off).
+ * Sample activity is shown automatically in the editor preview only (never on the
+ * published site), on top of the real activity. ?demoActivity=0 hides it for the tab.
  * Nothing is saved to the database.
  */
 export function demoActivityOn(): boolean {
   if (typeof window === "undefined") return false;
   const p = new URLSearchParams(window.location.search).get("demoActivity");
-  if (p === "1") sessionStorage.setItem("sg-demo-activity", "1");
-  if (p === "0") sessionStorage.removeItem("sg-demo-activity");
-  return sessionStorage.getItem("sg-demo-activity") === "1";
+  if (p === "0") sessionStorage.setItem("sg-demo-activity", "off");
+  if (p === "1") sessionStorage.removeItem("sg-demo-activity");
+  if (sessionStorage.getItem("sg-demo-activity") === "off") return false;
+  return !LIVE_HOSTS.includes(window.location.hostname);
 }
 
 const ALL: [ActivityKind, string][] = [
@@ -28,11 +31,13 @@ export function demoEvents(now: Date): ActivityEvent[] {
   };
   const out: ActivityEvent[] = [];
   const day = (offset: number, picks: number[]) => picks.forEach((i, n) => {
-    const [kind, label] = ALL[i]!; out.push({ at: at(offset, 7 + n, 10 + n * 3).toISOString(), kind, label });
+    const [kind, label] = ALL[i]!; out.push({ at: at(offset, 7 + n, 10 + n * 3).toISOString(), kind, label: `${label} (sample)` });
   });
   day(0, ALL.map((_, i) => i));                 // Monday: everything
   const todayOffset = Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() - monday.getTime()) / 864e5);
-  if (todayOffset > 1) day(todayOffset, ALL.map((_, i) => i)); // today: everything (Tuesday stays empty)
+  if (todayOffset > 1) ALL.forEach(([kind, label], n) => { // today: everything, all before now
+    out.push({ at: new Date(now.getTime() - (ALL.length - n) * 60_000 * 5).toISOString(), kind, label: `${label} (sample)` });
+  });
   day(-7, [0, 4, 9]); day(-6, [7]); day(-5, [0, 1, 4]); day(-3, [6, 8]); day(-2, [0, 2, 4, 5]); // last week
   return out.filter(e => new Date(e.at) <= now);
 }

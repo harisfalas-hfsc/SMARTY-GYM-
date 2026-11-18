@@ -4,7 +4,6 @@ import { demoActivityOn, demoEvents } from "./demo-activity";
 
 /** Owner-scoped, RLS-protected reads only; never writes. */
 export async function loadActivity(userId: string, start: string, end: string) {
-  if (demoActivityOn()) return demoEvents(new Date()).filter(e => e.at >= start && e.at < end);
   const range = <T,>(q: T) => q;
   const [w, c, cm, rx, rt] = await Promise.all([
     supabase.from("workouts").select("name,created_by,created_at,completed_at,status,shared_at,favorited_at").eq("user_id", userId).is("deleted_at", null)
@@ -18,8 +17,9 @@ export async function loadActivity(userId: string, start: string, end: string) {
   const err = [w, c, cm, rx, rt].find(r => r.error);
   if (err) throw new Error("Activity is unavailable");
   const inRange = (t: string | null) => !!t && t >= start && t < end;
-  return activityEvents({
+  const sample = demoActivityOn() ? demoEvents(new Date()).filter(e => e.at >= start && e.at < end) : [];
+  return [...activityEvents({
     workouts: (w.data ?? []) as never, checkins: (c.data ?? []) as never,
     comments: (cm.data ?? []) as never, reactions: (rx.data ?? []) as never, ratings: (rt.data ?? []) as never,
-  }).filter(e => inRange(new Date(e.at).toISOString()));
+  }).filter(e => inRange(new Date(e.at).toISOString())), ...sample].sort((a, b) => a.at.localeCompare(b.at));
 }
