@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Activity } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ACTIVITY_LABEL } from "@/lib/logbook/activity";
-import { loadActivity } from "@/lib/logbook/activity.client";
+import { loadActivity } from "@/lib/logbook/activity-reads";
 
 /** Everything the member did on the selected day(s), read-only. */
 export function DayActivityList({ start, end }: { start: string; end: string }) {

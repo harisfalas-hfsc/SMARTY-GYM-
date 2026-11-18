@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { getMyAccessState } from "@/lib/access.functions";
 import { localGreeting, localWeek } from "@/lib/logbook/weekly-activity";
 import { briefing, eventsByDay } from "@/lib/logbook/activity";
-import { loadActivity } from "@/lib/logbook/activity.client";
+import { loadActivity } from "@/lib/logbook/activity-reads";
 import { dayKey } from "@/lib/logbook/rows";
 
 export function MobileWeeklyActivity() {
