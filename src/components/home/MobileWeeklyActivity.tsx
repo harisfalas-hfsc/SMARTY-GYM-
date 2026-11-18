@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, ChevronRight, Dumbbell, HeartPulse, MessageCircle, Trophy } from "lucide-react";
+import { Check, ChevronRight, ClipboardCheck, Dumbbell, Trophy, Users } from "lucide-react";
 import { iconInk } from "@/lib/icon-tone";
 import { useAuth } from "@/hooks/useAuth";
 import { getMyAccessState } from "@/lib/access.functions";
@@ -14,8 +14,8 @@ import { dayKey } from "@/lib/logbook/rows";
 const GROUP_VIEW: Record<BriefingGroup, { Icon: typeof Dumbbell; tone: string; one: string; many: string }> = {
   trained: { Icon: Trophy, tone: "logbook", one: "workout done", many: "workouts done" },
   workouts: { Icon: Dumbbell, tone: "workouts", one: "workout saved", many: "workout actions" },
-  checkins: { Icon: HeartPulse, tone: "checkins", one: "check-in", many: "check-ins" },
-  community: { Icon: MessageCircle, tone: "community", one: "community action", many: "community actions" },
+  checkins: { Icon: ClipboardCheck, tone: "Smarty Check-ins", one: "check-in", many: "check-ins" },
+  community: { Icon: Users, tone: "Smarty Community", one: "community action", many: "community actions" },
 };
 
 export function MobileWeeklyActivity() {
@@ -65,12 +65,13 @@ export function MobileWeeklyActivity() {
       </span>)}
     </div>
     {user && access.data?.premium && now && (todayEvents.length
-      ? <div className="mt-3 flex flex-wrap items-center gap-1.5" aria-label="Today's activity">
+      ? <div className="mt-3 flex items-center gap-3 overflow-hidden whitespace-nowrap" aria-label="Today's activity">
           <span className="text-xs font-semibold text-muted-foreground">Today</span>
           {briefingGroups(todayEvents).map(([g, n]) => { const { Icon, tone, one, many } = GROUP_VIEW[g]; return (
-            <span key={g} className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium">
-              <Icon aria-hidden="true" className={`h-3.5 w-3.5 ${iconInk(tone)}`} />{n} {n === 1 ? one : many}
+            <span key={g} aria-label={`${n} ${n === 1 ? one : many}`} className="inline-flex shrink-0 items-center gap-1 text-sm font-bold tabular-nums">
+              <Icon aria-hidden="true" className={`h-4 w-4 ${iconInk(tone)}`} />{n}
             </span>); })}
+          <span className="ml-auto shrink-0 text-[11px] text-muted-foreground">Tap for details</span>
         </div>
       : <p className="mt-2 text-xs text-muted-foreground">Nothing yet today</p>)}
     {activity.isError && <p className="mt-2 text-xs text-muted-foreground">Training activity is temporarily unavailable.</p>}
