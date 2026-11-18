@@ -5,8 +5,10 @@ import { useServerFn } from "@tanstack/react-start";
 import { Check, ChevronRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { getMyAccessState } from "@/lib/access.functions";
-import { supabase } from "@/integrations/supabase/client";
-import { completedDays, localGreeting, localWeek } from "@/lib/logbook/weekly-activity";
+import { localGreeting, localWeek } from "@/lib/logbook/weekly-activity";
+import { briefing, eventsByDay } from "@/lib/logbook/activity";
+import { loadActivity } from "@/lib/logbook/activity.client";
+import { dayKey } from "@/lib/logbook/rows";
 
 export function MobileWeeklyActivity() {
   const { user, displayName, loading } = useAuth();
@@ -32,20 +34,11 @@ export function MobileWeeklyActivity() {
   const activity = useQuery({
     queryKey: ["home-week-activity", user?.id, start],
     enabled: Boolean(user && start && end && access.data?.premium),
-    queryFn: async () => {
-      if (!user || !start || !end) return [];
-      // Owner-scoped, RLS-protected reads only. No activity is created here.
-      const [workouts, sessions] = await Promise.all([
-        supabase.from("workouts").select("completed_at").eq("user_id", user.id)
-          .eq("status", "completed").gte("completed_at", start).lt("completed_at", end),
-        supabase.from("workout_results").select("performed_at").eq("user_id", user.id)
-          .gte("performed_at", start).lt("performed_at", end),
-      ]);
-      if (workouts.error || sessions.error) throw new Error("Training activity is unavailable");
-      return [...(workouts.data ?? []).map(row => row.completed_at), ...(sessions.data ?? []).map(row => row.performed_at)];
-    },
+    queryFn: () => loadActivity(user!.id, start!, end!),
   });
-  const completed = now && access.data?.premium ? completedDays(activity.data ?? [], now) : new Set<string>();
+  const byDay = now && access.data?.premium ? eventsByDay(activity.data ?? [], now) : new Map();
+  const completed = new Set<string>(byDay.keys());
+  const todayEvents = now ? byDay.get(dayKey(now)) ?? [] : [];
   const firstName = displayName?.trim().split(/\s+/)[0];
   const content = <>
     <div className="flex min-h-10 items-start justify-between gap-2">
@@ -56,13 +49,14 @@ export function MobileWeeklyActivity() {
       <ChevronRight aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />
     </div>
     <div className="mt-3 grid grid-cols-7 gap-1">
-      {week.map(({ date, key, today }, index) => <span key={key} aria-label={`${date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}${today ? ", today" : ""}${completed.has(key) ? ", training recorded" : ""}`} aria-current={today ? "date" : undefined} className="flex min-h-14 min-w-0 flex-col items-center gap-1.5">
+      {week.map(({ date, key, today }, index) => <span key={key} aria-label={`${date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}${today ? ", today" : ""}${completed.has(key) ? ", activity recorded" : ""}`} aria-current={today ? "date" : undefined} className="flex min-h-14 min-w-0 flex-col items-center gap-1.5">
         <span className={`text-[10px] font-semibold ${today ? "text-brand-blue" : "text-muted-foreground"}`}>{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][index]}</span>
-        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border text-xs font-bold ${completed.has(key) ? "border-brand-blue bg-brand-blue text-hero-foreground" : today ? "border-brand-blue bg-brand-blue/10 text-brand-blue" : "border-border text-muted-foreground"} ${today ? "ring-2 ring-brand-blue/30 ring-offset-2 ring-offset-card" : ""}`}>
+        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border text-xs font-bold ${completed.has(key) ? "border-brand-blue bg-brand-blue text-hero-foreground" : today ? "border-brand-blue bg-transparent text-brand-blue" : "border-border text-muted-foreground"} ${today ? "ring-2 ring-brand-blue/30 ring-offset-2 ring-offset-card" : ""}`}>
           {completed.has(key) ? <Check aria-hidden="true" className="h-4 w-4" /> : date.getDate()}
         </span>
       </span>)}
     </div>
+    {user && access.data?.premium && now && <p className="mt-2 truncate text-xs text-muted-foreground">{todayEvents.length ? `Today: ${briefing(todayEvents)}` : "No activity yet today"}</p>}
     {activity.isError && <p className="mt-2 text-xs text-muted-foreground">Training activity is temporarily unavailable.</p>}
     {!loading && !user && <p className="mt-2 text-xs font-semibold text-brand-blue">Track your streak</p>}
   </>;

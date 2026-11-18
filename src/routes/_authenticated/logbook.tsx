@@ -1,6 +1,7 @@
 import { iconInk, iconTone } from "@/lib/icon-tone";
 import { PremiumGate } from "@/components/PremiumGate";
 import { DayCheckinNote } from "@/components/checkins/CheckinsPanel";
+import { DayActivityList } from "@/components/logbook/DayActivityList";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -718,6 +719,7 @@ function CalendarView({
         onClear={end ? () => { setSelectionMode("day"); setEnd(null); } : undefined}
       />
       {!end ? <DayCheckinNote date={start} /> : null}
+      <DayActivityList start={start} end={end ?? start} />
 
       {periodRows.length === 0 ? (
         <div className="app-card p-6 text-center text-sm text-muted-foreground">
