@@ -18,3 +18,12 @@ describe("member activity", () => {
     expect(eventsByDay(activityEvents(empty)).size).toBe(0);
   });
 });
+
+import { briefingGroups } from "../activity";
+describe("home briefing groups", () => {
+  it("groups actions into trained, workouts, check-ins and community", () => {
+    const ev = (kind: any) => ({ at: "2026-11-16T09:00:00Z", kind, label: "" });
+    expect(briefingGroups([ev("checkin"), ev("completed"), ev("created"), ev("shared"), ev("comment"), ev("checkin")]))
+      .toEqual([["trained", 1], ["workouts", 2], ["checkins", 2], ["community", 1]]);
+  });
+});

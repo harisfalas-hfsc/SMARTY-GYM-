@@ -51,3 +51,16 @@ export function briefing(events: ActivityEvent[]) {
   for (const e of events) counts.set(e.kind, (counts.get(e.kind) ?? 0) + 1);
   return [...counts].map(([k, n]) => `${n} × ${ACTIVITY_LABEL[k]}`).join(" · ");
 }
+
+export type BriefingGroup = "trained" | "workouts" | "checkins" | "community";
+const GROUP_OF: Record<ActivityKind, BriefingGroup> = {
+  completed: "trained", created: "workouts", added: "workouts", shared: "workouts", favorited: "workouts",
+  checkin: "checkins", comment: "community", reaction: "community", rating: "community",
+};
+/** Plain, countable groups for the home card: e.g. [["trained", 1], ["checkins", 2]]. */
+export function briefingGroups(events: ActivityEvent[]): [BriefingGroup, number][] {
+  const order: BriefingGroup[] = ["trained", "workouts", "checkins", "community"];
+  const n = new Map<BriefingGroup, number>();
+  for (const e of events) n.set(GROUP_OF[e.kind], (n.get(GROUP_OF[e.kind]) ?? 0) + 1);
+  return order.flatMap(g => n.get(g) ? [[g, n.get(g)!] as [BriefingGroup, number]] : []);
+}

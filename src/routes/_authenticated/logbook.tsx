@@ -174,11 +174,19 @@ const SOURCE_DOT: Record<Source, string> = {
   own: "bg-emerald-400",
 };
 
-function dotClass(r: Row) {
-  if (r.status === "completed") return "bg-primary";
+/** Calendar marks: a done workout is covered by the day's activity tick, so only open workouts get a dot. */
+type DotKind = "scheduled" | "missed" | "created";
+const DOT_CLASS: Record<DotKind, string> = {
+  scheduled: SCHEDULE_TONE_DOT.upcoming,
+  missed: SCHEDULE_TONE_DOT.missed,
+  created: "bg-muted-foreground/50",
+};
+function dotKind(r: Row): DotKind | null {
+  if (r.status === "completed") return null;
   const tone = scheduleTone(r.scheduled_at, false);
-  if (tone) return SCHEDULE_TONE_DOT[tone];
-  return "bg-muted-foreground/50";
+  if (tone === "missed") return "missed";
+  if (tone) return "scheduled";
+  return "created";
 }
 
 function StatusLine({ r }: { r: Row }) {
@@ -425,6 +433,7 @@ function MonthGrid({
           if (!d) return <span key={`e${i}`} />;
           const key = dayKey(d);
           const items = byDay.get(key) ?? [];
+          const dotted = items.flatMap((r) => { const k = dotKind(r); return k ? [{ r, k }] : []; });
           const isSelected = inRange ? inRange(key) : key === selected;
           const dim = onlyScheduled && items.length === 0;
           return (
@@ -443,15 +452,15 @@ function MonthGrid({
               <span className="flex items-center justify-between gap-0.5">
                 <span className="font-bold">{d.getDate()}</span>
                 {activityDays?.has(key) ? (
-                  <span aria-label="Activity recorded" className="grid h-3.5 w-3.5 place-items-center rounded-full bg-brand-blue text-[8px] leading-none text-white">✓</span>
+                  <span aria-label="Activity recorded" className="grid h-3.5 w-3.5 place-items-center rounded-full bg-brand-blue text-[8px] leading-none text-primary-foreground">✓</span>
                 ) : null}
               </span>
               <span className="mt-1 flex flex-wrap gap-0.5">
-                {items.slice(0, 4).map((r) => (
-                  <span key={r.id} className={`h-1.5 w-1.5 rounded-full ${dotClass(r)}`} />
+                {dotted.slice(0, 4).map(({ r, k }) => (
+                  <span key={r.id} className={`h-1.5 w-1.5 rounded-full ${DOT_CLASS[k]}`} />
                 ))}
-                {items.length > 4 ? (
-                  <span className="text-muted-foreground">+{items.length - 4}</span>
+                {dotted.length > 4 ? (
+                  <span className="text-muted-foreground">+{dotted.length - 4}</span>
                 ) : null}
               </span>
             </button>
@@ -462,27 +471,21 @@ function MonthGrid({
   );
 }
 
-function Legend() {
+/** Shows only the marks that actually appear in the month on screen. */
+function Legend({ cursor, byDay, activityDays }: { cursor: Date; byDay: Map<string, Row[]>; activityDays?: Set<string> }) {
+  const prefix = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`;
+  const kinds = new Set<DotKind>();
+  for (const [key, rows] of byDay) if (key.startsWith(prefix)) for (const r of rows) { const k = dotKind(r); if (k) kinds.add(k); }
+  const hasActivity = [...(activityDays ?? [])].some((k) => k.startsWith(prefix));
+  const items: [string, React.ReactNode][] = [];
+  if (hasActivity) items.push(["You did something this day", <span className="grid h-3 w-3 place-items-center rounded-full bg-brand-blue text-[7px] leading-none text-primary-foreground">✓</span>]);
+  if (kinds.has("scheduled")) items.push(["Planned workout", <span className={`h-2 w-2 rounded-full ${DOT_CLASS.scheduled}`} />]);
+  if (kinds.has("missed")) items.push(["Planned, missed", <span className={`h-2 w-2 rounded-full ${DOT_CLASS.missed}`} />]);
+  if (kinds.has("created")) items.push(["Saved, not done yet", <span className={`h-2 w-2 rounded-full ${DOT_CLASS.created}`} />]);
+  if (!items.length) return <p className="mt-3 text-[11px] text-muted-foreground">Nothing recorded this month yet.</p>;
   return (
     <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-muted-foreground">
-      <span className="inline-flex items-center gap-1">
-        <span className="grid h-3 w-3 place-items-center rounded-full bg-brand-blue text-[7px] leading-none text-white">✓</span> Activity
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <span className="h-2 w-2 rounded-full bg-primary" /> Completed
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <span className="h-2 w-2 rounded-full bg-blue-500" /> Scheduled today
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <span className="h-2 w-2 rounded-full bg-emerald-500" /> Scheduled ahead
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <span className="h-2 w-2 rounded-full bg-red-500" /> Missed
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <span className="h-2 w-2 rounded-full bg-muted-foreground/50" /> Created, not done
-      </span>
+      {items.map(([label, mark]) => <span key={label} className="inline-flex items-center gap-1">{mark} {label}</span>)}
     </div>
   );
 }
@@ -712,16 +715,15 @@ function CalendarView({
           inRange={inRange}
           activityDays={activityDays}
         />
-        <Legend />
+        <Legend cursor={cursor} byDay={byDay} activityDays={activityDays} />
         <p className="mt-2 text-sm font-medium text-foreground">
           {selectionMode === "day"
-            ? "Select any day to see its workouts, recorded load, duration, and RPE."
+            ? "Tap a day to see everything you did."
             : end
               ? "Range selected. Select another day to start a new range."
               : "Select the first day, then select the last day of the range."}
         </p>
-        <p className="mt-1 text-[11px] text-muted-foreground">A blue filled cell is selected. A blue outline without fill marks today.</p>
-        </>
+                </>
         )}
       </div>
 
@@ -901,7 +903,7 @@ function ScheduledView({
         ) : null}
 
         <MonthGrid cursor={cursor} byDay={byDay} selected="" onSelect={() => {}} onlyScheduled />
-        <Legend />
+        <Legend cursor={cursor} byDay={byDay} />
       </div>
 
       <ul className="grid gap-3 sm:grid-cols-2">
