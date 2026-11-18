@@ -1,8 +1,27 @@
 import { iconInk, iconTone } from "@/lib/icon-tone";
-import type { ReactNode } from "react";
+import { isValidElement, type CSSProperties, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobilePageDescription } from "@/components/MobilePageDescription";
+
+/** Visible text of a title, used to size it so it stays on one line on phones. */
+function nodeText(node: ReactNode): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(nodeText).join("");
+  if (isValidElement(node)) return nodeText((node.props as { children?: ReactNode }).children);
+  return "";
+}
+
+/** True when the author asked for a deliberate line break; those are kept. */
+function hasExplicitBreak(node: ReactNode): boolean {
+  if (Array.isArray(node)) return node.some(hasExplicitBreak);
+  if (isValidElement(node)) {
+    if (node.type === "br") return true;
+    return hasExplicitBreak((node.props as { children?: ReactNode }).children);
+  }
+  return false;
+}
 
 interface PageHeaderProps {
   eyebrow?: string;
@@ -43,6 +62,9 @@ export function PageHeader({
 }: PageHeaderProps) {
   const Icon = typeof icon === "function" ? icon : null;
   const Description = mobileDescriptionCard ? MobilePageDescription : "p";
+  const titleText = nodeText(title).replace(/\s+/g, " ").trim();
+  const titleFitsOneLine =
+    titleText.length > 0 && !hasExplicitBreak(title) && !Icon && typeof icon !== "string";
   return (
     <div
       className={cn(
@@ -82,7 +104,16 @@ export function PageHeader({
         {typeof icon === "string" && (
           <span className="text-2xl leading-none sm:text-3xl">{icon}</span>
         )}
-        <span className="min-w-0">{title}</span>
+        <span
+          className={cn("min-w-0", titleFitsOneLine && "sg-title-fit")}
+          style={
+            titleFitsOneLine
+              ? ({ "--sg-title-chars": titleText.length } as CSSProperties)
+              : undefined
+          }
+        >
+          {title}
+        </span>
       </Heading>
 
       {subtitle && (

@@ -578,3 +578,16 @@ body {
   main.sg-page-enter { animation: sg-page-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
 }
 @keyframes sg-page-in { from { opacity: 0; transform: translateX(28px); } }
+
+/* Page titles stay on one line on phones: the size only shrinks as far as the
+   longest title needs, so short titles keep the normal size. Desktop is untouched. */
+@media (max-width: 639px) {
+  .sg-title-fit {
+    font-size: max(0.8125rem, min(1.875rem, calc((100vw - 40px) / (0.68 * var(--sg-title-chars, 20)))));
+  }
+}
+@media (min-width: 640px) and (max-width: 767px) {
+  .sg-title-fit {
+    font-size: max(0.875rem, min(2.25rem, calc((100vw - 40px) / (0.68 * var(--sg-title-chars, 20)))));
+  }
+}
