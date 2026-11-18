@@ -102,7 +102,7 @@ export function formatMonthYear(value: Date | string | number | null | undefined
 
 export type ScheduleTone = "missed" | "today" | "upcoming";
 
-/** Red when the scheduled date has passed, blue for today, green for the future. */
+/** Red when the scheduled date has passed, green for today and the future (blue means done/activity). */
 export function scheduleTone(
   value: Date | string | number | null | undefined,
   completed = false,
@@ -119,13 +119,13 @@ export function scheduleTone(
 
 export const SCHEDULE_TONE_TEXT: Record<ScheduleTone, string> = {
   missed: "text-red-500",
-  today: "text-blue-500",
+  today: "text-emerald-500",
   upcoming: "text-emerald-500",
 };
 
 export const SCHEDULE_TONE_DOT: Record<ScheduleTone, string> = {
   missed: "bg-red-500",
-  today: "bg-blue-500",
+  today: "bg-emerald-500",
   upcoming: "bg-emerald-500",
 };
 
