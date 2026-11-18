@@ -126,17 +126,18 @@ function ToolCard({ tool }: { tool: Tool }) {
         src={tool.image}
         alt={tool.title}
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 max-md:brightness-[0.72] max-md:saturate-[1.05]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/10" />
+      <div className="absolute inset-0 hidden bg-gradient-to-t from-background via-background/70 to-background/10 md:block" />
+      <div className="absolute inset-0 md:hidden" style={{ background: "var(--gradient-photo-card)" }} />
       <div className="relative flex h-full flex-col justify-end p-4 sm:p-5">
         <div className="mb-2 flex items-center justify-between gap-3">
-          <h2 className="text-lg font-extrabold leading-tight sm:text-xl">{tool.title}</h2>
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-primary/40 bg-card text-primary shadow-sm transition-transform duration-300 group-hover:scale-110">
+          <h2 className="text-lg font-extrabold leading-tight sm:text-xl max-md:text-hero-foreground max-md:photo-copy-shadow">{tool.title}</h2>
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-primary/40 bg-card text-primary shadow-sm transition-transform duration-300 group-hover:scale-110 max-md:border-hero-foreground/50 max-md:bg-hero-foreground/10 max-md:text-hero-foreground max-md:shadow-none">
             <Icon className="h-5 w-5" />
           </span>
         </div>
-        <p className="text-sm leading-snug text-muted-foreground">{tool.description}</p>
+        <p className="text-sm leading-snug text-muted-foreground max-md:text-hero-foreground/85 max-md:photo-copy-shadow">{tool.description}</p>
       </div>
     </Link>
   );
