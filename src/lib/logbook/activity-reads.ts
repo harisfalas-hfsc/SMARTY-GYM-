@@ -1,8 +1,10 @@
 import { supabase } from "@/integrations/supabase/client";
 import { activityEvents } from "./activity";
+import { demoActivityOn, demoEvents } from "./demo-activity";
 
 /** Owner-scoped, RLS-protected reads only; never writes. */
 export async function loadActivity(userId: string, start: string, end: string) {
+  if (demoActivityOn()) return demoEvents(new Date()).filter(e => e.at >= start && e.at < end);
   const range = <T,>(q: T) => q;
   const [w, c, cm, rx, rt] = await Promise.all([
     supabase.from("workouts").select("name,created_by,created_at,completed_at,status,shared_at,favorited_at").eq("user_id", userId).is("deleted_at", null)
