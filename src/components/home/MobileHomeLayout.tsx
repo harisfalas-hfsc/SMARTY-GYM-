@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BookOpen, ChevronLeft, ChevronRight, Newspaper, Sparkles, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,12 +37,6 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
     return () => { api.off("select", sync); api.off("reInit", sync); };
   }, [api]);
   return <div className="md:hidden">
-    <div className="mb-4 pt-1 text-center">
-      <p className="text-xs font-semibold uppercase tracking-wider text-primary">SMARTYGYM</p>
-      <p className="sg-title-fit mt-2 font-extrabold uppercase tracking-tight" style={{ "--sg-title-chars": 40 } as CSSProperties}>
-        Your Gym Re-imagined. Anywhere, Anytime.
-      </p>
-    </div>
     <div className="mb-3 mt-5 flex items-center justify-between">
       <h2 className="text-lg font-extrabold">Explore</h2>
       <div className="flex gap-2">

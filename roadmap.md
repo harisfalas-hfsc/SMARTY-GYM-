@@ -183,8 +183,3 @@
 - [x] Default both devices to light and preserve saved choices; fresh mobile/desktop defaults and saved dark mode verified in browser, 571 tests passed and preview build OK.
 - [x] Consistency sweep: root document now also starts light before scripts; Home/About/Smarty Workouts navigation and both avatar-menu theme switches verified on mobile/desktop. Shared provider, storage, initializer, desktop heading groups and print appearance read; native splash remains unchanged.
 - [x] Corrected desktop heading overlap: all six backdrop words now sit above labels with a measured 16px gap. Desktop Coach and every card follow light mode; light/dark colors checked and final screenshots inspected. 571 tests passed; final card correction retested and build OK. Mobile CSS unchanged.
-
-## One-line page titles on phones
-- [x] Mobile homepage now opens with SMARTYGYM + "Your Gym Re-imagined. Anywhere, Anytime." on one line.
-- [x] PageHeader titles that would wrap on phones now shrink just enough to stay on one line (26-40 char titles); deliberate two-line titles with a manual break are unchanged; desktop untouched.
-- [x] Verified one line at 360/394/414px with no horizontal overflow, desktop unchanged, 572 tests passed, build OK.
