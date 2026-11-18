@@ -1,7 +1,6 @@
 // Logbook derivations, kept out of the route so they can be tested.
 // The route is composition only: it must not decide what "planned" means.
 
-import { scheduleTone } from "@/lib/date-format";
 
 export type LogbookRow = {
   id: string;
@@ -127,16 +126,6 @@ export function dayKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
     d.getDate(),
   ).padStart(2, "0")}`;
-}
-
-/** Colour of the dot a workout gets in the calendar. */
-export function dotClass(row: LogbookRow): string {
-  if (row.status === "completed") return "bg-primary";
-  const tone = scheduleTone(row.scheduled_at, false);
-  if (tone === "missed") return "bg-red-500";
-  if (tone === "today") return "bg-blue-500";
-  if (tone === "upcoming") return "bg-emerald-500";
-  return "bg-muted-foreground/50";
 }
 
 export function filterMenuLabel(
