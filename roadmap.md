@@ -1,5 +1,9 @@
 # Roadmap
 
+## Mobile homepage weekly training strip
+- [x] Add device-local date/greeting and Monday–Sunday circles above Explore, highlight today and actual recorded training, and link members to the Logbook calendar and visitors to sign-in; desktop unchanged.
+- [x] 18 date/activity and existing Logbook tests passed; real signed-in mobile tap opens Calendar, visitor tap opens sign-in, seven circles/one today marker and desktop exclusion checked; screenshots inspected, no browser errors and preview build OK. Existing account has no displayed completions this week; recorded-day rendering covered by unit tests, not a real completed-session UI check. No training records changed; rituals have no existing completion record to display.
+
 ## Seven evidence-based blog articles
 - [x] Published all seven requested topics together with research sources, existing category links, cross-article links, search descriptions and seven existing topic-relevant photos cropped to 1200×630.
 - [x] One combined announcement: 29 emails accepted by the existing sending service, 29 inbox messages and paired push requested. Existing per-article email dedupe records cover this batch so the unchanged scheduled email job does not repeat the seven articles for those recipients. Individual mailbox/push receipt is not verified.

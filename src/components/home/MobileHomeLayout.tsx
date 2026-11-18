@@ -14,6 +14,7 @@ import workoutImage from "@/assets/smarty-workouts-card.jpg";
 import createImage from "@/assets/create-workout-card.jpg";
 import sharedImage from "@/assets/shared-workouts-card.jpg";
 import harisImage from "@/assets/haris-falas-coach.jpg";
+import { MobileWeeklyActivity } from "./MobileWeeklyActivity";
 
 export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: number; featured: SmartyWorkoutCard[] }) {
   const [api, setApi] = useState<CarouselApi>();
@@ -37,6 +38,7 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
     return () => { api.off("select", sync); api.off("reInit", sync); };
   }, [api]);
   return <div className="md:hidden">
+    <MobileWeeklyActivity />
     <div className="mb-3 mt-5 flex items-center justify-between">
       <h2 className="text-lg font-extrabold">Explore</h2>
       <div className="flex gap-2">
