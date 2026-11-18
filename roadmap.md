@@ -1,5 +1,10 @@
 # Roadmap
 
+## Seven evidence-based blog articles
+- [x] Published all seven requested topics together with research sources, existing category links, cross-article links, search descriptions and seven existing topic-relevant photos cropped to 1200×630.
+- [x] One combined announcement: 29 emails accepted by the existing sending service, 29 inbox messages and paired push requested. Existing per-article email dedupe records cover this batch so the unchanged scheduled email job does not repeat the seven articles for those recipients. Individual mailbox/push receipt is not verified.
+- [x] All seven articles reachable on smartygym.com and verified in the local browser with rendered covers, unique titles and self-referencing canonicals. Category links checked; WOD link corrected to /wod. Desktop/mobile article screenshots and the requesting account's expanded inbox message inspected. 15 existing announcement/scheduler tests passed; preview build OK. No scheduled-job code, schedules or training records changed.
+
 ## Mobile page introduction consistency
 - [x] Put existing customer page descriptions in a shared mobile-only introduction card; shorten long mobile introductions and match Workout of the Day without changing desktop or administrator headers.
 - [x] Verified all eight named pages, both creator modes, Tools, Blog, Library, About and Inbox at 384px with the requesting account; five desktop introductions remain undecorated. Screenshots inspected, 568 tests passed, preview build OK; no training data changed.
