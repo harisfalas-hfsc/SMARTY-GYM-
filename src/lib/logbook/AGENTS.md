@@ -1,0 +1,1 @@
+- Member activity is derived only by activity.ts from owner-scoped rows, read-only; home strip ticks days with ≥1 event, Logbook calendar lists them — why: one activity definition, no writes.
