@@ -15,7 +15,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
+        title: "SmartyGym | Online Gym & Smart Workouts by Haris Falas",
       },
       {
         name: "description",
@@ -24,21 +24,21 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
+        content: "SmartyGym | Online Gym & Smart Workouts by Haris Falas",
       },
       {
         property: "og:description",
         content:
-          "Personalized workouts built around your body, goals and equipment, programmed on the sports science of Haris Falas. Two workouts every day with Smarty Coach.",
+          "Your Gym Re-imagined. Anywhere, Anytime. Workout of the Day, daily coach guidance, Smarty Workouts, custom workout creation, training tools, and science-backed articles.",
       },
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas" },
+      { name: "twitter:title", content: "SmartyGym | Online Gym & Smart Workouts by Haris Falas" },
       {
         name: "twitter:description",
         content:
-          "Personalized workouts built around your body, goals and equipment, programmed on the sports science of Haris Falas. Two workouts every day with Smarty Coach.",
+          "Your Gym Re-imagined. Anywhere, Anytime. Workout of the Day, daily coach guidance, Smarty Workouts, custom workout creation, training tools, and science-backed articles.",
       },
       { property: "og:url", content: "https://smartygym.com/" },
       {
@@ -59,7 +59,7 @@ export const Route = createFileRoute("/")({
           "@type": "WebPage",
           "@id": "https://smartygym.com/#webpage",
           url: "https://smartygym.com/",
-          name: "SmartyGym | Online Gym & Personalized Workouts by Haris Falas",
+          name: "SmartyGym | Online Gym & Smart Workouts by Haris Falas",
           description:
             "An online gym with a personal coach: create your workout in seconds and train around your goals, your equipment and your schedule.",
           inLanguage: "en",
