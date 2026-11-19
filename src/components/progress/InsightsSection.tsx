@@ -14,6 +14,7 @@ import { reportChartGeometry } from "@/lib/report-chart";
 
 import { LOAD_TEXT } from "@/lib/insights/presentation";
 import { cn } from "@/lib/utils";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
 const fmt = (iso: string) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
@@ -41,13 +42,14 @@ function Card({ title, icon: Icon, children, tone = "text-primary" }: { title: s
 
 /** Today's pick — the exact same decision as the Smarty Coach pop-up. */
 function CoachTodayTip() {
+  const revision = useCheckinRevision();
   const fetchSnapshot = useServerFn(getCoachSnapshot);
   const [snap, setSnap] = useState<CoachSnapshot | null>(null);
   useEffect(() => {
     let active = true;
     fetchSnapshot().then((s) => { if (active) setSnap(s as CoachSnapshot); }).catch(() => undefined);
     return () => { active = false; };
-  }, [fetchSnapshot]);
+  }, [fetchSnapshot, revision]);
   if (!snap || snap.access !== "ready") return null;
   const name = snap.todayFocus.workoutName;
   const params = "params" in snap.action ? (snap.action.params as { workoutId?: string } | undefined) : undefined;
@@ -66,6 +68,7 @@ type LiveReadiness = Awaited<ReturnType<typeof getLiveReadiness>>;
 
 /** Readiness right now — refreshed while visible, never a weekly average. */
 function LiveReadinessCard() {
+  const revision = useCheckinRevision();
   const fetchReadiness = useServerFn(getLiveReadiness);
   const [value, setValue] = useState<LiveReadiness | null>(null);
   const [failed, setFailed] = useState(false);
@@ -88,7 +91,7 @@ function LiveReadinessCard() {
       document.removeEventListener("visibilitychange", load);
       window.removeEventListener("focus", load);
     };
-  }, [fetchReadiness]);
+  }, [fetchReadiness, revision]);
 
   return (
     <Card title="Readiness right now" icon={HeartPulse} tone="text-rose-500">
@@ -141,6 +144,7 @@ export function InsightsCard() {
 
 /** The same weekly report members receive on Monday. */
 export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
+  const revision = useCheckinRevision();
   const fetchInsights = useServerFn(getMyInsights);
   const [week, setWeek] = useState<"current" | "previous">("previous");
   const [data, setData] = useState<WeeklyInsights | null>(report ?? null);
@@ -157,7 +161,7 @@ export function InsightsSection({ report }: { report?: WeeklyInsights } = {}) {
     return () => {
       active = false;
     };
-  }, [fetchInsights, week, report]);
+  }, [fetchInsights, week, report, revision]);
 
   const k = data?.kpis;
   const dayPoints = data?.days.map((d) => ({ label: d.label, value: d.count })) ?? [];

@@ -3,6 +3,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { refreshActivity } from "@/lib/logbook/refresh-activity";
+import { CHECKINS_CHANGED } from "@/lib/checkins/changes";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
@@ -28,7 +30,7 @@ import { MorningCheckinForm, NightCheckinForm } from "./CheckinForms";
 import { formatDate } from "@/lib/date-format";
 
 export type CheckinState = Awaited<ReturnType<typeof getCheckinState>>;
-export const CHECKINS_CHANGED = "smarty:checkins-changed";
+export { CHECKINS_CHANGED };
 
 export const SCORE_COLOR: Record<string, string> = {
   red: "#ef4444",
@@ -356,6 +358,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
 /** One line under a selected calendar day: that day's Smarty Check-in. */
 export function DayCheckinNote({ date }: { date: string }) {
   const fetchState = useServerFn(getCheckinState);
+  const revision = useCheckinRevision();
   const [rows, setRows] = useState<CheckinRow[] | null>(null);
   useEffect(() => {
     let on = true;
@@ -365,7 +368,7 @@ export function DayCheckinNote({ date }: { date: string }) {
     return () => {
       on = false;
     };
-  }, [fetchState]);
+  }, [fetchState, revision]);
   const r = rows?.find((x) => x.checkin_date === date);
   if (!r) return null;
   return (

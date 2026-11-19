@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { adminGetUserActivity } from "@/lib/activity.functions";
 import { addDaysISO, fmtDate, fmtDateTime, KIND_LABEL, localDate, reportCsv, type ActivityReport } from "@/lib/activity/report";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
 function download(name: string, blob: Blob) {
   const url = URL.createObjectURL(blob);
@@ -53,6 +54,7 @@ async function exportPdf(r: ActivityReport) {
 }
 
 export function AdminUserActivityTab() {
+  const revision = useCheckinRevision();
   const load = useServerFn(adminGetUserActivity);
   const yesterday = addDaysISO(localDate(new Date()), -1);
   const [fromDate, setFrom] = useState(yesterday);
@@ -75,7 +77,7 @@ export function AdminUserActivityTab() {
       setBusy(false);
     }
   };
-  useEffect(() => { void run(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+  useEffect(() => { void run(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [revision]);
 
   const users = useMemo(() => {
     const s = q.trim().toLowerCase();

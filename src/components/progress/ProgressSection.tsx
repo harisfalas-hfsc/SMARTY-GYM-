@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/date-format";
 import { SCORE_RULES } from "@/lib/progress-config";
 import { useAuth } from "@/hooks/useAuth";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 import {
   Dialog,
   DialogContent,
@@ -129,6 +130,7 @@ function BadgeUnlockedToast({ names, onClose }: { names: string[]; onClose: () =
  * and progress are one place, never three.
  */
 export function ProgressSection() {
+  const revision = useCheckinRevision();
   const { user } = useAuth();
   const fetchOverview = useServerFn(getProgressOverview);
   const fetchExport = useServerFn(getProgressExport);
@@ -164,7 +166,7 @@ export function ProgressSection() {
     return () => {
       active = false;
     };
-  }, [fetchOverview, user?.id]);
+  }, [fetchOverview, user?.id, revision]);
 
   const byCategory = useMemo(() => {
     if (!data) return [];

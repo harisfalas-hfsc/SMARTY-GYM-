@@ -4,6 +4,7 @@ import { Lightbulb, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCoachRecommendation } from "@/lib/performance.functions";
 import { starsToLevel } from "@/lib/workout/spec";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
 type Result = Awaited<ReturnType<typeof getCoachRecommendation>>;
 
@@ -19,6 +20,7 @@ export function CoachRecommendationCard({
   onApplyStars?: (stars: number) => void;
 }) {
   const fetchRecommendation = useServerFn(getCoachRecommendation);
+  const revision = useCheckinRevision();
   const [data, setData] = useState<Result | null>(null);
   const [loading, setLoading] = useState(true);
   const [dismissed, setDismissed] = useState(false);
@@ -37,7 +39,7 @@ export function CoachRecommendationCard({
     return () => {
       active = false;
     };
-  }, [selectedStars, fetchRecommendation]);
+  }, [selectedStars, fetchRecommendation, revision]);
 
   if (dismissed) return null;
 

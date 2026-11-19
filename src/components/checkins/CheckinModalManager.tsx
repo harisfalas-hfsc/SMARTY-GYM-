@@ -13,12 +13,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { getCheckinState, markCheckinModalShown } from "@/lib/checkins.functions";
 import { MorningCheckinForm, NightCheckinForm } from "./CheckinForms";
 import { CHECKINS_CHANGED, useCheckinSubmit, type CheckinState } from "./CheckinsPanel";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
 /**
  * Opens the old SmartyGym prompt once per window (07:00–10:00 and 19:00–22:00):
  * "Do it now" opens the form, "Later" leaves it in Logbook → Progress.
  */
 export function CheckinModalManager() {
+  const revision = useCheckinRevision();
   const { user } = useAuth();
   const fetchState = useServerFn(getCheckinState);
   const markShown = useServerFn(markCheckinModalShown);
@@ -54,7 +56,7 @@ export function CheckinModalManager() {
       clearInterval(id);
       window.removeEventListener("smarty:coach-closed", afterCoach);
     };
-  }, [check]);
+  }, [check, revision]);
 
   const close = (then: "form" | "later") => {
     const kind = prompt;

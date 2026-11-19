@@ -1,5 +1,9 @@
 # Roadmap
 
+## Check-in freshness sweep
+- [x] Refresh all open calendar details, readiness, coaching, Progress, admin activity and current Insights after morning/night saves; preserve sent reports, schedules, permissions, examples and training records.
+- [x] Cache/event, check-in, readiness and Insights tests passed (58); real account morning check-in read-back and open calendar/Insights notification refresh checked, preview build OK. No actual check-in submitted/edited during verification; installed app and cross-device refresh unverified.
+
 ## Mobile homepage weekly training strip
 - [x] Add device-local date/greeting and Monday–Sunday circles above Explore, highlight today and actual recorded training, and link members to the Logbook calendar and visitors to sign-in; desktop unchanged.
 - [x] 18 date/activity and existing Logbook tests passed; real signed-in mobile tap opens Calendar, visitor tap opens sign-in, seven circles/one today marker and desktop exclusion checked; screenshots inspected, no browser errors and preview build OK. Existing account has no displayed completions this week; recorded-day rendering covered by unit tests, not a real completed-session UI check. No training records changed; rituals have no existing completion record to display.

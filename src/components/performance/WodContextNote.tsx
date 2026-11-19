@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Info } from "lucide-react";
 import { getWodContext } from "@/lib/performance.functions";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
 /**
  * Read-only context for the Workout of the Day. SmartyCoach never changes,
@@ -9,6 +10,7 @@ import { getWodContext } from "@/lib/performance.functions";
  * with what you have logged.
  */
 export function WodContextNote() {
+  const revision = useCheckinRevision();
   const fetchContext = useServerFn(getWodContext);
   const [note, setNote] = useState<string | null>(null);
 
@@ -22,7 +24,7 @@ export function WodContextNote() {
     return () => {
       active = false;
     };
-  }, [fetchContext]);
+  }, [fetchContext, revision]);
 
   if (!note) return null;
 

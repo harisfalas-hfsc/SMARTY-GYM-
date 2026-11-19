@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { feelingReply, type Feeling } from "@/lib/coach/feeling-replies";
 import { BrandText } from "@/components/BrandText";
 import coachPhoto from "@/assets/haris-falas-coach.jpg";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
 const CACHE_VERSION = 2;
 const CACHE_MAX_AGE = 12 * 60 * 60 * 1000;
@@ -81,6 +82,7 @@ const card = "app-card p-4 sm:p-5";
 const goldBtn = "flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-coach-gold px-4 text-sm font-extrabold uppercase tracking-wide text-coach-bg transition-opacity hover:opacity-90";
 
 export function SmartyCoachDialog({ open, onOpenChange, visitor = false, accountKey }: { open: boolean; onOpenChange: (open: boolean) => void; visitor?: boolean; accountKey: string | null }) {
+  const revision = useCheckinRevision();
   const load = useServerFn(getCoachSnapshot);
   const navigate = useNavigate();
   const [snapshot, setSnapshot] = useState<CoachSnapshot | null>(() => readCached(accountKey));
@@ -99,7 +101,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
   };
 
   useEffect(() => { setSnapshot(readCached(accountKey)); setFailed(false); }, [accountKey]);
-  useEffect(() => { if (!visitor && open) fetchSnapshot(); }, [open, visitor, accountKey]);
+  useEffect(() => { if (!visitor && (open || revision > 0)) fetchSnapshot(); }, [open, visitor, accountKey, revision]);
   useEffect(() => {
     if (open) document.documentElement.dataset.smartyCoach = "open";
     else delete document.documentElement.dataset.smartyCoach;

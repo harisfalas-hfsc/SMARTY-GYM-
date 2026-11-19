@@ -4,6 +4,7 @@ import { Activity, Dumbbell, Gauge, HeartPulse, Info, Loader2 } from "lucide-rea
 import { getPerformanceOverview } from "@/lib/performance.functions";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
 type Overview = Awaited<ReturnType<typeof getPerformanceOverview>>;
 
@@ -32,6 +33,7 @@ function LoadRow({
  * a training indicator, not a medical or diagnostic statement.
  */
 export function TrainingLoadPanel() {
+  const revision = useCheckinRevision();
   const fetchOverview = useServerFn(getPerformanceOverview);
   const { user } = useAuth();
   const [data, setData] = useState<Overview | null>(null);
@@ -52,7 +54,7 @@ export function TrainingLoadPanel() {
     return () => {
       active = false;
     };
-  }, [fetchOverview, user?.id]);
+  }, [fetchOverview, user?.id, revision]);
 
   if (loading) {
     return (
