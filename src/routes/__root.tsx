@@ -29,13 +29,14 @@ import { UpdatePrompt } from "../components/UpdatePrompt";
 import { TrafficTracker } from "../components/TrafficTracker";
 import { isRecoverablePageImportError } from "../lib/recoverable-page-error";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
+import { MEMBERSHIP_OFFER } from "../lib/seo/membership-schema";
 
 
 const SITE_URL = "https://smartygym.com";
 const OG_IMAGE = "https://smartygym.com/og-social.jpg";
 
 const SITE_DESCRIPTION =
-  "Online workout coach: personalized workouts built from your goals, experience, equipment and limitations, guided by Smarty Coach and sports scientist Haris Falas. Train at home or in any gym.";
+  "SmartyGym combines coach-designed Smarty Workouts and Workout of the Day with daily Smarty Coach guidance, custom strength and muscle-building workouts, and a training Logbook. Founded by sports scientist Haris Falas (CSCS), available on Web, iOS and Android.";
 
 const NATIVE_WRAPPER_INIT_SCRIPT = `(function(){try{var q=new URLSearchParams(location.search);var marked=q.get('nativeApp')==='true'||q.get('forceHideBadge')==='true';var ua=navigator.userAgent||'';var android=/Android/i.test(ua);var androidWebView=android&&(ua.indexOf('; wv)')>=0||ua.indexOf(';wv)')>=0||(ua.indexOf('Version/')>=0&&ua.indexOf('Chrome/')>=0));var iosWebView=/(iPhone|iPad|iPod)/i.test(ua)&&/AppleWebKit/i.test(ua)&&!/Safari/i.test(ua);var native=!!window.Capacitor||marked||androidWebView||iosWebView;if(!native)return;var r=document.documentElement;r.classList.add('native-shell');r.style.backgroundColor='#000';var hide=function(){try{var p=window.Capacitor&&window.Capacitor.Plugins;if(!p)return;var legacy=p.StatusBar;if(legacy&&typeof legacy.setOverlaysWebView==='function'){Promise.resolve(legacy.setOverlaysWebView({overlay:true})).catch(function(){});}var bars=p.SystemBars||legacy;if(bars&&typeof bars.hide==='function'){Promise.resolve(bars.hide({bar:'StatusBar'})).catch(function(){});}}catch(e){}};hide();document.addEventListener('deviceready',hide,{once:true});window.addEventListener('load',hide,{once:true});}catch(e){}})();`;
 
@@ -198,17 +199,24 @@ const JSONLD_GRAPH = {
     {
       "@type": ["SoftwareApplication", "WebApplication"],
       "@id": `${SITE_URL}/#software`,
-      name: "SmartyGym — Personalized Workout Generator",
+      name: "SmartyGym",
       applicationCategory: "HealthApplication",
-      applicationSubCategory: "Personalized workout generator and personal training coach",
+      applicationSubCategory: "Coach-designed workouts, custom workout creation and training logbook",
       operatingSystem: "Web, iOS, Android",
       browserRequirements: "Requires a modern web browser with JavaScript enabled",
       url: SITE_URL,
       image: OG_IMAGE,
       publisher: { "@id": `${SITE_URL}/#organization` },
       description: SITE_DESCRIPTION,
+      disambiguatingDescription:
+        "SmartyGym, spelled with a y and also written Smarty Gym, is the fitness platform founded by Haris Falas at smartygym.com, available on Web, iOS and Android. It is distinct from the separate SmartGym workout-tracking product.",
+      offers: MEMBERSHIP_OFFER,
       featureList: [
         "Personalized workout generator built on your training profile",
+        "Coach-designed Smarty Workouts, including Strength and Muscle Building",
+        "Daily Smarty Coach guidance following fixed coaching rules, not AI-generated advice",
+        "Create Your Own Workout: Smarty Coach or member-selected Build It Yourself exercises",
+        "Custom strength and hypertrophy sessions with chosen exercises, sets, reps or time",
         "Workout of the Day in bodyweight and equipment variants",
         "Exercise library with 1,300+ demonstrated movements",
         "Equipment-aware exercise filtering",
@@ -216,6 +224,8 @@ const JSONLD_GRAPH = {
         "Beginner, intermediate and advanced difficulty ladder",
         "Interactive workout player with rest timers",
         "Training logbook and calendar scheduling",
+        "Set-by-set logging of reps, weight, time or rounds",
+        "Smarty Rituals and Smarty Check-ins",
         "Progress tracking and workout feedback loop",
         "Workout timer, rounds tracker and 1RM calculator",
       ],
@@ -351,8 +361,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "twitter:description", content: SITE_DESCRIPTION },
       { property: "og:url", content: "https://smartygym.com/" },
-      { property: "og:image", content: OG_IMAGE },
-      { name: "twitter:image", content: OG_IMAGE },
 
     ],
     links: [

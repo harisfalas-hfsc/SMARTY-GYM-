@@ -14,7 +14,7 @@ import { getSmartyWorkoutCounts } from "@/lib/smarty-workouts.functions";
 const URL = "https://smartygym.com/faq";
 const TITLE = "SmartyGym FAQ — Smarty Coach, workouts & training";
 const DESCRIPTION =
-  "Answers about SmartyGym: create a workout with Smarty Coach or build it yourself, share workouts, track progress and manage your membership.";
+  "SmartyGym answers: coach-designed training, Build It Yourself custom strength and muscle-building workouts, set logging, sharing, progress and €9.99/month membership.";
 
 const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[] => [
   {

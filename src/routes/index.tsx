@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "SmartyGym is an online gym with a personal coach built on the sports science of Haris Falas (CSCS). Create your workout in seconds and train strength, conditioning or mobility around your goals, your equipment and your schedule.",
+          "SmartyGym: coach-designed workouts by Haris Falas (CSCS), Workout of the Day, daily Coach guidance and custom strength or muscle-building sessions. Build and log your own workouts. One Premium membership, €9.99/month.",
       },
       {
         property: "og:title",
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Your Gym Re-imagined. Anywhere, Anytime. Workout of the Day, daily coach guidance, Smarty Workouts, custom workout creation, training tools, and science-backed articles.",
+          "Your Gym Re-imagined. Anywhere, Anytime. Coach-designed Smarty Workouts, Workout of the Day, daily guidance, custom strength and muscle-building workouts, Logbook, tools and articles. Premium: €9.99/month.",
       },
 
       { property: "og:type", content: "website" },
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/")({
       {
         name: "twitter:description",
         content:
-          "Your Gym Re-imagined. Anywhere, Anytime. Workout of the Day, daily coach guidance, Smarty Workouts, custom workout creation, training tools, and science-backed articles.",
+          "Your Gym Re-imagined. Anywhere, Anytime. Coach-designed Smarty Workouts, Workout of the Day, daily guidance, custom strength and muscle-building workouts, Logbook, tools and articles. Premium: €9.99/month.",
       },
       { property: "og:url", content: "https://smartygym.com/" },
       {
@@ -61,7 +61,7 @@ export const Route = createFileRoute("/")({
           url: "https://smartygym.com/",
           name: "SmartyGym | Online Gym & Smart Workouts by Haris Falas",
           description:
-            "An online gym with a personal coach: create your workout in seconds and train around your goals, your equipment and your schedule.",
+            "An online gym founded by Haris Falas (CSCS): coach-designed Smarty Workouts, Workout of the Day, daily Coach guidance, custom strength and hypertrophy sessions, training Logbook, tools and articles. One Premium membership at €9.99 per month.",
           inLanguage: "en",
           isPartOf: { "@id": "https://smartygym.com/#website" },
           about: { "@id": "https://smartygym.com/#software" },

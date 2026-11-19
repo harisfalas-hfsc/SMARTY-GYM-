@@ -1,5 +1,9 @@
 # Roadmap
 
+## Background SEO clarification — zero visual changes
+- [x] Enriched existing application schema and homepage/FAQ metadata with factual membership, custom lifting and brand identity; visible FAQ and all rendering code remain unchanged. No hidden FAQ questions, unsupported split-planner claims or visual changes.
+- [x] Corrected the existing three AI-readable guides; crawler permissions, indexing infrastructure, founder credentials and private-data boundaries preserved. All 585 tests pass and build OK; mobile/desktop visible text unchanged, FAQ schema unchanged, actual pages inspected after closing Coach. Mobile captures and desktop FAQ pixel-identical; desktop homepage comparison affected by existing dynamic arrival state. Publish required; future crawler interpretation/ranking not guaranteed.
+
 ## Check-in freshness sweep
 - [x] Refresh all open calendar details, readiness, coaching, Progress, admin activity and current Insights after morning/night saves; preserve sent reports, schedules, permissions, examples and training records.
 - [x] Cache/event, check-in, readiness and Insights tests passed (58); real account morning check-in read-back and open calendar/Insights notification refresh checked, preview build OK. No actual check-in submitted/edited during verification; installed app and cross-device refresh unverified.

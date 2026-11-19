@@ -3,6 +3,7 @@ import type {} from "@tanstack/react-start";
 import { SITE_URL } from "@/lib/seo/site";
 import { publicPages } from "@/lib/seo/page-seo";
 import { TRAINING_TOPICS } from "@/lib/seo/training-topics";
+import { aiText } from "@/lib/seo/ai-txt";
 
 /**
  * /llms-full.txt — the long-form companion to /llms.txt, written for AI answer
@@ -25,11 +26,11 @@ export const Route = createFileRoute("/llms-full.txt")({
            "# SmartyGym — full site guide",
           "",
           `Site: ${SITE_URL}`,
-           "SmartyGym offers expert-programmed ready workouts, a shared Workout of the Day, and an exercise library. Smarty Coach builds personalized sessions from the library using programming rules based on Haris Falas's coaching methodology; it may use AI assistance. Build It Yourself is a separate member-selected exercise option.",
+          aiText(Boolean(freeAccessMode)),
           "",
           freeAccessMode
             ? "Access: every feature is currently available to all registered users at no cost."
-            : "Access: one membership (EUR 9.99 per month, cancel anytime) unlocks personalized workouts, Workout of the Day, the exercise library, the tools, the logbook and progress tracking.",
+            : "Access: one Premium membership (EUR 9.99 per month, no VAT, cancel anytime) unlocks training, daily guidance, Smarty Rituals and Check-ins, and personal Logbook/progress. The Exercise Library, tools and blog remain public resources.",
           "",
           "## How SmartyGym works",
           "",
