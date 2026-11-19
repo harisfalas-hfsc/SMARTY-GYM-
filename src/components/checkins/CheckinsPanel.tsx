@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import { refreshActivity } from "@/lib/logbook/refresh-activity";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
@@ -36,18 +39,21 @@ export const SCORE_COLOR: Record<string, string> = {
 
 export function useCheckinSubmit(onDone?: () => void) {
   const submit = useServerFn(submitCheckin);
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
   const morning = useCallback(
     async (d: MorningInput) => {
       try {
         await submit({ data: { kind: "morning", ...d } });
         toast.success("Morning check-in saved!", { description: "Your score has been updated." });
         window.dispatchEvent(new Event(CHECKINS_CHANGED));
+        if (user?.id) void refreshActivity(queryClient, user.id);
         onDone?.();
       } catch (e) {
         toast.error(e instanceof Error ? e.message : "Failed to save morning check-in.");
       }
     },
-    [submit, onDone],
+    [submit, onDone, queryClient, user?.id],
   );
   const night = useCallback(
     async (d: NightInput) => {
@@ -55,12 +61,13 @@ export function useCheckinSubmit(onDone?: () => void) {
         await submit({ data: { kind: "night", ...d } });
         toast.success("Night check-in saved!", { description: "Your score has been updated." });
         window.dispatchEvent(new Event(CHECKINS_CHANGED));
+        if (user?.id) void refreshActivity(queryClient, user.id);
         onDone?.();
       } catch (e) {
         toast.error(e instanceof Error ? e.message : "Failed to save night check-in.");
       }
     },
-    [submit, onDone],
+    [submit, onDone, queryClient, user?.id],
   );
   return { morning, night };
 }
