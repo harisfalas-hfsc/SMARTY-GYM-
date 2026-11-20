@@ -32,6 +32,7 @@ import { signOutAndClearDevice } from "@/lib/sign-out";
 import { adminCheckAccess } from "@/lib/admin.functions";
 import { NotificationBell, useInboxUnread } from "@/components/NotificationBell";
 import { SmartyCoachDialog } from "@/components/SmartyCoachDialog";
+import { WodArrivalFloor } from "@/components/wod/WodArrivalFloor";
 import { CheckinHeaderAlert } from "@/components/checkins/CheckinHeaderAlert";
 import coachIcon from "@/assets/smarty-coach.png";
 import {
@@ -52,6 +53,7 @@ export function Navigation() {
   const [navCount, setNavCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [coachOpen, setCoachOpen] = useState(false);
+  const [wodFloorOpen, setWodFloorOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { unread: inboxUnread } = useInboxUnread();
 
@@ -79,10 +81,11 @@ export function Navigation() {
   }, [menuOpen]);
 
   useEffect(() => {
-    const open = () => setCoachOpen(true);
-    const close = () => setCoachOpen(false);
+    const open = () => { setWodFloorOpen(false); setCoachOpen(true); };
+    const close = () => { setCoachOpen(false); setWodFloorOpen(false); };
     const openMenu = () => {
       setCoachOpen(false);
+      setWodFloorOpen(false);
       setMenuOpen(true);
     };
     window.addEventListener("smarty:open-coach", open);
@@ -97,9 +100,9 @@ export function Navigation() {
 
   useEffect(() => {
     if (loading) return;
-    // Coach is the arrival floor for every account and viewport, including
-    // sign-in transitions. Closing it stays respected during page navigation.
-    const timer = window.setTimeout(() => setCoachOpen(true), 0);
+    // The Workout of the Day floor is the arrival floor for every account and
+    // viewport; Smarty Coach opens only on tap. Closing stays respected.
+    const timer = window.setTimeout(() => setWodFloorOpen(true), 0);
     return () => window.clearTimeout(timer);
   }, [loading, user?.id]);
 
@@ -186,7 +189,7 @@ export function Navigation() {
           {!loading ? (
             <button
               type="button"
-              onClick={() => setCoachOpen(true)}
+              onClick={() => { setWodFloorOpen(false); setCoachOpen(true); }}
               aria-label="Smarty Coach"
               title="Smarty Coach"
               className="hidden h-8 w-8 items-center justify-center rounded-full border border-primary bg-background transition-colors hover:bg-primary/10 lg:inline-flex lg:bg-transparent"
@@ -287,6 +290,7 @@ export function Navigation() {
           document.body,
         )}
       <SmartyCoachDialog key={user?.id ?? "visitor"} accountKey={user?.id ?? null} open={coachOpen} onOpenChange={setCoachOpen} visitor={!user} />
+      <WodArrivalFloor key={`wod-${user?.id ?? "visitor"}`} accountKey={user?.id ?? null} open={wodFloorOpen} onOpenChange={setWodFloorOpen} visitor={!user} firstName={displayName?.split(" ")[0] ?? null} />
     </header>
   );
 }

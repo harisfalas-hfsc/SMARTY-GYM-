@@ -16,16 +16,17 @@ export function BottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const [coachOpen, setCoachOpen] = useState(false);
+  const [floorOpen, setFloorOpen] = useState(false);
   useEffect(() => {
     const el = document.documentElement;
-    const sync = () => setCoachOpen(el.dataset.smartyCoach === "open");
+    const sync = () => { setCoachOpen(el.dataset.smartyCoach === "open"); setFloorOpen(el.dataset.smartyFloor === "open"); };
     sync();
     const mo = new MutationObserver(sync);
-    mo.observe(el, { attributes: true, attributeFilter: ["data-smarty-coach"] });
+    mo.observe(el, { attributes: true, attributeFilter: ["data-smarty-coach", "data-smarty-floor"] });
     return () => mo.disconnect();
   }, []);
   // While Coach is open, any tab closes it first, then goes on.
-  const leaveCoach = () => { if (coachOpen) window.dispatchEvent(new Event("smarty:close-coach")); };
+  const leaveCoach = () => { if (coachOpen || floorOpen) window.dispatchEvent(new Event("smarty:close-coach")); };
 
   if (loading) return null;
   const items = ITEMS;
@@ -34,7 +35,7 @@ export function BottomNav() {
     <>
       <div aria-hidden className={`${user ? "" : "md:hidden "}h-[calc(3.5rem+env(safe-area-inset-bottom))]`} />
       <nav
-        className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 ${coachOpen ? "z-[60]" : "z-40"} border-t border-border bg-background`}
+        className={`${user ? "" : "md:hidden "}fixed inset-x-0 bottom-0 ${coachOpen || floorOpen ? "z-[60]" : "z-40"} border-t border-border bg-background`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)", pointerEvents: "auto" }}
         aria-label="Primary"
         data-bottom-nav=""

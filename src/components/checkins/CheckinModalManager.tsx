@@ -37,7 +37,7 @@ export function CheckinModalManager() {
       setToday(s.date);
       const t = s.today;
       const key = (k: string) => `checkin_${k}_dismissed_${s.date}`;
-      if (document.documentElement.dataset.smartyCoach === "open") return;
+      if ((document.documentElement.dataset.smartyCoach === "open" || document.documentElement.dataset.smartyFloor === "open")) return;
       if (s.window.isMorning && !t?.morning_completed && !t?.morning_modal_shown && !localStorage.getItem(key("morning")))
         setPrompt("morning");
       else if (s.window.isNight && !t?.night_completed && !t?.night_modal_shown && !localStorage.getItem(key("night")))

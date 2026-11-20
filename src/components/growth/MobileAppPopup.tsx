@@ -27,7 +27,7 @@ export function MobileAppPopup() {
     let timer = window.setTimeout(() => {
       setMounted(true);
       const tryOpen = () => {
-        if (document.documentElement.dataset.smartyCoach === "open" || document.querySelector('[role="dialog"]')) {
+        if ((document.documentElement.dataset.smartyCoach === "open" || document.documentElement.dataset.smartyFloor === "open") || document.querySelector('[role="dialog"]')) {
           timer = window.setTimeout(tryOpen, 1_000);
           return;
         }

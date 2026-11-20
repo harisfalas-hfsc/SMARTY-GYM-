@@ -7,7 +7,7 @@ let clock: MobileAnnouncementClock | undefined;
 let interval: ReturnType<typeof setInterval> | undefined;
 
 function dialogOpen() {
-  return document.documentElement.dataset.smartyCoach === 'open' ||
+  return (document.documentElement.dataset.smartyCoach === 'open' || document.documentElement.dataset.smartyFloor === 'open') ||
     [...document.querySelectorAll('[role="dialog"], [role="alertdialog"]')].some(
       element => element.getAttribute('data-state') !== 'closed' && element.getAttribute('aria-hidden') !== 'true',
     );
