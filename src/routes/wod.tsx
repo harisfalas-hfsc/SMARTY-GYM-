@@ -85,7 +85,7 @@ function WodPage() {
       <PageHeader image={pageHeroImage} eyebrow="SMARTYGYM" title="Workout of the Day" />
 
       <Card className="mb-8 border border-coach-line bg-gradient-to-br from-primary/5 via-background to-primary/5 shadow-primary">
-        <div className="p-4 sm:p-6">
+        <div className="px-4 pt-4 pb-2 sm:p-6">
           <p className="mx-auto hidden max-w-3xl text-center text-base text-muted-foreground md:block">
             Every training day <span className="font-semibold text-primary">SmartyGym</span> delivers TWO fresh, expertly designed workouts following a strategic periodization cycle — one with equipment and one without. On recovery days, we provide a single guided recovery session. Each day focuses on a different category and difficulty level. Our workouts follow a science-based periodization approach designed by{" "}
             <Link to="/haris-falas" className="font-semibold text-primary">Coach Haris Falas</Link>
@@ -97,9 +97,9 @@ function WodPage() {
             <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link>
             . Train with equipment, without equipment, or follow a guided recovery session.
           </p>
-          <div className="mt-3 flex justify-center">
-            <Button asChild variant="link" className="h-auto min-h-11 whitespace-normal text-center">
-              <Link to="/about-workout-of-the-day">The philosophy behind Workout of the Day <ArrowRight /></Link>
+          <div className="mt-2 flex justify-center">
+            <Button asChild variant="link" className="h-auto px-0 py-1 text-center">
+              <Link to="/about-workout-of-the-day">About Workout of the Day <ArrowRight /></Link>
             </Button>
           </div>
         </div>
