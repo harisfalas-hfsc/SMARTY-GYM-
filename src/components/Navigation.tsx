@@ -23,7 +23,7 @@ import {
   Dumbbell,
   CalendarCheck,
   Users,
-  LogIn, ClipboardCheck, Moon, Sun, Bell } from "lucide-react";
+  LogIn, ClipboardCheck, Moon, Sun, Bell, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -299,7 +299,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
   const { freeAccessMode } = useFreeAccessMode();
   const sections: {
     heading: string;
-    items: { to: string; label: string; Icon: typeof Home; className?: string }[];
+    items: { to: string; label: string; Icon: typeof Home; className?: string; coach?: boolean }[];
   }[] = [
     ...(isAuthed
       ? [
@@ -356,6 +356,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
     {
       heading: "Discover",
       items: [
+        { to: "#smarty-coach", label: "Smarty Coach", Icon: MessageCircle, coach: true },
         { to: "/haris-falas", label: "Meet the Coach", Icon: User },
         { to: "/glossary", label: "Glossary & training topics", Icon: BookOpen },
         { to: "/social-media", label: "Social Media", Icon: Users, className: "md:hidden" },
@@ -392,11 +393,17 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
                 {s.heading}
               </div>
               <ul className="space-y-1">
-                {s.items.map(({ to, label, Icon, className }) => (
+                {s.items.map(({ to, label, Icon, className, coach }) => (
                   <li key={to} className={className}>
                     <Link
-                      to={to}
-                      onClick={onClose}
+                      to={coach ? "." : to}
+                      onClick={(e) => {
+                        onClose();
+                        if (coach) {
+                          e.preventDefault();
+                          window.dispatchEvent(new Event("smarty:open-coach"));
+                        }
+                      }}
                       className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-primary/10"
                       style={{ textDecoration: "none" }}
                     >
