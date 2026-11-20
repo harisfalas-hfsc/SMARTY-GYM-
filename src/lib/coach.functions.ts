@@ -295,7 +295,25 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       : null;
 
     const { applyCoachDecision } = await import("@/lib/coach-snapshot");
-    return applyCoachDecision(decideCoachSnapshot({
+    const { dailyStatus } = await import("@/lib/coach/daily-status");
+    const dayStart = new Date(Date.now() - 36 * 3_600_000).toISOString();
+    const [{ data: todayRows }, { data: todayLogs }] = await Promise.all([
+      db.from("workouts").select("id,name,status,created_by,created_at,completed_at,scheduled_at,updated_at")
+        .eq("user_id", context.userId).is("deleted_at", null).eq("removed_from_logbook", false)
+        .or(`updated_at.gte.${new Date(Date.now() - 3 * 86_400_000).toISOString()},scheduled_at.gte.${dayStart}`)
+        .order("updated_at", { ascending: false }).limit(200),
+      db.from("set_logs").select("workout_id,completed_at").eq("user_id", context.userId)
+        .gte("completed_at", dayStart).limit(1000),
+    ]);
+    const dayOf = (iso: string) => localClock(new Date(iso), timezone).date;
+    const todayStatus = dailyStatus({
+      today, dayOf,
+      workouts: (todayRows ?? []) as never,
+      loggedTodayIds: ((todayLogs ?? []) as Array<{ workout_id: string; completed_at: string }>)
+        .filter((l) => dayOf(l.completed_at) === today).map((l) => l.workout_id),
+    });
+    const { applyDailyStatus } = await import("@/lib/coach-snapshot");
+    return applyDailyStatus(applyCoachDecision(decideCoachSnapshot({
       firstName,
       greeting,
       readiness: overview.readiness,
@@ -319,7 +337,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
         : null,
       comparison,
       personalRecord: recordText,
-    }), decision);
+    }), decision), todayStatus);
   });
 
 /** The only failure wording an athlete ever sees. */

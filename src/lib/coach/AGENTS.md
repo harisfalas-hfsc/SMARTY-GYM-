@@ -1,1 +1,2 @@
 - recommend.ts is pure (no I/O); getCoachSnapshot loads data and applyCoachDecision overlays its verdict — why: engine priorities stay testable and always win.
+- Today's training state (completed > unfinished > scheduled > recently built > ready) is decided only by daily-status.ts and overlaid via applyDailyStatus, read by both the arrival floor and Smarty Coach — why: both surfaces always say the same thing about the day.

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
-import { ArrowRight, CalendarCheck, MessageCircle, Dumbbell, Home, Loader2, Play, Shuffle, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarCheck, CheckCircle2, ClipboardCheck, CalendarClock, Wand2, MessageCircle, Dumbbell, Home, Loader2, Play, Shuffle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { getTodayWod, type WodCard, type WodDay } from "@/lib/wod.functions";
 import { getCoachSnapshot } from "@/lib/coach.functions";
-import type { CoachSnapshot } from "@/lib/coach-snapshot";
+import { dailyWorkoutAction, type CoachSnapshot } from "@/lib/coach-snapshot";
 import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 import { localGreeting } from "@/lib/logbook/weekly-activity";
 import { MobileWeeklyActivity } from "@/components/home/MobileWeeklyActivity";
@@ -61,6 +61,13 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
   const score = coach?.readinessDisplay.score ?? null;
   const name = member ? coach?.firstName ?? firstName : null;
 
+  const today = member ? coach?.today ?? null : null;
+  const TodayIcon = today?.kind === "completed" ? CheckCircle2 : today?.kind === "unfinished" ? ClipboardCheck : today?.kind === "scheduled" ? CalendarClock : Wand2;
+  const todayAction = today ? (() => {
+    const a = dailyWorkoutAction(today, today.kind === "unfinished" ? (today.started ? "Finish or mark complete" : "Mark complete & log") : "Start Training");
+    return a && "params" in a ? { to: a.to, label: a.label, params: a.params as Record<string, string> } : null;
+  })() : null;
+
   return (
     <Dialog open={open} onOpenChange={close}>
       <DialogContent
@@ -95,9 +102,28 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
               <ArrowRight className="h-4 w-4 shrink-0 text-coach-muted" />
             </button>
 
+            {/* Today's state — same rule and wording as Smarty Coach */}
+            {member && today && today.kind !== "ready" ? (
+              <section className="app-card space-y-3 p-4">
+                <div className="flex items-center gap-2">
+                  <TodayIcon className={`h-5 w-5 shrink-0 ${today.kind === "completed" ? "text-coach-good" : "text-primary"}`} />
+                  <h2 className="text-base font-extrabold uppercase tracking-wide text-coach-text">{today.title}</h2>
+                </div>
+                <p className="text-sm leading-snug text-coach-text">{today.message}</p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {today.kind === "completed" ? <>
+                    <button type="button" onClick={() => go("/smarty-ritual")} className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-bold text-primary-foreground hover:bg-primary-hover">Open Smarty Ritual</button>
+                    <button type="button" onClick={openReadiness} className="app-card flex min-h-12 items-center justify-center gap-2 px-4 text-sm font-bold text-coach-text">See Training Load</button>
+                  </> : todayAction ? (
+                    <button type="button" onClick={() => go(todayAction.to, todayAction.params)} className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-bold text-primary-foreground hover:bg-primary-hover"><Play className="h-4 w-4" /> {todayAction.label}</button>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+
             {/* Two workouts */}
             <section className="app-card space-y-3 p-4">
-            <h2 className="text-base font-extrabold uppercase tracking-wide text-coach-text">Workouts of the Day</h2>
+            <h2 className="text-base font-extrabold uppercase tracking-wide text-coach-text">{today && today.kind !== "ready" ? "Or today's Workouts of the Day" : "Workouts of the Day"}</h2>
             {wodFailed ? <p className="app-card p-6 text-center text-sm text-coach-muted">Workout of the Day is unavailable right now. Please try again shortly.</p>
               : !wod ? <div className="flex min-h-40 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-coach-muted" /></div>
               : wod.cards.length === 0 ? <p className="app-card p-6 text-center text-sm text-coach-muted">Today's workouts are being prepared. Check back soon.</p>

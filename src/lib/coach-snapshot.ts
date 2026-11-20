@@ -1,12 +1,14 @@
 import type { CoachDecision, CustomPlan } from "@/lib/coach/recommend";
 import type { CoachRecommendation } from "@/lib/coach-rules/types";
 import type { ReadinessState } from "@/lib/performance/types";
+import type { DailyStatus } from "@/lib/coach/daily-status";
 
 export type CoachSnapshotAction =
   | { label: string; to: "/smarty-checkins" }
   | { label: string; to: "/logbook"; search?: { view: "list" | "progress"; filter: "all" }; hash?: string }
   | { label: string; to: "/create-your-own-workout" }
   | { label: string; to: "/smarty-workouts/$workoutId"; params: { workoutId: string } }
+  | { label: string; to: "/w/$workoutId"; params: { workoutId: string } }
   | { label: string; to: "/account" }
   | { label: string; to: "/smarty-ritual" }
   | { label: string; to: "/pricing" };
@@ -65,6 +67,8 @@ export type CoachSnapshot = {
   /** Build-your-own suggestion, only when no Smarty Workout fits. */
   custom?: CustomPlan | null;
   confidence?: "none" | "limited" | "good";
+  /** Today's training state, shared with the arrival floor. */
+  today?: DailyStatus | null;
 };
 
 export type CoachSnapshotDecisionInput = {
@@ -244,5 +248,30 @@ export function applyCoachDecision(snap: CoachSnapshot, d: CoachDecision): Coach
     duration: d.workout?.minutes ?? null,
     stars: d.workout?.stars ?? d.planned?.stars ?? null,
   };
+  return out;
+}
+
+/** Workout page for today's status: Smarty copies open their Smarty page, others the member's own page. */
+export function dailyWorkoutAction(st: DailyStatus, label: string): CoachSnapshotAction | null {
+  if (!st.workout) return null;
+  return st.workout.smartyId
+    ? { label, to: "/smarty-workouts/$workoutId", params: { workoutId: st.workout.smartyId } }
+    : { label, to: "/w/$workoutId", params: { workoutId: st.workout.id } };
+}
+
+/** Today's state overrides the briefing headline so Coach and arrival floor always agree. */
+export function applyDailyStatus(snap: CoachSnapshot, st: DailyStatus): CoachSnapshot {
+  const out: CoachSnapshot = { ...snap, today: st };
+  if (st.kind === "ready") return out;
+  out.headline = st.title;
+  out.recommendation = st.message;
+  if (st.kind === "completed") {
+    out.nextStep = "Recover well: hydrate, do today's Smarty Ritual and train again when your readiness allows.";
+    out.action = { label: "Open Smarty Ritual", to: "/smarty-ritual" };
+  } else if (st.kind === "unfinished") {
+    out.action = dailyWorkoutAction(st, st.started ? "Finish or mark complete" : "Mark complete & log") ?? out.action;
+  } else {
+    out.action = dailyWorkoutAction(st, "Start Training") ?? out.action;
+  }
   return out;
 }

@@ -117,6 +117,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
     changeOpen(false);
     if (action.to === "/logbook") void navigate({ to: action.to, search: action.search ?? { view: "list", filter: "all" }, hash: action.hash });
     else if (action.to === "/smarty-workouts/$workoutId") void navigate({ to: action.to, params: action.params });
+    else if (action.to === "/w/$workoutId") void navigate({ to: action.to, params: action.params });
     else void navigate({ to: action.to });
   };
 
