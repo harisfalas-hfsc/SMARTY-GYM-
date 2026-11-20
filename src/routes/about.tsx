@@ -258,6 +258,23 @@ function AboutPage() {
       <div className="mx-auto mt-4 grid max-w-xl gap-4 lg:max-w-none lg:grid-cols-2">
         <div className="app-card flex flex-col p-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+            Workout of the Day
+          </p>
+          <p className="mt-2 text-base font-extrabold uppercase">Planned for you, every day</p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Every training day you get two fresh, expertly designed workouts — one with equipment,
+            one without — following a science-based periodization
+            plan, so you never overtrain, never undertrain and develop every fitness quality in the
+            right order. It is like having a personal trainer who already knows what you must do
+            today, next week and next month.
+          </p>
+          <Button asChild className="mt-auto w-full font-extrabold uppercase">
+            <Link to="/wod">See the Workout of the Day</Link>
+          </Button>
+        </div>
+
+        <div className="app-card flex flex-col p-5">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
             Smarty Workouts
           </p>
           <p className="mt-2 text-base font-extrabold uppercase">Ready when you are</p>
@@ -284,23 +301,6 @@ function AboutPage() {
           </p>
           <Button asChild className="mt-auto w-full font-extrabold uppercase">
             <Link to="/create-your-own-workout">Create your own workout</Link>
-          </Button>
-        </div>
-
-        <div className="app-card flex flex-col p-5">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-            Workout of the Day
-          </p>
-          <p className="mt-2 text-base font-extrabold uppercase">Planned for you, every day</p>
-          <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Every training day you get two fresh, expertly designed workouts — one with equipment,
-            one without — following a science-based periodization
-            plan, so you never overtrain, never undertrain and develop every fitness quality in the
-            right order. It is like having a personal trainer who already knows what you must do
-            today, next week and next month.
-          </p>
-          <Button asChild className="mt-auto w-full font-extrabold uppercase">
-            <Link to="/wod">See the Workout of the Day</Link>
           </Button>
         </div>
 

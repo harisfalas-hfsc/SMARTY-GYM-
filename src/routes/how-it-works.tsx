@@ -185,8 +185,8 @@ function HowItWorks() {
             Simple &amp; <span className="text-primary">transparent</span>
           </>
         }
-         subtitle="Four ways to train: choose a ready Smarty Workout, create your own, follow the Workout of the Day or train with the Smarty Community — with Smarty Ritual supporting your movement and recovery."
-         mobileSubtitle="Choose a Smarty Workout, create your own, follow the WOD or train with the community."
+         subtitle="Four ways to train: follow the Workout of the Day, choose a ready Smarty Workout, create your own or train with the Smarty Community — with Smarty Ritual supporting your movement and recovery."
+         mobileSubtitle="Follow the WOD, choose a Smarty Workout, create your own or train with the community."
       />
 
       <section className="app-card p-5 sm:p-8">
