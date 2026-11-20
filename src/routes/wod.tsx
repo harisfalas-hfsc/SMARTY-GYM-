@@ -108,7 +108,7 @@ function WodPage() {
       {failed ? (
         <p className="app-card p-6 text-center text-sm text-muted-foreground">Workout of the Day is unavailable right now. Please try again shortly.</p>
       ) : !data || !yesterday ? (
-        <div className="flex min-h-[20vh] items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+        <div className="flex items-center justify-center py-6"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
       ) : (
         <>
           <WodPeriodizationCalendar

@@ -97,7 +97,7 @@ function AboutWorkoutOfTheDay() {
       <section className="border-t border-border pt-8 sm:pt-12">
         <h2 className="text-xl font-extrabold uppercase sm:text-2xl">Follow the plan. Respect your body.</h2>
         <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground">Check today's focus and your readiness, choose the equipment or bodyweight option that fits, follow the prescribed session and record what you actually did. Use recovery days as intended. If your goals require a more specialized approach, Workout of the Day remains one way to train within SmartyGym—not an obligation to ignore your own needs.</p>
-        <Button asChild size="lg" className="mt-6 h-auto min-h-12 whitespace-normal py-3"><Link to="/wod">See today's Workout of the Day <ArrowRight /></Link></Button>
+        <Button asChild size="lg" className="mt-6 h-auto min-h-12 px-4 py-3"><Link to="/wod">Today's Workout of the Day <ArrowRight /></Link></Button>
       </section>
     </div>
   );

@@ -126,7 +126,7 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
             <h2 className="text-base font-extrabold uppercase tracking-wide text-coach-text">Today's Workout of the Day</h2>
             <Link to="/wod" onClick={() => close(false)} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary">About Workout of the Day <ArrowRight className="h-4 w-4 shrink-0" /></Link>
             {wodFailed ? <p className="app-card p-6 text-center text-sm text-coach-muted">Workout of the Day is unavailable right now. Please try again shortly.</p>
-              : !wod ? <div className="flex min-h-40 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-coach-muted" /></div>
+              : !wod ? <div className="flex items-center justify-center py-4"><Loader2 className="h-6 w-6 animate-spin text-coach-muted" /></div>
               : wod.cards.length === 0 ? <p className="app-card p-6 text-center text-sm text-coach-muted">Today's workouts are being prepared. Check back soon.</p>
               : <div className={`grid gap-4 ${wod.cards.length > 1 ? "md:grid-cols-2" : ""}`}>
                   {wod.cards.map((c) => <WodFloorCard key={c.slot} card={c} onStart={() => go("/smarty-workouts/$workoutId", { workoutId: c.workout.id })} />)}
