@@ -18,7 +18,7 @@ const GROUP_VIEW: Record<BriefingGroup, { Icon: typeof Dumbbell; tone: string; o
   community: { Icon: Users, tone: "Smarty Community", one: "community action", many: "community actions" },
 };
 
-export function MobileWeeklyActivity() {
+export function MobileWeeklyActivity({ hideArrow = false }: { hideArrow?: boolean } = {}) {
   const { user, displayName, loading } = useAuth();
   const [now, setNow] = useState<Date | null>(null);
   const readAccess = useServerFn(getMyAccessState);
@@ -54,7 +54,7 @@ export function MobileWeeklyActivity() {
         <p className="text-sm font-bold leading-5">{now ? user ? `${localGreeting(now)}${firstName ? `, ${firstName}` : ""}` : "Ready to train today?" : "Your week"}</p>
         <p className="mt-0.5 text-xs text-muted-foreground">{now ? now.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }) : "\u00a0"}</p>
       </div>
-      <ChevronRight aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />
+      {hideArrow ? null : <ChevronRight aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />}
     </div>
     <div className="mt-3 grid grid-cols-7 gap-1">
       {week.map(({ date, key, today }, index) => <span key={key} aria-label={`${date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}${today ? ", today" : ""}${completed.has(key) ? ", activity recorded" : ""}`} aria-current={today ? "date" : undefined} className="flex min-h-14 min-w-0 flex-col items-center gap-1.5">

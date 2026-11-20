@@ -73,7 +73,7 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
           <DialogDescription className="sr-only">Your week, readiness and today's two workouts.</DialogDescription>
           <div className="space-y-4 px-4 pb-5 pt-3 sm:px-8 sm:pb-7">
             {/* Week strip (greeting lives here; taps through to the Logbook calendar) */}
-            <div onClickCapture={() => close(false)} className="pr-10"><MobileWeeklyActivity /></div>
+            <div onClickCapture={() => close(false)} ><MobileWeeklyActivity hideArrow /></div>
 
             {/* Readiness — opens Logbook with Insights already open */}
             <button type="button" onClick={openReadiness} className="app-card flex w-full items-center gap-4 p-4 text-left">
@@ -134,7 +134,6 @@ function WodFloorCard({ card, onStart }: { card: WodCard; onStart: () => void })
       <div className="space-y-3 p-4">
         <div>
           <h3 className="text-lg font-extrabold leading-tight text-coach-text">{w.name}</h3>
-          <p className="mt-1 text-sm text-coach-muted">{[w.category, w.duration_min ? `${w.duration_min} min` : null, w.difficulty_stars ? `Level ${w.difficulty_stars}` : null].filter(Boolean).join(" · ")}</p>
         </div>
         <button type="button" onClick={onStart} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-bold text-primary-foreground hover:bg-primary-hover">
           <Play className="h-4 w-4" /> Start Training
