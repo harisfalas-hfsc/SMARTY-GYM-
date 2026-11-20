@@ -10,9 +10,13 @@ describe("member activity", () => {
       comments: [{ created_at: "2026-11-16T13:00:00Z" }], reactions: [{ created_at: "2026-11-16T14:00:00Z" }], ratings: [{ created_at: "2026-11-16T15:00:00Z" }] });
     expect(e.map(x => x.kind).sort()).toEqual(["checkin", "comment", "completed", "created", "favorited", "rating", "reaction", "shared"]);
   });
-  it("a Smarty workout added counts as added, not created; incomplete gives no completion", () => {
-    const e = activityEvents({ ...empty, workouts: [{ name: "B", created_by: "smarty:x", created_at: "2026-11-16T09:00:00Z", completed_at: null, status: "scheduled", shared_at: null, favorited_at: null }] });
-    expect(e.map(x => x.kind)).toEqual(["added"]);
+  it("only opening a Smarty workout is not an activity", () => {
+    const e = activityEvents({ ...empty, workouts: [{ name: "B", created_by: "smarty:x", created_at: "2026-11-16T09:00:00Z", completed_at: null, status: "created", shared_at: null, favorited_at: null }] });
+    expect(e).toEqual([]);
+  });
+  it("a Smarty workout counts once the member favourites or completes it", () => {
+    const e = activityEvents({ ...empty, workouts: [{ name: "B", created_by: "smarty:x", created_at: "2026-11-16T09:00:00Z", completed_at: "2026-11-16T10:00:00Z", status: "completed", shared_at: null, favorited_at: "2026-11-16T09:30:00Z" }] });
+    expect(e.map(x => x.kind)).toEqual(["favorited", "completed"]);
   });
   it("a day with no rows has no activity", () => {
     expect(eventsByDay(activityEvents(empty)).size).toBe(0);

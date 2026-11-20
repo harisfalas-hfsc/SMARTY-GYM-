@@ -21,7 +21,8 @@ export function activityEvents(s: ActivitySource): ActivityEvent[] {
   for (const w of s.workouts) {
     const name = w.name ?? "Workout";
     const origin = w.created_by ?? "";
-    push(w.created_at, origin.startsWith("smarty") || origin === "community" ? "added" : "created", name);
+    // Opening a Smarty Workout only makes a private copy: viewing is not an activity.
+    if (!origin.startsWith("smarty")) push(w.created_at, origin === "community" ? "added" : "created", name);
     if (w.status === "completed") push(w.completed_at, "completed", name);
     push(w.shared_at, "shared", name);
     push(w.favorited_at, "favorited", name);
