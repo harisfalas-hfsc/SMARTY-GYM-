@@ -145,9 +145,10 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
             <img src={coachPhoto} alt="Coach Haris Falas" className="h-20 w-20 shrink-0 rounded-md border border-coach-line object-cover object-top sm:h-28 sm:w-28" />
             <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-coach-gold">Smarty Coach</p>
-              <DialogTitle className="mt-1 text-2xl font-extrabold text-coach-text sm:text-4xl">Hey, I'm <button type="button" onClick={() => go("/haris-falas")} className="cursor-pointer font-extrabold text-primary">Haris</button>.</DialogTitle>
+              <DialogTitle className="mt-1 text-2xl font-extrabold text-coach-text sm:text-4xl">Your Coach Briefing.</DialogTitle>
               <DialogDescription className="mt-1 text-sm text-coach-muted sm:text-base">
                 {member && name ? <BrandText text={`Good to see you, ${name}. Let's make today count.`} name={name} /> : "Let's make today count."}
+                <span className="mt-1 block text-xs">Built on the methodology of <button type="button" onClick={() => go("/haris-falas")} className="cursor-pointer font-semibold text-primary">HARIS FALAS</button>.</span>
               </DialogDescription>
             </div>
           </header>
@@ -262,7 +263,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
             </div>
 
             {/* 03 Ask */}
-            <Section n="03" title="Ask Coach Haris" subtitle="Real coaching guidance, whenever you need it.">
+            <Section n="03" title="Ask Smarty Coach" subtitle="Real coaching guidance, whenever you need it.">
               <div className="space-y-2">
                 {QUESTIONS.map((item, i) => (
                   <div key={item.q} className="app-card">

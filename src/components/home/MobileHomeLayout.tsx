@@ -64,11 +64,11 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
         <span className="flex min-h-8 items-center text-[11px] font-bold leading-4">{title}</span>
       </Link>)}
     </nav>
-    <Button variant="ghost" onClick={() => window.dispatchEvent(new Event("smarty:open-coach"))} className="coach-promo mt-5 flex h-24 w-full justify-start gap-3 overflow-hidden p-0 text-left whitespace-normal" aria-label="Talk to Coach Haris">
+    <Button variant="ghost" onClick={() => window.dispatchEvent(new Event("smarty:open-coach"))} className="coach-promo mt-5 flex h-24 w-full justify-start gap-3 overflow-hidden p-0 text-left whitespace-normal" aria-label="Smarty Coach">
       <img src={harisImage} alt="Haris Falas" width={96} height={96} className="h-24 w-24 shrink-0 object-cover object-top" />
       <span className="flex min-w-0 flex-1 flex-col justify-center gap-0.5">
         <span className="text-[10px] font-bold uppercase tracking-wide">Smarty <span className="brand-ink">Coach</span></span>
-        <span className="text-[15px] font-extrabold leading-5">Talk to Coach Haris.</span>
+        <span className="text-[15px] font-extrabold leading-5">Smarty Coach.</span>
         <span className="line-clamp-2 text-[11px] font-normal leading-4 text-muted-foreground">Daily briefing & personal recommendation</span>
       </span>
       <span className="mr-3 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-blue text-hero-foreground"><ChevronRight className="h-5 w-5" /></span>
