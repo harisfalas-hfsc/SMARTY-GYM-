@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
-import { ArrowRight, CalendarCheck, Dumbbell, Home, Loader2, Play, Shuffle } from "lucide-react";
+import { ArrowRight, CalendarCheck, Dumbbell, Home, Loader2, Play, Shuffle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { getTodayWod, type WodCard, type WodDay } from "@/lib/wod.functions";
 import { getCoachSnapshot } from "@/lib/coach.functions";
@@ -48,7 +48,12 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
 
   const close = (next: boolean) => { onOpenChange(next); if (!next) window.dispatchEvent(new Event("smarty:coach-closed")); };
   const go = (to: string, params?: Record<string, string>) => { close(false); void navigate({ to: to as never, params: params as never }); };
-  const openCoach = () => { close(false); window.dispatchEvent(new Event("smarty:open-coach")); };
+  const openReadiness = () => {
+    if (visitor) return go("/auth");
+    close(false);
+    void navigate({ to: "/logbook" as never, hash: "insights" });
+    window.setTimeout(() => window.dispatchEvent(new Event("smarty:open-insights")), 0);
+  };
 
   const member = !visitor && coach?.access !== "locked" && !!coach;
   const score = coach?.readinessDisplay.score ?? null;
@@ -62,17 +67,14 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
         className="coach-floor fixed inset-2 left-2 top-2 max-md:bottom-[calc(4rem+env(safe-area-inset-bottom))] flex h-auto w-auto max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-lg border-0 bg-coach-bg p-0 text-coach-text shadow-none! outline-none sm:max-w-none md:inset-4 md:left-1/2 md:top-4 md:w-[min(64rem,calc(100vw-2rem))] md:-translate-x-1/2 [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:rounded-md [&>button]:border [&>button]:border-coach-line [&>button]:bg-coach-card [&>button]:p-2 [&>button]:text-coach-text [&>button]:opacity-100 [&>button_svg]:h-5 [&>button_svg]:w-5"
       >
         <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
-          <header className="border-b border-coach-line px-4 py-5 pr-14 sm:px-8 sm:py-7">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-coach-gold">Workout of the Day</p>
-            <DialogTitle className="mt-1 text-2xl font-extrabold text-coach-text sm:text-4xl">{greeting}{name ? `, ${name}` : ""}.</DialogTitle>
-            <DialogDescription className="mt-1 text-sm text-coach-muted sm:text-base">
-              {wod ? <>Today: <span className="font-semibold text-coach-text">{[wod.category, wod.difficulty].filter(Boolean).join(" · ")}</span>. Pick one and start training.</> : "Today's training is ready. Pick one and start."}
-            </DialogDescription>
-          </header>
+          <DialogTitle className="sr-only">{greeting}{name ? `, ${name}` : ""}. Workout of the Day</DialogTitle>
+          <DialogDescription className="sr-only">Your week, readiness and today's two workouts.</DialogDescription>
+          <div className="space-y-6 px-4 pb-5 pt-14 sm:px-8 sm:pb-7">
+            {/* Week strip (greeting lives here; taps through to the Logbook calendar) */}
+            <div onClickCapture={() => close(false)}><MobileWeeklyActivity /></div>
 
-          <div className="space-y-6 px-4 py-5 sm:px-8 sm:py-7">
-            {/* Coach briefing */}
-            <button type="button" onClick={openCoach} className="app-card flex w-full items-center gap-4 p-4 text-left">
+            {/* Readiness — opens Logbook with Insights already open */}
+            <button type="button" onClick={openReadiness} className="app-card flex w-full items-center gap-4 p-4 text-left">
               <img src={coachPhoto} alt="Coach Haris Falas" className="h-14 w-14 shrink-0 rounded-full border border-coach-line object-cover object-top" />
               <div className="min-w-0 flex-1">
                 {member && coach ? <>
@@ -84,15 +86,12 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
                   </div>
                   <p className="mt-1 line-clamp-2 text-sm leading-snug text-coach-text">{coach.readinessDisplay.reason}</p>
                 </> : <>
-                  <p className="text-xs font-bold uppercase tracking-wide text-coach-gold">Smarty Coach</p>
-                  <p className="mt-1 text-sm leading-snug text-coach-text">{visitor ? "Today's plan is ready. Sign in as a Premium member for your personal readiness briefing." : coach ? "Join Premium to unlock your readiness briefing." : "Preparing your briefing…"}</p>
+                  <p className="text-xs font-bold uppercase tracking-wide text-coach-gold">Readiness</p>
+                  <p className="mt-1 text-sm leading-snug text-coach-text">{visitor ? "Sign in as a Premium member to see your readiness." : coach ? "Join Premium to unlock your readiness." : "Preparing your readiness…"}</p>
                 </>}
               </div>
               <ArrowRight className="h-4 w-4 shrink-0 text-coach-muted" />
             </button>
-
-            {/* Week strip (stays visible; taps through to the Logbook calendar) */}
-            <div onClickCapture={() => close(false)}><MobileWeeklyActivity /></div>
 
             {/* Two workouts */}
             {wodFailed ? <p className="app-card p-6 text-center text-sm text-coach-muted">Workout of the Day is unavailable right now. Please try again shortly.</p>
@@ -102,6 +101,11 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
                   {wod.cards.map((c) => <WodFloorCard key={c.slot} card={c} onStart={() => go("/smarty-workouts/$workoutId", { workoutId: c.workout.id })} />)}
                 </div>}
 
+            {/* Other ways to train */}
+            <div className="grid gap-3 sm:grid-cols-2">
+              <button type="button" onClick={() => go("/create-your-own-workout")} className="app-card flex min-h-14 items-center gap-3 p-4 text-left"><Sparkles className="h-5 w-5 shrink-0 text-primary" /><span className="flex-1 text-sm font-bold text-coach-text">Create your own workout</span><ArrowRight className="h-4 w-4 text-coach-muted" /></button>
+              <button type="button" onClick={() => go("/smarty-workouts")} className="app-card flex min-h-14 items-center gap-3 p-4 text-left"><Dumbbell className="h-5 w-5 shrink-0 text-primary" /><span className="flex-1 text-sm font-bold text-coach-text">Explore Smarty Workouts</span><ArrowRight className="h-4 w-4 text-coach-muted" /></button>
+            </div>
             <button type="button" onClick={() => go("/wod")} className="mx-auto flex min-h-11 items-center gap-2 text-sm font-semibold text-primary">See the full Workout of the Day page <ArrowRight className="h-4 w-4" /></button>
           </div>
         </div>

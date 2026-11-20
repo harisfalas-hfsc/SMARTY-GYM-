@@ -115,12 +115,12 @@ export function InsightsCard() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const openLinkedReport = () => {
-      if (window.location.hash === "#insights") setOpen(true);
-    };
+    const reveal = () => { setOpen(true); window.requestAnimationFrame(() => document.getElementById("insights")?.scrollIntoView({ behavior: "smooth", block: "start" })); };
+    const openLinkedReport = () => { if (window.location.hash === "#insights") reveal(); };
     openLinkedReport();
     window.addEventListener("hashchange", openLinkedReport);
-    return () => window.removeEventListener("hashchange", openLinkedReport);
+    window.addEventListener("smarty:open-insights", reveal);
+    return () => { window.removeEventListener("hashchange", openLinkedReport); window.removeEventListener("smarty:open-insights", reveal); };
   }, []);
 
   return (
