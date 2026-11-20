@@ -1,5 +1,9 @@
 # Roadmap
 
+## Workout of the Day explanation
+- [x] Update arrival title and link to /wod; link the WOD introduction to a standalone explanation page, without Discovery changes.
+- [x] Explain planning, periodization, energy systems, training load and recovery in the existing page style. Both link journeys and return link verified at 384×714 and 1280×1800; no settled overflow or browser errors, 596 tests pass and preview build OK. No training records changed; publish required.
+
 ## Background SEO clarification — zero visual changes
 - [x] Enriched existing application schema and homepage/FAQ metadata with factual membership, custom lifting and brand identity; visible FAQ and all rendering code remain unchanged. No hidden FAQ questions, unsupported split-planner claims or visual changes.
 - [x] Corrected the existing three AI-readable guides; crawler permissions, indexing infrastructure, founder credentials and private-data boundaries preserved. All 585 tests pass and build OK; mobile/desktop visible text unchanged, FAQ schema unchanged, actual pages inspected after closing Coach. Mobile captures and desktop FAQ pixel-identical; desktop homepage comparison affected by existing dynamic arrival state. Publish required; future crawler interpretation/ranking not guaranteed.

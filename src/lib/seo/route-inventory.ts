@@ -36,6 +36,7 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/exercise-library": "indexable",
   "/exercise-library_/$slug": "indexable",
   "/wod": "indexable",
+  "/about-workout-of-the-day": "indexable",
   "/faq": "indexable",
   "/contact": "indexable",
   "/glossary": "indexable",

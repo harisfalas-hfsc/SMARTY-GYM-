@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Clock, Loader2 } from "lucide-react";
+import { ArrowRight, Clock, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 import { getTodayWod, type WodDay } from "@/lib/wod.functions";
@@ -96,6 +97,11 @@ function WodPage() {
             <Link to="/haris-falas" className="font-semibold text-primary">Haris Falas</Link>
             . Train with equipment, without equipment, or follow a guided recovery session.
           </p>
+          <div className="mt-3 flex justify-center">
+            <Button asChild variant="link" className="h-auto min-h-11 whitespace-normal text-center">
+              <Link to="/about-workout-of-the-day">The philosophy behind Workout of the Day <ArrowRight /></Link>
+            </Button>
+          </div>
         </div>
       </Card>
 

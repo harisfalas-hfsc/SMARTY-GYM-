@@ -14,6 +14,7 @@ import { Route as SplatRouteImport } from './routes/$'
 import { Route as R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRouteImport } from './routes/8f2c41d7a9b34e6ea0c5d81f37b9e42c[.]txt'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AboutWorkoutOfTheDayRouteImport } from './routes/about-workout-of-the-day'
 import { Route as AiDottxtRouteImport } from './routes/ai[.]txt'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BestOnlineFitnessPlatformRouteImport } from './routes/best-online-fitness-platform'
@@ -115,6 +116,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutWorkoutOfTheDayRoute = AboutWorkoutOfTheDayRouteImport.update({
+  id: '/about-workout-of-the-day',
+  path: '/about-workout-of-the-day',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AiDottxtRoute = AiDottxtRouteImport.update({
@@ -521,6 +527,7 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
+  '/about-workout-of-the-day': typeof AboutWorkoutOfTheDayRoute
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
@@ -604,6 +611,7 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
+  '/about-workout-of-the-day': typeof AboutWorkoutOfTheDayRoute
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
@@ -689,6 +697,7 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt': typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   '/about': typeof AboutRoute
+  '/about-workout-of-the-day': typeof AboutWorkoutOfTheDayRoute
   '/ai.txt': typeof AiDottxtRoute
   '/auth': typeof AuthRoute
   '/best-online-fitness-platform': typeof BestOnlineFitnessPlatformRoute
@@ -774,6 +783,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
+    | '/about-workout-of-the-day'
     | '/ai.txt'
     | '/auth'
     | '/best-online-fitness-platform'
@@ -857,6 +867,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
+    | '/about-workout-of-the-day'
     | '/ai.txt'
     | '/auth'
     | '/best-online-fitness-platform'
@@ -941,6 +952,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/8f2c41d7a9b34e6ea0c5d81f37b9e42c.txt'
     | '/about'
+    | '/about-workout-of-the-day'
     | '/ai.txt'
     | '/auth'
     | '/best-online-fitness-platform'
@@ -1026,6 +1038,7 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute: typeof R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute
   AboutRoute: typeof AboutRoute
+  AboutWorkoutOfTheDayRoute: typeof AboutWorkoutOfTheDayRoute
   AiDottxtRoute: typeof AiDottxtRoute
   AuthRoute: typeof AuthRoute
   BestOnlineFitnessPlatformRoute: typeof BestOnlineFitnessPlatformRoute
@@ -1130,6 +1143,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about-workout-of-the-day': {
+      id: '/about-workout-of-the-day'
+      path: '/about-workout-of-the-day'
+      fullPath: '/about-workout-of-the-day'
+      preLoaderRoute: typeof AboutWorkoutOfTheDayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ai.txt': {
@@ -1721,6 +1741,7 @@ const rootRouteChildren: RootRouteChildren = {
   R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute:
     R8f2c41d7a9b34e6ea0c5d81f37b9e42cDottxtRoute,
   AboutRoute: AboutRoute,
+  AboutWorkoutOfTheDayRoute: AboutWorkoutOfTheDayRoute,
   AiDottxtRoute: AiDottxtRoute,
   AuthRoute: AuthRoute,
   BestOnlineFitnessPlatformRoute: BestOnlineFitnessPlatformRoute,

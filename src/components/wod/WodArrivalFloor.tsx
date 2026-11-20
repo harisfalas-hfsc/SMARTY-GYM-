@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, CalendarCheck, CheckCircle2, ClipboardCheck, CalendarClock, Wand2, MessageCircle, Dumbbell, Home, Loader2, Play, Shuffle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { getTodayWod, type WodCard, type WodDay } from "@/lib/wod.functions";
@@ -123,7 +123,8 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
 
             {/* Two workouts */}
             <section className="app-card space-y-3 p-4">
-            <h2 className="text-base font-extrabold uppercase tracking-wide text-coach-text">{today && today.kind !== "ready" ? "Or today's Workouts of the Day" : "Workouts of the Day"}</h2>
+            <h2 className="text-base font-extrabold uppercase tracking-wide text-coach-text">Today's Workout of the Day</h2>
+            <Link to="/wod" onClick={() => close(false)} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary">About Workout of the Day <ArrowRight className="h-4 w-4 shrink-0" /></Link>
             {wodFailed ? <p className="app-card p-6 text-center text-sm text-coach-muted">Workout of the Day is unavailable right now. Please try again shortly.</p>
               : !wod ? <div className="flex min-h-40 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-coach-muted" /></div>
               : wod.cards.length === 0 ? <p className="app-card p-6 text-center text-sm text-coach-muted">Today's workouts are being prepared. Check back soon.</p>
