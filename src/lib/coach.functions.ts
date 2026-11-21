@@ -319,7 +319,7 @@ export const getCoachSnapshot = createServerFn({ method: "GET" })
       readiness: overview.readiness,
       readinessScore: overview.readiness.score,
       recommendation,
-      hasCheckin: Boolean(checkin),
+      hasCheckin: overview.readiness.calibrated,
       loggedSessions: overview.loggedSessions,
       totalCompleted: completed.length,
       daysSinceLast,

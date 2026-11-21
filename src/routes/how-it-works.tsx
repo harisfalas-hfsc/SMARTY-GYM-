@@ -363,12 +363,13 @@ function HowItWorks() {
           Tell your coach how you really feel.
         </h2>
         <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-          Two 30-second check-ins a day. In the morning (07:00–10:00) you log sleep, readiness,
-          soreness and mood; at night (19:00–22:00) your steps, hydration, protein and how demanding
+          Two 30-second check-ins a day. In the morning (05:00–19:00) you log sleep, readiness,
+          soreness and mood; at night (19:00–05:00 the next morning) your steps, hydration, protein and how demanding
           the day was. Both become one Daily Smarty Score, saved in Logbook → Progress, and Create
           Your Workout uses it to suggest the right intensity — you decide whether to accept. Missed
           the pop-up? Open Smarty Check-ins any time during the window, and you also get a reminder
-          in your inbox.
+          in your inbox. Times follow your Training Profile timezone. Without a current morning
+          check-in, readiness stays uncalibrated rather than showing a confirmed score.
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-3 sm:gap-4">

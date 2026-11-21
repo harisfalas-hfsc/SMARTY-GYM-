@@ -60,3 +60,4 @@
 - Theme preferences use separate mobile/desktop storage keys and a matching pre-hydration initializer; mobile styling is a shared media-scoped token palette, with branding on its own token — why: all routes and portalled controls stay consistent without changing desktop preferences or page layouts.
 - Mobile photo carousels share MobilePhotoCard and image-only semantic palette; shared-workout mobile filters reuse the existing sort/category/difficulty query controls — why: consistent native presentation without new browsing rules or desktop layout changes.
 - MobilePageDescription styles customer PageHeader subtitles only on phones — why: consistent intro cards without desktop changes.
+- CheckinPrompt shares entry; score.ts owns overnight dates — why: aligned prompts and saves.

@@ -172,7 +172,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
   const t = state.today;
   const w = state.window;
   const mins = state.minutes;
-  const morningState = t?.morning_completed ? "done" : w.isMorning ? "pending" : mins < MORNING_WINDOW.start ? "upcoming" : "missed";
+  const morningState = t?.morning_completed ? "done" : w.isMorning ? "pending" : "missed";
   const nightState = t?.night_completed ? "done" : w.isNight ? "pending" : mins < 1140 ? "upcoming" : "missed";
   const metricDef = METRICS.find((m) => m.key === metric) ?? METRICS[0];
   const s = state.stats;
@@ -236,12 +236,12 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
 
         {((w.isMorning && !t?.morning_completed && !openForm) || openForm === "morning") ? (
           <div className="mt-4 border-t border-border pt-4">
-            {w.isMorning || t?.morning_completed ? <MorningCheckinForm key={`m-${state.date}-${t?.sleep_hours}`} onSubmit={morning} initial={t} readOnly={!w.isMorning} /> : <p className="text-sm text-muted-foreground">Morning check-in opens at 05:00 and stays open until 19:00.</p>}
+            {w.isMorning || t?.morning_completed ? <MorningCheckinForm key={`m-${state.date}-${t?.sleep_hours}`} onSubmit={morning} initial={t?.morning_completed ? t : null} readOnly={!w.isMorning} /> : <p className="text-sm text-muted-foreground">Morning check-in opens at 05:00 and stays open until 19:00.</p>}
           </div>
         ) : null}
         {((w.isNight && !t?.night_completed && !openForm) || openForm === "night") ? (
           <div className="mt-4 border-t border-border pt-4">
-            {w.isNight || t?.night_completed ? <NightCheckinForm key={`n-${state.date}-${t?.hydration_liters}`} onSubmit={night} initial={t} readOnly={!w.isNight} /> : <p className="text-sm text-muted-foreground">Evening check-in opens at 19:00 and stays open until 05:00 the next morning.</p>}
+            {w.isNight || t?.night_completed ? <NightCheckinForm key={`n-${state.date}-${t?.hydration_liters}`} onSubmit={night} initial={t?.night_completed ? t : null} readOnly={!w.isNight} /> : <p className="text-sm text-muted-foreground">Evening check-in opens at 19:00 and stays open until 05:00 the next morning.</p>}
           </div>
         ) : null}
         {w.isMorning && t?.morning_completed && !openForm ? <p className="mt-3 text-sm text-muted-foreground">Morning check-in done. Tap it to review or update your answers until 19:00.</p> : null}

@@ -38,7 +38,15 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
   useEffect(() => { setCoach(null); }, [accountKey]);
   useEffect(() => {
     if (visitor || !open) return;
-    void loadCoach().then(setCoach).catch(() => setCoach(null));
+    let active = true;
+    const refresh = () => {
+      if (document.visibilityState === "hidden") return;
+      void loadCoach().then((next) => { if (active) setCoach(next); }).catch(() => { if (active) setCoach(null); });
+    };
+    refresh();
+    const timer = window.setInterval(refresh, 60_000);
+    window.addEventListener("focus", refresh);
+    return () => { active = false; window.clearInterval(timer); window.removeEventListener("focus", refresh); };
   }, [open, visitor, accountKey, revision]);
 
   useEffect(() => {

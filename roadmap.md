@@ -1,9 +1,9 @@
 # Roadmap
 
 ## Continuous check-ins and readiness prompts
-- [ ] Extend morning to 05:00–19:00 and evening to 19:00–05:00 in the member's timezone; overnight evening answers belong to the preceding day.
-- [ ] Share missing-check-in reminders across arrival, Smarty Coach and both creator modes; keep reminders optional and missing readiness uncalibrated.
-- [ ] Test boundaries, overnight attribution and readiness; verify member and visitor screens without changing customer training records.
+- [x] Extend morning to 05:00–19:00 and evening to 19:00–05:00 in the member's timezone; overnight evening answers belong to the preceding day. Update existing explanations and reminder text without changing scheduled cadence.
+- [x] Share missing-check-in reminders across arrival, Smarty Coach and both creator modes; keep reminders optional and missing readiness uncalibrated. Refresh open floors on focus and each visible minute.
+- [x] All 603 tests pass and preview build OK. Temporary Premium member's actual morning save refreshed Arrival/Coach and read back; overnight evening save read back under the preceding date. Both creator modes, Later dismissal, Coach prompt, visitor exclusion and phone/desktop layouts checked. Temporary account and its check-in/subscription removed; customer training records untouched. Installed-device behavior not separately exercised; publish required.
 
 ## Workout of the Day explanation
 - [x] Update arrival title and link to /wod; link the WOD introduction to a standalone explanation page, without Discovery changes.

@@ -132,11 +132,11 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "What are Smarty Check-ins?",
-    a: "Two 30-second check-ins a day for Premium members. The morning check-in (07:00–10:00) asks about sleep, readiness, soreness and mood; the night check-in (19:00–22:00) about steps, hydration, protein and how demanding your day was. Together they give you a Daily Smarty Score out of 100, saved in Logbook → Progress with trends, weekly insights and streak badges.",
+    a: "Two 30-second check-ins a day for Premium members. The morning check-in (05:00–19:00) asks about sleep, readiness, soreness and mood; the night check-in (19:00–05:00 the next morning) about steps, hydration, protein and how demanding your day was. Times follow your Training Profile timezone. Together they give you a Daily Smarty Score out of 100, saved in Logbook → Progress with trends, weekly insights and streak badges.",
   },
   {
     q: "What if I miss the check-in pop-up?",
-    a: "Open Smarty Check-ins from the menu and complete it any time while the window is open. You also get one reminder in your inbox during each window. Outside the windows, the page tells you when the next check-in opens.",
+    a: "Open Smarty Check-ins and complete or update the current check-in while its window is open: morning until 19:00, evening until 05:00 the next morning. Arrival, Smarty Coach and Create Your Own Workout offer an optional reminder when it is unanswered. Without a current morning check-in, readiness is shown as uncalibrated, not a confirmed score.",
   },
   {
     q: "Do my check-ins change my workouts?",

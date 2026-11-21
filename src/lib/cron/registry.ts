@@ -145,15 +145,15 @@ export const CRON_JOBS: CronJobDefinition[] = [
       "Sends one inbox message to every Premium member for each check-in window they have not completed yet — once in the morning and once at night. Members who already checked in get nothing, and nobody gets the same reminder twice in a day.",
     timing: "per-member",
     timingNote:
-      "Sent at each member's local time. Morning reminder at the hour below (inside the 07:00–10:00 window, default 08:00); night reminder at the night hour below (inside 19:00–22:00, default 20:00). Notifications go out at the job time.",
+      "Sent at each member's local time. Morning reminder at the hour below (check-in open 05:00–19:00, default reminder 08:00); night reminder at the night hour below (check-in open 19:00–05:00, default reminder 20:00). Notifications go out at the job time.",
     sends: [
       {
         title: "Your Morning Smarty Check-in is open",
-        body: "Takes 30 seconds. Open until 10:00 — with a Do check-in button.",
+        body: "Takes 30 seconds. Open until 19:00 — with a Do check-in button.",
       },
       {
         title: "Your Night Smarty Check-in is open",
-        body: "Review your day in 30 seconds. Open until 22:00.",
+        body: "Review your day in 30 seconds. Open until 05:00 the next morning.",
       },
     ],
     channels: ["in-app"], timeEditable: true, hourOnly: true, settings: ["nightHour"],

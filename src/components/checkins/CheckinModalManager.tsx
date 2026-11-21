@@ -37,8 +37,8 @@ export function CheckinModalManager() {
       setStreak(s.stats.currentStreak);
       setToday(s.date);
       const t = s.today;
-      const key = (k: string) => `checkin_${k}_dismissed_${s.date}`;
-      if ((document.documentElement.dataset.smartyCoach === "open" || document.documentElement.dataset.smartyFloor === "open")) return;
+      const key = (k: string) => `checkin_${user.id}_${k}_dismissed_${s.date}`;
+      if (document.documentElement.dataset.smartyCoach === "open" || document.documentElement.dataset.smartyFloor === "open" || document.querySelector('[aria-label="Check-in reminder"]')) return;
       if (pendingCheckin(s.minutes, t) === "morning" && !t?.morning_modal_shown && !localStorage.getItem(key("morning")))
         setPrompt("morning");
       else if (pendingCheckin(s.minutes, t) === "night" && !t?.night_modal_shown && !localStorage.getItem(key("night")))
@@ -65,7 +65,7 @@ export function CheckinModalManager() {
     const kind = prompt;
     setPrompt(null);
     if (!kind) return;
-    localStorage.setItem(`checkin_${kind}_dismissed_${today}`, "1");
+    localStorage.setItem(`checkin_${user?.id}_${kind}_dismissed_${today}`, "1");
     void markShown({ data: { kind } }).catch(() => undefined);
     if (then === "form") setForm(kind);
   };

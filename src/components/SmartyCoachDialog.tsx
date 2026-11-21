@@ -102,7 +102,20 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
   };
 
   useEffect(() => { setSnapshot(readCached(accountKey)); setFailed(false); }, [accountKey]);
-  useEffect(() => { if (!visitor && (open || revision > 0)) fetchSnapshot(); }, [open, visitor, accountKey, revision]);
+  useEffect(() => {
+    if (visitor || !open) return;
+    let active = true;
+    const refresh = () => {
+      if (document.visibilityState === "hidden") return;
+      void load().then((next) => {
+        if (active) { setSnapshot(next); saveCached(accountKey, next); setFailed(false); setLoading(false); }
+      }).catch(() => { if (active) { setFailed(true); setLoading(false); } });
+    };
+    refresh();
+    const timer = window.setInterval(refresh, 60_000);
+    window.addEventListener("focus", refresh);
+    return () => { active = false; window.clearInterval(timer); window.removeEventListener("focus", refresh); };
+  }, [open, visitor, accountKey, revision]);
   useEffect(() => {
     if (open) document.documentElement.dataset.smartyCoach = "open";
     else delete document.documentElement.dataset.smartyCoach;
