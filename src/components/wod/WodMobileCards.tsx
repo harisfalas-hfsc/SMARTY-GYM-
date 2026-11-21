@@ -10,6 +10,7 @@ import { difficultyLabel } from "@/lib/workout/spec";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import { cn } from "@/lib/utils";
+import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
 
 const LEVEL_TONE: Record<string, string> = {
   Beginner: "text-level-beginner",
@@ -58,6 +59,7 @@ export function WorkoutCard({
   favoriteBusy,
   compact = false,
   cinematic = false,
+  photo,
 }: {
   workout: WorkoutCardData;
   kind: WorkoutCardKind;
@@ -70,6 +72,8 @@ export function WorkoutCard({
   /** Tighter type and spacing on phones only (2-column grids). Tablet/desktop unchanged. */
   compact?: boolean;
   cinematic?: boolean;
+  /** WOD-only photo override; ordinary collection cards remain unchanged. */
+  photo?: string;
 }) {
   const navigate = useNavigate();
   const recovery = kind === "RECOVERY";
@@ -94,8 +98,8 @@ export function WorkoutCard({
     >
       <div className={cn("relative aspect-video overflow-hidden", cinematic && "wod-photo-card")}>
         <img
-          src={coverVariant(w.image_url, 640) ?? fallback}
-          onError={fallbackTo(w.image_url ?? fallback)}
+          src={coverVariant(photo ?? w.image_url, 640) ?? photo ?? fallback}
+          onError={fallbackTo(photo ?? w.image_url ?? fallback)}
           alt={`${w.name} - online workout by Haris Falas at SmartyGym`}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
@@ -214,6 +218,12 @@ export function WorkoutCard({
   );
 }
 
+export function DailyWodCard({ card, cards, fallback, index = 0, cinematic = false }: { card: WodCard; cards: WodCard[]; fallback: string; index?: number; cinematic?: boolean }) {
+  const photos = cards.flatMap(({ workout }) => workout.image_url ? [workout.image_url] : []);
+  const photo = useWodFeaturePhoto(card.workout.image_url ?? fallback, photos, index);
+  return <WorkoutCard workout={card.workout} kind={card.slot} fallback={fallback} photo={photo} cinematic={cinematic} />;
+}
+
 export function WodMobileCards({ cards, fallback }: { cards: WodCard[]; fallback: string }) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -230,7 +240,7 @@ export function WodMobileCards({ cards, fallback }: { cards: WodCard[]; fallback
   if (cards.length === 1) {
     return (
       <div className="w-full">
-        {cards[0] && <WorkoutCard workout={cards[0].workout} kind={cards[0].slot} fallback={fallback} cinematic />}
+        {cards[0] && <DailyWodCard card={cards[0]} cards={cards} fallback={fallback} cinematic />}
       </div>
     );
   }
@@ -239,9 +249,9 @@ export function WodMobileCards({ cards, fallback }: { cards: WodCard[]; fallback
     <div>
       <Carousel setApi={setApi} opts={{ align: "center", loop: true, startIndex: 0 }} className="w-full">
         <CarouselContent className="-ml-2">
-          {cards.map((c) => (
+          {cards.map((c, index) => (
             <CarouselItem key={c.slot} className="basis-[94%] pl-2 md:basis-[85%]">
-              <WorkoutCard workout={c.workout} kind={c.slot} fallback={fallback} cinematic />
+              <DailyWodCard card={c} cards={cards} index={index} fallback={fallback} cinematic />
             </CarouselItem>
           ))}
         </CarouselContent>

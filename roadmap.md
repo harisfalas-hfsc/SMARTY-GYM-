@@ -1,7 +1,11 @@
 # Roadmap
 
+## Mobile-only WOD photo correction
+- [x] Restored original static desktop feature/header pictures and each workout's static desktop card photo.
+- [x] Actual phone homepage, both arrival cards and both WOD-page cards alternate daily photos every 1.5 seconds, including reduced-motion mode with discrete swaps; screenshots show both photos. Mobile loading uses no old cover. At 1280×1800 all corresponding pictures stay static and loaded, with no browser errors. All 613 tests pass and preview build OK. Installed-device behavior not separately checked; publish required. No customer records changed.
+
 ## WOD rotation and readiness colors
-- [x] Observed actual homepage WOD images alternate roughly every 1.5 seconds at 384×714 and 1280×1800; captured both desktop WOD header images. Individual workout images remain tied to their workouts; reduced motion retains a still feature picture.
+- [x] Initial feature-only rotation verified; superseded by the mobile-only correction above, which includes arrival and WOD cards and restores static desktop pictures.
 - [x] Shared red 0–5, blue 6–7 and green 8–10 tones for scores, rings and labels in homepage, arrival, Coach, Insights, Training Load and self-rating. Existing scoring/calibration unchanged. Real account 6/10 blue verified on phone/desktop Arrival, Coach and expanded Insights; red/green bands covered by tests, not actual account score changes. All 610 tests pass, preview build OK. No customer records changed; publish required.
 
 ## Continuous check-ins and readiness prompts

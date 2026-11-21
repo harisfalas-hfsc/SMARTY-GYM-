@@ -32,7 +32,6 @@ import imgCommunity from "@/assets/community-card.jpg";
 import imgRitual from "@/assets/explore-ritual.png";
 import imgHaris from "@/assets/haris-falas-coach.jpg";
 import imgLibrary from "@/assets/explore-exercise-library.jpg";
-import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
 
 const heroSlides = [heroCity, heroBarbell, heroRopes, heroTimer];
 
@@ -293,7 +292,6 @@ function ItemRow({ item, compact = false }: { item: Item; compact?: boolean }) {
 
 /** Desktop-only About layout mirroring the old SmartyGym desktop homepage. */
 export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?: "home" | "about"; workoutCount?: number }) {
-  const dailyPhoto = useWodFeaturePhoto(imgWod);
   const [slide, setSlide] = useState(0);
   const [activeStrip, setActiveStrip] = useState(0);
   const [stripPaused, setStripPaused] = useState(false);
@@ -419,7 +417,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                   className={`group relative min-w-0 flex-1 overflow-hidden rounded-2xl transition-[flex-grow] duration-500 ease-out hover:flex-[3.5] ${active ? "flex-[3.5]" : ""}`}
                 >
                   <img
-                    src={s.id === "workout-of-the-day" ? dailyPhoto : s.image}
+                    src={s.image}
                     alt={s.tag}
                     loading="lazy"
                     className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] ${active ? "scale-[1.05]" : ""} ${s.id === "smarty-workouts" ? "object-[73%_center]" : ""}`}
@@ -463,7 +461,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                   className="group relative block aspect-[4/3] min-w-0 overflow-hidden rounded-3xl shadow-2xl"
                 >
                   <img
-                    src={s.id === "workout-of-the-day" ? dailyPhoto : s.image}
+                    src={s.image}
                     alt={`${s.lead} ${s.accentWord}`}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
@@ -483,7 +481,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                     </p>
                     <div className={`mt-5 grid ${compactRows ? "gap-1.5" : "gap-2 lg:gap-2.5"} ${many ? "grid-cols-2 gap-x-6" : "grid-cols-1"}`}>
                       {s.items.map((item) => (
-                        <ItemRow key={item.id} item={item.id === "wod" ? { ...item, image: dailyPhoto } : item} compact={compactRows} />
+                        <ItemRow key={item.id} item={item} compact={compactRows} />
                       ))}
                     </div>
                   </div>

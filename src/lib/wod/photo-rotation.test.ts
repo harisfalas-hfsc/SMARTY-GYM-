@@ -1,7 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { WOD_PHOTO_INTERVAL_MS, wodPhotoAt } from "./photo-rotation";
+import { WOD_PHOTO_INTERVAL_MS, WOD_LOADING_PHOTO, wodFeaturePhotoAt, wodPhotoAt } from "./photo-rotation";
 
 describe("daily feature photo rotation", () => {
+  it("keeps the original desktop cover static at every interval", () => {
+    for (const elapsed of [0, 1500, 3000]) expect(wodFeaturePhotoAt(false, ["one.jpg", "two.jpg"], elapsed, "original.jpg")).toBe("original.jpg");
+  });
+  it("rotates only mobile photos and starts each card with its own picture", () => {
+    expect(wodFeaturePhotoAt(true, ["one.jpg", "two.jpg"], 0, "original.jpg", 1)).toBe("two.jpg");
+    expect(wodFeaturePhotoAt(true, ["one.jpg", "two.jpg"], 1500, "original.jpg", 1)).toBe("one.jpg");
+  });
+  it("never flashes the old mobile cover before daily photos load", () => {
+    expect(wodFeaturePhotoAt(null, [], 0, "original.jpg")).toBe(WOD_LOADING_PHOTO);
+    expect(wodFeaturePhotoAt(true, [], 0, "original.jpg")).toBe(WOD_LOADING_PHOTO);
+  });
   it("alternates the two WOD pictures exactly every 1.5 seconds", () => {
     const photos = ["bodyweight.jpg", "equipment.jpg"];
     expect(WOD_PHOTO_INTERVAL_MS).toBe(1500);

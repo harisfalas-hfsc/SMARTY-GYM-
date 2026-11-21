@@ -7,9 +7,8 @@ import { PageHeader } from "@/components/PageHeader";
 import { getTodayWod, type WodDay } from "@/lib/wod.functions";
 import { getCycleDay } from "@/lib/wod-cycle";
 import pageHeroImage from "@/assets/hero-wod-card.jpg";
-import { WodMobileCards, WorkoutCard } from "@/components/wod/WodMobileCards";
+import { WodMobileCards, DailyWodCard } from "@/components/wod/WodMobileCards";
 import { WodPeriodizationCalendar } from "@/components/wod/WodPeriodizationCalendar";
-import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
 
 export const Route = createFileRoute("/wod")({
   head: () => ({
@@ -70,7 +69,6 @@ export const Route = createFileRoute("/wod")({
 });
 
 function WodPage() {
-  const dailyPhoto = useWodFeaturePhoto(pageHeroImage);
   const [data, setData] = useState<{ today: WodDay; tomorrow: WodDay } | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -84,7 +82,7 @@ function WodPage() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
-      <PageHeader image={dailyPhoto} eyebrow="SMARTYGYM" title="Workout of the Day" />
+      <PageHeader image={pageHeroImage} eyebrow="SMARTYGYM" title="Workout of the Day" />
 
       <Card className="mb-8 border border-coach-line bg-gradient-to-br from-primary/5 via-background to-primary/5 shadow-primary">
         <div className="px-4 pt-4 pb-2 sm:p-6">
@@ -129,7 +127,7 @@ function WodPage() {
             </Card>
           ) : data.today.cards.length === 1 ? (
             <div className="w-full">
-              <WorkoutCard workout={data.today.cards[0]!.workout} kind={data.today.cards[0]!.slot} fallback={pageHeroImage} />
+              {data.today.cards[0] && <DailyWodCard card={data.today.cards[0]} cards={data.today.cards} fallback={pageHeroImage} />}
             </div>
           ) : (
             <>
@@ -137,8 +135,8 @@ function WodPage() {
                 <WodMobileCards cards={data.today.cards} fallback={pageHeroImage} />
               </div>
               <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:gap-6">
-                {data.today.cards.map((c) => (
-                  <WorkoutCard key={c.slot} workout={c.workout} kind={c.slot} fallback={pageHeroImage} />
+                {data.today.cards.map((c, index) => (
+                  <DailyWodCard key={c.slot} card={c} cards={data.today.cards} index={index} fallback={pageHeroImage} />
                 ))}
               </div>
             </>
