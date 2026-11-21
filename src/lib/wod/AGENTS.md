@@ -1,1 +1,1 @@
-- WOD photo presentation uses the shared mobile-aware hook for feature pictures and WOD-only card wrappers; ordinary workout cards remain unchanged — why: rotating daily images cannot change desktop covers or other collection cards.
+- WOD photo presentation uses the shared mobile-aware hook and WodRotatingImage, keeping the outgoing image until the next is decoded; ordinary cards stay unchanged — why: smooth mobile transitions without desktop or collection changes.

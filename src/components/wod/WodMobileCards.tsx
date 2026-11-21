@@ -11,6 +11,7 @@ import { categoryLabel } from "@/lib/smarty-workout-row";
 import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import { cn } from "@/lib/utils";
 import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
+import { WodRotatingImage } from "@/components/wod/WodRotatingImage";
 
 const LEVEL_TONE: Record<string, string> = {
   Beginner: "text-level-beginner",
@@ -97,7 +98,13 @@ export function WorkoutCard({
       onClick={open}
     >
       <div className={cn("relative aspect-video overflow-hidden", cinematic && "wod-photo-card")}>
-        <img
+        {photo ? <WodRotatingImage
+          src={coverVariant(photo, 640) ?? photo}
+          fallback={photo}
+          alt={`${w.name} - online workout by Haris Falas at SmartyGym`}
+          loading={eager ? "eager" : "lazy"}
+          className="transition-transform duration-500 group-hover:scale-105"
+        /> : <img
           src={coverVariant(photo ?? w.image_url, 640) ?? photo ?? fallback}
           onError={fallbackTo(photo ?? w.image_url ?? fallback)}
           alt={`${w.name} - online workout by Haris Falas at SmartyGym`}
@@ -106,7 +113,7 @@ export function WorkoutCard({
           width={640}
           height={360}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        />}
         {cinematic && <div className="pointer-events-none md:hidden" data-brand-skip>
           <div className="mobile-photo-shade" />
           <div className="mobile-photo-copy text-hero-foreground"><p className="text-[10px] font-bold uppercase">Today's featured</p><h3 className="mt-2 text-lg font-extrabold leading-tight">{w.name}</h3><p className="mt-2 text-xs">{w.duration_min} min · {level}</p></div>

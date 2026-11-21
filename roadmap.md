@@ -1,5 +1,8 @@
 # Roadmap
 
+## Smooth mobile WOD picture transition
+- [x] Mobile homepage, arrival and WOD-page pictures share an 850ms left-to-right slide every 2 seconds, keeping the previous photo until the next is decoded; reduced-motion uses a gentle fade. Actual signed-in phone animation and roughly 2000ms intervals verified with moving/settled screenshots; desktop homepage, arrival and WOD cards remain static. All 613 tests pass and preview build OK. Installed-device behavior remains unverified; publish required. Customer records unchanged.
+
 ## Mobile-only WOD photo correction
 - [x] Restored original static desktop feature/header pictures and each workout's static desktop card photo.
 - [x] Actual phone homepage, both arrival cards and both WOD-page cards alternate daily photos every 1.5 seconds, including reduced-motion mode with discrete swaps; screenshots show both photos. Mobile loading uses no old cover. At 1280×1800 all corresponding pictures stay static and loaded, with no browser errors. All 613 tests pass and preview build OK. Installed-device behavior not separately checked; publish required. No customer records changed.

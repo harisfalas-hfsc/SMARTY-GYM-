@@ -1,4 +1,4 @@
-export const WOD_PHOTO_INTERVAL_MS = 1_500;
+export const WOD_PHOTO_INTERVAL_MS = 2_000;
 
 export const WOD_LOADING_PHOTO = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTodayWod } from "@/lib/wod.functions";
 import { WOD_PHOTO_INTERVAL_MS, wodFeaturePhotoAt } from "@/lib/wod/photo-rotation";
 
-/** Mobile-only discrete photo swaps, never a new request per picture change. */
+/** Mobile-only photo selection; presentation components animate the change. */
 export function useWodFeaturePhoto(fallback: string, suppliedPhotos?: readonly string[], offset = 0) {
   const [mobile, setMobile] = useState<boolean | null>(null);
   const [elapsed, setElapsed] = useState(0);
@@ -33,7 +33,7 @@ export function useWodFeaturePhoto(fallback: string, suppliedPhotos?: readonly s
       image.src = src;
     }
     let timer: ReturnType<typeof setInterval> | undefined;
-    // Discrete image replacement has no sliding/fading motion to suppress.
+    // Reduced-motion users receive a gentle fade instead of a slide.
     if (mobile && photoKey.includes("\n")) {
       timer = setInterval(() => {
         if (document.visibilityState !== "hidden") setElapsed(value => value + WOD_PHOTO_INTERVAL_MS);

@@ -1,12 +1,13 @@
 import { Play } from "lucide-react";
+import { WodRotatingImage } from "@/components/wod/WodRotatingImage";
 
 /** Shared mobile photo treatment; the owning page supplies its existing link. */
-export function MobilePhotoCard({ image, title, eyebrow, description, uniform = false }: {
-  image: string; title: string; eyebrow: string; description: string; uniform?: boolean;
+export function MobilePhotoCard({ image, title, eyebrow, description, uniform = false, smoothImage = false }: {
+  image: string; title: string; eyebrow: string; description: string; uniform?: boolean; smoothImage?: boolean;
 }) {
   return (
     <div className="mobile-photo-card">
-      <img src={image} alt={title} width={800} height={400} loading="lazy" decoding="async" />
+      {smoothImage ? <WodRotatingImage src={image} alt={title} loading="lazy" /> : <img src={image} alt={title} width={800} height={400} loading="lazy" decoding="async" />}
       <div className="mobile-photo-shade" />
       {uniform && <span className="absolute left-3 top-3 z-10 flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-extrabold shadow-md" style={{ background: "var(--brand-blue)", color: "var(--on-brand)" }} aria-label={eyebrow}>{eyebrow.split(" ")[0]}</span>}
       <div className="mobile-photo-copy" data-brand-skip>

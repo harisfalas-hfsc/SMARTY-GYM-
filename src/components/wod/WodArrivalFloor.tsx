@@ -11,7 +11,8 @@ import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 import { localGreeting } from "@/lib/logbook/weekly-activity";
 import { MobileWeeklyActivity } from "@/components/home/MobileWeeklyActivity";
 import coachPhoto from "@/assets/haris-falas-coach.jpg";
-import { coverVariant, fallbackTo } from "@/lib/cover-image";
+import { coverVariant } from "@/lib/cover-image";
+import { WodRotatingImage } from "@/components/wod/WodRotatingImage";
 import fallbackImage from "@/assets/hero-wod-card.jpg";
 import { readinessTone } from "@/lib/performance/readiness-tone";
 import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
@@ -169,7 +170,7 @@ function WodFloorCard({ card, photos, photoOffset, onStart }: { card: WodCard; p
   return (
     <article className="app-card overflow-hidden p-0">
       <div className="relative aspect-[16/9] w-full overflow-hidden">
-        <img src={coverVariant(photo, 640) ?? photo} onError={fallbackTo(photo)} alt="" className="h-full w-full object-cover" loading="eager" />
+        <WodRotatingImage src={coverVariant(photo, 640) ?? photo} fallback={photo} alt="" />
         <span className={`absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold text-hero-foreground ${slot.cls}`}><slot.Icon className="h-3.5 w-3.5" />{slot.label}</span>
       </div>
       <div className="space-y-3 p-4">

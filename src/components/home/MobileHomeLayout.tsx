@@ -22,7 +22,7 @@ export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: num
   const [api, setApi] = useState<CarouselApi>();
   const [active, setActive] = useState(0);
   const actions = [
-    { title: "Workout of the Day", eyebrow: "Today's featured", description: "Follow today's complete training session", image: dailyPhoto, to: "/wod" as const },
+    { title: "Workout of the Day", eyebrow: "Today's featured", description: "Follow today's complete training session", image: dailyPhoto, to: "/wod" as const, smoothImage: true },
     { title: "Smarty Workouts", eyebrow: "Expert collection", description: `${workoutCount.toLocaleString()} expert-designed workouts`, image: workoutImage, to: "/smarty-workouts" as const },
     { title: "Create Your Own Workout", eyebrow: "Your training, your way", description: "Choose your exercises or build with Smarty Coach", image: createImage, to: "/create-your-own-workout" as const },
     { title: "Shared Workouts", eyebrow: "From the community", description: "Train with workouts shared by members", image: sharedImage, to: "/shared-workouts" as const },
