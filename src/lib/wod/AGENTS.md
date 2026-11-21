@@ -1,1 +1,1 @@
-- WOD photo presentation uses the shared mobile-aware hook and WodRotatingImage, keeping the outgoing image until the next is decoded; ordinary cards stay unchanged — why: smooth mobile transitions without desktop or collection changes.
+- Only the mobile homepage WOD feature uses useWodFeaturePhoto and WodRotatingImage; individual workout cards use static images — why: preserve each workout's photo identity and desktop presentation.

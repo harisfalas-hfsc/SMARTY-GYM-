@@ -11,11 +11,9 @@ import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 import { localGreeting } from "@/lib/logbook/weekly-activity";
 import { MobileWeeklyActivity } from "@/components/home/MobileWeeklyActivity";
 import coachPhoto from "@/assets/haris-falas-coach.jpg";
-import { coverVariant } from "@/lib/cover-image";
-import { WodRotatingImage } from "@/components/wod/WodRotatingImage";
+import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import fallbackImage from "@/assets/hero-wod-card.jpg";
 import { readinessTone } from "@/lib/performance/readiness-tone";
-import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
 
 const SLOT: Record<string, { Icon: typeof Home; label: string; cls: string }> = {
   BODYWEIGHT: { Icon: Home, label: "No Equipment", cls: "bg-wod-bodyweight" },
@@ -143,7 +141,7 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
               : !wod ? <div className="flex items-center justify-center py-4"><Loader2 className="h-6 w-6 animate-spin text-coach-muted" /></div>
               : wod.cards.length === 0 ? <p className="app-card p-6 text-center text-sm text-coach-muted">Today's workouts are being prepared. Check back soon.</p>
               : <div className={`grid gap-4 ${wod.cards.length > 1 ? "md:grid-cols-2" : ""}`}>
-                  {wod.cards.map((c, index) => <WodFloorCard key={c.slot} card={c} photos={wod.cards.flatMap(({ workout }) => workout.image_url ? [workout.image_url] : [])} photoOffset={index} onStart={() => go("/smarty-workouts/$workoutId", { workoutId: c.workout.id })} />)}
+                  {wod.cards.map((c) => <WodFloorCard key={c.slot} card={c} onStart={() => go("/smarty-workouts/$workoutId", { workoutId: c.workout.id })} />)}
                 </div>}
             </section>
 
@@ -163,14 +161,13 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
   );
 }
 
-function WodFloorCard({ card, photos, photoOffset, onStart }: { card: WodCard; photos: string[]; photoOffset: number; onStart: () => void }) {
+function WodFloorCard({ card, onStart }: { card: WodCard; onStart: () => void }) {
   const w = card.workout;
-  const photo = useWodFeaturePhoto(w.image_url ?? fallbackImage, photos, photoOffset);
   const slot = SLOT[card.slot] ?? SLOT.EQUIPMENT;
   return (
     <article className="app-card overflow-hidden p-0">
       <div className="relative aspect-[16/9] w-full overflow-hidden">
-        <WodRotatingImage src={coverVariant(photo, 640) ?? photo} fallback={photo} alt="" />
+        <img src={coverVariant(w.image_url, 640) ?? fallbackImage} onError={fallbackTo(w.image_url ?? fallbackImage)} alt="" className="h-full w-full object-cover" />
         <span className={`absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold text-hero-foreground ${slot.cls}`}><slot.Icon className="h-3.5 w-3.5" />{slot.label}</span>
       </div>
       <div className="space-y-3 p-4">

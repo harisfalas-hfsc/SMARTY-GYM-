@@ -1,10 +1,7 @@
-import { stateForScore } from "./readiness";
-
-/** Visual bands follow the existing readiness states, never change coaching rules. */
+/** Shared score-color bands; scoring, coaching and calibration stay unchanged. */
 export function readinessBand(score: number | null | undefined): "low" | "moderate" | "ready" | "uncalibrated" {
   if (score == null || !Number.isFinite(score)) return "uncalibrated";
-  const state = stateForScore(score);
-  return state === "Ready" ? "ready" : state === "Moderate" ? "moderate" : "low";
+  return score >= 8 ? "ready" : score >= 4 ? "moderate" : "low";
 }
 
 export function readinessTone(score: number | null | undefined) {

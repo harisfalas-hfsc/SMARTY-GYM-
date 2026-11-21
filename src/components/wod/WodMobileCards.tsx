@@ -10,8 +10,6 @@ import { difficultyLabel } from "@/lib/workout/spec";
 import { categoryLabel } from "@/lib/smarty-workout-row";
 import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import { cn } from "@/lib/utils";
-import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
-import { WodRotatingImage } from "@/components/wod/WodRotatingImage";
 
 const LEVEL_TONE: Record<string, string> = {
   Beginner: "text-level-beginner",
@@ -60,7 +58,6 @@ export function WorkoutCard({
   favoriteBusy,
   compact = false,
   cinematic = false,
-  photo,
 }: {
   workout: WorkoutCardData;
   kind: WorkoutCardKind;
@@ -73,8 +70,6 @@ export function WorkoutCard({
   /** Tighter type and spacing on phones only (2-column grids). Tablet/desktop unchanged. */
   compact?: boolean;
   cinematic?: boolean;
-  /** WOD-only photo override; ordinary collection cards remain unchanged. */
-  photo?: string;
 }) {
   const navigate = useNavigate();
   const recovery = kind === "RECOVERY";
@@ -98,22 +93,16 @@ export function WorkoutCard({
       onClick={open}
     >
       <div className={cn("relative aspect-video overflow-hidden", cinematic && "wod-photo-card")}>
-        {photo ? <WodRotatingImage
-          src={coverVariant(photo, 640) ?? photo}
-          fallback={photo}
-          alt={`${w.name} - online workout by Haris Falas at SmartyGym`}
-          loading={eager ? "eager" : "lazy"}
-          className="transition-transform duration-500 group-hover:scale-105"
-        /> : <img
-          src={coverVariant(photo ?? w.image_url, 640) ?? photo ?? fallback}
-          onError={fallbackTo(photo ?? w.image_url ?? fallback)}
+        <img
+          src={coverVariant(w.image_url, 640) ?? fallback}
+          onError={fallbackTo(w.image_url ?? fallback)}
           alt={`${w.name} - online workout by Haris Falas at SmartyGym`}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
           width={640}
           height={360}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />}
+        />
         {cinematic && <div className="pointer-events-none md:hidden" data-brand-skip>
           <div className="mobile-photo-shade" />
           <div className="mobile-photo-copy text-hero-foreground"><p className="text-[10px] font-bold uppercase">Today's featured</p><h3 className="mt-2 text-lg font-extrabold leading-tight">{w.name}</h3><p className="mt-2 text-xs">{w.duration_min} min · {level}</p></div>
@@ -226,9 +215,7 @@ export function WorkoutCard({
 }
 
 export function DailyWodCard({ card, cards, fallback, index = 0, cinematic = false }: { card: WodCard; cards: WodCard[]; fallback: string; index?: number; cinematic?: boolean }) {
-  const photos = cards.flatMap(({ workout }) => workout.image_url ? [workout.image_url] : []);
-  const photo = useWodFeaturePhoto(card.workout.image_url ?? fallback, photos, index);
-  return <WorkoutCard workout={card.workout} kind={card.slot} fallback={fallback} photo={photo} cinematic={cinematic} />;
+  return <WorkoutCard workout={card.workout} kind={card.slot} fallback={fallback} cinematic={cinematic} />;
 }
 
 export function WodMobileCards({ cards, fallback }: { cards: WodCard[]; fallback: string }) {

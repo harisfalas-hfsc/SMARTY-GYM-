@@ -1,3 +1,3 @@
 - Public Training Load copy mirrors `src/lib/performance` — why: its science must match the actual formula.
-- Readiness displays share readiness-tone and semantic palette tokens derived from existing score states — why: consistent visual bands without changing coaching or calibration rules.
+- Readiness displays share score-color bands in readiness-tone and semantic palette tokens independently of coaching states — why: color changes must not change scoring or calibration.
 - Live readiness is computed only by liveReadiness (src/lib/performance/readiness.ts) via loadLiveReadiness in performance.server.ts, used by Training Load, Insights and Coach — why: one moment-in-time score everywhere.

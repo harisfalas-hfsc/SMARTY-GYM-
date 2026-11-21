@@ -1,5 +1,10 @@
 # Roadmap
 
+## Readiness bands and homepage-only rotation correction
+- [x] Apply red 0–3, blue 4–7, green 8–10 score-color bands everywhere without changing scoring.
+- [x] Keep smooth two-second rotation ONLY in the mobile homepage carousel; restore each workout's own static picture in arrival, WOD cards and all other contexts; desktop feature pictures static. Supersedes broader rotation scopes below.
+- [x] All 613 tests pass and preview build OK. Actual signed-in phone homepage alternates two photos; phone/desktop arrival and WOD-page pictures stay loaded and unchanged over 4.4 seconds, with no rotating frames outside the mobile homepage or browser errors. No customer records changed; installed-device behavior unverified; publish required.
+
 ## Smooth mobile WOD picture transition
 - [x] Mobile homepage, arrival and WOD-page pictures share an 850ms left-to-right slide every 2 seconds, keeping the previous photo until the next is decoded; reduced-motion uses a gentle fade. Actual signed-in phone animation and roughly 2000ms intervals verified with moving/settled screenshots; desktop homepage, arrival and WOD cards remain static. All 613 tests pass and preview build OK. Installed-device behavior remains unverified; publish required. Customer records unchanged.
 
