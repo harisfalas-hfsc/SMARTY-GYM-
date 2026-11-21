@@ -2,3 +2,4 @@
 - Preview-only samples (demo-activity.ts) add marked activity and display-only workouts (sample- ids, no links/actions) to the calendar; never on live hosts, never saved — why: every calendar mark is visible for review without touching real data.
 - Successful morning/night check-in saves invalidate account-scoped homepage, month and day activity caches through refreshActivity — why: mounted briefings update without reopening and cached calendar views cannot retain old activity.
 - Live non-query check-in consumers use useCheckinRevision; saved report props remain snapshots — why: calendar notes, readiness, coaching and current reports refresh without rewriting sent history.
+- Logbook list view uses a collapsed disclosure with filters inside and bounded history scrolling — why: long histories must not lengthen the whole page.

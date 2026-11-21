@@ -1,5 +1,9 @@
 # Roadmap
 
+## Expandable Logbook workout history
+- [x] Match Insights disclosure for the workout list, collapsed by default, with existing filters inside and bounded history scrolling; Calendar/Progress unchanged.
+- [x] Actual signed-in phone/desktop expansion, Completed filtering, reset and collapse verified; screenshots checked, no browser errors, 25 Logbook tests pass and preview build OK. No customer records changed; installed-device behavior unverified; publish required.
+
 ## Normal startup and briefing Insights access
 - [x] Delete the automatic arrival floor and all opening paths; preserve manually opened Smarty Coach.
 - [x] Greeting, date, readiness, calendar and summary links target expanded, visible Insights directly; router hash is observed and header clearance preserved.

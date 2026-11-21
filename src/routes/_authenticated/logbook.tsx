@@ -14,6 +14,7 @@ import { useOnlineStatus } from "@/lib/connectivity";
 import { supabase } from "@/integrations/supabase/client";
 import { isSupabaseConfigured } from "@/integrations/supabase/config";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useServerFn } from "@tanstack/react-start";
 import { setWorkoutMeta, setWorkoutStatus } from "@/lib/coach.functions";
 import { toast } from "sonner";
@@ -27,6 +28,7 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   ListFilter,
   CalendarDays,
   Dumbbell,
@@ -982,6 +984,7 @@ function LogbookContent() {
   const navigate = useNavigate({ from: "/logbook" });
   const [rows, setRows] = useState<Row[] | null>(null);
   const [busy, setBusy] = useState(false);
+  const [workoutsOpen, setWorkoutsOpen] = useState(false);
   const saveMeta = useServerFn(setWorkoutMeta);
   const saveStatus = useServerFn(setWorkoutStatus);
   const readFeedback = useServerFn(getSessionFeedback);
@@ -1217,7 +1220,18 @@ function LogbookContent() {
           />
         </div>
       ) : (
-        <>
+        <Collapsible open={workoutsOpen} onOpenChange={setWorkoutsOpen} className="mt-4">
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" className="app-card h-auto min-h-16 w-full justify-start gap-3 whitespace-normal p-4 text-left text-foreground">
+              <Dumbbell className={`h-5 w-5 shrink-0 ${iconInk("Workouts")}`} />
+              <span className="min-w-0 flex-1">
+                <span className="block text-base font-black">Your workouts</span>
+                <span className="block text-xs font-normal text-muted-foreground">Created, completed and saved workouts</span>
+              </span>
+              <ChevronDown className={`h-5 w-5 shrink-0 text-primary transition-transform motion-reduce:transition-none ${workoutsOpen ? "rotate-180" : ""}`} />
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pt-4">
           <div className="mt-2 flex items-center justify-between gap-2">
             <Button
               type="button"
@@ -1364,7 +1378,7 @@ function LogbookContent() {
               )}
             </div>
           ) : (
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            <ul className="mt-4 grid max-h-[70vh] gap-3 overflow-y-auto overscroll-contain sm:grid-cols-2" aria-label="Your workout history">
               {filtered.map((r) => (
                 <li key={r.id}>
                   <WorkoutCard r={r} onToggleFavorite={toggleFavorite} />
@@ -1372,7 +1386,8 @@ function LogbookContent() {
               ))}
             </ul>
           )}
-        </>
+          </CollapsibleContent>
+        </Collapsible>
       )}
 
       {debrief ? (
