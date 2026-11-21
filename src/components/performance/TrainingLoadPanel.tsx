@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Activity, Dumbbell, Gauge, HeartPulse, Info, Loader2 } from "lucide-react";
 import { readinessPresentation } from "@/lib/performance/readiness";
+import { readinessTone } from "@/lib/performance/readiness-tone";
 import { getPerformanceOverview } from "@/lib/performance.functions";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -81,7 +82,7 @@ export function TrainingLoadPanel() {
         <p className="flex items-center gap-2 font-bold text-primary">
           <Gauge className="h-4 w-4 shrink-0" /> Readiness
         </p>
-        <p className="mt-2 text-sm font-semibold text-foreground">{readinessState}</p>
+        <p className={`mt-2 text-sm font-semibold ${readinessTone(showExample ? 9 : presentation.score)}`}>{readinessState}</p>
         <p className="mt-1 text-sm text-muted-foreground">{readinessReason}</p>
         {showExample ? (
           <p className="mt-2 text-xs font-semibold text-primary">Example only. Your personal data has not changed.</p>

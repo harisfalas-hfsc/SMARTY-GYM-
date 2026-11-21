@@ -13,6 +13,7 @@ import { MobileWeeklyActivity } from "@/components/home/MobileWeeklyActivity";
 import coachPhoto from "@/assets/haris-falas-coach.jpg";
 import { coverVariant, fallbackTo } from "@/lib/cover-image";
 import fallbackImage from "@/assets/hero-wod-card.jpg";
+import { readinessTone } from "@/lib/performance/readiness-tone";
 
 const SLOT: Record<string, { Icon: typeof Home; label: string; cls: string }> = {
   BODYWEIGHT: { Icon: Home, label: "No Equipment", cls: "bg-wod-bodyweight" },
@@ -98,9 +99,9 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
                 {member && coach ? <>
                   <div className="flex items-center gap-2">
                     {score !== null
-                      ? <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 text-sm font-extrabold ${score >= 7 ? "border-coach-good text-coach-good" : "border-coach-line"}`}>{score}</span>
+                      ? <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 text-sm font-extrabold ${readinessTone(score)}`}>{score}</span>
                       : <CalendarCheck className="h-5 w-5 shrink-0 text-coach-muted" />}
-                    <p className="text-xs font-bold uppercase tracking-wide text-coach-muted">Readiness · <span className={score !== null && score >= 7 ? "text-coach-good" : "text-coach-text"}>{coach.readinessDisplay.label}</span></p>
+                    <p className="text-xs font-bold uppercase tracking-wide text-coach-muted">Readiness · <span className={readinessTone(score)}>{coach.readinessDisplay.label}</span></p>
                   </div>
                   <p className="mt-1 line-clamp-2 text-sm leading-snug text-coach-text">{coach.readinessDisplay.reason}</p>
                 </> : <>

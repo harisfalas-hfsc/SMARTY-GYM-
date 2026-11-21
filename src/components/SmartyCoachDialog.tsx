@@ -14,6 +14,7 @@ import { BrandText } from "@/components/BrandText";
 import coachPhoto from "@/assets/haris-falas-coach.jpg";
 import { CheckinPrompt } from "@/components/checkins/CheckinPrompt";
 import { useCheckinRevision } from "@/hooks/useCheckinRevision";
+import { readinessTone } from "@/lib/performance/readiness-tone";
 
 const CACHE_VERSION = 3;
 const CACHE_MAX_AGE = 12 * 60 * 60 * 1000;
@@ -232,13 +233,13 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
                   <div className={`${card} divide-y divide-coach-line p-0 sm:p-0`}>
                     <div className="flex items-center gap-4 p-4 sm:p-5">
                       {score !== null ? (
-                        <div className={`flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-full border-2 ${score >= 7 ? "border-coach-good" : "border-coach-line"}`}>
-                          <span className="text-xl font-extrabold leading-none">{score}</span><span className="text-[10px] text-coach-muted">/10</span>
+                        <div className={`flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-full border-2 ${readinessTone(score)}`}>
+                          <span className="text-xl font-extrabold leading-none">{score}</span><span className="text-[10px]">/10</span>
                         </div>
                       ) : <CalendarCheck className="h-10 w-10 shrink-0 text-coach-muted" />}
                       <div className="min-w-0">
                         <p className="text-xs font-bold uppercase tracking-wide text-coach-muted">Your readiness</p>
-                        <p className={`font-extrabold ${score !== null && score >= 7 ? "text-coach-good" : "text-coach-text"}`}>{snapshot.readinessDisplay.label}</p>
+                        <p className={`font-extrabold ${readinessTone(score)}`}>{snapshot.readinessDisplay.label}</p>
                         <p className="text-sm text-coach-muted">{snapshot.readinessDisplay.reason}</p>
                       </div>
                     </div>

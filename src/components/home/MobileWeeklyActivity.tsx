@@ -13,6 +13,7 @@ import { localGreeting, localWeek } from "@/lib/logbook/weekly-activity";
 import { briefingGroups, eventsByDay, type BriefingGroup } from "@/lib/logbook/activity";
 import { loadActivity } from "@/lib/logbook/activity-reads";
 import { dayKey } from "@/lib/logbook/rows";
+import { readinessTone } from "@/lib/performance/readiness-tone";
 
 const GROUP_VIEW: Record<BriefingGroup, { Icon: typeof Dumbbell; tone: string; one: string; many: string }> = {
   trained: { Icon: Trophy, tone: "logbook", one: "workout done", many: "workouts done" },
@@ -77,12 +78,12 @@ export function MobileWeeklyActivity({ hideArrow = false, readiness }: { hideArr
         <p className="mt-0.5 text-xs text-muted-foreground">{now ? now.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }) : "\u00a0"}</p>
       </Link>
       {score !== null && liveReadiness ? <Link to="/logbook" search={{ view: "list", filter: "all" }} hash="insights" aria-label={`Your readiness: ${score} out of 10, ${liveReadiness.label}. Open Insights`} className="flex shrink-0 items-center gap-1.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue md:hidden">
-        <span className={`flex h-10 w-10 shrink-0 items-baseline justify-center rounded-full border-2 pt-2 tabular-nums ${score >= 7 ? "border-coach-good text-coach-good" : "border-brand-blue text-brand-blue"}`}>
+        <span className={`flex h-10 w-10 shrink-0 items-baseline justify-center rounded-full border-2 pt-2 tabular-nums ${readinessTone(score)}`}>
           <span className="text-sm font-extrabold leading-5">{score}</span><span className="text-[9px] font-semibold">/10</span>
         </span>
         <span className="flex max-w-20 flex-col text-[10px] leading-4">
           <span className="font-semibold text-muted-foreground">Your readiness</span>
-          <span className="font-bold text-foreground">{liveReadiness.label}</span>
+          <span className={`font-bold ${readinessTone(score)}`}>{liveReadiness.label}</span>
         </span>
       </Link> : null}
       {hideArrow ? null : <Link {...calendarProps} className="mt-1 shrink-0"><ChevronRight aria-hidden="true" className="h-4 w-4 text-muted-foreground" /></Link>}

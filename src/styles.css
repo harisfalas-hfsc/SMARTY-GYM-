@@ -49,6 +49,9 @@
   --color-brand-blue: var(--brand-blue);
   --color-coach-gold: var(--primary);
   --color-coach-good: oklch(0.72 0.15 150);
+  --color-readiness-low: var(--destructive);
+  --color-readiness-moderate: var(--brand-blue);
+  --color-readiness-ready: var(--tone-1-fg);
   --radius-card: 0.625rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

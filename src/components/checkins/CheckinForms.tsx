@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import type { MorningInput, NightInput } from "@/lib/checkins/score";
+import { readinessTone } from "@/lib/performance/readiness-tone";
 
 // Question wording, emojis and labels are the old SmartyGym check-ins, unchanged.
 const sleepQualityEmojis = [
@@ -113,8 +114,8 @@ export function MorningCheckinForm({ onSubmit, initial, readOnly }: { onSubmit: 
       <Field label="How ready do you feel for today?">
         <div className="flex items-center gap-3">
           <Slider value={[readiness]} onValueChange={([v]) => setReadiness(v ?? 5)} min={0} max={10} step={1} className="flex-1" />
-          <span className="w-24 text-center text-xs font-medium sm:w-28 sm:text-sm">
-            <span className="font-bold text-primary">{readiness}</span> – {readinessLabel(readiness)}
+          <span className={`w-24 text-center text-xs font-medium sm:w-28 sm:text-sm ${readinessTone(readiness)}`}>
+            <span className="font-bold">{readiness}</span> – {readinessLabel(readiness)}
           </span>
         </div>
         <div className="flex justify-between text-xs text-muted-foreground"><span>0</span><span>10</span></div>

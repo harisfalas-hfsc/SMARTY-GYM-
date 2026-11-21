@@ -1,5 +1,9 @@
 # Roadmap
 
+## WOD rotation and readiness colors
+- [x] Observed actual homepage WOD images alternate roughly every 1.5 seconds at 384×714 and 1280×1800; captured both desktop WOD header images. Individual workout images remain tied to their workouts; reduced motion retains a still feature picture.
+- [x] Shared red 0–5, blue 6–7 and green 8–10 tones for scores, rings and labels in homepage, arrival, Coach, Insights, Training Load and self-rating. Existing scoring/calibration unchanged. Real account 6/10 blue verified on phone/desktop Arrival, Coach and expanded Insights; red/green bands covered by tests, not actual account score changes. All 610 tests pass, preview build OK. No customer records changed; publish required.
+
 ## Continuous check-ins and readiness prompts
 - [x] Extend morning to 05:00–19:00 and evening to 19:00–05:00 in the member's timezone; overnight evening answers belong to the preceding day. Update existing explanations and reminder text without changing scheduled cadence.
 - [x] Share missing-check-in reminders across arrival, Smarty Coach and both creator modes; keep reminders optional and missing readiness uncalibrated. Refresh open floors on focus and each visible minute.
