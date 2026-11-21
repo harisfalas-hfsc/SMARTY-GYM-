@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { localClock, type CheckinRow } from "@/lib/checkins/score";
+import { checkinDate, localClock, type CheckinRow } from "@/lib/checkins/score";
 import type { CheckinSignal } from "@/lib/coach-rules/types";
 
 export async function userTimezone(db: SupabaseClient, userId: string) {
@@ -19,7 +19,8 @@ export async function loadCheckinSignal(
   userId: string,
 ): Promise<CheckinSignal | null> {
   const tz = await userTimezone(db, userId);
-  const today = localClock(new Date(), tz).date;
+  const clock = localClock(new Date(), tz);
+  const today = checkinDate(clock.date, clock.minutes);
   const { data } = await db
     .from("smarty_checkins")
     .select("*")

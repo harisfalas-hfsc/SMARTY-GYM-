@@ -7,7 +7,8 @@
 //   2. Today's morning Check-in: soreness, short/poor sleep and a low
 //      self-rated readiness.
 //   3. Many consecutive training days.
-// No recent training and no Check-in means the member is rested: Ready.
+// Without the current morning check-in this is only a training-load estimate,
+// never a confirmed readiness score on screen.
 // It is a training-management indicator, not a medical assessment.
 
 import type { ReadinessState } from "./types";
@@ -33,12 +34,18 @@ export type ReadinessCheckin = {
 } | null;
 
 export type LiveReadiness = {
+  calibrated: boolean;
   score: number;
   state: ReadinessState;
   reason: string;
   factors: string[];
   computedAt: string;
 };
+
+/** Keep numeric fatigue estimates internal when current self-report is missing. */
+export function readinessPresentation(r: { score: number; state: string; reason: string; calibrated?: boolean }) {
+  return { score: r.calibrated === false ? null : r.score, label: r.calibrated === false ? "Uncalibrated" : r.state, reason: r.reason };
+}
 
 /** Hours for half of a session's fatigue to clear. */
 export const RECOVERY_HALF_LIFE_H = 12;
@@ -137,5 +144,7 @@ export function liveReadiness(input: {
   if (factors.length) reason = factors.join(" ");
   else if (input.sessions.length) reason = "Your last workout's fatigue has cleared — you're fully recovered and ready to train.";
   else reason = "No recent training load — you're rested and ready to train.";
-  return { score, state, reason, factors, computedAt: input.now.toISOString() };
+  const calibrated = c !== null;
+  if (!calibrated) reason = `${factors.length ? factors.join(" ") + " " : ""}Complete your morning check-in to tell Smarty Coach how you feel before training.`;
+  return { score, state, reason, factors, calibrated, computedAt: input.now.toISOString() };
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeScores, windowStatus, completeStreaks } from "@/lib/checkins/score";
+import { checkinDate, pendingCheckin, localClock, computeScores, windowStatus, completeStreaks } from "@/lib/checkins/score";
 import { recommend } from "@/lib/coach-rules";
 
 const base = {
@@ -22,11 +22,40 @@ describe("smarty check-ins", () => {
     expect(s["daily_smarty_score"]).toBeUndefined();
     expect(s["status"]).toBe("incomplete_morning_only");
   });
-  it("windows are 07-10 and 19-22", () => {
-    expect(windowStatus(7 * 60).isMorning).toBe(true);
-    expect(windowStatus(10 * 60).isMorning).toBe(false);
-    expect(windowStatus(21 * 60 + 59).isNight).toBe(true);
-    expect(windowStatus(12 * 60).next).toBe("night");
+  it("morning remains available from 05:00 through 18:59", () => {
+    expect(windowStatus(5 * 60).isMorning).toBe(true);
+    expect(windowStatus(12 * 60).isMorning).toBe(true);
+    expect(windowStatus(18 * 60 + 59).isMorning).toBe(true);
+    expect(windowStatus(19 * 60).isMorning).toBe(false);
+  });
+  it("evening remains available from 19:00 through 04:59", () => {
+    expect(windowStatus(19 * 60).isNight).toBe(true);
+    expect(windowStatus(23 * 60 + 59).isNight).toBe(true);
+    expect(windowStatus(0).isNight).toBe(true);
+    expect(windowStatus(4 * 60 + 59).isNight).toBe(true);
+    expect(windowStatus(5 * 60).isNight).toBe(false);
+  });
+  it("has exactly one active check-in at every minute", () => {
+    for (let m = 0; m < 1440; m++) {
+      const w = windowStatus(m);
+      expect(Number(w.isMorning) + Number(w.isNight)).toBe(1);
+    }
+  });
+  it("attributes an overnight evening save to the previous date, including year rollover", () => {
+    expect(checkinDate("2026-11-22", 4 * 60 + 59)).toBe("2026-11-21");
+    expect(checkinDate("2027-01-01", 0)).toBe("2026-12-31");
+    expect(checkinDate("2026-11-22", 5 * 60)).toBe("2026-11-22");
+  });
+  it("uses the member timezone across the overnight boundary", () => {
+    const clock = localClock(new Date("2026-11-21T22:30:00Z"), "Europe/Nicosia");
+    expect(clock.date).toBe("2026-11-22");
+    expect(checkinDate(clock.date, clock.minutes)).toBe("2026-11-21");
+  });
+  it("prompts only for an unanswered check-in in the active window", () => {
+    expect(pendingCheckin(12 * 60, null)).toBe("morning");
+    expect(pendingCheckin(12 * 60, { morning_completed: true })).toBeNull();
+    expect(pendingCheckin(1 * 60, { morning_completed: true })).toBe("night");
+    expect(pendingCheckin(1 * 60, { night_completed: true })).toBeNull();
   });
   it("streaks", () => {
     expect(completeStreaks(["2026-01-01", "2026-01-02", "2026-01-04"], "2026-01-04")).toEqual({ current: 1, longest: 2 });

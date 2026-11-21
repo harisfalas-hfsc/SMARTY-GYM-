@@ -272,7 +272,7 @@ export async function loadPerformanceOverview(supabase: Client, userId: string) 
  */
 export async function loadLiveReadiness(supabase: Client, userId: string, now = new Date()) {
   const since = new Date(now.getTime() - 8 * 86_400_000).toISOString();
-  const { localClock } = await import("@/lib/checkins/score");
+  const { localClock, checkinDate } = await import("@/lib/checkins/score");
   const [{ data: workoutRows }, { data: profile }] = await Promise.all([
     supabase
       .from("workouts")
@@ -290,7 +290,9 @@ export async function loadLiveReadiness(supabase: Client, userId: string, now = 
     duration_min: number | null; completed_at: string | null;
   }>;
   const tz = (profile as { timezone?: string | null } | null)?.timezone || "Europe/Nicosia";
-  const today = localClock(now, tz).date;
+  const clock = localClock(now, tz);
+  const today = clock.date;
+  const readinessDate = checkinDate(today, clock.minutes);
   const ids = workouts.map((w) => w.id);
   const [{ data: resultRows }, { data: feedbackRows }, { data: checkinRow }] = await Promise.all([
     ids.length
@@ -303,7 +305,7 @@ export async function loadLiveReadiness(supabase: Client, userId: string, now = 
       .from("smarty_checkins")
       .select("morning_completed,sleep_hours,sleep_quality,readiness_score,soreness_rating")
       .eq("user_id", userId)
-      .eq("checkin_date", today)
+      .eq("checkin_date", readinessDate)
       .maybeSingle(),
   ]);
   const rpeBy = new Map<string, number>();

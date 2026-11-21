@@ -50,8 +50,8 @@ export async function runCheckinReminders(
       title: kind === "morning" ? "Your Morning Smarty Check-in is open" : "Your Night Smarty Check-in is open",
       body:
         kind === "morning"
-          ? "Takes 30 seconds. Open until 10:00 — start your day with intention."
-          : "Review your day in 30 seconds. Open until 22:00 — keep your score on track.",
+          ? "Takes 30 seconds. Open until 19:00 — start your day with intention."
+          : "Review your day in 30 seconds. Open until 05:00 tomorrow — keep your score on track.",
       dedupe_key: `checkin:${kind}:${date}`,
     } as never);
     if (!insErr) sent += 1;

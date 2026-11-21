@@ -2,6 +2,7 @@ import type { CoachDecision, CustomPlan } from "@/lib/coach/recommend";
 import type { CoachRecommendation } from "@/lib/coach-rules/types";
 import type { ReadinessState } from "@/lib/performance/types";
 import type { DailyStatus } from "@/lib/coach/daily-status";
+import { readinessPresentation } from "@/lib/performance/readiness";
 
 export type CoachSnapshotAction =
   | { label: string; to: "/smarty-checkins" }
@@ -74,7 +75,7 @@ export type CoachSnapshot = {
 export type CoachSnapshotDecisionInput = {
   firstName: string;
   greeting: string;
-  readiness: { state: ReadinessState; reason: string; score?: number };
+  readiness: { state: ReadinessState; reason: string; score?: number; calibrated?: boolean };
   readinessScore: number | null;
   recommendation: CoachRecommendation;
   hasCheckin: boolean;
@@ -120,11 +121,7 @@ export function decideCoachSnapshot(input: CoachSnapshotDecisionInput): CoachSna
     access: "ready" as const,
     firstName: input.firstName,
     greeting: input.greeting,
-    readinessDisplay: {
-      label: input.readiness.state,
-      score: input.readinessScore,
-      reason: input.readiness.reason,
-    },
+    readinessDisplay: readinessPresentation({ ...input.readiness, score: input.readinessScore ?? 10 }),
     goals: { primary: readable(input.primaryGoal), secondary: readable(input.secondaryGoal) },
     todayFocus: {
       purpose: recovery ? "Recovery" : "Training",

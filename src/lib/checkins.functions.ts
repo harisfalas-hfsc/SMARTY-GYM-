@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   completeStreaks,
+  checkinDate,
   computeScores,
   localClock,
   windowStatus,
@@ -12,7 +13,8 @@ import {
 async function todayFor(db: never, userId: string) {
   const { userTimezone } = await import("@/lib/checkins.server");
   const tz = await userTimezone(db, userId);
-  return { tz, ...localClock(new Date(), tz) };
+  const clock = localClock(new Date(), tz);
+  return { tz, ...clock, date: checkinDate(clock.date, clock.minutes) };
 }
 
 export const CHECKIN_PREMIUM_REQUIRED = "Premium access required for Smarty Check-ins.";
@@ -97,9 +99,9 @@ export const submitCheckin = createServerFn({ method: "POST" })
     const { date, minutes } = await todayFor(db as never, context.userId);
     const w = windowStatus(minutes);
     if (data.kind === "morning" && !w.isMorning)
-      throw new Error("The morning check-in is open between 07:00 and 10:00.");
+      throw new Error("The morning check-in is open between 05:00 and 19:00 in your local timezone.");
     if (data.kind === "night" && !w.isNight)
-      throw new Error("The night check-in is open between 19:00 and 22:00.");
+      throw new Error("The evening check-in is open from 19:00 until 05:00 in your local timezone.");
 
     const { data: existing } = await db
       .from("smarty_checkins")
@@ -153,6 +155,7 @@ export const markCheckinModalShown = createServerFn({ method: "POST" })
   }))
   .handler(async ({ data, context }) => {
     const db = context.supabase;
+    await assertPremium(db as never, context.userId);
     const { date } = await todayFor(db as never, context.userId);
     await db.from("smarty_checkins").upsert(
       {

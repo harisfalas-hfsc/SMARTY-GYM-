@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Activity, Dumbbell, Gauge, HeartPulse, Info, Loader2 } from "lucide-react";
+import { readinessPresentation } from "@/lib/performance/readiness";
 import { getPerformanceOverview } from "@/lib/performance.functions";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -65,7 +66,8 @@ export function TrainingLoadPanel() {
   }
   if (!data) return null;
 
-  const readinessState = showExample ? "9/10 · Ready" : `${data.readiness.score}/10 · ${data.readiness.state}`;
+  const presentation = readinessPresentation(data.readiness);
+  const readinessState = showExample ? "9/10 · Ready" : presentation.score === null ? presentation.label : `${presentation.score}/10 · ${presentation.label}`;
   const readinessReason = showExample
     ? "Example view showing how the panel looks after enough comparable workouts have been recorded."
     : data.readiness.reason;

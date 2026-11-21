@@ -12,9 +12,10 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { feelingReply, type Feeling } from "@/lib/coach/feeling-replies";
 import { BrandText } from "@/components/BrandText";
 import coachPhoto from "@/assets/haris-falas-coach.jpg";
+import { CheckinPrompt } from "@/components/checkins/CheckinPrompt";
 import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 const CACHE_MAX_AGE = 12 * 60 * 60 * 1000;
 type CachedSnapshot = { version: number; savedAt: number; snapshot: CoachSnapshot };
 const cacheKey = (k: string) => `smarty:coach-snapshot:v${CACHE_VERSION}:${k}`;
@@ -155,6 +156,7 @@ export function SmartyCoachDialog({ open, onOpenChange, visitor = false, account
           </header>
 
           <div className="space-y-10 px-4 py-6 sm:px-8 sm:py-8">
+            {member ? <CheckinPrompt /> : null}
             {/* Feelings */}
             <section className="space-y-4">
               <h3 className="text-base font-bold text-coach-text sm:text-lg">How are you feeling today?</h3>

@@ -10,13 +10,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/useAuth";
+import { pendingCheckin } from "@/lib/checkins/score";
 import { getCheckinState, markCheckinModalShown } from "@/lib/checkins.functions";
 import { MorningCheckinForm, NightCheckinForm } from "./CheckinForms";
 import { CHECKINS_CHANGED, useCheckinSubmit, type CheckinState } from "./CheckinsPanel";
 import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 
 /**
- * Opens the old SmartyGym prompt once per window (07:00–10:00 and 19:00–22:00):
+ * Opens the check-in prompt once per continuous local window (05:00–19:00 / 19:00–05:00):
  * "Do it now" opens the form, "Later" leaves it in Logbook → Progress.
  */
 export function CheckinModalManager() {
@@ -38,9 +39,9 @@ export function CheckinModalManager() {
       const t = s.today;
       const key = (k: string) => `checkin_${k}_dismissed_${s.date}`;
       if ((document.documentElement.dataset.smartyCoach === "open" || document.documentElement.dataset.smartyFloor === "open")) return;
-      if (s.window.isMorning && !t?.morning_completed && !t?.morning_modal_shown && !localStorage.getItem(key("morning")))
+      if (pendingCheckin(s.minutes, t) === "morning" && !t?.morning_modal_shown && !localStorage.getItem(key("morning")))
         setPrompt("morning");
-      else if (s.window.isNight && !t?.night_completed && !t?.night_modal_shown && !localStorage.getItem(key("night")))
+      else if (pendingCheckin(s.minutes, t) === "night" && !t?.night_modal_shown && !localStorage.getItem(key("night")))
         setPrompt("night");
     } catch {
       /* never block the app over a reminder */
@@ -52,9 +53,11 @@ export function CheckinModalManager() {
     const id = setInterval(() => void check(), 5 * 60 * 1000);
     const afterCoach = () => void check();
     window.addEventListener("smarty:coach-closed", afterCoach);
+    window.addEventListener("focus", afterCoach);
     return () => {
       clearInterval(id);
       window.removeEventListener("smarty:coach-closed", afterCoach);
+      window.removeEventListener("focus", afterCoach);
     };
   }, [check, revision]);
 

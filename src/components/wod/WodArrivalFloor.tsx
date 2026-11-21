@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { getTodayWod, type WodCard, type WodDay } from "@/lib/wod.functions";
 import { getCoachSnapshot } from "@/lib/coach.functions";
 import { dailyWorkoutAction, type CoachSnapshot } from "@/lib/coach-snapshot";
+import { CheckinPrompt } from "@/components/checkins/CheckinPrompt";
 import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 import { localGreeting } from "@/lib/logbook/weekly-activity";
 import { MobileWeeklyActivity } from "@/components/home/MobileWeeklyActivity";
@@ -101,6 +102,8 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
               </div>
               <ArrowRight className="h-4 w-4 shrink-0 text-coach-muted" />
             </button>
+
+            {member ? <CheckinPrompt /> : null}
 
             {/* Today's state — same rule and wording as Smarty Coach */}
             {member && today && today.kind !== "ready" ? (

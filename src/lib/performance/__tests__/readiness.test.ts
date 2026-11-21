@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { liveReadiness, type ReadinessSession } from "../readiness";
+import { readinessPresentation, liveReadiness, type ReadinessSession } from "../readiness";
 
 const now = new Date("2026-10-10T20:00:00Z");
 const hoursAgo = (h: number) => new Date(now.getTime() - h * 3_600_000).toISOString();
@@ -10,10 +10,21 @@ const run = (sessions: ReadinessSession[], checkin: Parameters<typeof liveReadin
   liveReadiness({ now, sessions, checkin, consecutiveDays });
 
 describe("live readiness", () => {
-  it("is fully ready with no training and no check-in — never 'Limited Data'", () => {
+  it("does not present a confirmed 10/10 when the current morning check-in is missing", () => {
     const r = run([]);
-    expect(r.score).toBe(10);
-    expect(r.state).toBe("Ready");
+    expect(r.calibrated).toBe(false);
+    expect(readinessPresentation(r).score).toBeNull();
+  });
+  it("calibrates readiness from actual morning answers", () => {
+    const r = run([], { sleepHours: 8, sleepQuality: 5, readiness: 10, soreness: 0 });
+    expect(r.calibrated).toBe(true);
+    expect(readinessPresentation(r).score).toBe(10);
+  });
+  it("keeps real post-workout fatigue even without self-report", () => {
+    const r = run([session(0.2, { rpe: 9, durationMin: 60 })]);
+    expect(r.calibrated).toBe(false);
+    expect(r.score).toBeLessThanOrEqual(2);
+    expect(readinessPresentation(r).score).toBeNull();
   });
   it("drops sharply right after a hard workout", () => {
     const r = run([session(0.2, { rpe: 9, durationMin: 60 })]);
@@ -23,7 +34,10 @@ describe("live readiness", () => {
   });
   it("recovers over the following hours", () => {
     const scores = [0.5, 6, 12, 24, 48].map((h) => run([session(h)]).score);
-    for (let k = 1; k < scores.length; k++) expect(scores[k]).toBeGreaterThanOrEqual(scores[k - 1]!);
+    for (let k = 1; k < scores.length; k++) {
+      const previous = scores[k - 1];
+      if (previous !== undefined) expect(scores[k]).toBeGreaterThanOrEqual(previous);
+    }
     expect(scores.at(-1)).toBe(10);
   });
   it("is back to 10 after one to two rest days", () => {

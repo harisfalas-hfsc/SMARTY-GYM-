@@ -74,7 +74,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-type FormMode = { initial?: Partial<MorningInput & NightInput> | null; readOnly?: boolean };
+type FormMode = { initial?: { [K in keyof (MorningInput & NightInput)]?: number | null } | null; readOnly?: boolean };
 const num = (v: unknown, d: number) => (v === null || v === undefined ? d : Number(v));
 
 export function MorningCheckinForm({ onSubmit, initial, readOnly }: { onSubmit: (d: MorningInput) => Promise<void> } & FormMode) {
@@ -90,7 +90,7 @@ export function MorningCheckinForm({ onSubmit, initial, readOnly }: { onSubmit: 
         <p className="flex items-center gap-2 text-lg font-extrabold">
           <Sun className="h-5 w-5 text-primary" /> Morning Check-in
         </p>
-        <p className="text-sm text-muted-foreground">{readOnly ? "The window is closed. Your answers are locked." : initial ? "You can change your answers until the window closes. Only your last save counts." : "Window open until 10:00. Takes 30 seconds."}</p>
+        <p className="text-sm text-muted-foreground">{readOnly ? "The window is closed. Your answers are locked." : initial ? "You can change your answers until the window closes. Only your last save counts." : "Open until 19:00 in your local timezone. Takes 30 seconds."}</p>
       </div>
       <fieldset disabled={readOnly} className={cn("space-y-5", readOnly && "pointer-events-none opacity-80")}>
       <Field label="How many hours did you sleep last night?">
@@ -119,7 +119,7 @@ export function MorningCheckinForm({ onSubmit, initial, readOnly }: { onSubmit: 
         </div>
         <div className="flex justify-between text-xs text-muted-foreground"><span>0</span><span>10</span></div>
       </Field>
-      <Field label="How does your body feel this morning?">
+      <Field label="How does your body feel right now?">
         <div className="flex items-center gap-3">
           <Slider value={[soreness]} onValueChange={([v]) => setSoreness(v ?? 3)} min={0} max={10} step={1} className="flex-1" />
           <span className="w-24 text-center text-xs font-medium sm:w-28 sm:text-sm">
@@ -170,7 +170,7 @@ export function NightCheckinForm({ onSubmit, initial, readOnly }: { onSubmit: (d
         <p className="flex items-center gap-2 text-lg font-extrabold">
           <Moon className="h-5 w-5 text-primary" /> Night Check-in
         </p>
-        <p className="text-sm text-muted-foreground">{readOnly ? "The window is closed. Your answers are locked." : initial ? "You can change your answers until the window closes. Only your last save counts." : "Window open until 22:00. Takes 30 seconds."}</p>
+        <p className="text-sm text-muted-foreground">{readOnly ? "The window is closed. Your answers are locked." : initial ? "You can change your answers until the window closes. Only your last save counts." : "Open until 05:00 tomorrow in your local timezone. Takes 30 seconds."}</p>
       </div>
       <fieldset disabled={readOnly} className={cn("space-y-5", readOnly && "pointer-events-none opacity-80")}>
       <Field label="How much did you move today?">

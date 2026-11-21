@@ -25,7 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MetricLineChart, MetricPicker } from "@/components/performance/MetricLineChart";
 import { getCheckinState, submitCheckin } from "@/lib/checkins.functions";
-import type { CheckinRow, MorningInput, NightInput } from "@/lib/checkins/score";
+import { MORNING_WINDOW, NIGHT_WINDOW, type CheckinRow, type MorningInput, type NightInput } from "@/lib/checkins/score";
 import { MorningCheckinForm, NightCheckinForm } from "./CheckinForms";
 import { formatDate } from "@/lib/date-format";
 
@@ -137,7 +137,9 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
   useEffect(() => {
     load();
     window.addEventListener(CHECKINS_CHANGED, load);
-    return () => window.removeEventListener(CHECKINS_CHANGED, load);
+    window.addEventListener("focus", load);
+    const timer = window.setInterval(load, 60_000);
+    return () => { window.removeEventListener(CHECKINS_CHANGED, load); window.removeEventListener("focus", load); window.clearInterval(timer); };
   }, [load]);
   const { morning, night } = useCheckinSubmit(() => setOpenForm(null));
 
@@ -170,7 +172,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
   const t = state.today;
   const w = state.window;
   const mins = state.minutes;
-  const morningState = t?.morning_completed ? "done" : w.isMorning ? "pending" : mins < 420 ? "upcoming" : "missed";
+  const morningState = t?.morning_completed ? "done" : w.isMorning ? "pending" : mins < MORNING_WINDOW.start ? "upcoming" : "missed";
   const nightState = t?.night_completed ? "done" : w.isNight ? "pending" : mins < 1140 ? "upcoming" : "missed";
   const metricDef = METRICS.find((m) => m.key === metric) ?? METRICS[0];
   const s = state.stats;
@@ -194,7 +196,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
       </div>
 
       <div className={cn("app-card p-4", todayFirst && "order-1")}>
-        <p className="font-bold">Today's check-ins</p>
+        <p className="font-bold">Check-ins · {formatDate(`${state.date}T12:00:00Z`)}</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <button
             type="button"
@@ -204,7 +206,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
             <Sun className="h-5 w-5 text-primary" />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">Morning Check-in</p>
-              <p className="text-xs text-muted-foreground">07:00 – 10:00</p>
+              <p className="text-xs text-muted-foreground">{MORNING_WINDOW.label}</p>
             </div>
             <StatusIcon state={morningState} />
           </button>
@@ -216,7 +218,7 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
             <Moon className="h-5 w-5 text-primary" />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">Night Check-in</p>
-              <p className="text-xs text-muted-foreground">19:00 – 22:00</p>
+              <p className="text-xs text-muted-foreground">{NIGHT_WINDOW.label}</p>
             </div>
             <StatusIcon state={nightState} />
           </button>
@@ -232,65 +234,19 @@ export function CheckinsPanel({ todayFirst = false }: { todayFirst?: boolean }) 
           </div>
         </div>
 
-        {w.isMorning && !t?.morning_completed ? (
-          <div className="mt-4 rounded-xl border border-border p-4">
-            <MorningCheckinForm onSubmit={morning} />
+        {((w.isMorning && !t?.morning_completed && !openForm) || openForm === "morning") ? (
+          <div className="mt-4 border-t border-border pt-4">
+            {w.isMorning || t?.morning_completed ? <MorningCheckinForm key={`m-${state.date}-${t?.sleep_hours}`} onSubmit={morning} initial={t} readOnly={!w.isMorning} /> : <p className="text-sm text-muted-foreground">Morning check-in opens at 05:00 and stays open until 19:00.</p>}
           </div>
         ) : null}
-        {w.isNight && !t?.night_completed ? (
-          <div className="mt-4 rounded-xl border border-border p-4">
-            <NightCheckinForm onSubmit={night} />
+        {((w.isNight && !t?.night_completed && !openForm) || openForm === "night") ? (
+          <div className="mt-4 border-t border-border pt-4">
+            {w.isNight || t?.night_completed ? <NightCheckinForm key={`n-${state.date}-${t?.hydration_liters}`} onSubmit={night} initial={t} readOnly={!w.isNight} /> : <p className="text-sm text-muted-foreground">Evening check-in opens at 19:00 and stays open until 05:00 the next morning.</p>}
           </div>
         ) : null}
-        {openForm === "morning" && !t?.morning_completed ? (
-          <div className="mt-4 rounded-xl border border-border p-4">
-            <p className="text-sm font-semibold">Morning check-in not completed.</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {w.isMorning
-                ? "The morning window is open now — answer below to check in."
-                : "You didn't check in this morning, so there are no answers to show. The morning window is open 07:00–10:00."}
-            </p>
-          </div>
-        ) : null}
-        {openForm === "morning" && t?.morning_completed ? (
-          <div className="mt-4 rounded-xl border border-border p-4">
-            <MorningCheckinForm key={`m-${t.daily_smarty_score ?? ""}-${t.sleep_hours}`} onSubmit={morning} initial={t as never} readOnly={!w.isMorning} />
-          </div>
-        ) : null}
-        {openForm === "night" && !t?.night_completed ? (
-          <div className="mt-4 rounded-xl border border-border p-4">
-            <p className="text-sm font-semibold">Night check-in not completed.</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {w.isNight
-                ? "The night window is open now — answer below to check in."
-                : "You didn't check in tonight, so there are no answers to show. The night window is open 19:00–22:00."}
-            </p>
-          </div>
-        ) : null}
-        {openForm === "night" && t?.night_completed ? (
-          <div className="mt-4 rounded-xl border border-border p-4">
-            <NightCheckinForm key={`n-${t.daily_smarty_score ?? ""}-${t.hydration_liters}`} onSubmit={night} initial={t as never} readOnly={!w.isNight} />
-          </div>
-        ) : null}
-        {w.isMorning && t?.morning_completed && openForm !== "morning" ? (
-          <p className="mt-3 text-sm text-muted-foreground">Morning check-in done. Tap it to review or change your answers until 10:00. Your night check-in opens at 19:00.</p>
-        ) : null}
-        {w.isNight && t?.night_completed && openForm !== "night" ? (
-          <p className="mt-3 text-sm text-muted-foreground">Night check-in done. Tap it to review or change your answers until 22:00.</p>
-        ) : null}
-        {!w.isMorning && t?.morning_completed && !openForm ? (
-          <p className="mt-3 text-sm text-muted-foreground">Tap a completed check-in to see your answers.</p>
-        ) : null}
-        {w.next ? (
-          <div className="mt-4 rounded-xl bg-muted/50 p-3 text-sm">
-            <p className="font-semibold">Check-ins are closed right now.</p>
-            <p className="mt-1 text-muted-foreground">
-              The next {w.next === "morning" ? "morning" : "night"} check-in opens at{" "}
-              {w.next === "morning" ? "07:00" : "19:00"} (in {w.timeUntil}). Morning check-ins are open
-              07:00–10:00 and night check-ins 19:00–22:00.
-            </p>
-          </div>
-        ) : null}
+        {w.isMorning && t?.morning_completed && !openForm ? <p className="mt-3 text-sm text-muted-foreground">Morning check-in done. Tap it to review or update your answers until 19:00.</p> : null}
+        {w.isNight && t?.night_completed && !openForm ? <p className="mt-3 text-sm text-muted-foreground">Evening check-in done. Tap it to review or update your answers until 05:00.</p> : null}
+        <p className="mt-3 text-xs text-muted-foreground">Times follow your Training Profile timezone. After midnight, evening answers still belong to the preceding day.</p>
       </div>
 
       <div className={cn("app-card p-4", todayFirst && "order-2")}>

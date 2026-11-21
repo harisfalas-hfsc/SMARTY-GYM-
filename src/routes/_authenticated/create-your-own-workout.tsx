@@ -62,6 +62,7 @@ import { isSupabaseConfigured } from "@/integrations/supabase/config";
 import { getMyAccessState } from "@/lib/access.functions";
 import { PageHeader } from "@/components/PageHeader";
 import { createLocalWorkout } from "@/lib/local-workouts";
+import { CheckinPrompt } from "@/components/checkins/CheckinPrompt";
 import { ManualWorkoutBuilder } from "@/components/workout/ManualWorkoutBuilder";
 
 export const Route = createFileRoute("/_authenticated/create-your-own-workout")({
@@ -403,6 +404,7 @@ function CoachPage() {
           subtitle="Choose your own exercises from the Exercise Library for every part of your workout."
         />
         {modeToggle}
+        {premium ? <CheckinPrompt /> : null}
         {visitor ? (
           <VisitorJoinDialog open={membershipOpen} onOpenChange={setMembershipOpen} title="Your workout is one step away" text="Join SmartyGym or log in to create this workout and save it to your Logbook." />
         ) : (
@@ -425,6 +427,7 @@ function CoachPage() {
       />
 
       {modeToggle}
+        {premium ? <CheckinPrompt /> : null}
 
       <PendingGenerationCard />
 

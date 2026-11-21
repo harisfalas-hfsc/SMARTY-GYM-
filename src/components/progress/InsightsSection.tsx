@@ -5,6 +5,7 @@ import { Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, Clipboard
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getMyInsights } from "@/lib/weekly-insights.functions";
+import { readinessPresentation } from "@/lib/performance/readiness";
 import { getLiveReadiness } from "@/lib/performance.functions";
 import { getCoachSnapshot } from "@/lib/coach.functions";
 import type { CoachSnapshot } from "@/lib/coach-snapshot";
@@ -93,11 +94,12 @@ function LiveReadinessCard() {
     };
   }, [fetchReadiness, revision]);
 
+  const presentation = value ? readinessPresentation(value) : null;
   return (
     <Card title="Readiness right now" icon={HeartPulse} tone="text-rose-500">
       {value ? (
         <>
-          <p className="text-2xl font-black">{value.score}/10 <span className="text-sm font-medium text-muted-foreground">{value.state}</span></p>
+          <p className="text-2xl font-black">{presentation?.score !== null ? `${presentation?.score}/10` : "Uncalibrated"} <span className="text-sm font-medium text-muted-foreground">{presentation?.score !== null ? presentation?.label : ""}</span></p>
           <p className="mt-1 text-sm text-muted-foreground">{value.reason}</p>
         </>
       ) : failed ? (

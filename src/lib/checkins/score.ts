@@ -1,8 +1,21 @@
-// Smarty Check-ins — scoring and windows, ported exactly from the old SmartyGym.
+// Smarty Check-ins — shared scoring and continuous local-time windows.
 // Pure and deterministic so the server, the UI and the tests agree.
 
-export const MORNING_WINDOW = { start: 7 * 60, end: 10 * 60, label: "07:00–10:00" } as const;
-export const NIGHT_WINDOW = { start: 19 * 60, end: 22 * 60, label: "19:00–22:00" } as const;
+export const MORNING_WINDOW = { start: 5 * 60, end: 19 * 60, label: "05:00–19:00" } as const;
+export const NIGHT_WINDOW = { start: 19 * 60, end: 5 * 60, label: "19:00–05:00" } as const;
+
+/** Before 05:00 the open evening check-in still belongs to yesterday. */
+export function checkinDate(date: string, minutes: number) {
+  if (minutes >= MORNING_WINDOW.start) return date;
+  const previous = new Date(`${date}T12:00:00Z`);
+  previous.setUTCDate(previous.getUTCDate() - 1);
+  return previous.toISOString().slice(0, 10);
+}
+
+export function pendingCheckin(minutes: number, row: Partial<CheckinRow> | null) {
+  const kind = windowStatus(minutes).isMorning ? "morning" : "night";
+  return (kind === "morning" ? row?.morning_completed : row?.night_completed) ? null : kind;
+}
 
 export type CheckinRow = {
   id: string;
@@ -172,26 +185,12 @@ export function localClock(now: Date, tz: string) {
 
 export function windowStatus(minutes: number) {
   const isMorning = minutes >= MORNING_WINDOW.start && minutes < MORNING_WINDOW.end;
-  const isNight = minutes >= NIGHT_WINDOW.start && minutes < NIGHT_WINDOW.end;
-  let next: "morning" | "night" | null = null;
-  let until = 0;
-  if (minutes < MORNING_WINDOW.start) {
-    next = "morning";
-    until = MORNING_WINDOW.start - minutes;
-  } else if (minutes >= MORNING_WINDOW.end && minutes < NIGHT_WINDOW.start) {
-    next = "night";
-    until = NIGHT_WINDOW.start - minutes;
-  } else if (minutes >= NIGHT_WINDOW.end) {
-    next = "morning";
-    until = 24 * 60 - minutes + MORNING_WINDOW.start;
-  }
-  const h = Math.floor(until / 60);
-  const m = until % 60;
+  const isNight = minutes >= NIGHT_WINDOW.start || minutes < NIGHT_WINDOW.end;
   return {
     isMorning,
     isNight,
-    next,
-    timeUntil: next ? (h > 0 ? `${h}h ${m}m` : `${m}m`) : "",
+    next: null,
+    timeUntil: "",
   };
 }
 
