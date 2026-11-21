@@ -23,7 +23,7 @@
 - Coach/admin/WOD are deterministic; header Coach is read-only, account-keyed and decided only by coach/recommend.ts — why: one rule order, no cross-account state.
 - WOD pool queries and eligibility share categoriesForDay; resistance focuses use matchesDayFocus without changing stored categories or the cycle — why: Strength and Muscle Building rotate together consistently while preserving exhaustion-first selection.
 - Coach announcements share one photo-first, fixed-size scrolling frame across access levels; locked snapshots render the public introduction and reactivation action only — why: consistent presentation without locked personal briefing cards, with Premium details reachable below the photo.
-- Arrival opens WodArrivalFloor (today's WODs, short readiness, week strip) after auth resolves at every viewport; the Coach floor opens only on tap; closing stays respected — why: training-first landing.
+- Navigation mounts only the explicitly opened Coach; homepage briefing links target #insights and InsightsCard observes router hash — why: normal startup and direct expanded Insights.
 - Smarty Workouts share admin controls and local media; collection and mobile-home featured reuse getFeaturedSmartyWorkouts and original dates through loaders — why: consistent published ordering, no desktop-home change or old-project dependency.
 - Featured workout reads return an empty list on provider or connection failure without privileged fallback — why: optional listings must not crash the homepage or collection during an outage.
 - Vitest uses its own configuration without the application RPC transforms — why: unit tests must exercise handlers rather than generated network stubs.

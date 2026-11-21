@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Loader2, Brain, CalendarDays, Gauge, ListChecks, CircleSlash, ClipboardCheck, ChevronDown, HeartPulse } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -115,7 +115,15 @@ function LiveReadinessCard() {
 
 /** Persistent Logbook disclosure, independent of the selected view. */
 export function InsightsCard() {
+  const hash = useRouterState({ select: (state) => state.location.hash });
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (hash !== "insights" && hash !== "#insights") return;
+    setOpen(true);
+    const frame = window.requestAnimationFrame(() => document.getElementById("insights")?.scrollIntoView({ behavior: "instant", block: "start" }));
+    return () => window.cancelAnimationFrame(frame);
+  }, [hash]);
 
   useEffect(() => {
     const reveal = () => { setOpen(true); window.requestAnimationFrame(() => document.getElementById("insights")?.scrollIntoView({ behavior: "smooth", block: "start" })); };
@@ -127,7 +135,7 @@ export function InsightsCard() {
   }, []);
 
   return (
-    <Collapsible id="insights" open={open} onOpenChange={setOpen} className="mt-4">
+    <Collapsible id="insights" open={open} onOpenChange={setOpen} className="mt-4 scroll-mt-24">
       <CollapsibleTrigger asChild>
         <Button variant="outline" className="app-card h-auto min-h-16 w-full justify-start gap-3 whitespace-normal p-4 text-left text-foreground">
           <Brain className="h-5 w-5 shrink-0 text-primary" />

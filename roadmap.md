@@ -1,5 +1,10 @@
 # Roadmap
 
+## Normal startup and briefing Insights access
+- [x] Delete the automatic arrival floor and all opening paths; preserve manually opened Smarty Coach.
+- [x] Greeting, date, readiness, calendar and summary links target expanded, visible Insights directly; router hash is observed and header clearance preserved.
+- [x] Actual visitor and signed-in phone/desktop startup show no arrival dialog. All four phone briefing tap paths opened expanded visible Insights, and manual Coach worked on both viewports without browser errors. All 613 tests pass; preview build OK. No customer data changed. Installed-device behavior unverified; publish required.
+
 ## Readiness bands and homepage-only rotation correction
 - [x] Apply red 0–3, blue 4–7, green 8–10 score-color bands everywhere without changing scoring.
 - [x] Keep smooth two-second rotation ONLY in the mobile homepage carousel; restore each workout's own static picture in arrival, WOD cards and all other contexts; desktop feature pictures static. Supersedes broader rotation scopes below.

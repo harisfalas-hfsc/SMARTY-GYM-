@@ -69,7 +69,7 @@ export function MobileWeeklyActivity({ hideArrow = false, readiness }: { hideArr
   const todayEvents = now ? byDay.get(dayKey(now)) ?? [] : [];
   const firstName = displayName?.trim().split(/\s+/)[0];
   const calendarProps = user
-    ? { to: "/logbook" as const, search: { view: "calendar" as const, filter: "all" as const }, "aria-label": "Open your Logbook calendar" }
+    ? { to: "/logbook" as const, search: { view: "list" as const, filter: "all" as const }, hash: "insights", "aria-label": "Open your Insights" }
     : { to: "/auth" as const, "aria-label": "Sign in to track your training" };
   return <div className="app-card p-3">
     <div className="flex min-h-10 items-start gap-2">
