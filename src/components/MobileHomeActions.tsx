@@ -24,6 +24,7 @@ import { categoryLabel } from "@/lib/smarty-workout-row";
 import { difficultyLabel } from "@/lib/workout/spec";
 import { fallbackTo } from "@/lib/cover-image";
 import { MobileHomeLayout } from "@/components/home/MobileHomeLayout";
+import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
 
 type CarouselAction = {
   title: string;
@@ -47,6 +48,7 @@ export function MobileHomeActions({ showPricing, workoutCount, featured }: { sho
 }
 
 function TabletHomeActions({ showPricing, workoutCount, featured }: { showPricing: boolean; workoutCount: number; featured: SmartyWorkoutCard[] }) {
+  const dailyPhoto = useWodFeaturePhoto(wodImage);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeIndex, setActiveIndex] = useState(0);
   const [exploreApi, setExploreApi] = useState<CarouselApi>();
@@ -73,7 +75,7 @@ function TabletHomeActions({ showPricing, workoutCount, featured }: { showPricin
       title: "Workout of the Day",
       description: "Follow today's complete training session",
       to: "/wod",
-      image: wodImage,
+      image: dailyPhoto,
       icon: CalendarCheck,
     },
     {

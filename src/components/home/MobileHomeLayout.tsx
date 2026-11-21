@@ -15,12 +15,14 @@ import createImage from "@/assets/create-workout-card.jpg";
 import sharedImage from "@/assets/shared-workouts-card.jpg";
 import harisImage from "@/assets/haris-falas-coach.jpg";
 import { MobileWeeklyActivity } from "./MobileWeeklyActivity";
+import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
 
 export function MobileHomeLayout({ workoutCount, featured }: { workoutCount: number; featured: SmartyWorkoutCard[] }) {
+  const dailyPhoto = useWodFeaturePhoto(wodImage);
   const [api, setApi] = useState<CarouselApi>();
   const [active, setActive] = useState(0);
   const actions = [
-    { title: "Workout of the Day", eyebrow: "Today's featured", description: "Follow today's complete training session", image: wodImage, to: "/wod" as const },
+    { title: "Workout of the Day", eyebrow: "Today's featured", description: "Follow today's complete training session", image: dailyPhoto, to: "/wod" as const },
     { title: "Smarty Workouts", eyebrow: "Expert collection", description: `${workoutCount.toLocaleString()} expert-designed workouts`, image: workoutImage, to: "/smarty-workouts" as const },
     { title: "Create Your Own Workout", eyebrow: "Your training, your way", description: "Choose your exercises or build with Smarty Coach", image: createImage, to: "/create-your-own-workout" as const },
     { title: "Shared Workouts", eyebrow: "From the community", description: "Train with workouts shared by members", image: sharedImage, to: "/shared-workouts" as const },

@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { iconInk } from "@/lib/icon-tone";
 import wodPhoto from "@/assets/hero-wod-card.jpg";
 import coachPhoto from "@/assets/haris-falas-coach.jpg";
+import { useWodFeaturePhoto } from "@/hooks/useWodFeaturePhoto";
 
 const title = "Workout of the Day Philosophy — Planned Training | SmartyGym";
 const description = "Discover how Coach Haris Falas combines periodization, energy systems, training load and recovery in SmartyGym's science-based Workout of the Day.";
@@ -39,9 +40,10 @@ const energySystems = [
 ];
 
 function AboutWorkoutOfTheDay() {
+  const dailyPhoto = useWodFeaturePhoto(wodPhoto);
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
-      <PageHeader image={wodPhoto} eyebrow="The philosophy" title="Workout of the Day" subtitle="A purposeful session today. A coherent training plan over time." />
+      <PageHeader image={dailyPhoto} eyebrow="The philosophy" title="Workout of the Day" subtitle="A purposeful session today. A coherent training plan over time." />
 
       <section className="pb-8 sm:pb-12">
         <div className="flex items-center gap-3">
