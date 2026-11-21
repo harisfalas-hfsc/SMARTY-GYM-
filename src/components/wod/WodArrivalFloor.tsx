@@ -89,7 +89,7 @@ export function WodArrivalFloor({ open, onOpenChange, visitor, accountKey, first
           <DialogDescription className="sr-only">Your week, readiness and today's two workouts.</DialogDescription>
           <div className="space-y-4 px-4 pb-5 pt-3 sm:px-8 sm:pb-7">
             {/* Week strip (greeting lives here; taps through to the Logbook calendar) */}
-            <div onClickCapture={() => close(false)} ><MobileWeeklyActivity hideArrow /></div>
+            <div onClickCapture={() => close(false)} ><MobileWeeklyActivity hideArrow readiness={member && coach ? coach.readinessDisplay : null} /></div>
 
             {/* Readiness — opens Logbook with Insights already open */}
             <button type="button" onClick={openReadiness} className="app-card flex w-full items-center gap-4 p-4 text-left">

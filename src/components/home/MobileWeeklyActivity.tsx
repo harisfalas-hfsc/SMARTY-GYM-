@@ -6,6 +6,9 @@ import { Check, ChevronRight, ClipboardCheck, Dumbbell, Trophy, Users } from "lu
 import { iconInk } from "@/lib/icon-tone";
 import { useAuth } from "@/hooks/useAuth";
 import { getMyAccessState } from "@/lib/access.functions";
+import { getCoachSnapshot } from "@/lib/coach.functions";
+import type { CoachSnapshot } from "@/lib/coach-snapshot";
+import { useCheckinRevision } from "@/hooks/useCheckinRevision";
 import { localGreeting, localWeek } from "@/lib/logbook/weekly-activity";
 import { briefingGroups, eventsByDay, type BriefingGroup } from "@/lib/logbook/activity";
 import { loadActivity } from "@/lib/logbook/activity-reads";
@@ -18,10 +21,12 @@ const GROUP_VIEW: Record<BriefingGroup, { Icon: typeof Dumbbell; tone: string; o
   community: { Icon: Users, tone: "Smarty Community", one: "community action", many: "community actions" },
 };
 
-export function MobileWeeklyActivity({ hideArrow = false }: { hideArrow?: boolean } = {}) {
+export function MobileWeeklyActivity({ hideArrow = false, readiness }: { hideArrow?: boolean; readiness?: CoachSnapshot["readinessDisplay"] | null } = {}) {
   const { user, displayName, loading } = useAuth();
+  const revision = useCheckinRevision();
   const [now, setNow] = useState<Date | null>(null);
   const readAccess = useServerFn(getMyAccessState);
+  const readCoach = useServerFn(getCoachSnapshot);
   useEffect(() => {
     const update = () => setNow(new Date());
     update();
@@ -42,20 +47,47 @@ export function MobileWeeklyActivity({ hideArrow = false }: { hideArrow?: boolea
   const activity = useQuery({
     queryKey: ["home-week-activity", user?.id, start],
     enabled: Boolean(user && start && end && access.data?.premium),
-    queryFn: () => loadActivity(user!.id, start!, end!),
+    queryFn: () => {
+      if (!user || !start || !end) return [];
+      return loadActivity(user.id, start, end);
+    },
   });
+  const coach = useQuery({
+    queryKey: ["home-week-readiness", user?.id, revision],
+    queryFn: () => readCoach(),
+    enabled: readiness === undefined && !loading && Boolean(user && access.data?.premium),
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: "always",
+  });
+  const liveReadiness = readiness === undefined
+    ? coach.data?.access === "ready" ? coach.data.readinessDisplay : null
+    : readiness;
+  const score = user && access.data?.premium ? liveReadiness?.score ?? null : null;
   const byDay = now && access.data?.premium ? eventsByDay(activity.data ?? [], now) : new Map();
   const completed = new Set<string>(byDay.keys());
   const todayEvents = now ? byDay.get(dayKey(now)) ?? [] : [];
   const firstName = displayName?.trim().split(/\s+/)[0];
-  const content = <>
-    <div className="flex min-h-10 items-start justify-between gap-2">
-      <div className="min-w-0">
+  const calendarProps = user
+    ? { to: "/logbook" as const, search: { view: "calendar" as const, filter: "all" as const }, "aria-label": "Open your Logbook calendar" }
+    : { to: "/auth" as const, "aria-label": "Sign in to track your training" };
+  return <div className="app-card p-3">
+    <div className="flex min-h-10 items-start gap-2">
+      <Link {...calendarProps} className="min-w-0 flex-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue">
         <p className="text-sm font-bold leading-5">{now ? user ? `${localGreeting(now)}${firstName ? `, ${firstName}` : ""}` : "Ready to train today?" : "Your week"}</p>
         <p className="mt-0.5 text-xs text-muted-foreground">{now ? now.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }) : "\u00a0"}</p>
-      </div>
-      {hideArrow ? null : <ChevronRight aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />}
+      </Link>
+      {score !== null && liveReadiness ? <Link to="/logbook" search={{ view: "list", filter: "all" }} hash="insights" aria-label={`Your readiness: ${score} out of 10, ${liveReadiness.label}. Open Insights`} className="flex shrink-0 items-center gap-1.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue md:hidden">
+        <span className={`flex h-10 w-10 shrink-0 items-baseline justify-center rounded-full border-2 pt-2 tabular-nums ${score >= 7 ? "border-coach-good text-coach-good" : "border-brand-blue text-brand-blue"}`}>
+          <span className="text-sm font-extrabold leading-5">{score}</span><span className="text-[9px] font-semibold">/10</span>
+        </span>
+        <span className="flex max-w-20 flex-col text-[10px] leading-4">
+          <span className="font-semibold text-muted-foreground">Your readiness</span>
+          <span className="font-bold text-foreground">{liveReadiness.label}</span>
+        </span>
+      </Link> : null}
+      {hideArrow ? null : <Link {...calendarProps} className="mt-1 shrink-0"><ChevronRight aria-hidden="true" className="h-4 w-4 text-muted-foreground" /></Link>}
     </div>
+    <Link {...calendarProps} className="block rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue">
     <div className="mt-3 grid grid-cols-7 gap-1">
       {week.map(({ date, key, today }, index) => <span key={key} aria-label={`${date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}${today ? ", today" : ""}${completed.has(key) ? ", activity recorded" : ""}`} aria-current={today ? "date" : undefined} className="flex min-h-14 min-w-0 flex-col items-center gap-1.5">
         <span className={`text-[10px] font-semibold ${today ? "text-brand-blue" : "text-muted-foreground"}`}>{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][index]}</span>
@@ -76,9 +108,6 @@ export function MobileWeeklyActivity({ hideArrow = false }: { hideArrow?: boolea
       : <p className="mt-2 text-xs text-muted-foreground">Nothing yet today</p>)}
     {activity.isError && <p className="mt-2 text-xs text-muted-foreground">Training activity is temporarily unavailable.</p>}
     {!loading && !user && <p className="mt-2 text-xs font-semibold text-brand-blue">Track your streak</p>}
-  </>;
-  const className = "app-card block p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue";
-  return user
-    ? <Link to="/logbook" search={{ view: "calendar", filter: "all" }} aria-label="Open your Logbook calendar" className={className}>{content}</Link>
-    : <Link to="/auth" aria-label="Sign in to track your training" className={className}>{content}</Link>;
+    </Link>
+  </div>;
 }
