@@ -15,7 +15,6 @@ import {
   Timer,
 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
-import { SmartyCard } from "@/components/SmartyCard";
 
 const SITE = "https://smartygym.com";
 const URL = `${SITE}/readiness-science`;
@@ -162,11 +161,15 @@ function ReadinessSciencePage() {
           </div>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {inputs.map(({ icon: Icon, title, description }, index) => (
-              <SmartyCard key={title} tone="blue" title={title} description={description}>
-                <div className={`icon-tone-${(index % 5) + 1} grid h-11 w-11 place-items-center rounded-lg border`}>
-                  <Icon className="h-5 w-5" />
+              <div key={title} className="app-card p-6">
+                <div className="flex items-center gap-3">
+                  <div className={`icon-tone-${(index % 5) + 1} grid h-11 w-11 shrink-0 place-items-center rounded-lg border`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-bold">{title}</h3>
                 </div>
-              </SmartyCard>
+                <p className="mt-3 leading-7 text-muted-foreground">{description}</p>
+              </div>
             ))}
           </div>
           <div className="app-card mx-auto mt-4 max-w-3xl px-5 py-4 text-center text-sm leading-6 text-muted-foreground">
@@ -181,20 +184,24 @@ function ReadinessSciencePage() {
           </div>
           <div className="mt-6 grid gap-4 lg:grid-cols-2">
             <div className="app-card p-6">
-              <div className="icon-tone-2 grid h-11 w-11 place-items-center rounded-lg border">
-                <Timer className="h-5 w-5" />
+              <div className="flex items-center gap-3">
+                <div className="icon-tone-2 grid h-11 w-11 shrink-0 place-items-center rounded-lg border">
+                  <Timer className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-bold">Estimated</h3>
               </div>
-              <h3 className="mt-4 text-lg font-bold">Estimated</h3>
-              <p className="mt-2 leading-7 text-muted-foreground">
+              <p className="mt-3 leading-7 text-muted-foreground">
                 Before your morning check-in, you still see a score — calculated from your recent workouts, Training Load and training streak. It is marked Estimated, because your training data cannot know how you slept or how sore you feel.
               </p>
             </div>
             <div className="app-card p-6">
-              <div className="icon-tone-3 grid h-11 w-11 place-items-center rounded-lg border">
-                <ClipboardCheck className="h-5 w-5" />
+              <div className="flex items-center gap-3">
+                <div className="icon-tone-3 grid h-11 w-11 shrink-0 place-items-center rounded-lg border">
+                  <ClipboardCheck className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-bold">Calibrated</h3>
               </div>
-              <h3 className="mt-4 text-lg font-bold">Calibrated</h3>
-              <p className="mt-2 leading-7 text-muted-foreground">
+              <p className="mt-3 leading-7 text-muted-foreground">
                 Once you complete your morning check-in (open from 05:00 to 19:00), your sleep, soreness and self-rating are added and the score becomes calibrated. Check in before you train for the most accurate guidance.
               </p>
             </div>
@@ -224,20 +231,24 @@ function ReadinessSciencePage() {
         <section className="mt-12 sm:mt-16">
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <div className="app-card p-6">
-              <div className="icon-tone-4 grid h-11 w-11 place-items-center rounded-lg border">
-                <ShieldCheck className="h-5 w-5" />
+              <div className="flex items-center gap-3">
+                <div className="icon-tone-4 grid h-11 w-11 shrink-0 place-items-center rounded-lg border">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-bold">One score everywhere</h3>
               </div>
-              <h3 className="mt-4 text-lg font-bold">One score everywhere</h3>
-              <p className="mt-2 leading-7 text-muted-foreground">
+              <p className="mt-3 leading-7 text-muted-foreground">
                 The same readiness appears in your homepage briefing, Insights, Training Load and Smarty Coach, and Smarty Coach uses it to choose the right intensity for today.
               </p>
             </div>
             <div className="app-card p-6">
-              <div className="icon-tone-5 grid h-11 w-11 place-items-center rounded-lg border">
-                <Stethoscope className="h-5 w-5" />
+              <div className="flex items-center gap-3">
+                <div className="icon-tone-5 grid h-11 w-11 shrink-0 place-items-center rounded-lg border">
+                  <Stethoscope className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-bold">A coaching indicator, not a diagnosis</h3>
               </div>
-              <h3 className="mt-4 text-lg font-bold">A coaching indicator, not a diagnosis</h3>
-              <p className="mt-2 leading-7 text-muted-foreground">
+              <p className="mt-3 leading-7 text-muted-foreground">
                 Readiness supports training decisions; it does not assess health or injury. Pain, illness or unusual symptoms should be considered separately with an appropriate healthcare professional.
               </p>
             </div>

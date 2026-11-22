@@ -166,6 +166,32 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
 ];
 
 /** Drops every paid-membership question while Free Access Mode is ON. */
+const SECTIONS: { id: string; title: string; questions: string[] }[] = [
+  { id: "membership", title: "SmartyGym & Membership", questions: ["What is SmartyGym?", "What does it cost?", "What's included in the subscription?"] },
+  { id: "wod", title: "Workout of the Day", questions: ["What is the Workout of the Day?", "Why should I follow the Workout of the Day?", "How is it different from choosing a workout myself?"] },
+  { id: "smarty-workouts", title: "Smarty Workouts", questions: ["What are Smarty Workouts?", "Can I track a Smarty Workout in my logbook?"] },
+  { id: "ritual", title: "Smarty Ritual", questions: ["What is Smarty Ritual?"] },
+  { id: "create", title: "Create Your Own Workout & Smarty Coach", questions: ["What is Smarty Coach, and how does it choose my next workout?", "How does Smarty Coach build my workout?", "Can I build my own workout instead of using Smarty Coach?"] },
+  { id: "community", title: "Shared Workouts & Community", questions: ["What is the Smarty Community?", "What happens when I open a shared workout?", "Can I unshare or delete a workout I created?", "How do comments work?", "What are the rankings?"] },
+  { id: "training", title: "Equipment & Where to Train", questions: ["Do I need equipment?", "Can I train at home, outdoors or in a hotel?", "What about injuries or limitations?"] },
+  { id: "logbook", title: "Logbook & Progress", questions: ["Can I see my past workouts?", "Does the app track what I actually do in a session?", "What is the session debrief?", "How do I see if I am progressing?", "Does it get better over time?", "Are there achievements?", "Can I schedule a workout?", "Do I get reminders for a scheduled workout?"] },
+  { id: "load-readiness", title: "Training Load & Readiness", questions: ["What is the training load?", "What is readiness?"] },
+  { id: "checkins", title: "Smarty Check-ins", questions: ["What are Smarty Check-ins?", "What if I miss the check-in pop-up?", "Do my check-ins change my workouts?"] },
+  { id: "app-safety", title: "App, Safety & Your Data", questions: ["Does the app work offline?", "Is this medical advice?", "What happens to my data?"] },
+];
+
+function groupItems(items: { q: string; a: string }[]) {
+  const used = new Set<string>();
+  const groups = SECTIONS.map((sec) => {
+    const list = sec.questions.map((q) => items.find((it) => it.q === q)).filter((it): it is { q: string; a: string } => Boolean(it));
+    list.forEach((it) => used.add(it.q));
+    return { ...sec, items: list };
+  });
+  const rest = items.filter((it) => !used.has(it.q));
+  if (rest.length) groups.push({ id: "more", title: "More questions", questions: [], items: rest });
+  return groups.filter((g) => g.items.length);
+}
+
 function visibleItems(freeAccessMode: boolean, workoutCount: number) {
   const items = itemsWithWorkoutCount(workoutCount);
   return freeAccessMode
@@ -183,7 +209,7 @@ const jsonLd = (freeAccessMode: boolean, workoutCount: number) => ({
     {
       "@type": "FAQPage",
       "@id": `${URL}#faq`,
-      mainEntity: visibleItems(freeAccessMode, workoutCount).map((it) => ({
+      mainEntity: groupItems(visibleItems(freeAccessMode, workoutCount)).flatMap((g) => g.items).map((it) => ({
         "@type": "Question",
         name: it.q,
         acceptedAnswer: { "@type": "Answer", text: it.a },
@@ -235,7 +261,7 @@ export const Route = createFileRoute("/faq")({
 function FAQ() {
   const { freeAccessMode } = useFreeAccessMode();
   const { workoutCount } = Route.useLoaderData();
-  const items = visibleItems(freeAccessMode, workoutCount);
+  const groups = groupItems(visibleItems(freeAccessMode, workoutCount));
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12 lg:max-w-7xl lg:px-10 lg:py-16 xl:max-w-[1440px]">
       <PageHeader
@@ -247,26 +273,36 @@ function FAQ() {
         }
       />
 
-      <SmartyCard
-        tone="cyan"
-        eyebrow="FAQ"
-        eyebrowIcon="?"
-        title="Frequently asked"
-        accent="questions."
-      >
-        <Accordion type="single" collapsible className="w-full">
-          {items.map((it, i) => (
-            <AccordionItem key={it.q} value={`item-${i}`} className="border-coach-line last:border-b-0">
-              <AccordionTrigger className="py-3 text-left text-sm font-semibold leading-5 hover:no-underline sm:text-base">
-                {it.q}
-              </AccordionTrigger>
-              <AccordionContent className="pb-3 pr-6 pt-0 text-sm leading-6 text-muted-foreground">
-                {it.a}
-              </AccordionContent>
-            </AccordionItem>
+      <nav aria-label="FAQ sections" className="sticky top-16 z-20 -mx-4 mb-6 overflow-x-auto bg-background/95 px-4 py-2 [scrollbar-width:none] lg:mx-0 lg:px-0">
+        <div className="flex w-max gap-2 lg:w-auto lg:flex-wrap">
+          {groups.map((g) => (
+            <a key={g.id} href={`#${g.id}`} className="shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold text-foreground hover:border-primary hover:text-primary sm:text-sm">
+              {g.title}
+            </a>
           ))}
-        </Accordion>
-      </SmartyCard>
+        </div>
+      </nav>
+
+      <div className="space-y-6">
+        {groups.map((g) => (
+          <section key={g.id} id={g.id} className="scroll-mt-32 lg:scroll-mt-48">
+            <SmartyCard tone="cyan" eyebrow="FAQ" eyebrowIcon="?" title={g.title}>
+              <Accordion type="single" collapsible className="w-full">
+                {g.items.map((it) => (
+                  <AccordionItem key={it.q} value={it.q} className="border-coach-line last:border-b-0">
+                    <AccordionTrigger className="py-3 text-left text-sm font-semibold leading-5 hover:no-underline sm:text-base">
+                      {it.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-3 pr-6 pt-0 text-sm leading-6 text-muted-foreground">
+                      {it.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </SmartyCard>
+          </section>
+        ))}
+      </div>
     </div>
   );
 }
