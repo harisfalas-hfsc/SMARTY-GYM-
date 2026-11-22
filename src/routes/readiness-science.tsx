@@ -106,9 +106,9 @@ const inputs = [
 ];
 
 const bands = [
-  { title: "8–10 · Ready", description: "Green — you are recovered and ready to train.", tone: "text-emerald-600", width: "w-full" },
-  { title: "4–7 · Moderate", description: "Blue — train, but with sensible intensity.", tone: "text-primary", width: "w-2/3" },
-  { title: "0–3 · Recovery", description: "Red — recovery work or rest is the smart choice.", tone: "text-red-600", width: "w-1/4" },
+  { title: "8–10 · Ready", description: "Green — you are recovered and ready to train.", tone: "text-readiness-ready", width: "w-full" },
+  { title: "4–7 · Moderate", description: "Blue — train, but with sensible intensity.", tone: "text-readiness-moderate", width: "w-2/3" },
+  { title: "0–3 · Recovery", description: "Red — recovery work or rest is the smart choice.", tone: "text-readiness-low", width: "w-1/4" },
 ] as const;
 
 function ReadinessSciencePage() {

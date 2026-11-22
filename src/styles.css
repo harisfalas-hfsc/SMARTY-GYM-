@@ -118,7 +118,7 @@
  */
 :root {
   --brand-blue: oklch(0.745 0.131 220);
-  --on-brand: oklch(0.99 0 0);
+  --on-brand: oklch(0.19 0.014 229);
   --coach-bg: oklch(0.145 0 0);
   --coach-card: oklch(0.2 0 0);
   --coach-line: oklch(0.3 0 0);
@@ -145,7 +145,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.27 0 0);
   --primary: oklch(0.745 0.131 220);
-  --primary-foreground: oklch(0.97 0.01 240);
+  --primary-foreground: var(--on-brand);
   --primary-hover: oklch(0.79 0.13 220);
   --secondary: oklch(0.82 0 0);
   --secondary-foreground: oklch(0.27 0 0);
@@ -214,6 +214,7 @@
   --coach-line: var(--border);
   --coach-text: var(--foreground);
   --coach-muted: var(--muted-foreground);
+  --section-backdrop: oklch(0.76 0.004 229);
   /* Dark mode keeps the original light blues. */
   --color-blue-50: oklch(0.97 0.014 254.6);
   --color-blue-100: oklch(0.932 0.032 255.6);
@@ -317,7 +318,7 @@
 /* Desktop light mode: clean white page and the original soft card borders. */
 @media (min-width: 768px) {
   :root:not(.dark) { --background: oklch(1 0 0); --coach-line: var(--border); --section-backdrop: oklch(0.62 0 0); }
-  .desktop-section-backdrop { position: static; display: block; margin-bottom: 1rem; }
+  .desktop-section-backdrop { position: static; display: block; margin-bottom: 1rem; color: var(--section-backdrop); }
   .desktop-section-backdrop + div { padding-top: 0; }
   :root:not(.dark) .desktop-section-backdrop { color: var(--section-backdrop); }
   :root:not(.dark) .desktop-section-label { color: var(--foreground); }

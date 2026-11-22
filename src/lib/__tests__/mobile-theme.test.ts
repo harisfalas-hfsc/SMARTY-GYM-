@@ -12,21 +12,21 @@ function initialTheme(mobile: boolean, saved: Record<string, string> = {}, unava
   return root.style.colorScheme;
 }
 
-describe("independent light theme defaults", () => {
-  it("defaults mobile to light even with a saved desktop dark preference", () => {
-    expect(initialTheme(true, { [THEME_STORAGE_KEY]: "dark" })).toBe("light");
+describe("independent dark theme defaults", () => {
+  it("defaults mobile to dark even with a saved desktop light preference", () => {
+    expect(initialTheme(true, { [THEME_STORAGE_KEY]: "light" })).toBe("dark");
   });
-  it("defaults desktop to light", () => {
-    expect(initialTheme(false)).toBe("light");
+  it("defaults desktop to dark", () => {
+    expect(initialTheme(false)).toBe("dark");
   });
   it("honors an explicit desktop dark choice", () => {
     expect(initialTheme(false, { [THEME_STORAGE_KEY]: "dark" })).toBe("dark");
   });
-  it("defaults desktop to light when storage is unavailable", () => {
-    expect(initialTheme(false, {}, true)).toBe("light");
+  it("defaults desktop to dark when storage is unavailable", () => {
+    expect(initialTheme(false, {}, true)).toBe("dark");
   });
-  it("defaults desktop to light with an invalid saved preference", () => {
-    expect(initialTheme(false, { [THEME_STORAGE_KEY]: "invalid" })).toBe("light");
+  it("defaults desktop to dark with an invalid saved preference", () => {
+    expect(initialTheme(false, { [THEME_STORAGE_KEY]: "invalid" })).toBe("dark");
   });
   it("preserves the saved desktop light preference despite mobile dark", () => {
     expect(initialTheme(false, { [THEME_STORAGE_KEY]: "light", [MOBILE_THEME_STORAGE_KEY]: "dark" })).toBe("light");
@@ -34,7 +34,13 @@ describe("independent light theme defaults", () => {
   it("honors an explicit mobile dark choice independently of desktop", () => {
     expect(initialTheme(true, { [MOBILE_THEME_STORAGE_KEY]: "dark", [THEME_STORAGE_KEY]: "light" })).toBe("dark");
   });
-  it("defaults mobile to light when storage is unavailable", () => {
-    expect(initialTheme(true, {}, true)).toBe("light");
+  it("defaults mobile to dark when storage is unavailable", () => {
+    expect(initialTheme(true, {}, true)).toBe("dark");
+  });
+  it("honors an explicit mobile light choice independently of desktop", () => {
+    expect(initialTheme(true, { [MOBILE_THEME_STORAGE_KEY]: "light", [THEME_STORAGE_KEY]: "dark" })).toBe("light");
+  });
+  it("defaults mobile to dark with an invalid saved preference", () => {
+    expect(initialTheme(true, { [MOBILE_THEME_STORAGE_KEY]: "invalid" })).toBe("dark");
   });
 });

@@ -110,7 +110,8 @@ export function WorkoutCard({
         </div>}
         <Badge
           className={cn(
-            "absolute border-0 text-wod-badge-foreground",
+            "absolute border-0",
+            equipment.cls === "bg-wod-equipment" ? "text-primary-foreground" : "text-wod-badge-foreground",
             compact
               ? "left-1.5 top-1.5 px-1.5 py-0 text-[9px] sm:left-3 sm:top-3 sm:px-2.5 sm:py-0.5 sm:text-xs"
               : "left-3 top-3",

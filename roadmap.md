@@ -1,5 +1,10 @@
 # Roadmap
 
+## Dark defaults and cross-theme visibility
+- [x] Default mobile/desktop to dark before hydration and in the shared provider; preserve independent saved light/dark choices and native splash behavior.
+- [x] Make desktop homepage section words visible in both appearances using the shared contrast token, without layout changes; improve brand-button/count text and readiness/equipment labels without changing brand hues.
+- [x] Checked 30 public pages in both modes at 384/1280px, plus real signed-in Home/Logbook/Account/Check-ins/creator; homepage section screenshots inspected, no member-flow browser errors, 616 tests pass and preview build OK. Brand blue remains intentionally unchanged on light surfaces; this is not a claim of full WCAG compliance. Installed-device behavior unverified; publish required. No customer data changed.
+
 ## Expandable Logbook workout history
 - [x] Match Insights disclosure for the workout list, collapsed by default, with existing filters inside and bounded history scrolling; Calendar/Progress unchanged.
 - [x] Actual signed-in phone/desktop expansion, Completed filtering, reset and collapse verified; screenshots checked, no browser errors, 25 Logbook tests pass and preview build OK. No customer records changed; installed-device behavior unverified; publish required.
