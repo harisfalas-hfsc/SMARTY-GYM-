@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 export type Theme = "dark" | "light";
 
 export const THEME_STORAGE_KEY = "smartygym-theme";
-export const MOBILE_THEME_STORAGE_KEY = "smartygym-mobile-theme";
+export const MOBILE_THEME_STORAGE_KEY = "smartygym-mobile-theme-v2";
 const MOBILE_QUERY = "(max-width: 1023px)";
 
 /** Desktop is dark-only; mobile defaults to dark and honors its saved choice. */
