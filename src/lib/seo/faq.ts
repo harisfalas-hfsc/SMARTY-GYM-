@@ -112,6 +112,11 @@ export const TRAINING_LOAD_FAQ: FaqItem[] = [
       "Low is meaningfully below your usual weekly load, Moderate is broadly in line with it, High is meaningfully above it and Very High is far above it.",
   },
   {
+    question: "Does training load affect readiness?",
+    answer:
+      "Yes. A High 7-day training load lowers your live readiness score by 1 point and a Very High load by 2, alongside recent workout fatigue, training streaks and your morning check-in.",
+  },
+  {
     question: "Is training load a medical diagnosis?",
     answer:
       "No. Training load is a coaching indicator that supports training management. It does not diagnose health or injury.",

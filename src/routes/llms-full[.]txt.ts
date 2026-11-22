@@ -12,7 +12,7 @@ import { aiText } from "@/lib/seo/ai-txt";
  * published article with its optimized description, so an assistant can answer
  * about SmartyGym accurately without crawling each page.
  */
-import { METHOD_FACTS, METHOD_FAQ, TRAINING_LOAD_FAQ } from "@/lib/seo/faq";
+import { METHOD_FACTS, METHOD_FAQ, READINESS_FAQ, TRAINING_LOAD_FAQ } from "@/lib/seo/faq";
 
 export const Route = createFileRoute("/llms-full.txt")({
   server: {
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/llms-full.txt")({
           "",
           "## Frequently asked questions",
           "",
-          ...[...METHOD_FAQ, ...TRAINING_LOAD_FAQ].flatMap((q) => [`Q: ${q.question}`, `A: ${q.answer}`, ""]),
+          ...[...METHOD_FAQ, ...TRAINING_LOAD_FAQ, ...READINESS_FAQ].flatMap((q) => [`Q: ${q.question}`, `A: ${q.answer}`, ""]),
           "## Pages",
           "",
         ];

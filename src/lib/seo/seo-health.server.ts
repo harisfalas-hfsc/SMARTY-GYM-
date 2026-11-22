@@ -164,7 +164,7 @@ export async function runSeoHealth(db: SupabaseClient): Promise<SeoHealthItem[]>
     for (const bot of ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended", "Bingbot"]) {
       if (!robots.body.includes(bot)) problems.push(`robots.txt missing ${bot}`);
     }
-    const faqPages = ["/the-smarty-method", "/training-load-science", "/smarty-workouts/category/muscle-building",
+    const faqPages = ["/the-smarty-method", "/training-load-science", "/readiness-science", "/faq", "/smarty-workouts/category/muscle-building",
       ...locs.filter((u) => /\/blog\/[a-z0-9-]+$/.test(u)).slice(0, 2).map((u) => new URL(u).pathname)];
     for (const path of faqPages) {
       const { status, body } = await fetchText(`${SITE_URL}${path}`);
