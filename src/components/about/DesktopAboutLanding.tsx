@@ -307,6 +307,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
   );
   const stripSections = displayedSections.filter((s) => s.id !== "smarty-ritual");
   useEffect(() => {
+    if (page === "home") return;
     const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 2750);
     return () => clearInterval(id);
   }, [page]);
@@ -322,7 +323,15 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
       <h1 className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts: Your Gym Re-imagined</h1>
       <section className="relative h-[90vh] w-full overflow-hidden">
         <div className="absolute inset-0 bg-background" />
-        {heroSlides.map((src, i) => (
+        {page === "home" ? (
+          <img
+            src={heroBarbell}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : heroSlides.map((src, i) => (
           <img
             key={src}
             src={src}
