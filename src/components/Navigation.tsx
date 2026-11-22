@@ -224,7 +224,7 @@ export function Navigation() {
                   </>
                 )}
 
-                <DropdownMenuItem onClick={toggleTheme}>
+                <DropdownMenuItem onClick={toggleTheme} className="lg:hidden">
                   {theme === "dark" ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
                   {theme === "dark" ? "Light mode" : "Dark mode"}
                 </DropdownMenuItem>
@@ -249,7 +249,7 @@ export function Navigation() {
                 <DropdownMenuItem asChild>
                   <Link to="/auth"><LogIn className="h-4 w-4 mr-2" /> Sign in</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={toggleTheme}>
+                <DropdownMenuItem onClick={toggleTheme} className="lg:hidden">
                   {theme === "dark" ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
                   {theme === "dark" ? "Light mode" : "Dark mode"}
                 </DropdownMenuItem>

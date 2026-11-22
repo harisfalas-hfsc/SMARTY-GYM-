@@ -28,8 +28,11 @@ describe("independent dark theme defaults", () => {
   it("defaults desktop to dark with an invalid saved preference", () => {
     expect(initialTheme(false, { [THEME_STORAGE_KEY]: "invalid" })).toBe("dark");
   });
-  it("preserves the saved desktop light preference despite mobile dark", () => {
-    expect(initialTheme(false, { [THEME_STORAGE_KEY]: "light", [MOBILE_THEME_STORAGE_KEY]: "dark" })).toBe("light");
+  it("keeps desktop dark despite a previous desktop light preference", () => {
+    expect(initialTheme(false, { [THEME_STORAGE_KEY]: "light", [MOBILE_THEME_STORAGE_KEY]: "dark" })).toBe("dark");
+  });
+  it("keeps desktop dark even when both saved preferences are light", () => {
+    expect(initialTheme(false, { [THEME_STORAGE_KEY]: "light", [MOBILE_THEME_STORAGE_KEY]: "light" })).toBe("dark");
   });
   it("honors an explicit mobile dark choice independently of desktop", () => {
     expect(initialTheme(true, { [MOBILE_THEME_STORAGE_KEY]: "dark", [THEME_STORAGE_KEY]: "light" })).toBe("dark");

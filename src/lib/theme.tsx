@@ -4,10 +4,10 @@ export type Theme = "dark" | "light";
 
 export const THEME_STORAGE_KEY = "smartygym-theme";
 export const MOBILE_THEME_STORAGE_KEY = "smartygym-mobile-theme";
-const MOBILE_QUERY = "(max-width: 767px)";
+const MOBILE_QUERY = "(max-width: 1023px)";
 
-/** Both devices default to dark; explicit preferences remain independent. */
-export const THEME_INIT_SCRIPT = `(function(){var m=window.matchMedia('${MOBILE_QUERY}').matches;var d=true;try{var t=localStorage.getItem(m?'${MOBILE_THEME_STORAGE_KEY}':'${THEME_STORAGE_KEY}');d=t!=='light';}catch(e){}document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';})();`;
+/** Desktop is dark-only; mobile defaults to dark and honors its saved choice. */
+export const THEME_INIT_SCRIPT = `(function(){var m=window.matchMedia('${MOBILE_QUERY}').matches;var d=true;try{if(m){var t=localStorage.getItem('${MOBILE_THEME_STORAGE_KEY}');d=t!=='light';}}catch(e){}document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';})();`;
 
 type ThemeContextValue = {
   theme: Theme;
@@ -23,8 +23,9 @@ const ThemeContext = createContext<ThemeContextValue>({
 
 function readStoredTheme(): Theme {
   const mobile = window.matchMedia(MOBILE_QUERY).matches;
+  if (!mobile) return "dark";
   try {
-    const saved = localStorage.getItem(mobile ? MOBILE_THEME_STORAGE_KEY : THEME_STORAGE_KEY);
+    const saved = localStorage.getItem(MOBILE_THEME_STORAGE_KEY);
     return saved === "light" || saved === "dark" ? saved : "dark";
   } catch {
     return "dark";
@@ -54,10 +55,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setTheme = useCallback((next: Theme) => {
+    if (!window.matchMedia(MOBILE_QUERY).matches) {
+      setThemeState("dark");
+      applyTheme("dark");
+      return;
+    }
     setThemeState(next);
     applyTheme(next);
     try {
-      localStorage.setItem(window.matchMedia(MOBILE_QUERY).matches ? MOBILE_THEME_STORAGE_KEY : THEME_STORAGE_KEY, next);
+      localStorage.setItem(MOBILE_THEME_STORAGE_KEY, next);
     } catch {
       // Storage unavailable (private mode); theme still applies for this session.
     }
