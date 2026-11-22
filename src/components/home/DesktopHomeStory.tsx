@@ -126,7 +126,7 @@ export function DesktopHomeStory() {
     <div className="hidden lg:block">
       <section className="border-t border-border bg-background py-16">
         <div className="mx-auto max-w-7xl px-8">
-          <Heading ghost="EXPLORE" eyebrow="More in SmartyGym">Everything In One Place</Heading>
+          <Heading ghost="BEYOND" eyebrow="More in SmartyGym">Beyond The Workout</Heading>
           <div className="grid grid-cols-4 gap-5">
             {destinations.map((destination) => (
               <Link key={destination.title} to={destination.to} className="app-card group flex flex-col overflow-hidden">
