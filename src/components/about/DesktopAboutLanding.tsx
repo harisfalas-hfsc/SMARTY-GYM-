@@ -307,7 +307,6 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
   );
   const stripSections = displayedSections.filter((s) => s.id !== "smarty-ritual");
   useEffect(() => {
-    if (page === "home") return;
     const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 2750);
     return () => clearInterval(id);
   }, [page]);
@@ -321,11 +320,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
     <div className="hidden lg:block">
       {/* Semantic page heading for crawlers; the visible hero keeps its h2 styling. */}
       <h1 className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts: Your Gym Re-imagined</h1>
-      {page === "home" ? (
-        <section className="mx-auto max-w-lg px-4 pb-8 pt-24">
-          <MobileWeeklyActivity desktop />
-        </section>
-      ) : <section className="relative h-[90vh] w-full overflow-hidden">
+      <section className="relative h-[90vh] w-full overflow-hidden">
         <div className="absolute inset-0 bg-background" />
         {heroSlides.map((src, i) => (
           <img
@@ -346,15 +341,15 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
           style={{ height: "22%" }}
           aria-hidden="true"
         />
-        <div className="relative z-10 h-full">
-          <div className={`mx-auto w-full max-w-[1080px] px-6 ${page === "about" ? "pt-[144px]" : ""}`}>
-            <div className="max-w-full w-[640px] text-left">
+        <div className={`relative z-10 h-full ${page === "home" ? "flex items-center justify-center" : ""}`}>
+          <div className={`mx-auto w-full ${page === "home" ? "max-w-7xl px-8" : "max-w-[1080px] px-6 pt-[144px]"}`}>
+            <div className={`max-w-full ${page === "home" ? "mx-auto w-[760px] text-center" : "w-[640px] text-left"}`}>
               {page === "about" && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">About SmartyGym</p>}
               <h2 className={`font-extrabold uppercase tracking-tight text-hero-foreground ${page === "about" ? "mt-2 text-[60px] leading-[1.05]" : "text-[64px] leading-[1.08] tracking-[0.06em]"}`}>
                 <span className="block whitespace-nowrap">Your Gym Re-imagined</span>
                 <span className="block whitespace-nowrap text-primary">Anywhere, Anytime.</span>
               </h2>
-              <p className="mt-4 leading-relaxed text-hero-foreground/85 text-lg">
+              <p className={`mt-4 leading-relaxed text-hero-foreground/85 ${page === "home" ? "mx-auto max-w-[460px] text-base" : "text-lg"}`}>
                 Your online gym and fitness coach — built on the sports science and training
                 philosophy of{" "}
                 <Link to="/haris-falas" className="font-bold text-primary">
@@ -363,7 +358,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 .
               </p>
             </div>
-            <div className="mt-8 flex flex-nowrap items-center gap-6">
+            {page === "home" ? <div className="mt-8 w-full"><MobileWeeklyActivity desktop /></div> : <div className="mt-8 flex flex-nowrap items-center gap-6">
               {[
                 { to: "/wod", label: "Workout of the Day" },
                 { to: "/smarty-workouts", label: "Smarty Workouts" },
@@ -377,10 +372,10 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                   {b.label} <ArrowRight className="h-4 w-4" />
                 </Link>
               ))}
-            </div>
+            </div>}
           </div>
         </div>
-      </section>}
+      </section>
 
       {page === "home" ? (
         <section id="everything-you-need" className="border-t border-border bg-background py-16">

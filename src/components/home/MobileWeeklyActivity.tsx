@@ -71,7 +71,7 @@ export function MobileWeeklyActivity({ hideArrow = false, readiness, desktop = f
   const calendarProps = user
     ? { to: "/logbook" as const, search: { view: "list" as const, filter: "all" as const }, hash: "insights", "aria-label": "Open your Insights" }
     : { to: "/auth" as const, "aria-label": "Sign in to track your training" };
-  return <div className="app-card p-3">
+  return <div className={desktop ? "w-full border-y border-border bg-background/90 p-4 text-foreground backdrop-blur-sm" : "app-card p-3"}>
     <div className="flex min-h-10 items-start gap-2">
       <Link {...calendarProps} className="min-w-0 flex-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue">
         <p className="text-sm font-bold leading-5">{now ? user ? `${localGreeting(now)}${firstName ? `, ${firstName}` : ""}` : "Ready to train today?" : "Your week"}</p>

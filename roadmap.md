@@ -1,5 +1,9 @@
 # Roadmap
 
+## Restore desktop photos with wide briefing
+- [x] Restore the original rotating homepage photos/headline, replacing the old buttons with a full-section-width integrated briefing bar; mobile and other sections/controls unchanged.
+- [x] Actual signed-in 1206×674 dark/light screenshots checked; photos rotate, briefing width matches the section's 1142px content width, old buttons absent. Desktop/mobile taps open expanded Insights, no browser errors; 616 tests pass and preview build OK. No customer data changed; publish required.
+
 ## Desktop homepage briefing and simplified controls
 - [x] Replace only the desktop homepage rotating hero/buttons with the shared mobile briefing; preserve all following sections and mobile layout.
 - [x] Remove desktop More from bottom navigation and Coach/notifications from header; preserve header menu, avatar Inbox, check-in reminder and bottom Coach.
