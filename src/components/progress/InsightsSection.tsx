@@ -109,6 +109,7 @@ function LiveReadinessCard() {
         <Loader2 className="h-4 w-4 animate-spin text-primary" />
       )}
       <Link to="/smarty-checkins" className="mt-3 inline-block text-sm font-bold text-primary">Open Smarty Check-ins →</Link>
+      <Link to="/readiness-science" className="mt-2 block text-sm font-bold text-primary">About Readiness →</Link>
     </Card>
   );
 }

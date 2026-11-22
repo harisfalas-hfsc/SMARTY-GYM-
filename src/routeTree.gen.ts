@@ -36,6 +36,7 @@ import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ReadinessScienceRouteImport } from './routes/readiness-science'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SharedWorkoutsRouteImport } from './routes/shared-workouts'
 import { Route as SitemapExercisesDotxmlRouteImport } from './routes/sitemap-exercises[.]xml'
@@ -227,6 +228,11 @@ const PricingRoute = PricingRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadinessScienceRoute = ReadinessScienceRouteImport.update({
+  id: '/readiness-science',
+  path: '/readiness-science',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -549,6 +555,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/readiness-science': typeof ReadinessScienceRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
@@ -633,6 +640,7 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/readiness-science': typeof ReadinessScienceRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
@@ -719,6 +727,7 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/readiness-science': typeof ReadinessScienceRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shared-workouts': typeof SharedWorkoutsRoute
   '/sitemap-exercises.xml': typeof SitemapExercisesDotxmlRoute
@@ -805,6 +814,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/pricing'
     | '/privacy'
+    | '/readiness-science'
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap-exercises.xml'
@@ -889,6 +899,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/pricing'
     | '/privacy'
+    | '/readiness-science'
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap-exercises.xml'
@@ -974,6 +985,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/pricing'
     | '/privacy'
+    | '/readiness-science'
     | '/reset-password'
     | '/shared-workouts'
     | '/sitemap-exercises.xml'
@@ -1060,6 +1072,7 @@ export interface RootRouteChildren {
   McpRoute: typeof McpRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  ReadinessScienceRoute: typeof ReadinessScienceRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SharedWorkoutsRoute: typeof SharedWorkoutsRoute
   SitemapExercisesDotxmlRoute: typeof SitemapExercisesDotxmlRoute
@@ -1297,6 +1310,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/readiness-science': {
+      id: '/readiness-science'
+      path: '/readiness-science'
+      fullPath: '/readiness-science'
+      preLoaderRoute: typeof ReadinessScienceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -1763,6 +1783,7 @@ const rootRouteChildren: RootRouteChildren = {
   McpRoute: McpRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  ReadinessScienceRoute: ReadinessScienceRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SharedWorkoutsRoute: SharedWorkoutsRoute,
   SitemapExercisesDotxmlRoute: SitemapExercisesDotxmlRoute,

@@ -132,3 +132,25 @@ export function categoryFaq(label: string, description: string, slug: string): F
     },
   ];
 }
+
+export const READINESS_FAQ: FaqItem[] = [
+  {
+    question: "What is readiness?",
+    answer:
+      "Readiness is a live score from 0 to 10 that shows how ready you are to train right now. It is a moment-in-time value, never an average, and it is a training-management indicator, not a medical assessment.",
+  },
+  {
+    question: "How does SmartyGym calculate readiness?",
+    answer:
+      "Readiness starts from 10 and is lowered only by real evidence: fatigue from workouts completed in the last 72 hours (duration, difficulty and your logged effort, fading as you recover), a High or Very High 7-day Training Load, six or more training days in a row, and your morning check-in answers for sleep, soreness and how ready you feel.",
+  },
+  {
+    question: "What does Estimated readiness mean?",
+    answer:
+      "Until you complete your morning check-in, readiness is estimated from your training alone. Once you check in, your sleep, soreness and self-rating are added and the score becomes calibrated.",
+  },
+  {
+    question: "What do the readiness colours mean?",
+    answer: "Red (0–3) suggests recovery, blue (4–7) moderate readiness and green (8–10) ready to train.",
+  },
+];

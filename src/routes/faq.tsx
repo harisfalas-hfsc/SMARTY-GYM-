@@ -95,7 +95,11 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "What is the training load?",
-    a: "Your recent workload in your own logged units compared with your own 21-day baseline, adjusted by your RPE. There are no invented scores — only your own history.",
+    a: "Training Load is the work you actually logged in the last 7 days — strength volume and conditioning time, in their own units — compared with your own typical week from the 3 weeks before, adjusted by your RPE. It shows Low, Moderate, High or Very High. A High load lowers your readiness by 1 point and Very High by 2, and Smarty Coach lightens your sessions when it is high. There are no invented scores — only your own history.",
+  },
+  {
+    q: "What is readiness?",
+    a: "A live score from 0 to 10 that shows how ready you are to train right now. It starts at 10 and is lowered by fatigue from workouts in the last 72 hours, a High or Very High 7-day Training Load, long training streaks and your morning check-in (sleep, soreness, how you feel). Until you check in it is marked Estimated; after the morning check-in it is calibrated. Red 0–3, blue 4–7, green 8–10. It is a coaching indicator, not a medical assessment.",
   },
   {
     q: "Are there achievements?",

@@ -17,6 +17,7 @@ SmartyGym offers expert-programmed ready-made workouts, the shared Workout of th
 
 ## Key pages
 - [Training Load Science](https://smartygym.com/training-load-science)
+- [Readiness Science](https://smartygym.com/readiness-science)
 - [Muscle Building workouts](https://smartygym.com/smarty-workouts/category/muscle-building)
 - [Strength workouts](https://smartygym.com/smarty-workouts/category/strength)
 - [Pilates workouts](https://smartygym.com/smarty-workouts/category/pilates)
