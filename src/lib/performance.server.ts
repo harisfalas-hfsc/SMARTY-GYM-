@@ -224,7 +224,7 @@ export async function loadPerformanceOverview(supabase: Client, userId: string) 
   const days = new Set(sets.map((s) => s.completed_at.slice(0, 10)));
 
   const sessionsLast7 = new Set(weekSets.map((s) => s.workout_id)).size + weekResults.length;
-  const readinessResult = await loadLiveReadiness(supabase, userId);
+  const readinessResult: LiveReadiness = await loadLiveReadiness(supabase, userId, new Date(), overall);
 
   const histories = buildExerciseHistories(sets);
   const shortfalls = countShortfalls(sets);
@@ -270,7 +270,9 @@ export async function loadPerformanceOverview(supabase: Client, userId: string) 
  * their logged effort), today's morning Check-in and the training streak.
  * One source for Training Load, Insights and Smarty Coach.
  */
-export async function loadLiveReadiness(supabase: Client, userId: string, now = new Date()) {
+import type { LiveReadiness } from "@/lib/performance/readiness";
+export async function loadLiveReadiness(supabase: Client, userId: string, now = new Date(), load?: string | null): Promise<LiveReadiness> {
+  const overallLoad: string | null = load !== undefined ? load : (await loadPerformanceOverview(supabase, userId)).load.overall;
   const since = new Date(now.getTime() - 8 * 86_400_000).toISOString();
   const { localClock, checkinDate } = await import("@/lib/checkins/score");
   const [{ data: workoutRows }, { data: profile }] = await Promise.all([
@@ -335,6 +337,7 @@ export async function loadLiveReadiness(supabase: Client, userId: string, now = 
     now,
     sessions,
     consecutiveDays: streak,
+    load: overallLoad,
     checkin: c?.morning_completed
       ? { sleepHours: n(c.sleep_hours), sleepQuality: n(c.sleep_quality), readiness: n(c.readiness_score), soreness: n(c.soreness_rating) }
       : null,

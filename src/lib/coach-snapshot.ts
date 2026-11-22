@@ -41,6 +41,7 @@ export type CoachSnapshot = {
   readinessDisplay: {
     label: string;
     score: number | null;
+    calibrated?: boolean;
     /** Plain-language drivers of the live score. */
     reason: string;
   };

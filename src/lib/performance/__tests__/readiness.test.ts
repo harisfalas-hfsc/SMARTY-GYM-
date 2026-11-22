@@ -10,10 +10,18 @@ const run = (sessions: ReadinessSession[], checkin: Parameters<typeof liveReadin
   liveReadiness({ now, sessions, checkin, consecutiveDays });
 
 describe("live readiness", () => {
-  it("does not present a confirmed 10/10 when the current morning check-in is missing", () => {
+  it("shows an estimated score when the current morning check-in is missing", () => {
     const r = run([]);
     expect(r.calibrated).toBe(false);
-    expect(readinessPresentation(r).score).toBeNull();
+    expect(readinessPresentation(r).score).toBe(10);
+    expect(readinessPresentation(r).label).toContain("Estimated");
+    expect(readinessPresentation(r).calibrated).toBe(false);
+  });
+  it("High 7-day Training Load removes 1 point, Very High removes 2", () => {
+    const base = liveReadiness({ now, sessions: [], checkin: null, consecutiveDays: 0 }).score;
+    expect(liveReadiness({ now, sessions: [], checkin: null, consecutiveDays: 0, load: "High" }).score).toBe(base - 1);
+    expect(liveReadiness({ now, sessions: [], checkin: null, consecutiveDays: 0, load: "Very High" }).score).toBe(base - 2);
+    expect(liveReadiness({ now, sessions: [], checkin: null, consecutiveDays: 0, load: "Moderate" }).score).toBe(base);
   });
   it("calibrates readiness from actual morning answers", () => {
     const r = run([], { sleepHours: 8, sleepQuality: 5, readiness: 10, soreness: 0 });
@@ -24,7 +32,7 @@ describe("live readiness", () => {
     const r = run([session(0.2, { rpe: 9, durationMin: 60 })]);
     expect(r.calibrated).toBe(false);
     expect(r.score).toBeLessThanOrEqual(2);
-    expect(readinessPresentation(r).score).toBeNull();
+    expect(readinessPresentation(r).score).toBe(r.score);
   });
   it("drops sharply right after a hard workout", () => {
     const r = run([session(0.2, { rpe: 9, durationMin: 60 })]);

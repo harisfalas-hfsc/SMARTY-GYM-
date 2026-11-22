@@ -83,7 +83,8 @@ export function MobileWeeklyActivity({ hideArrow = false, readiness }: { hideArr
         </span>
         <span className="flex max-w-20 flex-col text-[10px] leading-4">
           <span className="font-semibold text-muted-foreground">Your readiness</span>
-          <span className={`font-bold ${readinessTone(score)}`}>{liveReadiness.label}</span>
+          <span className={`font-bold ${readinessTone(score)}`}>{liveReadiness.label.replace(" · Estimated", "")}</span>
+          {liveReadiness.calibrated === false ? <span className="font-medium text-muted-foreground">Estimated</span> : null}
         </span>
       </Link> : null}
       {hideArrow ? null : <Link {...calendarProps} className="mt-1 shrink-0"><ChevronRight aria-hidden="true" className="h-4 w-4 text-muted-foreground" /></Link>}

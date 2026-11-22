@@ -100,7 +100,7 @@ function LiveReadinessCard() {
     <Card title="Readiness right now" icon={HeartPulse} tone="text-rose-500">
       {value ? (
         <>
-          <p className={`text-2xl font-black ${readinessTone(presentation?.score)}`}>{presentation?.score != null ? `${presentation.score}/10` : "Uncalibrated"} <span className="text-sm font-medium">{presentation?.score != null ? presentation.label : ""}</span></p>
+          <p className={`text-2xl font-black ${readinessTone(presentation?.score)}`}>{presentation ? `${presentation.score}/10` : ""} <span className="text-sm font-medium">{presentation?.label ?? ""}</span></p>
           <p className="mt-1 text-sm text-muted-foreground">{value.reason}</p>
         </>
       ) : failed ? (

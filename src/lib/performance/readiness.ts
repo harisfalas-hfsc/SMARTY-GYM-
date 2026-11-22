@@ -7,8 +7,8 @@
 //   2. Today's morning Check-in: soreness, short/poor sleep and a low
 //      self-rated readiness.
 //   3. Many consecutive training days.
-// Without the current morning check-in this is only a training-load estimate,
-// never a confirmed readiness score on screen.
+//   4. A High (-1) or Very High (-2) 7-day Training Load against own baseline.
+// Without the current morning check-in the score is shown as Estimated.
 // It is a training-management indicator, not a medical assessment.
 
 import type { ReadinessState } from "./types";
@@ -43,9 +43,14 @@ export type LiveReadiness = {
 };
 
 /** Keep numeric fatigue estimates internal when current self-report is missing. */
+/** Always shows the score; marks it Estimated until the current morning check-in calibrates it. */
 export function readinessPresentation(r: { score: number; state: string; reason: string; calibrated?: boolean }) {
-  return { score: r.calibrated === false ? null : r.score, label: r.calibrated === false ? "Uncalibrated" : r.state, reason: r.reason };
+  const calibrated = r.calibrated !== false;
+  return { score: r.score, label: calibrated ? r.state : `${r.state} · Estimated`, calibrated, reason: r.reason };
 }
+
+/** Points the 7-day Training Load (vs the member's own baseline) removes from readiness. */
+export const LOAD_PENALTY: Record<string, number> = { High: 1, "Very High": 2 };
 
 /** Hours for half of a session's fatigue to clear. */
 export const RECOVERY_HALF_LIFE_H = 12;
@@ -96,6 +101,8 @@ export function liveReadiness(input: {
   sessions: ReadinessSession[];
   checkin: ReadinessCheckin;
   consecutiveDays: number;
+  /** Overall 7-day Training Load state; accumulated load lowers readiness. */
+  load?: string | null;
 }): LiveReadiness {
   const nowMs = input.now.getTime();
   let fatigue = 0;
@@ -138,13 +145,16 @@ export function liveReadiness(input: {
     factors.push(`${input.consecutiveDays} training days in a row.`);
   }
 
-  const score = Math.max(0, Math.min(10, Math.round(10 - fatigue - checkinPenalty - streakPenalty)));
+  const loadPenalty = input.load ? LOAD_PENALTY[input.load] ?? 0 : 0;
+  if (loadPenalty) factors.push(`Your 7-day Training Load is ${input.load!.toLowerCase()} against your own normal.`);
+
+  const score = Math.max(0, Math.min(10, Math.round(10 - fatigue - checkinPenalty - streakPenalty - loadPenalty)));
   const state = stateForScore(score);
   let reason: string;
   if (factors.length) reason = factors.join(" ");
   else if (input.sessions.length) reason = "Your last workout's fatigue has cleared — you're fully recovered and ready to train.";
   else reason = "No recent training load — you're rested and ready to train.";
   const calibrated = c !== null;
-  if (!calibrated) reason = `${factors.length ? factors.join(" ") + " " : ""}Complete your morning check-in to tell Smarty Coach how you feel before training.`;
+  if (!calibrated) reason = `${factors.length ? factors.join(" ") + " " : ""}Estimated from your training. Complete your morning check-in to calibrate it with sleep and soreness.`;
   return { score, state, reason, factors, calibrated, computedAt: input.now.toISOString() };
 }

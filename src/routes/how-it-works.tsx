@@ -369,7 +369,7 @@ function HowItWorks() {
           Your Workout uses it to suggest the right intensity — you decide whether to accept. Missed
           the pop-up? Open Smarty Check-ins any time during the window, and you also get a reminder
           in your inbox. Times follow your Training Profile timezone. Without a current morning
-          check-in, readiness stays uncalibrated rather than showing a confirmed score.
+          check-in, readiness is shown as an estimate from your training until you check in.
         </p>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-3 sm:gap-4">

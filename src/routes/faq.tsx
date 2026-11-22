@@ -136,7 +136,7 @@ const itemsWithWorkoutCount = (workoutCount: number): { q: string; a: string }[]
   },
   {
     q: "What if I miss the check-in pop-up?",
-    a: "Open Smarty Check-ins and complete or update the current check-in while its window is open: morning until 19:00, evening until 05:00 the next morning. Arrival, Smarty Coach and Create Your Own Workout offer an optional reminder when it is unanswered. Without a current morning check-in, readiness is shown as uncalibrated, not a confirmed score.",
+    a: "Open Smarty Check-ins and complete or update the current check-in while its window is open: morning until 19:00, evening until 05:00 the next morning. Arrival, Smarty Coach and Create Your Own Workout offer an optional reminder when it is unanswered. Without a current morning check-in, readiness is shown as an estimate from your training until you check in.",
   },
   {
     q: "Do my check-ins change my workouts?",

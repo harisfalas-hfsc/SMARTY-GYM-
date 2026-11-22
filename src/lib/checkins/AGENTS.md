@@ -1,3 +1,3 @@
 - Check-in windows and overnight date ownership live in score.ts and are enforced by checkins.functions.ts — why: evening saves before 05:00 complete the preceding day, with no closed gap.
 - CheckinPrompt reuses owner-scoped check-in reads and existing explicit-save forms across arrival, Coach and both creator modes — why: optional prompts share actual answers and cannot auto-log training.
-- Live readiness keeps a numeric training-load estimate internally but readinessPresentation hides it when the current morning self-report is missing — why: every live surface distinguishes measured answers from assumed recovery.
+- Live readiness always shows its score; readinessPresentation labels it Estimated until the current morning check-in calibrates it — why: members always see a number while measured answers stay distinct from estimates.
