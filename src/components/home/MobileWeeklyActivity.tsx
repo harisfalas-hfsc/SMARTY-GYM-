@@ -22,7 +22,7 @@ const GROUP_VIEW: Record<BriefingGroup, { Icon: typeof Dumbbell; tone: string; o
   community: { Icon: Users, tone: "Smarty Community", one: "community action", many: "community actions" },
 };
 
-export function MobileWeeklyActivity({ hideArrow = false, readiness }: { hideArrow?: boolean; readiness?: CoachSnapshot["readinessDisplay"] | null } = {}) {
+export function MobileWeeklyActivity({ hideArrow = false, readiness, desktop = false }: { hideArrow?: boolean; readiness?: CoachSnapshot["readinessDisplay"] | null; desktop?: boolean } = {}) {
   const { user, displayName, loading } = useAuth();
   const revision = useCheckinRevision();
   const [now, setNow] = useState<Date | null>(null);
@@ -77,7 +77,7 @@ export function MobileWeeklyActivity({ hideArrow = false, readiness }: { hideArr
         <p className="text-sm font-bold leading-5">{now ? user ? `${localGreeting(now)}${firstName ? `, ${firstName}` : ""}` : "Ready to train today?" : "Your week"}</p>
         <p className="mt-0.5 text-xs text-muted-foreground">{now ? now.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }) : "\u00a0"}</p>
       </Link>
-      {score !== null && liveReadiness ? <Link to="/logbook" search={{ view: "list", filter: "all" }} hash="insights" aria-label={`Your readiness: ${score} out of 10, ${liveReadiness.label}. Open Insights`} className="flex shrink-0 items-center gap-1.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue md:hidden">
+      {score !== null && liveReadiness ? <Link to="/logbook" search={{ view: "list", filter: "all" }} hash="insights" aria-label={`Your readiness: ${score} out of 10, ${liveReadiness.label}. Open Insights`} className={`flex shrink-0 items-center gap-1.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue ${desktop ? "" : "md:hidden"}`}>
         <span className={`flex h-10 w-10 shrink-0 items-baseline justify-center rounded-full border-2 pt-2 tabular-nums ${readinessTone(score)}`}>
           <span className="text-sm font-extrabold leading-5">{score}</span><span className="text-[9px] font-semibold">/10</span>
         </span>

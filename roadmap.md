@@ -1,5 +1,10 @@
 # Roadmap
 
+## Desktop homepage briefing and simplified controls
+- [x] Replace only the desktop homepage rotating hero/buttons with the shared mobile briefing; preserve all following sections and mobile layout.
+- [x] Remove desktop More from bottom navigation and Coach/notifications from header; preserve header menu, avatar Inbox, check-in reminder and bottom Coach.
+- [x] Actual signed-in desktop/mobile homepage checked at 1206×674 and 384×714; briefing opens expanded Readiness in Insights, avatar Inbox and bottom Coach work, mobile retains More, no browser errors. 616 tests pass and preview build OK; customer data unchanged, publish required.
+
 ## Dark defaults and cross-theme visibility
 - [x] Default mobile/desktop to dark before hydration and in the shared provider; preserve independent saved light/dark choices and native splash behavior.
 - [x] Make desktop homepage section words visible in both appearances using the shared contrast token, without layout changes; improve brand-button/count text and readiness/equipment labels without changing brand hues.

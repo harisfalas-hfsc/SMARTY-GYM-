@@ -1,7 +1,8 @@
 import { iconTone } from "@/lib/icon-tone";
+import { MobileWeeklyActivity } from "@/components/home/MobileWeeklyActivity";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ChevronDown, ChevronRight, type LucideIcon } from "lucide-react";
+import { ArrowRight, ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Brain,
   SlidersHorizontal,
@@ -306,9 +307,10 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
   );
   const stripSections = displayedSections.filter((s) => s.id !== "smarty-ritual");
   useEffect(() => {
+    if (page === "home") return;
     const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 2750);
     return () => clearInterval(id);
-  }, []);
+  }, [page]);
   useEffect(() => {
     if (page !== "home" || stripPaused) return;
     const id = setInterval(() => setActiveStrip((i) => (i + 1) % stripSections.length), 2000);
@@ -319,7 +321,11 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
     <div className="hidden lg:block">
       {/* Semantic page heading for crawlers; the visible hero keeps its h2 styling. */}
       <h1 className="sr-only">SmartyGym – Online Gym &amp; Personalized Workouts: Your Gym Re-imagined</h1>
-      <section className="relative h-[90vh] w-full overflow-hidden">
+      {page === "home" ? (
+        <section className="mx-auto max-w-lg px-4 pb-8 pt-24">
+          <MobileWeeklyActivity desktop />
+        </section>
+      ) : <section className="relative h-[90vh] w-full overflow-hidden">
         <div className="absolute inset-0 bg-background" />
         {heroSlides.map((src, i) => (
           <img
@@ -340,15 +346,15 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
           style={{ height: "22%" }}
           aria-hidden="true"
         />
-        <div className={`relative z-10 h-full ${page === "home" ? "flex items-center justify-center" : ""}`}>
+        <div className="relative z-10 h-full">
           <div className={`mx-auto w-full max-w-[1080px] px-6 ${page === "about" ? "pt-[144px]" : ""}`}>
-            <div className={`max-w-full ${page === "home" ? "mx-auto w-[760px] text-center" : "w-[640px] text-left"}`}>
+            <div className="max-w-full w-[640px] text-left">
               {page === "about" && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">About SmartyGym</p>}
               <h2 className={`font-extrabold uppercase tracking-tight text-hero-foreground ${page === "about" ? "mt-2 text-[60px] leading-[1.05]" : "text-[64px] leading-[1.08] tracking-[0.06em]"}`}>
                 <span className="block whitespace-nowrap">Your Gym Re-imagined</span>
                 <span className="block whitespace-nowrap text-primary">Anywhere, Anytime.</span>
               </h2>
-              <p className={`mt-4 leading-relaxed text-hero-foreground/85 ${page === "home" ? "mx-auto max-w-[460px] text-base" : "text-lg"}`}>
+              <p className="mt-4 leading-relaxed text-hero-foreground/85 text-lg">
                 Your online gym and fitness coach — built on the sports science and training
                 philosophy of{" "}
                 <Link to="/haris-falas" className="font-bold text-primary">
@@ -357,7 +363,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 .
               </p>
             </div>
-            <div className={`mt-8 flex flex-nowrap items-center gap-6 ${page === "home" ? "justify-center" : ""}`}>
+            <div className="mt-8 flex flex-nowrap items-center gap-6">
               {[
                 { to: "/wod", label: "Workout of the Day" },
                 { to: "/smarty-workouts", label: "Smarty Workouts" },
@@ -366,29 +372,15 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 <Link
                   key={b.to}
                   to={b.to}
-                  className={
-                    page === "home"
-                      ? "inline-flex h-11 items-center rounded-full border border-primary px-6 text-sm font-bold uppercase text-hero-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-                      : "inline-flex h-11 items-center gap-2 rounded-full bg-primary px-8 text-base font-bold text-primary-foreground transition-all hover:opacity-95"
-                  }
+                  className="inline-flex h-11 items-center gap-2 rounded-full bg-primary px-8 text-base font-bold text-primary-foreground transition-all hover:opacity-95"
                 >
-                  {b.label} {page !== "home" && <ArrowRight className="h-4 w-4" />}
+                  {b.label} <ArrowRight className="h-4 w-4" />
                 </Link>
               ))}
             </div>
           </div>
         </div>
-        {page === "home" && (
-          <button
-            type="button"
-            aria-label="Scroll down to explore SmartyGym"
-            onClick={() => document.getElementById("everything-you-need")?.scrollIntoView({ behavior: "smooth" })}
-            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 animate-bounce rounded-full border border-hero-foreground/40 p-2 text-hero-foreground/80 transition-colors hover:text-primary"
-          >
-            <ChevronDown className="h-6 w-6" />
-          </button>
-        )}
-      </section>
+      </section>}
 
       {page === "home" ? (
         <section id="everything-you-need" className="border-t border-border bg-background py-16">

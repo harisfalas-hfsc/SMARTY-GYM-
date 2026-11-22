@@ -40,7 +40,7 @@ export function BottomNav() {
         aria-label="Primary"
         data-bottom-nav=""
       >
-      <ul className="mx-auto grid max-w-lg grid-cols-6">
+      <ul className="mx-auto grid max-w-lg grid-cols-6 lg:grid-cols-5">
         <li>
           <button
             type="button"
@@ -75,7 +75,7 @@ export function BottomNav() {
             </li>
           );
         })}
-        <li>
+        <li className="lg:hidden">
           <button
             type="button"
             onClick={() => { leaveCoach(); window.dispatchEvent(new Event("smarty:open-menu")); }}

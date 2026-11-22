@@ -30,10 +30,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/lib/theme";
 import { signOutAndClearDevice } from "@/lib/sign-out";
 import { adminCheckAccess } from "@/lib/admin.functions";
-import { NotificationBell, useInboxUnread } from "@/components/NotificationBell";
+import { useInboxUnread } from "@/components/NotificationBell";
 import { SmartyCoachDialog } from "@/components/SmartyCoachDialog";
 import { CheckinHeaderAlert } from "@/components/checkins/CheckinHeaderAlert";
-import coachIcon from "@/assets/smarty-coach.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -175,19 +174,7 @@ export function Navigation() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          {!loading ? (
-            <button
-              type="button"
-              onClick={() => { setCoachOpen(true); }}
-              aria-label="Smarty Coach"
-              title="Smarty Coach"
-              className="hidden h-8 w-8 items-center justify-center rounded-full border border-primary bg-background transition-colors hover:bg-primary/10 lg:inline-flex lg:bg-transparent"
-            >
-              <img src={coachIcon} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
-            </button>
-          ) : null}
           {!loading && user ? <CheckinHeaderAlert /> : null}
-          {!loading && user ? <NotificationBell className="hidden lg:inline-flex" /> : null}
           {loading ? null : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
