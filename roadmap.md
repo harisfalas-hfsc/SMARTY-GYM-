@@ -1,5 +1,9 @@
 # Roadmap
 
+## Transparent lower photo briefing
+- [x] Remove the desktop briefing surface/borders/blur, keeping photo-readable details and feature colors in both themes; place it slightly above the photo bottom, preserving mobile. Keep the image-to-page fade below the briefing for light-mode readability.
+- [x] Actual signed-in desktop/mobile dark/light rotation and expanded Insights checked, screenshots inspected, no browser errors; 616 tests pass and preview build OK. No customer data changed; publish required.
+
 ## Restore desktop photos with wide briefing
 - [x] Restore the original rotating homepage photos/headline, replacing the old buttons with a full-section-width integrated briefing bar; mobile and other sections/controls unchanged.
 - [x] Actual signed-in 1206×674 dark/light screenshots checked; photos rotate, briefing width matches the section's 1142px content width, old buttons absent. Desktop/mobile taps open expanded Insights, no browser errors; 616 tests pass and preview build OK. No customer data changed; publish required.

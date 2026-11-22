@@ -71,44 +71,45 @@ export function MobileWeeklyActivity({ hideArrow = false, readiness, desktop = f
   const calendarProps = user
     ? { to: "/logbook" as const, search: { view: "list" as const, filter: "all" as const }, hash: "insights", "aria-label": "Open your Insights" }
     : { to: "/auth" as const, "aria-label": "Sign in to track your training" };
-  return <div className={desktop ? "w-full border-y border-border bg-background/90 p-4 text-foreground backdrop-blur-sm" : "app-card p-3"}>
+  const secondaryText = desktop ? "text-hero-foreground/85" : "text-muted-foreground";
+  return <div className={desktop ? "w-full bg-transparent py-3 text-hero-foreground photo-copy-shadow" : "app-card p-3"}>
     <div className="flex min-h-10 items-start gap-2">
       <Link {...calendarProps} className="min-w-0 flex-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue">
         <p className="text-sm font-bold leading-5">{now ? user ? `${localGreeting(now)}${firstName ? `, ${firstName}` : ""}` : "Ready to train today?" : "Your week"}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{now ? now.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }) : "\u00a0"}</p>
+        <p className={`mt-0.5 text-xs ${secondaryText}`}>{now ? now.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }) : "\u00a0"}</p>
       </Link>
       {score !== null && liveReadiness ? <Link to="/logbook" search={{ view: "list", filter: "all" }} hash="insights" aria-label={`Your readiness: ${score} out of 10, ${liveReadiness.label}. Open Insights`} className={`flex shrink-0 items-center gap-1.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue ${desktop ? "" : "md:hidden"}`}>
         <span className={`flex h-10 w-10 shrink-0 items-baseline justify-center rounded-full border-2 pt-2 tabular-nums ${readinessTone(score)}`}>
           <span className="text-sm font-extrabold leading-5">{score}</span><span className="text-[9px] font-semibold">/10</span>
         </span>
         <span className="flex max-w-20 flex-col text-[10px] leading-4">
-          <span className="font-semibold text-muted-foreground">Your readiness</span>
+          <span className={`font-semibold ${secondaryText}`}>Your readiness</span>
           <span className={`font-bold ${readinessTone(score)}`}>{liveReadiness.label.replace(" · Estimated", "")}</span>
-          {liveReadiness.calibrated === false ? <span className="font-medium text-muted-foreground">Estimated</span> : null}
+          {liveReadiness.calibrated === false ? <span className={`font-medium ${secondaryText}`}>Estimated</span> : null}
         </span>
       </Link> : null}
-      {hideArrow ? null : <Link {...calendarProps} className="mt-1 shrink-0"><ChevronRight aria-hidden="true" className="h-4 w-4 text-muted-foreground" /></Link>}
+      {hideArrow ? null : <Link {...calendarProps} className="mt-1 shrink-0"><ChevronRight aria-hidden="true" className={`h-4 w-4 ${secondaryText}`} /></Link>}
     </div>
     <Link {...calendarProps} className="block rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue">
     <div className="mt-3 grid grid-cols-7 gap-1">
       {week.map(({ date, key, today }, index) => <span key={key} aria-label={`${date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}${today ? ", today" : ""}${completed.has(key) ? ", activity recorded" : ""}`} aria-current={today ? "date" : undefined} className="flex min-h-14 min-w-0 flex-col items-center gap-1.5">
-        <span className={`text-[10px] font-semibold ${today ? "text-brand-blue" : "text-muted-foreground"}`}>{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][index]}</span>
-        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border text-xs font-bold ${completed.has(key) ? "border-brand-blue bg-brand-blue text-hero-foreground" : today ? "border-brand-blue bg-transparent text-brand-blue" : "border-border text-muted-foreground"} ${today ? "ring-2 ring-brand-blue/30 ring-offset-2 ring-offset-card" : ""}`}>
+        <span className={`text-[10px] font-semibold ${today ? "text-brand-blue" : secondaryText}`}>{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][index]}</span>
+        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border text-xs font-bold ${completed.has(key) ? "border-brand-blue bg-brand-blue text-hero-foreground" : today ? "border-brand-blue bg-transparent text-brand-blue" : desktop ? "border-hero-foreground/60 text-hero-foreground" : "border-border text-muted-foreground"} ${today ? desktop ? "ring-2 ring-brand-blue/30" : "ring-2 ring-brand-blue/30 ring-offset-2 ring-offset-card" : ""}`}>
           {completed.has(key) ? <Check aria-hidden="true" className="h-4 w-4" /> : date.getDate()}
         </span>
       </span>)}
     </div>
     {user && access.data?.premium && now && (todayEvents.length
       ? <div className="mt-3 flex items-center gap-3 overflow-hidden whitespace-nowrap" aria-label="Today's activity">
-          <span className="text-xs font-semibold text-muted-foreground">Today</span>
+          <span className={`text-xs font-semibold ${secondaryText}`}>Today</span>
           {briefingGroups(todayEvents).map(([g, n]) => { const { Icon, tone, one, many } = GROUP_VIEW[g]; return (
             <span key={g} aria-label={`${n} ${n === 1 ? one : many}`} className="inline-flex shrink-0 items-center gap-1 text-sm font-bold tabular-nums">
               <Icon aria-hidden="true" className={`h-4 w-4 ${iconInk(tone)}`} />{n}
             </span>); })}
-          <span className="ml-auto shrink-0 text-[11px] text-muted-foreground">Tap for details</span>
+          <span className={`ml-auto shrink-0 text-[11px] ${secondaryText}`}>Tap for details</span>
         </div>
-      : <p className="mt-2 text-xs text-muted-foreground">Nothing yet today</p>)}
-    {activity.isError && <p className="mt-2 text-xs text-muted-foreground">Training activity is temporarily unavailable.</p>}
+      : <p className={`mt-2 text-xs ${secondaryText}`}>Nothing yet today</p>)}
+    {activity.isError && <p className={`mt-2 text-xs ${secondaryText}`}>Training activity is temporarily unavailable.</p>}
     {!loading && !user && <p className="mt-2 text-xs font-semibold text-brand-blue">Track your streak</p>}
     </Link>
   </div>;

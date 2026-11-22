@@ -338,10 +338,10 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
         <div className="pointer-events-none absolute inset-0 bg-hero-shade" aria-hidden="true" />
         <div
           className="absolute inset-x-0 bottom-0 z-[1] bg-gradient-to-t from-background to-transparent"
-          style={{ height: "22%" }}
+          style={{ height: page === "home" ? "8%" : "22%" }}
           aria-hidden="true"
         />
-        <div className={`relative z-10 h-full ${page === "home" ? "flex items-center justify-center" : ""}`}>
+        <div className={`relative z-10 h-full ${page === "home" ? "flex items-center justify-center pb-40" : ""}`}>
           <div className={`mx-auto w-full ${page === "home" ? "max-w-7xl px-8" : "max-w-[1080px] px-6 pt-[144px]"}`}>
             <div className={`max-w-full ${page === "home" ? "mx-auto w-[760px] text-center" : "w-[640px] text-left"}`}>
               {page === "about" && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">About SmartyGym</p>}
@@ -358,7 +358,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
                 .
               </p>
             </div>
-            {page === "home" ? <div className="mt-8 w-full"><MobileWeeklyActivity desktop /></div> : <div className="mt-8 flex flex-nowrap items-center gap-6">
+            {page === "home" ? null : <div className="mt-8 flex flex-nowrap items-center gap-6">
               {[
                 { to: "/wod", label: "Workout of the Day" },
                 { to: "/smarty-workouts", label: "Smarty Workouts" },
@@ -375,6 +375,7 @@ export function DesktopAboutLanding({ page = "home", workoutCount = 0 }: { page?
             </div>}
           </div>
         </div>
+        {page === "home" && <div className="absolute inset-x-0 bottom-[8%] z-10 mx-auto w-full max-w-7xl px-8"><MobileWeeklyActivity desktop /></div>}
       </section>
 
       {page === "home" ? (
