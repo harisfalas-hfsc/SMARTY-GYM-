@@ -61,3 +61,4 @@
 - Mobile photo carousels share MobilePhotoCard and image-only semantic palette; shared-workout mobile filters reuse the existing sort/category/difficulty query controls — why: consistent native presentation without new browsing rules or desktop layout changes.
 - MobilePageDescription styles customer PageHeader subtitles only on phones — why: consistent intro cards without desktop changes.
 - CheckinPrompt shares entry; score.ts owns overnight dates — why: aligned prompts and saves.
+- Admin Blog Articles (AdminBlogTab + src/lib/blog-admin.functions.ts) edits blog_articles with the same link validator, read-time and cover storage as the weekly generator; AI drafts are returned unsaved for review — why: manual and AI articles look identical and nothing publishes without the admin pressing Save.

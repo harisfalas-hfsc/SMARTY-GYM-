@@ -21,6 +21,7 @@ import {
   type LucideIcon,
   TrendingUp,
   Sparkles,
+  Newspaper,
   HeartPulse,
   BarChart3,
   Activity,
@@ -49,6 +50,7 @@ import { AdminRevenueTab } from "@/components/admin/AdminRevenueTab";
 import { AdminInsightsTab } from "@/components/admin/AdminInsightsTab";
 
 import { AdminRitualsTab } from "@/components/admin/AdminRitualsTab";
+import { AdminBlogTab } from "@/components/admin/AdminBlogTab";
 import { AdminCronTab } from "@/components/admin/AdminCronTab";
 import { AdminSeoTab } from "@/components/admin/AdminSeoTab";
 import { AdminHealthTab } from "@/components/admin/AdminHealthTab";
@@ -77,6 +79,7 @@ type SectionKey =
   | "cycle"
   | "workouts"
   | "rituals"
+  | "blog"
   | "messages"
   | "awards"
   | "reports"
@@ -130,6 +133,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     label: "Rituals",
     description: "Daily Smarty Rituals, order and schedule",
     Icon: Sparkles,
+  },
+  {
+    key: "blog",
+    label: "Blog Articles",
+    description: "View, write, edit, hide, delete and export articles",
+    Icon: Newspaper,
   },
   {
     key: "messages",
@@ -307,6 +316,7 @@ function AdminPage() {
             </Tabs>
           )}
           {section === "rituals" && <AdminRitualsTab />}
+          {section === "blog" && <AdminBlogTab />}
           {section === "messages" && <AdminMessagesTab />}
           {section === "awards" && <AdminAwardsTab />}
           {section === "reports" && <AdminReportsTab />}

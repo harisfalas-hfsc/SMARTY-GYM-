@@ -30,7 +30,7 @@ export interface BlogGenerationResult {
 }
 
 /** Every real page an article is allowed to link to. */
-const VALID_PATHS: string[] = [
+export const VALID_PATHS: string[] = [
   "/",
   "/about",
   "/haris-falas",
@@ -53,7 +53,7 @@ const VALID_PATHS: string[] = [
 ];
 
 /** Links the writer is nudged to weave into the article. */
-const SUGGESTED_LINKS = [
+export const SUGGESTED_LINKS = [
   "/how-it-works — how SmartyGym builds a personalized workout",
   "/exercise-library — the full SmartyGym exercise library",
   "/wod — the Workout of the Day",
@@ -100,7 +100,7 @@ const TOPICS = [
   "training consistency beats motivation",
 ];
 
-function generateSlug(title: string): string {
+export function generateSlug(title: string): string {
   return title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")
@@ -110,7 +110,7 @@ function generateSlug(title: string): string {
     .substring(0, 80);
 }
 
-function estimateReadTime(content: string): string {
+export function estimateReadTime(content: string): string {
   const words = content
     .replace(/<[^>]*>/g, "")
     .split(/\s+/)
