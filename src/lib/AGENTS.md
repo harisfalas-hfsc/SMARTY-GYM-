@@ -1,0 +1,1 @@
+- blog-admin.functions.ts reuses the weekly generator's link validator, read-time and cover storage; AI drafts return unsaved — why: manual and AI articles match and nothing publishes without Save.
