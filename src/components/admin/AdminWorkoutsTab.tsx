@@ -373,7 +373,14 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
             >
               <div className="mb-2 flex items-center justify-between gap-2">
                 <Checkbox aria-label={`Select ${w.name}`} checked={selectedIds.has(w.id)} disabled={selectingAll || loading} onCheckedChange={(checked) => setSelectedIds((current) => { const next = new Set(current); if (checked === true) next.add(w.id); else next.delete(w.id); return next; })} />
-                <Button variant="outline" size="sm" onClick={() => setOpenId(w.id)}>View workout</Button>
+                <div className="flex flex-wrap gap-1">
+                  <Button variant="outline" size="sm" onClick={() => setOpenId(w.id)}>View workout</Button>
+                  <WorkoutDocumentDownloads menu count={1} filename={`workout-${w.id}`} load={async () => {
+                    const result = await getWorkout({ data: { id: w.id } });
+                    if ("error" in result) throw new Error(result.error);
+                    return [result.workout];
+                  }} />
+                </div>
               </div>
               <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
                 <p className="min-w-0 break-words font-semibold leading-snug">{w.name}</p>

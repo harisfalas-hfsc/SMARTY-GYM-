@@ -291,6 +291,7 @@ export function AdminSmartyWorkoutsTab() {
                 <div className="mt-2 flex flex-wrap gap-1">
                   <Button size="sm" variant="outline" onClick={() => setViewing(w)}><Eye className="mr-1 h-3.5 w-3.5" />View</Button>
                   <Button size="sm" variant="outline" onClick={() => setEditing(w)}><Pencil className="mr-1 h-3.5 w-3.5" />Edit</Button>
+                  <WorkoutDocumentDownloads menu count={1} filename={`workout-${w.id}`} load={async () => [smartyToWorkoutRow(w)]} />
                   <Button size="sm" variant="outline" onClick={() => void duplicate(w)}><Copy className="mr-1 h-3.5 w-3.5" />Duplicate</Button>
                   <Button size="sm" variant="outline" disabled={bulkBusy} onClick={() => { if (w.is_visible) void toggle(w); else { publishAction.current = crypto.randomUUID(); setShowTarget(w); } }}>
                     {w.is_visible ? <><EyeOff className="mr-1 h-3.5 w-3.5" />Hide</> : <><Eye className="mr-1 h-3.5 w-3.5" />Show</>}

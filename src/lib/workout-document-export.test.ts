@@ -1,8 +1,25 @@
-import { describe, expect, it } from "vitest";
-import { workoutDocumentParts } from "./workout-document-export";
+import { describe, expect, it, vi } from "vitest";
+import { withExportDeadline, workoutDocumentParts } from "./workout-document-export";
 import type { WorkoutRow } from "@/components/workout/WorkoutDisplay";
 
 describe("read-only workout document data", () => {
+  it("stops a stalled export rather than waiting indefinitely", async () => {
+    vi.useFakeTimers();
+    try {
+      const pending = withExportDeadline(new Promise<never>(() => {}), "Picture timed out", 20_000);
+      const assertion = expect(pending).rejects.toThrow("Picture timed out");
+      await vi.advanceTimersByTimeAsync(20_000);
+      await assertion;
+      expect(vi.getTimerCount()).toBe(0);
+    } finally { vi.useRealTimers(); }
+  });
+  it("returns completed exports and clears their deadline", async () => {
+    vi.useFakeTimers();
+    try {
+      expect(await withExportDeadline(Promise.resolve("ready"), "Timed out")).toBe("ready");
+      expect(vi.getTimerCount()).toBe(0);
+    } finally { vi.useRealTimers(); }
+  });
   it("includes every stored workout block without changing prescriptions or records", () => {
     const workout: WorkoutRow = {
       id: "original", name: "Record", category: "STRENGTH", format: null, focus: null,

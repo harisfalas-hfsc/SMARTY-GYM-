@@ -3,6 +3,15 @@ import { difficultyLabel } from "./workout/spec";
 import { EXERCISE_TOKEN_RE } from "./workout/tokens";
 import { createAssetEmbedder, embeddedHtml, escapeHtml, exportTheme } from "./standalone-html";
 
+export async function withExportDeadline<T>(work: Promise<T>, message: string, milliseconds = 30_000): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([work, new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error(message)), milliseconds);
+    })]);
+  } finally { if (timer !== undefined) clearTimeout(timer); }
+}
+
 export function workoutDocumentParts(w: WorkoutRow) {
   return [
     { title: "", html: w.description_html },
@@ -35,7 +44,7 @@ export async function prepareWorkoutDocument(w: WorkoutRow, embed = createAssetE
   host.querySelectorAll<HTMLElement>("h2,h3,h4").forEach(el => { el.style.color = "var(--primary)"; el.style.margin = "16px 0 8px"; });
   host.querySelectorAll<HTMLElement>("a").forEach(el => { el.style.color = "var(--primary)"; });
   host.querySelectorAll<HTMLImageElement>("img").forEach(el => { el.style.maxWidth = "100%"; });
-  await Promise.all(Array.from(host.querySelectorAll("img")).map(img => img.decode()));
+  await withExportDeadline(Promise.all(Array.from(host.querySelectorAll("img")).map(img => img.decode())), "A workout picture took too long to open. Please retry.");
   return host;
 }
 
@@ -107,7 +116,7 @@ export async function workoutWordDocument(hosts: HTMLElement[]): Promise<Blob> {
   return Packer.toBlob(doc);
 }
 
-export async function workoutPdfDocument(hosts: HTMLElement[]): Promise<Blob> {
+export async function workoutPdfDocument(hosts: HTMLElement[], report: (message: string) => void = () => {}, cancelled: () => boolean = () => false): Promise<Blob> {
   const [{ jsPDF }, { default: html2canvas }] = await Promise.all([import("jspdf"), import("html2canvas-pro"), document.fonts.ready]);
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
   const paper = tokenColor("card"), ink = tokenColor("foreground");
@@ -117,7 +126,9 @@ export async function workoutPdfDocument(hosts: HTMLElement[]): Promise<Blob> {
     pdf.setFillColor(`#${paper}`); pdf.rect(0, 0, 210, 297, "F");
     pdf.setTextColor(`#${ink}`); pdf.setFontSize(8); pdf.text(`SMARTYGYM · smartygym.com · ${pdf.getNumberOfPages()}`, 105, 288, { align: "center" });
   };
-  for (const host of hosts) {
+  for (const [workoutIndex, host] of hosts.entries()) {
+    if (cancelled()) throw new Error("Download cancelled.");
+    report(`Creating PDF · workout ${workoutIndex + 1} of ${hosts.length}…`);
     page();
     host.style.position = "fixed"; host.style.left = "-10000px"; host.style.top = "0";
     document.body.append(host);
@@ -125,17 +136,41 @@ export async function workoutPdfDocument(hosts: HTMLElement[]): Promise<Blob> {
       // Render each paragraph/list item independently so no exercise is sliced at a page boundary.
       const blocks = Array.from(host.querySelectorAll<HTMLElement>("p,h1,h2,h3,h4,li,img,table"))
         .filter(el => !el.parentElement?.closest("li,table") && !(el.tagName === "IMG" && el.parentElement?.closest("p")));
+      host.id = `workout-pdf-${workoutIndex}`;
+      let origin = host.getBoundingClientRect();
+      let bounds = blocks.map(block => block.getBoundingClientRect());
+      // Capture once, rather than cloning the entire app for every paragraph.
+      const rendered = await withExportDeadline(html2canvas(host, {
+        scale: 1.5, backgroundColor: `#${paper}`, logging: false, imageTimeout: 15_000,
+        ignoreElements: el => !document.head.contains(el) && !el.contains(host) && !host.contains(el),
+        onclone: doc => {
+          const clonedHost = doc.getElementById(host.id);
+          if (!clonedHost) throw new Error("The PDF layout could not be prepared.");
+          origin = clonedHost.getBoundingClientRect();
+          bounds = Array.from(clonedHost.querySelectorAll<HTMLElement>("p,h1,h2,h3,h4,li,img,table"))
+            .filter(el => !el.parentElement?.closest("li,table") && !(el.tagName === "IMG" && el.parentElement?.closest("p")))
+            .map(block => block.getBoundingClientRect());
+        },
+      }), "The PDF took too long to render. Please retry or download Word.");
+      const scale = rendered.width / origin.width;
       for (let index = 0; index < blocks.length; index++) {
+        if (cancelled()) throw new Error("Download cancelled.");
         const block = blocks[index]; if (!block) continue;
-        const canvas = await html2canvas(block, { scale: 1.5, backgroundColor: `#${paper}`, logging: false });
+        const rect = bounds[index]; if (!rect) continue;
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.ceil(rect.width * scale); canvas.height = Math.ceil(rect.height * scale);
         if (!canvas.width || !canvas.height) continue;
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("The PDF could not be rendered.");
+        context.fillStyle = `#${paper}`; context.fillRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(rendered, Math.round((rect.left - origin.left) * scale), Math.round((rect.top - origin.top) * scale), canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
         const width = Math.min(182, canvas.width * 182 / 624);
         const height = canvas.height * width / canvas.width;
         if (height > 266) throw new Error("One workout block is too large for an A4 page. Download Word or HTML for this workout.");
         const next = blocks[index + 1];
         const keepHeading = /^H[1-4]$/.test(block.tagName) && next ? next.getBoundingClientRect().height * 182 / 624 + 5 : 0;
         if (y + height + keepHeading > 278 && y > 14) page();
-        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 14, y, width, height); y += height + 3;
+        pdf.addImage(canvas.toDataURL("image/jpeg", 0.94), "JPEG", 14, y, width, height); y += height + 3;
       }
     } finally { host.remove(); }
   }

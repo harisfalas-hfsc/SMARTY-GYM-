@@ -1,5 +1,9 @@
 # Roadmap
 
+## Workout download delay and direct actions
+- [x] Real selected phone-sized PDF took 13 seconds before the fix; remove repeated whole-app capture, add progress/cancellation and picture/render deadlines. The reported two-minute stall was not reproduced.
+- [x] Word/PDF menu actions added directly to Smarty/member cards. Actual signed-in individual and selected PDFs and Word files saved in approximately 0.6–2 seconds; cover, complete prescriptions/instructions/tips and PDF pages inspected. Six regression tests pass; preview build OK. Phone-sized browser and desktop verified, not installed-device delivery; no customer records changed. Publish required.
+
 ## Admin workout Word and PDF records
 - [x] Add individual and selected/all-filtered exports in both workout archives, preserving covers and all workout content without writes.
 - [x] Actual signed-in Smarty/member Word and PDF downloads verified; embedded cover and complete prescriptions/instructions/tips inspected, PDF pages and Word rendering checked. Two-selected phone PDF downloaded without overflow; eight preservation/selection tests and preview build pass. Entire-library export and installed-device delivery not exercised; very large exports require batches. Microsoft Word can reflow pagination; no customer records changed.
