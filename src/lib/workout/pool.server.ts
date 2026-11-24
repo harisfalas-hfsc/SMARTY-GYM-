@@ -493,6 +493,9 @@ export function buildCooldownPool(
   return enginePrep(prepFilter(all, opts.selectedEquipment, disliked, COOLDOWN_OK_RE, false, lim), "cooldown");
 }
 
+/** Deterministic 31-bit LCG step that stays exact in JavaScript numbers. */
+export const nextSeed = (s: number) => (Math.imul(s, 1103515245) + 12345) & 0x7fffffff;
+
 /** Deterministic, rotating selection so two sessions rarely open the same way. */
 export function pickPrep(pool: PoolExercise[], count: number, seed: number): PoolExercise[] {
   if (!pool.length) return [];
@@ -508,15 +511,23 @@ export function pickPrep(pool: PoolExercise[], count: number, seed: number): Poo
   let guard = 0;
   while (out.length < count && guard < count * 20) {
     guard += 1;
-    s = (s * 1103515245 + 12345) & 0x7fffffff;
-    const part = parts[s % parts.length]!;
+    // 32-bit integer step (Math.imul): a plain multiply loses precision and
+    // used to lock onto one body part, returning too few prep exercises.
+    s = nextSeed(s);
+    const r = s >>> 8;
+    const part = parts[r % parts.length]!;
     const list = byPart.get(part)!;
     if (!list.length) {
       if (parts.every((p) => !byPart.get(p)!.length)) break;
       continue;
     }
-    const next = list.splice(s % list.length, 1)[0]!;
+    const next = list.splice(r % list.length, 1)[0]!;
     if (!out.some((e) => e.id === next.id)) out.push(next);
+  }
+  // Never return fewer than asked while the pool still has unused exercises.
+  for (const e of pool) {
+    if (out.length >= count) break;
+    if (!out.some((o) => o.id === e.id)) out.push(e);
   }
   return out;
 }

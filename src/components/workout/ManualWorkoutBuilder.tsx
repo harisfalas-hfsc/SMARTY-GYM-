@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUp, Loader2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createManualWorkout } from "@/lib/manual-workout.functions";
+import { manualStructureIssues } from "@/lib/manual-workout";
 import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import {
   DRAFT_EVENT,
@@ -121,7 +122,8 @@ export function ManualWorkoutBuilder({
     if (!draft) return;
     if (premium === false) return onLocked();
     if (!draft.name.trim()) return void toast.error("Give your workout a name.");
-    if (!draft.sections.main.length) return void toast.error("Add at least one exercise to the Main Workout.");
+    const structure = manualStructureIssues(draft.sections);
+    if (structure.length) return void toast.error(structure[0]);
     setBusy(true);
     try {
       const strip = (s: DraftSection) => draft.sections[s].map(({ id, dose }) => ({ id, dose }));

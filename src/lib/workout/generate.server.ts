@@ -8,6 +8,7 @@ import { overusedExerciseIds } from "./exercise-usage";
 import { memberQualityIssues } from "./member-quality";
 import { crossSectionRepeats } from "./section-repeats";
 import { plainWorkoutHtml } from "./plain-lines";
+import { complianceIssues, hardIssues, type ComplianceExercise } from "./smarty-compliance";
 import { buildSessionPlan } from "./programming";
 import { smartyCopy } from "./copy-bank.server";
 import { dominantRegion, focusRegion, resolveLocation } from "./doctrine";
@@ -269,16 +270,48 @@ export async function generateWorkoutContent(
     ...memberQualityIssues(p.main, { level: level === "all" ? "intermediate" : level, focus: input.focus ?? null, muscle: input.muscle ?? null, equipmentExpected, pool, minutesFitCount: p.fitCount }),
     ...crossSectionRepeats(p.html, (id, f) => all.find((e) => e.id === id)?.name ?? f, input.focus ?? null).map((r) => `"${r.name}" appears in both ${r.first} and ${r.again}.`),
   ];
-  let pack = buildOnce(seed);
-  let issues = qualityOf(pack);
-  for (let attempt = 1; attempt <= 6 && issues.length; attempt++) {
-    const next = buildOnce(seed + attempt * 101);
-    const nextIssues = qualityOf(next);
-    if (nextIssues.length < issues.length) { pack = next; issues = nextIssues; }
+  // Final full-rule gate (smarty-compliance.ts, the same check Admin uses): every
+  // section must be complete and legal. Keep rebuilding with new seeds until a
+  // candidate passes every hard rule; the best candidate is used only if none does.
+  const libMap = new Map(all.map((e) => [e.id, e as ComplianceExercise]));
+  const isMicro = input.category === "MICRO-WORKOUTS";
+  const finalize = (p: ReturnType<typeof buildOnce>, s: number) => {
+    const enforced = enforceWorkout(p.html, pool, { ...enforceOpts, seed: s });
+    // Plain text (plain-lines.ts): dose, exercise, side, rest — no tempo or cues.
+    const html = plainWorkoutHtml(enforced.html);
+    const hard = hardIssues(
+      complianceIssues(
+        {
+          id: "draft",
+          name: p.name,
+          category: input.category,
+          format,
+          difficulty_stars: input.stars,
+          main_workout: html,
+          duration_min: input.minutes,
+          equipment: input.equipmentMode === "BODYWEIGHT" ? [] : input.selectedEquipment,
+          focus: input.focus ?? null,
+        },
+        all as ComplianceExercise[],
+        libMap,
+      ),
+    ).filter((i) => !(isMicro && /^(Activation|Cool Down) has fewer than/.test(i)));
+    return { pack: p, enforced: { ...enforced, html }, hard, quality: qualityOf(p) };
+  };
+  const score = (c: ReturnType<typeof finalize>) => c.hard.length * 100 + c.quality.length;
+  let best = finalize(buildOnce(seed), seed);
+  for (let attempt = 1; attempt <= 24 && score(best) > 0; attempt++) {
+    const s = seed + attempt * 101;
+    const next = finalize(buildOnce(s), s);
+    if (score(next) < score(best)) best = next;
   }
-  const enforced = enforceWorkout(pack.html, pool, enforceOpts);
-  // Plain text (plain-lines.ts): dose, exercise, side, rest — no tempo or cues.
-  const enforcedPack = { ...enforced, html: plainWorkoutHtml(enforced.html) };
+  const pack = best.pack;
+  const issues = best.quality;
+  const enforcedPack = best.enforced;
+  // Missing or empty sections are never delivered, whoever asked for the workout.
+  const structural = best.hard.filter((i) => /fewer than|Same exercise in two sections|Repeated exercise/.test(i));
+  if (structural.length)
+    throw new Error("We couldn't build a complete session with every section for those settings, so nothing was saved. Try different equipment or a different duration.");
 
   const packValidation = validateWorkout(enforcedPack.html, validateOpts);
   const packSplit = classifyIssuesForFallback([

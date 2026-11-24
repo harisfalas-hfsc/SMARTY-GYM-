@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { buildManualWorkoutHtml, MANUAL_CATEGORY, type ManualSections } from "@/lib/manual-workout";
+import { buildManualWorkoutHtml, manualStructureIssues, MANUAL_CATEGORY, type ManualSections } from "@/lib/manual-workout";
 
 const item = z.object({
   id: z.string().regex(/^[A-Za-z0-9_-]{1,80}$/),
@@ -27,7 +27,8 @@ export const createManualWorkout = createServerFn({ method: "POST" })
     if (!access.healthAcknowledged || !access.readinessComplete || !access.profileComplete)
       throw new Error("Complete your Training Profile, health acknowledgement and readiness questionnaire (PAR-Q) first.");
     const all = Object.values(data.sections).flat();
-    if (!data.sections.main.length) throw new Error("Add at least one exercise to the Main Workout.");
+    const structure = manualStructureIssues(data.sections);
+    if (structure.length) throw new Error(structure[0]);
     const ids = [...new Set(all.map((e) => e.id))];
     const { data: rows, error } = await context.supabase
       .from("exercises")

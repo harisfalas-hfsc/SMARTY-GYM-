@@ -4,11 +4,11 @@ import { orderedPriority, pickPriorityByPattern } from "./priority";
 // involved. Used as the reliability fallback when the AI cannot produce a
 // workout that passes enforcement + validation.
 import type { PoolExercise } from "./pool.server";
-import { pickPrep, STRETCH_RE } from "./pool.server";
+import { nextSeed, pickPrep, STRETCH_RE } from "./pool.server";
 import { dominantRegion, equipmentFamilyLimit, equipmentFamilyOf, isDynamicFormat, regionOf } from "./doctrine";
 import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
-import { isCardioRhythm, isTimedPosition, isTimeDosed, LIGHT_SET_CAP } from "./rules";
+import { isCardioRhythm, isTimedPosition, isTimeDosed, LIGHT_SET_CAP, TABATA_TRAVEL_RE } from "./rules";
 import { buildFinisherHtml, finisherMinimumMinutes } from "./finisher-length";
 import { dedupeMovements, improvePicks, levelMainMinimum, levelMinSets, movementKey } from "./member-quality";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
@@ -96,8 +96,8 @@ function shuffle<T>(arr: T[], seed = 1): T[] {
   const a = arr.slice();
   let s = seed || 1;
   for (let i = a.length - 1; i > 0; i--) {
-    s = (s * 1103515245 + 12345) & 0x7fffffff;
-    const j = s % (i + 1);
+    s = nextSeed(s);
+    const j = (s >>> 8) % (i + 1);
     [a[i], a[j]] = [a[j]!, a[i]!];
   }
   return a;
@@ -340,6 +340,53 @@ export function buildPackWorkout(
         return flowGroup(filled, src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));
       })();
   finisherPicks.forEach((e) => used.add(e.id));
+  // Block rules decided by rules.ts are repaired here by swapping exercises, so
+  // the delivered session passes the same gate Admin uses.
+  const keyOf = (e: PoolExercise) => movementKey(e.name, input.focus);
+  const takenKeys = () => new Set([...mainPicks, ...finisherPicks].map(keyOf));
+  const spareWhere = (ok: (e: PoolExercise) => boolean) => {
+    const taken = takenKeys();
+    return [...workPool, ...pool].find((e) => ok(e) && !used.has(e.id) && !taken.has(keyOf(e)));
+  };
+  // CARDIO: each block is rhythmic aerobic work with at most one strength-type move.
+  if (input.category === "CARDIO") {
+    for (const list of [mainPicks, finisherPicks]) {
+      let extra = list.filter((e) => !isCardioRhythm(e.name)).length - 1;
+      for (let i = list.length - 1; i >= 0 && extra > 0; i--) {
+        if (isCardioRhythm(list[i]!.name)) continue;
+        const rep = spareWhere((e) => isCardioRhythm(e.name) && !(input.format === "TABATA" && TABATA_TRAVEL_RE.test(e.name.trim())));
+        if (!rep) break;
+        used.add(rep.id); list[i] = rep; extra--;
+      }
+    }
+  }
+  // CHALLENGE: no body region above 60% of the work.
+  if (input.category === "CHALLENGE") {
+    for (let guard = 0; guard < 8; guard++) {
+      const work = [...mainPicks, ...finisherPicks];
+      const counts: Record<string, number> = { lower: 0, upper: 0, core: 0, full: 0 };
+      for (const e of work) counts[regionOf(e)] = (counts[regionOf(e)] ?? 0) + 1;
+      const top = (["lower", "upper", "core"] as const).slice().sort((a, b) => (counts[b] ?? 0) - (counts[a] ?? 0))[0]!;
+      const represented = (["lower", "upper", "core"] as const).filter((r) => (counts[r] ?? 0) > 0).length;
+      if ((counts[top] ?? 0) / Math.max(1, work.length) <= 0.6 && (represented >= 2 || (counts["full"] ?? 0) * 2 >= work.length)) break;
+      const low = (["lower", "upper", "core"] as const).slice().sort((a, b) => (counts[a] ?? 0) - (counts[b] ?? 0))[0]!;
+      const rep = spareWhere((e) => regionOf(e) === low && isBodyweight(e)) ?? spareWhere((e) => regionOf(e) === low);
+      if (!rep) break;
+      const list = finisherPicks.some((e) => regionOf(e) === top) ? finisherPicks : mainPicks;
+      const at = list.map(regionOf).lastIndexOf(top);
+      if (at < 0) break;
+      used.add(rep.id); list[at] = rep;
+    }
+  }
+  // STRENGTH / MUSCLE BUILDING: the Finisher stays shorter than the Main Workout.
+  if ((input.category === "STRENGTH" || input.category === "MUSCLE BUILDING") && finisherPicks.length && finisherPicks.length >= mainPicks.length) {
+    for (let i = mainPicks.length; i <= finisherPicks.length; i++) {
+      const rep = spareWhere(() => true);
+      if (!rep) break;
+      used.add(rep.id); mainPicks.push(rep);
+    }
+    while (finisherPicks.length >= mainPicks.length && finisherPicks.length > 3) finisherPicks.pop();
+  }
   // CHALLENGE is majority bodyweight (doctrine): swap surplus equipment picks for unused bodyweight moves.
   if (input.category === "CHALLENGE") {
     const all = [...mainPicks, ...finisherPicks];
@@ -378,15 +425,30 @@ export function buildPackWorkout(
     (derivedActivationPool.filter(notInWork).length >= 4 ? derivedActivationPool : (input.activationPool ?? [])).filter(notInWork),
   );
 
-  const activationPicks = (relevantActivationPool.length
-    ? pickPrep(relevantActivationPool, 4, seed)
-    : pickBalanced(library, 4, {
-        filter: (e) =>
-          notInWork(e) &&
-          isBodyweight(e) &&
-          prepAllowed(e.name, "activation") &&
-          (e.difficulty ?? "").toLowerCase() !== "advanced",
-      })) as PoolExercise[];
+  const activationPicks = (relevantActivationPool.length ? pickPrep(relevantActivationPool, 4, seed) : []) as PoolExercise[];
+  // Every Activation carries real library exercises: top up from the full
+  // activation vocabulary, then the approved bodyweight prep list — never plain text.
+  const topUp = (picks: PoolExercise[], count: number, sources: PoolExercise[][]) => {
+    const keys = new Set(picks.map((e) => movementKey(e.name, input.focus)));
+    for (const src of sources)
+      for (const e of src) {
+        if (picks.length >= count) return;
+        const k = movementKey(e.name, input.focus);
+        if (keys.has(k)) continue;
+        keys.add(k);
+        picks.push(e);
+      }
+  };
+  topUp(activationPicks, 4, [
+    dedupeMovements((input.activationPool ?? []).filter(notInWork), input.focus),
+    pickBalanced(library, 8, {
+      filter: (e) =>
+        notInWork(e) &&
+        isBodyweight(e) &&
+        prepAllowed(e.name, "activation") &&
+        (e.difficulty ?? "").toLowerCase() !== "advanced",
+    }),
+  ]);
 
   // Cool Down stretches the muscles the Main Workout trained.
   const cdAll = dedupeMovements(input.cooldownPool ?? [], input.focus);
@@ -396,11 +458,11 @@ export function buildPackWorkout(
     return r === mainRegion || (mainRegion === "lower" && r === "core") || (mainRegion === "core" && r === "lower");
   });
   const cdPool = cdRelevant.length >= 3 ? cdRelevant : cdAll;
-  const cooldownPicks = (cdPool.length
-    ? pickPrep(cdPool, 3, seed + 17)
-    : pickBalanced(library, 3, {
-        filter: (e) => isBodyweight(e) && STRETCH_RE.test(e.name),
-      })) as PoolExercise[];
+  const cooldownPicks = (cdPool.length ? pickPrep(cdPool, 3, seed + 17) : []) as PoolExercise[];
+  topUp(cooldownPicks, 3, [
+    cdAll,
+    pickBalanced(library, 6, { filter: (e) => isBodyweight(e) && STRETCH_RE.test(e.name) && prepAllowed(e.name, "cooldown") }),
+  ]);
 
   const blocks: string[] = [];
 
