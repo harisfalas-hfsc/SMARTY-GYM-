@@ -397,9 +397,7 @@ export const adminUpdateSmartyWorkout = createServerFn({ method: "POST" })
       if (data.patch.is_visible === true) {
         const { runSmartyPublication } = await import("./smarty-publication.server");
         const publication = await runSmartyPublication(supabaseAdmin, data.actionId ?? crypto.randomUUID(), async () => {
-          const { publishRuleBreaks } = await import("@/lib/smarty-rule-gate.server");
-          const breaks = await publishRuleBreaks(supabaseAdmin, data.id, data.patch);
-          if (breaks.length) return { workouts: [], held: 1, error: breaks.join("\n\n") };
+
           const { data: current, error: readError } = await supabaseAdmin.from("smarty_workouts").select("is_visible").eq("id", data.id).single();
           if (readError) throw new Error(readError.message);
           const { data: changed, error } = await supabaseAdmin.from("smarty_workouts")
@@ -410,12 +408,6 @@ export const adminUpdateSmartyWorkout = createServerFn({ method: "POST" })
         if ("error" in publication) return publication;
         if (publication.publicationError && publication.count === 0) return { error: publication.publicationError };
         return { ok: true, publication };
-      }
-      // Same hard rules as the generator: a rule-breaking workout cannot be published.
-      if ("is_visible" in data.patch || "main_workout" in data.patch || "category" in data.patch || "format" in data.patch || "equipment" in data.patch) {
-        const { publishRuleBreaks } = await import("@/lib/smarty-rule-gate.server");
-        const breaks = await publishRuleBreaks(supabaseAdmin, data.id, data.patch);
-        if (breaks.length) return { error: breaks.join("\n\n") };
       }
       const { error } = await supabaseAdmin
         .from("smarty_workouts")
@@ -717,9 +709,8 @@ export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
         return await runSmartyPublication(supabaseAdmin, data.actionId ?? crypto.randomUUID(), async () => {
           const selected = data.ids ? new Set(data.ids) : null;
           const rows = (await loadAllSmarty(supabaseAdmin)).filter((row) => !selected || selected.has(row.id));
-          const report = await transferredWorkoutAudit(supabaseAdmin);
-          const { ruleFailingIds } = await import("@/lib/smarty-rule-gate.server");
-          const failing = new Set([...report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id), ...(await ruleFailingIds(supabaseAdmin))]);
+          // Owner decision: admins may publish any workout; the quality check never blocks.
+          const failing = new Set<string>();
           const targets = visibilityTargets(rows, true, failing);
           return publishSmartyIds(supabaseAdmin, targets.ids, targets.held);
         });
@@ -728,9 +719,8 @@ export const adminSetTransferredVisibility = createServerFn({ method: "POST" })
       const rows = (await loadAllSmarty(supabaseAdmin)).filter((row) => !selected || selected.has(row.id));
       let failing = new Set<string>();
       if (data.visible) {
-        const report = await transferredWorkoutAudit(supabaseAdmin);
-        const { ruleFailingIds } = await import("@/lib/smarty-rule-gate.server");
-        failing = new Set([...report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id), ...(await ruleFailingIds(supabaseAdmin))]);
+        // Owner decision: admins may publish any workout; the quality check never blocks.
+        failing = new Set<string>();
       }
       const targets = visibilityTargets(rows, data.visible, failing);
       let count = 0;
@@ -836,9 +826,8 @@ export const adminPublishCheckedWorkouts = createServerFn({ method: "POST" })
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       const { runSmartyPublication, publishSmartyIds } = await import("./smarty-publication.server");
       return await runSmartyPublication(supabaseAdmin, data.actionId ?? crypto.randomUUID(), async () => {
-        const report = await transferredWorkoutAudit(supabaseAdmin);
-        const { ruleFailingIds } = await import("@/lib/smarty-rule-gate.server");
-        const failing = new Set([...report.workouts.filter((w) => w.issues.length > 0).map((w) => w.id), ...(await ruleFailingIds(supabaseAdmin))]);
+        // Owner decision: admins may publish any workout; the quality check never blocks.
+        const failing = new Set<string>();
         const targets = visibilityTargets(await loadAllSmarty(supabaseAdmin), true, failing);
         return publishSmartyIds(supabaseAdmin, targets.ids, targets.held);
       });
