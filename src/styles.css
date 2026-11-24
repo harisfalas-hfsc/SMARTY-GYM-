@@ -117,6 +117,11 @@
  * Light mode now uses the dark-view blue (oklch(0.745 0.131 220)) everywhere.
  */
 :root {
+  /* Portable, printable documents do not inherit the screen's dark theme. */
+  --document-paper: #ffffff;
+  --document-ink: #202529;
+  --document-muted: #59636b;
+  --document-line: #d7dce0;
   --brand-blue: oklch(0.745 0.131 220);
   --on-brand: oklch(0.19 0.014 229);
   --coach-bg: oklch(0.145 0 0);

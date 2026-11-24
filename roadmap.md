@@ -1,5 +1,9 @@
 # Roadmap
 
+## Presentable native workout documents
+- [x] Replace screenshot-based PDF pages with selectable Unicode text, wrapping, pagination, hyperlinks and embedded cover photos; Word uses explicit dark text on white paper independent of screen mode.
+- [x] Real signed-in individual Smarty/member and selected-two PDFs downloaded; text extraction confirms complete instructions/tips and native text, not paragraph images. Word package validation passed; rendered both Word documents and every PDF page, confirming white paper, readable dark text, embedded covers and no clipping/overlap. 616 tests pass and preview build OK. Original screenshot clipping and theme-dependent Word colors removed. Physical Microsoft Word/Acrobat apps and whole-library export remain unverified; Word pagination may reflow. No training records changed; publish and re-download required.
+
 ## Workout download delay and direct actions
 - [x] Sweep: read Smarty/member card menus, previews, selected/all-filtered controls, both member-profile archive entries, admin read functions, shared PDF/Word/HTML preparation and delivery, plus job registry; no scheduled/database export function exists. Fixed unbounded tool/font/HTML waits and replaced the total member-loading deadline with a progress watchdog so healthy batches continue. Real card/menu, preview, all-filtered, selected-two PDF, Word and animated HTML downloads saved; profile entries verified by code reuse, not separately driven. 616 library tests pass and preview build OK. Installed-device delivery, entire-library exports and the original two-minute stall remain unverified; Word may reflow pages. No records, permissions, settings or schedules changed; publish required.
 - [x] Real selected phone-sized PDF took 13 seconds before the fix; remove repeated whole-app capture, add progress/cancellation and picture/render deadlines. The reported two-minute stall was not reproduced.

@@ -70,11 +70,11 @@ async function imagePng(image: HTMLImageElement) {
 
 export async function workoutWordDocument(hosts: HTMLElement[]): Promise<Blob> {
   const { Document, Packer, Paragraph, TextRun, ExternalHyperlink, ImageRun, HeadingLevel, LevelFormat, AlignmentType, Footer, PageNumber } = await import("docx");
-  const ink = tokenColor("foreground"), accent = tokenColor("primary"), paper = tokenColor("card");
+  const ink = tokenColor("document-ink"), accent = tokenColor("brand-blue"), paper = tokenColor("document-paper");
   const children: InstanceType<typeof Paragraph>[] = [];
   type Run = InstanceType<typeof TextRun> | InstanceType<typeof ExternalHyperlink>;
   const runs = (node: Node, bold = false, italics = false): Run[] => {
-    if (node.nodeType === Node.TEXT_NODE) return [new TextRun({ text: node.textContent ?? "", bold, italics })];
+    if (node.nodeType === Node.TEXT_NODE) return [new TextRun({ text: node.textContent ?? "", bold, italics, color: ink })];
     if (!(node instanceof HTMLElement)) return [];
     if (node.tagName === "BR") return [new TextRun({ break: 1 })];
     if (node.tagName === "A") return [new ExternalHyperlink({ link: node.getAttribute("href") ?? "", children: [new TextRun({ text: node.textContent ?? "", color: accent, underline: {} })] })];
@@ -104,68 +104,122 @@ export async function workoutWordDocument(hosts: HTMLElement[]): Promise<Blob> {
     background: { color: paper },
     styles: { default: { document: { run: { font: "Arial", size: 22, color: ink } } }, paragraphStyles: ["Heading1", "Heading2", "Heading3"].map((id, index) => ({ id, name: id, basedOn: "Normal", next: "Normal", run: { bold: true, color: index ? accent : ink, size: index ? 30 : 40 }, paragraph: { outlineLevel: index, keepNext: true } })) },
     numbering: { config: ["bullets", "numbers"].map(reference => ({ reference, levels: [{ level: 0, format: reference === "bullets" ? LevelFormat.BULLET : LevelFormat.DECIMAL, text: reference === "bullets" ? "•" : "%1.", alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 500, hanging: 250 } } } }] })) },
-    sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 800, bottom: 800, left: 800, right: 800 } } }, footers: { default: new Footer({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun("SMARTYGYM · smartygym.com · "), new TextRun({ children: [PageNumber.CURRENT] })] })] }) }, children }],
+    sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 800, bottom: 800, left: 800, right: 800 } } }, footers: { default: new Footer({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "SMARTYGYM · smartygym.com · ", color: ink }), new TextRun({ children: [PageNumber.CURRENT], color: ink })] })] }) }, children }],
   });
   return Packer.toBlob(doc);
 }
 
-export async function workoutPdfDocument(hosts: HTMLElement[], report: (message: string) => void = () => {}, cancelled: () => boolean = () => false): Promise<Blob> {
-  const [{ jsPDF }, { default: html2canvas }] = await withExportDeadline(Promise.all([import("jspdf"), import("html2canvas-pro"), document.fonts.ready]), "PDF tools or fonts took too long to load. Please retry.");
-  const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
-  const paper = tokenColor("card"), ink = tokenColor("foreground");
-  let first = true, y = 14;
-  const page = () => {
-    if (!first) pdf.addPage(); first = false; y = 14;
-    pdf.setFillColor(`#${paper}`); pdf.rect(0, 0, 210, 297, "F");
-    pdf.setTextColor(`#${ink}`); pdf.setFontSize(8); pdf.text(`SMARTYGYM · smartygym.com · ${pdf.getNumberOfPages()}`, 105, 288, { align: "center" });
+type DocumentRun = { text: string; bold: boolean; link?: string };
+type DocumentBlock = { kind: "text"; runs: DocumentRun[]; level: number; prefix: string } | { kind: "image"; image: HTMLImageElement };
+
+function documentText(value: string) {
+  // Decorative section emoji are not prescriptions; omit unsupported pictographs from PDF fonts.
+  return value.replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "").replace(/\s+/g, " ");
+}
+
+function documentBlocks(host: HTMLElement): DocumentBlock[] {
+  const blocks: DocumentBlock[] = [];
+  const runs = (node: Node, bold = false, link?: string): DocumentRun[] => {
+    if (node.nodeType === Node.TEXT_NODE) return [{ text: documentText(node.textContent ?? ""), bold, ...(link ? { link } : {}) }];
+    if (!(node instanceof HTMLElement)) return [];
+    if (node.tagName === "BR") return [{ text: "\n", bold }];
+    const href = node.tagName === "A" ? node.getAttribute("href") ?? undefined : link;
+    return Array.from(node.childNodes).flatMap(child => runs(child, bold || ["STRONG", "B"].includes(node.tagName), href));
   };
+  const walk = (element: Element, prefix = "") => {
+    if (element.tagName === "IMG" && element instanceof HTMLImageElement) {
+      blocks.push({ kind: "image", image: element }); return;
+    }
+    if (["UL", "OL"].includes(element.tagName)) {
+      Array.from(element.children).forEach((child, index) => walk(child, element.tagName === "OL" ? `${index + 1}. ` : "• "));
+      return;
+    }
+    if (["P", "H1", "H2", "H3", "H4", "LI", "TR", "BLOCKQUOTE"].includes(element.tagName)) {
+      const level = /^H[1-4]$/.test(element.tagName) ? Number(element.tagName.slice(1)) : 0;
+      const content = element.tagName === "TR"
+        ? Array.from(element.children).flatMap((cell, i) => [{ text: i ? " | " : "", bold: false }, ...runs(cell)])
+        : Array.from(element.childNodes).filter(node => !(node instanceof HTMLElement && ["UL", "OL"].includes(node.tagName))).flatMap(node => runs(node, level > 0));
+      if (content.some(run => run.text.trim())) blocks.push({ kind: "text", runs: content, level, prefix });
+      element.querySelectorAll<HTMLImageElement>("img").forEach(image => blocks.push({ kind: "image", image }));
+      Array.from(element.children).filter(child => ["UL", "OL"].includes(child.tagName)).forEach(child => walk(child));
+      return;
+    }
+    Array.from(element.children).forEach(child => walk(child));
+  };
+  walk(host);
+  return blocks;
+}
+
+export async function workoutPdfDocument(hosts: HTMLElement[], report: (message: string) => void = () => {}, cancelled: () => boolean = () => false): Promise<Blob> {
+  const { jsPDF } = await withExportDeadline(import("jspdf"), "PDF tools took too long to load. Please retry.");
+  const loadFont = async (name: string) => {
+    const response = await fetch(`/fonts/workout-document-${name}.ttf`);
+    if (!response.ok) throw new Error("The document font could not be loaded. Please retry.");
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    let binary = "";
+    for (let offset = 0; offset < bytes.length; offset += 8192) binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
+    return btoa(binary);
+  };
+  const [regular, bold] = await withExportDeadline(Promise.all([loadFont("regular"), loadFont("bold")]), "Document fonts took too long to load. Please retry.");
+  const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  pdf.addFileToVFS("Document-Regular.ttf", regular); pdf.addFont("Document-Regular.ttf", "Document", "normal");
+  pdf.addFileToVFS("Document-Bold.ttf", bold); pdf.addFont("Document-Bold.ttf", "Document", "bold");
+  pdf.setProperties({ title: hosts.length === 1 ? hosts[0]?.querySelector("h1")?.textContent ?? "SmartyGym Workout" : "SmartyGym Workouts", author: "SMARTYGYM", creator: "SMARTYGYM" });
+  const ink = tokenColor("document-ink"), accent = tokenColor("brand-blue"), muted = tokenColor("document-muted"), line = tokenColor("document-line");
+  const left = 16, right = 194, bottom = 276;
+  let y = 18;
+  const newPage = () => { pdf.addPage(); y = 18; };
+  const ensure = (height: number) => { if (y + height > bottom) newPage(); };
   for (const [workoutIndex, host] of hosts.entries()) {
     if (cancelled()) throw new Error("Download cancelled.");
+    if (workoutIndex) newPage();
     report(`Creating PDF · workout ${workoutIndex + 1} of ${hosts.length}…`);
-    page();
-    host.style.position = "fixed"; host.style.left = "-10000px"; host.style.top = "0";
-    document.body.append(host);
-    try {
-      // Render each paragraph/list item independently so no exercise is sliced at a page boundary.
-      const blocks = Array.from(host.querySelectorAll<HTMLElement>("p,h1,h2,h3,h4,li,img,table"))
-        .filter(el => !el.parentElement?.closest("li,table") && !(el.tagName === "IMG" && el.parentElement?.closest("p")));
-      host.id = `workout-pdf-${workoutIndex}`;
-      let origin = host.getBoundingClientRect();
-      let bounds = blocks.map(block => block.getBoundingClientRect());
-      // Capture once, rather than cloning the entire app for every paragraph.
-      const rendered = await withExportDeadline(html2canvas(host, {
-        scale: 1.5, backgroundColor: `#${paper}`, logging: false, imageTimeout: 15_000,
-        ignoreElements: el => !document.head.contains(el) && !el.contains(host) && !host.contains(el),
-        onclone: doc => {
-          const clonedHost = doc.getElementById(host.id);
-          if (!clonedHost) throw new Error("The PDF layout could not be prepared.");
-          origin = clonedHost.getBoundingClientRect();
-          bounds = Array.from(clonedHost.querySelectorAll<HTMLElement>("p,h1,h2,h3,h4,li,img,table"))
-            .filter(el => !el.parentElement?.closest("li,table") && !(el.tagName === "IMG" && el.parentElement?.closest("p")))
-            .map(block => block.getBoundingClientRect());
-        },
-      }), "The PDF took too long to render. Please retry or download Word.");
-      const scale = rendered.width / origin.width;
-      for (let index = 0; index < blocks.length; index++) {
-        if (cancelled()) throw new Error("Download cancelled.");
-        const block = blocks[index]; if (!block) continue;
-        const rect = bounds[index]; if (!rect) continue;
-        const canvas = document.createElement("canvas");
-        canvas.width = Math.ceil(rect.width * scale); canvas.height = Math.ceil(rect.height * scale);
-        if (!canvas.width || !canvas.height) continue;
-        const context = canvas.getContext("2d");
-        if (!context) throw new Error("The PDF could not be rendered.");
-        context.fillStyle = `#${paper}`; context.fillRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(rendered, Math.round((rect.left - origin.left) * scale), Math.round((rect.top - origin.top) * scale), canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-        const width = Math.min(182, canvas.width * 182 / 624);
-        const height = canvas.height * width / canvas.width;
-        if (height > 266) throw new Error("One workout block is too large for an A4 page. Download Word or HTML for this workout.");
-        const next = blocks[index + 1];
-        const keepHeading = /^H[1-4]$/.test(block.tagName) && next ? next.getBoundingClientRect().height * 182 / 624 + 5 : 0;
-        if (y + height + keepHeading > 278 && y > 14) page();
-        pdf.addImage(canvas.toDataURL("image/jpeg", 0.94), "JPEG", 14, y, width, height); y += height + 3;
+    const blocks = documentBlocks(host);
+    for (const block of blocks) {
+      if (cancelled()) throw new Error("Download cancelled.");
+      if (block.kind === "image") {
+        const png = await imagePng(block.image);
+        const width = right - left, height = Math.min(100, width * png.height / png.width);
+        ensure(height + 6);
+        pdf.addImage(png.data, "PNG", left, y, width, height); y += height + 7;
+        continue;
       }
-    } finally { host.remove(); }
+      const size = block.level === 1 ? 22 : block.level ? 13 : 10;
+      const lineHeight = size * 0.352778 * 1.5;
+      if (block.level) { ensure(lineHeight * 3 + 6); y += 4; }
+      let x = left + (block.prefix ? 5 : 0);
+      const textLeft = x;
+      pdf.setFontSize(size);
+      if (block.prefix) { ensure(lineHeight); pdf.setFont("Document", "normal"); pdf.setTextColor(`#${ink}`); pdf.text(block.prefix, left, y + size * 0.352778); }
+      for (const run of block.runs) {
+        pdf.setFont("Document", run.bold ? "bold" : "normal");
+        pdf.setTextColor(`#${run.link || block.level > 1 ? accent : ink}`);
+        for (const token of run.text.split(/(\s+)/)) {
+          if (!token) continue;
+          const space = /^\s+$/.test(token);
+          if (token.includes("\n")) { y += lineHeight; ensure(lineHeight); x = textLeft; continue; }
+          if (space && x === textLeft) continue;
+          const width = pdf.getTextWidth(token);
+          if (x + width > right && x > textLeft) { y += lineHeight; ensure(lineHeight); x = textLeft; if (space) continue; }
+          const pieces = width > right - textLeft ? Array.from(token) : [token];
+          for (const piece of pieces) {
+            const pieceWidth = pdf.getTextWidth(piece);
+            if (x + pieceWidth > right) { y += lineHeight; ensure(lineHeight); x = textLeft; }
+            ensure(lineHeight);
+            const baseline = y + size * 0.352778;
+            pdf.text(piece, x, baseline);
+            if (run.link) pdf.link(x, y, pieceWidth, lineHeight, { url: run.link });
+            x += pieceWidth;
+          }
+        }
+      }
+      y += lineHeight + (block.level ? 3 : 2.5);
+    }
+  }
+  for (let index = 1; index <= pdf.getNumberOfPages(); index++) {
+    pdf.setPage(index); pdf.setDrawColor(`#${line}`); pdf.line(left, 284, right, 284);
+    pdf.setFont("Document", "normal"); pdf.setFontSize(8); pdf.setTextColor(`#${muted}`);
+    pdf.text(`SMARTYGYM · smartygym.com · ${index} / ${pdf.getNumberOfPages()}`, 105, 290, { align: "center" });
   }
   return pdf.output("blob");
 }
