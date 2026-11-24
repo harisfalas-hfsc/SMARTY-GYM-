@@ -11,6 +11,7 @@ import { adminListRituals, adminUpdateRitual } from "@/lib/ritual.functions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { HtmlDownloadButton } from "./HtmlDownloadButton";
 import { ritualHtmlFile } from "@/lib/ritual-html-export";
+import { workoutSelectionScope } from "@/lib/admin-workout-selection";
 
 type Row = Awaited<ReturnType<typeof adminListRituals>>["rituals"][number];
 
@@ -54,17 +55,19 @@ export function AdminRitualsTab() {
 
   if (!data) return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
   if (!data.rituals.length) return <p className="text-sm text-muted-foreground">No rituals yet.</p>;
+  const { selected, targets } = workoutSelectionScope(data.rituals, selectedIds);
+  const exportLabel = selected.length ? `Export selected (${selected.length})` : "Export all";
 
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">{data.rituals.length} rituals — one per day, in order, then the cycle starts again.</p>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" disabled={exporting} onClick={() => void download("word", data.rituals, "smarty-rituals")}>
-            <FileText className="mr-2 h-4 w-4" /> Export all · Word
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" disabled={exporting} onClick={() => void download("word", targets, "smarty-rituals")}>
+            <FileText className="mr-2 h-4 w-4" /> {exportLabel} · Word
           </Button>
-          <Button variant="outline" size="sm" disabled={exporting} onClick={() => void download("pdf", data.rituals, "smarty-rituals")}>
-            <FileDown className="mr-2 h-4 w-4" /> Export all · PDF
+          <Button variant="outline" size="sm" disabled={exporting} onClick={() => void download("pdf", targets, "smarty-rituals")}>
+            <FileDown className="mr-2 h-4 w-4" /> {exportLabel} · PDF
           </Button>
         </div>
       </div>
@@ -72,8 +75,7 @@ export function AdminRitualsTab() {
         <Button variant="outline" size="sm" onClick={() => setSelectedIds(new Set(data.rituals.map(r => r.id)))}>Select all ({data.rituals.length})</Button>
         <Button variant="ghost" size="sm" disabled={!selectedIds.size} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
         <span className="text-xs text-muted-foreground">{selectedIds.size} selected</span>
-        <HtmlDownloadButton count={selectedIds.size || data.rituals.length} label={selectedIds.size ? "Download selected HTML" : "Download all HTML"} filename="smarty-rituals" load={async (report, embed, cancelled) => {
-          const targets = data.rituals.filter(r => !selectedIds.size || selectedIds.has(r.id));
+        <HtmlDownloadButton count={targets.length} label={selected.length ? "Download selected HTML" : "Download all HTML"} filename="smarty-rituals" load={async (report, embed, cancelled) => {
           const files = [];
           for (const [index, ritual] of targets.entries()) {
             if (cancelled()) throw new Error("Download cancelled.");
