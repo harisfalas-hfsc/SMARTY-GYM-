@@ -2,15 +2,8 @@ import type { WorkoutRow } from "@/components/workout/WorkoutDisplay";
 import { difficultyLabel } from "./workout/spec";
 import { EXERCISE_TOKEN_RE } from "./workout/tokens";
 import { createAssetEmbedder, embeddedHtml, escapeHtml, exportTheme } from "./standalone-html";
-
-export async function withExportDeadline<T>(work: Promise<T>, message: string, milliseconds = 30_000): Promise<T> {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  try {
-    return await Promise.race([work, new Promise<never>((_, reject) => {
-      timer = setTimeout(() => reject(new Error(message)), milliseconds);
-    })]);
-  } finally { if (timer !== undefined) clearTimeout(timer); }
-}
+import { withExportDeadline } from "./export-timing";
+export { withExportDeadline } from "./export-timing";
 
 export function workoutDocumentParts(w: WorkoutRow) {
   return [
@@ -117,7 +110,7 @@ export async function workoutWordDocument(hosts: HTMLElement[]): Promise<Blob> {
 }
 
 export async function workoutPdfDocument(hosts: HTMLElement[], report: (message: string) => void = () => {}, cancelled: () => boolean = () => false): Promise<Blob> {
-  const [{ jsPDF }, { default: html2canvas }] = await Promise.all([import("jspdf"), import("html2canvas-pro"), document.fonts.ready]);
+  const [{ jsPDF }, { default: html2canvas }] = await withExportDeadline(Promise.all([import("jspdf"), import("html2canvas-pro"), document.fonts.ready]), "PDF tools or fonts took too long to load. Please retry.");
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
   const paper = tokenColor("card"), ink = tokenColor("foreground");
   let first = true, y = 14;

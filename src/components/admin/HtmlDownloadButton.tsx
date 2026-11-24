@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { createAssetEmbedder, packageHtmlFiles, type HtmlExportFile } from "@/lib/standalone-html";
 import { deliverExerciseFile } from "@/lib/exercise-card-export";
+import { withExportDeadline, withExportProgress } from "@/lib/export-timing";
 
 export function HtmlDownloadButton({ count, disabled, load, filename, label = "Download HTML" }: {
   count: number; disabled?: boolean; filename: string; label?: string;
@@ -19,12 +20,19 @@ export function HtmlDownloadButton({ count, disabled, load, filename, label = "D
     const run = ++generation.current;
     setOpen(true); setBusy(true); setReady(null); setError(null); setStatus("Preparing HTML…");
     try {
-      const files = await load(message => { if (run === generation.current) setStatus(message); }, createAssetEmbedder(), () => run !== generation.current);
+      const fetchAsset = createAssetEmbedder();
+      const embed = (src: string) => withExportDeadline(fetchAsset(src), "A picture took too long to download. Please retry.", 20_000);
+      const files = await withExportProgress(
+        report => load(report, embed, () => run !== generation.current),
+        message => { if (run === generation.current) setStatus(message); },
+        "HTML preparation stopped responding. Please retry or select a smaller batch.",
+        60_000,
+      );
       if (run !== generation.current) return;
       // Keep browser packaging bounded. No silent truncation or partial successful downloads.
       if (files.reduce((size, file) => size + file.html.length, 0) > 180_000_000) throw new Error("This selection is too large for one download. Select fewer items and download in batches.");
       setStatus("Packaging HTML…");
-      const file = await packageHtmlFiles(files, filename);
+      const file = await withExportDeadline(packageHtmlFiles(files, filename), "Packaging took too long. Please select a smaller batch.", 60_000);
       if (run === generation.current) { setReady(file); setStatus(`${files.length} ${files.length === 1 ? "HTML file" : "HTML files"} ready`); }
     } catch (e) { if (run === generation.current) setError(e instanceof Error ? e.message : "Could not prepare this download."); }
     finally { if (run === generation.current) setBusy(false); }
@@ -32,9 +40,10 @@ export function HtmlDownloadButton({ count, disabled, load, filename, label = "D
   return <>
     <Button variant="outline" size="sm" disabled={disabled || count === 0 || busy} onClick={() => void prepare()}><Download className="mr-1 h-4 w-4" />{label} ({count})</Button>
     <Dialog open={open} onOpenChange={value => { setOpen(value); if (!value) { generation.current++; setBusy(false); setReady(null); } }}>
-      <DialogContent className="max-w-md"><DialogTitle>HTML download</DialogTitle><DialogDescription>{status}</DialogDescription>
+      <DialogContent className="max-w-md"><DialogTitle>HTML download</DialogTitle><DialogDescription aria-live="polite">{status}</DialogDescription>
         {busy && <Loader2 className="h-6 w-6 animate-spin text-primary" />}
         {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+        {busy && <Button variant="outline" onClick={() => { generation.current++; setBusy(false); setOpen(false); }}>Cancel</Button>}
         {ready && <Button onClick={() => { void deliverExerciseFile(ready.blob, ready.filename).then(() => { setOpen(false); setReady(null); generation.current++; }).catch(() => setError("The file could not be saved. Please try again.")); }}><Download className="mr-2 h-4 w-4" />Download {ready.filename.endsWith(".zip") ? "ZIP" : "HTML"}</Button>}
       </DialogContent>
     </Dialog>

@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { createAssetEmbedder } from "@/lib/standalone-html";
 import { deliverExerciseFile } from "@/lib/exercise-card-export";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { withExportDeadline, withExportProgress } from "@/lib/export-timing";
 
 export function WorkoutDocumentDownloads({ count, disabled, filename, load, selected = false, menu = false }: {
   count: number; disabled?: boolean; filename: string; selected?: boolean;
@@ -21,9 +22,9 @@ export function WorkoutDocumentDownloads({ count, disabled, filename, load, sele
     const cancelled = () => run !== generation.current;
     setOpen(true); setBusy(true); setError(null); setReady(null); setStatus("Loading workouts…");
     try {
-      const { prepareWorkoutDocument, workoutPdfDocument, workoutWordDocument, withExportDeadline } = await import("@/lib/workout-document-export");
+      const { prepareWorkoutDocument, workoutPdfDocument, workoutWordDocument } = await withExportDeadline(import("@/lib/workout-document-export"), "Download tools took too long to load. Please retry.");
       const report = (message: string) => { if (!cancelled()) setStatus(message); };
-      const workouts = await withExportDeadline(load(report, cancelled), "Workouts took too long to load. Please retry or select a smaller batch.");
+      const workouts = await withExportProgress(progress => load(progress, cancelled), report, "Workouts stopped loading. Please retry or select a smaller batch.");
       if (!workouts.length) throw new Error("No workouts selected.");
       const fetchAsset = createAssetEmbedder();
       const embed = (src: string) => withExportDeadline(fetchAsset(src), "A workout picture took too long to download. Please retry.", 20_000);

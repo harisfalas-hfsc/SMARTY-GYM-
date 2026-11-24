@@ -1,2 +1,3 @@
 - blog-admin.functions.ts reuses the weekly generator's link validator, read-time and cover storage; AI drafts return unsaved — why: manual and AI articles match and nothing publishes without Save.
 - Workout PDF exports capture each document once and crop using cloned-layout bounds, with asset/render deadlines — why: fast, complete downloads without indefinite waits or changes to training records.
+- Download loading uses export-timing progress watchdogs rather than total batch deadlines — why: stalled reads stop but healthy large selections keep progressing.

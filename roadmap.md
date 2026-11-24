@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Workout download delay and direct actions
+- [x] Sweep: read Smarty/member card menus, previews, selected/all-filtered controls, both member-profile archive entries, admin read functions, shared PDF/Word/HTML preparation and delivery, plus job registry; no scheduled/database export function exists. Fixed unbounded tool/font/HTML waits and replaced the total member-loading deadline with a progress watchdog so healthy batches continue. Real card/menu, preview, all-filtered, selected-two PDF, Word and animated HTML downloads saved; profile entries verified by code reuse, not separately driven. 616 library tests pass and preview build OK. Installed-device delivery, entire-library exports and the original two-minute stall remain unverified; Word may reflow pages. No records, permissions, settings or schedules changed; publish required.
 - [x] Real selected phone-sized PDF took 13 seconds before the fix; remove repeated whole-app capture, add progress/cancellation and picture/render deadlines. The reported two-minute stall was not reproduced.
 - [x] Word/PDF menu actions added directly to Smarty/member cards. Actual signed-in individual and selected PDFs and Word files saved in approximately 0.6–2 seconds; cover, complete prescriptions/instructions/tips and PDF pages inspected. Six regression tests pass; preview build OK. Phone-sized browser and desktop verified, not installed-device delivery; no customer records changed. Publish required.
 
