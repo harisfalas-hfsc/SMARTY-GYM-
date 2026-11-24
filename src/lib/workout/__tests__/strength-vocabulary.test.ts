@@ -17,7 +17,7 @@ describe("SmartyGym Strength & Muscle Hypertrophy list", () => {
     expect(exerciseRuleBreaks(ex("sled 45° leg press", "sled machine"), ctx)).toEqual([]);
     expect(exerciseRuleBreaks(ex("barbell full squat", "barbell"), { ...ctx, category: "MUSCLE BUILDING" })).toEqual([]);
     expect(exerciseRuleBreaks(ex("smith bench press", "smith machine"), ctx).join()).toMatch(/not a coach priority exercise/);
-    expect(exerciseRuleBreaks(ex("dumbbell fly", "dumbbell"), ctx).join()).toMatch(/not a coach priority exercise/);
+    expect(exerciseRuleBreaks(ex("dumbbell fly", "dumbbell"), ctx)).toEqual([]);
     expect(exerciseRuleBreaks(ex("smith reverse calf raises", "smith machine"), ctx).join()).toMatch(/equipment Strength & Muscle Hypertrophy list/);
   });
   it("accepts priority Chin-Up consistently in exercise and workout checks", () => {

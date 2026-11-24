@@ -223,7 +223,7 @@ describe("filterPool equipment allowlist", () => {
 });
 
 describe("deterministic delivery fallback", () => {
-  it("fills a complete workout even when only one legal exercise survives", () => {
+  it("never repeats an exercise to fill a block, even when only one legal exercise survives", () => {
     const only = [ex("solo", "bodyweight squat")];
     const result = buildPackWorkout(only, only, {
       category: "STRENGTH",
@@ -231,7 +231,13 @@ describe("deterministic delivery fallback", () => {
       level: "beginner",
       minutes: 30,
     });
-    expect((result.html.match(/\{\{exercise:solo:bodyweight squat\}\}/g) ?? []).length).toBeGreaterThanOrEqual(5);
+    expect((result.html.match(/\{\{exercise:solo:bodyweight squat\}\}/g) ?? []).length).toBe(1);
     expect(result.html).toContain("Main Workout");
+  });
+  it("chest with a small pool never puts a Main exercise in the Finisher", () => {
+    const pool = ["barbell bench press", "barbell incline bench press", "dumbbell bench press", "dumbbell incline bench press", "push-up", "decline push-up"].map((n, i) => ex(`c${i}`, n));
+    const result = buildPackWorkout(pool, pool, { category: "MUSCLE BUILDING", format: "REPS & SETS", level: "intermediate", minutes: 45, finisher: true });
+    const ids = [...result.html.matchAll(/\{\{exercise:([^:}]+):/g)].map((m) => m[1]);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 });

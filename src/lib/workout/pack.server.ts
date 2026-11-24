@@ -154,13 +154,16 @@ export function pickBalanced(
 /** Fill a prescribed block from the legal pool even when a narrow filter leaves few rows. */
 function fillFromLegalPool(picks: PoolExercise[], pool: PoolExercise[], count: number): PoolExercise[] {
   if (!pool.length || count <= 0) return [];
-  const out = picks.slice(0, count);
-  let cursor = 0;
-  while (out.length < count) {
-    const next = pool[cursor % pool.length];
-    if (!next) break;
-    out.push(next);
-    cursor += 1;
+  // Never repeat an exercise to fill a block (Coach Haris): a shorter list beats a duplicate.
+  const out: PoolExercise[] = [];
+  const seen = new Set<string>();
+  const key = (e: PoolExercise) => movementKey(e.name, null);
+  for (const e of [...picks, ...pool]) {
+    if (out.length >= count) break;
+    if (seen.has(e.id) || seen.has(key(e))) continue;
+    out.push(e);
+    seen.add(e.id);
+    seen.add(key(e));
   }
   return out;
 }
@@ -327,7 +330,11 @@ export function buildPackWorkout(
         const spareOf = () => src.find((e) => !seenKeys.has(movementKey(e.name, input.focus)) && !used.has(e.id) && !filled.some((f) => f.id === e.id));
         for (let i = 0; i < filled.length; i++) {
           const k = movementKey(filled[i]!.name, input.focus);
-          if (seenKeys.has(k)) { const s = spareOf(); if (s) filled[i] = s; }
+          if (seenKeys.has(k)) {
+            const s = spareOf();
+            if (s) filled[i] = s;
+            else { filled.splice(i, 1); i--; continue; } // no spare: drop it, never repeat
+          }
           seenKeys.add(movementKey(filled[i]!.name, input.focus));
         }
         return flowGroup(filled, src, input, new Set([...used, ...mainPicks.map((e) => e.id)]));

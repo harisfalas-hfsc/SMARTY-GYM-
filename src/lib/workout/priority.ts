@@ -55,6 +55,7 @@ export const PRIORITY_MOVEMENT_PATTERN: Record<string, FocusGroup | FocusGroup[]
   "Barbell Overhead Press": "upper push", "Cable Triceps Pushdown": "upper push",
   "Overhead Cable Triceps Extension": "upper push", "Triceps Dip": "upper push",
   "Cable Lateral Raise": "upper push", "Cable Chest Fly": "upper push",
+  "Dumbbell Fly": "upper push", "Dumbbell Incline Fly": "upper push", "Barbell Decline Bench Press": "upper push",
   // 4. UPPER BODY PULL
   "Pull-Up": "upper pull", "Chin-Up": "upper pull", "Neutral-Grip Pull-Up": "upper pull", "Inverted Row": "upper pull",
   "Dumbbell Row": "upper pull", "Single-Arm Dumbbell Row": "upper pull", "Kettlebell Row": "upper pull",
@@ -107,6 +108,7 @@ export const PRIORITY_EQUIPMENT = [
   "Kettlebell Row", "Kettlebell Press", "Kettlebell Push Press", "Kettlebell Thruster", "Kettlebell Reverse Lunge",
   "TRX Row", "TRX Push-Up", "TRX Reverse Lunge", "TRX Split Squat", "TRX Mountain Climber",
   "Medicine Ball Slam", "Medicine Ball Squat to Press", "Medicine Ball Chest Pass",
+  "Dumbbell Incline Bench Press", "Dumbbell Fly", "Dumbbell Incline Fly",
 ];
 
 export const PRIORITY_FULL_GYM = [
@@ -118,7 +120,7 @@ export const PRIORITY_FULL_GYM = [
   "Single-Arm Dumbbell Row", "Seated Calf Raise", "Standing Calf Raise",
   // Common gym accessories — familiar, after the compound staples.
   "Cable Biceps Curl", "Dumbbell Biceps Curl", "Hammer Curl", "Cable Triceps Pushdown",
-  "Overhead Cable Triceps Extension", "Triceps Dip", "Cable Lateral Raise", "Cable Chest Fly",
+  "Overhead Cable Triceps Extension", "Triceps Dip", "Cable Lateral Raise", "Cable Chest Fly", "Dumbbell Fly", "Dumbbell Incline Fly", "Barbell Decline Bench Press",
   "Cable Crunch", "Hanging Knee Raise", "Hanging Leg Raise", "Cable Pallof Press",
   "Kettlebell Swing",
 ];
