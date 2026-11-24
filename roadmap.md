@@ -1,5 +1,9 @@
 # Roadmap
 
+## Admin workout Word and PDF records
+- [x] Add individual and selected/all-filtered exports in both workout archives, preserving covers and all workout content without writes.
+- [x] Actual signed-in Smarty/member Word and PDF downloads verified; embedded cover and complete prescriptions/instructions/tips inspected, PDF pages and Word rendering checked. Two-selected phone PDF downloaded without overflow; eight preservation/selection tests and preview build pass. Entire-library export and installed-device delivery not exercised; very large exports require batches. Microsoft Word can reflow pagination; no customer records changed.
+
 ## Transparent lower photo briefing
 - [x] Remove the desktop briefing surface/borders/blur, keeping photo-readable details and feature colors in both themes; place it slightly above the photo bottom, preserving mobile. Keep the image-to-page fade below the briefing for light-mode readability.
 - [x] Actual signed-in desktop/mobile dark/light rotation and expanded Insights checked, screenshots inspected, no browser errors; 616 tests pass and preview build OK. No customer data changed; publish required.

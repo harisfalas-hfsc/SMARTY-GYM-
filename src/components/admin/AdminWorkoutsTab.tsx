@@ -27,6 +27,7 @@ import { requestSmartyDraft } from "@/lib/admin-smarty-draft";
 import { Checkbox } from "@/components/ui/checkbox";
 import { HtmlDownloadButton } from "./HtmlDownloadButton";
 import { workoutHtmlFile } from "@/lib/workout-html-export";
+import { WorkoutDocumentDownloads } from "./WorkoutDocumentDownloads";
 
 type Props = {
   /** When set, the archive is scoped to one member (their full logbook). */
@@ -300,6 +301,32 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
       <div className="flex flex-wrap items-center gap-2">
         <Button variant="outline" size="sm" disabled={loading || selectingAll || total === 0} onClick={() => void selectAllFiltered()}>{selectingAll && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Select all filtered ({total})</Button>
         <Button variant="ghost" size="sm" disabled={selectingAll || !selectedIds.size} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
+        <WorkoutDocumentDownloads count={selectedIds.size || total} selected={selectedIds.size > 0} disabled={loading || selectingAll} filename="member-workouts" load={async (report, cancelled) => {
+          const ids = [...selectedIds];
+          if (!ids.length) {
+            for (let nextPage = 1; ; nextPage++) {
+              if (cancelled()) throw new Error("Download cancelled.");
+              report("Loading matching workouts…");
+              const result = await listWorkouts({ data: {
+                userId, search: searchTerm, category, focus, source, status, equipment, duration,
+                ...(stars !== "all" ? { stars: Number(stars) } : {}),
+                ...(from ? { from } : {}), ...(to ? { to } : {}), page: nextPage, pageSize: 100,
+              } });
+              if ("error" in result) throw new Error(result.error);
+              ids.push(...result.workouts.map(w => w.id));
+              if (nextPage * 100 >= result.total || !result.workouts.length) break;
+            }
+          }
+          const workouts = [];
+          for (const [index, id] of [...new Set(ids)].entries()) {
+            if (cancelled()) throw new Error("Download cancelled.");
+            report(`Loading workout ${index + 1} of ${ids.length}…`);
+            const result = await getWorkout({ data: { id } });
+            if ("error" in result) throw new Error(result.error);
+            workouts.push(result.workout);
+          }
+          return workouts;
+        }} />
         <HtmlDownloadButton count={selectedIds.size || total} disabled={loading || selectingAll} filename="member-workouts" label={selectedIds.size ? "Download selected HTML" : "Download all filtered HTML"} load={async (report, embed, cancelled) => {
           const ids = [...selectedIds];
           if (!ids.length) {
@@ -442,6 +469,7 @@ export function AdminWorkoutsTab({ userId, title }: Props) {
                   {dupBusy ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Copy className="mr-1 h-3.5 w-3.5" />}
                   Duplicate as Smarty Workout
                 </Button>
+                <div className="mt-3 flex flex-wrap gap-2"><WorkoutDocumentDownloads count={1} filename={`workout-${detail.id}`} load={async () => [detail]} /></div>
               </div>
               <WorkoutDisplay workout={detail} previewMode onComplete={() => {}} />
             </div>

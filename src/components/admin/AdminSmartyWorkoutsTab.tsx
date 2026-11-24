@@ -38,6 +38,7 @@ import { workoutSelectionScope } from "@/lib/admin-workout-selection";
 import { publicationDeliverySummary } from "@/lib/broadcast-content";
 import { HtmlDownloadButton } from "./HtmlDownloadButton";
 import { workoutHtmlFile } from "@/lib/workout-html-export";
+import { WorkoutDocumentDownloads } from "./WorkoutDocumentDownloads";
 
 const LEVELS = [
   { v: 1, label: "Beginner" },
@@ -251,6 +252,7 @@ export function AdminSmartyWorkoutsTab() {
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="outline" disabled={loading || bulkBusy || !shown.length} onClick={() => setSelectedIds(new Set(shown.map((w) => w.id)))}>Select all filtered ({shown.length})</Button>
           <Button size="sm" variant="ghost" disabled={!scope.selected.length || bulkBusy} onClick={() => setSelectedIds(new Set())}>Clear selection</Button>
+          <WorkoutDocumentDownloads count={scope.targets.length} selected={scope.selected.length > 0} disabled={loading || bulkBusy} filename="smarty-workouts" load={async () => scope.targets.map(smartyToWorkoutRow)} />
           <HtmlDownloadButton count={scope.targets.length} disabled={loading || bulkBusy} filename="smarty-workouts" label={scope.selected.length ? "Download selected HTML" : "Download all filtered HTML"} load={async (report, embed, cancelled) => {
             const targets = [...scope.targets];
             const files = [];
@@ -401,6 +403,7 @@ export function AdminSmartyWorkoutsTab() {
       <Dialog open={Boolean(viewing)} onOpenChange={(o) => !o && setViewing(null)}>
         <DialogContent className="max-h-[95dvh] w-[calc(100vw-1rem)] max-w-6xl overflow-y-auto p-0 sm:w-full">
           <DialogHeader className="px-4 pt-4"><DialogTitle className="pr-8 text-left">{viewing?.name}</DialogTitle></DialogHeader>
+          {viewing && <div className="flex flex-wrap gap-2 px-4"><WorkoutDocumentDownloads count={1} filename={`workout-${viewing.id}`} load={async () => [smartyToWorkoutRow(viewing)]} /></div>}
           {viewing && <WorkoutDisplay workout={smartyToWorkoutRow(viewing)} previewMode onComplete={() => {}}><MemberSectionsPreview /></WorkoutDisplay>}
         </DialogContent>
       </Dialog>
