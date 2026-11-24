@@ -804,13 +804,13 @@ function PlayerSlideView({
             type="button"
             onClick={() => step.exerciseId && setInfoOpen(true)}
             aria-label={`See full instructions for ${step.name}`}
-            className="relative block h-full w-full rounded-none p-0"
+            className="relative block h-full w-full rounded-none bg-white p-0 hover:bg-white"
           >
             <ExerciseImage
               path={gifPath}
               url={gifUrl}
               alt={`${step.name} demonstration`}
-              className="block h-full w-full rounded-none bg-card object-contain"
+              className="block h-full w-full rounded-none bg-white object-contain"
               fallbackClassName="flex h-full w-full items-center justify-center bg-card"
             />
             {step.exerciseId ? (
