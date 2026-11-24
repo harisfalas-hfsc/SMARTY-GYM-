@@ -1,5 +1,9 @@
 # Roadmap
 
+## Native Blog and Ritual PDFs
+- [x] Replace screenshot pages with shared native Unicode text, embedded pictures, links and pagination without changing saved content or Word/HTML exports. App-owned cover URLs resolve on the current host to avoid preview cross-origin failures.
+- [x] Real signed-in single/selected Blog and single/all-180 Ritual PDFs downloaded. Extracted single-item text contains every original editor line; all 180 Ritual titles present. All five single-item PDF pages inspected: readable paper/ink, intact cover, no clipping or overlap. Eight targeted tests pass; preview build OK, no browser runtime errors. Physical PDF apps and whole-Blog export unverified; no records changed, publish required.
+
 ## Presentable native workout documents
 - [x] Follow-up formatting sweep: re-read both workout lists (individual/selected/all), both previews, member-profile/Logbook entry points, shared document generator, admin read functions and job registry. Every workout PDF/Word path uses the corrected generator; no additional workout formatter or scheduled/database document generator exists. Fresh filtered/preview PDFs confirm native complete text; eight targeted tests pass. Blog/Ritual PDFs still use screenshot generation and brand-guide PDFs intentionally preserve page appearance; left unchanged as outside this workout-only request. Exercise PDF uses native text. Profile entry points checked by code only; physical Word/Acrobat apps and whole-library export remain unverified.
 - [x] Replace screenshot-based PDF pages with selectable Unicode text, wrapping, pagination, hyperlinks and embedded cover photos; Word uses explicit dark text on white paper independent of screen mode.

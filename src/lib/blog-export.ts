@@ -1,4 +1,5 @@
 import DOMPurify from "dompurify";
+import { contentPdfDocument } from "./content-pdf";
 
 export type ExportArticle = { title: string; excerpt: string | null; content: string; category: string; read_time: string | null; published_at: string | null; is_published: boolean; image_url: string | null; slug: string };
 
@@ -65,32 +66,19 @@ export async function exportBlogWord(articles: ExportArticle[], filename: string
   save(await Packer.toBlob(doc), `${filename}.docx`);
 }
 
+export function blogPdfContents(articles: ExportArticle[]) {
+  return articles.map(article => ({
+    title: article.title,
+    subtitle: meta(article),
+    ...(article.image_url ? { cover: article.image_url } : {}),
+    sections: [
+      ...(article.excerpt ? [{ html: `<p>${DOMPurify.sanitize(article.excerpt)}</p>` }] : []),
+      { html: article.content },
+    ],
+  }));
+}
+
 export async function exportBlogPdf(articles: ExportArticle[], filename: string) {
-  const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import("html2canvas-pro"), import("jspdf")]);
-  const pdf = new jsPDF({ unit: "pt", format: "a4", compress: true });
-  const pw = pdf.internal.pageSize.getWidth();
-  const ph = pdf.internal.pageSize.getHeight();
-  let first = true;
-  for (const a of articles) {
-    const host = document.createElement("div");
-    host.style.cssText = "position:fixed;left:-10000px;top:0;width:794px;padding:56px;background:#fff;color:#171b1d;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;box-sizing:border-box";
-    const cover = a.image_url ? `<img src="${a.image_url}" crossorigin="anonymous" style="width:100%;border-radius:12px;margin-bottom:20px"/>` : "";
-    host.innerHTML = `${cover}<h1 style="font-size:28px;margin:0 0 6px">${DOMPurify.sanitize(a.title)}</h1><p style="color:#666;font-size:12px;margin:0 0 18px">${meta(a)}</p>${a.excerpt ? `<p style="font-weight:bold">${DOMPurify.sanitize(a.excerpt)}</p>` : ""}<div class="c">${DOMPurify.sanitize(a.content)}</div>`;
-    host.querySelectorAll("a").forEach((l) => { (l as HTMLElement).style.color = "#087EA4"; });
-    document.body.append(host);
-    try {
-      await Promise.all(Array.from(host.querySelectorAll("img")).map((img) => img.decode().catch(() => img.remove())));
-      const canvas = await html2canvas(host, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-      const sliceH = Math.floor(canvas.width * (ph / pw));
-      for (let y = 0; y < canvas.height; y += sliceH) {
-        const slice = document.createElement("canvas");
-        slice.width = canvas.width; slice.height = Math.min(sliceH, canvas.height - y);
-        slice.getContext("2d")!.drawImage(canvas, 0, y, canvas.width, slice.height, 0, 0, canvas.width, slice.height);
-        if (!first) pdf.addPage();
-        first = false;
-        pdf.addImage(slice.toDataURL("image/jpeg", 0.9), "JPEG", 0, 0, pw, (slice.height * pw) / slice.width);
-      }
-    } finally { host.remove(); }
-  }
-  pdf.save(`${filename}.pdf`);
+  const blob = await contentPdfDocument(blogPdfContents(articles), "Blog Articles");
+  save(blob, `${filename}.pdf`);
 }

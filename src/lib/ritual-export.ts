@@ -1,4 +1,5 @@
 import DOMPurify from "dompurify";
+import { contentPdfDocument } from "./content-pdf";
 
 export type ExportRitual = {
   number: number;
@@ -73,23 +74,6 @@ async function makeEmojiImages(root: HTMLElement) {
     node.replaceWith(fragment);
   }));
 }
-
-const STYLES = `
-  .export-sheet { width: 794px; box-sizing: border-box; padding: 56px 65px; background: #ffffff; color: #171b1d; font: 16px/1.5 Arial, sans-serif; }
-  .export-sheet h1 { font-size: 28px; margin: 0 0 3px; line-height: 1.2; }
-  .export-sheet .byline { color: #647079; margin: 0 0 22px; font-size: 14px; }
-  .export-sheet h2 { font-size: 21px; line-height: 1.25; margin: 0; }
-  .export-sheet .phase { margin: 0 0 36px; }
-  .export-sheet .phase-heading { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; }
-  .export-sheet .phase-heading .emoji { width: 30px; height: 30px; }
-  .export-sheet .time { color: #647079; font-size: 14px; margin: 2px 0 0; }
-  .export-sheet .content p { margin: 8px 0; }
-  .export-sheet .content ul, .export-sheet .content ol { margin: 8px 0; padding-left: 25px; list-style: none; }
-  .export-sheet .content li { padding: 0; margin: 3px 0; position: relative; }
-  .export-sheet .content li .list-marker { position: absolute; left: -19px; top: 0; }
-  .export-sheet .content a { color: #087ea4; text-decoration: underline; }
-  .export-sheet .emoji { display: inline-block; width: 17px; height: 17px; vertical-align: -3px; margin: 0 2px; object-fit: contain; }
-`;
 
 async function sheet(ritual: ExportRitual): Promise<HTMLElement> {
   const el = document.createElement("article");
@@ -208,41 +192,15 @@ export async function exportWord(rituals: ExportRitual[], filename: string) {
   save(await Packer.toBlob(document), `${filename}.docx`);
 }
 
+export function ritualPdfContents(rituals: ExportRitual[]) {
+  return rituals.map(ritual => ({
+    title: `Daily Smarty Ritual ${ritual.number}`,
+    subtitle: "SmartyGym · Designed by HARIS FALAS",
+    sections: PHASES.map(phase => ({ title: phase.name, subtitle: phase.time, html: ritual[phase.key] })),
+  }));
+}
+
 export async function exportPdf(rituals: ExportRitual[], filename: string) {
-  const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import("html2canvas-pro"), import("jspdf")]);
-  const style = document.createElement("style");
-  style.textContent = STYLES;
-  document.head.append(style);
-  const holder = document.createElement("div");
-  holder.style.cssText = "position:fixed;left:-20000px;top:0;width:794px;z-index:-1";
-  document.body.append(holder);
-  const pdf = new jsPDF({ unit: "pt", format: "a4", compress: true });
-  let first = true;
-  try {
-    for (const ritual of rituals) {
-      const el = await sheet(ritual);
-      holder.replaceChildren(el);
-      const canvas = await html2canvas(el, { scale: 1.5, backgroundColor: "#ffffff", useCORS: false, logging: false });
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const sliceHeight = Math.floor(canvas.width * pageHeight / pageWidth);
-      for (let y = 0; y < canvas.height; y += sliceHeight) {
-        if (!first) pdf.addPage();
-        first = false;
-        const slice = document.createElement("canvas");
-        slice.width = canvas.width;
-        slice.height = Math.min(sliceHeight, canvas.height - y);
-        const context = slice.getContext("2d");
-        if (!context) throw new Error("PDF rendering is unavailable");
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, slice.width, slice.height);
-        context.drawImage(canvas, 0, y, canvas.width, slice.height, 0, 0, slice.width, slice.height);
-        pdf.addImage(slice.toDataURL("image/jpeg", 0.9), "JPEG", 0, 0, pageWidth, slice.height * pageWidth / slice.width);
-      }
-    }
-    pdf.save(`${filename}.pdf`);
-  } finally {
-    holder.remove();
-    style.remove();
-  }
+  const blob = await contentPdfDocument(ritualPdfContents(rituals), "Smarty Rituals");
+  save(blob, `${filename}.pdf`);
 }

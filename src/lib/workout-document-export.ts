@@ -150,7 +150,7 @@ function documentBlocks(host: HTMLElement): DocumentBlock[] {
   return blocks;
 }
 
-export async function workoutPdfDocument(hosts: HTMLElement[], report: (message: string) => void = () => {}, cancelled: () => boolean = () => false): Promise<Blob> {
+export async function nativePdfDocument(hosts: HTMLElement[], report: (message: string) => void = () => {}, cancelled: () => boolean = () => false, collection = "Workouts"): Promise<Blob> {
   const { jsPDF } = await withExportDeadline(import("jspdf"), "PDF tools took too long to load. Please retry.");
   const loadFont = async (name: string) => {
     const response = await fetch(`/fonts/workout-document-${name}.ttf`);
@@ -164,7 +164,7 @@ export async function workoutPdfDocument(hosts: HTMLElement[], report: (message:
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
   pdf.addFileToVFS("Document-Regular.ttf", regular); pdf.addFont("Document-Regular.ttf", "Document", "normal");
   pdf.addFileToVFS("Document-Bold.ttf", bold); pdf.addFont("Document-Bold.ttf", "Document", "bold");
-  pdf.setProperties({ title: hosts.length === 1 ? hosts[0]?.querySelector("h1")?.textContent ?? "SmartyGym Workout" : "SmartyGym Workouts", author: "SMARTYGYM", creator: "SMARTYGYM" });
+  pdf.setProperties({ title: hosts.length === 1 ? hosts[0]?.querySelector("h1")?.textContent ?? `SmartyGym ${collection}` : `SmartyGym ${collection}`, author: "SMARTYGYM", creator: "SMARTYGYM" });
   const ink = tokenColor("document-ink"), accent = tokenColor("brand-blue"), muted = tokenColor("document-muted"), line = tokenColor("document-line");
   const left = 16, right = 194, bottom = 276;
   let y = 18;
@@ -173,7 +173,7 @@ export async function workoutPdfDocument(hosts: HTMLElement[], report: (message:
   for (const [workoutIndex, host] of hosts.entries()) {
     if (cancelled()) throw new Error("Download cancelled.");
     if (workoutIndex) newPage();
-    report(`Creating PDF · workout ${workoutIndex + 1} of ${hosts.length}…`);
+    report(`Creating PDF · ${collection.toLowerCase()} ${workoutIndex + 1} of ${hosts.length}…`);
     const blocks = documentBlocks(host);
     for (const block of blocks) {
       if (cancelled()) throw new Error("Download cancelled.");
@@ -223,3 +223,5 @@ export async function workoutPdfDocument(hosts: HTMLElement[], report: (message:
   }
   return pdf.output("blob");
 }
+
+export const workoutPdfDocument = nativePdfDocument;
