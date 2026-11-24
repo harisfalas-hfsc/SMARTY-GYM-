@@ -10,6 +10,7 @@ import type { SessionPlan } from "./programming";
 import { prepAllowed } from "./prep-vocabulary";
 import { isCardioRhythm, isTimedPosition, isTimeDosed, LIGHT_SET_CAP, TABATA_TRAVEL_RE } from "./rules";
 import { buildFinisherHtml, finisherMinimumMinutes } from "./finisher-length";
+import { FOCUS_RULES, focusBreaks, focusGroups, normFocus, type FocusGroup } from "./strength-focus";
 import { dedupeMovements, improvePicks, levelMainMinimum, levelMinSets, movementKey } from "./member-quality";
 import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
 
@@ -264,7 +265,9 @@ export function buildPackWorkout(
   const minSets = input.level === "all" ? 2 : levelMinSets(input.level);
   const perExerciseSec = input.plan ? minSets * (45 + input.plan.main.restSec[0]) : 180;
   const fitCount = input.format === "REPS & SETS" ? Math.max(3, Math.floor((mainMinutes * 60) / perExerciseSec)) : 99;
-  const mainCount = specialist ? baseCount : Math.max(baseCount, Math.min(levelMin, fitCount));
+  const fullCount = specialist ? baseCount : Math.max(baseCount, Math.min(levelMin, fitCount));
+  // TABATA is fixed (8 × 20/10 = 4 min per exercise): only as many blocks as the Main Workout's minutes hold.
+  const mainCount = input.format === "TABATA" ? Math.min(fullCount, Math.max(3, Math.floor(mainMinutes / 4))) : fullCount;
   const finisherCount = input.plan ? Math.max(input.plan.finisherCount[0], 1) : 3;
   // Coach's priority exercises (the 3 × 50 lists) come first; the rest of the
   // legal pool is only used to top up when too few priority matches exist.
@@ -348,16 +351,41 @@ export function buildPackWorkout(
     const taken = takenKeys();
     return [...workPool, ...pool].find((e) => ok(e) && !used.has(e.id) && !taken.has(keyOf(e)));
   };
-  // CARDIO: each block is rhythmic aerobic work with at most one strength-type move.
+  // CARDIO: each block is rhythmic aerobic work with at most one strength-type
+  // move, and no exercise repeats between blocks. The rhythm vocabulary is
+  // shared out so the Finisher keeps its own aerobic moves (≥3 exercises).
   if (input.category === "CARDIO") {
-    for (const list of [mainPicks, finisherPicks]) {
-      let extra = list.filter((e) => !isCardioRhythm(e.name)).length - 1;
-      for (let i = list.length - 1; i >= 0 && extra > 0; i--) {
-        if (isCardioRhythm(list[i]!.name)) continue;
-        const rep = spareWhere((e) => isCardioRhythm(e.name) && !(input.format === "TABATA" && TABATA_TRAVEL_RE.test(e.name.trim())));
-        if (!rep) break;
-        used.add(rep.id); list[i] = rep; extra--;
-      }
+    const tabataOk = (e: PoolExercise) => !(input.format === "TABATA" && TABATA_TRAVEL_RE.test(e.name.trim()));
+    const seenK = new Set<string>();
+    const rhythm: PoolExercise[] = [];
+    for (const e of [...mainPicks, ...finisherPicks, ...workPool, ...pool]) {
+      if (!isCardioRhythm(e.name) || !tabataOk(e) || seenK.has(keyOf(e))) continue;
+      seenK.add(keyOf(e));
+      rhythm.push(e);
+    }
+    const strengthMoves: PoolExercise[] = [];
+    for (const e of [...mainPicks, ...finisherPicks, ...workPool, ...pool]) {
+      if (isCardioRhythm(e.name) || seenK.has(keyOf(e))) continue;
+      seenK.add(keyOf(e));
+      strengthMoves.push(e);
+    }
+    // Equipment rhythm moves go to the Main Workout so the Finisher never adds a new station.
+    rhythm.sort((a, b) => Number(isBodyweight(a)) - Number(isBodyweight(b)));
+    const wantFinisher = !noFinisher && rhythm.length >= 4;
+    const finRhythm = wantFinisher ? 2 : 0;
+    const mainRhythm = rhythm.slice(0, Math.min(rhythm.length - finRhythm, Math.max(mainPicks.length - 1, 3)));
+    const finRhythmPicks = wantFinisher ? rhythm.slice(mainRhythm.length, mainRhythm.length + finRhythm) : [];
+    const mainStrength = strengthMoves.slice(0, mainRhythm.length + 1 > mainPicks.length && mainRhythm.length >= 3 ? 0 : 1);
+    // The Finisher keeps the Main Workout's equipment flow: no new station.
+    const mainFams = new Set([...mainRhythm, ...mainStrength].map((e) => equipmentFamilyOf(e.equipment)));
+    const finStrength = wantFinisher
+      ? strengthMoves.filter((e) => !mainStrength.includes(e) && (mainFams.has(equipmentFamilyOf(e.equipment)) || equipmentFamilyOf(e.equipment) === "bodyweight")).slice(0, 1)
+      : [];
+    if (mainRhythm.length >= 3) {
+      mainPicks.splice(0, mainPicks.length, ...mainRhythm, ...mainStrength);
+      finisherPicks.splice(0, finisherPicks.length, ...(wantFinisher ? [...finRhythmPicks, ...finStrength] : []));
+      used.clear();
+      [...mainPicks, ...finisherPicks].forEach((e) => used.add(e.id));
     }
   }
   // CHALLENGE: no body region above 60% of the work.
@@ -387,6 +415,17 @@ export function buildPackWorkout(
     }
     while (finisherPicks.length >= mainPicks.length && finisherPicks.length > 3) finisherPicks.pop();
   }
+  // Every Finisher has at least 3 exercises: top up from unused legal moves,
+  // otherwise move surplus Main Workout exercises (never repeating one).
+  if (finisherPicks.length && finisherPicks.length < 3) {
+    const fams = new Set(mainPicks.map((e) => equipmentFamilyOf(e.equipment)));
+    while (finisherPicks.length < 3) {
+      const rep = spareWhere((e) => fams.has(equipmentFamilyOf(e.equipment)) || equipmentFamilyOf(e.equipment) === "bodyweight");
+      if (rep) { used.add(rep.id); finisherPicks.push(rep); continue; }
+      if (mainPicks.length <= Math.max(4, levelMin)) break;
+      finisherPicks.push(mainPicks.pop()!);
+    }
+  }
   // CHALLENGE is majority bodyweight (doctrine): swap surplus equipment picks for unused bodyweight moves.
   if (input.category === "CHALLENGE") {
     const all = [...mainPicks, ...finisherPicks];
@@ -402,6 +441,36 @@ export function buildPackWorkout(
         }
   }
 
+  // STRENGTH / MUSCLE BUILDING focus coverage (strength-focus.ts): each movement
+  // group the focus needs appears in the Main Workout (twice with 4+ exercises).
+  const focusRule = FOCUS_RULES[normFocus(input.focus)];
+  if ((input.category === "STRENGTH" || input.category === "MUSCLE BUILDING") && focusRule) {
+    for (let guard = 0; guard < 8; guard++) {
+      const min = mainPicks.length >= 4 && focusRule.need.length === 2 ? 2 : 1;
+      const haveOf = (need: FocusGroup[]) => mainPicks.filter((e) => focusGroups(e).some((g) => need.includes(g))).length;
+      const short = focusRule.need.find((need) => haveOf(need) < min);
+      if (!short) break;
+      const fits = (e: PoolExercise) => focusGroups(e).some((g) => short.includes(g)) && focusBreaks(input.focus, [e], []).every((b) => /needs at least/.test(b));
+      const spare = spareWhere(fits);
+      // No unused one left: bring it forward from the Finisher (swapped, never repeated).
+      const finAt = spare ? -1 : finisherPicks.findIndex(fits);
+      const rep = spare ?? (finAt >= 0 ? finisherPicks[finAt] : undefined);
+      if (!rep) break;
+      // Replace the exercise whose group has the most surplus (or that no requirement needs).
+      let at = -1, bestSurplus = -1;
+      mainPicks.forEach((e, i) => {
+        const needs = focusRule.need.filter((need) => focusGroups(e).some((g) => need.includes(g)));
+        const surplus = needs.length ? Math.min(...needs.map((n) => haveOf(n) - min)) : 99;
+        if (surplus > 0 && surplus > bestSurplus) { bestSurplus = surplus; at = i; }
+      });
+      if (at < 0) {
+        if (finAt >= 0) finisherPicks.splice(finAt, 1);
+        used.add(rep.id); mainPicks.push(rep); continue;
+      }
+      if (finAt >= 0) finisherPicks[finAt] = mainPicks[at]!;
+      used.add(rep.id); mainPicks[at] = rep;
+    }
+  }
   const seed = input.seed ?? (mainPicks[0]?.id.length ?? 5) * 31 + input.minutes;
 
   // §21 — activation is DERIVED from the main block that was just built: the

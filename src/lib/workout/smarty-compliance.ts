@@ -62,6 +62,8 @@ export function complianceIssues(w: ComplianceWorkout, library: ComplianceExerci
   const mainRows = steps.filter((x) => x.section === "Main Workout").map((x) => lib.get(x.exerciseId)).filter((e): e is ComplianceExercise => Boolean(e));
   if (!D.categoryAllowsFinisher(cat) && steps.some((x) => x.section === "Finisher")) s.add("Finisher in a category that never has one");
   if (mainRows.length < 3) s.add("Main Workout has fewer than 3 exercises");
+  // A Finisher, when present, has at least 3 exercises (Coach Haris).
+  if (steps.some((x) => x.section === "Finisher") && rowsIn(html, lib, "Finisher").length < 3) s.add("Finisher has fewer than 3 exercises");
   for (const r of rows) for (const v of exerciseRuleBreaks(r, ctx)) s.add(complianceRuleLabel(v));
   const finRows = finisherRows(html, lib);
   // A Strength workout without a focus label could never be checked against its focus.

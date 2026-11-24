@@ -115,6 +115,7 @@ export function publicationRuleReports(
   }
 
   if (mainRows.length < 3) add("Main Workout has fewer than 3 exercises", line("Workout Structure Rule", [["Section", "Main Workout"], ["Current", `${mainRows.length} exercises`], ["Allowed", "at least 3 exercises"]], "Add enough legal Main Workout exercises."));
+  if (finisherSteps.length && finisherRows.length < 3) add("Finisher has fewer than 3 exercises", line("Workout Structure Rule", [["Section", "Finisher"], ["Current", `${finisherRows.length} exercises`], ["Allowed", "at least 3 exercises"]], "Add enough legal Finisher exercises."));
   if (!D.categoryAllowsFinisher(category) && finisherSteps.length) add("Finisher in a category that never has one", line("Finisher Structure Rule", [["Section", "Finisher"], ["Current", `${finisherSteps.length} exercises`], ["Allowed", `no Finisher for ${category}`]], "Remove the Finisher section exercises."));
 
   for (const raw of workoutRuleBreaks(workRows, mainRows, { category, format, level }, finisherRows)) {

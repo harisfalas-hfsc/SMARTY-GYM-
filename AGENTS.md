@@ -15,7 +15,7 @@
 
 - Shared Workouts reuses the public community-workout view and guard — why: consistent listings without duplicated rules or Community changes.
 - The workout creator's canonical route is `/create-your-own-workout`; `/create-your-workout` and `/coach` are redirects only — why: old bookmarks keep working.
-- Build It Yourself uses createManualWorkout (src/lib/manual-workout.functions.ts), saving normal MY OWN WORKOUT rows without generation/doctrine — why: members choose exercises; Smarty rules govern coach/admin workouts only.
+- Build It Yourself uses createManualWorkout (src/lib/manual-workout.functions.ts), saving normal MY OWN WORKOUT rows without generation/doctrine, but manualStructureIssues requires Activation ≥2, Main ≥3, Cool Down ≥2 and no exercise in two sections — why: members choose exercises, yet every workout keeps its sections.
 
 - Smarty Ritual rotation is computed from app_settings.ritual_anchor_date + position (src/lib/ritual-schedule.ts); no nightly job, so page and admin schedule never drift.
 - Public PDFs are client-generated with every visible block — why: page parity.
