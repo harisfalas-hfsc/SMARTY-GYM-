@@ -65,7 +65,7 @@ export function ExerciseImage({
       src={src}
       alt={alt}
       loading="lazy"
-      className={cn("h-20 w-20 shrink-0 rounded-xl bg-muted object-cover", className)}
+      className={cn("h-20 w-20 shrink-0 rounded-xl bg-white object-cover", className)}
     />
   );
 }
