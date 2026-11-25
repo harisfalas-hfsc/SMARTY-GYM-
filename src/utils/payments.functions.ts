@@ -96,6 +96,14 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         userId: context.userId,
       });
 
+      // Partner attribution travels on the Stripe subscription as metadata.
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: referral } = await (supabaseAdmin as any)
+        .from("partner_referrals").select("code,partner_id").eq("user_id", context.userId).maybeSingle();
+      const refMeta: Record<string, string> = referral
+        ? { referral_code: String(referral.code), partner_id: String(referral.partner_id) }
+        : {};
+
       let productDescription: string | undefined;
       if (!isRecurring) {
         const productId =
@@ -111,9 +119,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         return_url: data.returnUrl,
         customer: customerId,
         ...(!isRecurring && { payment_intent_data: { description: productDescription } }),
-        metadata: { userId: context.userId, managed_payments: "false" },
+        metadata: { userId: context.userId, managed_payments: "false", ...refMeta },
         ...(isRecurring && {
-          subscription_data: { metadata: { userId: context.userId } },
+          subscription_data: { metadata: { userId: context.userId, ...refMeta } },
         }),
       } as Stripe.Checkout.SessionCreateParams);
 

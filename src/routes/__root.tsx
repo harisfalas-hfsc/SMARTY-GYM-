@@ -30,6 +30,7 @@ import { TrafficTracker } from "../components/TrafficTracker";
 import { isRecoverablePageImportError } from "../lib/recoverable-page-error";
 import { ThemeProvider, THEME_INIT_SCRIPT } from "../lib/theme";
 import { MEMBERSHIP_OFFER } from "../lib/seo/membership-schema";
+import { ReferralCapture } from "../components/partners/ReferralCapture";
 
 
 const SITE_URL = "https://smartygym.com";
@@ -457,6 +458,7 @@ function RootComponent() {
           <SiteFooter />
           <Toaster />
           <PasswordChangeGate />
+          <ReferralCapture />
           {SHOW_SISTER_APPS_POPUP && <SisterAppsPopup />}
           <MobileAppPopup />
           <SmartyGiftPopup />

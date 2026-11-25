@@ -24,7 +24,7 @@ import {
   Dumbbell,
   CalendarCheck,
   Users,
-  LogIn, ClipboardCheck, Moon, Sun, Bell, MessageCircle } from "lucide-react";
+  LogIn, ClipboardCheck, Moon, Sun, Bell, MessageCircle, Handshake } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -132,6 +132,18 @@ export function Navigation() {
     };
   }, [user?.id]);
 
+  // Partners see their own dashboard link (row-level security returns only their row).
+  const [isPartner, setIsPartner] = useState(false);
+  useEffect(() => {
+    let active = true;
+    if (!user) { setIsPartner(false); return; }
+    void import("@/integrations/supabase/client").then(({ supabase }) =>
+      (supabase as any).from("partners").select("id").eq("user_id", user.id).maybeSingle()
+        .then(({ data }: { data: unknown }) => { if (active) setIsPartner(Boolean(data)); }),
+    );
+    return () => { active = false; };
+  }, [user?.id]);
+
   return (
     <header
       className={`sticky top-0 z-40 w-full bg-background transition-colors duration-200 lg:py-3 ${scrolled ? "lg:bg-background" : "lg:bg-transparent"} ${pathname === "/" ? "lg:fixed lg:inset-x-0 lg:top-0" : "lg:top-0"}`}
@@ -215,6 +227,13 @@ export function Navigation() {
                     )}
                   </Link>
                 </DropdownMenuItem>
+                {isPartner && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/partner">
+                      <Handshake className="h-4 w-4 mr-2" /> Partner Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 {isAdmin && (
                   <>
                         <DropdownMenuItem asChild>
@@ -263,7 +282,7 @@ export function Navigation() {
       {menuOpen &&
         typeof document !== "undefined" &&
         createPortal(
-          <NavDrawer onClose={() => setMenuOpen(false)} isAuthed={!!user} isAdmin={isAdmin} />,
+          <NavDrawer onClose={() => setMenuOpen(false)} isAuthed={!!user} isAdmin={isAdmin} isPartner={isPartner} />,
           document.body,
         )}
       <SmartyCoachDialog key={user?.id ?? "visitor"} accountKey={user?.id ?? null} open={coachOpen} onOpenChange={setCoachOpen} visitor={!user} />
@@ -271,7 +290,7 @@ export function Navigation() {
   );
 }
 
-function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuthed: boolean; isAdmin: boolean }) {
+function NavDrawer({ onClose, isAuthed, isAdmin, isPartner }: { onClose: () => void; isAuthed: boolean; isAdmin: boolean; isPartner: boolean }) {
   const { freeAccessMode } = useFreeAccessMode();
   const sections: {
     heading: string;
@@ -293,6 +312,7 @@ function NavDrawer({ onClose, isAuthed, isAdmin }: { onClose: () => void; isAuth
               { to: "/inbox", label: "Inbox & messages", Icon: Mail },
               { to: "/account", label: "My account", Icon: User },
 
+              ...(isPartner ? [{ to: "/partner", label: "Partner Dashboard", Icon: Handshake }] : []),
               ...(isAdmin ? [{ to: "/admin", label: "Admin", Icon: Shield }] : []),
             ],
           },

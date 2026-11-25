@@ -41,6 +41,8 @@ import { AdminWodTab } from "@/components/admin/AdminWodTab";
 import { AdminWorkoutsTab } from "@/components/admin/AdminWorkoutsTab";
 import { SMARTY_DRAFT_EVENT } from "@/lib/admin-smarty-draft";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AdminCollaborationsTab } from "@/components/admin/AdminCollaborationsTab";
+import { Handshake } from "lucide-react";
 import { AdminSmartyWorkoutsTab } from "@/components/admin/AdminSmartyWorkoutsTab";
 import { AdminMessagesTab } from "@/components/admin/AdminMessagesTab";
 import { AdminAwardsTab } from "@/components/admin/AdminAwardsTab";
@@ -73,6 +75,7 @@ export const Route = createFileRoute("/admin/")({
 });
 
 type SectionKey =
+  | "collaborations"
   | "seo"
   | "customers"
   | "rules"
@@ -175,6 +178,12 @@ const SECTIONS: { key: SectionKey; label: string; description: string; Icon: Luc
     label: "Generation failures",
     description: "Failed workout builds, alerts and recovery",
     Icon: AlertTriangle,
+  },
+  {
+    key: "collaborations",
+    label: "Collaborations",
+    description: "Private partner contacts, invitations, referral links and payouts",
+    Icon: Handshake,
   },
   {
     key: "seo",
@@ -325,6 +334,7 @@ function AdminPage() {
           {section === "insights" && <AdminInsightsTab />}
           {section === "cron" && <AdminCronTab />}
           {section === "seo" && <AdminSeoTab />}
+          {section === "collaborations" && <AdminCollaborationsTab />}
           {section === "health" && <AdminHealthTab />}
           {section === "generation" && <AdminGenerationFailuresTab />}
           {section === "activity" && <AdminUserActivityTab />}

@@ -771,6 +771,13 @@
       "when": 1795577473087,
       "tag": "0109_exercise_demos_legacy_read",
       "breakpoints": true
+    },
+    {
+      "idx": 110,
+      "version": "7",
+      "when": 1795628685491,
+      "tag": "0110_partner_collaborations",
+      "breakpoints": true
     }
   ]
 }

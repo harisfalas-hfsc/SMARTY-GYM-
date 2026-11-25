@@ -198,9 +198,13 @@ async function applyEvent(
       }
       break;
     }
-    case "invoice.paid":
+    case "invoice.paid": {
       // Subscription state is kept current by the customer.subscription.* events.
+      // Partner share of every paid invoice (first month and each renewal).
+      const { recordPartnerCommission } = await import("@/lib/partners/ledger.server");
+      await recordPartnerCommission(await db(), event.data.object, env);
       break;
+    }
 
     default:
       console.log("Unhandled payments event:", event.type);

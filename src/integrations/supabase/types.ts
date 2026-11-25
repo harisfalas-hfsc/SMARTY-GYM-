@@ -834,6 +834,243 @@ export type Database = {
           },
         ]
       }
+      partner_commissions: {
+        Row: {
+          commission_cents: number
+          created_at: string
+          currency: string
+          environment: string
+          gross_cents: number
+          id: string
+          invoice_id: string
+          kind: string
+          net_cents: number
+          paid_at: string
+          partner_id: string
+          subscription_id: string | null
+          user_id: string
+        }
+        Insert: {
+          commission_cents: number
+          created_at?: string
+          currency?: string
+          environment: string
+          gross_cents: number
+          id?: string
+          invoice_id: string
+          kind?: string
+          net_cents: number
+          paid_at?: string
+          partner_id: string
+          subscription_id?: string | null
+          user_id: string
+        }
+        Update: {
+          commission_cents?: number
+          created_at?: string
+          currency?: string
+          environment?: string
+          gross_cents?: number
+          id?: string
+          invoice_id?: string
+          kind?: string
+          net_cents?: number
+          paid_at?: string
+          partner_id?: string
+          subscription_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_commissions_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_contacts: {
+        Row: {
+          country: string | null
+          created_at: string
+          email: string | null
+          followers: string | null
+          id: string
+          instagram: string | null
+          name: string
+          niche: string | null
+          notes: string | null
+          partner_id: string | null
+          status: string
+          tiktok: string | null
+          updated_at: string
+          youtube: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          followers?: string | null
+          id?: string
+          instagram?: string | null
+          name: string
+          niche?: string | null
+          notes?: string | null
+          partner_id?: string | null
+          status?: string
+          tiktok?: string | null
+          updated_at?: string
+          youtube?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          followers?: string | null
+          id?: string
+          instagram?: string | null
+          name?: string
+          niche?: string | null
+          notes?: string | null
+          partner_id?: string | null
+          status?: string
+          tiktok?: string | null
+          updated_at?: string
+          youtube?: string | null
+        }
+        Relationships: []
+      }
+      partner_payouts: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          id: string
+          method: string
+          notes: string | null
+          paid_at: string
+          partner_id: string
+          period_label: string | null
+          receipt_number: string
+          reference: string | null
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          id?: string
+          method: string
+          notes?: string | null
+          paid_at?: string
+          partner_id: string
+          period_label?: string | null
+          receipt_number: string
+          reference?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          id?: string
+          method?: string
+          notes?: string | null
+          paid_at?: string
+          partner_id?: string
+          period_label?: string | null
+          receipt_number?: string
+          reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_payouts_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_referrals: {
+        Row: {
+          code: string
+          created_at: string
+          partner_id: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          partner_id: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          partner_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_referrals_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partners: {
+        Row: {
+          click_count: number
+          code: string
+          created_at: string
+          email: string
+          id: string
+          instagram: string | null
+          media_kit_url: string | null
+          name: string
+          notes: string | null
+          share_rate: number
+          status: string
+          tiktok: string | null
+          updated_at: string
+          user_id: string | null
+          vat_rate: number
+        }
+        Insert: {
+          click_count?: number
+          code: string
+          created_at?: string
+          email: string
+          id?: string
+          instagram?: string | null
+          media_kit_url?: string | null
+          name: string
+          notes?: string | null
+          share_rate?: number
+          status?: string
+          tiktok?: string | null
+          updated_at?: string
+          user_id?: string | null
+          vat_rate?: number
+        }
+        Update: {
+          click_count?: number
+          code?: string
+          created_at?: string
+          email?: string
+          id?: string
+          instagram?: string | null
+          media_kit_url?: string | null
+          name?: string
+          notes?: string | null
+          share_rate?: number
+          status?: string
+          tiktok?: string | null
+          updated_at?: string
+          user_id?: string | null
+          vat_rate?: number
+        }
+        Relationships: []
+      }
       personal_records: {
         Row: {
           achieved_at: string
@@ -4254,6 +4491,7 @@ export type Database = {
         Returns: boolean
       }
       is_app_admin: { Args: { _user_id: string }; Returns: boolean }
+      record_partner_click: { Args: { p_code: string }; Returns: undefined }
       reserve_smarty_gift: {
         Args: {
           p_buyer: string

@@ -1,3 +1,4 @@
+import { PartnerRevenueCard } from "./PartnerRevenueCard";
 import { useCallback, useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Loader2, RefreshCw, TrendingUp, AlertTriangle, Gift } from "lucide-react";
@@ -75,6 +76,7 @@ export function AdminRevenueTab({ onViewCancelled }: { onViewCancelled?: () => v
 
   return (
     <div className="space-y-4">
+      <PartnerRevenueCard />
       <section className="space-y-3 rounded-2xl border border-coach-line bg-card p-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary">

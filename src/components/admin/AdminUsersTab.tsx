@@ -1,3 +1,4 @@
+import { adminPartnerAttribution } from "@/lib/partners/partners.functions";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -50,6 +51,9 @@ export function AdminUsersTab({ initialFilter = "all", initialMemberId }: { init
   const grantPremium = useServerFn(adminGrantPremium);
   const revokePremium = useServerFn(adminRevokePremium);
   const createComplimentary = useServerFn(adminCreateComplimentaryMember);
+  const partnerAttribution = useServerFn(adminPartnerAttribution);
+  const [attribution, setAttribution] = useState<{ referred: Record<string, string>; partnerAccounts: Record<string, string> }>({ referred: {}, partnerAccounts: {} });
+  useEffect(() => { void partnerAttribution().then(setAttribution).catch(() => {}); }, [partnerAttribution]);
   const [newOpen, setNewOpen] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -232,6 +236,12 @@ export function AdminUsersTab({ initialFilter = "all", initialMemberId }: { init
                   <p className="truncate text-xs text-muted-foreground">{u.email}</p>
                 </div>
                 <div className="flex flex-wrap gap-1">
+                  {attribution.partnerAccounts[u.id] && <Badge className="gap-1">Partner</Badge>}
+                  {attribution.referred[u.id] ? (
+                    <Badge variant="outline" className="border-primary/60 text-primary">via {attribution.referred[u.id]}</Badge>
+                  ) : (
+                    <Badge variant="outline" className="text-muted-foreground">Organic</Badge>
+                  )}
                   {u.is_admin && (
                     <Badge variant="secondary" className="gap-1">
                       <Shield className="h-3 w-3" /> Admin

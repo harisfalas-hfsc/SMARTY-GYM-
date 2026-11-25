@@ -1,0 +1,1 @@
+- ?ref is kept 30 days in the browser, claimed once per never-paid member into partner_referrals, copied to Stripe subscription metadata at checkout; each paid invoice adds one idempotent partner_commissions row from the payments webhook — why: lifetime renewal shares stay exact and auditable against Stripe invoices.

@@ -59,6 +59,7 @@ import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedLogbookRouteImport } from './routes/_authenticated/logbook'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedPartnerRouteImport } from './routes/_authenticated/partner'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -350,6 +351,11 @@ const AuthenticatedNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPartnerRoute = AuthenticatedPartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -590,6 +596,7 @@ export interface FileRoutesByFullPath {
   '/logbook': typeof AuthenticatedLogbookRoute
   '/messages': typeof AuthenticatedMessagesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/partner': typeof AuthenticatedPartnerRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
@@ -677,6 +684,7 @@ export interface FileRoutesByTo {
   '/logbook': typeof AuthenticatedLogbookRoute
   '/messages': typeof AuthenticatedMessagesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/partner': typeof AuthenticatedPartnerRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
@@ -766,6 +774,7 @@ export interface FileRoutesById {
   '/_authenticated/logbook': typeof AuthenticatedLogbookRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/partner': typeof AuthenticatedPartnerRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/admin/exercise-library': typeof AdminExerciseLibraryRoute
@@ -855,6 +864,7 @@ export interface FileRouteTypes {
     | '/logbook'
     | '/messages'
     | '/notifications'
+    | '/partner'
     | '/profile'
     | '/progress'
     | '/admin/exercise-library'
@@ -942,6 +952,7 @@ export interface FileRouteTypes {
     | '/logbook'
     | '/messages'
     | '/notifications'
+    | '/partner'
     | '/profile'
     | '/progress'
     | '/admin/exercise-library'
@@ -1030,6 +1041,7 @@ export interface FileRouteTypes {
     | '/_authenticated/logbook'
     | '/_authenticated/messages'
     | '/_authenticated/notifications'
+    | '/_authenticated/partner'
     | '/_authenticated/profile'
     | '/_authenticated/progress'
     | '/admin/exercise-library'
@@ -1499,6 +1511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/partner': {
+      id: '/_authenticated/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof AuthenticatedPartnerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
       path: '/profile'
@@ -1761,6 +1780,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedLogbookRoute: typeof AuthenticatedLogbookRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedPartnerRoute: typeof AuthenticatedPartnerRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedWorkoutWorkoutIdRoute: typeof AuthenticatedWorkoutWorkoutIdRoute
@@ -1774,6 +1794,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLogbookRoute: AuthenticatedLogbookRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedPartnerRoute: AuthenticatedPartnerRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedWorkoutWorkoutIdRoute: AuthenticatedWorkoutWorkoutIdRoute,
