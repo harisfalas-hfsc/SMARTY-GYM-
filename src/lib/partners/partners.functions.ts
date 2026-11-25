@@ -99,6 +99,15 @@ export const adminListCollaborations = createServerFn({ method: "GET" })
         monthCents: c.filter((x: any) => Date.parse(x.paid_at) >= monthStart.getTime()).reduce((s: number, x: any) => s + x.commission_cents, 0),
       };
     });
+    // Fill in public business emails for starter creators whose email is still blank.
+    const { SUGGESTED_CREATORS } = await import("./suggested-creators");
+    const known = new Map(SUGGESTED_CREATORS.filter((c) => c.email).map((c) => [c.name, c.email!]));
+    for (const c of (contacts ?? []) as ContactRow[]) {
+      const e = !c.email ? known.get(c.name) : undefined;
+      if (!e) continue;
+      const { error } = await db.from("partner_contacts").update({ email: e, updated_at: new Date().toISOString() }).eq("id", c.id).is("email", null);
+      if (!error) c.email = e;
+    }
     return { contacts: (contacts ?? []) as ContactRow[], partners: rows };
   });
 
@@ -110,7 +119,7 @@ export const adminSeedSuggestedContacts = createServerFn({ method: "POST" })
     const { count } = await db.from("partner_contacts").select("id", { count: "exact", head: true });
     if ((count ?? 0) > 0) return { added: 0 };
     const { SUGGESTED_CREATORS } = await import("./suggested-creators");
-    const rows = SUGGESTED_CREATORS.map((c) => ({ name: c.name, instagram: c.instagram, tiktok: c.tiktok ?? null, youtube: c.youtube ?? null, country: c.country, niche: c.niche, followers: c.followers }));
+    const rows = SUGGESTED_CREATORS.map((c) => ({ name: c.name, email: c.email ?? null, instagram: c.instagram, tiktok: c.tiktok ?? null, youtube: c.youtube ?? null, country: c.country, niche: c.niche, followers: c.followers }));
     const { error } = await db.from("partner_contacts").insert(rows);
     if (error) return { error: error.message };
     return { added: rows.length };
@@ -380,4 +389,40 @@ export const adminSendInvitation = createServerFn({ method: "POST" })
     if (!res.ok) { console.error("invitation send failed", res.status, await res.text()); return { error: "The email could not be sent. Try again or use Outlook." }; }
     if (c.status === "to_contact") await db.from("partner_contacts").update({ status: "contacted", updated_at: new Date().toISOString() }).eq("id", c.id);
     return { ok: true };
+  });
+
+/** Asks AI for up to 50 more well-known fitness creators that are not in Contacts yet. */
+export const adminFindMoreCreators = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const db = await assertAdmin(context.userId);
+    const { data: existing } = await db.from("partner_contacts").select("name, instagram");
+    const names = (existing ?? []).map((c: any) => c.name).join("; ");
+    const taken = new Set((existing ?? []).flatMap((c: any) => [String(c.name).toLowerCase(), String(c.instagram ?? "").toLowerCase()]));
+    const { generateResponse, PaymentRequiredError, RateLimitError } = await import("@lovable.dev/ai-gateway");
+    const prompt = `List 50 real, currently popular and fast-growing fitness creators and coaches (Instagram/TikTok/YouTube), worldwide, who are NOT in this list: ${names}.
+Prefer creators gaining attention recently. For each give: name, instagram handle (no @), tiktok handle or "", youtube handle or "", country, niche, rough follower count like "2M+", and email = their publicly listed business/management email ONLY if you are certain it is published on their own website or profile, otherwise "".
+Respond with raw JSON only: {"creators":[{"name":"","instagram":"","tiktok":"","youtube":"","country":"","niche":"","followers":"","email":""}]}`;
+    let text = "";
+    try {
+      const res = await generateResponse({ model: "openai/gpt-6-astra", instructions: "Respond with valid JSON only. Never invent email addresses.", input: prompt });
+      text = (res.output ?? []).flatMap((o: any) => (o.type === "message" ? o.content ?? [] : [])).filter((c: any) => c.type === "output_text").map((c: any) => c.text).join("");
+    } catch (e) {
+      if (e instanceof PaymentRequiredError) return { error: "AI credits are used up — add credits to search again." };
+      if (e instanceof RateLimitError) return { error: "AI is busy right now — please try again in a minute." };
+      console.error("find creators failed", e);
+      return { error: "The search could not finish — please try again." };
+    }
+    let list: any[] = [];
+    try { list = JSON.parse(text.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim()).creators ?? []; } catch { return { error: "The search returned an unreadable list — please try again." }; }
+    const clean = (v: unknown, n: number) => (typeof v === "string" && v.trim() ? v.trim().replace(/^@/, "").slice(0, n) : null);
+    const rows = list
+      .map((c) => ({ name: clean(c.name, 120), instagram: clean(c.instagram, 300), tiktok: clean(c.tiktok, 300), youtube: clean(c.youtube, 300), country: clean(c.country, 80), niche: clean(c.niche, 120), followers: clean(c.followers, 40), email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(c.email ?? "")) ? String(c.email).trim() : null, notes: "Found by Find 50 more — check the profile and email before contacting." }))
+      .filter((r) => r.name && !taken.has(r.name.toLowerCase()) && !(r.instagram && taken.has(r.instagram.toLowerCase())))
+      .filter((r, i, a) => a.findIndex((x) => x.name!.toLowerCase() === r.name!.toLowerCase()) === i)
+      .slice(0, 50);
+    if (rows.length === 0) return { added: 0, withEmail: 0 };
+    const { error } = await db.from("partner_contacts").insert(rows as any);
+    if (error) return { error: error.message };
+    return { added: rows.length, withEmail: rows.filter((r) => r.email).length };
   });

@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import {
   adminCheckPartnerCode, adminCreatePartner, adminDeleteContact, adminListCollaborations, adminPartnerLedger,
-  adminRecordPayout, adminSaveContact, adminSendInvitation, adminSeedSuggestedContacts, adminUpdatePartner,
+  adminRecordPayout, adminSaveContact, adminSendInvitation, adminSeedSuggestedContacts, adminFindMoreCreators, adminUpdatePartner,
   type ContactRow, type LedgerEntry, type PartnerRow, type PayoutEntry,
 } from "@/lib/partners/partners.functions";
 import { euros, partnerCommission, suggestPartnerCode } from "@/lib/partners/commission";
@@ -93,6 +93,7 @@ function ContactsPanel({ contacts, onChange }: { contacts: ContactRow[]; onChang
           {STATUSES.map((s) => <option key={s.key} value={s.key}>{s.label} ({contacts.filter((c) => c.status === s.key).length})</option>)}
         </select>
         <Button size="sm" onClick={() => setEditing({ status: "to_contact" })}><Plus className="mr-1 h-4 w-4" />Add creator</Button>
+        <FindMoreButton onDone={onChange} />
         {contacts.length === 0 && <Button size="sm" variant="outline" onClick={async () => { const r = await seed(); if ("error" in r && r.error) toast.error(r.error); else { toast.success(`${r.added ?? 0} creators added`); onChange(); } }}>Load 50 suggested creators</Button>}
       </div>
       <p className="text-xs text-muted-foreground">Emails are added by you from each creator's public business contact (Instagram “Email” button, bio or website).</p>
@@ -151,35 +152,61 @@ function ContactsPanel({ contacts, onChange }: { contacts: ContactRow[]; onChang
   );
 }
 
+/* ---------------- Find more creators ---------------- */
+function FindMoreButton({ onDone }: { onDone: () => void }) {
+  const find = useServerFn(adminFindMoreCreators);
+  const [busy, setBusy] = useState(false);
+  return (
+    <Button size="sm" variant="outline" disabled={busy} onClick={async () => {
+      setBusy(true);
+      try {
+        const r = await find();
+        if ("error" in r && r.error) toast.error(r.error);
+        else { toast.success(`${r.added ?? 0} new creators added (${r.withEmail ?? 0} with email)`); onDone(); }
+      } catch { toast.error("The search could not finish — please try again."); } finally { setBusy(false); }
+    }}>{busy ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Plus className="mr-1 h-4 w-4" />}{busy ? "Searching…" : "Find 50 more creators"}</Button>
+  );
+}
+
 /* ---------------- Invite one creator ---------------- */
 function InviteDialog({ contact, onClose, onSent }: { contact: ContactRow | null; code?: string; onClose: () => void; onSent: () => void }) {
   const send = useServerFn(adminSendInvitation);
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
+  const saveContact = useServerFn(adminSaveContact);
+  const [email, setEmail] = useState("");
   useEffect(() => {
     if (!contact) return;
     const l = invitationLetter({ name: contact.name });
-    setSubject(l.subject); setBody(l.body);
+    setSubject(l.subject); setBody(l.body); setEmail(contact.email ?? "");
   }, [contact?.id]);
-  const email = contact?.email ?? "";
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  async function keepEmail() {
+    if (!contact || !validEmail || email.trim() === (contact.email ?? "")) return true;
+    const r = await saveContact({ data: { id: contact.id, name: contact.name, email: email.trim() } });
+    if ("error" in r && r.error) { toast.error(r.error); return false; }
+    return true;
+  }
   return (
     <Dialog open={!!contact} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogTitle>Invite {contact?.name}</DialogTitle>
-        <DialogDescription>{email ? `To: ${email}` : "Add this creator's email (pencil icon) to send by email."}</DialogDescription>
+        <DialogDescription>Check the email address, then send. A changed address is saved on the creator's card.</DialogDescription>
+        <Input type="email" placeholder="Creator's email address" value={email} onChange={(e) => setEmail(e.target.value)} aria-label="To" />
         <Input value={subject} onChange={(e) => setSubject(e.target.value)} aria-label="Subject" />
         <Textarea className="min-h-[40vh] text-sm" value={body} onChange={(e) => setBody(e.target.value)} aria-label="Email" />
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" disabled={!email || sending} onClick={async () => {
+          <Button size="sm" disabled={!validEmail || sending} onClick={async () => {
             if (!contact) return;
             setSending(true);
             try {
+              if (!(await keepEmail())) return;
               const r = await send({ data: { contactId: contact.id, subject, body } });
               if ("error" in r && r.error) toast.error(r.error); else { toast.success(`Invitation sent to ${contact.name}`); onSent(); onClose(); }
             } catch { toast.error("The email could not be sent."); } finally { setSending(false); }
           }}>{sending ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Mail className="mr-1 h-4 w-4" />}Send invitation now</Button>
-          <Button size="sm" variant="outline" asChild disabled={!email}><a href={mailtoLink(email, subject, body)}><ExternalLink className="mr-1 h-4 w-4" />Open in Outlook / Mail</a></Button>
+          <Button size="sm" variant="outline" asChild disabled={!validEmail}><a href={mailtoLink(email.trim(), subject, body)} onClick={() => { void keepEmail().then(() => onSent()); }}><ExternalLink className="mr-1 h-4 w-4" />Open in Outlook / Mail</a></Button>
           <Button size="sm" variant="outline" onClick={() => copy(`${subject}\n\n${body}`, "Email")}><Copy className="mr-1 h-4 w-4" />Copy email</Button>
           {contact && <Button size="sm" variant="outline" onClick={() => copy(invitationDm(contact.name), "Instagram DM")}><Copy className="mr-1 h-4 w-4" />Copy DM</Button>}
         </div>
