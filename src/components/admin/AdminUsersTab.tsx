@@ -34,7 +34,7 @@ import { formatDate } from "@/lib/date-format";
 import { useFreeAccessMode } from "@/hooks/useFreeAccessMode";
 import { COMPLIMENTARY_MONTH_OPTIONS, MIN_TEMP_PASSWORD } from "@/lib/complimentary";
 
-type Filter = "all" | "subscriber" | "complimentary" | "gift" | "member" | "cancelled";
+type Filter = "all" | "subscriber" | "complimentary" | "gift" | "member" | "cancelled" | "partners" | "referred";
 
 const FILTERS: { key: Filter; label: string }[] = [
   { key: "all", label: "Everyone" },
@@ -43,6 +43,8 @@ const FILTERS: { key: Filter; label: string }[] = [
   { key: "complimentary", label: "Complimentary" },
   { key: "member", label: "Free members" },
   { key: "cancelled", label: "Cancelled" },
+  { key: "partners", label: "Partners" },
+  { key: "referred", label: "Referred" },
 ];
 
 export function AdminUsersTab({ initialFilter = "all", initialMemberId }: { initialFilter?: Filter; initialMemberId?: string }) {
@@ -98,11 +100,17 @@ export function AdminUsersTab({ initialFilter = "all", initialMemberId }: { init
       gift: users.filter((u) => u.membership === "gift").length,
       member: users.filter((u) => u.membership === "member").length,
       cancelled: users.filter((u) => u.cancellation_status).length,
+      partners: users.filter((u) => attribution.partnerAccounts[u.id]).length,
+      referred: users.filter((u) => attribution.referred[u.id]).length,
     }),
-    [users],
+    [users, attribution],
   );
 
-  const rows = filter === "all" ? users : users.filter((u) => filter === "cancelled" ? Boolean(u.cancellation_status) : u.membership === filter);
+  const rows = filter === "all" ? users : users.filter((u) =>
+    filter === "cancelled" ? Boolean(u.cancellation_status)
+    : filter === "partners" ? Boolean(attribution.partnerAccounts[u.id])
+    : filter === "referred" ? Boolean(attribution.referred[u.id])
+    : u.membership === filter);
 
   async function act(fn: () => Promise<{ error?: string } | unknown>, ok: string) {
     setBusy(true);

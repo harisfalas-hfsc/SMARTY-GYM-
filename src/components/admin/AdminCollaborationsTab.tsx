@@ -75,6 +75,7 @@ function ContactsPanel({ contacts, onChange }: { contacts: ContactRow[]; onChang
   const [q, setQ] = useState("");
   const [removeId, setRemoveId] = useState<string | null>(null);
   const seed = useServerFn(adminSeedSuggestedContacts);
+  const [enrollId, setEnrollId] = useState<string | null>(null);
   const shown = contacts.filter((c) => (filter === "all" || c.status === filter) && (!q || `${c.name} ${c.instagram ?? ""} ${c.niche ?? ""}`.toLowerCase().includes(q.toLowerCase())));
 
   async function setStatus(c: ContactRow, status: string) {
@@ -112,6 +113,7 @@ function ContactsPanel({ contacts, onChange }: { contacts: ContactRow[]; onChang
               {socialUrl(c.instagram, "https://instagram.com/") && <a className="text-primary" href={socialUrl(c.instagram, "https://instagram.com/")!} target="_blank" rel="noreferrer">Instagram</a>}
               {socialUrl(c.tiktok, "https://tiktok.com/@") && <a className="text-primary" href={socialUrl(c.tiktok, "https://tiktok.com/@")!} target="_blank" rel="noreferrer">TikTok</a>}
               {socialUrl(c.youtube, "https://youtube.com/@") && <a className="text-primary" href={socialUrl(c.youtube, "https://youtube.com/@")!} target="_blank" rel="noreferrer">YouTube</a>}
+              {!c.partner_id && <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => setEnrollId(c.id)}><UserPlus className="mr-1 h-3 w-3" />Create partner &amp; code</Button>}
               <select className="ml-auto h-7 rounded-md border border-input bg-background px-1 text-xs" value={c.status} onChange={(e) => void setStatus(c, e.target.value)}>
                 {STATUSES.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
               </select>
@@ -139,6 +141,7 @@ function ContactsPanel({ contacts, onChange }: { contacts: ContactRow[]; onChang
           )}
         </DialogContent>
       </Dialog>
+      <CreatePartnerDialog open={!!enrollId} onOpenChange={(o) => !o && setEnrollId(null)} contacts={contacts} initialContactId={enrollId ?? undefined} onCreated={onChange} />
       <AppConfirmDialog open={!!removeId} onOpenChange={(o) => !o && setRemoveId(null)} title="Delete this creator?" description="This removes the contact from your list." confirmLabel="Delete"
         onConfirm={async () => { if (removeId) { await del({ data: { id: removeId } }); setRemoveId(null); onChange(); } }} />
     </div>
@@ -153,24 +156,51 @@ function InvitationsPanel({ contacts, partners }: { contacts: ContactRow[]; part
   ], [contacts, partners]);
   const [sel, setSel] = useState(options[0]?.key ?? "");
   const pick = options.find((o) => o.key === sel) ?? { name: "[Name]", email: "", code: undefined };
-  const letter = invitationLetter({ name: pick.name, ...(pick.code ? { code: pick.code } : {}) });
-  const dm = invitationDm(pick.name);
+  const base = invitationLetter({ name: pick.name, ...(pick.code ? { code: pick.code } : {}) });
+  const baseDm = invitationDm(pick.name);
+  const baseAgreement = agreementText(pick.name);
+  const [subject, setSubject] = useState(base.subject);
+  const [body, setBody] = useState(base.body);
+  const [dm, setDm] = useState(baseDm);
+  const [agreement, setAgreement] = useState(baseAgreement);
+  function reset() { setSubject(base.subject); setBody(base.body); setDm(baseDm); setAgreement(baseAgreement); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(reset, [sel]);
   return (
     <div className="space-y-3">
       <select className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm" value={sel} onChange={(e) => setSel(e.target.value)}>
         {options.map((o) => <option key={o.key} value={o.key}>{o.name}{o.code ? ` — partner (${o.code})` : ""}</option>)}
       </select>
       <div className="flex flex-wrap gap-2">
-        <Button size="sm" asChild disabled={!pick.email}><a href={mailtoLink(pick.email, letter.subject, letter.body)}><Mail className="mr-1 h-4 w-4" />Open in Outlook / Mail</a></Button>
-        <Button size="sm" variant="outline" onClick={() => copy(`${letter.subject}\n\n${letter.body}`, "Letter")}><Copy className="mr-1 h-4 w-4" />Copy letter</Button>
+        <Button size="sm" asChild disabled={!pick.email}><a href={mailtoLink(pick.email, subject, body)}><Mail className="mr-1 h-4 w-4" />Open in Outlook / Mail</a></Button>
+        <Button size="sm" variant="outline" onClick={() => copy(`${subject}\n\n${body}`, "Email")}><Copy className="mr-1 h-4 w-4" />Copy email</Button>
         <Button size="sm" variant="outline" onClick={() => copy(dm, "Instagram DM")}><Copy className="mr-1 h-4 w-4" />Copy Instagram DM</Button>
+        <Button size="sm" variant="ghost" onClick={reset}>Reset to original</Button>
       </div>
       {!pick.email && <p className="text-xs text-muted-foreground">Add this creator's email in Contacts to open it in your mail app.</p>}
-      <p className="text-xs font-semibold">Subject: {letter.subject}</p>
-      <pre className="max-h-[50vh] overflow-y-auto whitespace-pre-wrap rounded-xl border border-coach-line bg-background/40 p-3 font-sans text-sm">{letter.body}</pre>
-      <details className="rounded-xl border border-coach-line p-3 text-sm">
-        <summary className="cursor-pointer font-semibold">Private partnership agreement (draft)</summary>
-        <pre className="mt-2 whitespace-pre-wrap font-sans">{`SmartyGym Partnership Agreement — between Haris Falas (SmartyGym) and ${pick.name}
+      <p className="text-xs text-muted-foreground">Everything below is editable. Your changes are used by the copy and mail buttons.</p>
+      <label className="block text-xs font-semibold">Subject
+        <Input className="mt-1" value={subject} onChange={(e) => setSubject(e.target.value)} />
+      </label>
+      <label className="block text-xs font-semibold">Email
+        <Textarea className="mt-1 min-h-[40vh] font-sans text-sm" value={body} onChange={(e) => setBody(e.target.value)} />
+      </label>
+      <label className="block text-xs font-semibold">Instagram DM
+        <Textarea className="mt-1 min-h-28 text-sm" value={dm} onChange={(e) => setDm(e.target.value)} />
+      </label>
+      <div className="rounded-xl border border-coach-line p-3 text-sm">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+          <p className="min-w-0 font-semibold">Private partnership agreement (draft)</p>
+          <Button size="sm" variant="outline" onClick={() => copy(agreement, "Agreement")}><Copy className="mr-1 h-4 w-4" />Copy agreement</Button>
+        </div>
+        <Textarea className="mt-2 min-h-[40vh] text-sm" value={agreement} onChange={(e) => setAgreement(e.target.value)} />
+      </div>
+    </div>
+  );
+}
+
+function agreementText(name: string) {
+  return `SmartyGym Partnership Agreement — between Haris Falas (SmartyGym) and ${name}
 
 1. Share: 50% of net subscription revenue (€9.99 less 19% VAT = €8.40) from every member who joins through the partner's personal link — €4.20 per member per month.
 2. Lifetime: the share continues on every renewal for as long as the member stays subscribed and this partnership remains active.
@@ -178,10 +208,13 @@ function InvitationsPanel({ contacts, partners }: { contacts: ContactRow[]; part
 4. Payment: monthly, by bank transfer, PayPal or Revolut, with a payout statement. Refunded or failed payments earn no share.
 5. Independence: the partner acts as an independent contractor responsible for their own taxes.
 6. Conduct: the partner promotes SmartyGym honestly and only if they personally believe in it.
-7. Either side may end the partnership by written notice; shares already earned are paid.`}</pre>
-      </details>
-    </div>
-  );
+7. Either side may end the partnership by written notice; shares already earned are paid.
+
+Signed for SmartyGym: ______________________   Date: __________
+Haris Falas
+
+Signed by partner: ______________________   Date: __________
+${name}`;
 }
 
 /* ---------------- Partnerships ---------------- */
@@ -226,7 +259,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return <div className="rounded-xl border border-coach-line p-3"><p className="text-[11px] text-muted-foreground">{label}</p><p className="text-lg font-extrabold">{value}</p></div>;
 }
 
-function CreatePartnerDialog({ open, onOpenChange, contacts, onCreated }: { open: boolean; onOpenChange: (o: boolean) => void; contacts: ContactRow[]; onCreated: () => void }) {
+function CreatePartnerDialog({ open, onOpenChange, contacts, onCreated, initialContactId }: { open: boolean; onOpenChange: (o: boolean) => void; contacts: ContactRow[]; onCreated: () => void; initialContactId?: string | undefined }) {
   const create = useServerFn(adminCreatePartner);
   const check = useServerFn(adminCheckPartnerCode);
   const [f, setF] = useState({ contactId: "", name: "", email: "", code: "", instagram: "", tiktok: "", password: "" });
@@ -235,7 +268,15 @@ function CreatePartnerDialog({ open, onOpenChange, contacts, onCreated }: { open
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<{ name: string; email: string; code: string; password: string; createdAccount: boolean } | null>(null);
 
-  useEffect(() => { if (open) { setF({ contactId: "", name: "", email: "", code: "", instagram: "", tiktok: "", password: randomPassword() }); setDone(null); setCodeTouched(false); setCodeMsg(null); } }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const c = initialContactId ? contacts.find((x) => x.id === initialContactId) : undefined;
+    setF(c
+      ? { contactId: c.id, name: c.name, email: c.email ?? "", code: suggestPartnerCode(c.instagram || c.name), instagram: c.instagram ?? "", tiktok: c.tiktok ?? "", password: randomPassword() }
+      : { contactId: "", name: "", email: "", code: "", instagram: "", tiktok: "", password: randomPassword() });
+    setDone(null); setCodeTouched(false); setCodeMsg(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, initialContactId]);
   useEffect(() => {
     if (!f.code) { setCodeMsg(null); return; }
     const t = setTimeout(() => { void check({ data: { code: f.code } }).then((r) => setCodeMsg(r.available ? "Available" : (r as { reason?: string }).reason ?? "Taken")); }, 300);
