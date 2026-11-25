@@ -41,6 +41,7 @@ export const ROUTE_CLASSIFICATION: Record<string, RouteClass> = {
   "/faq": "indexable",
   "/contact": "indexable",
   "/glossary": "indexable",
+  "/fitness-applications-2026": "indexable",
   "/social-media": "noindex",
   "/training/": "indexable",
   "/training/$slug": "indexable",
@@ -124,6 +125,7 @@ export const STATIC_SITEMAP_ENTRIES: StaticSitemapEntry[] = [
   { path: "/faq", changefreq: "monthly", priority: "0.8" },
   { path: "/contact", changefreq: "yearly", priority: "0.5" },
   { path: "/glossary", changefreq: "monthly", priority: "0.75" },
+  { path: "/fitness-applications-2026", changefreq: "monthly", priority: "0.8" },
   { path: "/training", changefreq: "monthly", priority: "0.9" },
   ...TRAINING_TOPIC_SLUGS.map((slug) => ({
     path: `/training/${slug}`,

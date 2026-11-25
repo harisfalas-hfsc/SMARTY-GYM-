@@ -26,6 +26,7 @@ import { Route as CreateYourWorkoutRouteImport } from './routes/create-your-work
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as ExerciseLibraryRouteImport } from './routes/exercise-library'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as FitnessApplications2026RouteImport } from './routes/fitness-applications-2026'
 import { Route as FounderNoteRouteImport } from './routes/founder-note'
 import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as HarisFalasRouteImport } from './routes/haris-falas'
@@ -178,6 +179,11 @@ const ExerciseLibraryRoute = ExerciseLibraryRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FitnessApplications2026Route = FitnessApplications2026RouteImport.update({
+  id: '/fitness-applications-2026',
+  path: '/fitness-applications-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FounderNoteRoute = FounderNoteRouteImport.update({
@@ -545,6 +551,7 @@ export interface FileRoutesByFullPath {
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
   '/faq': typeof FaqRoute
+  '/fitness-applications-2026': typeof FitnessApplications2026Route
   '/founder-note': typeof FounderNoteRoute
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
@@ -630,6 +637,7 @@ export interface FileRoutesByTo {
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
   '/faq': typeof FaqRoute
+  '/fitness-applications-2026': typeof FitnessApplications2026Route
   '/founder-note': typeof FounderNoteRoute
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
@@ -717,6 +725,7 @@ export interface FileRoutesById {
   '/disclaimer': typeof DisclaimerRoute
   '/exercise-library': typeof ExerciseLibraryRoute
   '/faq': typeof FaqRoute
+  '/fitness-applications-2026': typeof FitnessApplications2026Route
   '/founder-note': typeof FounderNoteRoute
   '/glossary': typeof GlossaryRoute
   '/haris-falas': typeof HarisFalasRoute
@@ -804,6 +813,7 @@ export interface FileRouteTypes {
     | '/disclaimer'
     | '/exercise-library'
     | '/faq'
+    | '/fitness-applications-2026'
     | '/founder-note'
     | '/glossary'
     | '/haris-falas'
@@ -889,6 +899,7 @@ export interface FileRouteTypes {
     | '/disclaimer'
     | '/exercise-library'
     | '/faq'
+    | '/fitness-applications-2026'
     | '/founder-note'
     | '/glossary'
     | '/haris-falas'
@@ -975,6 +986,7 @@ export interface FileRouteTypes {
     | '/disclaimer'
     | '/exercise-library'
     | '/faq'
+    | '/fitness-applications-2026'
     | '/founder-note'
     | '/glossary'
     | '/haris-falas'
@@ -1062,6 +1074,7 @@ export interface RootRouteChildren {
   DisclaimerRoute: typeof DisclaimerRoute
   ExerciseLibraryRoute: typeof ExerciseLibraryRoute
   FaqRoute: typeof FaqRoute
+  FitnessApplications2026Route: typeof FitnessApplications2026Route
   FounderNoteRoute: typeof FounderNoteRoute
   GlossaryRoute: typeof GlossaryRoute
   HarisFalasRoute: typeof HarisFalasRoute
@@ -1240,6 +1253,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fitness-applications-2026': {
+      id: '/fitness-applications-2026'
+      path: '/fitness-applications-2026'
+      fullPath: '/fitness-applications-2026'
+      preLoaderRoute: typeof FitnessApplications2026RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/founder-note': {
@@ -1773,6 +1793,7 @@ const rootRouteChildren: RootRouteChildren = {
   DisclaimerRoute: DisclaimerRoute,
   ExerciseLibraryRoute: ExerciseLibraryRoute,
   FaqRoute: FaqRoute,
+  FitnessApplications2026Route: FitnessApplications2026Route,
   FounderNoteRoute: FounderNoteRoute,
   GlossaryRoute: GlossaryRoute,
   HarisFalasRoute: HarisFalasRoute,
