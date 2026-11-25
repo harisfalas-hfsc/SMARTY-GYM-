@@ -356,3 +356,28 @@ export const getMyPartnerDashboard = createServerFn({ method: "GET" })
       payouts: (pays ?? []) as PayoutEntry[],
     };
   });
+
+/** Sends one personal invitation to a saved creator's own email (recipient read from Contacts, never from the browser). */
+export const adminSendInvitation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ contactId: z.string().uuid(), subject: z.string().trim().min(1).max(200), body: z.string().trim().min(1).max(10000) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const db = await assertAdmin(context.userId);
+    const { data: c } = await db.from("partner_contacts").select("id, email, status").eq("id", data.contactId).maybeSingle();
+    const to = (c?.email ?? "").trim();
+    if (!c || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return { error: "Add a valid email for this creator first." };
+    const apiKey = process.env.LOVABLE_API_KEY;
+    const resendKey = process.env.RESEND_API_KEY;
+    if (!apiKey || !resendKey) return { error: "Email sending is not configured." };
+    const { escapeHtml } = await import("../broadcast-email.server");
+    const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222;max-width:600px">${data.body
+      .split(/\n\s*\n/).map((p) => `<p style="margin:0 0 14px">${escapeHtml(p.trim()).replace(/\n/g, "<br />")}</p>`).join("")}</div>`;
+    const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}`, "X-Connection-Api-Key": resendKey },
+      body: JSON.stringify({ from: "Haris Falas <no-reply@smartygym.com>", to: [to], reply_to: "smartygym@outlook.com", subject: data.subject, html, text: data.body }),
+    });
+    if (!res.ok) { console.error("invitation send failed", res.status, await res.text()); return { error: "The email could not be sent. Try again or use Outlook." }; }
+    if (c.status === "to_contact") await db.from("partner_contacts").update({ status: "contacted", updated_at: new Date().toISOString() }).eq("id", c.id);
+    return { ok: true };
+  });

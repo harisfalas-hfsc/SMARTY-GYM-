@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { AppConfirmDialog } from "@/components/ui/app-dialog";
 import {
   adminCheckPartnerCode, adminCreatePartner, adminDeleteContact, adminListCollaborations, adminPartnerLedger,
-  adminRecordPayout, adminSaveContact, adminSeedSuggestedContacts, adminUpdatePartner,
+  adminRecordPayout, adminSaveContact, adminSendInvitation, adminSeedSuggestedContacts, adminUpdatePartner,
   type ContactRow, type LedgerEntry, type PartnerRow, type PayoutEntry,
 } from "@/lib/partners/partners.functions";
 import { euros, partnerCommission, suggestPartnerCode } from "@/lib/partners/commission";
@@ -76,6 +76,7 @@ function ContactsPanel({ contacts, onChange }: { contacts: ContactRow[]; onChang
   const [removeId, setRemoveId] = useState<string | null>(null);
   const seed = useServerFn(adminSeedSuggestedContacts);
   const [enrollId, setEnrollId] = useState<string | null>(null);
+  const [inviteId, setInviteId] = useState<string | null>(null);
   const shown = contacts.filter((c) => (filter === "all" || c.status === filter) && (!q || `${c.name} ${c.instagram ?? ""} ${c.niche ?? ""}`.toLowerCase().includes(q.toLowerCase())));
 
   async function setStatus(c: ContactRow, status: string) {
@@ -113,6 +114,7 @@ function ContactsPanel({ contacts, onChange }: { contacts: ContactRow[]; onChang
               {socialUrl(c.instagram, "https://instagram.com/") && <a className="text-primary" href={socialUrl(c.instagram, "https://instagram.com/")!} target="_blank" rel="noreferrer">Instagram</a>}
               {socialUrl(c.tiktok, "https://tiktok.com/@") && <a className="text-primary" href={socialUrl(c.tiktok, "https://tiktok.com/@")!} target="_blank" rel="noreferrer">TikTok</a>}
               {socialUrl(c.youtube, "https://youtube.com/@") && <a className="text-primary" href={socialUrl(c.youtube, "https://youtube.com/@")!} target="_blank" rel="noreferrer">YouTube</a>}
+              <Button size="sm" className="h-7 px-2 text-xs" onClick={() => setInviteId(c.id)}><Mail className="mr-1 h-3 w-3" />Invite</Button>
               {!c.partner_id && <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => setEnrollId(c.id)}><UserPlus className="mr-1 h-3 w-3" />Create partner &amp; code</Button>}
               <select className="ml-auto h-7 rounded-md border border-input bg-background px-1 text-xs" value={c.status} onChange={(e) => void setStatus(c, e.target.value)}>
                 {STATUSES.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
@@ -141,10 +143,49 @@ function ContactsPanel({ contacts, onChange }: { contacts: ContactRow[]; onChang
           )}
         </DialogContent>
       </Dialog>
+      <InviteDialog contact={contacts.find((c) => c.id === inviteId) ?? null} code={undefined} onClose={() => setInviteId(null)} onSent={onChange} />
       <CreatePartnerDialog open={!!enrollId} onOpenChange={(o) => !o && setEnrollId(null)} contacts={contacts} initialContactId={enrollId ?? undefined} onCreated={onChange} />
       <AppConfirmDialog open={!!removeId} onOpenChange={(o) => !o && setRemoveId(null)} title="Delete this creator?" description="This removes the contact from your list." confirmLabel="Delete"
         onConfirm={async () => { if (removeId) { await del({ data: { id: removeId } }); setRemoveId(null); onChange(); } }} />
     </div>
+  );
+}
+
+/* ---------------- Invite one creator ---------------- */
+function InviteDialog({ contact, onClose, onSent }: { contact: ContactRow | null; code?: string; onClose: () => void; onSent: () => void }) {
+  const send = useServerFn(adminSendInvitation);
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+  const [sending, setSending] = useState(false);
+  useEffect(() => {
+    if (!contact) return;
+    const l = invitationLetter({ name: contact.name });
+    setSubject(l.subject); setBody(l.body);
+  }, [contact?.id]);
+  const email = contact?.email ?? "";
+  return (
+    <Dialog open={!!contact} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogTitle>Invite {contact?.name}</DialogTitle>
+        <DialogDescription>{email ? `To: ${email}` : "Add this creator's email (pencil icon) to send by email."}</DialogDescription>
+        <Input value={subject} onChange={(e) => setSubject(e.target.value)} aria-label="Subject" />
+        <Textarea className="min-h-[40vh] text-sm" value={body} onChange={(e) => setBody(e.target.value)} aria-label="Email" />
+        <div className="flex flex-wrap gap-2">
+          <Button size="sm" disabled={!email || sending} onClick={async () => {
+            if (!contact) return;
+            setSending(true);
+            try {
+              const r = await send({ data: { contactId: contact.id, subject, body } });
+              if ("error" in r && r.error) toast.error(r.error); else { toast.success(`Invitation sent to ${contact.name}`); onSent(); onClose(); }
+            } catch { toast.error("The email could not be sent."); } finally { setSending(false); }
+          }}>{sending ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Mail className="mr-1 h-4 w-4" />}Send invitation now</Button>
+          <Button size="sm" variant="outline" asChild disabled={!email}><a href={mailtoLink(email, subject, body)}><ExternalLink className="mr-1 h-4 w-4" />Open in Outlook / Mail</a></Button>
+          <Button size="sm" variant="outline" onClick={() => copy(`${subject}\n\n${body}`, "Email")}><Copy className="mr-1 h-4 w-4" />Copy email</Button>
+          {contact && <Button size="sm" variant="outline" onClick={() => copy(invitationDm(contact.name), "Instagram DM")}><Copy className="mr-1 h-4 w-4" />Copy DM</Button>}
+        </div>
+        <p className="text-xs text-muted-foreground">Replies go to smartygym@outlook.com. Sending marks the creator as Contacted.</p>
+      </DialogContent>
+    </Dialog>
   );
 }
 
