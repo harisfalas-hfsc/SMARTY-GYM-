@@ -87,6 +87,7 @@ import { Route as ApiPublicRetryGenerationsRouteImport } from './routes/api/publ
 import { Route as CommunityWorkoutWorkoutIdRouteImport } from './routes/community.workout.$workoutId'
 import { Route as SmartyWorkoutsCategoryCategoryRouteImport } from './routes/smarty-workouts.category.$category'
 import { Route as ApiPublicBlogCoverFileRouteImport } from './routes/api/public/blog-cover/$file'
+import { Route as ApiPublicBlogVideoFileRouteImport } from './routes/api/public/blog-video/$file'
 import { Route as ApiPublicExerciseMediaSlugRouteImport } from './routes/api/public/exercise-media/$slug'
 import { Route as ApiPublicHooksDailyRunRouteImport } from './routes/api/public/hooks/daily-run'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -494,6 +495,11 @@ const ApiPublicBlogCoverFileRoute = ApiPublicBlogCoverFileRouteImport.update({
   path: '/api/public/blog-cover/$file',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBlogVideoFileRoute = ApiPublicBlogVideoFileRouteImport.update({
+  id: '/api/public/blog-video/$file',
+  path: '/api/public/blog-video/$file',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicExerciseMediaSlugRoute =
   ApiPublicExerciseMediaSlugRouteImport.update({
     id: '/api/public/exercise-media/$slug',
@@ -612,6 +618,7 @@ export interface FileRoutesByFullPath {
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
   '/smarty-workouts/category/$category': typeof SmartyWorkoutsCategoryCategoryRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
+  '/api/public/blog-video/$file': typeof ApiPublicBlogVideoFileRoute
   '/api/public/exercise-media/$slug': typeof ApiPublicExerciseMediaSlugRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -698,6 +705,7 @@ export interface FileRoutesByTo {
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
   '/smarty-workouts/category/$category': typeof SmartyWorkoutsCategoryCategoryRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
+  '/api/public/blog-video/$file': typeof ApiPublicBlogVideoFileRoute
   '/api/public/exercise-media/$slug': typeof ApiPublicExerciseMediaSlugRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -786,6 +794,7 @@ export interface FileRoutesById {
   '/community/workout/$workoutId': typeof CommunityWorkoutWorkoutIdRoute
   '/smarty-workouts/category/$category': typeof SmartyWorkoutsCategoryCategoryRoute
   '/api/public/blog-cover/$file': typeof ApiPublicBlogCoverFileRoute
+  '/api/public/blog-video/$file': typeof ApiPublicBlogVideoFileRoute
   '/api/public/exercise-media/$slug': typeof ApiPublicExerciseMediaSlugRoute
   '/api/public/hooks/daily-run': typeof ApiPublicHooksDailyRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -874,6 +883,7 @@ export interface FileRouteTypes {
     | '/community/workout/$workoutId'
     | '/smarty-workouts/category/$category'
     | '/api/public/blog-cover/$file'
+    | '/api/public/blog-video/$file'
     | '/api/public/exercise-media/$slug'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
@@ -960,6 +970,7 @@ export interface FileRouteTypes {
     | '/community/workout/$workoutId'
     | '/smarty-workouts/category/$category'
     | '/api/public/blog-cover/$file'
+    | '/api/public/blog-video/$file'
     | '/api/public/exercise-media/$slug'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
@@ -1047,6 +1058,7 @@ export interface FileRouteTypes {
     | '/community/workout/$workoutId'
     | '/smarty-workouts/category/$category'
     | '/api/public/blog-cover/$file'
+    | '/api/public/blog-video/$file'
     | '/api/public/exercise-media/$slug'
     | '/api/public/hooks/daily-run'
     | '/api/public/payments/webhook'
@@ -1125,6 +1137,7 @@ export interface RootRouteChildren {
   CommunityWorkoutWorkoutIdRoute: typeof CommunityWorkoutWorkoutIdRoute
   SmartyWorkoutsCategoryCategoryRoute: typeof SmartyWorkoutsCategoryCategoryRoute
   ApiPublicBlogCoverFileRoute: typeof ApiPublicBlogCoverFileRoute
+  ApiPublicBlogVideoFileRoute: typeof ApiPublicBlogVideoFileRoute
   ApiPublicExerciseMediaSlugRoute: typeof ApiPublicExerciseMediaSlugRoute
   ApiPublicHooksDailyRunRoute: typeof ApiPublicHooksDailyRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -1682,6 +1695,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBlogCoverFileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/blog-video/$file': {
+      id: '/api/public/blog-video/$file'
+      path: '/api/public/blog-video/$file'
+      fullPath: '/api/public/blog-video/$file'
+      preLoaderRoute: typeof ApiPublicBlogVideoFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/exercise-media/$slug': {
       id: '/api/public/exercise-media/$slug'
       path: '/api/public/exercise-media/$slug'
@@ -1845,6 +1865,7 @@ const rootRouteChildren: RootRouteChildren = {
   CommunityWorkoutWorkoutIdRoute: CommunityWorkoutWorkoutIdRoute,
   SmartyWorkoutsCategoryCategoryRoute: SmartyWorkoutsCategoryCategoryRoute,
   ApiPublicBlogCoverFileRoute: ApiPublicBlogCoverFileRoute,
+  ApiPublicBlogVideoFileRoute: ApiPublicBlogVideoFileRoute,
   ApiPublicExerciseMediaSlugRoute: ApiPublicExerciseMediaSlugRoute,
   ApiPublicHooksDailyRunRoute: ApiPublicHooksDailyRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
