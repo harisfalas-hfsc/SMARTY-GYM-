@@ -9,6 +9,7 @@
 // (a calf raise never enters CORE & GLUTES). Shared by the publish gate,
 // audits, the generator pool and the validator.
 
+import { combinationIssues } from "./muscle-spread";
 import { PRIORITY_ALIASES, PRIORITY_MOVEMENT_PATTERN } from "./priority";
 
 export type FocusGroup = "upper push" | "upper pull" | "lower push" | "lower pull" | "core" | "conditioning" | "other";
@@ -138,6 +139,7 @@ export const normFocus = (focus: string | null | undefined) => (focus ?? "").tri
 
 /** Rule breaks of a Strength workout's focus. Empty when no focus rule applies. */
 export function focusBreaks(focus: string | null | undefined, main: RowLike[], finisher: RowLike[]): string[] {
+  if (focus?.includes(" + ")) return combinationIssues(focus, main.map(asRow), finisher.map(asRow));
   const rule = FOCUS_RULES[normFocus(focus)];
   if (!rule) return [];
   const out: string[] = [];

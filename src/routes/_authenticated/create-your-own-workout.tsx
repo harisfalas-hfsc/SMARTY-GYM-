@@ -46,7 +46,7 @@ import {
   MOODS,
   TIMES,
 } from "@/lib/coach-options";
-import { SPECIFIC_MUSCLES } from "@/lib/workout/muscle-spread";
+import { SPECIFIC_MUSCLES, COMBINABLE_FOCUSES, combinedFocus, type MuscleSelection } from "@/lib/workout/muscle-spread";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -90,14 +90,19 @@ function Chip({
   active,
   onClick,
   children,
+  disabled = false,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  disabled?: boolean;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      aria-pressed={active}
+      disabled={disabled}
       onClick={onClick}
       className={`flex h-12 w-full items-center justify-start truncate whitespace-nowrap rounded-2xl border px-2.5 text-left text-[13px] font-semibold leading-none transition sm:text-sm ${
         active
@@ -106,7 +111,7 @@ function Chip({
       }`}
     >
       {children}
-    </button>
+    </Button>
   );
 }
 
@@ -154,6 +159,18 @@ function CoachPage() {
   const [goal, setGoal] = useState<string>("");
   const [focus, setFocus] = useState<string>("");
   const [muscle, setMuscle] = useState<string>("");
+  const [selections, setSelections] = useState<MuscleSelection[]>([]);
+  function toggleFocus(id: string) {
+    const current = selections.length ? selections : focus ? [{ focus, muscle }] : [];
+    const next = current.some((s) => s.focus === id)
+      ? current.filter((s) => s.focus !== id)
+      : !COMBINABLE_FOCUSES.includes(id) || current.some((s) => !COMBINABLE_FOCUSES.includes(s.focus))
+        ? [{ focus: id, muscle: "" }]
+        : current.length < 2 ? [...current, { focus: id, muscle: "" }] : current;
+    setSelections(next);
+    setFocus(next[0]?.focus ?? "");
+    setMuscle(next[0]?.muscle ?? "");
+  }
   const muscleOptions = SPECIFIC_MUSCLES[focus] ?? [];
   const showFocus = FOCUS_GOALS.includes(goal);
 
@@ -271,8 +288,8 @@ function CoachPage() {
     if (busy || wodMode) return;
     const request = {
       goal,
-      ...(showFocus ? { focus } : {}),
-      ...(showFocus && muscle && muscleOptions.some((m) => m.id === muscle) ? { muscle } : {}),
+      ...(showFocus ? { focus: selections.length === 2 ? combinedFocus(selections) : focus } : {}),
+      ...(showFocus && selections.length < 2 && muscle && muscleOptions.some((m) => m.id === muscle) ? { muscle } : {}),
 
       mood,
       minutes: minutes ?? undefined,
@@ -305,7 +322,7 @@ function CoachPage() {
     } catch (e) {
       // Never expose the internal cause — the recovery system delivers it.
       toast.error(
-        e instanceof Error && /snag|per day|membership|Training Profile|readiness|acknowledgement/i.test(e.message)
+        e instanceof Error && /snag|per day|membership|Training Profile|readiness|acknowledgement|muscle combination/i.test(e.message)
           ? e.message
           : "We hit a temporary snag building your workout. Your answers are safe, we are already on it, and it will arrive shortly.",
       );
@@ -566,24 +583,31 @@ function CoachPage() {
           >
             <Grid>
               {BODY_FOCUS.map((f) => (
-                <Chip key={f.id} active={focus === f.id} onClick={() => { setFocus(f.id); setMuscle(""); }}>
+                <Chip key={f.id} active={selections.some((s) => s.focus === f.id)} disabled={selections.length === 2 && COMBINABLE_FOCUSES.includes(f.id) && !selections.some((s) => s.focus === f.id)} onClick={() => toggleFocus(f.id)}>
                   {f.label}
                 </Chip>
               ))}
             </Grid>
-            {muscleOptions.length ? (
-              <div className="mt-4">
-                <p className="mb-2 text-sm text-muted-foreground">A specific muscle? (optional)</p>
+            {selections.map((selection, index) => {
+              const options = SPECIFIC_MUSCLES[selection.focus] ?? [];
+              const setSpecific = (id: string) => {
+                setSelections((prev) => prev.map((s, at) => at === index ? { ...s, muscle: id } : s));
+                if (index === 0) setMuscle(id);
+              };
+              return options.length ? (
+              <div key={selection.focus} className="mt-4">
+                <p className="mb-2 text-sm text-muted-foreground">{BODY_FOCUS.find((f) => f.id === selection.focus)?.label} — specific muscle (optional)</p>
                 <Grid>
-                  <Chip active={!muscle} onClick={() => setMuscle("")}>All muscles</Chip>
-                  {muscleOptions.map((m) => (
-                    <Chip key={m.id} active={muscle === m.id} onClick={() => setMuscle(m.id)}>
+                  <Chip active={!selection.muscle} onClick={() => setSpecific("")}>All muscles</Chip>
+                  {options.map((m) => (
+                    <Chip key={m.id} active={selection.muscle === m.id} onClick={() => setSpecific(m.id)}>
                       {m.label}
                     </Chip>
                   ))}
                 </Grid>
               </div>
-            ) : null}
+            ) : null;
+            })}
           </QuestionCard>
         ) : null}
 

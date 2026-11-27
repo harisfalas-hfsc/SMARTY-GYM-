@@ -348,12 +348,18 @@ export const generateWorkout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: CoachRequest & { refinementText?: string }) => input)
   .handler(async ({ data, context }) => {
+    if (data.focus?.includes(" + ")) {
+      const { requireWorkoutAccess } = await import("@/lib/eligibility.server");
+      await requireWorkoutAccess(context.supabase as never, context.userId, { countsAgainstDailyQuota: true });
+      const { preflightCombinedRequest } = await import("@/lib/workout/create.server");
+      await preflightCombinedRequest(context.supabase as never, context.userId, data);
+    }
     const { withProblemReport } = await import("@/lib/errors/report.server");
     return withProblemReport(
       { source: "workout-generation", route: "/create-your-own-workout", userId: context.userId },
       async () => {
         const { requireWorkoutAccess } = await import("@/lib/eligibility.server");
-        await requireWorkoutAccess(context.supabase as never, context.userId, {
+        if (!data.focus?.includes(" + ")) await requireWorkoutAccess(context.supabase as never, context.userId, {
           countsAgainstDailyQuota: true,
         });
         const { runTrackedGeneration } = await import("@/lib/workout-generation.server");

@@ -13,6 +13,9 @@ import { resolveDifficulty } from "@/lib/workout/programming";
 import { wodRationale } from "@/lib/wod-cycle";
 import { whyThisSession } from "@/lib/coach-rules/why";
 import { loadPerformanceOverview } from "@/lib/performance.server";
+import { parseCombinedFocus } from "./muscle-spread";
+import { combinationFits } from "./combined-picks";
+import { levelMainMinimum, levelMinSets } from "./member-quality";
 
 export type CoachRequest = {
   goal?: string;
@@ -303,7 +306,7 @@ export async function createWorkoutForUser(
     (mood !== "normal" && mood !== "");
 
   let reused: ArchivedWorkout | null = null;
-  if (!data.note && !equipmentOther && !data.wod && !personalContext) {
+  if (!data.note && !data.muscle && !focus?.includes(" + ") && !equipmentOther && !data.wod && !personalContext) {
     const usedSet = new Set(usedNames);
     const sameEquipment = [...equipmentIds].sort().join("|");
     let candidates = db
@@ -470,4 +473,48 @@ function averageRpe(rows: Array<{ rpe: number | null }>): number | null {
   const values = rows.map((r) => r.rpe).filter((v): v is number => typeof v === "number");
   if (!values.length) return null;
   return values.reduce((a, b) => a + b, 0) / values.length;
+}
+
+/** A physically impossible combination is a settings choice, not a failed job to retry overnight. */
+export async function preflightCombinedRequest(db: SupabaseClient, userId: string, data: CoachRequest): Promise<void> {
+  if (!data.focus?.includes(" + ") || data.wod) return;
+  const selections = parseCombinedFocus(data.focus);
+  const category = GOAL_TO_CATEGORY[String(data.goal ?? "strength")] ?? "STRENGTH";
+  if (selections.length !== 2 || !["STRENGTH", "MUSCLE BUILDING"].includes(category))
+    throw new Error("Choose two valid muscle groups for your muscle combination.");
+  const { data: profile } = await db.from("profiles").select("*").eq("id", userId).maybeSingle();
+  const { loadAllExercises, filterPool, resolveCustomEquipment } = await import("./pool.server");
+  const { buildSessionPlan } = await import("./programming");
+  const { starsToLevel } = await import("./spec");
+  const { finisherMinimumMinutes } = await import("./finisher-length");
+  const all = await loadAllExercises(db);
+  const equipment = data.equipment ?? ["bodyweight"];
+  const equipmentMode = equipment.every((e) => e === "bodyweight") ? "BODYWEIGHT" : "EQUIPMENT";
+  const stars = resolveDifficulty(requestedStarsFor(profile, data.level === "auto" ? undefined : data.level), data.mood ?? "normal").effectiveStars;
+  const level = starsToLevel(stars);
+  const minutes = Math.max(5, Math.min(120, Number(data.minutes) || 30));
+  const format = "REPS & SETS";
+  const usePreferences = data.useLibraryPreferences ?? profile?.use_library_preferences ?? true;
+  const pool = filterPool(all, {
+    category, format, selectedEquipment: equipment, equipmentMode, level,
+    focus: data.focus as StrengthFocus,
+    customEquipment: resolveCustomEquipment(all, data.equipmentOther ?? ""),
+    dislikedIds: usePreferences ? profile?.disliked_exercise_ids ?? [] : [],
+    limitations: {
+      limitations: knownLimitations(profile?.limitations ?? []),
+      pregnancyStage: profile?.pregnancy_stage ?? null,
+      clearance: Boolean(profile?.limitation_clearance),
+    },
+    location: data.location ?? "any", age: profile?.age ?? null,
+  });
+  const plan = buildSessionPlan({ category, format, level, stars, minutes, focus: data.focus as StrengthFocus, mood: data.mood ?? "normal", equipmentCount: equipment.length });
+  const finMin = finisherMinimumMinutes(stars);
+  const hasFinisher = Boolean(plan.finisher) && minutes - finMin >= 15;
+  const mainMinutes = hasFinisher ? minutes - finMin : minutes;
+  const minSets = level === "all" ? 2 : levelMinSets(level);
+  const fitCount = Math.max(3, Math.floor(mainMinutes * 60 / (minSets * (45 + plan.main.restSec[0]))));
+  const finCount = hasFinisher ? Math.max(3, plan.finisherCount[0]) : 0;
+  const mainMinimum = Math.max(Math.min(levelMainMinimum(level), fitCount), hasFinisher ? finCount + 1 : 3);
+  if (!combinationFits(pool, data.focus, mainMinimum, finCount))
+    throw new Error("Not enough suitable exercises match this muscle combination, equipment and duration without repeating movements. Choose different equipment or a shorter duration. Nothing was saved.");
 }

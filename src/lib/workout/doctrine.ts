@@ -7,7 +7,8 @@
 // The AI is never the final authority — this module is.
 // ---------------------------------------------------------------------------
 
-import type { Category, DifficultyLevel, Format, StrengthFocus } from "./spec";
+import type { Category, DifficultyLevel, Format, StrengthFocus, BaseStrengthFocus } from "./spec";
+import { parseCombinedFocus, matchesMuscleSelection } from "./muscle-spread";
 import { FOCUS_RULES as GROUP_RULES, focusGroups, muscleFocusBreak } from "./strength-focus";
 
 export type ExerciseLike = {
@@ -424,7 +425,7 @@ export function microExerciseViolation(e: ExerciseLike): string | null {
 
 export type FocusRule = { allow?: RegExp; deny?: RegExp; parts?: string[]; targets?: RegExp };
 
-export const FOCUS_RULES: Record<StrengthFocus, FocusRule> = {
+export const FOCUS_RULES: Record<BaseStrengthFocus, FocusRule> = {
   "LOWER BODY": {
     parts: ["upper legs", "lower legs"],
     deny: /\b(press|push-?up|pushup|row|pull-?up|pulldown|curl|fly|dip|triceps|biceps|shoulder|chest|lat)\b/i,
@@ -467,7 +468,12 @@ const focusText = (e: ExerciseLike) =>
 /** Hard focus legality — never widened because a pool ran thin. */
 export function focusViolation(e: ExerciseLike, focus: StrengthFocus | null): string | null {
   if (!focus) return null;
-  const rule = FOCUS_RULES[focus];
+  if (focus.includes(" + ")) {
+    const selections = parseCombinedFocus(focus);
+    return selections.some((s) => matchesMuscleSelection(e, s)) ? null : `"${e.name}" is outside the requested ${focus} focus.`;
+  }
+  const rule = FOCUS_RULES[focus as BaseStrengthFocus];
+  if (!rule) return `Invalid workout focus.`;
   if (rule.deny && rule.deny.test(focusText(e)))
     return `"${e.name}" is outside the requested ${focus} focus.`;
   if (rule.parts?.length) {
@@ -509,6 +515,11 @@ export function regionOf(e: ExerciseLike): BodyRegion {
 
 /** The region a focus asks activation to prepare. */
 export function focusRegion(focus: StrengthFocus | null | undefined): BodyRegion {
+  const selections = parseCombinedFocus(focus);
+  if (selections.length) {
+    const regions = selections.map((s) => focusRegion(s.focus as BaseStrengthFocus));
+    return regions.every((r) => r === regions[0]) ? (regions[0] ?? "full") : "full";
+  }
   switch (focus) {
     case "LOWER BODY":
     case "LEGS":

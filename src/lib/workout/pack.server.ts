@@ -1,4 +1,6 @@
 import { orderedPriority, pickPriorityByPattern } from "./priority";
+import { parseCombinedFocus } from "./muscle-spread";
+import { pickCombined, combinedMainCount, combinationFits } from "./combined-picks";
 // Deterministic template ("pack") engine.
 // Builds a fully compliant session straight from the filtered pool — no model
 // involved. Used as the reliability fallback when the AI cannot produce a
@@ -267,7 +269,7 @@ export function buildPackWorkout(
   const fitCount = input.format === "REPS & SETS" ? Math.max(3, Math.floor((mainMinutes * 60) / perExerciseSec)) : 99;
   const fullCount = specialist ? baseCount : Math.max(baseCount, Math.min(levelMin, fitCount));
   // TABATA is fixed (8 × 20/10 = 4 min per exercise): only as many blocks as the Main Workout's minutes hold.
-  const mainCount = input.format === "TABATA" ? Math.min(fullCount, Math.max(3, Math.floor(mainMinutes / 4))) : fullCount;
+  let mainCount = input.format === "TABATA" ? Math.min(fullCount, Math.max(3, Math.floor(mainMinutes / 4))) : fullCount;
   const finisherCount = input.plan ? Math.max(input.plan.finisherCount[0], 1) : 3;
   // Coach's priority exercises (the 3 × 50 lists) come first; the rest of the
   // legal pool is only used to top up when too few priority matches exist.
@@ -277,10 +279,14 @@ export function buildPackWorkout(
   // CARDIO blocks are rhythmic aerobic work (rules.ts): draw them from the rhythm vocabulary.
   const rhythmPool = pool.filter((e) => isCardioRhythm(e.name) && !/burpee|mountain climber|skater|sprint|jump squat|tuck|depth/i.test(e.name));
   const basePool = input.category === "CARDIO" && rhythmPool.length >= 4 ? rhythmPool : pool;
+  if (input.focus && parseCombinedFocus(input.focus).length) {
+    mainCount = combinedMainCount(basePool, input.focus, mainCount, Math.min(levelMin, fitCount), noFinisher ? 0 : finisherCount);
+  }
   // Usage cap: skip exercises that already dominate this category while enough others remain.
   const overused = new Set(input.overusedIds ?? []);
   const fresh = basePool.filter((e) => !overused.has(e.id));
-  const workPool = overused.size && fresh.length >= mainCount + finisherCount + 2 ? fresh : basePool;
+  const freshCoversCombination = !input.focus || !parseCombinedFocus(input.focus).length || combinationFits(fresh, input.focus, mainCount, noFinisher ? 0 : finisherCount);
+  const workPool = overused.size && fresh.length >= mainCount + finisherCount + 2 && freshCoversCombination ? fresh : basePool;
   const pickPriorityFirst = (count: number, favs: string[]) => {
     const first = usePriority
       ? pickPriorityByPattern(workPool, count, { exclude: used, seed: input.seed ?? input.minutes, conditioningFirst: flow })
@@ -472,11 +478,29 @@ export function buildPackWorkout(
     }
   }
   const seed = input.seed ?? (mainPicks[0]?.id.length ?? 5) * 31 + input.minutes;
+  if (parseCombinedFocus(input.focus).length === 2 && input.focus) {
+    const options = { seed, favorites: favouriteIds, advanced: input.level === "advanced" };
+    const combinedMain = pickCombined(workPool, mainCount, input.focus, options);
+    mainPicks.splice(0, mainPicks.length, ...combinedMain);
+    const families = new Set(mainPicks.map((e) => equipmentFamilyOf(e.equipment)));
+    const finPool = workPool.filter((e) => families.has(equipmentFamilyOf(e.equipment)) || isBodyweight(e));
+    let combinedFinisher = noFinisher ? [] : pickCombined(finPool, finisherCount, input.focus, {
+      ...options, seed: seed + 7, excluded: mainPicks, accessory: true,
+    });
+    // Reps & Sets may use other selected kit; timed formats never add a new station.
+    if (!noFinisher && !isDynamicFormat(input.format) && combinedFinisher.length < finisherCount) {
+      combinedFinisher = pickCombined(workPool, finisherCount, input.focus, { ...options, seed: seed + 7, excluded: mainPicks, accessory: true });
+    }
+    finisherPicks.splice(0, finisherPicks.length, ...combinedFinisher);
+    used.clear();
+    [...mainPicks, ...finisherPicks].forEach((e) => used.add(e.id));
+  }
 
   // §21 — activation is DERIVED from the main block that was just built: the
   // prep vocabulary is narrowed to the dominant region of the chosen main
   // exercises before anything is picked, so irrelevant prep is never offered.
-  const mainRegion = dominantRegion(mainPicks);
+  const regions = new Set(mainPicks.map(regionOf));
+  const mainRegion = parseCombinedFocus(input.focus).length && regions.size > 1 ? "full" : dominantRegion(mainPicks);
   const derivedActivationPool = (input.activationPool ?? []).filter((e) => {
     if (mainRegion === "full") return true;
     const r = regionOf(e);

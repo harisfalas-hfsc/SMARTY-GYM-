@@ -30,7 +30,7 @@ export function levelMinSets(level: DifficultyLevel): number {
 /** Single-muscle focuses (Coach Haris, 14 Oct 2026): every angle and implement is its own exercise (flat / incline / decline, dumbbell / barbell / machine, flies). */
 const SINGLE_MUSCLE_FOCUS = /^(CHEST|SHOULDERS|ARMS|BACK|LEGS)$/;
 const ANGLE_GRIP = /\b(incline|decline|flat|close[- ]?grip|wide[- ]?grip|reverse[- ]?grip|neutral[- ]?grip)\b/g;
-export const isSingleMuscleFocus = (focus?: string | null) => SINGLE_MUSCLE_FOCUS.test((focus ?? "").trim().toUpperCase());
+export const isSingleMuscleFocus = (focus?: string | null) => Boolean(focus?.includes(" + ")) || SINGLE_MUSCLE_FOCUS.test((focus ?? "").trim().toUpperCase());
 
 /**
  * Same movement under another listing ("inchworm", "inchworm v. 2"). Bench

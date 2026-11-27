@@ -113,3 +113,48 @@ export function muscleSpreadGap(main: MuscleRowLike[], pool: MuscleRowLike[], fo
   if (!missing.length || !over.length) return none;
   return { over, missing };
 }
+
+
+/** Combinations persist in the existing focus field, so readers and audits retain the exact brief. */
+export type MuscleSelection = { focus: string; muscle: string };
+export const COMBINABLE_FOCUSES = ["CHEST", "BACK", "SHOULDERS", "ARMS", "LEGS", "CORE & GLUTES"];
+export function combinedFocus(selections: MuscleSelection[]): string {
+  return selections.map((s) => (s.muscle || s.focus).toUpperCase()).join(" + ");
+}
+export function parseCombinedFocus(focus?: string | null): MuscleSelection[] {
+  if (!focus?.includes(" + ")) return [];
+  const parts = focus.toUpperCase().split(" + ");
+  if (parts.length !== 2) return [];
+  const out: MuscleSelection[] = [];
+  for (const part of parts) {
+    if (COMBINABLE_FOCUSES.includes(part)) out.push({ focus: part, muscle: "" });
+    else {
+      const parent = COMBINABLE_FOCUSES.find((f) => SPECIFIC_MUSCLES[f]?.some((m) => m.id.toUpperCase() === part));
+      if (!parent) return [];
+      out.push({ focus: parent, muscle: part.toLowerCase() });
+    }
+  }
+  return out;
+}
+export function matchesMuscleSelection(e: MuscleRowLike, s: MuscleSelection): boolean {
+  if (s.muscle) return muscleBucket(e, s.focus) === s.muscle;
+  const fine = fineMuscle(e);
+  if (!fine) return false;
+  if (s.focus === "CHEST") return fine === "chest";
+  if (s.focus === "SHOULDERS") return fine === "shoulders" || fine === "rear delts";
+  return Boolean(SPREAD[s.focus]?.[fine]) || (s.focus === "CORE & GLUTES" && ["abs", "obliques", "glutes", "lower back"].includes(fine));
+}
+/** Two selections share the existing count; neither receives a second workout. */
+export function combinationIssues(focus: string | null | undefined, main: MuscleRowLike[], finisher: MuscleRowLike[]): string[] {
+  const selections = parseCombinedFocus(focus);
+  if (!selections.length) return focus?.includes(" + ") ? ["Invalid muscle combination."] : [];
+  const out: string[] = [];
+  for (const [label, rows] of [["Main Workout", main], ["Finisher", finisher]] as const) {
+    if (!rows.length) continue;
+    const counts = selections.map((_, i) => rows.filter((e) => selections.findIndex((s) => matchesMuscleSelection(e, s)) === i).length);
+    for (const e of rows) if (!selections.some((s) => matchesMuscleSelection(e, s))) out.push(`"${e.name}" is outside the requested muscle combination.`);
+    if (counts.some((n) => n < Math.max(1, Math.floor(rows.length / 2))) || Math.abs((counts[0] ?? 0) - (counts[1] ?? 0)) > 1)
+      out.push(`${label} must balance both selected muscle groups without extra exercises.`);
+  }
+  return out;
+}

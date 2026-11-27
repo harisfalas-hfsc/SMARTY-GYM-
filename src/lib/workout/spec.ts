@@ -43,7 +43,8 @@ export const STRENGTH_FOCUS = [
   "ARMS",
   "LEGS",
 ] as const;
-export type StrengthFocus = (typeof STRENGTH_FOCUS)[number];
+export type BaseStrengthFocus = (typeof STRENGTH_FOCUS)[number];
+export type StrengthFocus = BaseStrengthFocus | `${string} + ${string}`;
 
 /** Categories where a body-part focus is meaningful and offered to the athlete. */
 export const FOCUS_CATEGORIES: Category[] = ["STRENGTH", "MUSCLE BUILDING"];

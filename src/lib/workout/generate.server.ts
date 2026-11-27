@@ -7,6 +7,8 @@ import { buildPackWorkout, packCopy } from "./pack.server";
 import { overusedExerciseIds } from "./exercise-usage";
 import { memberQualityIssues } from "./member-quality";
 import { crossSectionRepeats } from "./section-repeats";
+import { parseCombinedFocus, combinationIssues } from "./muscle-spread";
+import { parseWorkoutSteps } from "./parse-steps";
 import { plainWorkoutHtml } from "./plain-lines";
 import { complianceIssues, hardIssues, type ComplianceExercise } from "./smarty-compliance";
 import { buildSessionPlan } from "./programming";
@@ -279,6 +281,10 @@ export async function generateWorkoutContent(
     const enforced = enforceWorkout(p.html, pool, { ...enforceOpts, seed: s });
     // Plain text (plain-lines.ts): dose, exercise, side, rest — no tempo or cues.
     const html = plainWorkoutHtml(enforced.html);
+    const steps = parseWorkoutSteps(html);
+    const rowsFor = (section: string) => steps.filter((step) => step.section === section)
+      .map((step) => libMap.get(step.exerciseId)).filter((row): row is ComplianceExercise => Boolean(row));
+    const combinedErrors = combinationIssues(input.focus, rowsFor("Main Workout"), rowsFor("Finisher"));
     const hard = hardIssues(
       complianceIssues(
         {
@@ -296,7 +302,7 @@ export async function generateWorkoutContent(
         libMap,
       ),
     ).filter((i) => !(isMicro && /^(Activation|Cool Down) has fewer than/.test(i)));
-    return { pack: p, enforced: { ...enforced, html }, hard, quality: qualityOf(p) };
+    return { pack: p, enforced: { ...enforced, html }, hard: [...hard, ...combinedErrors], quality: qualityOf(p) };
   };
   const score = (c: ReturnType<typeof finalize>) => c.hard.length * 100 + c.quality.length;
   let best = finalize(buildOnce(seed), seed);
@@ -310,6 +316,8 @@ export async function generateWorkoutContent(
   const enforcedPack = best.enforced;
   // Missing or empty sections are never delivered, whoever asked for the workout.
   const structural = best.hard.filter((i) => /fewer than|Same exercise in two sections|Repeated exercise/.test(i));
+  if (parseCombinedFocus(input.focus).length && (best.hard.length || best.quality.length))
+    throw new Error("We couldn't build a complete, balanced workout for both selected muscle groups with those settings. Try different equipment or a different duration. Nothing was saved.");
   if (structural.length)
     throw new Error("We couldn't build a complete session with every section for those settings, so nothing was saved. Try different equipment or a different duration.");
 
